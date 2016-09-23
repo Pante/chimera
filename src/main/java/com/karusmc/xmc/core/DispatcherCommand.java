@@ -16,30 +16,41 @@
  */
 package com.karusmc.xmc.core;
 
+import java.util.*;
+
+import org.bukkit.command.*;
+import org.bukkit.plugin.Plugin;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public enum Default {
+public class DispatcherCommand extends XMCommand {
     
-    NONE("none"), OP("op"), ALL("all");
+    private Map<String, Command> commands;
     
     
-    public final String name;
-    
-    private Default(String name) {
-        this.name = name;
+    public DispatcherCommand(Plugin owningPlugin, String name) {
+        super(owningPlugin, name);
+        commands = new HashMap<>();
     }
     
     
-    public static Default fromString(String name) {
-        for (Default value: Default.values()) {
-            if (value.name.equalsIgnoreCase(name)) {
-                return value;
-            }
-        }
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         
-        throw new IllegalArgumentException("No enum with name: " + name + " was found");
     }
-
+    
+    
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        if (args.length != 0) {
+            
+            
+            
+        } else {
+            return null;
+        }
+    }
+    
 }
