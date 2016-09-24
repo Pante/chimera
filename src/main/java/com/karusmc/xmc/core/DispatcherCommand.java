@@ -17,6 +17,7 @@
 package com.karusmc.xmc.core;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
@@ -28,9 +29,10 @@ import org.bukkit.plugin.Plugin;
 public class DispatcherCommand extends XMCommand {
     
     private Map<String, Command> commands;
+    private Command defaultHandler;
     
     
-    public DispatcherCommand(Plugin owningPlugin, String name) {
+    public DispatcherCommand(Plugin owningPlugin, String name, Command defaultHandler) {
         super(owningPlugin, name);
         commands = new HashMap<>();
     }
@@ -38,19 +40,21 @@ public class DispatcherCommand extends XMCommand {
     
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        
+        Command subcommand = commands.getOrDefault(args[0], defaultHandler);
+        return subcommand.execute(sender, args[0], Arrays.copyOf(args, 1));
     }
     
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        if (args.length != 0) {
+        if (args.length == 1) {
+            return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
             
-            
-            
-        } else {
-            return null;
+        } else if (args.length >= 2 && commands.containsKey(args[0])) {
+            return commands.get(args[0]).tabComplete(sender, args[0], Arrays.copyOfRange(args, 1, args.length - 1));
         }
+        
+        return null;
     }
     
 }
