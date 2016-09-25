@@ -16,38 +16,34 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.StartElement;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class DescriptionTag extends Tag {
+public abstract class Tag {
     
-    public DescriptionTag() {
-        super("description");
+    private String name;
+    protected StartElement element;
+    
+    
+    public Tag(String name) {
+        this.name = name;
     }
     
     
-    public String getDescription() {
-        Attribute description = element.getAttributeByName(new QName("description"));
-        if (description == null) {
-            return "No description found for this command.";
-            
-        } else {
-            return description.getValue();
-        }
+    public boolean isElement() {
+        return element.isStartElement() && element.asStartElement().getName().getLocalPart().equalsIgnoreCase(name);
+    }
+ 
+    
+    public StartElement get() {
+        return element;
     }
     
-    public String getUsage() {
-        Attribute usage = element.getAttributeByName(new QName("usage"));
-        if (usage == null) {
-            return "";
-            
-        } else {
-            return usage.getValue();
-        }
+    public void set(StartElement element) {
+        this.element = element;
     }
     
 }

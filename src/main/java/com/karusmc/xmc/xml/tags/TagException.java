@@ -16,38 +16,18 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.events.Attribute;
-
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class DescriptionTag extends Tag {
+public class TagException extends RuntimeException {
     
-    public DescriptionTag() {
-        super("description");
+    public TagException(String message) {
+        super(message);
     }
-    
-    
-    public String getDescription() {
-        Attribute description = element.getAttributeByName(new QName("description"));
-        if (description == null) {
-            return "No description found for this command.";
-            
-        } else {
-            return description.getValue();
-        }
-    }
-    
-    public String getUsage() {
-        Attribute usage = element.getAttributeByName(new QName("usage"));
-        if (usage == null) {
-            return "";
-            
-        } else {
-            return usage.getValue();
-        }
+
+    public TagException(String message, Throwable cause) {
+        super(message, cause);
     }
     
 }

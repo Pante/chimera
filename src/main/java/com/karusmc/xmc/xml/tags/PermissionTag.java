@@ -16,10 +16,59 @@
  */
 package com.karusmc.xmc.xml.tags;
 
+import javax.xml.namespace.QName;
+import javax.xml.stream.events.Attribute;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class PermissionTag {
+public class PermissionTag extends Tag {
+    
+    public PermissionTag() {
+        super("permission");
+    }
+    
+    
+    public String getPermission() {
+        Attribute permission = element.getAttributeByName(new QName("permission"));
+        if (permission == null) {
+            return "";
+            
+        } else {
+            return permission.getValue();
+        }
+    }
+    
+    
+    public String getMessage() {
+        Attribute message = element.getAttributeByName(new QName("message"));
+        if (message == null) {
+            return "";
+            
+        } else {
+            return message.getValue();
+        }
+    }
+    
+    
+    public boolean isDefaultAllowed() {
+        Attribute defaultAllowed = element.getAttributeByName(new QName("default"));
+        if (defaultAllowed == null) {
+            return false;
+        }
+        
+        return Boolean.parseBoolean(defaultAllowed.getValue());
+    }
+    
+    
+    public boolean isConsoleAllowed() {
+        Attribute consoleAllowed = element.getAttributeByName(new QName("console"));
+        if (consoleAllowed == null) {
+            return false;
+        }
+        
+        return Boolean.parseBoolean(consoleAllowed.getValue());
+    }
     
 }

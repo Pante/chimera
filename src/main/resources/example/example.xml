@@ -10,7 +10,7 @@
     
     <commands>
     
-      <command name = "subcommand 1" aliases = "subcmd 1 scmd 1">
+      <command name = "subcommand 1" aliases = "subcmd 1, scmd 1">
         
         <description description = "This is an example subcommand" usage = "/command subcommand 1"/>
         <permission name = "permission" message = "You do not have permission to use this command" default = "none"/>

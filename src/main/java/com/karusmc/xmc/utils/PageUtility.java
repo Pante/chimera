@@ -14,12 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml;
+package com.karusmc.xmc.utils;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Parser {
+public class PageUtility {
+    
+    private PageUtility() {}
+    
+    
+    public static int parsePageNumber(String argument) {
+        if (argument.matches("//d+") && Integer.parseInt(argument) > 0) {
+            return Integer.parseInt(argument);
+            
+        } else {
+            return 1;
+        }
+    }
+    
+    public static int getTotalPages(int divisibleSize, int pageSize) {
+        if (divisibleSize > 0 && pageSize > 0) {
+            return (int) Math.max(1, Math.ceil((double) divisibleSize / pageSize));
+            
+        } else {
+            return 0;
+        }
+    }
     
 }

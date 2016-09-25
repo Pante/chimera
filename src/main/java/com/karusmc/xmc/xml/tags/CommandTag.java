@@ -16,10 +16,33 @@
  */
 package com.karusmc.xmc.xml.tags;
 
+import java.util.*;
+import javax.xml.namespace.QName;
+import javax.xml.stream.events.Attribute;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CommandTag {
+public class CommandTag extends Tag {
+    
+    public CommandTag() {
+        super("commands");
+    }
+    
+    
+    public String getName() {
+        return element.getAttributeByName(new QName("name")).getValue();
+    }
+    
+    public List<String> getAttributes() {
+        Attribute aliases = element.getAttributeByName(new QName("aliases"));
+        if (aliases != null) {
+            return Arrays.asList(aliases.getValue().split("\\s*,\\s*"));
+            
+        } else {
+            return Collections.<String>emptyList();
+        }
+    }
     
 }
