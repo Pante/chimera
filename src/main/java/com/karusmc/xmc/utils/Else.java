@@ -14,36 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.utils;
 
-import javax.xml.stream.events.*;
+import com.karusmc.xmc.core.XMCommand;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class Tag {
+
+@FunctionalInterface
+public interface Else {
     
-    private String name;
-    protected StartElement element;
-    
-    
-    public Tag(String name) {
-        this.name = name;
-    }
-    
-    
-    public boolean isElement(XMLEvent event) {
-        return event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(name);
-    }
- 
-    
-    public StartElement get() {
-        return element;
-    }
-    
-    public void set(StartElement element) {
-        this.element = element;
-    }
+    public void call(CommandSender sender, XMCommand command);
     
 }

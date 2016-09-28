@@ -14,36 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.core;
 
-import javax.xml.stream.events.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class Tag {
+public class StubCommand extends Command {
     
-    private String name;
-    protected StartElement element;
-    
-    
-    public Tag(String name) {
-        this.name = name;
+    public StubCommand(String name) {
+        super(name);
     }
     
     
-    public boolean isElement(XMLEvent event) {
-        return event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(name);
-    }
- 
-    
-    public StartElement get() {
-        return element;
-    }
-    
-    public void set(StartElement element) {
-        this.element = element;
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -16,7 +16,7 @@
  */
 package com.karusmc.xmc.core;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 
 import org.bukkit.Server;
 import org.bukkit.command.*;
@@ -34,9 +34,12 @@ public class CommandInjector {
     
     public CommandInjector(Server server) {
         try {
+            this.server = server;
+            
             field = server.getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
-            field.get(server);
+            
+            commands = (CommandMap) field.get(server);
             
         } catch (ReflectiveOperationException e) {
             throw new IllegalArgumentException("Server class doest not contain field: commandMap", e);
@@ -46,9 +49,14 @@ public class CommandInjector {
     
     public void inject(CommandMap map) {
         try {
+            Field modifierField = field.getClass().getDeclaredField("modifiers");
+            modifierField.setAccessible(true);
+            modifierField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
             CommandMap serverMap = (CommandMap) field.get(server);
-            if (map instanceof SimpleCommandMap) {
-                ((SimpleCommandMap) serverMap).getCommands().forEach(command -> command.register(map));
+            
+            if (serverMap instanceof SimpleCommandMap) {
+                ((SimpleCommandMap) serverMap).getCommands().forEach(command -> map.register(command.getName(), command));
             }
 
             field.set(server, map);

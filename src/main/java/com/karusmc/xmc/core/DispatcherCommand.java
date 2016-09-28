@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
+import static com.karusmc.xmc.utils.Validator.hasLength;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
@@ -35,13 +37,18 @@ public class DispatcherCommand extends XMCommand {
     public DispatcherCommand(Plugin owningPlugin, String name, Command defaultHandler) {
         super(owningPlugin, name);
         commands = new HashMap<>();
+        this.defaultHandler = defaultHandler;
     }
     
     
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        Command subcommand = commands.getOrDefault(args[0], defaultHandler);
-        return subcommand.execute(sender, args[0], Arrays.copyOf(args, 1));
+        if (hasLength(1, args.length, 999)) {
+            return commands.getOrDefault(args[0], defaultHandler).execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length - 1));
+            
+        } else {
+            return defaultHandler.execute(sender, commandLabel, args);
+        }
     }
     
     

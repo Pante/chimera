@@ -43,4 +43,13 @@ public class PageUtility {
         }
     }
     
+    
+    public static int getFirstIndex(int page, int pageSize) {
+        return page * pageSize - page;
+    }
+    
+    public static int getLastIndex(int page, int pageSize, int divisibleSize) {
+        return Math.min(page * pageSize, divisibleSize);
+    }
+    
 }
