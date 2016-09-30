@@ -28,36 +28,37 @@ import org.junit.*;
  * @author PanteLegacy @ karusmc.com
  * @param <GenericTag>
  */
-public abstract class TagTestBase<GenericTag extends Tag> {
+public abstract class TagBase<GenericTag extends Tag> {
     
-    private WstxInputFactory factory;
-    private ClassLoader loader;
+    private static final WstxInputFactory FACTORY = new WstxInputFactory();
+
     private String fileName;
-    
-    private GenericTag tag;
-    private String name;
-    
-    protected XMLEventReader reader;
-    
-    
-    public TagTestBase(GenericTag tag, String name, String fileName) {
-        factory = new WstxInputFactory();
-        loader = TagTestBase.class.getClassLoader();
+    private XMLEventReader reader;
         
-        this.fileName = fileName;
+    protected GenericTag tag;
+    
+    
+    public TagBase(GenericTag tag, String fileName) {
         this.tag = tag;
-        this.name = name;
+        this.fileName = fileName;
     }
     
     
     @Before
     public void setup() throws XMLStreamException {
-        reader = factory.createXMLEventReader(loader.getResourceAsStream(fileName));
+        reader = FACTORY.createXMLEventReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
+        find();
+    }
+    
+    
+    @After
+    public void closeStream() throws XMLStreamException {
+        reader.close();
     }
     
     
     public void find() throws XMLStreamException {
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             
             if (tag.isElement(event)) {

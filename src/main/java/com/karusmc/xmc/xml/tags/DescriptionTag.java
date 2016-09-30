@@ -33,7 +33,7 @@ public class DescriptionTag extends Tag {
     public String getDescription() {
         Attribute description = element.getAttributeByName(new QName("description"));
         if (description == null) {
-            return "No description found for this command.";
+            return "No description for command";
             
         } else {
             return description.getValue();
@@ -43,7 +43,7 @@ public class DescriptionTag extends Tag {
     public String getUsage() {
         Attribute usage = element.getAttributeByName(new QName("usage"));
         if (usage == null) {
-            return "";
+            return "No usage for command";
             
         } else {
             return usage.getValue();

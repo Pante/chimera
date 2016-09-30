@@ -44,7 +44,7 @@ public class PermissionTag extends Tag {
     public String getMessage() {
         Attribute message = element.getAttributeByName(new QName("message"));
         if (message == null) {
-            return "";
+            return "You do not have permission to use this command";
             
         } else {
             return message.getValue();

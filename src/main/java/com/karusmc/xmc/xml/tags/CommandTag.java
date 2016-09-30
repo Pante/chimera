@@ -27,7 +27,7 @@ import javax.xml.stream.events.Attribute;
 public class CommandTag extends Tag {
     
     public CommandTag() {
-        super("commands");
+        super("command");
     }
     
     
@@ -35,14 +35,17 @@ public class CommandTag extends Tag {
         return element.getAttributeByName(new QName("name")).getValue();
     }
     
-    public List<String> getAttributes() {
+    public List<String> getAliases() {
         Attribute aliases = element.getAttributeByName(new QName("aliases"));
         if (aliases != null) {
-            return Arrays.asList(aliases.getValue().split("\\s*,\\s*"));
             
-        } else {
-            return Collections.<String>emptyList();
+            String[] parsed = aliases.getValue().split("\\s*,\\s*");
+            if (parsed.length != 1 || !parsed[0].equals("")) {
+                return Arrays.asList(parsed);
+            }   
         }
+        
+        return Collections.emptyList();
     }
     
 }
