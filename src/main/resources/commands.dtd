@@ -1,0 +1,33 @@
+<!ELEMENT commands (command+)>
+
+<!ELEMENT command (meta, permission, (commands|configuration))>
+<!ATTLIST command
+  name CDATA #REQUIRED
+  aliases CDATA ""
+>
+
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+  description CDATA "No description for command"
+  usage CDATA "No usage for command"
+>
+
+<!ELEMENT permission EMPTY>
+<!ATTLIST
+  permission CDATA ""
+  message CDATA "You do not have permission to use this command."
+  allow-console (true|false) "false"
+>
+
+<!ELEMENT configuration (cooldown*, worlds*)>
+
+<!ELEMENT cooldown EMPTY>
+<!ATTLIST
+  time CDATA "0"
+>
+
+<!ELEMENT worlds EMPTY>
+<!ATTLIST
+  type (whitelist|blacklist) #REQUIRED
+  list CDATA #REQUIRED
+>

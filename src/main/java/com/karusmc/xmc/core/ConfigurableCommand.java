@@ -14,36 +14,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.core;
 
-import javax.xml.stream.events.*;
+import java.util.Set;
+
+import org.bukkit.plugin.Plugin;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class Tag {
+public abstract class ConfigurableCommand extends XMCommand {
     
-    private String name;
-    protected StartElement element;
+    private long cooldown;
+    
+    private ListType type;
+    private Set<String> worlds;
     
     
-    public Tag(String name) {
-        this.name = name;
+    public ConfigurableCommand(Plugin owningPlugin, String name) {
+        super(owningPlugin, name);
     }
     
     
-    public boolean isElement(XMLEvent event) {
-        return event.isStartElement() && event.asStartElement().getName().getLocalPart().equalsIgnoreCase(name);
-    }
- 
-    
-    public StartElement get() {
-        return element;
+    public long getCooldown() {
+        return cooldown;
     }
     
-    public void set(StartElement element) {
-        this.element = element;
+    public void setCooldown(long cooldown) {
+        this.cooldown = cooldown;
+    }
+    
+    
+    public ListType getListType() {
+        return type;
+    }
+    
+    public void setListType(ListType type) {
+        this.type = type;
+    }
+    
+    
+    public Set<String> getWorlds() {
+        return worlds;
+    }
+    
+    public void setWorlds(Set<String> worlds) {
+        this.worlds = worlds;
     }
     
 }

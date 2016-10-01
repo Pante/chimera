@@ -1,0 +1,19 @@
+<!ELEMENT commands (command+)>
+
+<!ELEMENT command (commands|configuration)>
+<!ATTLIST command
+  name CDATA #REQUIRED
+>
+
+<!ELEMENT configuration ((cooldown*, worlds*)|(worlds*, cooldown*)>
+
+<!ELEMENT cooldown EMPTY>
+<!ATTLIST cooldown
+  time CDATA #REQUIRED
+>
+
+<!ELEMENT worlds EMPTY>
+<!ATTLIST worlds
+  type (whitelist|blacklist) #REQUIRED
+  list CDATA #REQUIRED
+>

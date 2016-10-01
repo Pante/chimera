@@ -14,20 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.core;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class TagException extends RuntimeException {
+public enum ListType {
     
-    public TagException(String message) {
-        super(message);
-    }
-
-    public TagException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    WHITELIST, BLACKLIST
     
 }
