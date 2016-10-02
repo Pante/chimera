@@ -16,6 +16,9 @@
  */
 package com.karusmc.xmc.core;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
@@ -23,32 +26,14 @@ import org.bukkit.plugin.Plugin;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class XMCommand extends Command implements PluginIdentifiableCommand {
+public class DispatchCommand extends XMCommand {
     
-    private Plugin owningPlugin;
-    
-    private boolean consoleAllowed;
-    private boolean defaultAllowed;
+    private Map<String, Command> commands;
     
     
-    public XMCommand(Plugin owningPlugin, String name) {
-        super(name);
-        this.owningPlugin = owningPlugin;
-    }
-    
-    
-    @Override
-    public Plugin getPlugin() {
-        return owningPlugin;
-    }
-    
-    
-    public boolean isConsoleAllowed() {
-        return consoleAllowed;
-    }
-    
-    public void setConsoleAllowed(boolean consoleAllowed) {
-        this.consoleAllowed = consoleAllowed;
+    public DispatchCommand(Plugin owningPlugin, String name) {
+        super(owningPlugin, name);
+        commands = new HashMap<>();
     }
     
 }

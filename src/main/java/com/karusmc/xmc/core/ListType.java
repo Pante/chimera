@@ -22,6 +22,24 @@ package com.karusmc.xmc.core;
  */
 public enum ListType {
     
-    WHITELIST, BLACKLIST
+    WHITELIST("whitelist"), BLACKLIST("blacklist");
+    
+    public final String text;
+    
+    
+    private ListType(String text) {
+        this.text = text;
+    }
+    
+    
+    public static ListType fromString(String text) {
+        if (text.equalsIgnoreCase("whitelist")) {
+            return WHITELIST;
+            
+        } else if (text.equalsIgnoreCase("blacklist")){
+            return BLACKLIST;
+            
+        } else throw new IllegalArgumentException("Invalid list type");
+    }
     
 }
