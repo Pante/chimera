@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.util.validation;
+package com.karusmc.xmc.util;
 
 import org.bukkit.command.CommandSender;
 
@@ -22,7 +22,6 @@ import org.bukkit.command.CommandSender;
  *
  * @author PanteLegacy @ karusmc.com
  */
-
 @FunctionalInterface
 public interface Else {
     

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.util.validation;
+package com.karusmc.xmc.util;
 
 import com.karusmc.xmc.core.*;
 
@@ -26,6 +26,17 @@ import org.bukkit.entity.Player;
  * @author PanteLegacy @ karusmc.com
  */
 public class Validator {
+    
+    
+    public static boolean isValid(boolean criteria, Else handle, CommandSender sender) {
+        if (!criteria) {
+            handle.handle(sender);
+        }
+        
+        return criteria;
+    }
+    
+    
     
     public static boolean isAllowed(CommandSender sender, XMCommand command) {
         return (command.isConsoleAllowed() || !(sender instanceof ConsoleCommandSender)) && command.testPermissionSilent(sender);
