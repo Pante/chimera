@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.commands;
 
+import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.util.Else;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +26,7 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Validator.*;
-import com.karusmc.xmc.util.Else;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
@@ -35,7 +37,7 @@ public class DispatchCommand extends XMCommand {
     private Else handle;
     
     
-    public DispatchCommand(Plugin owningPlugin, String name) {
+    public DispatchCommand(Plugin owningPlugin, String name, Else handle) {
         super(owningPlugin, name);
         commands = new HashMap<>();
     }
@@ -61,6 +63,15 @@ public class DispatchCommand extends XMCommand {
         }
         
         return null;
+    }
+    
+    
+    public Else getHandle() {
+        return handle;
+    }
+    
+    public void setHandle(Else handle) {
+        this.handle = handle;
     }
     
 }
