@@ -14,18 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.util.validation;
-
-import org.bukkit.command.CommandSender;
+package com.karusmc.xmc.xml.tags;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-
-@FunctionalInterface
-public interface Else {
+public class TagException extends RuntimeException {
     
-    public void handle(CommandSender sender);
+    public TagException(String message) {
+        super(message);
+    }
+
+    public TagException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

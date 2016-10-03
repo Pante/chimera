@@ -14,26 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class DispatchCommand extends XMCommand {
+@FunctionalInterface
+public interface Else {
     
-    private Map<String, Command> commands;
-    
-    
-    public DispatchCommand(Plugin owningPlugin, String name) {
-        super(owningPlugin, name);
-        commands = new HashMap<>();
-    }
+    public void handle(CommandSender sender);
     
 }
