@@ -14,32 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml;
+package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
 
-import java.util.*;
-
-import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Parser {
+@FunctionalInterface
+public interface Tag {
     
-    private Map<String, XMCommand> commands;
-    
-    
-    
-    public Parser() {
-        commands = new HashMap<>();
-        
-    }
-    
-    
-    public void parse(XMLEventReader reader) {
-        
-    }
+    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
     
 }

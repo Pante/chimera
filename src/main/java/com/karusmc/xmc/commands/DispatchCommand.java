@@ -16,7 +16,7 @@
  */
 package com.karusmc.xmc.commands;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
 import com.karusmc.xmc.util.Else;
 
 import java.util.*;
@@ -31,9 +31,9 @@ import static com.karusmc.xmc.util.Validator.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class DispatchCommand extends XMCommand {
+public class DispatchCommand extends XMCommand implements Dispatcher {
     
-    private Map<String, Command> commands;
+    private Map<String, XMCommand> commands;
     private Else handle;
     
     
@@ -63,6 +63,12 @@ public class DispatchCommand extends XMCommand {
         }
         
         return null;
+    }
+    
+    
+    @Override
+    public Map<String, XMCommand> getCommands() {
+        return commands;
     }
     
     
