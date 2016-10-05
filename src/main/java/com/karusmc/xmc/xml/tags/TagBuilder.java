@@ -20,14 +20,6 @@ package com.karusmc.xmc.xml.tags;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class TagException extends RuntimeException {
-    
-    public TagException(String message) {
-        super(message);
-    }
-
-    public TagException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public class TagBuilder {
     
 }

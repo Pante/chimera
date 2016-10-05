@@ -20,21 +20,22 @@ import com.karusmc.xmc.core.XMCommand;
 
 import java.util.*;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CommandTag implements Tag {
+public class BlockTag implements Tag {
     
     private Map<QName, Tag> tags;
+    private String tagName;
     
     
-    public CommandTag() {
+    public BlockTag(String tagName) {
         tags = new HashMap<>();
+        this.tagName = tagName;
     }
     
     
@@ -43,10 +44,11 @@ public class CommandTag implements Tag {
         while(reader.hasNext()) {
             XMLEvent event = reader.peek();
             
-            if (event.isStartElement() && tags.containsKey(event.asStartElement().getName())) {
-                tags.get(event.asStartElement().getName()).parse(reader, command);
+            QName name;
+            if (event.isStartElement() && tags.containsKey((name = event.asStartElement().getName()))) {
+                tags.get(name).parse(reader, command);
                 
-            } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals("command")) {
+            } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(tagName)) {
                 break;
                 
             } else {

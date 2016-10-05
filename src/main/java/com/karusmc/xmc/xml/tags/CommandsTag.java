@@ -20,7 +20,7 @@ import com.karusmc.xmc.core.*;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.events.*;
 
 /**
  *
@@ -39,21 +39,21 @@ public class CommandsTag implements Tag {
     @Override
     public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException {
         while (reader.hasNext()) {
-            XMLEvent event = reader.peek();
+            XMLEvent event = reader.nextEvent();
             
-            if (event.isStartElement() && event.asStartElement().getName().getLocalPart().equals("command")) {
-                String commandName = event.asStartElement().getAttributeByName(new QName("name")).getValue();
+            StartElement element;
+            if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("command")) {
                 
-                if (command instanceof Dispatcher && ((Dispatcher) command).getCommands().containsKey(commandName)) {
-                    commandTag.parse(reader, ((Dispatcher) command).getCommands().get(commandName));
+                String name = element.getAttributeByName(new QName("name")).getValue();
+                
+                Dispatcher dispatcher;
+                if (command instanceof Dispatcher && (dispatcher = (Dispatcher) command).getCommands().containsKey(name)) {
+                    commandTag.parse(reader, dispatcher.getCommands().get(name));
                 }
                 
             
             } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals("commands")) {
                 break;
-                
-            } else {
-                reader.nextEvent();
             }
         }
     }

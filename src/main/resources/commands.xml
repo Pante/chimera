@@ -12,9 +12,9 @@
 <commands>
   
   <!-- Attribute: name is mandatory for obvious reasons -->
-  <command name = "command" aliases = "cmd, comm">
+  <command name = "command">
     
-    <meta description = "command description" usage = "example usage"/>
+    <meta aliases = "cmd, comm" description = "command description" usage = "example usage"/>
     <permission permission = "example.permission" message = "You do not have permission to use this command" allow-console = "true"/>
     
     
@@ -27,9 +27,9 @@
     -->
     <commands>
       
-      <command name = "subcommand" aliases = "subcmd, subcomm">
+      <command name = "subcommand">
     
-      <meta description = "command description" usage = "example usage"/>
+      <meta aliases = "subcmd, subcomm" description = "command description" usage = "example usage"/>
       <permission permission = "example.permission" message = "You do not have permission to use this command" allow-console = "true"/>
       
       

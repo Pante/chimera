@@ -16,30 +16,76 @@
  */
 package com.karusmc.xmc.xml;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
+import com.karusmc.xmc.xml.tags.Tag;
 
+import com.ctc.wstx.stax.WstxInputFactory;
+
+import java.io.*;
 import java.util.*;
+import javax.xml.stream.*;
 
-import javax.xml.stream.XMLEventReader;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Parser {
+public class Parser extends XMCommand implements Dispatcher {
     
     private Map<String, XMCommand> commands;
+    private Tag commandsTag;
+    private WstxInputFactory factory;
     
     
-    
-    public Parser() {
-        commands = new HashMap<>();
+    public Parser(Tag commandsTag, String dtd) {
+        super(null, null);
+        this.commandsTag = commandsTag;
         
+        commands = new HashMap<>();
+        factory = new WstxInputFactory();
+        
+        factory.setXMLResolver((String publicID, String systemID, String baseURI, String namespace) -> {
+            if (systemID.equals(dtd)) {
+                return getClass().getClassLoader().getResourceAsStream("dtds/" + dtd);
+            } else {
+                throw new ParserException("Invalid DTD: " + systemID);
+            }
+        });
+        
+        factory.setProperty(XMLInputFactory.IS_VALIDATING, true);
     }
     
     
-    public void parse(XMLEventReader reader) {
+    
+    public void parse(File file) {
+        XMLEventReader reader = null;
         
+        try {
+            reader = factory.createXMLEventReader(file);
+            commandsTag.parse(reader, this);
+            
+        } catch (XMLStreamException e) {
+            throw new ParserException("An error occurred while attempting to parse an XML Document", e);
+            
+        } finally {
+            try {
+                reader.close();
+            } catch (XMLStreamException e) {
+                throw new ParserException("An error occured while trying to close underlying XML stream", e);
+            }
+        }
+    }
+
+    
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<String, XMCommand> getCommands() {
+        return commands;
     }
     
 }

@@ -3,11 +3,11 @@
 <!ELEMENT command (meta, permission, (commands|configuration))>
 <!ATTLIST command
   name CDATA #REQUIRED
-  aliases CDATA ""
 >
 
 <!ELEMENT meta EMPTY>
 <!ATTLIST meta
+  aliases CDATA ""
   description CDATA "No description for command"
   usage CDATA "No usage for command"
 >
