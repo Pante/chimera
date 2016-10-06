@@ -18,53 +18,26 @@ package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
 
-import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.events.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class BlockTag implements Tag {
-    
-    private Map<QName, Tag> tags;
-    private String tagName;
-    
-    
-    public BlockTag(String tagName) {
-        tags = new HashMap<>();
-        this.tagName = tagName;
-    }
-    
-    
+public class PermissionTag implements Tag {
+
     @Override
     public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException {
-        while(reader.hasNext()) {
-            XMLEvent event = reader.peek();
+        XMLEvent event;
+        if (reader.hasNext() && (event = reader.nextEvent()).isStartElement()) {
+            StartElement element = event.asStartElement();
             
-            QName name;
-            if (event.isStartElement() && tags.containsKey((name = event.asStartElement().getName()))) {
-                tags.get(name).parse(reader, command);
-                
-            } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(tagName)) {
-                break;
-                
-            } else {
-                reader.nextEvent();
-            }
+            command.setPermission(element.getAttributeByName(new QName("permission")).getValue());
+            command.setPermissionMessage(element.getAttributeByName(new QName("message")).getValue());
+            command.setConsoleAllowed(Boolean.parseBoolean(element.getAttributeByName(new QName("allow-console")).getValue()));
         }
-    }
-    
-    
-    public Map<QName, Tag> getTags() {
-        return tags;
-    }
-    
-    
-    public void register(QName name, Tag tag) {
-        tags.put(name, tag);
     }
     
 }

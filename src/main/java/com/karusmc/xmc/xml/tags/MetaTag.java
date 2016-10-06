@@ -17,54 +17,28 @@
 package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
-
-import java.util.*;
+import java.util.Arrays;
 import javax.xml.namespace.QName;
+
 import javax.xml.stream.*;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.events.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class BlockTag implements Tag {
-    
-    private Map<QName, Tag> tags;
-    private String tagName;
-    
-    
-    public BlockTag(String tagName) {
-        tags = new HashMap<>();
-        this.tagName = tagName;
-    }
-    
-    
+public class MetaTag implements Tag {
+
     @Override
     public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException {
-        while(reader.hasNext()) {
-            XMLEvent event = reader.peek();
+        XMLEvent event;
+        if (reader.hasNext() && (event = reader.nextEvent()).isStartElement()) {
+            StartElement element = event.asStartElement();
             
-            QName name;
-            if (event.isStartElement() && tags.containsKey((name = event.asStartElement().getName()))) {
-                tags.get(name).parse(reader, command);
-                
-            } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(tagName)) {
-                break;
-                
-            } else {
-                reader.nextEvent();
-            }
+            command.setAliases(Arrays.asList(element.getAttributeByName(new QName("aliases")).getValue().split("\\s*,\\s*")));
+            command.setDescription(element.getAttributeByName(new QName("description")).getValue());
+            command.setUsage(element.getAttributeByName(new QName("usage")).getValue());
         }
-    }
-    
-    
-    public Map<QName, Tag> getTags() {
-        return tags;
-    }
-    
-    
-    public void register(QName name, Tag tag) {
-        tags.put(name, tag);
     }
     
 }

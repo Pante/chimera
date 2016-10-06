@@ -23,31 +23,30 @@ import com.ctc.wstx.stax.WstxInputFactory;
 
 import java.io.*;
 import java.util.*;
+import javax.xml.namespace.QName;
 import javax.xml.stream.*;
-
-import org.bukkit.command.CommandSender;
+import javax.xml.stream.events.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Parser extends XMCommand implements Dispatcher {
+public class Parser {
     
     private Map<String, XMCommand> commands;
-    private Tag commandsTag;
+    private Tag commandTag;
     private WstxInputFactory factory;
     
     
-    public Parser(Tag commandsTag, String dtd) {
-        super(null, null);
-        this.commandsTag = commandsTag;
+    public Parser(Tag commandTag, String dtd, String path) {
+        this.commandTag = commandTag;
         
         commands = new HashMap<>();
         factory = new WstxInputFactory();
         
         factory.setXMLResolver((String publicID, String systemID, String baseURI, String namespace) -> {
             if (systemID.equals(dtd)) {
-                return getClass().getClassLoader().getResourceAsStream("dtds/" + dtd);
+                return getClass().getClassLoader().getResourceAsStream(path);
             } else {
                 throw new ParserException("Invalid DTD: " + systemID);
             }
@@ -63,7 +62,18 @@ public class Parser extends XMCommand implements Dispatcher {
         
         try {
             reader = factory.createXMLEventReader(file);
-            commandsTag.parse(reader, this);
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+
+                StartElement element;
+                if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("command")) {
+                    
+                    String name = element.getAttributeByName(new QName("name")).getValue();
+                    if (commands.containsKey(name)) {
+                        commandTag.parse(reader, commands.get(name));
+                    }
+                }
+            }
             
         } catch (XMLStreamException e) {
             throw new ParserException("An error occurred while attempting to parse an XML Document", e);
@@ -75,17 +85,6 @@ public class Parser extends XMCommand implements Dispatcher {
                 throw new ParserException("An error occured while trying to close underlying XML stream", e);
             }
         }
-    }
-
-    
-    @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Map<String, XMCommand> getCommands() {
-        return commands;
     }
     
 }

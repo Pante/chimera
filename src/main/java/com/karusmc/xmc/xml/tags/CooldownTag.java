@@ -16,10 +16,28 @@
  */
 package com.karusmc.xmc.xml.tags;
 
+import com.karusmc.xmc.core.*;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.*;
+import javax.xml.stream.events.*;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class TagBuilder {
+public class CooldownTag implements Tag {
+
+    @Override
+    public void parse(XMLEventReader reader, XMCommand xmCommand) throws XMLStreamException {
+        XMLEvent event;
+        if (reader.hasNext() && (event = reader.nextEvent()).isStartElement() && xmCommand instanceof ConfigurableCommand) {
+            
+            StartElement element = event.asStartElement();
+            ConfigurableCommand command = (ConfigurableCommand) xmCommand;
+            
+            command.setCooldown(Long.parseLong(element.getAttributeByName(new QName("time")).getValue()));
+        }
+    }
     
 }
