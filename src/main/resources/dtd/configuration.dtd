@@ -5,7 +5,7 @@
   name CDATA #REQUIRED
 >
 
-<!ELEMENT configuration ((cooldown*, worlds*)|(worlds*, cooldown*)>
+<!ELEMENT configuration ((cooldown*, worlds*) | (worlds*, cooldown*))>
 
 <!ELEMENT cooldown EMPTY>
 <!ATTLIST cooldown

@@ -3,7 +3,7 @@
 <!-- Example configuration.xml -->
 
 <!-- Mandatory document type definition (DTD) needed for XMC to parse the document -->
-<!DOCTYPE commands SYSTEM configuration.dtd>
+<!DOCTYPE commands SYSTEM "configuration.dtd">
 
 
 <commands>
@@ -28,7 +28,7 @@
         <configuration>
           <cooldown time = "100"/>
           <worlds type = "whitelist" list = "world1, wordl2"/>
-        <configuration/>
+        </configuration>
         
       </command>
       
