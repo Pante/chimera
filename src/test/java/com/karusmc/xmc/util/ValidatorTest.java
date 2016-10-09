@@ -25,6 +25,8 @@ import org.bukkit.command.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.karusmc.xmc.util.ValidatorParameters.*;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -35,29 +37,17 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnitParamsRunner.class)
 public class ValidatorTest {
     
-    private ConfigurableCommand command;
-    
-    private CommandSender sender;
-    private ConsoleCommandSender console;
-    
-    
-    public ValidatorTest() {
-        command = mock(ConfigurableCommand.class);
-        sender = mock(CommandSender.class);
-        console = mock(ConsoleCommandSender.class);
-    }
-    
     
     @Test
-    @Parameters(method = "is_HandlesCriteria_Parameters")
-    public void is_HandlesCriteria(boolean criteria, Else handler, boolean expected, int times) {
+    @Parameters(method = "is_Parameters")
+    public void is(boolean criteria, Else handler, boolean expected, int times) {
         boolean returned = Validator.is(criteria, handler, null);
         
         assertEquals(expected, returned);
         verify(handler, times(times)).handle(null);
     }
     
-    public Object[] is_HandlesCriteria_Parameters() {
+    public Object[] is_Parameters() {
         Else handler = mock(Else.class);
         
         return new Object[]{
@@ -68,33 +58,72 @@ public class ValidatorTest {
     
     
     @Test
-    @Parameters(method = "isAllowed_ChecksUser_Parameters")
-    public void isAllowed_ChecksUser(XMCommand command, CommandSender sender, boolean expected) {
-        boolean returned = Validator.isAllowed(command, sender);
+    @Parameters(method = "canUse_Parameters")
+    public void canUse(XMCommand command, CommandSender sender, boolean expected) {
+        boolean returned = Validator.canUse(command, sender);
         
         assertEquals(expected, returned);
     }
     
-    public Object[] isAllowed_ChecksUser_Parameters() {
+    public Object[] canUse_Parameters() {
         return new Object[] {
-            new Object[] {configureCommand(true, true), configureSender(true), true}
+            canUse_Parameter(true, true, true, true),
+            canUse_Parameter(true, false, true, false),
+            
+            canUse_Parameter(true, true, false, false),
+            canUse_Parameter(true, false, false, false),
+            
+            canUse_Parameter(false, true, true, false),
+            canUse_Parameter(false, false, true, true),
+            
+            canUse_Parameter(false, true, false, false),
+            canUse_Parameter(false, false, false, false)
+        };
+    }
+    
+    @Test
+    @Parameters(method = "canUseInWorld_Parameters")
+    public void canUseInWorld(ConfigurableCommand command, CommandSender sender, boolean expected) {
+        boolean returned = Validator.canUseInWorld(command, sender);
+        
+        assertEquals(expected, returned);
+    }
+    
+    public Object[] canUseInWorld_Parameters() {
+        return new Object[] {
+            canUseInWorld_Parameter(true, true, true, false),
+            canUseInWorld_Parameter(true, true, false, false),
+            
+            canUseInWorld_Parameter(true, false, true, false),
+            canUseInWorld_Parameter(true, false, false, false),
+            
+            canUseInWorld_Parameter(false, true, true, false),
+            canUseInWorld_Parameter(false, true, false, false),
+            
+            canUseInWorld_Parameter(false, false, true, false),
+            canUseInWorld_Parameter(false, false, false, false)
         };
     }
     
     
-    public ConfigurableCommand configureCommand(boolean consoleAllowed, boolean hasPermission) {
-        when(command.isConsoleAllowed()).thenReturn(consoleAllowed);
-        when(command.testPermissionSilent(any(CommandSender.class))).thenReturn(hasPermission);
+    @Test
+    @Parameters({"0, 0, 2, true", "0, 2, 2, true", "1, 0, 2, false", "1, 3, 2, false"})
+    public void hasLength(int min, int length, int max, boolean expected) {
+        boolean returned = Validator.hasLength(min, length, max);
         
-        return command;
+        assertEquals(expected, returned);
     }
     
-    public CommandSender configureSender(boolean isPlayer) {
-        if (isPlayer) {
-            return sender;
-        } else {
-            return console;
-        }
+    
+    @Test
+    @Parameters({"1, 0, false", "0, 1, true", "0, 0, false"})
+    public void hasCooldown(long currentTime, long lastUse, boolean expected) {
+        ConfigurableCommand command = mock(ConfigurableCommand.class);
+        when(command.getCooldown()).thenReturn((long) 0);
+        
+        boolean returned = Validator.hasCooldown(command, currentTime, lastUse);
+        
+        assertEquals(expected, returned);
     }
     
 }

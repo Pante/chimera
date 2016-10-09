@@ -36,24 +36,23 @@ public class Validator {
     }
     
     
+    public static boolean canUse(XMCommand command, CommandSender sender) {
+        return (!command.isConsoleAllowed() ^ sender instanceof ConsoleCommandSender) && command.testPermissionSilent(sender);
+    }
     
-    public static boolean isAllowed(XMCommand command, CommandSender sender) {
-        return (command.isConsoleAllowed() || !(sender instanceof ConsoleCommandSender)) && command.testPermissionSilent(sender);
+    
+    public static boolean canUseInWorld(ConfigurableCommand command, CommandSender sender) {
+        return !command.hasBlacklist() && sender instanceof Player && command.getWorlds().contains(((Player) sender).getWorld().getName());
     }
     
     
     public static boolean hasLength(int min, int length, int max) {
-        return min <= length && length >= max;
+        return min <= length && length <= max;
     }
     
     
     public static boolean hasCooldown(ConfigurableCommand command, long currentTime, long lastUse) {
         return currentTime - lastUse < command.getCooldown();
     }
-    
-    
-    public static boolean isWorldRestricted(ConfigurableCommand command, CommandSender sender) {
-        return command.hasBlacklist() && sender instanceof Player && command.getWorlds().contains(((Player) sender).getWorld().getName());
-    }
-    
+
 }
