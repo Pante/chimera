@@ -16,17 +16,26 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.xml.XMLResource;
 
-import javax.xml.stream.*;
+import org.junit.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-@FunctionalInterface
-public interface Tag {
+public class BlockTagTest {
     
-    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
+    @ClassRule
+    public XMLResource resource = new XMLResource("tags/BlockTag.xml");
     
+    private BlockTag tag;
+    
+    
+    public BlockTagTest() {
+        tag = new BlockTag("block");
+    }
+    
+    @Test
+    public void 
 }

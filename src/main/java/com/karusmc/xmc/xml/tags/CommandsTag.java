@@ -16,47 +16,45 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
 
-import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.events.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class BlockTag implements Tag {
+public class CommandsTag implements Tag {
     
-    private Map<QName, Tag> tags;
-    private String tagName;
+    private Tag commandTag;
     
     
-    public BlockTag(String tagName) {
-        tags = new HashMap<>();
-        this.tagName = tagName;
+    public CommandsTag(Tag commandTag) {
+        this.commandTag = commandTag;
     }
     
     
     @Override
     public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException {
-        while(reader.hasNext()) {
-            XMLEvent event = reader.peek();
+        while (reader.hasNext()) {
+            XMLEvent event = reader.nextEvent();
             
-            QName name;
-            if (event.isStartElement() && tags.containsKey((name = event.asStartElement().getName()))) {
-                tags.get(name).parse(reader, command);
+            StartElement element;
+            if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("command")) {
                 
-            } else if (!(event.isEndElement() && event.asEndElement().getName().getLocalPart().equals(tagName))) {
-                reader.nextEvent();
+                String name = element.getAttributeByName(new QName("name")).getValue();
+                
+                Dispatcher dispatcher;
+                if (command instanceof Dispatcher && (dispatcher = (Dispatcher) command).getCommands().containsKey(name)) {
+                    commandTag.parse(reader, dispatcher.getCommands().get(name));  
+                }
+                
+            } else if (event.isEndElement() && event.asEndElement().getName().getLocalPart().equals("commands")) {
+                break;
             }
         }
-    }
-    
-    
-    public Map<QName, Tag> getTags() {
-        return tags;
     }
     
 }

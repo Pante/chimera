@@ -14,19 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.xml;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
 
-import javax.xml.stream.*;
+import java.util.*;
+
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-@FunctionalInterface
-public interface Tag {
+public class ParserRegister extends XMCommand implements Dispatcher {
     
-    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
+    private Map<String, XMCommand> commands;
+    
+    
+    public ParserRegister() {
+        super(null, null);
+        commands = new HashMap<>();
+    }
+    
+    
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        throw new UnsupportedOperationException();
+    }
+    
+
+    @Override
+    public Map<String, XMCommand> getCommands() {
+        return commands;
+    }
+    
+    public void setCommands(Map<String, XMCommand> commands) {
+        this.commands = commands;
+    }
     
 }

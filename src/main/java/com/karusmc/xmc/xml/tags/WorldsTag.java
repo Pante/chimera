@@ -17,10 +17,8 @@
 package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.*;
-import com.karusmc.xmc.xml.tags.Tag;
-import java.util.Arrays;
 
-import java.util.HashSet;
+import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.*;
@@ -38,7 +36,10 @@ public class WorldsTag implements Tag {
             StartElement element = event.asStartElement();
             ConfigurableCommand command = (ConfigurableCommand) xmCommand;
             
-            command.setListType(ListType.fromString(element.getAttributeByName(new QName("type")).getValue()));
+            if (element.getAttributeByName(new QName("type")).getValue().equals("blacklist")) {
+                command.setBlacklist(true);
+            }
+            
             command.setWorlds(new HashSet<>(Arrays.asList(element.getAttributeByName(new QName("list")).getValue().split("\\s*,\\s*"))));
         }
     }
