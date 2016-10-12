@@ -14,28 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.xml.nodes;
 
-import com.karusmc.xmc.xml.XMLResource;
+import com.karusmc.xmc.core.XMCommand;
 
-import org.junit.*;
+import javax.xml.stream.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class BlockTagTest {
+@FunctionalInterface
+public interface Node {
     
-    @ClassRule
-    public XMLResource resource = new XMLResource("tags/BlockTag.xml");
+    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
     
-    private BlockTag tag;
-    
-    
-    public BlockTagTest() {
-        tag = new BlockTag("block");
-    }
-    
-    @Test
-    public void 
 }

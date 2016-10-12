@@ -62,4 +62,9 @@ public class XMLResource extends ExternalResource {
         }
     }
     
+    
+    public XMLEventReader getReader() {
+        return reader;
+    }
+    
 }

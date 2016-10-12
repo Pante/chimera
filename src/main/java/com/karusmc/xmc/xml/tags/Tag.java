@@ -18,7 +18,7 @@ package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
 
-import javax.xml.stream.*;
+import javax.xml.stream.events.StartElement;
 
 /**
  *
@@ -27,6 +27,6 @@ import javax.xml.stream.*;
 @FunctionalInterface
 public interface Tag {
     
-    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
+    public void parse(StartElement element, XMCommand command);
     
 }

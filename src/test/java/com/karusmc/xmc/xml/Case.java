@@ -14,13 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.xml;
 
-import com.karusmc.xmc.core.XMCommand;
-import com.karusmc.xmc.xml.tags.Tag;
-import java.util.Arrays;
 import javax.xml.namespace.QName;
-
 import javax.xml.stream.*;
 import javax.xml.stream.events.*;
 
@@ -28,17 +24,23 @@ import javax.xml.stream.events.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class MetaTag implements Tag {
+public class Case {
+    
+    public XMLEventReader find(XMLEventReader reader, String id) {
+        try {
+            while(reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
 
-    @Override
-    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException {
-        XMLEvent event;
-        if (reader.hasNext() && (event = reader.nextEvent()).isStartElement()) {
-            StartElement element = event.asStartElement();
+                StartElement element;
+                if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("case") 
+                        && element.getAttributeByName(new QName("id")).getValue().equals("id")) {
+                    break;
+                }
+            }
+            return reader;
             
-            command.setAliases(Arrays.asList(element.getAttributeByName(new QName("aliases")).getValue().split("\\s*,\\s*")));
-            command.setDescription(element.getAttributeByName(new QName("description")).getValue());
-            command.setUsage(element.getAttributeByName(new QName("usage")).getValue());
+        } catch (XMLStreamException e) {
+            throw new RuntimeException("Failed to find case with ID: " + id);
         }
     }
     
