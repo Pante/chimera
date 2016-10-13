@@ -14,25 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.xml.nodes;
 
-import org.bukkit.command.Command;
+import com.karusmc.xmc.core.*;
+
+import java.util.*;
+
 import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class StubCommand extends Command {
+public class StubDispatcherCommand extends XMCommand implements Dispatcher {
     
-    public StubCommand(String name) {
-        super(name);
+    private Map<String, XMCommand> commands;
+    
+    
+    public StubDispatcherCommand() {
+        super(null, null);
+        commands = new HashMap<>();
     }
     
-    
+
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<String, XMCommand> getCommands() {
+        return commands;
     }
     
 }

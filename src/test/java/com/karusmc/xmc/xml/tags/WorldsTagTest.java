@@ -16,10 +16,10 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
-import com.karusmc.xmc.xml.*;
+import com.karusmc.xmc.core.ConfigurableCommand;
+import com.karusmc.xmc.xml.XMLResource;
 
-import javax.xml.stream.XMLStreamException;
+import java.util.*;
 
 import junitparams.*;
 
@@ -33,32 +33,37 @@ import static org.mockito.Mockito.*;
  * @author PanteLegacy @ karusmc.com
  */
 @RunWith(JUnitParamsRunner.class)
-public class PermissionTagTest {
+public class WorldsTagTest {
     
     @ClassRule
-    public static XMLResource resource = new XMLResource("xml/tags/permission.xml");
+    public static XMLResource resource = new XMLResource("xml/tags/worlds.xml");
     
-    private PermissionTag tag;
-    private XMCommand command;
-
+    private WorldsTag tag;
+    private ConfigurableCommand command;
     
-    public PermissionTagTest() {
-        command = mock(XMCommand.class);
-        
-        tag = new PermissionTag();
+    
+    public WorldsTagTest() {
+        tag = new WorldsTag();
+        command = mock(ConfigurableCommand.class);
     }
     
     
     @Test
-    @Parameters({"1, true", "2, false"})
-    public void parse(String id, boolean expected) throws XMLStreamException {
+    @Parameters(method = "parse_parameters")
+    public void parse(String id, boolean hasBlacklist, Set<String> worlds) {
         resource.findCase(id);
+        tag.parse(resource.find("worlds"), command);
         
-        tag.parse(resource.find("permission"), command);
-        
-        verify(command, times(1)).setPermission("permission " + id);
-        verify(command, times(1)).setPermissionMessage("message " + id);
-        verify(command, times(1)).setConsoleAllowed(expected);
+        verify(command, times(1)).setBlacklist(hasBlacklist);
+        verify(command, times(1)).setWorlds(worlds);
     }
+    
+    public Object[] parse_parameters() {
+        return new Object[] {
+            new Object[] {"1", false, new HashSet<>(Arrays.asList("1", "2"))},
+            new Object[] {"2", true, new HashSet<>(Arrays.asList("1", "2"))}
+        };
+    }
+    
     
 }

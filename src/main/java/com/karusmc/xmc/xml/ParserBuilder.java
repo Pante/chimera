@@ -14,39 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
-
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
+package com.karusmc.xmc.xml;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class XMCommand extends Command implements PluginIdentifiableCommand {
-    
-    private Plugin owningPlugin;
-    private boolean consoleAllowed;
-    
-    
-    public XMCommand(Plugin owningPlugin, String name) {
-        super(name);
-        this.owningPlugin = owningPlugin;
-    }
-    
-    
-    @Override
-    public Plugin getPlugin() {
-        return owningPlugin;
-    }
-    
-    
-    public boolean isConsoleAllowed() {
-        return consoleAllowed;
-    }
-    
-    public void setConsoleAllowed(boolean consoleAllowed) {
-        this.consoleAllowed = consoleAllowed;
-    }
+public class ParserBuilder {
     
 }

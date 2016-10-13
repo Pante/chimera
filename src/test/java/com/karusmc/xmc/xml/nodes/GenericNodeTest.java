@@ -14,17 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.xml.nodes;
 
-import com.karusmc.xmc.core.XMCommand;
-import com.karusmc.xmc.xml.*;
-
+import com.karusmc.xmc.xml.XMLResource;
+import com.karusmc.xmc.xml.tags.Tag;
 import javax.xml.stream.XMLStreamException;
 
-import junitparams.*;
-
 import org.junit.*;
-import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.*;
 
@@ -32,33 +28,33 @@ import static org.mockito.Mockito.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-@RunWith(JUnitParamsRunner.class)
-public class PermissionTagTest {
+public class GenericNodeTest {
     
     @ClassRule
-    public static XMLResource resource = new XMLResource("xml/tags/permission.xml");
+    public static XMLResource resource = new XMLResource("xml/nodes/genericnode.xml");
     
-    private PermissionTag tag;
-    private XMCommand command;
-
+    private GenericNode node;
     
-    public PermissionTagTest() {
-        command = mock(XMCommand.class);
+    private Node mockNode;
+    private Tag mockTag;
+    
+    
+    public GenericNodeTest() {
+        node = new GenericNode("node");
         
-        tag = new PermissionTag();
+        node.getNodes().put("node", mockNode = mock(Node.class));
+        node.getTags().put("tag", mockTag = mock(Tag.class));
     }
     
     
     @Test
-    @Parameters({"1, true", "2, false"})
-    public void parse(String id, boolean expected) throws XMLStreamException {
-        resource.findCase(id);
+    public void parse() throws XMLStreamException {
+        resource.find("node");
         
-        tag.parse(resource.find("permission"), command);
+        node.parse(resource.getReader(), null);
         
-        verify(command, times(1)).setPermission("permission " + id);
-        verify(command, times(1)).setPermissionMessage("message " + id);
-        verify(command, times(1)).setConsoleAllowed(expected);
+        verify(mockTag, times(1)).parse(any(), any());
+        verify(mockNode, times(1)).parse(any(), any());
     }
     
 }

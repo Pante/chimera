@@ -47,8 +47,8 @@ public class StubServer implements Server {
     private final CommandMap commandMap;
     
     
-    public StubServer() {
-        commandMap = new SimpleCommandMap(this);
+    public StubServer(CommandMap commandMap) {
+        this.commandMap = commandMap;
     }
     
     
@@ -56,7 +56,7 @@ public class StubServer implements Server {
         return commandMap;
     }
     
-
+    
     @Override
     public String getName() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

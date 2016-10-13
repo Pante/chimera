@@ -7,14 +7,14 @@
 
 
 <!-- Mandatory document type definition (DTD) needed for XMC to parse the document -->
-<!DOCTYPE commands SYSTEM commands.dtd>
+<!DOCTYPE commands SYSTEM "commands.dtd">
 
 <commands>
   
   <!-- Attribute: name is mandatory for obvious reasons -->
-  <command name = "command" aliases = "cmd, comm">
+  <command name = "command">
     
-    <meta description = "command description" usage = "example usage"/>
+    <meta aliases = "cmd, comm" description = "command description" usage = "example usage"/>
     <permission permission = "example.permission" message = "You do not have permission to use this command" allow-console = "true"/>
     
     
@@ -27,26 +27,28 @@
     -->
     <commands>
       
-      <command name = "subcommand" aliases = "subcmd, subcomm">
+      <command name = "subcommand">
     
-      <meta description = "command description" usage = "example usage"/>
-      <permission permission = "example.permission" message = "You do not have permission to use this command" allow-console = "true"/>
+        <meta aliases = "subcmd, subcomm" description = "command description" usage = "example usage"/>
+        <permission permission = "example.permission" message = "You do not have permission to use this command" allow-console = "true"/>
       
       
-      <!--
-      A default value must be specified for the command to be configurable under the 
-      commands-configuration.xml document. XMC will ignore said configuuration option if 
-      no default value is present.
-      -->
-      <configuration>
+        <!--
+        A default value must be specified for the command to be configurable under the 
+        commands-configuration.xml document. XMC will ignore said configuuration option if 
+        no default value is present.
+        -->
+        <configuration>
       
-        <!-- The time unit for attribute: time is in milliseconds -->
-        <cooldown time = "10"/>
+          <!-- The time unit for attribute: time is in milliseconds -->
+          <cooldown time = "10"/>
         
-        <!-- Valid values for attribute: type are "whitelist" and "blacklist" -->
-        <worlds type = "whitelist" list = "world1, world2"/>
+          <!-- Valid values for attribute: type are "whitelist" and "blacklist" -->
+          <worlds type = "whitelist" list = "world1, world2"/>
         
-      <configuration/>
+        </configuration>
+        
+      </command>
     
     </commands>
     

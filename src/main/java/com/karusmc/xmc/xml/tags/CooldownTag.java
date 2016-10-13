@@ -14,12 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.xml.tags;
+
+import com.karusmc.xmc.core.*;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.events.StartElement;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class DispatcherCommandTest {
+public class CooldownTag implements Tag {
     
+    private QName time;
+    
+    
+    public CooldownTag() {
+        time = new QName("time");
+    }
+    
+    
+    @Override
+    public void parse(StartElement element, XMCommand command) {
+        long cooldown;
+        if ((cooldown = Long.parseLong(element.getAttributeByName(time).getValue())) >= 0) {
+            ((ConfigurableCommand) command).setCooldown(cooldown);
+        }
+    }
+
 }

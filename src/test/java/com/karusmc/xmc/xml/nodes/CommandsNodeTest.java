@@ -14,14 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.xml.nodes;
+
+import com.karusmc.xmc.xml.XMLResource;
+
+import org.junit.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public enum ListType {
+public class CommandsNodeTest {
     
-    WHITELIST, BLACKLIST
+    @ClassRule
+    public static XMLResource resource = new XMLResource("xml/nodes/genericnode.xml");
+    
+    private CommandsNode node;
+    
+    
+    public CommandsNodeTest() {
+        node = new CommandsNode();
+    }
     
 }

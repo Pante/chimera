@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    
+  <case id = "1">
+    <permission permission = "permission 1" message = "message 1" allow-console = "true"/>
+  </case>
+  
+  <case id = "2">
+    <permission permission = "permission 2" message = "message 2" allow-console = "false"/>
+  </case>
+  
+</root>

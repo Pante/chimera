@@ -16,14 +16,13 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
-import com.karusmc.xmc.xml.*;
-
-import javax.xml.stream.XMLStreamException;
+import com.karusmc.xmc.core.ConfigurableCommand;
+import com.karusmc.xmc.xml.XMLResource;
 
 import junitparams.*;
 
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.*;
@@ -33,32 +32,41 @@ import static org.mockito.Mockito.*;
  * @author PanteLegacy @ karusmc.com
  */
 @RunWith(JUnitParamsRunner.class)
-public class PermissionTagTest {
+public class CooldownTagTest {
     
     @ClassRule
-    public static XMLResource resource = new XMLResource("xml/tags/permission.xml");
+    public static XMLResource resource = new XMLResource("xml/tags/cooldown.xml");
     
-    private PermissionTag tag;
-    private XMCommand command;
-
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     
-    public PermissionTagTest() {
-        command = mock(XMCommand.class);
-        
-        tag = new PermissionTag();
+    private CooldownTag tag;
+    private ConfigurableCommand command;
+    
+    
+    public CooldownTagTest() {
+        tag = new CooldownTag();
+        command = mock(ConfigurableCommand.class);
     }
     
     
     @Test
-    @Parameters({"1, true", "2, false"})
-    public void parse(String id, boolean expected) throws XMLStreamException {
+    @Parameters({"1, 1, 10", "2, 1, 0", "3, 0, -5"})
+    public void parse(String id, int times, long cooldown) {
         resource.findCase(id);
         
-        tag.parse(resource.find("permission"), command);
+        tag.parse(resource.find("cooldown"), command);
         
-        verify(command, times(1)).setPermission("permission " + id);
-        verify(command, times(1)).setPermissionMessage("message " + id);
-        verify(command, times(1)).setConsoleAllowed(expected);
+        verify(command, times(times)).setCooldown(cooldown);
+    }
+    
+    
+    @Test
+    public void parse_ThrowsException() {
+        exception.expect(NumberFormatException.class);
+        
+        resource.findCase("4");
+        tag.parse(resource.find("cooldown"), command);
     }
     
 }

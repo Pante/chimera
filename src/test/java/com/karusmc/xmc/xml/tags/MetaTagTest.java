@@ -17,9 +17,9 @@
 package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
-import com.karusmc.xmc.xml.*;
+import com.karusmc.xmc.xml.XMLResource;
 
-import javax.xml.stream.XMLStreamException;
+import java.util.*;
 
 import junitparams.*;
 
@@ -33,32 +33,38 @@ import static org.mockito.Mockito.*;
  * @author PanteLegacy @ karusmc.com
  */
 @RunWith(JUnitParamsRunner.class)
-public class PermissionTagTest {
+public class MetaTagTest {
     
     @ClassRule
-    public static XMLResource resource = new XMLResource("xml/tags/permission.xml");
+    public static XMLResource resource = new XMLResource("xml/tags/meta.xml");
     
-    private PermissionTag tag;
+    private MetaTag tag;
     private XMCommand command;
-
     
-    public PermissionTagTest() {
+    
+    public MetaTagTest() {
+        tag = new MetaTag();
         command = mock(XMCommand.class);
-        
-        tag = new PermissionTag();
     }
     
     
     @Test
-    @Parameters({"1, true", "2, false"})
-    public void parse(String id, boolean expected) throws XMLStreamException {
+    @Parameters(method = "parse_parameters")
+    public void parse(String id, List<String> expectedAliases) {
         resource.findCase(id);
+        tag.parse(resource.find("meta"), command);
         
-        tag.parse(resource.find("permission"), command);
-        
-        verify(command, times(1)).setPermission("permission " + id);
-        verify(command, times(1)).setPermissionMessage("message " + id);
-        verify(command, times(1)).setConsoleAllowed(expected);
+        verify(command, times(1)).setAliases(expectedAliases);
+        verify(command, times(1)).setDescription("description " + id);
+        verify(command, times(1)).setUsage("usage " + id);
+    }
+    
+    public Object[] parse_parameters() {
+        return new Object[] {
+            new Object[] {"1", Arrays.asList("1", "2", "3")},
+            new Object[] {"2", Arrays.asList("1", "2", "3")},
+            new Object[] {"3", Arrays.<String>asList()}
+        };
     }
     
 }

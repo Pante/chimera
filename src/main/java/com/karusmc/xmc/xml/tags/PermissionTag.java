@@ -14,39 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
+package com.karusmc.xmc.xml.tags;
 
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
+import com.karusmc.xmc.core.XMCommand;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.events.StartElement;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class XMCommand extends Command implements PluginIdentifiableCommand {
+public class PermissionTag implements Tag {
     
-    private Plugin owningPlugin;
-    private boolean consoleAllowed;
+    private QName permission;
+    private QName message;
+    private QName console;
     
     
-    public XMCommand(Plugin owningPlugin, String name) {
-        super(name);
-        this.owningPlugin = owningPlugin;
+    public PermissionTag() {
+        permission = new QName("permission");
+        message = new QName("message");
+        console = new QName("allow-console");
     }
     
     
     @Override
-    public Plugin getPlugin() {
-        return owningPlugin;
-    }
-    
-    
-    public boolean isConsoleAllowed() {
-        return consoleAllowed;
-    }
-    
-    public void setConsoleAllowed(boolean consoleAllowed) {
-        this.consoleAllowed = consoleAllowed;
+    public void parse(StartElement element, XMCommand command) {
+        command.setPermission(element.getAttributeByName(permission).getValue());
+        command.setPermissionMessage(element.getAttributeByName(message).getValue());
+        command.setConsoleAllowed(Boolean.parseBoolean(element.getAttributeByName(console).getValue()));
     }
     
 }

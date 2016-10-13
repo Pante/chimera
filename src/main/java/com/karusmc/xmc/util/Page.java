@@ -14,39 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.core;
-
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
+package com.karusmc.xmc.util;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class XMCommand extends Command implements PluginIdentifiableCommand {
+public class Page {
     
-    private Plugin owningPlugin;
-    private boolean consoleAllowed;
+    public static int getPageNumber(String argument) {
+        if (argument.matches("\\d+")) {
+            return Integer.parseInt(argument);
+            
+        } else {
+            return 1;
+        }
+    }
     
-    
-    public XMCommand(Plugin owningPlugin, String name) {
-        super(name);
-        this.owningPlugin = owningPlugin;
+    public static int getTotalPages(int divisibleSize, int pageSize) {
+        if (divisibleSize > 0 && pageSize > 0) {
+            return Math.max(1, (int) Math.ceil((double) divisibleSize / pageSize));
+            
+        } else {
+            return 0;
+        }
     }
     
     
-    @Override
-    public Plugin getPlugin() {
-        return owningPlugin;
+    public static int getFirstIndex(int page, int pageSize) {
+        return page * pageSize - page;
     }
     
-    
-    public boolean isConsoleAllowed() {
-        return consoleAllowed;
-    }
-    
-    public void setConsoleAllowed(boolean consoleAllowed) {
-        this.consoleAllowed = consoleAllowed;
+    public static int getLastIndex(int page, int pageSize, int divisibleSize) {
+        return Math.min(page * pageSize, divisibleSize);
     }
     
 }
