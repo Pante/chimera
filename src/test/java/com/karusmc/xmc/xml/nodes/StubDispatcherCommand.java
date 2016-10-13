@@ -14,36 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.tags;
+package com.karusmc.xmc.xml.nodes;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.events.StartElement;
+import java.util.*;
+
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class PermissionTag implements Tag {
+public class StubDispatcherCommand extends XMCommand implements Dispatcher {
     
-    private QName permission;
-    private QName message;
-    private QName console;
+    private Map<String, XMCommand> commands;
     
     
-    public PermissionTag() {
-        permission = new QName("permission");
-        message = new QName("message");
-        console = new QName("allow-console");
+    public StubDispatcherCommand() {
+        super(null, null);
+        commands = new HashMap<>();
     }
     
-    
+
     @Override
-    public void parse(StartElement element, XMCommand command) {
-        command.setPermission(element.getAttributeByName(permission).getValue());
-        command.setPermissionMessage(element.getAttributeByName(message).getValue());
-        command.setConsoleAllowed(Boolean.parseBoolean(element.getAttributeByName(console).getValue()));
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Map<String, XMCommand> getCommands() {
+        return commands;
     }
     
 }

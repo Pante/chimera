@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    
+  <case id = "1">
+    <cooldown time = "10"/>
+  </case>
+  
+  <case id = "2">
+    <cooldown time = "0"/>
+  </case>
+  
+  <case id = "3">
+    <cooldown time = "-5"/>
+  </case>
+  
+  <case id = "4">
+    <cooldown time = "invalid"/>
+  </case>
+  
+</root>

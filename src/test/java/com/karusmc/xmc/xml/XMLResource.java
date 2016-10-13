@@ -17,8 +17,11 @@
 package com.karusmc.xmc.xml;
 
 import com.ctc.wstx.stax.WstxInputFactory;
+import javax.xml.namespace.QName;
 
 import javax.xml.stream.*;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.junit.rules.ExternalResource;
 
@@ -65,6 +68,45 @@ public class XMLResource extends ExternalResource {
     
     public XMLEventReader getReader() {
         return reader;
+    }
+    
+    
+    public void findCase(String id) {
+        try {
+            while(reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+
+                StartElement element;
+                if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("case") 
+                        && element.getAttributeByName(new QName("id")).getValue().equals(id)) {
+                    
+                    return;
+                }
+            }
+            
+            throw new RuntimeException("Failed to find case with id: " + id);
+            
+        } catch (XMLStreamException e) {
+            throw new RuntimeException("An error occured while trying to find case with id: " + id);
+        }
+    }
+    
+    public StartElement find(String name) {
+        try {
+            while(reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+
+                StartElement element;
+                if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals(name)) {
+                    return element;
+                }
+            }
+            
+            throw new RuntimeException("Failed to find tag with name: " + name);
+            
+        } catch (XMLStreamException e) {
+            throw new RuntimeException("An error occured while trying to find tag with name: " + name);
+        }
     }
     
 }

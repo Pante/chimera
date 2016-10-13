@@ -14,34 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml;
+package com.karusmc.xmc.xml.tags;
+
+import com.karusmc.xmc.core.*;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.*;
-import javax.xml.stream.events.*;
+import javax.xml.stream.events.StartElement;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Case {
+public class CooldownTag implements Tag {
     
-    public XMLEventReader find(XMLEventReader reader, String id) {
-        try {
-            while(reader.hasNext()) {
-                XMLEvent event = reader.nextEvent();
-
-                StartElement element;
-                if (event.isStartElement() && (element = event.asStartElement()).getName().getLocalPart().equals("case") 
-                        && element.getAttributeByName(new QName("id")).getValue().equals("id")) {
-                    break;
-                }
-            }
-            return reader;
-            
-        } catch (XMLStreamException e) {
-            throw new RuntimeException("Failed to find case with ID: " + id);
-        }
+    private QName time;
+    
+    
+    public CooldownTag() {
+        time = new QName("time");
     }
     
+    
+    @Override
+    public void parse(StartElement element, XMCommand command) {
+        long cooldown;
+        if ((cooldown = Long.parseLong(element.getAttributeByName(time).getValue())) >= 0) {
+            ((ConfigurableCommand) command).setCooldown(cooldown);
+        }
+    }
+
 }

@@ -18,6 +18,8 @@ package com.karusmc.xmc.xml.tags;
 
 import com.karusmc.xmc.core.XMCommand;
 
+import java.util.Arrays;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.StartElement;
 
@@ -25,25 +27,20 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class PermissionTag implements Tag {
-    
-    private QName permission;
-    private QName message;
-    private QName console;
-    
-    
-    public PermissionTag() {
-        permission = new QName("permission");
-        message = new QName("message");
-        console = new QName("allow-console");
-    }
-    
-    
+public class MetaTag implements Tag {
+
     @Override
     public void parse(StartElement element, XMCommand command) {
-        command.setPermission(element.getAttributeByName(permission).getValue());
-        command.setPermissionMessage(element.getAttributeByName(message).getValue());
-        command.setConsoleAllowed(Boolean.parseBoolean(element.getAttributeByName(console).getValue()));
+        
+        String aliases;
+        if ((aliases = element.getAttributeByName(new QName("aliases")).getValue()).length() != 0) {
+            command.setAliases(Arrays.asList(aliases.split("\\s*,\\s*")));
+        } else {
+            command.setAliases(Arrays.<String>asList());
+        }
+        
+        command.setDescription(element.getAttributeByName(new QName("description")).getValue());
+        command.setUsage(element.getAttributeByName(new QName("usage")).getValue());
     }
     
 }

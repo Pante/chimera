@@ -16,8 +16,9 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
+import com.karusmc.xmc.core.*;
 
+import java.util.*;
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.StartElement;
 
@@ -25,25 +26,19 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class PermissionTag implements Tag {
-    
-    private QName permission;
-    private QName message;
-    private QName console;
-    
-    
-    public PermissionTag() {
-        permission = new QName("permission");
-        message = new QName("message");
-        console = new QName("allow-console");
-    }
-    
-    
+public class WorldsTag implements Tag {
+
     @Override
-    public void parse(StartElement element, XMCommand command) {
-        command.setPermission(element.getAttributeByName(permission).getValue());
-        command.setPermissionMessage(element.getAttributeByName(message).getValue());
-        command.setConsoleAllowed(Boolean.parseBoolean(element.getAttributeByName(console).getValue()));
+    public void parse(StartElement element, XMCommand xmCommand) {
+        ConfigurableCommand command = (ConfigurableCommand) xmCommand;
+        
+        if (element.getAttributeByName(new QName("type")).getValue().equals("blacklist")) {
+            command.setBlacklist(true);
+        } else {
+            command.setBlacklist(false);
+        }
+        
+        command.setWorlds(new HashSet<>(Arrays.asList(element.getAttributeByName(new QName("list")).getValue().split("\\s*,\\s*"))));
     }
     
 }

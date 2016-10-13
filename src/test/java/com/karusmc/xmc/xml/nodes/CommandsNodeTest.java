@@ -14,42 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml;
+package com.karusmc.xmc.xml.nodes;
 
-import com.karusmc.xmc.core.*;
+import com.karusmc.xmc.xml.XMLResource;
 
-import java.util.*;
-
-import org.bukkit.command.CommandSender;
+import org.junit.*;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class ParserRegister extends XMCommand implements Dispatcher {
+public class CommandsNodeTest {
     
-    private Map<String, XMCommand> commands;
+    @ClassRule
+    public static XMLResource resource = new XMLResource("xml/nodes/genericnode.xml");
     
-    
-    public ParserRegister() {
-        super(null, null);
-        commands = new HashMap<>();
-    }
+    private CommandsNode node;
     
     
-    @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        throw new UnsupportedOperationException();
-    }
-    
-
-    @Override
-    public Map<String, XMCommand> getCommands() {
-        return commands;
-    }
-    
-    public void setCommands(Map<String, XMCommand> commands) {
-        this.commands = commands;
+    public CommandsNodeTest() {
+        node = new CommandsNode();
     }
     
 }
