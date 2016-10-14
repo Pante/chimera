@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+  
+  <commands>
+    
+    <command name = "subcommand">
+        
+    </command>
+      
+  </commands>
+  
+  <command name = "subcommand"/>
+  
+</root>

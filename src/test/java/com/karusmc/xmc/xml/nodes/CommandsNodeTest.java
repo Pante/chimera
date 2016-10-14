@@ -16,9 +16,13 @@
  */
 package com.karusmc.xmc.xml.nodes;
 
+import com.karusmc.xmc.core.XMCommand;
 import com.karusmc.xmc.xml.XMLResource;
+import javax.xml.stream.XMLStreamException;
 
 import org.junit.*;
+
+import static org.mockito.Mockito.*;
 
 /**
  *
@@ -27,13 +31,31 @@ import org.junit.*;
 public class CommandsNodeTest {
     
     @ClassRule
-    public static XMLResource resource = new XMLResource("xml/nodes/genericnode.xml");
+    public static XMLResource resource = new XMLResource("xml/nodes/commands.xml");
     
     private CommandsNode node;
+    private Node mockNode;
+    
+    private StubDispatcherCommand stubCommand;
+    private XMCommand mockCommand;
     
     
     public CommandsNodeTest() {
-        node = new CommandsNode();
+        node = new CommandsNode(mockNode = mock(Node.class));
+        
+        stubCommand = new StubDispatcherCommand();
+        mockCommand = mock(XMCommand.class);
+        
+        stubCommand.getCommands().put("subcommand", mockCommand);
+    }
+    
+    
+    @Test
+    public void parse() throws XMLStreamException {
+        resource.find("commands");
+        node.parse(resource.getReader(), stubCommand);
+        
+        verify(mockNode, times(1)).parse(resource.getReader(), mockCommand);
     }
     
 }
