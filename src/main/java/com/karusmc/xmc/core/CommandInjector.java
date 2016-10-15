@@ -17,9 +17,12 @@
 package com.karusmc.xmc.core;
 
 import java.lang.reflect.*;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bukkit.Server;
 import org.bukkit.command.*;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -27,43 +30,39 @@ import org.bukkit.command.*;
  */
 public class CommandInjector {
     
-    private Server server;
-    private CommandMap commandMap;
+    private SimpleCommandMap commandMap;
     private Field field;
     
     
     public CommandInjector(Server server) {
         try {
-            this.server = server;
             
             field = server.getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
             
-            commandMap = (CommandMap) field.get(server);
+            commandMap = (SimpleCommandMap) field.get(server);
             
         } catch (ReflectiveOperationException e) {
             throw new IllegalArgumentException("Server class doest not contain field: commandMap", e);
         }
     }
     
-    
-    public void setCommandMap(CommandMap map) {
-        try {
-            Field modifier = field.getClass().getDeclaredField("modifiers");
-            modifier.setAccessible(true);
-            modifier.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(server, map);
-            commandMap = map;
-            
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Failed to inject commandmap implementation", e);
-        }
+    public SimpleCommandMap getCommandMap() {
+        return commandMap;
     }
     
     
-    public CommandMap getCommandMap() {
-        return commandMap;
+    public Map<String, Command> getPluginCommands(Plugin plugin) {
+        return commandMap.getCommands().stream()
+                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().equals(plugin))
+                .collect(Collectors.toMap(command -> command.getName(), command -> command));
+    }
+    
+    
+    public Map<String, XMCommand> getXMCommands(Plugin plugin) {
+        return commandMap.getCommands().stream()
+                .filter(command -> command instanceof XMCommand && ((XMCommand) command).getPlugin().equals(plugin))
+                .collect(Collectors.toMap(command -> command.getName(), command -> (XMCommand) command));
     }
     
 }

@@ -22,7 +22,17 @@ package com.karusmc.xmc.util;
  */
 public class Page {
     
-    public static int getPageNumber(String argument) {
+    public static<T> T getOrDefault(T[] args, int index, T defaultArgument) {
+        if (args.length >= index + 1) {
+            return args[index];
+            
+        } else {
+            return defaultArgument;
+        }
+    }
+    
+    
+    public static int getPage(String argument) {
         if (argument.matches("\\d+")) {
             return Integer.parseInt(argument);
             
