@@ -25,7 +25,7 @@ import org.bukkit.plugin.Plugin;
  */
 public abstract class XMCommand extends Command implements PluginIdentifiableCommand {
     
-    private Plugin owningPlugin;
+    protected Plugin owningPlugin;
     private boolean consoleAllowed;
     
     
