@@ -16,11 +16,8 @@
  */
 package com.karusmc.xmc.core;
 
-import java.util.*;
-
 import org.bukkit.Server;
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.command.CommandMap;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
@@ -39,23 +36,11 @@ public class CommandInjectorTest {
     
     private CommandInjector injector;
     private StubServer server;
-    private SimpleCommandMap commandMap;
-    
-    private Plugin plugin;
-    private XMCommand command;
-    private Command mockCommand;
+    private CommandMap commandMap;
     
     
     public CommandInjectorTest() {
-        server = new StubServer((commandMap = mock(SimpleCommandMap.class)));
-
-        command = mock(XMCommand.class);
-        when(command.getPlugin()).thenReturn(plugin = mock(Plugin.class));
-        when(command.getName()).thenReturn("XMCommand");
-        
-        mockCommand = mock(Command.class);
-        
-        when(commandMap.getCommands()).thenReturn(Arrays.asList(command, mockCommand));
+        server = new StubServer((commandMap = mock(CommandMap.class)));
     }
     
     
@@ -71,27 +56,19 @@ public class CommandInjectorTest {
     @Test
     public void getCommandMap_ReturnsCommandMap() {
         injector = new CommandInjector(server);
-        assertTrue(commandMap == injector.getCommandMap());
+        assertEquals(commandMap, injector.getCommandMap());
     }
     
     
     @Test
-    public void getPluginCommands_ReturnsPluginCommand() {
+    public void setCommandMap_SetsCommandMap() {
+        server = new StubServer(mock(CommandMap.class));
         injector = new CommandInjector(server);
-        Map<String, Command> commands = injector.getPluginCommands(plugin);
         
-        assertEquals(1, commands.size());
-        assertTrue(commands.containsKey("XMCommand"));
-    }
-    
-    
-    @Test
-    public void getXMCommands_ReturnsPluginCommand() {
-        injector = new CommandInjector(server);
-        Map<String, XMCommand> commands = injector.getXMCommands(plugin);
+        commandMap = mock(CommandMap.class);
+        injector.setCommandMap(commandMap);
         
-        assertEquals(1, commands.size());
-        assertTrue(commands.containsKey("XMCommand"));
+        assertEquals(commandMap, server.getCommandMap());
     }
     
 }
