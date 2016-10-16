@@ -20,7 +20,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
@@ -28,7 +28,7 @@ import org.bukkit.plugin.Plugin;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CommandMapProxy extends Observable {
+public class CommandMapProxy extends Observable implements CommandMap {
     
     private SimpleCommandMap commandMap;
     
@@ -47,19 +47,22 @@ public class CommandMapProxy extends Observable {
     }
     
     
+    @Override
     public void clearCommands() {
         commandMap.clearCommands();
     }
     
     
+    @Override
     public Command getCommand(String name) {
         return commandMap.getCommand(name);
     }
     
     
-    public void register(String fallbackPrefix, Command command) {
-        commandMap.register(fallbackPrefix, command);
+    @Override
+    public boolean register(String fallbackPrefix, Command command) {
         notifyObservers(command);
+        return commandMap.register(fallbackPrefix, command);
     }
     
     
@@ -75,7 +78,35 @@ public class CommandMapProxy extends Observable {
                 .filter(command -> command instanceof XMCommand && ((XMCommand) command).getPlugin().equals(plugin))
                 .collect(Collectors.toMap(command -> command.getName(), command -> (XMCommand) command));
     }
+
     
+    @Override
+    public boolean register(String label, String fallbackPrefix, Command command) {
+        return commandMap.register(label, fallbackPrefix, command);
+    }
+    
+    
+    @Override
+    public void registerAll(String fallbackPrefix, List<Command> commands) {
+        commandMap.registerAll(fallbackPrefix, commands);
+    }
+    
+
+    @Override
+    public boolean dispatch(CommandSender sender, String cmdLine) throws CommandException {
+        return commandMap.dispatch(sender, cmdLine);
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String cmdLine) throws IllegalArgumentException {
+        return commandMap.tabComplete(sender, cmdLine);
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String cmdLine, Location location) throws IllegalArgumentException {
+        return commandMap.tabComplete(sender, cmdLine, location);
+    }
+
     
     public CommandMap getRealCommandMap() {
         return commandMap;

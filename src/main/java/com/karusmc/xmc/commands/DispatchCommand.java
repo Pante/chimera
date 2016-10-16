@@ -22,6 +22,7 @@ import com.karusmc.xmc.util.Else;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -36,16 +37,21 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
     private Else handle;
     
     
+    public DispatchCommand(Plugin owningPlugin, String name) {
+        this(owningPlugin, name, sender -> sender.sendMessage(ChatColor.RED + "No such command"));
+    }
+    
     public DispatchCommand(Plugin owningPlugin, String name, Else handle) {
         super(owningPlugin, name);
         commands = new HashMap<>();
+        this.handle = handle;
     }
     
     
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (is(hasLength(1, args.length, 100) && commands.containsKey(args[0]), handle, sender)) {
-            return commands.get(args[0]).execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length - 1));
+            return commands.get(args[0]).execute(sender, args[0], trimArguments(args));
         }
     
         return true;
@@ -58,10 +64,20 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
             return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
             
         } else if (args.length >= 2 && commands.containsKey(args[0])) {
-            return commands.get(args[0]).tabComplete(sender, args[0], Arrays.copyOfRange(args, 1, args.length - 1));
+            return commands.get(args[0]).tabComplete(sender, args[0], trimArguments(args));
         }
         
         return null;
+    }
+    
+    
+    private String[] trimArguments(String[] args) {
+        if (args.length <= 1)  {
+            return new String[] {};
+            
+        } else {
+            return Arrays.copyOfRange(args, 1, args.length - 1);
+        }
     }
     
     

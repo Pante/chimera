@@ -20,6 +20,7 @@ import com.karusmc.xmc.core.*;
 import com.karusmc.xmc.util.Else;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -27,11 +28,11 @@ import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Page.*;
 import static com.karusmc.xmc.util.Validator.*;
-import java.util.stream.Collectors;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
+ * TODO
  */
 public class HelpCommand extends XMCommand implements Observer {
     
@@ -41,17 +42,17 @@ public class HelpCommand extends XMCommand implements Observer {
     private int pageSize;
     
     
-    public HelpCommand(Plugin owningPlugin, String name, Map<String, XMCommand> commands) {
-        this(owningPlugin, name, commands,
+    public HelpCommand(Plugin owningPlugin, String name) {
+        this(owningPlugin, name,
                 sender -> sender.sendMessage(ChatColor.RED + "You either do not have permission to use this command or invalid number of arguments were specified."));
     }
    
-    public HelpCommand(Plugin owningPlugin, String name, Map<String, XMCommand> commands, Else handle) {
+    public HelpCommand(Plugin owningPlugin, String name, Else handle) {
         super(owningPlugin, name);
         
-        commands.forEach(this::putCommand);
-        
+        commands = new HashMap<>();
         this.handle = handle;
+        
         this.pageSize = 5;
     }
     
@@ -59,23 +60,30 @@ public class HelpCommand extends XMCommand implements Observer {
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
         if (is(canUse(this, sender) && hasLength(0, args.length, 2), handle, sender)) {
-
             int page = getPage(getOrDefault(args, 0, ""));
             String search = getOrDefault(args, 1, "");
             
-            List<String> usages = commands.entrySet().stream()
-                    .filter(entry -> entry.getKey().startsWith(search) && entry.getValue().testPermissionSilent(sender))
-                    .limit(page * pageSize)
-                    .map(entry -> entry.getValue().getUsage())
-                    .collect(Collectors.toList());
-            
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6==== Help: &c" + search
-                    + " &6=== Page: &c" + page + "/" + " &6===="));
-            
-            sender.sendMessage(usages.subList(page, usages.size()).toArray(new String[0]));
+            List<String> usages = getUsages(sender, page, search);
+            displayUsages(sender, page, search, usages);
         }
        
         return true;
+    }
+    
+    
+    protected List<String> getUsages(CommandSender sender, int page, String search) {
+        return commands.entrySet().stream()
+                .filter(entry -> entry.getKey().startsWith(search) && entry.getValue().testPermissionSilent(sender))
+                .limit(page * pageSize)
+                .map(entry -> entry.getValue().getUsage())
+                .collect(Collectors.toList());
+    }
+    
+    
+    protected void displayUsages(CommandSender sender, int page, String search, List<String> usages) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6==== Help: &c" + search
+                + " &6=== Page: &c" + page + "/" + " &6===="));
+        sender.sendMessage(usages.subList(page, usages.size()).toArray(new String[0]));
     }
     
 
@@ -83,18 +91,18 @@ public class HelpCommand extends XMCommand implements Observer {
     public void update(Observable o, Object object) {
         XMCommand command;
         if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().equals(owningPlugin)) {
-            putCommand(command.getName(), command);
-        }
-    }
-    
-    
-    private void putCommand(String name, XMCommand command) {
-        if (command instanceof Dispatcher) {
-            ((Dispatcher) command).getCommands().forEach((subcommandName, subcommand) -> putCommand(name + " " + subcommandName, subcommand));
             
-        } else {
-            commands.put(name, command);
         }
     }
-
+    
+    
+    public Map<String, XMCommand> getCommands() {
+        return commands;
+    }
+    
+    public void setCommands(Map<String, XMCommand> commands) {
+        this.commands.clear();
+        //commands.forEach(this::putCommand);
+    }
+    
 }

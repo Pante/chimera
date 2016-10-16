@@ -36,13 +36,13 @@ public class AboutCommand extends XMCommand {
     public AboutCommand(Plugin plugin, String name) {
         super(plugin, name);
         
-        PluginDescriptionFile description = plugin.getDescription();
-        pluginDescription = ChatColor.translateAlternateColorCodes('&', 
-                "&6" + description.getName() 
-                + "version: &c" + description.getVersion() 
-                + "\n&6" + description.getDescription()
-                + "\nAuthor(s): &c" + description.getAuthors().toString() 
-                + "\n&6Source code & development resources: &c" + description.getWebsite());
+        PluginDescriptionFile pluginDescription = plugin.getDescription();
+        this.pluginDescription = ChatColor.translateAlternateColorCodes('&', 
+                "&6" + pluginDescription.getName() 
+                + "version: &c" + pluginDescription.getVersion() 
+                + "\n&6" + pluginDescription.getDescription()
+                + "\nAuthor(s): &c" + pluginDescription.getAuthors().toString() 
+                + "\n&6Source code & development resources: &c" + pluginDescription.getWebsite());
     }
     
     
@@ -56,6 +56,11 @@ public class AboutCommand extends XMCommand {
         }
         
         return true;
+    }
+    
+    
+    protected String getPluginDescription() {
+        return description;
     }
     
 }
