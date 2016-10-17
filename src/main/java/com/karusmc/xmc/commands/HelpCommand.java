@@ -17,7 +17,7 @@
 package com.karusmc.xmc.commands;
 
 import com.karusmc.xmc.core.*;
-import com.karusmc.xmc.util.Else;
+import com.karusmc.xmc.util.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -91,7 +91,7 @@ public class HelpCommand extends XMCommand implements Observer {
     public void update(Observable o, Object object) {
         XMCommand command;
         if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().equals(owningPlugin)) {
-            
+            Commands.flatMapTo(command, commands);
         }
     }
     
@@ -102,7 +102,7 @@ public class HelpCommand extends XMCommand implements Observer {
     
     public void setCommands(Map<String, XMCommand> commands) {
         this.commands.clear();
-        //commands.forEach(this::putCommand);
+        commands.values().forEach(command -> Commands.flatMapTo(command, this.commands));
     }
     
 }
