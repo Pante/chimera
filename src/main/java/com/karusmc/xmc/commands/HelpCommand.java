@@ -63,34 +63,37 @@ public class HelpCommand extends XMCommand implements Observer {
             int page = getPage(getOrDefault(args, 0, ""));
             String search = getOrDefault(args, 1, "");
             
-            List<String> usages = getUsages(sender, page, search);
-            displayUsages(sender, page, search, usages);
+            displayUsages(sender, page, search, getUsages(sender, page, search));
         }
        
         return true;
     }
     
     
-    protected List<String> getUsages(CommandSender sender, int page, String search) {
-        return commands.entrySet().stream()
+    protected String[] getUsages(CommandSender sender, int page, String search) {
+        List<String> usages = commands.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(search) && entry.getValue().testPermissionSilent(sender))
                 .limit(page * pageSize)
                 .map(entry -> entry.getValue().getUsage())
                 .collect(Collectors.toList());
+        
+        return usages
+                .subList(Math.max(0, usages.size() - pageSize), usages.size())
+                .toArray(new String[0]);
     }
     
     
-    protected void displayUsages(CommandSender sender, int page, String search, List<String> usages) {
+    protected void displayUsages(CommandSender sender, int page, String search, String[] usages) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6==== Help: &c" + search
                 + " &6=== Page: &c" + page + "/" + " &6===="));
-        sender.sendMessage(usages.subList(page, usages.size()).toArray(new String[0]));
+        sender.sendMessage(usages);
     }
     
 
     @Override
     public void update(Observable o, Object object) {
         XMCommand command;
-        if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().equals(owningPlugin)) {
+        if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().getName().equals(owningPlugin.getName())) {
             Commands.flatMapTo(command, commands);
         }
     }
@@ -103,6 +106,15 @@ public class HelpCommand extends XMCommand implements Observer {
     public void setCommands(Map<String, XMCommand> commands) {
         this.commands.clear();
         commands.values().forEach(command -> Commands.flatMapTo(command, this.commands));
+    }
+    
+    
+    public void setPageSize(int size) {
+        pageSize = size;
+    }
+    
+    public int getPageSize() {
+        return pageSize;
     }
     
 }

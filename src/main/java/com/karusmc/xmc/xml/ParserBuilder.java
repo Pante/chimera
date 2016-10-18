@@ -16,10 +16,41 @@
  */
 package com.karusmc.xmc.xml;
 
+import com.karusmc.xmc.xml.nodes.*;
+import com.karusmc.xmc.xml.tags.*;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
 public class ParserBuilder {
+    
+    public static Parser buildCommandsParser(String dtd, String path) {
+        GenericNode node = new GenericNode("command");
+        node.getNodes().put("configuration", buildConfigurationNode());
+        
+        node.getTags().put("meta", new MetaTag());
+        node.getTags().put("permission", new PermissionTag());
+        
+        return new Parser(new CommandsNode(node), dtd, path);
+    }
+    
+    
+    public static Parser buildConfigurationParser(String dtd, String path) {
+        GenericNode node = new GenericNode("command");
+        node.getNodes().put("configuration", buildConfigurationNode());
+        
+        return new Parser(new CommandsNode(node), dtd, path);
+    }
+    
+    
+    public static Node buildConfigurationNode() {
+        GenericNode configurationNode = new GenericNode("configuration");
+        
+        configurationNode.getTags().put("cooldown", new CooldownTag());
+        configurationNode.getTags().put("worlds", new WorldsTag());
+        
+        return configurationNode;
+    }
     
 }

@@ -18,6 +18,7 @@ package com.karusmc.xmc.xml;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 
+import com.karusmc.xmc.core.XMCommand;
 import com.karusmc.xmc.xml.nodes.Node;
 
 import java.io.File;
@@ -75,6 +76,14 @@ public class Parser {
                 throw new ParserException("An error occured while trying to close underlying XML stream", e);
             }
         }
+    }
+    
+    public void register(XMCommand command) {
+        register.getCommands().put(command.getName(), command);
+    }
+    
+    public void unregister(XMCommand command) {
+        register.getCommands().remove(command.getName());
     }
     
 }

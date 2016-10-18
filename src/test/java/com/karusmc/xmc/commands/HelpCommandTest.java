@@ -20,7 +20,13 @@ import com.karusmc.xmc.core.XMCommand;
 
 import java.util.*;
 
+import junitparams.*;
+
+import org.bukkit.command.Command;
+import org.bukkit.plugin.Plugin;
+
 import org.junit.*;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -29,12 +35,22 @@ import static org.mockito.Mockito.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
+@RunWith(JUnitParamsRunner.class)
 public class HelpCommandTest {
     
     private HelpCommand command;
     
     public HelpCommandTest() {
-        command = spy(new HelpCommand(null, null));
+        Plugin plugin = mock(Plugin.class);
+        when(plugin.getName()).thenReturn("test");
+        
+        command = spy(new HelpCommand(plugin, "help"));
+    }
+    
+    
+    @Before
+    public void setup() {
+        command.getCommands().clear();
     }
     
     
@@ -60,8 +76,31 @@ public class HelpCommandTest {
     
     
     @Test
-    public void update() {
+    @Parameters(method = "update_parameters")
+    public void update(Command toUpdate, int size, List<String> expectedCommands) {
+        Map<String, XMCommand> commands = command.getCommands();
         
+        command.update(null, toUpdate);
+        
+        assertEquals(size, commands.size());
+        assertTrue(commands.keySet().containsAll(expectedCommands));
+    }
+    
+    public Object[] update_parameters() {
+        return new Object[] {
+            new Object[] {mock(Command.class), 0, Collections.emptyList()},
+            new Object[] {command, 1, Arrays.asList("help")}
+        };
+    }
+    
+    
+    @Test
+    @Parameters(source = CommandProvider.class)
+    public void getUsages(Map<String, XMCommand> commands, int page, String criteria, String[] expectedArray) {
+        command.getCommands().putAll(commands);
+        String[] returned = command.getUsages(null, page, criteria);
+        
+        assertArrayEquals(expectedArray, returned);
     }
     
 }
