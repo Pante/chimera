@@ -19,6 +19,8 @@ package com.karusmc.xmc.commands;
 import com.karusmc.xmc.core.XMCommand;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import junitparams.*;
 
@@ -45,6 +47,7 @@ public class HelpCommandTest {
         when(plugin.getName()).thenReturn("test");
         
         command = spy(new HelpCommand(plugin, "help"));
+        command.setPageSize(2);
     }
     
     
@@ -99,6 +102,8 @@ public class HelpCommandTest {
     public void getUsages(Map<String, XMCommand> commands, int page, String criteria, String[] expectedArray) {
         command.getCommands().putAll(commands);
         String[] returned = command.getUsages(null, page, criteria);
+        
+        Logger.getAnonymousLogger().log(Level.SEVERE, returned.toString());
         
         assertArrayEquals(expectedArray, returned);
     }

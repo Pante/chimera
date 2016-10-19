@@ -28,6 +28,8 @@ import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Page.*;
 import static com.karusmc.xmc.util.Validator.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -78,7 +80,7 @@ public class HelpCommand extends XMCommand implements Observer {
                 .collect(Collectors.toList());
         
         return usages
-                .subList(Math.max(0, usages.size() - pageSize), usages.size())
+                .subList(Math.max(0, page * pageSize - pageSize), usages.size())
                 .toArray(new String[0]);
     }
     

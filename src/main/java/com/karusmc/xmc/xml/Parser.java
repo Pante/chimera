@@ -22,6 +22,7 @@ import com.karusmc.xmc.core.XMCommand;
 import com.karusmc.xmc.xml.nodes.Node;
 
 import java.io.File;
+import java.util.Map;
 import javax.xml.stream.*;
 
 /**
@@ -84,6 +85,15 @@ public class Parser {
     
     public void unregister(XMCommand command) {
         register.getCommands().remove(command.getName());
+    }
+    
+    
+    public void registerAll(Map<String, XMCommand> commands) {
+        register.getCommands().putAll(commands);
+    }
+    
+    public void unregisterAll() {
+        register.getCommands().clear();
     }
     
 }

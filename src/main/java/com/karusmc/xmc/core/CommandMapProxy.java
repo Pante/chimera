@@ -45,24 +45,11 @@ public class CommandMapProxy extends Observable implements CommandMap {
         }
         
     }
-    
-    
-    @Override
-    public void clearCommands() {
-        commandMap.clearCommands();
-    }
-    
+
     
     @Override
     public Command getCommand(String name) {
         return commandMap.getCommand(name);
-    }
-    
-    
-    @Override
-    public boolean register(String fallbackPrefix, Command command) {
-        notifyObservers(command);
-        return commandMap.register(fallbackPrefix, command);
     }
     
     
@@ -78,10 +65,18 @@ public class CommandMapProxy extends Observable implements CommandMap {
                 .filter(command -> command instanceof XMCommand && ((XMCommand) command).getPlugin().equals(plugin))
                 .collect(Collectors.toMap(command -> command.getName(), command -> (XMCommand) command));
     }
-
+    
+    
+    @Override
+    public boolean register(String fallbackPrefix, Command command) {
+        notifyObservers(command);
+        return commandMap.register(fallbackPrefix, command);
+    }
+    
     
     @Override
     public boolean register(String label, String fallbackPrefix, Command command) {
+        notifyObservers(command);
         return commandMap.register(label, fallbackPrefix, command);
     }
     
@@ -89,6 +84,20 @@ public class CommandMapProxy extends Observable implements CommandMap {
     @Override
     public void registerAll(String fallbackPrefix, List<Command> commands) {
         commandMap.registerAll(fallbackPrefix, commands);
+    }
+    
+    
+    public void unregister(String name) {
+        Command command = commandMap.getCommand(name);
+        
+        if (command != null) {
+            command.unregister(commandMap);
+        }
+    }
+    
+    @Override
+    public void clearCommands() {
+        commandMap.clearCommands();
     }
     
 

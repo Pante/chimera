@@ -39,14 +39,27 @@ public class CommandProvider {
     
     
     public static Object[] provideWithCriteria() {
+        
+        Map<String, XMCommand> commands = new HashMap<>();
+        commands.put("command", mockCommand("command", "command usage", true));
+        commands.put("invalidcommand", mockCommand("invalidcommand", "invalidcommand usage", true));
+        commands.put("invalidpermission", mockCommand("invalidpermission", "invalidpermission usage", false));
+        
         return new Object[] {
-            
+            new Object[] {commands, 1, "com", new String[] {"command usage"}}
         };
     }
     
     public static Object[] provideWithPageLength() {
+        
+        Map<String, XMCommand> commands = new HashMap<>();
+        commands.put("1", mockCommand("1", "1 usage", true));
+        commands.put("2", mockCommand("2", "2 usage", true));
+        commands.put("3", mockCommand("3", "3 usage", true));
+        
         return new Object[] {
-            
+            new Object[] {commands, 1, "", new String[] {"1 usage", "2 usage"}},
+            new Object[] {commands, 2, "", new String[] {"3 usage"}}
         };
     }
     

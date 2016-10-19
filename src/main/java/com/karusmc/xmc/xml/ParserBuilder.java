@@ -25,22 +25,22 @@ import com.karusmc.xmc.xml.tags.*;
  */
 public class ParserBuilder {
     
-    public static Parser buildCommandsParser(String dtd, String path) {
+    public static Parser buildCommandsParser(String path) {
         GenericNode node = new GenericNode("command");
         node.getNodes().put("configuration", buildConfigurationNode());
         
         node.getTags().put("meta", new MetaTag());
         node.getTags().put("permission", new PermissionTag());
         
-        return new Parser(new CommandsNode(node), dtd, path);
+        return new Parser(new CommandsNode(node), "commands.", path);
     }
     
     
-    public static Parser buildConfigurationParser(String dtd, String path) {
+    public static Parser buildConfigurationParser(String path) {
         GenericNode node = new GenericNode("command");
         node.getNodes().put("configuration", buildConfigurationNode());
         
-        return new Parser(new CommandsNode(node), dtd, path);
+        return new Parser(new CommandsNode(node), "configuration.dtd", path);
     }
     
     
