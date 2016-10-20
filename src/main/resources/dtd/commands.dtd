@@ -1,6 +1,6 @@
 <!ELEMENT commands (command+)>
 
-<!ELEMENT command (meta, permission, (commands|configuration))>
+<!ELEMENT command (meta, permission, (commands*|configuration*))>
 <!ATTLIST command
   name CDATA #REQUIRED
 >

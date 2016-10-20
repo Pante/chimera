@@ -45,7 +45,6 @@
           </execution>
         </executions>
         <configuration>
-          <groups>com.karusmc.ck.curator.integration.IntegrationTest</groups>
           <parallel>methods</parallel>
           <threadCount>4</threadCount>
         </configuration>

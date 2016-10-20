@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!-- Example configuration.xml -->
+
+<!-- Mandatory document type definition (DTD) needed for XMC to parse the document -->
+<!DOCTYPE commands SYSTEM "configuration.dtd">
+
+
+<commands>
+  
+  <!-- 
+  Commands can only have either child commands as defined by the element: <commands> or 
+  by the various configuration elements, e.g <cooldown> and <worlds>If both element 
+  are present, XMC will only parse the first element. This is to ensure that configuration 
+  is delegated to the child commands to prevent hierarchical conflicts.
+  -->
+  <command name = "command">
+  
+    <commands>
+      
+      <!--
+      Commands must have a default value defined in the embedded commands.xml document for
+      the configuration option to take effect. Not having a default value defined will cause
+      XMC to ignore the element.
+      -->
+      <command name = "subcommand">
+        
+        <configuration>
+          <cooldown time = "100"/>
+          <worlds type = "blacklist" list = "world1, wordl2"/>
+        </configuration>
+        
+      </command>
+      
+    </commands>
+    
+  </command>
+  
+</commands>

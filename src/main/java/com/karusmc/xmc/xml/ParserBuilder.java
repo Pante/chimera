@@ -32,7 +32,10 @@ public class ParserBuilder {
         node.getTags().put("meta", new MetaTag());
         node.getTags().put("permission", new PermissionTag());
         
-        return new Parser(new CommandsNode(node), "commands.", path);
+        CommandsNode commandsNode = new CommandsNode(node);
+        node.getNodes().put("commands", commandsNode);
+        
+        return new Parser(commandsNode, "commands.dtd", path);
     }
     
     
@@ -40,7 +43,10 @@ public class ParserBuilder {
         GenericNode node = new GenericNode("command");
         node.getNodes().put("configuration", buildConfigurationNode());
         
-        return new Parser(new CommandsNode(node), "configuration.dtd", path);
+        CommandsNode commandsNode = new CommandsNode(node);
+        node.getNodes().put("commands", commandsNode);
+        
+        return new Parser(commandsNode, "configuration.dtd", path);
     }
     
     
