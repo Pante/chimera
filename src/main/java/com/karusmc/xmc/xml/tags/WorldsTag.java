@@ -27,18 +27,28 @@ import javax.xml.stream.events.StartElement;
  * @author PanteLegacy @ karusmc.com
  */
 public class WorldsTag implements Tag {
-
+    
+    private QName type;
+    private QName list;
+    
+    
+    public WorldsTag() {
+        type = new QName("type");
+        list = new QName("list");
+    }
+    
+    
     @Override
     public void parse(StartElement element, XMCommand xmCommand) {
         ConfigurableCommand command = (ConfigurableCommand) xmCommand;
         
-        if (element.getAttributeByName(new QName("type")).getValue().equals("blacklist")) {
+        if (element.getAttributeByName(type).getValue().equals("blacklist")) {
             command.setBlacklist(true);
         } else {
             command.setBlacklist(false);
         }
         
-        command.setWorlds(new HashSet<>(Arrays.asList(element.getAttributeByName(new QName("list")).getValue().split("\\s*,\\s*"))));
+        command.setWorlds(new HashSet<>(Arrays.asList(element.getAttributeByName(list).getValue().split("\\s*,\\s*"))));
     }
     
 }

@@ -26,16 +26,35 @@ import java.util.*;
  */
 public class Commands {
     
-    public static void flatMapTo(XMCommand command, Map<String, XMCommand> commands) {
-        flatMapTo(command.getName(), command, commands);
+    public static void flatMap(XMCommand command, Map<String, XMCommand> commands) {
+        flapMap(command.getName(), command, commands);
     }
     
-    private static void flatMapTo(String name, XMCommand command, Map<String, XMCommand> commands) {
+    private static void flapMap(String name, XMCommand command, Map<String, XMCommand> commands) {
         if (command instanceof Dispatcher) {
-            ((Dispatcher) command).getCommands().values().forEach(subcommand -> flatMapTo(name + " " + subcommand.getName(), subcommand, commands));
+            ((Dispatcher) command).getCommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));
         }
         
         commands.put(name, command);
+    }
+    
+    
+    public static<T> T getArgumentOrDefault(T[] args, int index, T defaultArgument) {
+        if (args.length > index) {
+            return args[index];
+    
+        } else {
+            return defaultArgument;
+        }
+    }
+    
+    public static String[] trimArguments(String[] args) {
+        if (args.length <= 1) {
+            return new String[]{};
+
+        } else {
+            return Arrays.copyOfRange(args, 1, args.length - 1);
+        }
     }
 
 }

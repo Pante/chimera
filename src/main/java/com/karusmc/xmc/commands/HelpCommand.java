@@ -28,8 +28,7 @@ import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Page.*;
 import static com.karusmc.xmc.util.Validator.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static com.karusmc.xmc.util.Commands.*;
 
 /**
  *
@@ -40,53 +39,50 @@ public class HelpCommand extends XMCommand implements Observer {
     
     private Map<String, XMCommand> commands;
     private Else handle;
-   
-    private int pageSize;
+    private int size;
     
     
-    public HelpCommand(Plugin owningPlugin, String name) {
-        this(owningPlugin, name,
-                sender -> sender.sendMessage(ChatColor.RED + "You either do not have permission to use this command or invalid number of arguments were specified."));
+    public HelpCommand(Plugin owningPlugin, String name, int size) {
+        this(owningPlugin, name, size,
+                sender -> sender.sendMessage(ChatColor.RED + "You either do not have permission or an invalid number of arguments were specified."));
     }
    
-    public HelpCommand(Plugin owningPlugin, String name, Else handle) {
+    public HelpCommand(Plugin owningPlugin, String name, int size, Else handle) {
         super(owningPlugin, name);
         
         commands = new HashMap<>();
         this.handle = handle;
-        
-        this.pageSize = 5;
+        this.size = size;
     }
     
     
     @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         if (is(canUse(this, sender) && hasLength(0, args.length, 2), handle, sender)) {
-            int page = getPage(getOrDefault(args, 0, ""));
-            String search = getOrDefault(args, 1, "");
+            int page = getPage(getArgumentOrDefault(args, 0, ""));
+            String search = getArgumentOrDefault(args, 1, "");
             
             displayUsages(sender, page, search, getUsages(sender, page, search));
         }
-       
-        return true;
     }
     
     
     protected String[] getUsages(CommandSender sender, int page, String search) {
-        List<String> usages = commands.entrySet().stream()
-                .filter(entry -> entry.getKey().startsWith(search) && entry.getValue().testPermissionSilent(sender))
-                .limit(page * pageSize)
-                .map(entry -> entry.getValue().getUsage())
+        List<String> usages = commands.values().stream()
+                .filter(command -> command.getName().startsWith(search) && command.testPermissionSilent(sender))
+                .limit(page * size)
+                .map(command -> command.getUsage())
                 .collect(Collectors.toList());
         
         return usages
-                .subList(Math.max(0, page * pageSize - pageSize), usages.size())
+                .subList(Math.max(0, page * size - size), usages.size())
                 .toArray(new String[0]);
     }
     
     
     protected void displayUsages(CommandSender sender, int page, String search, String[] usages) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6==== Help: &c" + search
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', 
+                "&6==== Help: &c" + search
                 + " &6=== Page: &c" + page + "/" + " &6===="));
         sender.sendMessage(usages);
     }
@@ -96,7 +92,7 @@ public class HelpCommand extends XMCommand implements Observer {
     public void update(Observable o, Object object) {
         XMCommand command;
         if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().getName().equals(owningPlugin.getName())) {
-            Commands.flatMapTo(command, commands);
+            flatMap(command, commands);
         }
     }
     
@@ -107,16 +103,7 @@ public class HelpCommand extends XMCommand implements Observer {
     
     public void setCommands(Map<String, XMCommand> commands) {
         this.commands.clear();
-        commands.values().forEach(command -> Commands.flatMapTo(command, this.commands));
+        commands.values().forEach(command -> flatMap(command, this.commands));
     }
-    
-    
-    public void setPageSize(int size) {
-        pageSize = size;
-    }
-    
-    public int getPageSize() {
-        return pageSize;
-    }
-    
+
 }

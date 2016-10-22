@@ -21,7 +21,10 @@ import com.karusmc.xmc.core.XMCommand;
 
 import java.util.*;
 
+import junitparams.*;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +33,7 @@ import static org.mockito.Mockito.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
+@RunWith(JUnitParamsRunner.class)
 public class CommandsTest {
     
     private Map<String, XMCommand> commands;
@@ -58,8 +62,24 @@ public class CommandsTest {
     
     
     @Test
+    @Parameters(method = "getOrDefault_ReturnsArgument_parameters")
+    public void getOrDefault_ReturnsArgument(String[] arguments, int index, String expected) {
+        String returned = Commands.getArgumentOrDefault(arguments, index, "");
+        assertEquals(expected, returned);
+    }
+    
+    public Object[] getOrDefault_ReturnsArgument_parameters() {
+        return new Object[] {
+            new Object[] {new String[] {"1", "2", "3"}, 1, "2"},
+            new Object[] {new String[] {"1", "2", "3"}, 2, "3"},
+            new Object[] {new String[] {"1", "2", "3"}, 3, ""}
+        };
+    }   
+    
+    
+    @Test
     public void flatMapTo() {
-        Commands.flatMapTo(command, commands);
+        Commands.flatMap(command, commands);
         
         assertEquals(4, commands.size());
         assertTrue(commands.keySet().containsAll(Arrays.asList("command", "command subcommandA", "command subcommandA subsubcommandA", "command subcommandB")));

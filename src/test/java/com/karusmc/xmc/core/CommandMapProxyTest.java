@@ -51,6 +51,8 @@ public class CommandMapProxyTest {
 
         command = mock(XMCommand.class);
         when(command.getPlugin()).thenReturn(plugin = mock(Plugin.class));
+        when(plugin.getName()).thenReturn("name");
+        
         when(command.getName()).thenReturn("XMCommand");
         
         mockCommand = mock(Command.class);
@@ -62,7 +64,7 @@ public class CommandMapProxyTest {
     @Test
     public void constructor_ThrowsException() {
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Server class doest not contain field: commandMap");
+        exception.expectMessage("Server instance does not contain field: commandMap");
         
         injector = new CommandMapProxy(mock(Server.class));
     }
@@ -78,7 +80,7 @@ public class CommandMapProxyTest {
     @Test
     public void getPluginCommands_ReturnsPluginCommand() {
         injector = new CommandMapProxy(server);
-        Map<String, Command> commands = injector.getPluginCommands(plugin);
+        Map<String, Command> commands = injector.getPluginCommands("name", Command.class);
         
         assertEquals(1, commands.size());
         assertTrue(commands.containsKey("XMCommand"));
@@ -88,7 +90,7 @@ public class CommandMapProxyTest {
     @Test
     public void getXMCommands_ReturnsPluginCommand() {
         injector = new CommandMapProxy(server);
-        Map<String, XMCommand> commands = injector.getXMCommands(plugin);
+        Map<String, XMCommand> commands = injector.getPluginCommands("name", XMCommand.class);
         
         assertEquals(1, commands.size());
         assertTrue(commands.containsKey("XMCommand"));

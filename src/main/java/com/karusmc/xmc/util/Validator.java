@@ -37,7 +37,7 @@ public class Validator {
     
     
     public static boolean canUse(XMCommand command, CommandSender sender) {
-        return (!command.isConsoleAllowed() ^ sender instanceof ConsoleCommandSender) && command.testPermissionSilent(sender);
+        return !command.isConsoleAllowed() ^ sender instanceof ConsoleCommandSender && command.testPermissionSilent(sender);
     }
     
     

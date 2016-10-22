@@ -32,22 +32,6 @@ import static org.junit.Assert.*;
 public class PageTest {
     
     @Test
-    @Parameters(method = "getOrDefault_ReturnsArgument_parameters")
-    public void getOrDefault_ReturnsArgument(String[] arguments, int index, String expected) {
-        String returned = Page.getOrDefault(arguments, index, "");
-        assertEquals(expected, returned);
-    }
-    
-    public Object[] getOrDefault_ReturnsArgument_parameters() {
-        return new Object[] {
-            new Object[] {new String[] {"1", "2", "3"}, 1, "2"},
-            new Object[] {new String[] {"1", "2", "3"}, 2, "3"},
-            new Object[] {new String[] {"1", "2", "3"}, 3, ""}
-        };
-    }   
-    
-    
-    @Test
     @Parameters({"3, 3", "invalid, 1", "3.01, 1", "-3, 1"})
     public void getPage_ReturnsNumber(String argument, int expected) {
         int returned = Page.getPage(argument);

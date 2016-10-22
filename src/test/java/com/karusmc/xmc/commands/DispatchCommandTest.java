@@ -57,9 +57,9 @@ public class DispatchCommandTest {
     @Test
     @Parameters(method = "execute_parameters")
     public void execute(String[] arguments, int subcommandTimes, int handleTimes) {
-        command.execute(sender, null, arguments);
+        command.execute(sender, arguments);
         
-        verify(subcommand, times(subcommandTimes)).execute(any(), any(), any());
+        verify(subcommand, times(subcommandTimes)).execute(any(), any());
         verify(handle, times(handleTimes)).handle(sender);
     }
     

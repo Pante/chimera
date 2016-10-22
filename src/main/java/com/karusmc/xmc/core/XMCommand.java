@@ -41,6 +41,17 @@ public abstract class XMCommand extends Command implements PluginIdentifiableCom
     }
     
     
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        execute(sender, args);
+        return true;
+    }
+    
+    
+    public abstract void execute(CommandSender sender, String[] args);
+    
+    
+    
     public boolean isConsoleAllowed() {
         return consoleAllowed;
     }

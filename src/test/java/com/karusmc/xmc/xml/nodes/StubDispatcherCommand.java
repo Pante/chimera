@@ -38,7 +38,7 @@ public class StubDispatcherCommand extends XMCommand implements Dispatcher {
     
 
     @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

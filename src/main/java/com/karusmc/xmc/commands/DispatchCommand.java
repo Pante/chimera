@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Validator.*;
+import static com.karusmc.xmc.util.Commands.trimArguments;
 /**
  *
  * @author PanteLegacy @ karusmc.com
@@ -49,34 +50,24 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
     
     
     @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        if (is(hasLength(1, args.length, 100) && commands.containsKey(args[0]), handle, sender)) {
-            return commands.get(args[0]).execute(sender, args[0], trimArguments(args));
+    public void execute(CommandSender sender, String[] args) {
+        if (is(args.length >= 1 && commands.containsKey(args[0]), handle, sender)) {
+            commands.get(args[0]).execute(sender, trimArguments(args));
         }
-    
-        return true;
     }
     
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        String argument;
         if (args.length == 1) {
             return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
             
-        } else if (args.length >= 2 && commands.containsKey(args[0])) {
-            return commands.get(args[0]).tabComplete(sender, args[0], trimArguments(args));
-        }
-        
-        return null;
-    }
-    
-    
-    private String[] trimArguments(String[] args) {
-        if (args.length <= 1)  {
-            return new String[] {};
+        } else if (args.length >= 2 && commands.containsKey(argument = args[0])) {
+            return commands.get(argument).tabComplete(sender, argument, trimArguments(args));
             
         } else {
-            return Arrays.copyOfRange(args, 1, args.length - 1);
+            return null;
         }
     }
     
@@ -84,15 +75,6 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
     @Override
     public Map<String, XMCommand> getCommands() {
         return commands;
-    }
-    
-    
-    public Else getHandle() {
-        return handle;
-    }
-    
-    public void setHandle(Else handle) {
-        this.handle = handle;
     }
     
 }

@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.*;
 import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -41,7 +40,7 @@ public class CommandMapProxy extends Observable implements CommandMap {
             commandMap = (SimpleCommandMap) field.get(server);
             
         } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Server class doest not contain field: commandMap", e);
+            throw new IllegalArgumentException("Server instance does not contain field: commandMap", e);
         }
         
     }
@@ -53,17 +52,12 @@ public class CommandMapProxy extends Observable implements CommandMap {
     }
     
     
-    public Map<String, Command> getPluginCommands(Plugin plugin) {
+    public <T extends Command> Map<String, T> getPluginCommands(String pluginName, Class<T> commandType) {
         return commandMap.getCommands().stream()
-                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().equals(plugin))
-                .collect(Collectors.toMap(command -> command.getName(), command -> command));
-    }
-    
-    
-    public Map<String, XMCommand> getXMCommands(Plugin plugin) {
-        return commandMap.getCommands().stream()
-                .filter(command -> command instanceof XMCommand && ((XMCommand) command).getPlugin().equals(plugin))
-                .collect(Collectors.toMap(command -> command.getName(), command -> (XMCommand) command));
+                .filter(command -> command instanceof PluginIdentifiableCommand 
+                        && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName) 
+                        && commandType.isInstance(command))
+                .collect(Collectors.toMap(Command::getName, command -> commandType.cast(command)));
     }
     
     

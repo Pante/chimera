@@ -26,18 +26,16 @@ import org.bukkit.plugin.Plugin;
  */
 public abstract class ConfigurableCommand extends XMCommand {
     
-    private long cooldown;
-    
-    private boolean blacklist;
     private Set<String> worlds;
+    private long cooldown;
+    private boolean blacklist;
     
     
     public ConfigurableCommand(Plugin owningPlugin, String name) {
         super(owningPlugin, name);
-        cooldown = 0;
-        
-        blacklist = false;
         worlds = new HashSet<>();
+        cooldown = 0;
+        blacklist = false;
     }
     
     

@@ -44,8 +44,7 @@ public class HelpCommandTest {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getName()).thenReturn("test");
         
-        command = spy(new HelpCommand(plugin, "help"));
-        command.setPageSize(2);
+        command = spy(new HelpCommand(plugin, "help", 2));
     }
     
     
