@@ -25,32 +25,32 @@ import com.karusmc.xmc.xml.tags.*;
  */
 public class ParserBuilder {
     
-    public static Parser buildCommandsParser(String path) {
+    public static Parser createCommandParser() {
         GenericNode node = new GenericNode("command");
-        node.getNodes().put("configuration", buildConfigurationNode());
+        CommandsNode commandsNode = new CommandsNode(node);
+        
+        node.getNodes().put("configuration", createConfigurationNode());        
+        node.getNodes().put("commands", commandsNode);
         
         node.getTags().put("meta", new MetaTag());
         node.getTags().put("permission", new PermissionTag());
         
-        CommandsNode commandsNode = new CommandsNode(node);
-        node.getNodes().put("commands", commandsNode);
-        
-        return new Parser(commandsNode, "commands.dtd", path);
+        return new Parser(commandsNode, "commands.dtd", "dtd/commands.dtd");
     }
     
     
-    public static Parser buildConfigurationParser(String path) {
+    public static Parser createConfigurationParser() {
         GenericNode node = new GenericNode("command");
-        node.getNodes().put("configuration", buildConfigurationNode());
-        
         CommandsNode commandsNode = new CommandsNode(node);
+        
+        node.getNodes().put("configuration", createConfigurationNode());
         node.getNodes().put("commands", commandsNode);
         
-        return new Parser(commandsNode, "configuration.dtd", path);
+        return new Parser(commandsNode, "configuration.dtd", "dtd/configuration.dtd");
     }
     
     
-    public static Node buildConfigurationNode() {
+    public static Node createConfigurationNode() {
         GenericNode configurationNode = new GenericNode("configuration");
         
         configurationNode.getTags().put("cooldown", new CooldownTag());

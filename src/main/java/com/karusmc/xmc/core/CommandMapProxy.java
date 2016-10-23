@@ -81,6 +81,11 @@ public class CommandMapProxy extends Observable implements CommandMap {
     }
     
     
+    public void registerAll(Map<String, XMCommand> commands) {
+        commands.values().forEach(command -> register(command.getPlugin().getName(), command));
+    }
+    
+    
     public void unregister(String name) {
         Command command = commandMap.getCommand(name);
         

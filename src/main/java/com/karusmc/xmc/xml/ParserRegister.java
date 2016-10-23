@@ -31,7 +31,7 @@ public class ParserRegister extends XMCommand implements Dispatcher {
     private Map<String, XMCommand> commands;
     
     
-    public ParserRegister() {
+    protected ParserRegister() {
         super(null, null);
         commands = new HashMap<>();
     }

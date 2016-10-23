@@ -36,15 +36,13 @@ public class CommandManager {
     
     
     public CommandManager(Server server) {
-        proxy = new CommandMapProxy(server);
-        commandsParser = ParserBuilder.buildCommandsParser("dtd/commands.dtd");
-        configurationParser = ParserBuilder.buildConfigurationParser("dtd/configuration.dtd");
+        this(new CommandMapProxy(server));
     }
     
     public CommandManager(CommandMapProxy proxy) {
         this.proxy = proxy;
-        commandsParser = ParserBuilder.buildCommandsParser("dtd/commands.dtd");
-        configurationParser = ParserBuilder.buildConfigurationParser("dtd/configuration.dtd");
+        commandsParser = ParserBuilder.createCommandParser();
+        configurationParser = ParserBuilder.createConfigurationParser();
     }
     
     
@@ -56,30 +54,26 @@ public class CommandManager {
     
     public void register(XMCommand command) {
         proxy.register(command.getPlugin().getName(), command);
-        
         commandsParser.register(command);
         configurationParser.register(command);
     }
     
     
     public void registerAll(Map<String, XMCommand> commands) {
-        commands.values().forEach(command -> proxy.register(command.getPlugin().getName(), command));
-        
+        proxy.registerAll(commands);
         commandsParser.registerAll(commands);
         configurationParser.registerAll(commands);
     }
     
     
-    public void unregister(XMCommand command) {
-        proxy.unregister(command.getName());
-        
-        commandsParser.unregister(command);
-        configurationParser.unregister(command);
+    public void unregister(String name) {
+        proxy.unregister(name);
+        commandsParser.unregister(name);
+        configurationParser.unregister(name);
     }
     
     public void unregisterAll() {
         proxy.clearCommands();
-        
         commandsParser.unregisterAll();
         configurationParser.unregisterAll();
     }

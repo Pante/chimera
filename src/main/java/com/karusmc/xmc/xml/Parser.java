@@ -38,53 +38,45 @@ public class Parser {
     
     
     public Parser(Node node, String dtd, String path) {
-        this(new ParserRegister(), node, dtd, path);
+        this(node, new XMLResolver() {
+            @Override
+            public Object resolveEntity(String publicID, String systemID, String baseURI, String namespace) throws XMLStreamException {
+                if (systemID.equals(dtd)) {
+                    return getClass().getClassLoader().getResourceAsStream(path);
+                    
+                } else {
+                    throw new ParserException("Invalid DTD: " + systemID);
+                }
+            }
+        });
     }
     
-    protected Parser(ParserRegister register, Node node, String dtd, String path) {
-        this.register = register;
+    public Parser(Node node, XMLResolver resolver) {
+        this.register = new ParserRegister();
         this.node = node;
         
         factory = new WstxInputFactory();
-        factory.setXMLResolver((String publicID, String systemID, String baseURI, String namespace) -> {
-            if (systemID.equals(dtd)) {
-                return getClass().getClassLoader().getResourceAsStream(path);
-                
-            } else {
-                throw new ParserException("Invalid DTD: " + systemID);
-            }
-        });
-        
+        factory.setXMLResolver(resolver);
         factory.setProperty(WstxInputFactory.IS_VALIDATING, true);
     }
     
     
     public void parse(File file) {
-        XMLEventReader reader = null;
-        
-        try {
-            reader = factory.createXMLEventReader(file);
+        try (ClosableXMLEventReader reader = new ClosableXMLEventReader(factory.createXMLEventReader(file))) {
             node.parse(reader, register);
             
         } catch (XMLStreamException e) {
             throw new ParserException("An error occurred while attempting to parse an XML Document", e);
-            
-        } finally {
-            try {
-                reader.close();
-                
-            } catch (XMLStreamException e) {
-                throw new ParserException("An error occured while trying to close underlying XML stream", e);
-            }
         }
     }
+    
     
     public void register(XMCommand command) {
         register.getCommands().put(command.getName(), command);
     }
     
-    public void unregister(XMCommand command) {
-        register.getCommands().remove(command.getName());
+    public void unregister(String name) {
+        register.getCommands().remove(name);
     }
     
     

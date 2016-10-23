@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class ParserBuilderTest {
+public class ParserBuilderIT {
     
     private Parser parser;
     
@@ -46,7 +46,7 @@ public class ParserBuilderTest {
     
     @Test
     public void parser_ParsesCommands() {
-        parser = ParserBuilder.buildCommandsParser("dtd/commands.dtd");
+        parser = ParserBuilder.createCommandParser();
         parser.register(dispatcher);
         parser.parse(new File(getClass().getClassLoader().getResource("integration/xml/commands.xml").getPath()));
         
@@ -71,7 +71,7 @@ public class ParserBuilderTest {
     
     @Test
     public void parser_ParsersConfiguration() {
-        parser = ParserBuilder.buildConfigurationParser("dtd/configuration.dtd");
+        parser = ParserBuilder.createConfigurationParser();
         parser.register(dispatcher);
         parser.parse(new File(getClass().getClassLoader().getResource("integration/xml/configuration.xml").getPath()));
         
