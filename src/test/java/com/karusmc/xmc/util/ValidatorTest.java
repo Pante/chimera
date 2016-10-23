@@ -25,7 +25,7 @@ import org.bukkit.command.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.karusmc.xmc.util.ValidatorParameters.*;
+import static com.karusmc.xmc.util.PlayerProvider.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -58,53 +58,22 @@ public class ValidatorTest {
     
     
     @Test
-    @Parameters(method = "canUse_Parameters")
+    @Parameters(source = PlayerProvider.class)
     public void canUse(XMCommand command, CommandSender sender, boolean expected) {
         boolean returned = Validator.canUse(command, sender);
         
         assertEquals(expected, returned);
     }
-    
-    public Object[] canUse_Parameters() {
-        return new Object[] {
-            canUse_Parameter(true, true, true, true),
-            canUse_Parameter(true, false, true, false),
-            
-            canUse_Parameter(true, true, false, false),
-            canUse_Parameter(true, false, false, false),
-            
-            canUse_Parameter(false, true, true, false),
-            canUse_Parameter(false, false, true, true),
-            
-            canUse_Parameter(false, true, false, false),
-            canUse_Parameter(false, false, false, false)
-        };
-    }
+
     
     @Test
-    @Parameters(method = "canUseInWorld_Parameters")
+    @Parameters(source = WorldsProvider.class)
     public void canUseInWorld(ConfigurableCommand command, CommandSender sender, boolean expected) {
         boolean returned = Validator.canUseInWorld(command, sender);
         
         assertEquals(expected, returned);
     }
-    
-    public Object[] canUseInWorld_Parameters() {
-        return new Object[] {
-            canUseInWorld_Parameter(true, true, true, false),
-            canUseInWorld_Parameter(true, true, false, false),
-            
-            canUseInWorld_Parameter(true, false, true, false),
-            canUseInWorld_Parameter(true, false, false, false),
-            
-            canUseInWorld_Parameter(false, true, true, false),
-            canUseInWorld_Parameter(false, true, false, false),
-            
-            canUseInWorld_Parameter(false, false, true, false),
-            canUseInWorld_Parameter(false, false, false, false)
-        };
-    }
-    
+
     
     @Test
     @Parameters({"0, 0, 2, true", "0, 2, 2, true", "1, 0, 2, false", "1, 3, 2, false"})

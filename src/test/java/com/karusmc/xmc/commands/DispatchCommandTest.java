@@ -18,13 +18,10 @@ package com.karusmc.xmc.commands;
 
 import com.karusmc.xmc.core.XMCommand;
 import com.karusmc.xmc.util.Else;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.*;
 
 import junitparams.*;
-
-import org.bukkit.command.CommandSender;
-import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,27 +37,26 @@ import static org.mockito.Mockito.*;
 public class DispatchCommandTest {
     
     private DispatchCommand command;
-    
     private XMCommand subcommand;
-    private CommandSender sender;
     private Else handle;
     
     
     public DispatchCommandTest() {
-        command = new DispatchCommand(null, "dispatch", handle = mock(Else.class));
-        command.getCommands().put("subcommand", subcommand = mock(XMCommand.class));
+        handle = mock(Else.class);
+        subcommand = mock(XMCommand.class);
         
-        sender = mock(CommandSender.class);
+        command = new DispatchCommand(null, null, handle);
+        command.getCommands().put("subcommand", subcommand);
     }
     
     
     @Test
     @Parameters(method = "execute_parameters")
     public void execute(String[] arguments, int subcommandTimes, int handleTimes) {
-        command.execute(sender, arguments);
+        command.execute(null, arguments);
         
         verify(subcommand, times(subcommandTimes)).execute(any(), any());
-        verify(handle, times(handleTimes)).handle(sender);
+        verify(handle, times(handleTimes)).handle(null);
     }
     
     public Object[] execute_parameters() {
@@ -76,7 +72,7 @@ public class DispatchCommandTest {
     @Test
     @Parameters(method = "tabComplete_parameters")
     public void tabComplete(String[] arguments, int times, List<String> expected) {
-        List<String> returned = command.tabComplete(sender, null, arguments);
+        List<String> returned = command.tabComplete(null, null, arguments);
         
         verify(subcommand, times(times)).tabComplete(any(), any(), any());
         assertEquals(expected, returned);
@@ -86,8 +82,8 @@ public class DispatchCommandTest {
         return new Object[] {
             new Object[] {new String[] {}, 0, null},
             new Object[] {new String[] {"subcommand"}, 0, Arrays.asList("subcommand")},
-            new Object[] {new String[] {"invalid"}, 0, Arrays.asList()},
-            new Object[] {new String[] {"subcommand", "blah"}, 1, Arrays.asList()},
+            new Object[] {new String[] {"invalid"}, 0, new ArrayList<>()},
+            new Object[] {new String[] {"subcommand", "blah"}, 1, new ArrayList<>()},
             new Object[] {new String[] {"invalid", "blah"}, 0, null}
         };
     }

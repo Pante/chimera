@@ -47,7 +47,8 @@ public class ParserTest {
     
     
     public ParserTest() {
-        parser = new Parser(node = mock(Node.class), "test.dtd", "xml/test.dtd");
+        node = mock(Node.class);
+        parser = new Parser(node, "test.dtd", "xml/test.dtd");
     }
     
     

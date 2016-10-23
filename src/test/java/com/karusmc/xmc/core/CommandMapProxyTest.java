@@ -80,10 +80,7 @@ public class CommandMapProxyTest {
     @Test
     public void getPluginCommands_ReturnsPluginCommand() {
         injector = new CommandMapProxy(server);
-        Map<String, Command> commands = injector.getPluginCommands("name", Command.class);
-        
-        assertEquals(1, commands.size());
-        assertTrue(commands.containsKey("XMCommand"));
+        assertEquals(injector.getPluginCommands("name", Command.class).keySet(), new HashSet<>(Arrays.asList("XMCommand")));
     }
     
     
@@ -92,8 +89,7 @@ public class CommandMapProxyTest {
         injector = new CommandMapProxy(server);
         Map<String, XMCommand> commands = injector.getPluginCommands("name", XMCommand.class);
         
-        assertEquals(1, commands.size());
-        assertTrue(commands.containsKey("XMCommand"));
+        assertEquals(commands.keySet(), new HashSet<>(Arrays.asList("XMCommand")));
     }
     
 }

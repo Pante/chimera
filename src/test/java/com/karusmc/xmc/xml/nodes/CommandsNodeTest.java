@@ -18,6 +18,7 @@ package com.karusmc.xmc.xml.nodes;
 
 import com.karusmc.xmc.core.XMCommand;
 import com.karusmc.xmc.xml.XMLResource;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.junit.*;
@@ -41,7 +42,8 @@ public class CommandsNodeTest {
     
     
     public CommandsNodeTest() {
-        node = new CommandsNode(mockNode = mock(Node.class));
+        mockNode = mock(Node.class);
+        node = new CommandsNode(mockNode);
         
         stubCommand = new StubDispatcherCommand();
         mockCommand = mock(XMCommand.class);

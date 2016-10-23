@@ -80,9 +80,7 @@ public class CommandsTest {
     @Test
     public void flatMapTo() {
         Commands.flatMap(command, commands);
-        
-        assertEquals(4, commands.size());
-        assertTrue(commands.keySet().containsAll(Arrays.asList("command", "command subcommandA", "command subcommandA subsubcommandA", "command subcommandB")));
+        assertEquals(commands.keySet(), new HashSet<>(Arrays.asList("command", "command subcommandA", "command subcommandA subsubcommandA", "command subcommandB")));
     } 
     
     

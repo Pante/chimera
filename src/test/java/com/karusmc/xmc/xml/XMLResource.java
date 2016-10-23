@@ -17,8 +17,8 @@
 package com.karusmc.xmc.xml;
 
 import com.ctc.wstx.stax.WstxInputFactory;
-import javax.xml.namespace.QName;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;

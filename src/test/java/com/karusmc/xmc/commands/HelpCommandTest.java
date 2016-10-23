@@ -40,11 +40,12 @@ public class HelpCommandTest {
     
     private HelpCommand command;
     
+    
     public HelpCommandTest() {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getName()).thenReturn("test");
         
-        command = spy(new HelpCommand(plugin, "help", 2));
+        command = new HelpCommand(plugin, "help", 2);
     }
     
     
@@ -56,40 +57,33 @@ public class HelpCommandTest {
     
     @Test
     public void setCommands() {
-        command.getCommands().put("1", mock(XMCommand.class));
-        
         Map<String, XMCommand> commands = new HashMap<>();
         
         DispatchCommand dispatcher = new DispatchCommand(null, "command");       
         
         XMCommand subcommand = mock(XMCommand.class);
         when(subcommand.getName()).thenReturn("subcommand");     
-        
-        dispatcher.getCommands().put(subcommand.getName(), subcommand);        
+       
         commands.put(dispatcher.getName(), dispatcher);
+        dispatcher.getCommands().put(subcommand.getName(), subcommand);
         
         command.setCommands(commands);
         
-        assertEquals(2, command.getCommands().size());
-        assertTrue(command.getCommands().keySet().containsAll(Arrays.asList("command", "command subcommand")));
+        assertEquals(command.getCommands().keySet(), new HashSet<>(Arrays.asList("command", "command subcommand")));
     }
     
     
     @Test
     @Parameters(method = "update_parameters")
-    public void update(Command toUpdate, int size, List<String> expectedCommands) {
-        Map<String, XMCommand> commands = command.getCommands();
-        
+    public void update(Command toUpdate, Set<String> expectedCommands) {
         command.update(null, toUpdate);
-        
-        assertEquals(size, commands.size());
-        assertTrue(commands.keySet().containsAll(expectedCommands));
+        assertEquals(command.getCommands().keySet(), expectedCommands);
     }
     
     public Object[] update_parameters() {
         return new Object[] {
-            new Object[] {mock(Command.class), 0, Collections.emptyList()},
-            new Object[] {command, 1, Arrays.asList("help")}
+            new Object[] {mock(Command.class), Collections.emptySet()},
+            new Object[] {command, new HashSet<>(Arrays.asList("help"))}
         };
     }
     

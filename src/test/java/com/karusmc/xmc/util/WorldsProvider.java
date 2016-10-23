@@ -16,7 +16,7 @@
  */
 package com.karusmc.xmc.util;
 
-import com.karusmc.xmc.core.*;
+import com.karusmc.xmc.core.ConfigurableCommand;
 
 import java.util.Set;
 
@@ -30,43 +30,48 @@ import static org.mockito.Mockito.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class ValidatorParameters {
+public class WorldsProvider {
     
     private static ConfigurableCommand command;
     
-    private static ConsoleCommandSender console;
     private static Player player;
     
     private static Set<String> worlds;
+    private static World world;
     
     
     static {
         command = mock(ConfigurableCommand.class);
         
-        console = mock(ConsoleCommandSender.class);
         player = mock(Player.class);
-        when(player.getWorld()).thenReturn(mock(World.class));
+        world = mock(World.class);
+        
+        when(player.getWorld()).thenReturn(world);
         
         worlds = mock(Set.class);
     }
     
     
-    public static Object[] canUse_Parameter(boolean consoleAllowed, boolean isConsole, boolean hasPermission, boolean expected) {
-        command = mock(ConfigurableCommand.class);
-        
-        when(command.isConsoleAllowed()).thenReturn(consoleAllowed);
-        when(command.testPermissionSilent(any())).thenReturn(hasPermission);
-        
-        return new Object[] {command, getSender(isConsole), expected};
+    public static Object[] provideParameters() {
+        return new Object[] {
+            parameters(true, true, true, false),
+            parameters(true, true, false, false),
+            
+            parameters(true, false, true, false),
+            parameters(true, false, false, false),
+            
+            parameters(false, true, true, false),
+            parameters(false, true, false, false),
+            
+            parameters(false, false, true, false),
+            parameters(false, false, false, false)
+        };
     }
     
     
-    public static Object[] canUseInWorld_Parameter(boolean hasBlacklist, boolean isConsole, boolean contains, boolean expected) {
-        command = mock(ConfigurableCommand.class);
-        
+    public static Object[] parameters(boolean hasBlacklist, boolean isConsole, boolean contains, boolean expected) {
         when(command.getWorlds()).thenReturn(worlds);
         when(command.hasBlacklist()).thenReturn(hasBlacklist);
-        
         when(worlds.contains(any(String.class))).thenReturn(contains);
         
         return new Object[] {command, getSender(isConsole), expected};
@@ -74,11 +79,11 @@ public class ValidatorParameters {
     
     
     private static CommandSender getSender(boolean isConsole) {
-        if (isConsole) {
-            return console;
+        if (!isConsole) {
+            return player;
         }
         
-        return player;
+        return null;
     }
     
 }

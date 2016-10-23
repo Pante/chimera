@@ -18,6 +18,7 @@ package com.karusmc.xmc.xml.nodes;
 
 import com.karusmc.xmc.xml.XMLResource;
 import com.karusmc.xmc.xml.tags.Tag;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.junit.*;
