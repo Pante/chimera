@@ -27,12 +27,15 @@ import org.bukkit.command.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CommandMapProxy extends Observable implements CommandMap {
+public class CommandMapProxy implements CommandMap {
     
     private SimpleCommandMap commandMap;
+    private Set<CommandMapObserver> observers;
     
     
     public CommandMapProxy(Server server) {
+        observers = new HashSet<>();
+        
         try {
             Field field = server.getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
@@ -63,25 +66,27 @@ public class CommandMapProxy extends Observable implements CommandMap {
     
     @Override
     public boolean register(String fallbackPrefix, Command command) {
-        notifyObservers(command);
+        observers.forEach(observer -> observer.register(command));
         return commandMap.register(fallbackPrefix, command);
     }
     
     
     @Override
     public boolean register(String label, String fallbackPrefix, Command command) {
-        notifyObservers(command);
+        observers.forEach(observer -> observer.register(command));
         return commandMap.register(label, fallbackPrefix, command);
     }
     
     
     @Override
     public void registerAll(String fallbackPrefix, List<Command> commands) {
+        observers.forEach(observer -> observer.registerAll(commands));
         commandMap.registerAll(fallbackPrefix, commands);
     }
     
     
     public void registerAll(Map<String, XMCommand> commands) {
+        observers.forEach(observer -> observer.registerAll(commands.values()));
         commands.values().forEach(command -> register(command.getPlugin().getName(), command));
     }
     
@@ -90,12 +95,14 @@ public class CommandMapProxy extends Observable implements CommandMap {
         Command command = commandMap.getCommand(name);
         
         if (command != null) {
+            observers.forEach(observer -> observer.unregister(name));
             command.unregister(commandMap);
         }
     }
     
     @Override
     public void clearCommands() {
+        observers.forEach(observer -> observer.unregisterAll());
         commandMap.clearCommands();
     }
     
@@ -114,9 +121,14 @@ public class CommandMapProxy extends Observable implements CommandMap {
     public List<String> tabComplete(CommandSender sender, String cmdLine, Location location) throws IllegalArgumentException {
         return commandMap.tabComplete(sender, cmdLine, location);
     }
+    
+    
+    public Set<CommandMapObserver> getObservers() {
+        return observers;
+    }
 
     
-    public CommandMap getRealCommandMap() {
+    public CommandMap getUnderlyingCommandMap() {
         return commandMap;
     }
     

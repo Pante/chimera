@@ -33,9 +33,9 @@ public class AboutCommand extends XMCommand {
     private String information;
     
     
-    public AboutCommand(Plugin plugin, String name) {
-        super(plugin, name);
-        information = getInformation(plugin.getDescription());
+    public AboutCommand(Plugin owningPlugin, String name) {
+        super(owningPlugin, name);
+        information = getInformation(owningPlugin.getDescription());
     }
     
     

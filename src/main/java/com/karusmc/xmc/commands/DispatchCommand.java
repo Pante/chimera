@@ -28,6 +28,7 @@ import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.xmc.util.Validator.*;
 import static com.karusmc.xmc.util.Commands.trimArguments;
+
 /**
  *
  * @author PanteLegacy @ karusmc.com

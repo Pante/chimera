@@ -74,17 +74,54 @@ public class HelpCommandTest {
     
     
     @Test
-    @Parameters(method = "update_parameters")
-    public void update(Command toUpdate, Set<String> expectedCommands) {
-        command.update(null, toUpdate);
+    @Parameters(method = "register_parameters")
+    public void register(Command toUpdate, Set<String> expectedCommands) {
+        command.register(toUpdate);
         assertEquals(command.getCommands().keySet(), expectedCommands);
     }
     
-    public Object[] update_parameters() {
+    public Object[] register_parameters() {
         return new Object[] {
             new Object[] {mock(Command.class), Collections.emptySet()},
             new Object[] {command, new HashSet<>(Arrays.asList("help"))}
         };
+    }
+    
+    
+    @Test
+    @Parameters(method = "registerAll_parameters")
+    public void registerAll(Collection<? extends Command> commands, Set<String> expectedCommands) {
+        command.registerAll(commands);
+        assertEquals(command.getCommands().keySet(), expectedCommands);
+    }
+    
+    public Object[] registerAll_parameters() {
+        return new Object[] {
+            new Object[] {Arrays.asList(mock(Command.class)), Collections.emptySet()},
+            new Object[] {Arrays.asList(command), new HashSet<>(Arrays.asList("help"))}
+        };
+    }
+    
+    
+    @Test
+    public void unregister() {
+        command.getCommands().put("command", command);
+        command.getCommands().put("command subcommand", command);
+        
+        command.unregister("command");
+        
+        assertTrue(command.getCommands().isEmpty());
+    }
+    
+    
+    @Test
+    public void unregisterAll() {
+        command.getCommands().put("a", command);
+        command.getCommands().put("b", command);
+        
+        command.unregisterAll();
+        
+        assertTrue(command.getCommands().isEmpty());
     }
     
     

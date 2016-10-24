@@ -33,9 +33,9 @@ import static com.karusmc.xmc.util.Commands.*;
 /**
  *
  * @author PanteLegacy @ karusmc.com
- * TODO
+ *
  */
-public class HelpCommand extends XMCommand implements Observer {
+public class HelpCommand extends XMCommand implements CommandMapObserver {
     
     private Map<String, XMCommand> commands;
     private Else handle;
@@ -75,7 +75,7 @@ public class HelpCommand extends XMCommand implements Observer {
                 .collect(Collectors.toList());
         
         return usages
-                .subList(Math.max(0, page * size - size), usages.size())
+                .subList(Math.max(0, Math.min(usages.size(), page * size - size)), usages.size())
                 .toArray(new String[0]);
     }
     
@@ -87,15 +87,6 @@ public class HelpCommand extends XMCommand implements Observer {
         sender.sendMessage(usages);
     }
     
-
-    @Override
-    public void update(Observable o, Object object) {
-        XMCommand command;
-        if (object instanceof XMCommand && (command = (XMCommand) object).getPlugin().getName().equals(owningPlugin.getName())) {
-            flatMap(command, commands);
-        }
-    }
-    
     
     public Map<String, XMCommand> getCommands() {
         return commands;
@@ -104,6 +95,32 @@ public class HelpCommand extends XMCommand implements Observer {
     public void setCommands(Map<String, XMCommand> commands) {
         this.commands.clear();
         commands.values().forEach(command -> flatMap(command, this.commands));
+    }
+    
+
+    @Override
+    public void register(Command command) {
+        XMCommand xmCommand;
+        if (command instanceof XMCommand && (xmCommand = (XMCommand) command).getPlugin().getName().equals(owningPlugin.getName())) {
+            flatMap(xmCommand, commands);
+        }
+    }
+    
+
+    @Override
+    public void registerAll(Collection<? extends Command> commands) {
+        commands.forEach(this::register);
+    }
+
+    
+    @Override
+    public void unregister(String name) {
+        commands.entrySet().removeIf(entry -> entry.getKey().startsWith(name));
+    }
+
+    @Override
+    public void unregisterAll() {
+        commands.clear();
     }
 
 }

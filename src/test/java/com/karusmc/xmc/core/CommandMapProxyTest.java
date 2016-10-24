@@ -73,7 +73,7 @@ public class CommandMapProxyTest {
     @Test
     public void getCommandMap_ReturnsCommandMap() {
         injector = new CommandMapProxy(server);
-        assertTrue(commandMap == injector.getRealCommandMap());
+        assertTrue(commandMap == injector.getUnderlyingCommandMap());
     }
     
     

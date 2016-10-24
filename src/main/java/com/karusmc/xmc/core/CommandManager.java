@@ -21,7 +21,7 @@ import com.karusmc.xmc.xml.*;
 import java.io.File;
 import java.util.*;
 
-import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -30,52 +30,51 @@ import org.bukkit.Server;
 public class CommandManager {
     
     private CommandMapProxy proxy;
-    
-    private Parser commandsParser; 
-    private Parser configurationParser;
+    private Plugin owningPlugin;
     
     
-    public CommandManager(Server server) {
-        this(new CommandMapProxy(server));
+    public CommandManager(Plugin owningPlugin) {
+        this(owningPlugin, new CommandMapProxy(owningPlugin.getServer()));
     }
     
-    public CommandManager(CommandMapProxy proxy) {
+    public CommandManager(Plugin owningPlugin, CommandMapProxy proxy) {
         this.proxy = proxy;
-        commandsParser = ParserBuilder.createCommandParser();
-        configurationParser = ParserBuilder.createConfigurationParser();
+        this.owningPlugin = owningPlugin;
     }
     
     
-    public void loadCommands(File commandsFile, File configurationFile) {
-        commandsParser.parse(commandsFile);
+    public void loadCommands(File commandFile, File configurationFile) {
+        loadCommands(ParserBuilder.createCommandParser(), ParserBuilder.createConfigurationParser(), commandFile, configurationFile);
+    }
+    
+    
+    public void loadCommands(Parser commandParser, Parser configurationParser, File commandFile, File configurationFile) {
+        Map<String, XMCommand> commands = proxy.getPluginCommands(owningPlugin.getName(), XMCommand.class);
+        
+        commandParser.registerAll(commands);
+        configurationParser.registerAll(commands);
+        
+        commandParser.parse(commandFile);
         configurationParser.parse(configurationFile);
     }
     
     
     public void register(XMCommand command) {
         proxy.register(command.getPlugin().getName(), command);
-        commandsParser.register(command);
-        configurationParser.register(command);
     }
     
     
     public void registerAll(Map<String, XMCommand> commands) {
         proxy.registerAll(commands);
-        commandsParser.registerAll(commands);
-        configurationParser.registerAll(commands);
     }
     
     
     public void unregister(String name) {
         proxy.unregister(name);
-        commandsParser.unregister(name);
-        configurationParser.unregister(name);
     }
     
     public void unregisterAll() {
         proxy.clearCommands();
-        commandsParser.unregisterAll();
-        configurationParser.unregisterAll();
     }
 
 }
