@@ -76,5 +76,10 @@ public class CommandManager {
     public void unregisterAll() {
         proxy.clearCommands();
     }
+    
+    
+    public CommandMapProxy getCommandMapProxy() {
+        return proxy;
+    }
 
 }
