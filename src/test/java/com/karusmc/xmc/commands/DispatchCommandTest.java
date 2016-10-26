@@ -79,12 +79,13 @@ public class DispatchCommandTest {
     }
     
     public Object[] tabComplete_parameters() {
+        List emptyList = new ArrayList<>();
         return new Object[] {
-            new Object[] {new String[] {}, 0, null},
+            new Object[] {new String[] {}, 0, emptyList},
             new Object[] {new String[] {"subcommand"}, 0, Arrays.asList("subcommand")},
-            new Object[] {new String[] {"invalid"}, 0, new ArrayList<>()},
-            new Object[] {new String[] {"subcommand", "blah"}, 1, new ArrayList<>()},
-            new Object[] {new String[] {"invalid", "blah"}, 0, null}
+            new Object[] {new String[] {"invalid"}, 0, emptyList},
+            new Object[] {new String[] {"subcommand", "blah"}, 1, emptyList},
+            new Object[] {new String[] {"invalid", "blah"}, 0, emptyList}
         };
     }
     

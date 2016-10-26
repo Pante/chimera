@@ -75,12 +75,12 @@ public class HelpCommand extends XMCommand implements CommandMapObserver {
                 .collect(Collectors.toList());
         
         return usages
-                .subList(Math.max(0, Math.min(usages.size(), page * size - size)), usages.size())
+                .subList(getFirstIndex(page, size, usages.size()), usages.size())
                 .toArray(new String[0]);
     }
     
     
-    protected void displayUsages(CommandSender sender, int page, String search, String[] usages) {
+    private void displayUsages(CommandSender sender, int page, String search, String[] usages) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', 
                 "&6==== Help: &c" + search
                 + " &6=== Page: &c" + page + "/" + " &6===="));

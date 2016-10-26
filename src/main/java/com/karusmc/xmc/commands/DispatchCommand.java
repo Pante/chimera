@@ -68,7 +68,7 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
             return commands.get(argument).tabComplete(sender, argument, trimArguments(args));
             
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
     

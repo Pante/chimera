@@ -41,12 +41,12 @@ public class Page {
     }
     
     
-    public static int getFirstIndex(int page, int pageSize) {
-        return page * pageSize - page;
+    public static int getFirstIndex(int page, int pageSize, int totalEntries) {
+        return Math.min(page * pageSize - pageSize, totalEntries);
     }
     
-    public static int getLastIndex(int page, int pageSize, int divisibleSize) {
-        return Math.min(page * pageSize, divisibleSize);
+    public static int getLastIndex(int page, int pageSize, int totalEntries) {
+        return Math.min(page * pageSize, totalEntries);
     }
     
 }

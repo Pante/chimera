@@ -48,9 +48,9 @@ public class PageTest {
     
     
     @Test
-    @Parameters({"3, 4, 9"})
-    public void getFirstIndex_ReturnsIndex(int page, int pageSize, int expected) {
-        int returned = Page.getFirstIndex(page, pageSize);
+    @Parameters({"3, 4, 13, 8", "3, 4, 7, 7"})
+    public void getFirstIndex_ReturnsIndex(int page, int pageSize, int totalEntries, int expected) {
+        int returned = Page.getFirstIndex(page, pageSize, totalEntries);
         assertEquals(expected, returned);
     }
     
