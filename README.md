@@ -1,5 +1,5 @@
 # XMC-Toolkit - Extensible Markup Commands
-XMC is a lightweight command toolkit for Spigot plug-ins meant to simplfy command creation and management. 
+XMC is a lightweight command toolkit for Spigot plug-ins meant to simplify command creation and management, and reduce boilerplate code.
 
 ### Maven Artifact
 ``` XML
