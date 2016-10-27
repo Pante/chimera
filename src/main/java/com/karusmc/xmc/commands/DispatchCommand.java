@@ -52,8 +52,11 @@ public class DispatchCommand extends XMCommand implements Dispatcher {
     
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (is(args.length >= 1 && commands.containsKey(args[0]), handle, sender)) {
+        if (args.length >= 1 && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, trimArguments(args));
+            
+        } else {
+            handle.handle(sender);
         }
     }
     

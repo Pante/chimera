@@ -25,8 +25,6 @@ import org.bukkit.command.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.karusmc.xmc.util.PlayerProvider.*;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -35,27 +33,7 @@ import static org.mockito.Mockito.*;
  * @author PanteLegacy @ karusmc.com
  */
 @RunWith(JUnitParamsRunner.class)
-public class ValidatorTest {
-    
-    
-    @Test
-    @Parameters(method = "is_Parameters")
-    public void is(boolean criteria, Else handler, boolean expected, int times) {
-        boolean returned = Validator.is(criteria, handler, null);
-        
-        assertEquals(expected, returned);
-        verify(handler, times(times)).handle(null);
-    }
-    
-    public Object[] is_Parameters() {
-        Else handler = mock(Else.class);
-        
-        return new Object[]{
-            new Object[]{true, handler, true, 0},
-            new Object[]{false, handler, false, 1}
-        };
-    }
-    
+public class ValidatorTest {    
     
     @Test
     @Parameters(source = PlayerProvider.class)

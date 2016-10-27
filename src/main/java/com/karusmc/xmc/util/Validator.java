@@ -25,16 +25,7 @@ import org.bukkit.entity.Player;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class Validator {
-    
-    public static boolean is(boolean criteria, Else handle, CommandSender sender) {
-        if (!criteria) {
-            handle.handle(sender);
-        }
-        
-        return criteria;
-    }
-    
+public class Validator { 
     
     public static boolean canUse(XMCommand command, CommandSender sender) {
         return !command.isConsoleAllowed() ^ sender instanceof ConsoleCommandSender && command.testPermissionSilent(sender);

@@ -6,7 +6,7 @@
 -->
 
 
-<!-- Mandatory document type definition (DTD) needed for XMC to parse the document -->
+<!-- Mandatory DTD needed to parse this document -->
 <!DOCTYPE commands SYSTEM "commands.dtd">
 
 <commands>
@@ -19,11 +19,8 @@
     
     
     <!-- 
-    Commands can only either have child commands as defined by the element: <commands> 
+    Commands can either have child commands defined by the element: <commands> 
     or be configurable as defined by the element: <configuration>.
-    If both of the above elements are present, XMC will only parse the element which 
-    comes first and ignore the subsequent one(s). This is to ensure that configuration 
-    is delegated to the child commands to prevent hierarchical conflicts.
     -->
     <commands>
       
@@ -34,13 +31,11 @@
       
       
         <!--
-        A default value must be specified for the command to be configurable under the 
-        commands-configuration.xml document. XMC will ignore said configuuration option if 
-        no default value is present.
+        A default value can be specified for the command or defaults to a safe value.
         -->
         <configuration>
       
-          <!-- The time unit for attribute: time is in milliseconds -->
+          <!-- The time unit for this attribute: time is in milliseconds -->
           <cooldown time = "10"/>
         
           <!-- Valid values for attribute: type are "whitelist" and "blacklist" -->

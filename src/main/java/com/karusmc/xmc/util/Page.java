@@ -31,9 +31,9 @@ public class Page {
         }
     }
     
-    public static int getTotalPages(int divisibleSize, int pageSize) {
-        if (divisibleSize > 0 && pageSize > 0) {
-            return Math.max(1, (int) Math.ceil((double) divisibleSize / pageSize));
+    public static int getTotalPages(int totalEntries, int pageSize) {
+        if (totalEntries > 0 && pageSize > 0) {
+            return Math.max(1, (int) Math.ceil((double) totalEntries / pageSize));
             
         } else {
             return 0;

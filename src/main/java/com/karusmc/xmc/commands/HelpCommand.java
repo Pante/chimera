@@ -58,11 +58,14 @@ public class HelpCommand extends XMCommand implements CommandMapObserver {
     
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (is(canUse(this, sender) && hasLength(0, args.length, 2), handle, sender)) {
+        if (canUse(this, sender) && hasLength(0, args.length, 2)) {
             int page = getPage(getArgumentOrDefault(args, 0, ""));
             String search = getArgumentOrDefault(args, 1, "");
             
             displayUsages(sender, page, search, getUsages(sender, page, search));
+            
+        } else {
+            handle.handle(sender);
         }
     }
     
