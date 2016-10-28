@@ -43,13 +43,25 @@ public class CommandManager {
     }
     
     
-    public void loadCommands(File commandFile, File configurationFile) {
-        loadCommands(ParserBuilder.createCommandParser(), ParserBuilder.createConfigurationParser(), commandFile, configurationFile);
+    public void loadCommands(File file) {
+        load(ParserBuilder.createCommandParser(), file);
     }
     
+    public void loadConfiguration(File file) {
+        load(ParserBuilder.createConfigurationParser(), file);
+    }
     
-    public void loadCommands(Parser commandParser, Parser configurationParser, File commandFile, File configurationFile) {
+    private void load(Parser parser, File commandsFile) {
+        parser.registerAll(proxy.getPluginCommands(owningPlugin.getName(), XMCommand.class));
+        parser.parse(commandsFile);
+    }
+      
+    
+    public void loadAll(File commandFile, File configurationFile) {
         Map<String, XMCommand> commands = proxy.getPluginCommands(owningPlugin.getName(), XMCommand.class);
+        
+        Parser commandParser = ParserBuilder.createCommandParser();
+        Parser configurationParser = ParserBuilder.createConfigurationParser();
         
         commandParser.registerAll(commands);
         configurationParser.registerAll(commands);
