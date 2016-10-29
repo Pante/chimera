@@ -1,21 +1,9 @@
-# XMC-Toolkit - Extensible Markup Commands
-XMC is a lightweight command toolkit for Spigot plug-ins meant to simplify command creation and management, and reduce boilerplate code.
+<p align="center">
+  <img src = "http://i.imgur.com/ChzwBto.jpg"/>
+</p>
+# XMC: Extensible Markup Commands
+XMC is a lightweight XML based command toolkit for Spigot that helps reduce the amount of boilerplate code by implementing commonly used concepts and operations so you do not have to.
+## Full Documentaton
+Please see the <a href = "https://github.com/Pante/XMC-Toolkit/wiki">Wiki</a> for full documentation, examples and other information.
 
-### Maven Artifact
-``` XML
-  <dependency>
-      <groupId>com.karusmc</groupId>
-      <artifactId>XMC</artifactId>
-      <version>1.0.0</version>
-  </dependency>
-```
-
-### Requirements
-* Java 8 and above
-
-### Links
-* [Spigot Page]()
-* [Wiki]()
-* [Javadocs](https://pante.github.io/XMC-Toolkit/)
-
-
+See the <a href = "https://pante.github.io/XMC-Toolkit/">Javadocs</a>
