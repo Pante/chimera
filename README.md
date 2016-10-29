@@ -6,4 +6,4 @@ XMC is a lightweight XML based command toolkit for Spigot that helps reduce the 
 ## Full Documentaton
 Please see the <a href = "https://github.com/Pante/XMC-Toolkit/wiki">Wiki</a> for full documentation, examples and other information.
 
-See the <a href = "https://pante.github.io/XMC-Toolkit/">Javadocs</a>
+See the <a href = "https://pante.github.io/XMC-Toolkit/">Javadocs</a> for the API
