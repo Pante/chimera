@@ -25,7 +25,7 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CooldownTag implements Tag {
+public class CooldownTag implements Tag<XMCommand> {
     
     private QName time;
     

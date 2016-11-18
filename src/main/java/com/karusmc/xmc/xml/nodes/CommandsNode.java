@@ -26,7 +26,7 @@ import javax.xml.stream.events.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class CommandsNode implements Node {
+public class CommandsNode implements Node<XMCommand> {
     
     private Node node;
     

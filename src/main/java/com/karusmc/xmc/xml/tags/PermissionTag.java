@@ -25,7 +25,7 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class PermissionTag implements Tag {
+public class PermissionTag implements Tag<XMCommand> {
     
     private QName permission;
     private QName message;

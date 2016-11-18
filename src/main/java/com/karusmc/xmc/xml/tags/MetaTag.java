@@ -27,7 +27,7 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class MetaTag implements Tag {
+public class MetaTag implements Tag<XMCommand> {
     
     private QName aliases;
     private QName description;

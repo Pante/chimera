@@ -16,8 +16,6 @@
  */
 package com.karusmc.xmc.xml.tags;
 
-import com.karusmc.xmc.core.XMCommand;
-
 import javax.xml.stream.events.StartElement;
 
 /**
@@ -25,8 +23,8 @@ import javax.xml.stream.events.StartElement;
  * @author PanteLegacy @ karusmc.com
  */
 @FunctionalInterface
-public interface Tag {
+public interface Tag<T> {
     
-    public void parse(StartElement element, XMCommand command);
+    public void parse(StartElement element, T command);
     
 }

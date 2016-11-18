@@ -16,8 +16,6 @@
  */
 package com.karusmc.xmc.xml.nodes;
 
-import com.karusmc.xmc.core.XMCommand;
-
 import javax.xml.stream.*;
 
 /**
@@ -25,8 +23,8 @@ import javax.xml.stream.*;
  * @author PanteLegacy @ karusmc.com
  */
 @FunctionalInterface
-public interface Node {
+public interface Node<T> {
     
-    public void parse(XMLEventReader reader, XMCommand command) throws XMLStreamException;
+    public void parse(XMLEventReader reader, T command) throws XMLStreamException;
     
 }

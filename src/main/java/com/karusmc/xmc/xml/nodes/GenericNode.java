@@ -27,7 +27,7 @@ import javax.xml.stream.events.*;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class GenericNode implements Node {
+public class GenericNode implements Node<XMCommand> {
     
     private String name;
     

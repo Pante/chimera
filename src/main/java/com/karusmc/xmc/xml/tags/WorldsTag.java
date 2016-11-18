@@ -26,7 +26,7 @@ import javax.xml.stream.events.StartElement;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class WorldsTag implements Tag {
+public class WorldsTag implements Tag<XMCommand> {
     
     private QName type;
     private QName list;
