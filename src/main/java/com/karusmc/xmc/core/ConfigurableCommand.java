@@ -24,7 +24,7 @@ import org.bukkit.plugin.Plugin;
  *
  * @author PanteLegacy @ karusmc.com
  */
-public abstract class ConfigurableCommand extends XMCommand {
+public abstract class ConfigurableCommand extends XMCommand implements Configurable {
     
     private Set<String> worlds;
     private long cooldown;
@@ -39,28 +39,34 @@ public abstract class ConfigurableCommand extends XMCommand {
     }
     
     
+    @Override
     public long getCooldown() {
         return cooldown;
     }
     
+    @Override
     public void setCooldown(long cooldown) {
         this.cooldown = cooldown;
     }
     
     
+    @Override
     public boolean hasBlacklist() {
         return blacklist;
     }
     
+    @Override
     public void setBlacklist(boolean blacklist) {
         this.blacklist = blacklist;
     }
     
     
+    @Override
     public Set<String> getWorlds() {
         return worlds;
     }
     
+    @Override
     public void setWorlds(Set<String> worlds) {
         this.worlds = worlds;
     }

@@ -14,37 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.xmc.xml.nodes;
+package com.karusmc.xmc.core;
 
-import com.karusmc.xmc.core.*;
-
-import java.util.*;
-
-import org.bukkit.command.CommandSender;
+import java.util.Set;
 
 /**
  *
  * @author PanteLegacy @ karusmc.com
  */
-public class StubDispatcherCommand extends XMCommand implements Dispatcher {
+public interface Configurable {
     
-    private Map<String, XMCommand> commands;
+    public long getCooldown();
+    
+    public void setCooldown(long cooldown);
     
     
-    public StubDispatcherCommand() {
-        super(null, null);
-        commands = new HashMap<>();
-    }
+    public boolean hasBlacklist();
     
-
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Map<String, XMCommand> getCommands() {
-        return commands;
-    }
+    public void setBlacklist(boolean blacklist);
+    
+    
+    public Set<String> getWorlds();
+    
+    public void setWorlds(Set<String> worlds);
     
 }
