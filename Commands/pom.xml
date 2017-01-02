@@ -6,7 +6,17 @@
         <artifactId>commons</artifactId>
         <version>0.0.1</version>
     </parent>
+    
     <groupId>com.karusmc.commons</groupId>
-    <artifactId>Core</artifactId>
+    <artifactId>Commands</artifactId>
     <packaging>jar</packaging>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.karusmc.commons</groupId>
+            <artifactId>Core</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+    
 </project>

@@ -5,13 +5,13 @@
     <name>Karus-Commons</name>
     <groupId>com.karusmc</groupId>
     <artifactId>commons</artifactId>
-    <version>1.1.0</version>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
     
     <modules>
-        <module>commands</module>
-        <module>items</module>
         <module>Core</module>
+        <module>Commands</module>
+        <module>Items</module>
     </modules>
     
     <properties>
@@ -34,9 +34,17 @@
         
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <artifactId>spigot-api</artifactId>
             <version>1.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<items>
+    
+    <item id = "liver" type = "RAW_BEEF" amount = "16">
+        
+        <value buy = "0.00" sell = "0.00"/>
+        
+        <meta type = "ITEM" display-name = "&amp;cLiver">
+            
+            <enchantments>
+                <enchantment type = "POWER" level = "1"/>
+            </enchantments>
+            
+            <description>
+                <br>Line one</br>
+                <br>Line Two</br>
+            </description>
+            
+        </meta>
+        
+    </item>
+    
+</items>

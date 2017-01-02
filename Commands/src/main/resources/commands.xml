@@ -1,0 +1,20 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<commands xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation = "commands.xsd"
+>
+    
+  <command name = "command">
+    <meta aliases = "cmd, comm" description = "command description" usage = "example usage"/>
+    <permission permission = "example.permission" message = "You do not have permission to use this command"/>
+    <commands>
+        
+      <command name = "subcommand">
+        <meta aliases = "subcmd, subcomm" description = "command description" usage = "example usage"/>
+        <permission permission = "example.permission" message = "You do not have permission to use this command"/>
+      </command>
+      
+    </commands>
+  </command>
+  
+</commands>
