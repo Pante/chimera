@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.commands;
+package com.karusmc.commons.commands.reference;
 
+import com.karusmc.commons.commands.Command;
+import com.karusmc.commons.commands.Criteria;
+import com.karusmc.commons.commands.Marshall;
+import com.karusmc.commons.commands.PluginCommand;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,17 +29,17 @@ import org.bukkit.plugin.Plugin;
 import static com.karusmc.commons.commands.Utility.trim;
 
 
-public class Marshaller extends PluginCommand {
+public class MarshallCommand extends PluginCommand implements Marshall {
     
     private PluginCommand delegate;
     private Map<String, Command> commands;
     
     
-    public Marshaller(PluginCommand delegate) {
+    public MarshallCommand(PluginCommand delegate) {
         this(delegate, new HashMap<>(0));
     }
     
-    public Marshaller(PluginCommand delegate, Map<String, Command> commands) {
+    public MarshallCommand(PluginCommand delegate, Map<String, Command> commands) {
         super(null, null, null);
         
         this.delegate = delegate;
@@ -67,16 +71,13 @@ public class Marshaller extends PluginCommand {
             return Collections.emptyList();
         }
     }
-
     
+    
+    @Override
     public Map<String, Command> getCommands() {
         return commands;
     }
 
-    public void setCommands(Map<String, Command> commands) {
-        this.commands = commands;
-    }
-    
 
     @Override
     public String getName() {

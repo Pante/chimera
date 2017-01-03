@@ -16,23 +16,11 @@
  */
 package com.karusmc.commons.commands;
 
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
+import java.util.Map;
 
 
-@FunctionalInterface
-public interface Criteria {
+public interface Marshall {
     
-    public static final Criteria NONE = (command, sender, args) -> true;
-    public static final Criteria PERMITTED = (command, sender, args) -> command.testPermissionSilent(sender);
-    public static final Criteria PERMITTEDPLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
-    public static final Criteria NOARGUMENTS = (command, sender, args) -> args.length == 0;
-    
-    public boolean test(Command command, CommandSender sender, String[] args);
-    
-    
-    public static boolean hasLength(int min, int length, int max) {
-        return min <= length && length <= max;
-    }
+    public Map<String, Command> getCommands();
     
 }
