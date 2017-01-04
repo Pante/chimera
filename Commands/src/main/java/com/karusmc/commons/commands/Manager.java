@@ -42,8 +42,8 @@ public class Manager {
 
     
     public void load(File commandsFile, Map<String, Command> commands) {
-        getParser().parse(commandsFile, commands);
-        getProxy().register(commands);
+        parser.parse(commandsFile, commands);
+        proxy.register(commands);
     }
 
     

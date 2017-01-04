@@ -27,7 +27,7 @@ public class CommandRegistrationEvent extends Event implements Cancellable {
     
     private Command command;
     private boolean cancelled;
-    
+
     
     public CommandRegistrationEvent(Command command) {
         this.command = command;

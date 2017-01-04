@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.karusmc.commons</groupId>
-  <artifactId>Core</artifactId>
+  <artifactId>Commands</artifactId>
   <dependencies>
     <dependency>
       <groupId>org.spigotmc</groupId>

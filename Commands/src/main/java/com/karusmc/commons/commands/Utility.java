@@ -16,7 +16,7 @@
  */
 package com.karusmc.commons.commands;
 
-import java.util.Arrays;
+import java.util.*;
 
 
 public class Utility {
@@ -26,7 +26,16 @@ public class Utility {
             return new String[]{};
 
         } else {
-            return Arrays.copyOfRange(args, 1, args.length - 1);
+            return Arrays.copyOfRange(args, 1, args.length);
+        }
+    }
+    
+    public static<T> T getArgumentOrDefault(T[] args, int index, T defaultArgument) {
+        if (args.length > index) {
+            return args[index];
+    
+        } else {
+            return defaultArgument;
         }
     }
     
@@ -61,6 +70,15 @@ public class Utility {
         int lastOnPage = (page * pageSize);
         
         return (lastOnPage < totalEntries) ? lastOnPage : totalEntries;
+    }
+
+    
+    public static void flapMap(String name, Command command, Map<String, Command> commands) {
+        if (command instanceof Marshall) {
+            ((Marshall) command).getCommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));
+        }
+        
+        commands.put(name, command);
     }
     
 }
