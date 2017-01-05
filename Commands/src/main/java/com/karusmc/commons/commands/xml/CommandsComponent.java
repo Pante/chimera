@@ -21,36 +21,31 @@ import com.karusmc.commons.core.xml.*;
 
 import java.util.*;
 
-import org.bukkit.command.CommandSender;
-
 import org.jdom2.Element;
 
 
 public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     private SetterComponent<Command> component;
-    private CommandSender sender;
     
     
-    public CommandsComponent(CommandSender sender) {
+    public CommandsComponent() {
         component = new CommandComponent(this);
-        this.sender = sender;
     }
     
-    public CommandsComponent(SetterComponent<Command> component, CommandSender sender) {
+    public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
-        this.sender = sender;
     }
     
     
     @Override
     public void parse(Element root, Map<String, Command> commands) {
         root.getChildren("command").forEach((element) -> {
-            String name = element.getAttribute("name").getValue();
+            String name = element.getAttribute("name").getValue();  
             
             if (commands.containsKey(name)) { 
                 component.parse(element, commands.get(name));
-                
+
             } else {
                 throw new ParserException("No such registered command with name: \"" + name + "\"");
             }

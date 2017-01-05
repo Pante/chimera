@@ -104,7 +104,7 @@ public class CommandMapProxyTest {
         assertEquals(expected, returned);
     }
     
-    public Object[] parametersForPluginCommands() {
+    public Object[] parametersForGetPluginCommands() {
         Command nonPluginCommand = mock(Command.class);
         PluginCommand differentPluginCommand = mock(PluginCommand.class);
         PluginCommand command = mock(PluginCommand.class);
@@ -115,12 +115,13 @@ public class CommandMapProxyTest {
         
         Plugin plugin = mock(Plugin.class);
         when(plugin.getName()).thenReturn("test");
-        when(differentPluginCommand.getPlugin()).thenReturn(aPlugin);
+        when(command.getPlugin()).thenReturn(plugin);
+        when(command.getName()).thenReturn("command name");
         
         return new Object[] {
             new Object[] {nonPluginCommand, Collections.<String>emptySet()},
             new Object[] {differentPluginCommand, Collections.<String>emptySet()},
-            new Object[] {command, Collections.singleton("test")}
+            new Object[] {command, Collections.singleton("command name")}
         };
     }
     

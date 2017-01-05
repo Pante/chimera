@@ -41,13 +41,21 @@ public abstract class Parser<ParsedObject> {
     
     
     public ParsedObject parse(File file) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            Element element = builder.build(reader, schemaPath).getRootElement();
+        try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
+            return parse(stream);
             
+        } catch (IOException e) {
+            throw new ParserException("Failed to parse file: " + file.getName(), e);
+        }
+    }
+    
+    public ParsedObject parse(InputStream stream) {
+        try {
+            Element element = builder.build(stream, schemaPath).getRootElement();
             return parse(element);
             
-        } catch (IOException | JDOMException e) {
-            throw new ParserException("Failed to parse file: " + file.getName(), e);
+        } catch (JDOMException | IOException e) {
+            throw new ParserException("Failed to parse XML Document", e);
         }
     }
     

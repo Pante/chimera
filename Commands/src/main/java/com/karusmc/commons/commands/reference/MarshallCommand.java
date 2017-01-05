@@ -16,14 +16,13 @@
  */
 package com.karusmc.commons.commands.reference;
 
-import com.karusmc.commons.commands.Command;
-import com.karusmc.commons.commands.Criteria;
-import com.karusmc.commons.commands.Marshall;
-import com.karusmc.commons.commands.PluginCommand;
+import com.karusmc.commons.commands.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.bukkit.command.*;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.commons.commands.Utility.trim;

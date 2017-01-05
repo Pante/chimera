@@ -32,7 +32,7 @@ public class Manager {
     
     
     public Manager(Plugin owningPlugin) {
-        this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent(owningPlugin.getServer().getConsoleSender())));
+        this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent()));
     }
     
     public Manager(CommandMapProxy proxy, SetterParser<Map<String, Command>> parser) {

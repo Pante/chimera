@@ -1,10 +1,8 @@
-<?xml version = "1.0" encoding = "UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<commands xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation = "commands.xsd"
->
+
+<command name = "command">
     
-  <command name = "command">
     <meta aliases = "cmd, comm" description = "command description" usage = "command usage"/>
     <permission permission = "command.permission" message = "You do not have permission to use this command"/>
     
@@ -16,6 +14,5 @@
       </command>
       
     </commands>
-  </command>
-  
-</commands>
+    
+</command>

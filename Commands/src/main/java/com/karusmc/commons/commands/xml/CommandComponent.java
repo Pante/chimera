@@ -38,6 +38,7 @@ public class CommandComponent implements SetterComponent<Command> {
     public void parse(Element element, Command command) {
         Element meta = element.getChild("meta");
         Element permission = element.getChild("permission");
+        Element commands = element.getChild("commands");
         
         command.setAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")));
         command.setDescription(meta.getAttribute("description").getValue());
@@ -45,13 +46,14 @@ public class CommandComponent implements SetterComponent<Command> {
         
         command.setPermission(permission.getAttribute("permission").getValue());
         command.setPermissionMessage(permission.getAttribute("message").getValue());
-        
-        Element commands = element.getChild("commands");
-        if (commands != null && command instanceof Marshall) {
-            commandsComponent.parse(element, ((Marshall) command).getCommands());
             
-        } else {
-            throw new ParserException("Command doest not implement the Marshall interface, unable to retrieve child commands");
+        if (commands != null) {
+            if (command instanceof Marshall) {
+                commandsComponent.parse(commands, ((Marshall) command).getCommands());
+                
+            } else {
+                throw new ParserException("Command: \"" + command.getName() + "\" does not implement the Marshall interface, unable to retrieve child commands");
+            }
         }
     }
 
