@@ -14,17 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.core.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.TYPE;
+package com.karusmc.commons.items;
 
 
-@Documented
-@Target({TYPE})
-public @interface Threading {
-    
-    Policy policy() default Policy.NOT_THREAD_SAFE;
+public class ItemParser {
     
 }

@@ -48,8 +48,8 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length >= 1 && getCommands().containsKey(args[0])) {
-            getCommands().get(args[0]).execute(sender, trim(args));
+        if (args.length >= 1 && commands.containsKey(args[0])) {
+            commands.get(args[0]).execute(sender, trim(args));
             
         } else {
            delegate.execute(sender, args);
@@ -61,10 +61,10 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         String argument;
         if (args.length == 1) {
-            return getCommands().keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
+            return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
             
-        } else if (args.length >= 2 && getCommands().containsKey(argument = args[0])) {
-            return getCommands().get(argument).tabComplete(sender, argument, trim(args));
+        } else if (args.length >= 2 && commands.containsKey(argument = args[0])) {
+            return commands.get(argument).tabComplete(sender, argument, trim(args));
             
         } else {
             return Collections.emptyList();

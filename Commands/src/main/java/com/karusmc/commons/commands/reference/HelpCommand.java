@@ -25,22 +25,24 @@ import java.util.stream.Collectors;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
+import org.bukkit.plugin.Plugin;
 
 import static com.karusmc.commons.commands.Utility.*;
 
 
-public class HelpCommand extends Command implements Listener {
+
+public class HelpCommand extends PluginCommand implements Listener {
     
     private Map<String, Command> commands;
     private int size;
     
     
-    public HelpCommand(String name) {
-        this(name, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.hasLength(0, args.length, 2), new HashMap<>(), 3);
+    public HelpCommand(String name, Plugin plugin) {
+        this(name, plugin, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.hasLength(0, args.length, 2), new HashMap<>(), 3);
     }
     
-    public HelpCommand(String name, Criteria criteria, Map<String, Command> commands, int size) {
-        super(name, criteria);
+    public HelpCommand(String name, Plugin plugin, Criteria criteria, Map<String, Command> commands, int size) {
+        super(name, plugin, criteria);
         this.commands = commands;
         this.size = size;
     }
@@ -67,7 +69,7 @@ public class HelpCommand extends Command implements Listener {
                 .collect(Collectors.toList());
         
         return usages
-                .subList(getFirstIndex(page, size, usages.size()), usages.size())
+                .subList(getFirstIndex(usages.size(), size, page), usages.size())
                 .toArray(new String[0]);
     }
     
