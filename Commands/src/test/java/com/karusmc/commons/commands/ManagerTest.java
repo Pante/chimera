@@ -16,24 +16,40 @@
  */
 package com.karusmc.commons.commands;
 
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
+import com.karusmc.commons.core.xml.SetterParser;
+
+import java.io.File;
+import java.util.*;
+
+import org.junit.Test;
+
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Criteria {
+public class ManagerTest {
     
-    public static final Criteria NONE = (command, sender, args) -> true;
-    public static final Criteria PERMITTED = (command, sender, args) -> command.testPermissionSilent(sender);
-    public static final Criteria PERMITTEDPLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
-    public static final Criteria NOARGUMENTS = (command, sender, args) -> args.length == 0;
-  
-    
-    public boolean test(Command command, CommandSender sender, String[] args);
+    private Manager manager;
+    private CommandMapProxy proxy;
+    private SetterParser<Map<String, Command>> parser;
     
     
-    public static boolean hasLength(int min, int length, int max) {
-        return min <= length && length <= max;
+    public ManagerTest() {
+        proxy = mock(CommandMapProxy.class);
+        parser = mock(SetterParser.class);
+        
+        manager = new Manager(proxy, parser);
+    }
+    
+    
+    @Test
+    public void load() {
+        File file = mock(File.class);
+        Map<String, Command> commands = new HashMap<>(0);
+        
+        manager.load(file, commands);
+        
+        verify(parser, times(1)).parse(file, commands);
+        verify(proxy, times(1)).register(commands);
     }
     
 }

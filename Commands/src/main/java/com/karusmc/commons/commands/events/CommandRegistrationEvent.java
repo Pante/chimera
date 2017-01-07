@@ -14,38 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.commands.xml;
+package com.karusmc.commons.commands.events;
 
 import com.karusmc.commons.commands.Command;
-import com.karusmc.commons.core.xml.*;
 
-import java.util.*;
-
-import org.jdom2.Element;
+import org.bukkit.event.*;
 
 
-public class CommandParser extends SetterParser<Map<String, Command>> {
+public class CommandRegistrationEvent extends Event implements Cancellable {
+
+    private static HandlerList handlers = new HandlerList();
     
-    private SetterComponent<Map<String, Command>> component;
+    private Command command;
+    private boolean cancelled;
+
     
-    
-    public CommandParser(SetterComponent<Map<String, Command>> component) {
-        super(null);
-        
-        schemaPath = getClass().getClassLoader().getResource("commands.xsd").getPath();
-        this.component = component;
+    public CommandRegistrationEvent(Command command) {
+        this.command = command;
+        cancelled = false;
     }
-   
     
-    public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
-        super(schemaPath);
-        this.component = component;
+    
+    public Command getCommand() {
+        return command;
     }
     
     
     @Override
-    protected void parse(Element element, Map<String, Command> commands) {
-        component.parse(element, commands);
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
     
 }

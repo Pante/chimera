@@ -9,4 +9,14 @@
     <groupId>com.karusmc.commons</groupId>
     <artifactId>Core</artifactId>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
 </project>

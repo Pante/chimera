@@ -16,7 +16,7 @@
  */
 package com.karusmc.commons.commands.xml;
 
-import com.karusmc.commons.commands.Command;
+import com.karusmc.commons.commands.*;
 import com.karusmc.commons.core.xml.*;
 
 import java.util.*;
@@ -24,28 +24,32 @@ import java.util.*;
 import org.jdom2.Element;
 
 
-public class CommandParser extends SetterParser<Map<String, Command>> {
+public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
-    private SetterComponent<Map<String, Command>> component;
+    private SetterComponent<Command> component;
     
     
-    public CommandParser(SetterComponent<Map<String, Command>> component) {
-        super(null);
-        
-        schemaPath = getClass().getClassLoader().getResource("commands.xsd").getPath();
-        this.component = component;
+    public CommandsComponent() {
+        component = new CommandComponent(this);
     }
-   
     
-    public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
-        super(schemaPath);
+    public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
     }
     
     
     @Override
-    protected void parse(Element element, Map<String, Command> commands) {
-        component.parse(element, commands);
+    public void parse(Element root, Map<String, Command> commands) {
+        root.getChildren("command").forEach((element) -> {
+            String name = element.getAttribute("name").getValue();  
+            
+            if (commands.containsKey(name)) { 
+                component.parse(element, commands.get(name));
+
+            } else {
+                throw new ParserException("No such registered command with name: \"" + name + "\"");
+            }
+        });
     }
     
 }

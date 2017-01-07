@@ -19,40 +19,40 @@ package com.karusmc.commons.core.xml;
 import java.io.*;
 
 import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.*;
 import org.jdom2.input.sax.XMLReaders;
 
 
-public abstract class Parser<ParsedObject> {
+public abstract class SetterParser<Argument> {
     
     protected String schemaPath;
     protected SAXBuilder builder;
     
     
-    public Parser(String schemaPath) {
+    public SetterParser(String schemaPath) {
         this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
     }
     
-    public Parser(String schemaPath, SAXBuilder builder) {
+    public SetterParser(String schemaPath, SAXBuilder builder) {
         this.schemaPath = schemaPath;
         this.builder = builder;
     }
     
     
     
-    public ParsedObject parse(File file) {
+    public void parse(File file, Argument argument) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
-            return parse(stream);
+            parse(stream, argument);
             
         } catch (IOException e) {
             throw new ParserException("Failed to parse file: " + file.getName(), e);
         }
     }
     
-    public ParsedObject parse(InputStream stream) {
+    public void parse(InputStream stream, Argument argument) {
         try {
             Element element = builder.build(stream, schemaPath).getRootElement();
-            return parse(element);
+            parse(element, argument);
             
         } catch (JDOMException | IOException e) {
             throw new ParserException("Failed to parse XML Document", e);
@@ -60,6 +60,5 @@ public abstract class Parser<ParsedObject> {
     }
     
     
-    protected abstract ParsedObject parse(Element element);
-    
+    protected abstract void parse(Element element, Argument argument);
 }

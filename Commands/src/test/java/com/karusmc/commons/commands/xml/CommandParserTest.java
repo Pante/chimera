@@ -17,35 +17,37 @@
 package com.karusmc.commons.commands.xml;
 
 import com.karusmc.commons.commands.Command;
-import com.karusmc.commons.core.xml.*;
+import com.karusmc.commons.core.xml.SetterComponent;
 
 import java.util.*;
 
 import org.jdom2.Element;
 
+import org.junit.Test;
 
-public class CommandParser extends SetterParser<Map<String, Command>> {
+import static org.mockito.Mockito.*;
+
+
+public class CommandParserTest {
     
+    private CommandParser parser;
     private SetterComponent<Map<String, Command>> component;
     
     
-    public CommandParser(SetterComponent<Map<String, Command>> component) {
-        super(null);
+    public CommandParserTest() {
+        component = mock(SetterComponent.class);
+        parser = new CommandParser(component);
+    }
+    
+    
+    @Test
+    public void parse() {
+        Element element = mock(Element.class);
+        Map<String, Command> commands = new HashMap<>(0);
         
-        schemaPath = getClass().getClassLoader().getResource("commands.xsd").getPath();
-        this.component = component;
-    }
-   
-    
-    public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
-        super(schemaPath);
-        this.component = component;
-    }
-    
-    
-    @Override
-    protected void parse(Element element, Map<String, Command> commands) {
-        component.parse(element, commands);
+        parser.parse(element, commands);
+        
+        verify(component, times(1)).parse(element, commands);
     }
     
 }
