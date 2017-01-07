@@ -27,6 +27,7 @@ public interface Criteria {
     public static final Criteria PERMITTED = (command, sender, args) -> command.testPermissionSilent(sender);
     public static final Criteria PERMITTEDPLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
     public static final Criteria NOARGUMENTS = (command, sender, args) -> args.length == 0;
+  
     
     public boolean test(Command command, CommandSender sender, String[] args);
     

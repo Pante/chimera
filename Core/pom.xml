@@ -9,7 +9,7 @@
     <groupId>com.karusmc.commons</groupId>
     <artifactId>Core</artifactId>
     <packaging>jar</packaging>
-    
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

@@ -26,7 +26,7 @@ public class Utility {
             return new String[]{};
 
         } else {
-            return Arrays.copyOfRange(args, 1, args.length);
+            return Arrays.copyOfRange(args, 1, args.length - 1);
         }
     }
     
@@ -72,7 +72,7 @@ public class Utility {
         return (lastOnPage < totalEntries) ? lastOnPage : totalEntries;
     }
 
-    
+
     public static void flapMap(String name, Command command, Map<String, Command> commands) {
         if (command instanceof Marshall) {
             ((Marshall) command).getCommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));
