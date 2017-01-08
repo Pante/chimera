@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+Copyright (C) 2017 PanteLegacy @ karusmc.com
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace = "karus-commons"
+           xmlns = "karus-commons"
+>
+    <xs:include schemaLocation = "./meta/banner-meta.xsd"/>
+    <xs:include schemaLocation = "./meta/book-meta.xsd"/>
+    <xs:include schemaLocation = "./meta/item-meta.xsd"/>
+    <xs:include schemaLocation = "./meta/leather-armor-meta.xsd"/>
+    <xs:include schemaLocation = "./meta/potion-meta.xsd"/>
+    <xs:include schemaLocation = "./meta/storage-meta.xsd"/>
+    
+    <xs:element name = "items">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name = "item" minOccurs = "1" maxOccurs = "unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            
+                            <xs:element name = "value" minOccurs = "0" maxOccurs = "1">
+                                <xs:complexType>
+                                    <xs:attribute name = "buy" type = "xs:float" default = "0"/>
+                                    <xs:attribute name = "sell" type = "xs:float" default = "0"/>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <xs:choice>
+                                <xs:element name = "banner-meta" type = "bannerType"/>
+                                <xs:element name = "book-meta" type = "bookType"/>
+                                <xs:element name = "item-meta" type = "itemType"/>
+                                <xs:element name = "leather-armour-meta" type = "leatherArmorType"/>
+                                <xs:element name = "potion-meta" type = "potionMeta"/>
+                                <xs:element name = "storageMeta" type = "storageMeta"/>
+                            </xs:choice>
+                            
+                        </xs:sequence>
+                        
+                        <xs:attribute name = "name" type = "xs:string" use = "required"/>
+                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
+                        <xs:attribute name = "amount" type = "xs:positiveInteger" default = "1"/>
+                        <xs:attribute name = "data" type = "xs:short" default = "0"/>
+                        
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

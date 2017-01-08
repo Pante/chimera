@@ -16,7 +16,7 @@
  */
 package com.karusmc.commons.items.meta;
 
-import com.karusmc.commons.core.xml.test.XMLResource;
+import com.karusmc.commons.core.test.XMLResource;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.LeatherArmorMeta;

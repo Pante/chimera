@@ -14,36 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.items.meta;
+package com.karusmc.commons.core.test;
 
-import com.karusmc.commons.core.test.XMLResource;
+import java.util.logging.Logger;
 
-import org.bukkit.DyeColor;
-import org.bukkit.block.banner.*;
-import org.bukkit.inventory.meta.BannerMeta;
-
-import org.junit.*;
+import org.bukkit.*;
+import org.bukkit.inventory.ItemFactory;
 
 import static org.mockito.Mockito.*;
 
 
-public class BannerMetaComponentTest {
+public class BukkitResource extends XMLResource {
     
-    @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/BannerMeta.xml"), null);
-    
-    @Rule
-    public ItemMetaResource<BannerMeta> resource = new ItemMetaResource(new BannerMetaComponent(), mock(BannerMeta.class));
+    public static final Server SERVER;
+    public static final Logger LOGGER;
+    public static final ItemFactory FACTORY;
     
     
-    @Test
-    public void parse() {
-        resource.parse(xml.getRoot());
-        resource.assertMeta();
+    static {
+        SERVER = mock(Server.class);
+        LOGGER = mock(Logger.class);
+        FACTORY = mock(ItemFactory.class);
         
-        BannerMeta meta = resource.getMeta();
+        when(SERVER.getItemFactory()).thenReturn(FACTORY);
+        when(SERVER.getLogger()).thenReturn(LOGGER);
         
-        verify(meta, times(1)).addPattern(new Pattern(DyeColor.CYAN, PatternType.BORDER));
+        when(FACTORY.isApplicable(any(), any(Material.class))).thenReturn(true);
+        when(FACTORY.asMetaFor(any(), any(Material.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        Bukkit.setServer(SERVER);
     }
     
 }

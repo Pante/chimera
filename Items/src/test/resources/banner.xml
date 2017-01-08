@@ -17,25 +17,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 
-<leather-armor-meta xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation = "leather-armour-meta.xsd"
-      display-name = "&amp;cItem"
-      r = "1"
-      g = "2"
-      b = "3"
->
-      
-    <enchantments>
-        <enchantment type = "PROTECTION_ENVIROMENTAL" level = "3"/>
-    </enchantments>
-    
-    <description>
-        <line>Line 1</line>
-        <line>Line 2</line>
-    </description>
-    
-    <flags>
-        <flag>HIDE_DESTROYS</flag>
-    </flags>
-    
-</leather-armor-meta>
+<item name = "banner" type = "BANNER" amount = "16" data = "3">
+    <value buy = "5.00" sell = "10.00"/>
+    <banner-meta display-name = "&amp;cLiver">
+        <enchantments>
+            <enchantment type = "PROTECTION_ENVIROMENTAL" level = "1"/>
+        </enchantments>
+            
+        <description>
+            <line>Line one</line>
+            <line>Line Two</line>
+        </description>
+            
+        <flags>
+            <flag>HIDE_DESTROYS</flag>
+        </flags>
+            
+        <patterns>
+            <pattern type = "BORDER" color = "CYAN"/>
+        </patterns>
+    </banner-meta>
+</item>

@@ -16,35 +16,41 @@
  */
 package com.karusmc.commons.items;
 
-import com.karusmc.commons.core.xml.*;
-
-import java.util.*;
+import com.karusmc.commons.core.test.XMLResource;
+import com.karusmc.commons.core.xml.Component;
 
 import org.jdom2.Element;
 
+import org.junit.*;
 
-public class ItemParser extends Parser<Map<String, ValueStack>> {
+import static org.mockito.Mockito.*;
+
+
+public class ItemParserTest {
     
+    @Rule
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("empty-items.xml"), null);
+    
+    
+    private ItemParser parser;
     private Component<ValueStack> component;
     
     
-    public ItemParser(Component<ValueStack> component) {
-        super(null);
-        schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();
-        this.component = component;
+    public ItemParserTest() {
+        component = mock(Component.class);
+        parser = new ItemParser(component);
     }
-
     
-    @Override
-    protected Map<String, ValueStack> parse(Element root) {
-        Map<String, ValueStack> items = new HashMap<>();
+    
+    @Test
+    public void parse() {
+        ValueStack item = mock(ValueStack.class);
+        when(item.getName()).thenReturn("name");
+        when(component.parse(any(Element.class))).thenReturn(item);
         
-        root.getChildren("item").forEach(element -> {
-            ValueStack item  = component.parse(element);
-            items.put(item.getName(), item);
-        });
+        parser.parse(resource.getRoot());
         
-        return items;
+        verify(component, times(4)).parse(any(Element.class));
     }
     
 }

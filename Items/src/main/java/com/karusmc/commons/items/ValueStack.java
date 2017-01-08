@@ -16,35 +16,39 @@
  */
 package com.karusmc.commons.items;
 
-import com.karusmc.commons.core.xml.*;
-
-import java.util.*;
-
-import org.jdom2.Element;
+import org.bukkit.inventory.ItemStack;
 
 
-public class ItemParser extends Parser<Map<String, ValueStack>> {
+public class ValueStack {
     
-    private Component<ValueStack> component;
+    private String name;
+    private ItemStack item;
+    private float buy;
+    private float sell;
     
     
-    public ItemParser(Component<ValueStack> component) {
-        super(null);
-        schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();
-        this.component = component;
+    public ValueStack(String name, ItemStack item, float buy, float sell) {
+        this.name = name;
+        this.item = item;
+        this.buy = buy;
+        this.sell = sell;
     }
 
     
-    @Override
-    protected Map<String, ValueStack> parse(Element root) {
-        Map<String, ValueStack> items = new HashMap<>();
-        
-        root.getChildren("item").forEach(element -> {
-            ValueStack item  = component.parse(element);
-            items.put(item.getName(), item);
-        });
-        
-        return items;
+    public String getName() {
+        return name;
+    }
+    
+    public ItemStack getItem() {
+        return item;
+    }
+
+    public float getBuy() {
+        return buy;
+    }
+
+    public float getSell() {
+        return sell;
     }
     
 }
