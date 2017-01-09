@@ -28,6 +28,11 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     private Component<ValueStack> component;
     
     
+    public ItemParser(Component<ValueStack> component, String schemaPath) {
+        super(schemaPath);
+        this.component = component;
+    }
+    
     public ItemParser(Component<ValueStack> component) {
         super(null);
         schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();
