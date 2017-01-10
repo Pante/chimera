@@ -36,7 +36,7 @@ public class ValueStackComponentTest {
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("banner.xml"), null);
     
     @Rule
-    public BukkitResource resource = new BukkitResource();
+    public ItemFactoryResource resource = new ItemFactoryResource();
     
     
     private ValueStackComponent component;

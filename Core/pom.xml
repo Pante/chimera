@@ -11,6 +11,14 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.11-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -24,6 +32,7 @@
             <version>2.3.0</version>
             <scope>provided</scope>
         </dependency>
+        
     </dependencies>
     
 </project>

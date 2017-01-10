@@ -18,11 +18,10 @@ package com.karusmc.commons.items.meta;
 
 import com.karusmc.commons.core.xml.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.bukkit.ChatColor;
 
+import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;

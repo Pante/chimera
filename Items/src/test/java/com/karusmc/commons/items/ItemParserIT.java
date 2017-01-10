@@ -16,16 +16,26 @@
  */
 package com.karusmc.commons.items;
 
+import com.karusmc.commons.core.test.ItemFactoryResource;
+import com.karusmc.commons.items.meta.ItemMetaResource;
+
 import org.junit.*;
 
 
 public class ItemParserIT {
     
+    @Rule
+    public ItemFactoryResource resource = new ItemFactoryResource();
+    
+    @Rule
+    public ItemMetaResource.get
+    
+    
     private ItemParser parser;
     
     
     public ItemParserIT() {
-        parser = new ItemParser(new ValueStackComponent(), getClass().getClassLoader().getResource("schema/items.xsd").getPath());
+        parser = new ItemParser(new ValueStackComponent(), getClass().getClassLoader().getResource("items.xsd").getPath());
     }
     
     

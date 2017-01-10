@@ -21,28 +21,27 @@ import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemFactory;
 
+import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
+
+import org.junit.rules.ExternalResource;
+
 import static org.mockito.Mockito.*;
 
 
-public class BukkitResource extends XMLResource {
+public class ItemFactoryResource extends ExternalResource {
     
     public static final Server SERVER;
-    public static final Logger LOGGER;
     public static final ItemFactory FACTORY;
     
     
     static {
         SERVER = mock(Server.class);
-        LOGGER = mock(Logger.class);
-        FACTORY = mock(ItemFactory.class);
-        
+        FACTORY = CraftItemFactory.instance();
+
         when(SERVER.getItemFactory()).thenReturn(FACTORY);
         when(SERVER.getLogger()).thenReturn(LOGGER);
-        
-        when(FACTORY.isApplicable(any(), any(Material.class))).thenReturn(true);
-        when(FACTORY.asMetaFor(any(), any(Material.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        
+
         Bukkit.setServer(SERVER);
     }
-    
+
 }
