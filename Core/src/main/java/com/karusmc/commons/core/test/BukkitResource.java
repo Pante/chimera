@@ -16,32 +16,52 @@
  */
 package com.karusmc.commons.core.test;
 
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.*;
 import org.bukkit.inventory.ItemFactory;
-
 import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
+import org.bukkit.enchantments.*;
 
 import org.junit.rules.ExternalResource;
 
 import static org.mockito.Mockito.*;
 
 
-public class ItemFactoryResource extends ExternalResource {
+public class BukkitResource extends ExternalResource {
     
-    public static final Server SERVER;
-    public static final ItemFactory FACTORY;
+    public static final BukkitResource RESOURCE = new BukkitResource();
     
     
-    static {
-        SERVER = mock(Server.class);
-        FACTORY = CraftItemFactory.instance();
-
-        when(SERVER.getItemFactory()).thenReturn(FACTORY);
-        when(SERVER.getLogger()).thenReturn(LOGGER);
-
-        Bukkit.setServer(SERVER);
+    private Server server;
+    private Logger logger;
+    private ItemFactory factory;
+    
+    
+    private BukkitResource() {
+        server = mock(Server.class);
+        logger = Logger.getAnonymousLogger();
+        factory = CraftItemFactory.instance();
+        
+        when(server.getLogger()).thenReturn(logger);
+        when(server.getItemFactory()).thenReturn(factory);
+        
+        Bukkit.setServer(server);
     }
 
+
+    public Server getServer() {
+        return server;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public ItemFactory getFactory() {
+        return factory;
+    }
+    
 }

@@ -16,6 +16,7 @@
             <groupId>com.karusmc.commons</groupId>
             <artifactId>Core</artifactId>
             <version>0.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     

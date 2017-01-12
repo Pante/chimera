@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <value buy = "5.00" sell = "10.00"/>
     <banner-meta display-name = "&amp;cLiver">
         <enchantments>
-            <enchantment type = "PROTECTION_ENVIROMENTAL" level = "1"/>
+            <enchantment type = "PROTECTION_ENVIRONMENTAL" level = "1"/>
         </enchantments>
             
         <description>

@@ -18,6 +18,8 @@ package com.karusmc.commons.items.meta;
 
 import com.karusmc.commons.core.test.XMLResource;
 
+import org.bukkit.enchantments.Enchantment;
+
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.*;
@@ -41,7 +43,7 @@ public class EnchantmentStorageMetaComponentTest {
         
         EnchantmentStorageMeta meta = resource.getMeta();
         
-        verify(meta, times(1)).addStoredEnchant(ItemMetaResource.ENCHANTMENT, 3, true);
+        verify(meta, times(1)).addStoredEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
     }
     
 }

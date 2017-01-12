@@ -10,6 +10,12 @@
   <artifactId>Items</artifactId>
   <dependencies>
     <dependency>
+      <groupId>com.karusmc.commons</groupId>
+      <artifactId>Core</artifactId>
+      <version>0.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
       <version>1.11-R0.1-SNAPSHOT</version>

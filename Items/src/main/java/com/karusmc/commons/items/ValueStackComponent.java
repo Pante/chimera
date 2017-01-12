@@ -39,7 +39,7 @@ public class ValueStackComponent implements Component<ValueStack> {
         components.put("book-meta", new BookMetaComponent());
         components.put("storage-meta", new EnchantmentStorageMetaComponent());
         components.put("item-meta", new ItemMetaComponent());
-        components.put("leather-armor-component", new LeatherArmorMetaComponent());
+        components.put("leather-armor-meta", new LeatherArmorMetaComponent());
         components.put("potion-meta", new PotionMetaComponent());
     }
     

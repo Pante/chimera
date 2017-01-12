@@ -6,8 +6,8 @@
 >
     
     <item name = "banner" type = "BANNER" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
-        <banner-meta display-name = "&amp;cLiver">
+        <value buy = "10.00" sell = "50.00"/>
+        <banner-meta display-name = "&amp;cItem">
             <enchantments>
                 <enchantment type = "PROTECTION_ENVIRONMENTAL" level = "1"/>
             </enchantments>
@@ -28,7 +28,7 @@
     </item>
     
     <item name = "written book" type = "WRITTEN_BOOK" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
+        <value buy = "10.00" sell = "50.00"/>
         <book-meta display-name = "&amp;cItem" author = "Aldous Huxley" title = "&amp;cBrave New World">      
             <enchantments>
                 <enchantment type = "PROTECTION_ENVIRONMENTAL" level = "3"/>
@@ -51,7 +51,7 @@
     </item>
     
     <item name = "raw beef" type = "RAW_BEEF" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
+        <value buy = "10.00" sell = "50.00"/>
         <item-meta display-name = "&amp;cItem">
             <enchantments>
                 <enchantment type = "PROTECTION_ENVIRONMENTAL" level = "3"/>
@@ -69,7 +69,7 @@
     </item>
     
     <item name = "leather boots" type = "LEATHER_BOOTS" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
+        <value buy = "10.00" sell = "50.00"/>
         <leather-armor-meta display-name = "&amp;cItem" r = "1" g = "2" b = "3">
       
             <enchantments>
@@ -89,7 +89,7 @@
     </item>
     
     <item name = "potion" type = "POTION" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
+        <value buy = "10.00" sell = "50.00"/>
         <potion-meta display-name = "&amp;cItem" color = "SILVER">
       
             <enchantments>
@@ -113,7 +113,7 @@
     </item>
     
     <item name = "enchanted book" type = "ENCHANTED_BOOK" amount = "16" data = "0">
-        <value buy = "0.00" sell = "0.00"/>
+        <value buy = "10.00" sell = "50.00"/>
         <storage-meta display-name = "&amp;cItem">
       
             <enchantments>

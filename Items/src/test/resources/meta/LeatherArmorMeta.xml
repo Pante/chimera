@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 >
       
     <enchantments>
-        <enchantment type = "PROTECTION_ENVIROMENTAL" level = "3"/>
+        <enchantment type = "PROTECTION_ENVIRONMENTAL" level = "3"/>
     </enchantments>
     
     <description>

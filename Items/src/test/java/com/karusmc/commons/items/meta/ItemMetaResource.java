@@ -16,6 +16,8 @@
  */
 package com.karusmc.commons.items.meta;
 
+import com.karusmc.commons.core.test.*;
+
 import java.util.Arrays;
 
 import org.bukkit.ChatColor;
@@ -32,20 +34,17 @@ import static org.mockito.Mockito.*;
 
 public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalResource {
     
-    public static final Enchantment ENCHANTMENT;
-    
-    static {
-        ENCHANTMENT = mock(Enchantment.class);
-        when(ENCHANTMENT.getName()).thenReturn("PROTECTION_ENVIROMENTAL");
-        Enchantment.registerEnchantment(ENCHANTMENT);
-    }
-    
+    private BukkitResource bukkit;
+    private EnchantmentResource enchantments;
     
     private ItemMetaComponent<GenericMeta> component;
     private GenericMeta meta;
     
     
     public ItemMetaResource(ItemMetaComponent<GenericMeta> component, GenericMeta meta) {
+        bukkit = BukkitResource.RESOURCE;
+        enchantments = EnchantmentResource.RESOURCE;
+        
         this.component = component;
         this.meta = meta;
     }
@@ -67,7 +66,7 @@ public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalReso
     
     public void assertMeta() {
         verify(meta, times(1)).setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cItem"));
-        verify(meta, times(1)).addEnchant(ENCHANTMENT, 3, true);
+        verify(meta, times(1)).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
         verify(meta, times(1)).setLore(Arrays.asList(new String[] {"Line 1", "Line 2"}));
         verify(meta, times(1)).addItemFlags(ItemFlag.HIDE_DESTROYS);
     }

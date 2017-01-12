@@ -20,8 +20,8 @@ import com.karusmc.commons.core.test.*;
 import com.karusmc.commons.items.meta.ItemMetaComponent;
 
 import java.util.HashMap;
-import org.bukkit.Material;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.*;
@@ -36,7 +36,7 @@ public class ValueStackComponentTest {
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("banner.xml"), null);
     
     @Rule
-    public ItemFactoryResource resource = new ItemFactoryResource();
+    public BukkitResource resource = BukkitResource.RESOURCE;
     
     
     private ValueStackComponent component;

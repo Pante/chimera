@@ -14,34 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.items;
+package com.karusmc.commons.core.test;
 
-import com.karusmc.commons.core.test.ItemFactoryResource;
-import com.karusmc.commons.items.meta.ItemMetaResource;
+import org.bukkit.enchantments.*;
 
-import org.junit.*;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 
-public class ItemParserIT {
+public class EnchantmentResourceTest {
     
-    @Rule
-    public ItemFactoryResource resource = new ItemFactoryResource();
-    
-    @Rule
-    public ItemMetaResource.get
+    private EnchantmentResource resource;
     
     
-    private ItemParser parser;
-    
-    
-    public ItemParserIT() {
-        parser = new ItemParser(new ValueStackComponent(), getClass().getClassLoader().getResource("items.xsd").getPath());
+    public EnchantmentResourceTest() {
+        resource = EnchantmentResource.RESOURCE;
     }
     
     
     @Test
-    public void parse() {
-        parser.parse(getClass().getClassLoader().getResourceAsStream("items.xml"));
+    public void getById() {
+        Enchantment enchantment = Enchantment.getById(0);
+        assertTrue(Enchantment.PROTECTION_ENVIRONMENTAL == enchantment);
+    }
+    
+    
+    @Test
+    public void getByName() {
+        Enchantment enchantment = Enchantment.getByName("PROTECTION_ENVIRONMENTAL");
+        assertTrue(Enchantment.PROTECTION_ENVIRONMENTAL == enchantment);
     }
     
 }
