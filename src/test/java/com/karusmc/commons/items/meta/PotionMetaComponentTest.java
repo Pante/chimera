@@ -16,10 +16,10 @@
  */
 package com.karusmc.commons.items.meta;
 
+import com.karusmc.commons.core.test.PotionResource;
 import com.karusmc.commons.core.test.XMLResource;
 
 import org.bukkit.Color;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
@@ -30,14 +30,8 @@ import static org.mockito.Mockito.*;
 
 public class PotionMetaComponentTest {
     
-    public static final PotionEffectType EFFECT;
-    
-    static {
-        EFFECT = mock(PotionEffectType.class);
-        when(EFFECT.getName()).thenReturn("JUMP");
-        PotionEffectType.registerPotionEffectType(EFFECT);
-    }
-    
+    @Rule
+    public PotionResource potionResource = PotionResource.RESOURCE;
     
     @Rule
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/PotionMeta.xml"), null);
@@ -54,7 +48,7 @@ public class PotionMetaComponentTest {
         PotionMeta meta = resource.getMeta();
         
         verify(meta, times(1)).setColor(Color.SILVER);
-        verify(meta, times(1)).addCustomEffect(new PotionEffect(EFFECT, 10, 3, true, true), true);
+        verify(meta, times(1)).addCustomEffect(new PotionEffect(PotionEffectType.getByName("JUMP"), 10, 3, true, true), true);
     }
     
     
