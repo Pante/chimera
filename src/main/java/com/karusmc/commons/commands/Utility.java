@@ -26,7 +26,7 @@ public class Utility {
             return new String[]{};
 
         } else {
-            return Arrays.copyOfRange(args, 1, args.length - 1);
+            return Arrays.copyOfRange(args, 1, args.length);
         }
     }
     
