@@ -19,7 +19,6 @@ package com.karusmc.commons.items.meta;
 import com.karusmc.commons.core.test.XMLResource;
 
 import org.bukkit.enchantments.Enchantment;
-
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.*;

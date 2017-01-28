@@ -16,6 +16,7 @@
  */
 package com.karusmc.commons.items.meta;
 
+import com.karusmc.commons.core.test.EnchantmentResource;
 import com.karusmc.commons.core.test.*;
 
 import java.util.Arrays;

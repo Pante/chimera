@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.jdom2.*;
 
+
 public class EnchantmentStorageMetaComponent extends ItemMetaComponent<EnchantmentStorageMeta> {
     
     @Override
@@ -39,6 +40,7 @@ public class EnchantmentStorageMetaComponent extends ItemMetaComponent<Enchantme
 
                     if (enchantment != null) {
                         meta.addStoredEnchant(enchantment, level, true);
+                        
                     } else {
                         throw new IllegalArgumentException("No such enchantment: " + enchantmentName);
                     }

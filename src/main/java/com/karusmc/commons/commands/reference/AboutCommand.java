@@ -34,13 +34,14 @@ public class AboutCommand extends PluginCommand {
     
     public AboutCommand(String name, Plugin plugin, Criteria criteria) {
         super(name, plugin,  criteria);
-        PluginDescriptionFile pluginDescription = plugin.getDescription();
+        PluginDescriptionFile description = plugin.getDescription();
+        
         information = ChatColor.translateAlternateColorCodes('&', 
-                "&6" + pluginDescription.getName() 
-                + " version: &c" + pluginDescription.getVersion() 
-                + "\n&6" + pluginDescription.getDescription()
-                + "\nAuthor(s): &c" + pluginDescription.getAuthors().toString() 
-                + "\n&6Source code & development resources: &c" + pluginDescription.getWebsite());
+                "&6" + description.getName() 
+                + " version: &c" + description.getVersion() 
+                + "\n&6" + description.getDescription()
+                + "\nAuthor(s): &c" + description.getAuthors().toString() 
+                + "\n&6Source code & development resources: &c" + description.getWebsite());
     }
     
     

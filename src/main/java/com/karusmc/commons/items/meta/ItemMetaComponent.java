@@ -55,6 +55,7 @@ public class ItemMetaComponent<GenericMeta extends ItemMeta> implements SetterCo
             
             if (enchantment != null) {
                 meta.addEnchant(enchantment, level, true);
+                
             } else {
                 throw new IllegalArgumentException("No such enchantment: " + enchantmentName);
             }
@@ -67,9 +68,7 @@ public class ItemMetaComponent<GenericMeta extends ItemMeta> implements SetterCo
     }
     
     protected void parseItemFlags(Element root, GenericMeta meta) {
-        root.getChildren("flag").forEach((element) -> {
-            meta.addItemFlags(ItemFlag.valueOf(element.getText()));
-        });
+        root.getChildren("flag").forEach(element -> meta.addItemFlags(ItemFlag.valueOf(element.getText())));
     }
     
 }

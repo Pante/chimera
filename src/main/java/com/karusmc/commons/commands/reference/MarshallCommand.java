@@ -30,18 +30,18 @@ import static com.karusmc.commons.commands.Utility.trim;
 
 public class MarshallCommand extends PluginCommand implements Marshall {
     
-    private PluginCommand delegate;
+    private PluginCommand command;
     private Map<String, Command> commands;
     
     
-    public MarshallCommand(PluginCommand delegate) {
-        this(delegate, new HashMap<>(0));
+    public MarshallCommand(PluginCommand command) {
+        this(command, new HashMap<>(0));
     }
     
-    public MarshallCommand(PluginCommand delegate, Map<String, Command> commands) {
+    public MarshallCommand(PluginCommand command, Map<String, Command> commands) {
         super(null, null, null);
         
-        this.delegate = delegate;
+        this.command = command;
         this.commands = commands;
     }
     
@@ -52,7 +52,7 @@ public class MarshallCommand extends PluginCommand implements Marshall {
             commands.get(args[0]).execute(sender, trim(args));
             
         } else {
-           delegate.execute(sender, args);
+           command.execute(sender, args);
         }
     }
     
@@ -80,116 +80,116 @@ public class MarshallCommand extends PluginCommand implements Marshall {
 
     @Override
     public String getName() {
-        return delegate.getName();
+        return command.getName();
     }
 
     @Override
     public boolean setName(String name) {
-        return delegate.setName(name);
+        return command.setName(name);
     }
 
 
     @Override
     public String getPermission() {
-        return delegate.getPermission();
+        return command.getPermission();
     }
 
     @Override
     public void setPermission(String permission) {
-        delegate.setPermission(permission);
+        command.setPermission(permission);
     }
 
 
     @Override
     public boolean testPermission(CommandSender target) {
-        return delegate.testPermission(target);
+        return command.testPermission(target);
     }
 
     @Override
     public boolean testPermissionSilent(CommandSender target) {
-        return delegate.testPermissionSilent(target);
+        return command.testPermissionSilent(target);
     }
 
 
     @Override
     public String getLabel() {
-        return delegate.getLabel();
+        return command.getLabel();
     }
 
     @Override
     public boolean setLabel(String name) {
-        return delegate.setLabel(name);
+        return command.setLabel(name);
     }
 
 
     @Override
     public boolean register(CommandMap commandMap) {
-        return delegate.register(commandMap);
+        return command.register(commandMap);
     }
 
     @Override
     public boolean unregister(CommandMap commandMap) {
-        return delegate.unregister(commandMap);
+        return command.unregister(commandMap);
     }
  
     @Override
     public boolean isRegistered() {
-        return delegate.isRegistered();
+        return command.isRegistered();
     }
 
     
     @Override
     public List<String> getAliases() {
-        return delegate.getAliases();
+        return command.getAliases();
     }
     
     @Override
     public org.bukkit.command.Command setAliases(List<String> aliases) {
-        return delegate.setAliases(aliases);
+        return command.setAliases(aliases);
     }
     
     
     @Override
     public String getPermissionMessage() {
-        return delegate.getPermissionMessage();
+        return command.getPermissionMessage();
     }
     
     @Override
     public org.bukkit.command.Command setPermissionMessage(String permissionMessage) {
-        return delegate.setPermissionMessage(permissionMessage);
+        return command.setPermissionMessage(permissionMessage);
     }
 
     
     @Override
     public String getDescription() {
-        return delegate.getDescription();
+        return command.getDescription();
     }
     
     @Override
     public org.bukkit.command.Command setDescription(String description) {
-        return delegate.setDescription(description);
+        return command.setDescription(description);
     }
 
     
     @Override
     public String getUsage() {
-        return delegate.getUsage();
+        return command.getUsage();
     }
     
     @Override
     public org.bukkit.command.Command setUsage(String usage) {
-        return delegate.setUsage(usage);
+        return command.setUsage(usage);
     }
 
 
     @Override
     public Criteria getCriteria() {
-        return delegate.getCriteria();
+        return command.getCriteria();
     }
 
     @Override
     public Plugin getPlugin() {
-        return delegate.getPlugin();
+        return command.getPlugin();
     }
     
 }

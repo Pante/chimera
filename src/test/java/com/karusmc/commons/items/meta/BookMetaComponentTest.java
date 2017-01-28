@@ -17,8 +17,8 @@
 package com.karusmc.commons.items.meta;
 
 import com.karusmc.commons.core.test.XMLResource;
-import net.md_5.bungee.api.ChatColor;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 
 import org.junit.*;

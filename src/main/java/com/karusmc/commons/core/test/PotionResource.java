@@ -17,7 +17,6 @@
 package com.karusmc.commons.core.test;
 
 import java.lang.reflect.Field;
-import java.util.*;
 
 import org.bukkit.potion.*;
 
@@ -33,31 +32,27 @@ public class PotionResource extends ExternalResource {
     
     public PotionResource() {
         try {
-            Field byIdField = PotionEffectType.class.getDeclaredField("byId");
-            Field byNameField = PotionEffectType.class.getDeclaredField("byName");
-
-            byIdField.setAccessible(true);
-            byNameField.setAccessible(true);
-
-            PotionEffectType[] byId = (PotionEffectType[]) byIdField.get(null);
-            Map<String, PotionEffectType> byName = (Map<String, PotionEffectType>) byNameField.get(null);
-
-            Field[] fields = PotionEffectType.class.getFields();
-            for (Field field : fields) {
-                Object object = field.get(null);
-
-                if (object.getClass().equals(PotionEffectTypeWrapper.class)) {
-                    PotionEffectType effect = spy((PotionEffectType) object);
+            for (Field field : PotionEffectType.class.getFields()) {
+                if (field.getType().equals(PotionEffectType.class)) {
+                    PotionEffectType effect = spy((PotionEffectType) field.get(null));
                     doReturn(field.getName()).when(effect).getName();
-                    
-                    byId[effect.getId()] = effect;
-                    byName.put(field.getName().toLowerCase(Locale.ENGLISH), effect);
+
+                    PotionEffectType.registerPotionEffectType(effect);
                 }
             }
 
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
+    }
+    
+    
+    public PotionEffectType getById(int id) {
+        return PotionEffectType.getById(id);
+    }
+    
+    public PotionEffectType getByName(String name) {
+        return PotionEffectType.getByName(name);
     }
     
 }

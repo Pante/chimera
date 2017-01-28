@@ -36,14 +36,14 @@ public class EnchantmentResourceTest {
     @Test
     public void getById() {
         Enchantment enchantment = Enchantment.getById(0);
-        assertTrue(Enchantment.PROTECTION_ENVIRONMENTAL == enchantment);
+        assertEquals(Enchantment.PROTECTION_ENVIRONMENTAL, enchantment);
     }
     
     
     @Test
     public void getByName() {
         Enchantment enchantment = Enchantment.getByName("PROTECTION_ENVIRONMENTAL");
-        assertTrue(Enchantment.PROTECTION_ENVIRONMENTAL == enchantment);
+        assertEquals(Enchantment.PROTECTION_ENVIRONMENTAL, enchantment);
     }
     
 }

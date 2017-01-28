@@ -51,16 +51,9 @@ public class Manager {
         return proxy;
     }
 
-    public void setProxy(CommandMapProxy proxy) {
-        this.proxy = proxy;
-    }
-
+    
     public SetterParser<Map<String, Command>> getParser() {
         return parser;
     }
 
-    public void setParser(SetterParser<Map<String, Command>> parser) {
-        this.parser = parser;
-    }
-    
 }

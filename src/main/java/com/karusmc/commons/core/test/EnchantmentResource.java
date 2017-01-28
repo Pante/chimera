@@ -17,11 +17,12 @@
 package com.karusmc.commons.core.test;
 
 import java.lang.reflect.Field;
-import java.util.Map;
 
 import org.bukkit.enchantments.*;
 
 import org.junit.rules.ExternalResource;
+
+import static org.mockito.Mockito.*;
 
 
 public class EnchantmentResource extends ExternalResource {
@@ -31,30 +32,27 @@ public class EnchantmentResource extends ExternalResource {
     
     private EnchantmentResource() {
         try {
-            Field byIdField = Enchantment.class.getDeclaredField("byId");
-            Field byNameField = Enchantment.class.getDeclaredField("byName");
-
-            byIdField.setAccessible(true);
-            byNameField.setAccessible(true);
-
-            Map<Integer, Enchantment> byId = (Map<Integer, Enchantment>) byIdField.get(null);
-            Map<String, Enchantment> byName = (Map<String, Enchantment>) byNameField.get(null);
-
-            Field[] fields = Enchantment.class.getFields();
-            for (Field field : fields) {
-                Object object = field.get(null);
-                
-                if (object.getClass().equals(EnchantmentWrapper.class)) {
-                    Enchantment enchantment = (Enchantment) object;
-
-                    byId.put(enchantment.getId(), enchantment);
-                    byName.put(field.getName(), enchantment);
+            for (Field field : Enchantment.class.getFields()) {
+                if (field.getType().equals(Enchantment.class)) {
+                    Enchantment enchantment = spy((Enchantment) field.get(null));
+                    doReturn(field.getName()).when(enchantment).getName();
+                    
+                    Enchantment.registerEnchantment(enchantment);
                 }
             }
-
+            
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
+    }
+    
+    
+    public Enchantment getById(int id) {
+        return Enchantment.getById(id);
+    }
+    
+    public Enchantment getByName(String name) {
+        return Enchantment.getByName(name);
     }
     
 }

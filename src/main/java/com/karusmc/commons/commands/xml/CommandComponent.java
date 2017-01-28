@@ -26,11 +26,11 @@ import org.jdom2.Element;
 
 public class CommandComponent implements SetterComponent<Command> {
     
-    private SetterComponent<Map<String, Command>> commandsComponent;
+    private SetterComponent<Map<String, Command>> subcomponent;
     
     
     public CommandComponent(SetterComponent<Map<String, Command>> component) {
-        this.commandsComponent = component;
+        this.subcomponent = component;
     }
     
     
@@ -49,7 +49,7 @@ public class CommandComponent implements SetterComponent<Command> {
             
         if (commands != null) {
             if (command instanceof Marshall) {
-                commandsComponent.parse(commands, ((Marshall) command).getCommands());
+                subcomponent.parse(commands, ((Marshall) command).getCommands());
                 
             } else {
                 throw new ParserException("Command: \"" + command.getName() + "\" does not implement the Marshall interface, unable to retrieve child commands");
@@ -58,15 +58,8 @@ public class CommandComponent implements SetterComponent<Command> {
     }
 
     
-    public SetterComponent<Map<String, Command>> getCommandsComponent() {
-        return commandsComponent;
+    public SetterComponent<Map<String, Command>> getSubcomponent() {
+        return subcomponent;
     }
-
-    public void setCommandsComponent(SetterComponent<Map<String, Command>> commandsComponent) {
-        this.commandsComponent = commandsComponent;
-    }
-    
-    
-    
-    
+  
 }

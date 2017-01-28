@@ -37,7 +37,7 @@ public class CommandProvider {
     
     public static Object[] provideWithCriteria() {
         
-        Map<String, Command> commands = new HashMap<>();
+        Map<String, Command> commands = new HashMap<>(3);
         commands.put("command", mockCommand("command", "command usage", true));
         commands.put("invalidcommand", mockCommand("invalidcommand", "invalidcommand usage", true));
         commands.put("invalidpermission", mockCommand("invalidpermission", "invalidpermission usage", false));

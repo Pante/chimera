@@ -38,7 +38,7 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     public HelpCommand(String name, Plugin plugin) {
-        this(name, plugin, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.hasLength(0, args.length, 2), new HashMap<>(), 3);
+        this(name, plugin, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.within(args, 0, 2), new HashMap<>(), 3);
     }
     
     public HelpCommand(String name, Plugin plugin, Criteria criteria, Map<String, Command> commands, int size) {

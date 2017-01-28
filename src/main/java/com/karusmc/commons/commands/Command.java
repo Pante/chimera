@@ -16,7 +16,6 @@
  */
 package com.karusmc.commons.commands;
 
-
 import java.util.*;
 
 import org.bukkit.command.CommandSender;
@@ -28,7 +27,7 @@ public abstract class Command extends org.bukkit.command.Command {
     
     
     public Command(String name, Criteria criteria) {
-        this(name, criteria, "", "", new ArrayList<>(0));
+        this(name, criteria, "", "", new ArrayList<>());
     }
     
     public Command(String name, Criteria criteria, String description, String message, List<String> aliases) {

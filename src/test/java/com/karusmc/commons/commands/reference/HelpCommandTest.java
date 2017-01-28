@@ -16,8 +16,7 @@
  */
 package com.karusmc.commons.commands.reference;
 
-import com.karusmc.commons.commands.Command;
-import com.karusmc.commons.commands.Criteria;
+import com.karusmc.commons.commands.*;
 
 import java.util.*;
 

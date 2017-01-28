@@ -16,7 +16,7 @@
  */
 package com.karusmc.commons.items.meta;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
 
 import org.jdom2.Element;
@@ -33,9 +33,7 @@ public class BookMetaComponent extends ItemMetaComponent<BookMeta> {
         
         Element pages = root.getChild("pages");
         if (pages != null) {
-            pages.getChildren("page").forEach((element) -> {
-                meta.addPage(ChatColor.translateAlternateColorCodes('&', element.getTextNormalize()));
-            });
+            pages.getChildren("page").forEach(element -> meta.addPage(ChatColor.translateAlternateColorCodes('&', element.getTextNormalize())));
         }
     }
     

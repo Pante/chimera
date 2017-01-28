@@ -21,17 +21,21 @@ import java.util.*;
 
 public class Utility {
     
+    private static final String[] EMPTY = new String[] {};
+    
+    
     public static String[] trim(String[] args) {
         if (args.length <= 1) {
-            return new String[]{};
-
+            return EMPTY;
+            
         } else {
             return Arrays.copyOfRange(args, 1, args.length);
         }
     }
     
-    public static<T> T getArgumentOrDefault(T[] args, int index, T defaultArgument) {
-        if (args.length > index) {
+    
+    public static String getArgumentOrDefault(String[] args, int index, String defaultArgument) {
+        if (index < args.length) {
             return args[index];
     
         } else {
@@ -65,6 +69,7 @@ public class Utility {
         
         return (firstOnPage < totalEntries) ? firstOnPage : totalEntries;
     }
+    
     
     public static int getLastIndex(int totalEntries, int pageSize, int page) {
         int lastOnPage = (page * pageSize);

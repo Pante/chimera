@@ -39,7 +39,7 @@ public class BukkitResource extends ExternalResource {
     
     private BukkitResource() {
         server = mock(Server.class);
-        logger = Logger.getAnonymousLogger();
+        logger = mock(Logger.class);
         factory = CraftItemFactory.instance();
         
         when(server.getLogger()).thenReturn(logger);

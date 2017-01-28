@@ -17,9 +17,10 @@
 package com.karusmc.commons.commands.reference;
 
 import com.karusmc.commons.commands.Criteria;
-import java.util.Arrays;
-import org.bukkit.ChatColor;
 
+import java.util.Arrays;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.*;
 

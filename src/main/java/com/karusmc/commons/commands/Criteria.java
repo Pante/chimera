@@ -25,15 +25,15 @@ public interface Criteria {
     
     public static final Criteria NONE = (command, sender, args) -> true;
     public static final Criteria PERMITTED = (command, sender, args) -> command.testPermissionSilent(sender);
-    public static final Criteria PERMITTEDPLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
-    public static final Criteria NOARGUMENTS = (command, sender, args) -> args.length == 0;
+    public static final Criteria PERMITTED_PLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
+    public static final Criteria NO_ARGUMENTS = (command, sender, args) -> args.length == 0;
   
     
     public boolean test(Command command, CommandSender sender, String[] args);
     
     
-    public static boolean hasLength(int min, int length, int max) {
-        return min <= length && length <= max;
+    public static boolean within(String[] args, int min, int max) {
+        return min <= args.length && args.length <= max;
     }
     
 }

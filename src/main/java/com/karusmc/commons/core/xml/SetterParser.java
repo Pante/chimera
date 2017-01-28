@@ -61,4 +61,5 @@ public abstract class SetterParser<Argument> {
     
     
     protected abstract void parse(Element element, Argument argument);
+    
 }

@@ -30,7 +30,7 @@ public class BannerMetaComponent extends ItemMetaComponent<BannerMeta> {
         super.parse(root, meta);
         
         Element patterns = root.getChild("patterns");
-        if (patterns!= null) {
+        if (patterns != null) {
             patterns.getChildren("pattern").forEach(element -> {
                 PatternType type = PatternType.valueOf(element.getAttribute("type").getValue());
                 DyeColor color = DyeColor.valueOf(element.getAttribute("color").getValue());

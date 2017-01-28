@@ -25,6 +25,7 @@ public class CommandRegistrationEvent extends Event implements Cancellable {
 
     private static HandlerList handlers = new HandlerList();
     
+    
     private Command command;
     private boolean cancelled;
 

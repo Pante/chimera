@@ -46,16 +46,12 @@ public class CommandMapProxy {
             throw new IllegalArgumentException("Server does not contain field: commandMap", e);
         }
     }
-
-    
-    public SimpleCommandMap getMap() {
-        return map;
-    }
     
     
     public void register(Map<String, Command> commands) {
-        commands.forEach((name, command) -> register(name, command));
+        commands.forEach(this::register);
     }
+    
     
     public void register(String fallbackPrefix, Command command) {
         CommandRegistrationEvent event = new CommandRegistrationEvent(command);
@@ -71,6 +67,11 @@ public class CommandMapProxy {
         return map.getCommands().stream()
                 .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName)) 
                 .collect(Collectors.toMap(command -> command.getName(), command -> command));
+    }
+    
+    
+    public SimpleCommandMap getCommandMap() {
+        return map;
     }
     
 }
