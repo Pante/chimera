@@ -1,6 +1,8 @@
-com.karusmc.xmc.commands
-com.karusmc.xmc.core
-com.karusmc.xmc.util
-com.karusmc.xmc.xml
-com.karusmc.xmc.xml.nodes
-com.karusmc.xmc.xml.tags
+com.karusmc.commons.commands
+com.karusmc.commons.commands.events
+com.karusmc.commons.commands.reference
+com.karusmc.commons.commands.xml
+com.karusmc.commons.core.test
+com.karusmc.commons.core.xml
+com.karusmc.commons.items
+com.karusmc.commons.items.meta
