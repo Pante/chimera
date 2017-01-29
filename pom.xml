@@ -5,7 +5,7 @@
     <name>Karus-Commons</name>
     <groupId>com.karusmc</groupId>
     <artifactId>Commons</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     
     <properties>
