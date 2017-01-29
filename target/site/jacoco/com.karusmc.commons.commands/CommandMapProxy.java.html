@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommandMapProxy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.commands</a> &gt; <span class="el_source">CommandMapProxy.java</span></div><h1>CommandMapProxy.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.commands;
+
+import com.karusmc.commons.commands.events.CommandRegistrationEvent;
+
+import java.lang.reflect.*;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.bukkit.Server;
+import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.plugin.PluginManager;
+
+
+public class CommandMapProxy {
+ 
+    private SimpleCommandMap map;
+    private PluginManager manager;
+    
+    
+<span class="fc" id="L37">    public CommandMapProxy(Server server) {</span>
+        try {
+<span class="fc" id="L39">            Field field = server.getClass().getDeclaredField(&quot;commandMap&quot;);</span>
+<span class="fc" id="L40">            field.setAccessible(true);</span>
+            
+<span class="fc" id="L42">            map = (SimpleCommandMap) field.get(server);</span>
+<span class="fc" id="L43">            manager = server.getPluginManager();</span>
+            
+<span class="fc" id="L45">        } catch (ReflectiveOperationException e) {</span>
+<span class="fc" id="L46">            throw new IllegalArgumentException(&quot;Server does not contain field: commandMap&quot;, e);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+    
+    
+    public void register(Map&lt;String, Command&gt; commands) {
+<span class="fc" id="L52">        commands.forEach(this::register);</span>
+<span class="fc" id="L53">    }</span>
+    
+    
+    public void register(String fallbackPrefix, Command command) {
+<span class="fc" id="L57">        CommandRegistrationEvent event = new CommandRegistrationEvent(command);</span>
+        
+<span class="fc" id="L59">        manager.callEvent(event);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (!event.isCancelled()) {</span>
+<span class="fc" id="L61">            map.register(fallbackPrefix, command);</span>
+        }
+<span class="fc" id="L63">    }</span>
+    
+    
+    public Map&lt;String, org.bukkit.command.Command&gt; getPluginCommands(String pluginName) {
+<span class="fc" id="L67">        return map.getCommands().stream()</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">                .filter(command -&gt; command instanceof PluginIdentifiableCommand &amp;&amp; ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName)) </span>
+<span class="fc" id="L69">                .collect(Collectors.toMap(command -&gt; command.getName(), command -&gt; command));</span>
+    }
+    
+    
+    public SimpleCommandMap getCommandMap() {
+<span class="nc" id="L74">        return map;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

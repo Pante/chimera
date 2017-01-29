@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.karusmc.commons.commands.xml.CommandParserIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.741 sec - in com.karusmc.commons.commands.xml.CommandParserIT

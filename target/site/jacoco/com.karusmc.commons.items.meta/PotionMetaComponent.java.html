@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PotionMetaComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.items.meta</a> &gt; <span class="el_source">PotionMetaComponent.java</span></div><h1>PotionMetaComponent.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.items.meta;
+
+import com.karusmc.commons.core.xml.ParserException;
+
+import org.bukkit.Color;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.*;
+
+import org.jdom2.*;
+
+
+<span class="fc" id="L28">public class PotionMetaComponent extends ItemMetaComponent&lt;PotionMeta&gt; {</span>
+    
+    @Override
+    public void parse(Element root, PotionMeta meta) {
+<span class="fc" id="L32">        super.parse(root, meta);</span>
+        
+<span class="fc" id="L34">        meta.setColor(fromString(root.getAttribute(&quot;color&quot;).getValue()));</span>
+        
+<span class="fc" id="L36">        Element effects = root.getChild(&quot;effects&quot;);</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (effects != null) {</span>
+            try {
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                for (Element effect : effects.getChildren(&quot;effect&quot;)) {</span>
+
+<span class="fc" id="L41">                    PotionEffectType type = PotionEffectType.getByName(effect.getAttribute(&quot;type&quot;).getValue());</span>
+<span class="fc" id="L42">                    int duration = effect.getAttribute(&quot;duration&quot;).getIntValue();</span>
+<span class="fc" id="L43">                    int level = effect.getAttribute(&quot;level&quot;).getIntValue();</span>
+<span class="fc" id="L44">                    boolean ambient = effect.getAttribute(&quot;ambient&quot;).getBooleanValue();</span>
+<span class="fc" id="L45">                    boolean particles = effect.getAttribute(&quot;particles&quot;).getBooleanValue();</span>
+
+<span class="fc" id="L47">                    meta.addCustomEffect(new PotionEffect(type, duration, level, ambient, particles), true);</span>
+<span class="fc" id="L48">                }</span>
+<span class="nc" id="L49">            } catch (DataConversionException e) {</span>
+<span class="nc" id="L50">                throw new ParserException(&quot;Failed to parse element: &quot; + effects.getName(), e);</span>
+<span class="fc" id="L51">            }</span>
+        }
+<span class="fc" id="L53">    }</span>
+    
+    public Color fromString(String color) {
+<span class="pc bpc" id="L56" title="67 of 70 branches missed.">        switch (color) {</span>
+            case &quot;AQUA&quot;:
+<span class="nc" id="L58">                return Color.AQUA;</span>
+                
+            case &quot;BLACK&quot;:
+<span class="nc" id="L61">                return Color.BLACK;</span>
+                
+            case &quot;BLUE&quot;:
+<span class="nc" id="L64">                return Color.BLUE;</span>
+                
+            case &quot;FUCHSIA&quot;:
+<span class="nc" id="L67">                return Color.FUCHSIA;</span>
+                
+            case &quot;GRAY&quot;:
+<span class="nc" id="L70">                return Color.FUCHSIA;</span>
+                
+            case &quot;GREEN&quot;:
+<span class="nc" id="L73">                return Color.GREEN;</span>
+                
+            case &quot;LIME&quot;:
+<span class="nc" id="L76">                return Color.LIME;</span>
+                
+            case &quot;MAROON&quot;:
+<span class="nc" id="L79">                return Color.MAROON;</span>
+            
+            case &quot;NAVY&quot;:
+<span class="nc" id="L82">                return Color.NAVY;</span>
+                
+            case &quot;OLIVE&quot;:
+<span class="nc" id="L85">                return Color.OLIVE;</span>
+                
+            case &quot;ORANGE&quot;:
+<span class="nc" id="L88">                return Color.ORANGE;</span>
+                
+            case &quot;PURPLE&quot;:
+<span class="nc" id="L91">                return Color.PURPLE;</span>
+                
+            case &quot;RED&quot;:
+<span class="nc" id="L94">                return Color.RED;</span>
+                
+            case &quot;SILVER&quot;:
+<span class="fc" id="L97">                return Color.SILVER;</span>
+                
+            case &quot;TEAL&quot;:
+<span class="nc" id="L100">                return Color.TEAL;</span>
+                
+            case &quot;WHITE&quot;:
+<span class="nc" id="L103">                return Color.WHITE;</span>
+                
+            case &quot;YELLOW&quot;:
+<span class="nc" id="L106">                return Color.YELLOW;</span>
+                
+            default:
+<span class="nc" id="L109">                throw new IllegalArgumentException(&quot;No such color: &quot; + color);</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

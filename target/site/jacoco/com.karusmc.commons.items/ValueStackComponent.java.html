@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValueStackComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.items</a> &gt; <span class="el_source">ValueStackComponent.java</span></div><h1>ValueStackComponent.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.items;
+
+import com.karusmc.commons.core.xml.*;
+import com.karusmc.commons.items.meta.*;
+
+import java.util.*;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import org.jdom2.*;
+
+
+public class ValueStackComponent implements Component&lt;ValueStack&gt; {
+
+    private Map&lt;String, ItemMetaComponent&gt; components;
+    
+    
+<span class="nc" id="L36">    public ValueStackComponent() {</span>
+<span class="nc" id="L37">        components = new HashMap&lt;&gt;(6);</span>
+<span class="nc" id="L38">        components.put(&quot;banner-meta&quot;, new BannerMetaComponent());</span>
+<span class="nc" id="L39">        components.put(&quot;book-meta&quot;, new BookMetaComponent());</span>
+<span class="nc" id="L40">        components.put(&quot;storage-meta&quot;, new EnchantmentStorageMetaComponent());</span>
+<span class="nc" id="L41">        components.put(&quot;item-meta&quot;, new ItemMetaComponent());</span>
+<span class="nc" id="L42">        components.put(&quot;leather-armor-meta&quot;, new LeatherArmorMetaComponent());</span>
+<span class="nc" id="L43">        components.put(&quot;potion-meta&quot;, new PotionMetaComponent());</span>
+<span class="nc" id="L44">    }</span>
+    
+<span class="fc" id="L46">    public ValueStackComponent(Map&lt;String, ItemMetaComponent&gt; components) {</span>
+<span class="fc" id="L47">        this.components = components;</span>
+<span class="fc" id="L48">    }</span>
+    
+    
+    @Override
+    public ValueStack parse(Element element) {
+        try {
+<span class="fc" id="L54">            String name = element.getAttribute(&quot;name&quot;).getValue();</span>
+            
+<span class="fc" id="L56">            Material material = Material.valueOf(element.getAttribute(&quot;type&quot;).getValue());</span>
+<span class="fc" id="L57">            int amount = element.getAttribute(&quot;amount&quot;).getIntValue();</span>
+<span class="fc" id="L58">            short data = (short) element.getAttribute(&quot;data&quot;).getIntValue();</span>
+            
+<span class="fc" id="L60">            ItemStack item = new ItemStack(material, amount, data);</span>
+            
+            
+<span class="fc" id="L63">            Element value = element.getChild(&quot;value&quot;);</span>
+<span class="fc" id="L64">            float buy = value.getAttribute(&quot;buy&quot;).getFloatValue();</span>
+<span class="fc" id="L65">            float sell = value.getAttribute(&quot;sell&quot;).getFloatValue();</span>
+
+            
+<span class="fc" id="L68">            Element meta = element.getChildren().get(1);</span>
+<span class="fc" id="L69">            ItemMeta itemMeta = item.getItemMeta();</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (components.containsKey(meta.getName())) {</span>
+<span class="fc" id="L71">                components.get(meta.getName()).parse(meta, itemMeta);</span>
+                
+            } else {
+<span class="nc" id="L74">                throw new ParserException(&quot;No such meta type: &quot; + meta.getName() + &quot; is registered&quot;);</span>
+            }
+            
+<span class="fc" id="L77">            item.setItemMeta(itemMeta);</span>
+            
+<span class="fc" id="L79">            return new ValueStack(name, item, buy, sell);</span>
+            
+<span class="nc" id="L81">        } catch (DataConversionException e) {</span>
+<span class="nc" id="L82">            throw new ParserException(&quot;Failed to parse XML Document&quot;, e);</span>
+        }
+    }
+    
+    
+    public Map&lt;String, ItemMetaComponent&gt; getComponents() {
+<span class="fc" id="L88">        return components;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

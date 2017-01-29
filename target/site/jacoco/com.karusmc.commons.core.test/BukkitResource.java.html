@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BukkitResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.core.test</a> &gt; <span class="el_source">BukkitResource.java</span></div><h1>BukkitResource.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.core.test;
+
+import java.util.logging.Logger;
+
+import org.bukkit.*;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
+
+import org.junit.rules.ExternalResource;
+
+import static org.mockito.Mockito.*;
+
+
+public class BukkitResource extends ExternalResource {
+    
+<span class="fc" id="L32">    public static final BukkitResource RESOURCE = new BukkitResource();</span>
+    
+    
+    private Server server;
+    private Logger logger;
+    private ItemFactory factory;
+    
+    
+<span class="fc" id="L40">    private BukkitResource() {</span>
+<span class="fc" id="L41">        server = mock(Server.class);</span>
+<span class="fc" id="L42">        logger = mock(Logger.class);</span>
+<span class="fc" id="L43">        factory = CraftItemFactory.instance();</span>
+        
+<span class="fc" id="L45">        when(server.getLogger()).thenReturn(logger);</span>
+<span class="fc" id="L46">        when(server.getItemFactory()).thenReturn(factory);</span>
+        
+<span class="fc" id="L48">        Bukkit.setServer(server);</span>
+<span class="fc" id="L49">    }</span>
+
+
+    public Server getServer() {
+<span class="nc" id="L53">        return server;</span>
+    }
+
+    public Logger getLogger() {
+<span class="nc" id="L57">        return logger;</span>
+    }
+
+    public ItemFactory getFactory() {
+<span class="nc" id="L61">        return factory;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

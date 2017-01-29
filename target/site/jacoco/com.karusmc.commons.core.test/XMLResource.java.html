@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XMLResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.core.test</a> &gt; <span class="el_source">XMLResource.java</span></div><h1>XMLResource.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.core.test;
+
+import com.karusmc.commons.core.xml.ParserException;
+
+import java.io.*;
+
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.XMLReaders;
+
+import org.junit.rules.ExternalResource;
+
+
+<span class="fc" id="L30">public class XMLResource extends ExternalResource {</span>
+    
+    private Document document;
+    
+    
+    public XMLResource load(File file, String schemaPath) {
+<span class="nc" id="L36">        try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {</span>
+<span class="nc" id="L37">            load(stream, schemaPath);</span>
+            
+<span class="nc" id="L39">            return this;</span>
+            
+<span class="nc bnc" id="L41" title="All 8 branches missed.">        } catch (IOException e) {</span>
+<span class="nc" id="L42">            throw new ParserException(&quot;Failed to parse file: &quot; + file.getName(), e);</span>
+        }
+    }
+    
+    
+    public XMLResource load(InputStream stream, String schemaPath) {
+        try {
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (schemaPath == null) {</span>
+<span class="fc" id="L50">                document = new SAXBuilder(XMLReaders.NONVALIDATING).build(stream);</span>
+            } else {
+<span class="nc" id="L52">                document = new SAXBuilder(XMLReaders.XSDVALIDATING).build(stream, schemaPath);</span>
+            }
+            
+<span class="fc" id="L55">            return this;</span>
+
+<span class="nc" id="L57">        } catch (IOException | JDOMException e) {</span>
+<span class="nc" id="L58">            throw new ParserException(&quot;Failed to parse XML Document&quot;, e);</span>
+        }
+    }
+    
+    
+    public Document getDocument() {
+<span class="nc" id="L64">        return document;</span>
+    }
+    
+    public Element getRoot() {
+<span class="fc" id="L68">        return document.getRootElement();</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

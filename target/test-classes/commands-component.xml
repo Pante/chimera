@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<command name = "command">
+    
+    <meta aliases = "cmd, comm" description = "command description" usage = "command usage"/>
+    <permission permission = "command.permission" message = "You do not have permission to use this command"/>
+    
+    <commands>
+        
+      <command name = "subcommand">
+        <meta aliases = "subcmd, subcomm" description = "subcommand description" usage = "subcommand usage"/>
+        <permission permission = "subcommand.permission" message = "You do not have permission to use this subcommand"/>
+      </command>
+      
+    </commands>
+    
+</command>

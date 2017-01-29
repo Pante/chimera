@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnchantmentStorageMetaComponent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Karus-Commons</a> &gt; <a href="index.source.html" class="el_package">com.karusmc.commons.items.meta</a> &gt; <span class="el_source">EnchantmentStorageMetaComponent.java</span></div><h1>EnchantmentStorageMetaComponent.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 PanteLegacy @ karusmc.com
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package com.karusmc.commons.items.meta;
+
+import com.karusmc.commons.core.xml.ParserException;
+
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+
+import org.jdom2.*;
+
+
+<span class="fc" id="L27">public class EnchantmentStorageMetaComponent extends ItemMetaComponent&lt;EnchantmentStorageMeta&gt; {</span>
+    
+    @Override
+    public void parse(Element root, EnchantmentStorageMeta meta) {
+<span class="fc" id="L31">        super.parse(root, meta);</span>
+
+<span class="fc" id="L33">        Element stored = root.getChild(&quot;stored&quot;);</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (stored != null) {</span>
+            try {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">                for (Element element : stored.getChildren(&quot;enchantment&quot;)) {</span>
+<span class="fc" id="L37">                    String enchantmentName = element.getAttribute(&quot;type&quot;).getValue();</span>
+<span class="fc" id="L38">                    Enchantment enchantment = Enchantment.getByName(enchantmentName);</span>
+<span class="fc" id="L39">                    int level = element.getAttribute(&quot;level&quot;).getIntValue();</span>
+
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                    if (enchantment != null) {</span>
+<span class="fc" id="L42">                        meta.addStoredEnchant(enchantment, level, true);</span>
+                        
+                    } else {
+<span class="nc" id="L45">                        throw new IllegalArgumentException(&quot;No such enchantment: &quot; + enchantmentName);</span>
+                    }
+<span class="fc" id="L47">                }</span>
+<span class="nc" id="L48">            } catch (DataConversionException e) {</span>
+<span class="nc" id="L49">                throw new ParserException(&quot;Failed to parse element: &quot; + root.getName());</span>
+<span class="fc" id="L50">            }</span>
+        }
+<span class="fc" id="L52">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>
