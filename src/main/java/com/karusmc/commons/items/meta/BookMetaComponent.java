@@ -22,8 +22,17 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jdom2.Element;
 
 
+/**
+ * Parses the book-meta nodes in a XML document.
+ */
 public class BookMetaComponent extends ItemMetaComponent<BookMeta> {
     
+    /**
+     * Parses a book-meta node.
+     * 
+     * @param root The starting element of the node
+     * @param meta The BookMeta to modify
+     */
     @Override
     public void parse(Element root, BookMeta meta) {
         super.parse(root, meta);

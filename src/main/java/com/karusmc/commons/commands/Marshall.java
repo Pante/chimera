@@ -19,8 +19,14 @@ package com.karusmc.commons.commands;
 import java.util.Map;
 
 
+/**
+ * Represents a command with subcommands.
+ */
 public interface Marshall {
     
+    /**
+     * @return The subcommands
+     */
     public Map<String, Command> getCommands();
     
 }

@@ -14,24 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.core.xml;
-
-import org.jdom2.Element;
-
 
 /**
- * Parses a node in an XMl Document and returns a parsed object.
- * 
- * @param <ParsedComponent> The object type to parse to
+ * Classes used to deserialize items from XML documents.
  */
-public interface Component<ParsedComponent> {
-    
-    /**
-     * Parses the specified element and returns a parsed object.
-     * 
-     * @param element The start of the node
-     * @return The parsed object
-     */
-    public ParsedComponent parse(Element element);
-    
-}
+package com.karusmc.commons.items;

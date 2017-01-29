@@ -24,16 +24,31 @@ import java.util.*;
 import org.jdom2.Element;
 
 
+/**
+ * Parses the command nodes in a XML document.
+ */
 public class CommandComponent implements SetterComponent<Command> {
     
     private SetterComponent<Map<String, Command>> subcomponent;
     
     
+    /**
+     * Constructs this with the specified component.
+     * 
+     * @param component The component used to parse the (sub)commands nodes.
+     */
     public CommandComponent(SetterComponent<Map<String, Command>> component) {
         this.subcomponent = component;
     }
     
     
+    /**
+     * Parses the command component. Delegates the parsing of the commands nodes
+     * to the component specified in this constructor.
+     * 
+     * @param element The starting element of the node
+     * @param command The command used to set the information
+     */
     @Override
     public void parse(Element element, Command command) {
         Element meta = element.getChild("meta");
@@ -58,6 +73,9 @@ public class CommandComponent implements SetterComponent<Command> {
     }
 
     
+    /**
+     * @return The component used to parse the (sub)commands nodes
+     */
     public SetterComponent<Map<String, Command>> getSubcomponent() {
         return subcomponent;
     }

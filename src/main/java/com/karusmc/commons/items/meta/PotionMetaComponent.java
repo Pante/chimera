@@ -25,8 +25,17 @@ import org.bukkit.potion.*;
 import org.jdom2.*;
 
 
+/**
+ * Parses the Potion-meta nodes in a XML document.
+ */
 public class PotionMetaComponent extends ItemMetaComponent<PotionMeta> {
     
+    /**
+     * Parses a potion-meta node.
+     * 
+     * @param root The starting element of the node
+     * @param meta The PotionMeta to modify
+     */
     @Override
     public void parse(Element root, PotionMeta meta) {
         super.parse(root, meta);
@@ -52,6 +61,12 @@ public class PotionMetaComponent extends ItemMetaComponent<PotionMeta> {
         }
     }
     
+    /**
+     * Parses the specified color name to a Color object
+     * 
+     * @param color The color name
+     * @return The color with the matching name
+     */
     public Color fromString(String color) {
         switch (color) {
             case "AQUA":

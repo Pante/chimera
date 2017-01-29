@@ -27,11 +27,23 @@ import org.jdom2.input.sax.XMLReaders;
 import org.junit.rules.ExternalResource;
 
 
+/**
+ * Provides classes with a XML test resource.
+ * Meant for testing purposes and should never be used in production code.
+ */
 public class XMLResource extends ExternalResource {
     
     private Document document;
     
     
+    /**
+     * Loads the XML document from the specified file using the specified XML schema.
+     * Not providing a schema causes this to build the document without validation.
+     * 
+     * @param file The XML file
+     * @param schemaPath The schema path
+     * @return this
+     */
     public XMLResource load(File file, String schemaPath) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
             load(stream, schemaPath);
@@ -44,6 +56,14 @@ public class XMLResource extends ExternalResource {
     }
     
     
+    /**
+     * Loads the XML Document from the specified inputstream using the specified XML schema.
+     * Not providing a schema causes this to build the document without validation.
+     * 
+     * @param stream The inputstream
+     * @param schemaPath The schema path
+     * @return this
+     */
     public XMLResource load(InputStream stream, String schemaPath) {
         try {
             if (schemaPath == null) {
@@ -60,10 +80,16 @@ public class XMLResource extends ExternalResource {
     }
     
     
+    /**
+     * @return The currently loaded document
+     */
     public Document getDocument() {
         return document;
     }
     
+    /*
+     * @return The root element of the currently loaded document
+     */
     public Element getRoot() {
         return document.getRootElement();
     }

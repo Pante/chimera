@@ -21,6 +21,9 @@ import com.karusmc.commons.commands.Command;
 import org.bukkit.event.*;
 
 
+/**
+ * Called when a command is registered to a {@link com.karusmc.commons.commands.CommandMapProxy}
+ */
 public class CommandRegistrationEvent extends Event implements Cancellable {
 
     private static HandlerList handlers = new HandlerList();
@@ -30,28 +33,47 @@ public class CommandRegistrationEvent extends Event implements Cancellable {
     private boolean cancelled;
 
     
+    /**
+     * Constructs this with the specified command.
+     * 
+     * @param command The command that was registered
+     */
     public CommandRegistrationEvent(Command command) {
         this.command = command;
         cancelled = false;
     }
     
     
+    /**
+     * @return The command that was registered
+     */
     public Command getCommand() {
         return command;
     }
     
     
+    /**
+     * @return The HandlerList
+     */
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
     
+    /**
+     * @return true if the event is cancelled and false otherwise
+     */
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
 
+    /**
+     * Sets whether the event is cancelled.
+     * 
+     * @param cancelled true if the event is cancelled and false otherwise
+     */
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;

@@ -23,16 +23,30 @@ import java.util.*;
 import org.jdom2.Element;
 
 
+/**
+ * Parses a XML document and transform it into item information.
+ */
 public class ItemParser extends Parser<Map<String, ValueStack>> {
     
     private Component<ValueStack> component;
     
     
+    /**
+     * Constructs this with the specified component and schema path.
+     * 
+     * @param component The component used to parse item nodes
+     * @param schemaPath The schema path
+     */
     public ItemParser(Component<ValueStack> component, String schemaPath) {
         super(schemaPath);
         this.component = component;
     }
     
+    /**
+     * Constructs this with the specified component and default schema.
+     * 
+     * @param component The component used to parse item nodes
+     */
     public ItemParser(Component<ValueStack> component) {
         super(null);
         schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();

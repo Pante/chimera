@@ -19,8 +19,19 @@ package com.karusmc.commons.core.xml;
 import org.jdom2.Element;
 
 
+/**
+ * Parses a node in an XMl Document and modifies the argument object accordingly.
+ * 
+ * @param <ParseObject> The object to modify
+ */
 public interface SetterComponent<ParseObject> {
     
+    /**
+     * Parses the specified element and modifies the argument object.
+     * 
+     * @param element The start of the node
+     * @param argument The argument object to modify
+     */
     public void parse(Element element, ParseObject argument);
 
 }

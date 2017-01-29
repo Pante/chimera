@@ -24,8 +24,17 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jdom2.*;
 
 
+/**
+ * Parses the Leather-Armor-Meta nodes in a XML document.
+ */
 public class LeatherArmorMetaComponent extends ItemMetaComponent<LeatherArmorMeta> {
     
+    /**
+     * Parses a leather-armor-meta node.
+     * 
+     * @param element The starting element of the node
+     * @param meta The LeatherArmorMeta to modify
+     */
     @Override
     public void parse(Element element, LeatherArmorMeta meta) {
         super.parse(element, meta);

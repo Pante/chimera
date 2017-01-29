@@ -24,8 +24,18 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jdom2.*;
 
 
+/**
+ * Parses the enchantment-storage-meta nodes in a XML document.
+ */
 public class EnchantmentStorageMetaComponent extends ItemMetaComponent<EnchantmentStorageMeta> {
     
+    
+    /**
+     * Parses a enchantment-storage-meta node.
+     * 
+     * @param root The starting element of the node
+     * @param meta The EnchantmentStorageMeta to modify
+     */
     @Override
     public void parse(Element root, EnchantmentStorageMeta meta) {
         super.parse(root, meta);

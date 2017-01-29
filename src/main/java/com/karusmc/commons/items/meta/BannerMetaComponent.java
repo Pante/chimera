@@ -23,8 +23,17 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.jdom2.Element;
 
 
+/**
+ * Parses the banner-meta nodes in a XML document.
+ */
 public class BannerMetaComponent extends ItemMetaComponent<BannerMeta> {
     
+    /**
+     * Parses a banner-meta node.
+     * 
+     * @param root The starting element of the node
+     * @param meta The BannerMeta to modify
+     */
     @Override
     public void parse(Element root, BannerMeta meta) {
         super.parse(root, meta);

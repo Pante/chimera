@@ -21,21 +21,47 @@ import java.util.*;
 import org.bukkit.command.CommandSender;
 
 
+/**
+ * Represents a Command, which executes various tasks upon user input.
+ */
 public abstract class Command extends org.bukkit.command.Command {
-
+    
     protected Criteria criteria;
     
     
+    /**
+     * Constructs this with the specified name and and execution criteria.
+     * 
+     * @param name The name of this command
+     * @param criteria The execution criteria
+     */
     public Command(String name, Criteria criteria) {
         this(name, criteria, "", "", new ArrayList<>());
     }
     
+    /**
+     * Constructs that with the specified name, execution criteria, description, permission message, and aliases.
+     * 
+     * @param name The name of this command
+     * @param criteria The execution criteria
+     * @param description The description of this command
+     * @param message The permission message of this command
+     * @param aliases The aliases of this command
+     */
     public Command(String name, Criteria criteria, String description, String message, List<String> aliases) {
         super(name, description, message, aliases);
         this.criteria = criteria;
     }
     
     
+    /**
+     * Wrapper method that delegates execution to {@link #execute(org.bukkit.command.CommandSender, java.lang.String[])}
+     * 
+     * @param sender Source object which is executing this command
+     * @param label The alias of the command used
+     * @param args All arguments passed to the command, split via ' '
+     * @return always returns true
+     */
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         execute(sender, args);
@@ -43,9 +69,18 @@ public abstract class Command extends org.bukkit.command.Command {
     }
     
     
+    /**
+     * Executes the command.
+     * 
+     * @param sender Source object which is executing this command
+     * @param args All arguments passed to the command, split via ' '
+     */
     public abstract void execute(CommandSender sender, String[] args);
     
     
+    /**
+     * @return The execution criteria for this command
+     */
     public Criteria getCriteria() {
         return criteria;
     }

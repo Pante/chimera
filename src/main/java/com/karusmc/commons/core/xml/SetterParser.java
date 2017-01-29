@@ -23,23 +23,44 @@ import org.jdom2.input.*;
 import org.jdom2.input.sax.XMLReaders;
 
 
+/**
+ * Parses a XML Document and modifies the argument object accordingly.
+ * 
+ * @param <Argument> The object type of the modifiable argument
+ */
 public abstract class SetterParser<Argument> {
     
     protected String schemaPath;
     protected SAXBuilder builder;
     
     
+    /**
+     * Constructs this with the specified schema and a default schema validating SAXBuilder.
+     * 
+     * @param schemaPath The schema path
+     */
     public SetterParser(String schemaPath) {
         this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
     }
     
+    /**
+     * Constructs this with the specified schema and SAXBuilder.
+     * 
+     * @param schemaPath The schema path
+     * @param builder The SAXBuilder
+     */
     public SetterParser(String schemaPath, SAXBuilder builder) {
         this.schemaPath = schemaPath;
         this.builder = builder;
     }
     
     
-    
+    /**
+     * Parses a file and modifies the argument.
+     * 
+     * @param file The file to parse
+     * @param argument The object to be modified
+     */
     public void parse(File file, Argument argument) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
             parse(stream, argument);
@@ -49,6 +70,12 @@ public abstract class SetterParser<Argument> {
         }
     }
     
+    /**
+     * Parses an inputstream and modifies the argument.
+     * 
+     * @param stream The inputstream to parse
+     * @param argument The object to be modified
+     */
     public void parse(InputStream stream, Argument argument) {
         try {
             Element element = builder.build(stream, schemaPath).getRootElement();
@@ -60,6 +87,12 @@ public abstract class SetterParser<Argument> {
     }
     
     
+    /**
+     * Contains the parsing logic. Used in the template methods, {@link #parse(java.io.File, java.lang.Object) } and {@link #parse(java.io.InputStream, java.lang.Object) }.
+     * 
+     * @param element The element to parse
+     * @param argument The object to be modified
+     */
     protected abstract void parse(Element element, Argument argument);
     
 }

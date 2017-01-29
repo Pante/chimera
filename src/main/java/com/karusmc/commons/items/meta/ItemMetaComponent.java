@@ -29,8 +29,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jdom2.*;
 
 
+/**
+ * Parses the item-meta nodes in a XML document.
+ * 
+ * @param <GenericMeta> The meta type to modify
+ */
 public class ItemMetaComponent<GenericMeta extends ItemMeta> implements SetterComponent<GenericMeta> {
-
+    
+    
+    /**
+     * Parses a item-meta node.
+     * 
+     * @param root The starting element of the node
+     * @param meta The ItemMeta to modify
+     */
     @Override
     public void parse(Element root, GenericMeta meta) {
         try {

@@ -28,12 +28,25 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.PluginManager;
 
 
+/**
+ * Acts as a proxy for the server's internal CommandMap implementation.
+ * 
+ * This class does not replace the server's internal CommandMap implementation.
+ * Allows plug-ins to listen for {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} registered via this class.
+ * {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} will be called only when commands are registered through
+ * this class and not if directly through the underlying CommandMap implementation.
+ */
 public class CommandMapProxy {
  
     private SimpleCommandMap map;
     private PluginManager manager;
     
     
+    /**
+     * Constructs this with the specified server's CommandMap implementation obtained via reflection.
+     * 
+     * @param server the server
+     */
     public CommandMapProxy(Server server) {
         try {
             Field field = server.getClass().getDeclaredField("commandMap");
@@ -48,11 +61,22 @@ public class CommandMapProxy {
     }
     
     
+    /**
+     * Registers all commands and notifies all {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} listeners.
+     * 
+     * @param commands The commands to be registered
+     */
     public void register(Map<String, Command> commands) {
         commands.forEach(this::register);
     }
     
     
+    /**
+     * Registers a command and notifies all {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} listeners.
+     * 
+     * @param fallbackPrefix A prefix which is prepended to the command with a ':' one or more times to make the command unique
+     * @param command The command to be registered
+     */
     public void register(String fallbackPrefix, Command command) {
         CommandRegistrationEvent event = new CommandRegistrationEvent(command);
         
@@ -63,6 +87,12 @@ public class CommandMapProxy {
     }
     
     
+    /**
+     * Retrieves a specified plug-in's commands.
+     * 
+     * @param pluginName The name of the plug-in
+     * @return A map of command names and commands
+     */
     public Map<String, org.bukkit.command.Command> getPluginCommands(String pluginName) {
         return map.getCommands().stream()
                 .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName)) 
@@ -70,6 +100,10 @@ public class CommandMapProxy {
     }
     
     
+    /**
+     * 
+     * @return The proxied CommandMap implementation
+     */
     public SimpleCommandMap getCommandMap() {
         return map;
     }

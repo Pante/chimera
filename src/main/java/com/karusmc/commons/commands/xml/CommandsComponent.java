@@ -24,20 +24,38 @@ import java.util.*;
 import org.jdom2.Element;
 
 
+/**
+ * Parses the (sub)commands nodes in a XML Document.
+ */
 public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     private SetterComponent<Command> component;
     
     
+    /**
+     * Constructs this with the default {@link CommandComponent}.
+     */
     public CommandsComponent() {
         component = new CommandComponent(this);
     }
     
+    /**
+     * Constructs this with the specified component.
+     * 
+     * @param component The component used to parse the command nodes
+     */
     public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
     }
     
     
+    /**
+     * Parses the commands component. Delegates the parsing of the command nodes
+     * to the component specified in this constructor.
+     * 
+     * @param root The starting element of the node
+     * @param commands The commands used to set the information
+     */
     @Override
     public void parse(Element root, Map<String, Command> commands) {
         root.getChildren("command").forEach((element) -> {

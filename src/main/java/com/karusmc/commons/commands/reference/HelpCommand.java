@@ -30,24 +30,49 @@ import org.bukkit.plugin.Plugin;
 import static com.karusmc.commons.commands.Utility.*;
 
 
-
+/**
+ * Represents a command which retrieves and displays the owning plug-in's commands and their usages.
+ * Listens for {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} and automatically
+ * updates itself. Command hierarchy is flatten when stored to optimize look-up performance.
+ */
 public class HelpCommand extends PluginCommand implements Listener {
     
     private Map<String, Command> commands;
     private int size;
     
     
+    /**
+     * Constructs this with the specified name and owning plug-in.
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     */
     public HelpCommand(String name, Plugin plugin) {
         this(name, plugin, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.within(args, 0, 2), new HashMap<>(), 3);
     }
     
+    /**
+     * Constructs this with the specified name, owning plug-in, execution criteria, commands and page size.
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     * @param criteria The execution criteria
+     * @param commands The map containing flatten hierarchy of commands
+     * @param size The number of commands on each page page
+     */
     public HelpCommand(String name, Plugin plugin, Criteria criteria, Map<String, Command> commands, int size) {
         super(name, plugin, criteria);
         this.commands = commands;
         this.size = size;
     }
     
-
+    
+    /**
+     * Tests the criteria and displays the processed command information.
+     * 
+     * @param sender Source object which is executing this command
+     * @param args All arguments passed to the command, split via ' '
+     */
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (criteria.test(this, sender, args)) {
@@ -82,6 +107,11 @@ public class HelpCommand extends PluginCommand implements Listener {
     }
     
     
+    /**
+     * Called when a command is registered to a {@link com.karusmc.commons.commands.CommandMapProxy}.
+     * 
+     * @param event The event called
+     */
     @EventHandler
     public void onRegister(CommandRegistrationEvent event) {
         Command command = event.getCommand();
@@ -89,6 +119,9 @@ public class HelpCommand extends PluginCommand implements Listener {
     }
     
     
+    /** 
+     * @return A flatten representation of commands.
+     */
     public Map<String, Command> getCommands() {
         return commands;
     }

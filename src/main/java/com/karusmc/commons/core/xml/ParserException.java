@@ -17,12 +17,26 @@
 package com.karusmc.commons.core.xml;
 
 
+/**
+ * Thrown when an unhandled exception occurs while parsing a file.
+ */
 public class ParserException extends RuntimeException {
     
+    /**
+     * Constructs this with the specified message.
+     * 
+     * @param message The error message
+     */
     public ParserException(String message) {
         super(message);
     }
     
+    /**
+     * Constructs this with the specified message and cause.
+     * 
+     * @param message The error message
+     * @param cause The underlying cause
+     */
     public ParserException(String message, Throwable cause) {
         super(message, cause);
     }

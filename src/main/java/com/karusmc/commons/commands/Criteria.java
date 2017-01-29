@@ -20,6 +20,11 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 
+/**
+ * Represents a criteria for executing a command.
+ * 
+ * Contains implementations of commonly used criteria.
+ */
 @FunctionalInterface
 public interface Criteria {
     
@@ -29,9 +34,25 @@ public interface Criteria {
     public static final Criteria NO_ARGUMENTS = (command, sender, args) -> args.length == 0;
   
     
+    /**
+     * Tests if the criteria passes.
+     * 
+     * @param command The command
+     * @param sender Source object which is executing this command
+     * @param args The command's arguments
+     * @return true if the criteria passes and false otherwise
+     */
     public boolean test(Command command, CommandSender sender, String[] args);
     
     
+    /**
+     * Tests if the number of arguments is within the specified boundaries.
+     * 
+     * @param args The command's arguments
+     * @param min The inclusive minimum number of arguments
+     * @param max The inclusive maximum number of arguments
+     * @return true if within the boundaries and false otherwise
+     */
     public static boolean within(String[] args, int min, int max) {
         return min <= args.length && args.length <= max;
     }

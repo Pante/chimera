@@ -19,6 +19,9 @@ package com.karusmc.commons.items;
 import org.bukkit.inventory.ItemStack;
 
 
+/**
+ * Represents an ItemStack with buy and sell prices.
+ */
 public class ValueStack {
     
     private String name;
@@ -27,6 +30,14 @@ public class ValueStack {
     private float sell;
     
     
+    /**
+     * Constructs this with the specified name, itemstack, buy and sell prices.
+     * 
+     * @param name The name
+     * @param item The ItemStack
+     * @param buy The buy price
+     * @param sell The sell price
+     */
     public ValueStack(String name, ItemStack item, float buy, float sell) {
         this.name = name;
         this.item = item;
@@ -35,18 +46,30 @@ public class ValueStack {
     }
 
     
+    /**
+     * @return The name
+     */
     public String getName() {
         return name;
     }
     
+    /**
+     * @return The item
+     */
     public ItemStack getItem() {
         return item;
     }
-
+    
+    /**
+     * @return The buy price
+     */
     public float getBuy() {
         return buy;
     }
 
+    /**
+     * @return The sell price
+     */
     public float getSell() {
         return sell;
     }

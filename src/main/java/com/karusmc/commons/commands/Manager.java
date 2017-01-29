@@ -25,33 +25,59 @@ import java.util.Map;
 import org.bukkit.plugin.Plugin;
 
 
+/**
+ * Acts as a facade for registering and parsing commands from XML Documents.
+ */
 public class Manager {
     
     private CommandMapProxy proxy;
     private SetterParser<Map<String, Command>> parser;
     
     
+    /**
+     * Constructs this with the specified owning plug-in.
+     * 
+     * @param owningPlugin The owning plug-in of this CommandManager
+     */
     public Manager(Plugin owningPlugin) {
         this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent()));
     }
     
+    /**
+     * Constructs this with the specified CommandMapProxy and Parser.
+     * 
+     * @param proxy A CommandMapProxy
+     * @param parser A Parser
+     */
     public Manager(CommandMapProxy proxy, SetterParser<Map<String, Command>> parser) {
         this.proxy = proxy;
         this.parser = parser;
     }
 
     
+    /**
+     * Parses command information from the file and registers the commands.
+     * 
+     * @param commandsFile The file containing the command information
+     * @param commands The commands to be parsed and registered
+     */
     public void load(File commandsFile, Map<String, Command> commands) {
         parser.parse(commandsFile, commands);
         proxy.register(commands);
     }
 
     
+    /**
+     * @return a CommandMapProxy
+     */
     public CommandMapProxy getProxy() {
         return proxy;
     }
 
     
+    /**
+     * @return a SetterParser
+     */
     public SetterParser<Map<String, Command>> getParser() {
         return parser;
     }

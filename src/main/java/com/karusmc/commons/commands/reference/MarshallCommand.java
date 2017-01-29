@@ -28,16 +28,31 @@ import org.bukkit.plugin.Plugin;
 import static com.karusmc.commons.commands.Utility.trim;
 
 
+/**
+ * Represents a decorator which decorates a command and allows it to contain subcommands.
+ * Delegates all getter methods to the decorated command.
+ */
 public class MarshallCommand extends PluginCommand implements Marshall {
     
     private PluginCommand command;
     private Map<String, Command> commands;
     
     
+    /**
+     * Constructs this with the specified command.
+     * 
+     * @param command The command to be decorated
+     */
     public MarshallCommand(PluginCommand command) {
         this(command, new HashMap<>(0));
     }
     
+    /**
+     * Constructs this with the specified command and subcommands.
+     * 
+     * @param command The command to be decorated
+     * @param commands The subcommands
+     */
     public MarshallCommand(PluginCommand command, Map<String, Command> commands) {
         super(null, null, null);
         
@@ -46,6 +61,15 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     }
     
     
+    /**
+     * Delegates execution to the decorated command or subcommands.
+     * Checks if a subcommand with the same name as the first argument exists
+     * and trims the arguments and delegates execution to it. Otherwise delegates
+     * execution to the decorated command.
+     * 
+     * @param sender Source object which is executing this command
+     * @param args All arguments passed to the command, split via ' '
+     */
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length >= 1 && commands.containsKey(args[0])) {
@@ -57,8 +81,19 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     }
     
    
+    /**
+     * Delegates tab completion to the decorated command or subcommands.
+     * Checks if a subcommand with a name starting with the first argument exists and adds it to a list.
+     * If the number of arguments is greater than 1, and a subcommand with the same name as the first argument exists, delegate tab completion to it.
+     * Otherwise return the decorated commands aliases.
+     * 
+     * @param sender Source object which is executing this command
+     * @param alias The alias being used
+     * @param args All arguments passed to the command, split via ' '
+     * @return A list of tab-completions for the specified arguments. This will never be null. List may be immutable.
+     */
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         String argument;
         if (args.length == 1) {
             return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
@@ -67,11 +102,14 @@ public class MarshallCommand extends PluginCommand implements Marshall {
             return commands.get(argument).tabComplete(sender, argument, trim(args));
             
         } else {
-            return Collections.emptyList();
+            return getAliases();
         }
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Command> getCommands() {
         return commands;
@@ -181,12 +219,12 @@ public class MarshallCommand extends PluginCommand implements Marshall {
         return command.setUsage(usage);
     }
 
-
+    
     @Override
     public Criteria getCriteria() {
         return command.getCriteria();
     }
-
+    
     @Override
     public Plugin getPlugin() {
         return command.getPlugin();

@@ -27,6 +27,10 @@ import org.junit.rules.ExternalResource;
 import static org.mockito.Mockito.*;
 
 
+/**
+ * Provides classes with a singleton test resource which stub implementation of Bukkit and Server.
+ * Meant for testing purposes and should never be used in production code.
+ */
 public class BukkitResource extends ExternalResource {
     
     public static final BukkitResource RESOURCE = new BukkitResource();
@@ -48,15 +52,24 @@ public class BukkitResource extends ExternalResource {
         Bukkit.setServer(server);
     }
 
-
+    
+    /**
+     * @return The stub server implementation
+     */
     public Server getServer() {
         return server;
     }
 
+    /**
+     * @return The Logger
+     */
     public Logger getLogger() {
         return logger;
     }
-
+    
+    /**
+     * @return The ItemFactory
+     */
     public ItemFactory getFactory() {
         return factory;
     }

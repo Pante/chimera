@@ -19,11 +19,20 @@ package com.karusmc.commons.commands;
 import java.util.*;
 
 
+/**
+ * Provides classes with utility methods.
+ */
 public class Utility {
     
     private static final String[] EMPTY = new String[] {};
     
     
+    /**
+     * Trims the specified array and removes the first value.
+     * 
+     * @param args The arguments to trim
+     * @return Returns the trimmed array or an empty array if the arrays length was less than or equal to 1
+     */
     public static String[] trim(String[] args) {
         if (args.length <= 1) {
             return EMPTY;
@@ -34,6 +43,15 @@ public class Utility {
     }
     
     
+    /**
+     * Gets the value at the specified index or the specified default argument if the specified index
+     * was out of bounds.
+     * 
+     * @param args The arguments containing the value
+     * @param index The index of the value
+     * @param defaultArgument The default argument to return if the index was out of bounds
+     * @return The value at the specified index or the default argument if the index was out of bounds.
+     */
     public static String getArgumentOrDefault(String[] args, int index, String defaultArgument) {
         if (index < args.length) {
             return args[index];
@@ -44,6 +62,12 @@ public class Utility {
     }
     
     
+    /**
+     * Parses the specified string to an integer.
+     * 
+     * @param argument The argument to parse
+     * @return The parsed value or 1 if the specified string was not a integer
+     */
     public static int toInt(String argument) {
         if (argument.matches("\\d+")) {
             return Integer.parseInt(argument);
@@ -54,6 +78,13 @@ public class Utility {
     }
     
     
+    /**
+     * Gets the total number of pages based on the specified entries and page size.
+     * 
+     * @param totalEntries The total entries
+     * @param pageSize The number of entries on each page
+     * @return The number of pages or 0 if the total entries or page size was less than 0
+     */
     public static int getTotalPages(int totalEntries, int pageSize) {
         if (totalEntries > 0 && pageSize > 0) {
             return Math.max(1, (int) Math.ceil((double) totalEntries / pageSize));
@@ -64,6 +95,14 @@ public class Utility {
     }
     
     
+    /**
+     * Gets the index of the first entry on a page based on the specified entries, page size and page.
+     * 
+     * @param totalEntries The total entries
+     * @param pageSize The number of entries on each page
+     * @param page The page
+     * @return The index of the first entry on a page or the total number of entries if the index was out of bounds.
+     */
     public static int getFirstIndex(int totalEntries, int pageSize, int page) {
         int firstOnPage = (page * pageSize) - pageSize;
         
@@ -71,13 +110,31 @@ public class Utility {
     }
     
     
+    /**
+     * Gets the index of the last entry o a page based on the specified entries, page size and page.
+     * 
+     * @param totalEntries The total entries
+     * @param pageSize The number of entries on each page
+     * @param page The page
+     * @return The index of the last entry on a page or the total number of entries if the index was out of bounds.
+     */
     public static int getLastIndex(int totalEntries, int pageSize, int page) {
         int lastOnPage = (page * pageSize);
         
         return (lastOnPage < totalEntries) ? lastOnPage : totalEntries;
     }
 
-
+    
+    /**
+     * Converts the tree structured commands into a flat format.
+     * 
+     * For example, if a command with the name, "command" contains a subcommand with the name "subcommand".
+     * Using this method on the command will add both to the map as "command" and "command subcommand" respectively.
+     * 
+     * @param name The name of the command
+     * @param command The command to be mapped
+     * @param commands The map the commands are to be mapped to
+     */
     public static void flapMap(String name, Command command, Map<String, Command> commands) {
         if (command instanceof Marshall) {
             ((Marshall) command).getCommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));

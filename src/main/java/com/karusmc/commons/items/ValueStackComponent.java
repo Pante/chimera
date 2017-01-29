@@ -28,11 +28,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jdom2.*;
 
 
+/**
+ * Parses the item nodes in a XML document.
+ */
 public class ValueStackComponent implements Component<ValueStack> {
 
     private Map<String, ItemMetaComponent> components;
     
     
+    /**
+     * Constructs this with the default Item-meta components.
+     */
     public ValueStackComponent() {
         components = new HashMap<>(6);
         components.put("banner-meta", new BannerMetaComponent());
@@ -43,11 +49,22 @@ public class ValueStackComponent implements Component<ValueStack> {
         components.put("potion-meta", new PotionMetaComponent());
     }
     
+    /**
+     * Constructs this with the specified Item-meta components.
+     * 
+     * @param components The Item-meta components
+     */
     public ValueStackComponent(Map<String, ItemMetaComponent> components) {
         this.components = components;
     }
     
     
+    /**
+     * Parses the item nodes. Delegates the parsing of item-meta nodes to a registered item-meta component.
+     * 
+     * @param element The starting element of the node
+     * @return The parsed ValueStack
+     */
     @Override
     public ValueStack parse(Element element) {
         try {
@@ -84,6 +101,9 @@ public class ValueStackComponent implements Component<ValueStack> {
     }
     
     
+    /**
+     * @return The registered Item-meta components
+     */
     public Map<String, ItemMetaComponent> getComponents() {
         return components;
     }

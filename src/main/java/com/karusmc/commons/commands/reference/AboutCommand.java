@@ -23,15 +23,32 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.*;
 
 
+/**
+ * Represents a command which formats and returns information as defined in the owning plug-ins
+ * plugin.yml file.
+ */
 public class AboutCommand extends PluginCommand {
     
     private String information;
     
     
+    /**
+     * Constructs this with the specified name and owning plug-in
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     */
     public AboutCommand(String name, Plugin plugin) {
         this(name, plugin, Criteria.PERMITTED);
     }
     
+    /**
+     * Constructs this with the specified name, owning plug-in and execution criteria.
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     * @param criteria The execution criteria
+     */
     public AboutCommand(String name, Plugin plugin, Criteria criteria) {
         super(name, plugin,  criteria);
         PluginDescriptionFile description = plugin.getDescription();
@@ -45,6 +62,12 @@ public class AboutCommand extends PluginCommand {
     }
     
     
+    /**
+     * Tests the criteria and displays the owning plug-in's information to the sender.
+     * 
+     * @param sender Source object which is executing this command
+     * @param args All arguments passed to the command, split via ' '
+     */
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (criteria.test(this, sender, args)) {

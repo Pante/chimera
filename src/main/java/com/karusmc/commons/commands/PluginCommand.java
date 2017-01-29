@@ -22,22 +22,45 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 
+/**
+ * Represents a {@link com.karusmc.commons.commands.Command} belonging to a plug-in
+ */
 public abstract class PluginCommand extends Command implements PluginIdentifiableCommand {
     
     protected Plugin plugin;
     
     
+    /**
+     * Constructs this with the specified name, plug-in and criteria.
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     * @param criteria The execution criteria
+     */
     public PluginCommand(String name, Plugin plugin, Criteria criteria) {
         super(name, criteria);
         this.plugin = plugin;
     }
     
+    /**
+     * Constructs this with the specified name, plug-in, criteria, description, message and aliases.
+     * 
+     * @param name The name of this command
+     * @param plugin The owning plug-in of this command
+     * @param criteria The execution criteria
+     * @param description The description of this command
+     * @param message The permission message of this command
+     * @param aliases The aliases of this command
+     */
     public PluginCommand(String name, Plugin plugin, Criteria criteria, String description, String message, List<String> aliases) {
         super(name, criteria, description, message, aliases);
         this.plugin = plugin;
     }
     
     
+    /**
+     * @return The owning plug-in of this command
+     */
     @Override
     public Plugin getPlugin() {
         return plugin;

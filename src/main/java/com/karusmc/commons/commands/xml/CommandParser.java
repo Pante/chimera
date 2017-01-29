@@ -24,11 +24,19 @@ import java.util.*;
 import org.jdom2.Element;
 
 
+/**
+ * Parses a XML Document and transforms it into command information.
+ */
 public class CommandParser extends SetterParser<Map<String, Command>> {
     
     private SetterComponent<Map<String, Command>> component;
     
     
+    /**
+     * Constructs this with the specified component and the default XML schema.
+     * 
+     * @param component The component used to parse commands nodes
+     */
     public CommandParser(SetterComponent<Map<String, Command>> component) {
         super(null);
         
@@ -37,6 +45,12 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
     }
    
     
+    /**
+     * Constructs this with the specified component and XML schema.
+     * 
+     * @param component The component used to parse commands nodes
+     * @param schemaPath The path to the XML schema
+     */
     public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
         super(schemaPath);
         this.component = component;

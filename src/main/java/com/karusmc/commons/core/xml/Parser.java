@@ -23,23 +23,44 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 
 
+/**
+ * Parses a XML Document and returns a parsed object.
+ * 
+ * @param <ParsedObject> The object type to be parsed to
+ */
 public abstract class Parser<ParsedObject> {
     
     protected String schemaPath;
     protected SAXBuilder builder;
     
     
+    /**
+     * Constructs this with the specified schema and a default schema validating SAXBuilder.
+     * 
+     * @param schemaPath The schema path
+     */
     public Parser(String schemaPath) {
         this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
     }
     
+    /**
+     * Constructs this with the specified schema and SAXBuilder.
+     * 
+     * @param schemaPath The schema path
+     * @param builder The SAXBuilder
+     */
     public Parser(String schemaPath, SAXBuilder builder) {
         this.schemaPath = schemaPath;
         this.builder = builder;
     }
     
     
-    
+    /**
+     * Parses a file and returns a parsed object.
+     * 
+     * @param file The file to parse
+     * @return The parsed object
+     */
     public ParsedObject parse(File file) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
             return parse(stream);
@@ -49,6 +70,12 @@ public abstract class Parser<ParsedObject> {
         }
     }
     
+    /**
+     * Parses an inputstream and returns a parsed object.
+     * 
+     * @param stream The inputstream to parse
+     * @return The parsed object
+     */
     public ParsedObject parse(InputStream stream) {
         try {
             Element element = builder.build(stream, schemaPath).getRootElement();
@@ -59,7 +86,12 @@ public abstract class Parser<ParsedObject> {
         }
     }
     
-    
+    /**
+     * Contains the parsing logic. Used in the template methods, {@link #parse(java.io.File)} and {@link #parse(java.io.InputStream)}.
+     * 
+     * @param element The element to parse
+     * @return The parsed object
+     */
     protected abstract ParsedObject parse(Element element);
     
 }
