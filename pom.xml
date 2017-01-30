@@ -25,7 +25,7 @@
         
         <repository>
             <id>git-PanteLegacy</id>
-            <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/craftbukkit</url>
+            <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/</url>
         </repository>
         
     </repositories>

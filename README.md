@@ -1,5 +1,5 @@
 <p align = "center">
-  <img src = "http://i.imgur.com/Vj8OHAV.jpg"/>
+  <img src = "http://i.imgur.com/hlLPWau.jpg"/>
 </p>
 [![Build Status](https://travis-ci.org/Pante/Karus-Commons.svg?branch=master)](https://travis-ci.org/Pante/Karus-Commons)
 
