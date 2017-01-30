@@ -9,6 +9,7 @@ _Java 8 artifact:_
   <repositories>
       <repository>
           <id>git-PanteLegacy</id>
+          <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/</url>
       <repository>
   </repositories>
   
