@@ -23,6 +23,11 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         
+        <repository>
+            <id>git-PanteLegacy</id>
+            <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/craftbukkit</url>
+        </repository>
+        
     </repositories>
      
     <dependencies>
@@ -45,7 +50,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
             <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>

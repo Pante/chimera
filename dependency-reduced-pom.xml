@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.karusmc</groupId>
-  <artifactId>Commons</artifactId>
+  <artifactId>commons</artifactId>
   <name>Karus-Commons</name>
   <version>1.0.0</version>
   <build>
@@ -65,6 +65,10 @@
     <repository>
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>git-PanteLegacy</id>
+      <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/craftbukkit</url>
     </repository>
   </repositories>
   <dependencies>
@@ -135,12 +139,6 @@
           <groupId>org.yaml</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>craftbukkit</artifactId>
-      <version>1.11.2-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
