@@ -6,6 +6,11 @@
 ***
 _Java 8 artifact:_
 ```XML
+    <repository>
+      <id>karus-repo</id>
+      <url>https://pante.github.io/Karus-Commons/</url>
+    </repository>
+
     <dependencies>
       <dependency>
           <groupId>com.karusmc</groupId>
@@ -15,4 +20,4 @@ _Java 8 artifact:_
   </dependencies>
 ```
 
-<a href = "https://pante.github.io/Karus-Commons/">Javadocs</a> 
+<a href = "https://pante.github.io/Karus-Commons/docs/">Javadocs</a> 

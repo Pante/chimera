@@ -23,6 +23,11 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         
+        <repository>
+            <id>craftbukkit-repo</id>
+            <url>https://pante.github.io/Karus-Commons/</url>
+        </repository>
+        
     </repositories>
      
     <dependencies>
