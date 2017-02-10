@@ -6,18 +6,11 @@
 ***
 _Java 8 artifact:_
 ```XML
-  <repositories>
-      <repository>
-          <id>git-PanteLegacy</id>
-          <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/</url>
-      <repository>
-  </repositories>
-  
-  <dependencies>
+    <dependencies>
       <dependency>
           <groupId>com.karusmc</groupId>
           <artifactId>commons</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1</version>
       </dependency>
   </dependencies>
 ```

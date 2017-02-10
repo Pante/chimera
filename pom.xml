@@ -5,7 +5,7 @@
     <name>Karus-Commons</name>
     <groupId>com.karusmc</groupId>
     <artifactId>commons</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     
     <properties>
@@ -21,11 +21,6 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        
-        <repository>
-            <id>git-PanteLegacy</id>
-            <url>https://github.com/Pante/Karus-Commons/tree/maven-repo/</url>
         </repository>
         
     </repositories>
