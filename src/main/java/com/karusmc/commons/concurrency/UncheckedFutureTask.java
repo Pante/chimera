@@ -48,6 +48,7 @@ public class UncheckedFutureTask<T> extends FutureTask<T> {
     
     /**
      * Waits if necessary for the computation to complete, and then retrieves its result.
+     * Wraps any thrown {@link java.util.concurrent.ExecutionException}s and {@link java.lang.InterruptedException}s in {@link UncheckedExecutionException}s and {@link UncheckedInterruptedException}s.
      * 
      * @return the computed result
      */

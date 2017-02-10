@@ -18,6 +18,7 @@ package com.karusmc.commons.concurrency;
 
 
 /**
+ * Thrown when an unhandled {@link java.lang.InterruptedException} occurs when calling {@link UncheckedFutureTask#getUnchecked()}.
  */
 public class UncheckedInterruptedException extends RuntimeException {
     

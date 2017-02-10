@@ -26,6 +26,7 @@ import org.bukkit.scheduler.*;
 
 /**
  * Represents a stub BukkitScheduler implementation.
+ * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
  * In general, methods that schedule tasks without delay and/or repetition are stubbed and will run the task
  * on the calling thread.
  */
