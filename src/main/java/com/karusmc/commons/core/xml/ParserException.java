@@ -25,7 +25,7 @@ public class ParserException extends RuntimeException {
     /**
      * Constructs this with the specified message.
      * 
-     * @param message The error message
+     * @param message The detail message
      */
     public ParserException(String message) {
         super(message);
@@ -34,8 +34,8 @@ public class ParserException extends RuntimeException {
     /**
      * Constructs this with the specified message and cause.
      * 
-     * @param message The error message
-     * @param cause The underlying cause
+     * @param message The detail message
+     * @param cause The cause
      */
     public ParserException(String message, Throwable cause) {
         super(message, cause);

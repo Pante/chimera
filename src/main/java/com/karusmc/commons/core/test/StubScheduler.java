@@ -24,7 +24,11 @@ import java.util.concurrent.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.*;
 
-
+/**
+ * Represents a stub BukkitScheduler implementation.
+ * In general, methods that schedule tasks without delay and/or repetition are stubbed and will run the task
+ * on the calling thread.
+ */
 public class StubScheduler implements BukkitScheduler {
 
     @Override
