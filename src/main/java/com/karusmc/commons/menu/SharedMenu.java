@@ -58,4 +58,13 @@ public class SharedMenu implements Menu {
         return inventory;
     }
     
+    
+    public Button getDefaultButton() {
+        return defaultButton;
+    }
+    
+    public void setDefaultButton(Button defaultButton) {
+        this.defaultButton = defaultButton;
+    }
+    
 }
