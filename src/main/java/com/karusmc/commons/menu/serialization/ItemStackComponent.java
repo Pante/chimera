@@ -51,7 +51,7 @@ public class ItemStackComponent implements Component<ItemStack> {
             
             ItemStack item = new ItemStack(material, amount, data);
   
-            Element meta = element.getChildren().get(1);
+            Element meta = element.getChildren().get(0);
             ItemMeta itemMeta = item.getItemMeta();
             if (components.containsKey(meta.getName())) {
                 components.get(meta.getName()).parse(meta, itemMeta);
@@ -67,6 +67,11 @@ public class ItemStackComponent implements Component<ItemStack> {
         } catch (DataConversionException e) {
             throw new ParserException("Failed to parse XML Document", e);
         }
+    }
+    
+    
+    public Map<String, ItemMetaComponent> getComponents() {
+        return components;
     }
     
 }

@@ -14,30 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.items.meta;
+package com.karusmc.commons.menu.serialization;
 
-import com.karusmc.commons.core.test.XMLResource;
-
-import org.bukkit.inventory.meta.ItemMeta;
-
-import org.junit.*;
-
-import static org.mockito.Mockito.*;
+import org.junit.Rule;
 
 
-public class ItemMetaComponentTest {
+public class InventoryParserTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/ItemMeta.xml"), null);
     
-    @Rule
-    public ItemMetaResource resource = new ItemMetaResource(new ItemMetaComponent(), mock(ItemMeta.class));
+    private InventoryParser parser;
     
-    
-    @Test
-    public void parse() {
-        resource.parse(xml.getRoot());
-        resource.assertMeta();
-    }
     
 }

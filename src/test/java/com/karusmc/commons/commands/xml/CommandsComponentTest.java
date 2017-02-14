@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 public class CommandsComponentTest {
     
     @Rule
-    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands-component.xml"), null);
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands-component.xml"), null);
     
     @Rule
     public ExpectedException exception = ExpectedException.none();

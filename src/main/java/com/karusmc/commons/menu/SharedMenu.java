@@ -30,13 +30,13 @@ public class SharedMenu implements Menu {
     
     
     public SharedMenu(Inventory inventory) {
-        this(inventory, event -> {});
+        this(inventory, e -> {});
     }
     
     public SharedMenu(Inventory inventory, Button defaultButton) {
         this.inventory = inventory;
         this.defaultButton = defaultButton;
-        buttons = new HashMap<>(inventory.getSize());
+        buttons = new HashMap<>();
     }
     
     
@@ -56,6 +56,12 @@ public class SharedMenu implements Menu {
     @Override
     public Inventory getInventory() {
         return inventory;
+    }
+    
+    
+    @Override
+    public Map<Integer, Button> getButtons() {
+        return buttons;
     }
     
     

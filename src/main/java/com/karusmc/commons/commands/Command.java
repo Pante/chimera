@@ -16,6 +16,8 @@
  */
 package com.karusmc.commons.commands;
 
+import java.util.*;
+
 import org.bukkit.command.CommandSender;
 
 

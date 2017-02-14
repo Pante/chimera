@@ -16,6 +16,8 @@
  */
 package com.karusmc.commons.menu;
 
+import java.util.*;
+
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 
@@ -30,5 +32,7 @@ public interface Menu {
     
     
     public Inventory getInventory();
+    
+    public Map<Integer, Button> getButtons();
     
 }

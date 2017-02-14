@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class ItemParserTest {
     
     @Rule
-    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("empty-items.xml"), null);
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/empty-items.xml"), null);
     
     
     private ItemParser parser;

@@ -16,7 +16,7 @@
  */
 package com.karusmc.commons.menu;
 
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.HumanEntity;
@@ -60,7 +60,7 @@ public class MenuPool implements Listener {
     }
 
     
-    public WeakHashMap<HumanEntity, Menu> getMenus() {
+    public Map<HumanEntity, Menu> getMenus() {
         return menus;
     }
     
