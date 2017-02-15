@@ -49,7 +49,7 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
      */
     public ItemParser(Component<ValueStack> component) {
         super(null);
-        schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();
+        schemaPath = getClass().getClassLoader().getResource("items/items.xsd").getPath();
         this.component = component;
     }
 

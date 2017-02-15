@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class BookMetaComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/BookMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/BookMeta.xml"), null);
     
     @Rule
     public ItemMetaResource<BookMeta> resource = new ItemMetaResource(new BookMetaComponent(), mock(BookMeta.class));

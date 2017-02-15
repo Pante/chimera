@@ -53,7 +53,7 @@ public class CommandParserIT {
     
     @Test
     public void parse() {
-        parser.parse(getClass().getClassLoader().getResourceAsStream("commands.xml"), commands);
+        parser.parse(getClass().getClassLoader().getResourceAsStream("commands/commands.xml"), commands);
         
         verify(command, times(1)).setAliases(Arrays.asList(new String[] {"cmd", "comm"}));
         verify(command, times(1)).setDescription("command description");

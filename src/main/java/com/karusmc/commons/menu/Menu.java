@@ -14,30 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.items.meta;
+package com.karusmc.commons.menu;
 
-import com.karusmc.commons.core.test.XMLResource;
+import java.util.*;
 
-import org.bukkit.inventory.meta.ItemMeta;
-
-import org.junit.*;
-
-import static org.mockito.Mockito.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.Inventory;
 
 
-public class ItemMetaComponentTest {
+public interface Menu {
     
-    @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/ItemMeta.xml"), null);
+    public void onClick(InventoryClickEvent event);
     
-    @Rule
-    public ItemMetaResource resource = new ItemMetaResource(new ItemMetaComponent(), mock(ItemMeta.class));
-    
-    
-    @Test
-    public void parse() {
-        resource.parse(xml.getRoot());
-        resource.assertMeta();
+    public default void onDrag(InventoryDragEvent event) {
+        event.setCancelled(true);
     }
+    
+    
+    public Inventory getInventory();
+    
+    public Map<Integer, Button> getButtons();
     
 }

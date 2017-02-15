@@ -33,7 +33,7 @@ public class PotionMetaComponentTest {
     public PotionResource potionResource = PotionResource.RESOURCE;
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/PotionMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/PotionMeta.xml"), null);
     
     @Rule
     public ItemMetaResource<PotionMeta> resource = new ItemMetaResource(new PotionMetaComponent(), mock(PotionMeta.class));

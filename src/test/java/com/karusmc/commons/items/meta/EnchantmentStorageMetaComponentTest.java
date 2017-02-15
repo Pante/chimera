@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class EnchantmentStorageMetaComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/StorageMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/StorageMeta.xml"), null);
     
     @Rule
     public ItemMetaResource<EnchantmentStorageMeta> resource = new ItemMetaResource(new EnchantmentStorageMetaComponent(), mock(EnchantmentStorageMeta.class));

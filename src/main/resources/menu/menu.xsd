@@ -16,7 +16,46 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    
+    <xs:element name = "menu">
+        <xs:complexType>
+            <xs:sequence>
+                
+                <xs:element name = "slot" minOccurs = "1" maxOccurs = "unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                
+                            <xs:element name = "item" minOccurs = "1" maxOccurs = "1">
+                                <xs:complexType>
+                                    <xs:choice>
+                                        <xs:element name = "banner-meta" type = "bannerType"/>
+                                        <xs:element name = "item-meta" type = "itemType"/>
+                                        <xs:element name = "leather-armor-meta" type = "leatherArmorType"/>
+                                        <xs:element name = "potion-meta" type = "potionType"/>
+                                    </xs:choice>
+                        
+                                    <xs:attribute name = "type" type = "xs:string" use = "required"/>
+                                    <xs:attribute name = "amount" type = "xs:positiveInteger" default = "1"/>
+                                    <xs:attribute name = "data" type = "xs:short" default = "0"/> 
+                                </xs:complexType> 
+                            </xs:element>
+                            
+                        </xs:sequence>
+                        <xs:attribute name = "number" type = "xs:nonNegativeInteger" use = "required"/>
+                        
+                    </xs:complexType>
+                </xs:element>
+                
+            </xs:sequence>
+            <xs:attribute name = "title" type = "xs:string" default = "Menu"/>
+            <xs:attribute name = "type" type = "xs:string" default = "chest"/>
+            <xs:attribute name = "size" type = "xs:positiveInteger" default = "54"/>
+            
+        </xs:complexType>
+    </xs:element>
     
     <xs:complexType name = "enchantmentsType">
         <xs:sequence>
@@ -28,9 +67,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    
-    
-    <xs:element name = "item-meta" type = "itemType"/>
         
     <xs:complexType name = "itemType">
             <xs:sequence>
@@ -57,9 +93,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <xs:attribute name = "display-name" type = "xs:string"/>
     </xs:complexType>
     
-    
-    <xs:element name = "banner-meta" type = "bannerType"/>
-    
     <xs:complexType name = "bannerType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -83,32 +116,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </xs:complexContent>
     </xs:complexType>
     
-    
-    <xs:element name = "book-meta" type = "bookType"/>
-    
-    <xs:complexType name = "bookType">
-        <xs:complexContent>
-            <xs:extension base = "itemType">
-                
-                <xs:sequence>
-                    <xs:element name = "pages" minOccurs = "0" maxOccurs = "1">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name = "page" type = "xs:string" minOccurs = "1" maxOccurs = "unbounded"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                </xs:sequence>
-                <xs:attribute name = "title" type = "xs:string" use = "required"/>
-                <xs:attribute name = "author" type = "xs:string" use = "required"/>
-                
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    
-    <xs:element name = "leather-armour-meta" type = "leatherArmorType"/>
-    
     <xs:complexType name = "leatherArmorType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -118,9 +125,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
-    
-    <xs:element name = "potion-meta" type = "potionType"/>
+
     
     <xs:complexType name = "potionType">
         <xs:complexContent>
@@ -148,59 +153,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
-    
-    <xs:element name = "storage-meta" type = "storageType"/>
-    
-    <xs:complexType name = "storageType">
-        <xs:complexContent>
-            <xs:extension base = "itemType">
-                <xs:sequence>
-                    
-                    <xs:element name = "stored" type = "enchantmentsType" minOccurs = "0" maxOccurs = "1"/>
-                    
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    
-    
-    
-    <xs:element name = "items">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name = "item" minOccurs = "1" maxOccurs = "unbounded">
-                    <xs:complexType>
-                        <xs:sequence>
-                            
-                            <xs:element name = "value" minOccurs = "0" maxOccurs = "1">
-                                <xs:complexType>
-                                    <xs:attribute name = "buy" type = "xs:float" default = "0"/>
-                                    <xs:attribute name = "sell" type = "xs:float" default = "0"/>
-                                </xs:complexType>
-                            </xs:element>
-                            
-                            <xs:choice>
-                                <xs:element name = "banner-meta" type = "bannerType"/>
-                                <xs:element name = "book-meta" type = "bookType"/>
-                                <xs:element name = "item-meta" type = "itemType"/>
-                                <xs:element name = "leather-armor-meta" type = "leatherArmorType"/>
-                                <xs:element name = "potion-meta" type = "potionType"/>
-                                <xs:element name = "storage-meta" type = "storageType"/>
-                            </xs:choice>
-                            
-                        </xs:sequence>
-                        
-                        <xs:attribute name = "name" type = "xs:string" use = "required"/>
-                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
-                        <xs:attribute name = "amount" type = "xs:positiveInteger" default = "1"/>
-                        <xs:attribute name = "data" type = "xs:short" default = "0"/>
-                        
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
 
 </xs:schema>

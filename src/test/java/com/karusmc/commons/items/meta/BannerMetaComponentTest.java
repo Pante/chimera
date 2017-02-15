@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 public class BannerMetaComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/BannerMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/BannerMeta.xml"), null);
     
     @Rule
     public ItemMetaResource<BannerMeta> resource = new ItemMetaResource(new BannerMetaComponent(), mock(BannerMeta.class));

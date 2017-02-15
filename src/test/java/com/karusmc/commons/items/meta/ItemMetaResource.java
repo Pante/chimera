@@ -21,7 +21,7 @@ import com.karusmc.commons.core.test.*;
 
 import java.util.Arrays;
 
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalResource {
     
-    private BukkitResource bukkit;
+    private StubServer server;
     private EnchantmentResource enchantments;
     
     private ItemMetaComponent<GenericMeta> component;
@@ -43,7 +43,7 @@ public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalReso
     
     
     public ItemMetaResource(ItemMetaComponent<GenericMeta> component, GenericMeta meta) {
-        bukkit = BukkitResource.RESOURCE;
+        server = StubServer.INSTANCE;
         enchantments = EnchantmentResource.RESOURCE;
         
         this.component = component;

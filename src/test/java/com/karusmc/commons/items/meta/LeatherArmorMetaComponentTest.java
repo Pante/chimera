@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class LeatherArmorMetaComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("meta/LeatherArmorMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/LeatherArmorMeta.xml"), null);
     
     @Rule
     public ItemMetaResource<LeatherArmorMeta> resource = new ItemMetaResource(new LeatherArmorMetaComponent(), mock(LeatherArmorMeta.class));

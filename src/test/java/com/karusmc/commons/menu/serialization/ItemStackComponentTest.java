@@ -14,53 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.items;
+package com.karusmc.commons.menu.serialization;
 
 import com.karusmc.commons.core.test.*;
 import com.karusmc.commons.items.meta.ItemMetaComponent;
-
-import java.util.HashMap;
 
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class ValueStackComponentTest {
+public class ItemStackComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/banner.xml"), null);
-    
-    private StubServer server;
-    private ValueStackComponent component;
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("menu/itemstack.xml"), null);
+
+    private Server server;
+    private ItemStackComponent component;
     private ItemMetaComponent meta;
     
     
-    public ValueStackComponentTest() {
+    public ItemStackComponentTest() {
         server = StubServer.INSTANCE;
-        component = new ValueStackComponent(new HashMap<>(1));
-        component.getComponents().put("banner-meta", meta = mock(ItemMetaComponent.class));
+        component = new ItemStackComponent();
+        meta = mock(ItemMetaComponent.class);
+        
+        component.getComponents().put("mock-meta", meta);
     }
     
     
     @Test
     public void parse() {
-        ValueStack value = component.parse(xml.getRoot());
-        ItemStack item = value.getItem();
-        
-        assertEquals("banner", value.getName());
-        assertEquals(5, value.getBuy(), 0);
-        assertEquals(10, value.getSell(), 0);
-        
-        assertEquals(Material.BANNER, item.getType());
-        assertEquals(16, item.getAmount());
-        assertEquals(3, item.getDurability());
+        ItemStack item = component.parse(resource.getRoot());
         
         verify(meta, times(1)).parse(any(), any());
+        assertEquals(new ItemStack(Material.BANNER, 16, (short) 0), item);
     }
     
 }

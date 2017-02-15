@@ -40,7 +40,7 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
     public CommandParser(SetterComponent<Map<String, Command>> component) {
         super(null);
         
-        schemaPath = getClass().getClassLoader().getResource("commands.xsd").getPath();
+        schemaPath = getClass().getClassLoader().getResource("commands/commands.xsd").getPath();
         this.component = component;
     }
    
