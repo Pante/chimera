@@ -5,7 +5,7 @@
     <name>Karus-Commons</name>
     <groupId>com.karusmc</groupId>
     <artifactId>commons</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     
     <properties>
@@ -115,7 +115,7 @@
                 
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName> <!-- Any name that makes sense -->
+                    <shadedClassifierName>shaded</shadedClassifierName>
                 </configuration>
             </plugin>
            
