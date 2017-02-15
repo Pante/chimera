@@ -24,6 +24,10 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 
 
+/**
+ * Serves as a singleton entry point for the menu framework and should be registered to the server.
+ * Delegation of event handling requires the client to manually register and unregister menus and the players viewing them.
+ */
 public class MenuPool implements Listener {
     
     public static final MenuPool INSTANCE = new MenuPool();
@@ -39,6 +43,12 @@ public class MenuPool implements Listener {
     }
     
     
+    /**
+     * Checks if there are any corresponding players registered to the MenuPool
+     * and delegates event handling to the menu registered with the player if present.
+     * 
+     * @param event The InventoryClickEvent instance
+     */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
         if (menus.containsKey(event.getWhoClicked())) {
@@ -47,6 +57,12 @@ public class MenuPool implements Listener {
     }
     
     
+    /**
+     * Checks if there are any corresponding players registered to the MenuPool
+     * and delegates event handling to the menu registered with the player if present.
+     * 
+     * @param event The InvntoryDragEvent event
+     */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
         if (menus.containsKey(event.getWhoClicked())) {
@@ -55,11 +71,21 @@ public class MenuPool implements Listener {
     }
 
     
+    /**
+     * Returns a thread-safe view of the pooled menus with their titles as keys.
+     * 
+     * @return A thread-safe map containing the pooled menus.
+     */
     public ConcurrentHashMap<String, Menu> getPooledMenus() {
         return pooledMenus;
     }
 
     
+    /**
+     * Returns the currently registered players and menus.
+     * 
+     * @return The registered players and menus
+     */
     public Map<HumanEntity, Menu> getMenus() {
         return menus;
     }

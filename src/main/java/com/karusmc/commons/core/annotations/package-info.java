@@ -14,30 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.menu;
-
-import org.bukkit.event.inventory.*;
-
 
 /**
- * Processes click and drag events for a {@link Menu} slot binded to it.
+ * Commonly used annotations.
  */
-@FunctionalInterface
-public interface Button {
-    
-    /**
-     * Processes a InventoryClickEvent for a {@link Menu} slot binded to it.
-     * 
-     * @param event A InventoryClickEvent instance
-     */
-    public void onClick(InventoryClickEvent event);
-    
-    /**
-     * Processes a InventoryDragEvent for a {@link Menu} slot binded to it.
-     * Default implementation ignores the event.
-     * 
-     * @param event A InventoryDragEvent instance
-     */
-    public default void onDrag(InventoryDragEvent event) {}
-    
-}
+package com.karusmc.commons.core.annotations;

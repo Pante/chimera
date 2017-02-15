@@ -29,7 +29,7 @@ import org.jdom2.*;
 
 
 /**
- * Parses the item nodes in a XML document.
+ * Parses the item nodes in a XML document and transforms it into a {@link ValueStack}.
  */
 public class ValueStackComponent implements Component<ValueStack> {
 

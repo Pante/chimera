@@ -22,6 +22,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 
+/**
+ * Represents a static menu that can be shared among multiple players.
+ */
 public class SharedMenu implements Menu {
     
     private Inventory inventory;
@@ -29,10 +32,21 @@ public class SharedMenu implements Menu {
     private Map<Integer, Button> buttons;
     
     
+    /**
+     * Constructs this with the specified inventory.
+     * 
+     * @param inventory The backing inventory
+     */
     public SharedMenu(Inventory inventory) {
         this(inventory, e -> {});
     }
     
+    /**
+     * Constructs this with the specified inventory and default button.
+     * 
+     * @param inventory The backing inventory
+     * @param defaultButton The button that handles events if there is no button binded to the specified slot
+     */
     public SharedMenu(Inventory inventory, Button defaultButton) {
         this.inventory = inventory;
         this.defaultButton = defaultButton;
@@ -40,6 +54,11 @@ public class SharedMenu implements Menu {
     }
     
     
+    /**
+     * Delegates event handling to a {@link Button} instance binded to the slot.
+     * 
+     * @param event A InventoryClickEvent instance
+     */
     @Override
     public void onClick(InventoryClickEvent event) {
         event.setCancelled(true);
@@ -47,28 +66,55 @@ public class SharedMenu implements Menu {
     }
     
     
+    /**
+     * Binds a button instance to the specified slot.
+     * 
+     * @param slot The slot to bind the button to
+     * @param button The button to be binded
+     * @return 
+     */
     public SharedMenu bind(int slot, Button button) {
         buttons.put(slot, button);
         return this;
     }
     
 
+    /**
+     * Returns the backing Inventory instance.
+     * Modifications made to the inventory directly affects the SharedMenu.
+     * 
+     * @return the backing Inventory
+     */
     @Override
     public Inventory getInventory() {
         return inventory;
     }
     
     
+    /**
+     * Returns the menu's slots and buttons binded to them.
+     * 
+     * @return the menu's slots and binded buttons.
+     */
     @Override
     public Map<Integer, Button> getButtons() {
         return buttons;
     }
     
     
+    /**
+     * Retu
+     * 
+     * @return 
+     */
     public Button getDefaultButton() {
         return defaultButton;
     }
     
+    /**
+     * 
+     * @param defaultButton 
+     */
     public void setDefaultButton(Button defaultButton) {
         this.defaultButton = defaultButton;
     }

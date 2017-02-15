@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.menu.serialization;
+package com.karusmc.commons.menu.xml;
 
 import com.karusmc.commons.core.xml.*;
 import com.karusmc.commons.items.meta.*;
@@ -28,6 +28,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jdom2.*;
 
 
+/**
+ * Parses the item nodes in a XML document and transforms it into an ItemStack.
+ */
 public class ItemStackComponent implements Component<ItemStack> {
     
     private Map<String, ItemMetaComponent> components;

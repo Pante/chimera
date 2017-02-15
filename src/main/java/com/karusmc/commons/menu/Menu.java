@@ -22,17 +22,42 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 
 
+/**
+ * Represents a GUI menu that provides a graphical view and delegates event handling to the specific {@link Button} instances.
+ */
 public interface Menu {
     
+    /**
+     * Delegates event handling to a {@link Button} instance binded to the slot.
+     * 
+     * @param event A InventoryClickEvent instance
+     */
     public void onClick(InventoryClickEvent event);
     
+    /**
+     * Delegates event handling to a {@link Button} instance binded to the slot.
+     * Default implementation cancels and ignores the event.
+     * 
+     * @param event A InventoryDragEvent instance
+     */
     public default void onDrag(InventoryDragEvent event) {
         event.setCancelled(true);
     }
     
     
+    /**
+     * Returns an Inventory instance.
+     * 
+     * @return The Inventory instance
+     */
     public Inventory getInventory();
     
+    
+    /**
+     * Returns the menu's slots and buttons binded to them.
+     * 
+     * @return the menu's slots and binded buttons.
+     */
     public Map<Integer, Button> getButtons();
     
 }

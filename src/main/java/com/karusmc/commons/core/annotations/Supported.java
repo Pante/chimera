@@ -18,6 +18,11 @@ package com.karusmc.commons.core.annotations;
 
 import java.lang.annotation.*;
 
+
+/**
+ * Signifies that a stub implementation's method is supported.
+ * Used extensively in {@link com.karusmc.commons.core.test} package.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented

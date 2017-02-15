@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.menu.serialization;
+package com.karusmc.commons.menu.xml;
 
 import com.karusmc.commons.core.xml.*;
 
@@ -25,18 +25,34 @@ import org.bukkit.inventory.*;
 import org.jdom2.*;
 
 
+/**
+ * Parsers a XML Document and transforms it into an Inventory instance.
+ */
 public class InventoryParser extends Parser<Inventory> {
 
     private Server server;
     private Component<ItemStack> component;
     
     
+    /**
+     * Constructs this with the specified server, component and schema path.
+     * 
+     * @param server The server instance
+     * @param component The component used to parse item nodes
+     * @param schemaPath The path to the XML schema
+     */
     public InventoryParser(Server server, Component<ItemStack> component, String schemaPath) {
         super(schemaPath);
         this.server = server;
         this.component = component;
     }
     
+    /**
+     * Constructs this with the specified server and component.
+     * 
+     * @param server The server instance
+     * @param component  The component used to parse item nodes
+     */
     public InventoryParser(Server server, Component<ItemStack> component) {
         super(null);
         this.server = server;
@@ -46,7 +62,7 @@ public class InventoryParser extends Parser<Inventory> {
     
     
     @Override
-    public Inventory parse(Element root) {
+    protected Inventory parse(Element root) {
         try {
             String title = root.getAttribute("title").getValue();
             InventoryType type = InventoryType.valueOf(root.getAttribute("type").getValue().toUpperCase());

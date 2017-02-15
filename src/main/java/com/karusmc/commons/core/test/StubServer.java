@@ -47,8 +47,7 @@ import static org.mockito.Mockito.*;
 /**
  * Represents a stub Bukkit server implementation.
  * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * In general, methods that schedule tasks without delay and/or repetition are stubbed and will run the task
- * on the calling thread.
+ * <br>Methods denoted by {@link com.karusmc.commons.core.annotations.Supported} are implemented.
  */
 public class StubServer implements Server {
     
@@ -70,19 +69,33 @@ public class StubServer implements Server {
     }
     
     
-    
+    /**
+     * Gets the name of this server implementation.
+     * 
+     * @return An empty string
+     */
     @Override
     @Supported
     public String getName() {
         return "";
     }
-
+    
+    /**
+     * Gets the version string of this server implementation.
+     * 
+     * @return An empty string
+     */
     @Override
     @Supported
     public String getVersion() {
         return "";
     }
-
+    
+    /**
+     * Gets the Bukkit version that this server is running.
+     * 
+     * @return An empty string
+     */
     @Override
     @Supported
     public String getBukkitVersion() {
@@ -223,7 +236,12 @@ public class StubServer implements Server {
     public PluginManager getPluginManager() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Gets the scheduler for managing scheduled events.
+     * 
+     * @return a {@link com.karusmc.commons.core.test.StubScheduler} instance
+     */
     @Override
     @Supported
     public BukkitScheduler getScheduler() {
@@ -279,7 +297,12 @@ public class StubServer implements Server {
     public void reload() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Returns the primary logger associated with this server instance.
+     * 
+     * @return a mocked logger instance
+     */
     @Override
     @Supported
     public Logger getLogger() {
@@ -510,7 +533,12 @@ public class StubServer implements Server {
     public Warning.WarningState getWarningState() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Gets the instance of the item factory.
+     * 
+     * @return a CraftItemFactory instance
+     */
     @Override
     @Supported
     public ItemFactory getItemFactory() {
