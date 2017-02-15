@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karusmc.commons.menu.serialization;
+package com.karusmc.commons.menu.xml;
 
 import com.karusmc.commons.core.xml.*;
 import com.karusmc.commons.items.meta.*;
