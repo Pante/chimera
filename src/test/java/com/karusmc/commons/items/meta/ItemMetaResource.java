@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalResource {
     
-    private Server server;
+    private StubServer server;
     private EnchantmentResource enchantments;
     
     private ItemMetaComponent<GenericMeta> component;

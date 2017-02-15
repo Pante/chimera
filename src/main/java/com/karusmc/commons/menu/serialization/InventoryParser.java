@@ -40,7 +40,7 @@ public class InventoryParser extends Parser<Inventory> {
     public InventoryParser(Server server, Component<ItemStack> component) {
         super(null);
         this.server = server;
-        schemaPath = getClass().getClassLoader().getResource("items.xsd").getPath();
+        schemaPath = getClass().getClassLoader().getResource("menu/menu.xsd").getPath();
         this.component = component;
     }
     
@@ -49,19 +49,13 @@ public class InventoryParser extends Parser<Inventory> {
     public Inventory parse(Element root) {
         try {
             String title = root.getAttribute("title").getValue();
-            InventoryType type = InventoryType.valueOf(root.getAttribute("type").getValue());
+            InventoryType type = InventoryType.valueOf(root.getAttribute("type").getValue().toUpperCase());
             int size = root.getAttribute("size").getIntValue();
             
             Inventory inventory = createInventory(title, type, size);
             
             for (Element element : root.getChildren("slot")) {
-                int slot = element.getAttribute("number").getIntValue();                
-                if (slot < inventory.getSize()) {
-                    inventory.setItem(slot, component.parse(element.getChild("item")));
-                    
-                } else {
-                    throw new ParserException("Invalid slot: " + slot);
-                }
+                setSlot(element, inventory);
             }
             
             return inventory;
@@ -77,6 +71,16 @@ public class InventoryParser extends Parser<Inventory> {
 
         } else {
             return server.createInventory(null, type, title);
+        }
+    }
+    
+    protected void setSlot(Element element, Inventory inventory) throws DataConversionException {
+        int slot = element.getAttribute("number").getIntValue();
+        if (slot < inventory.getSize()) {
+            inventory.setItem(slot, component.parse(element.getChild("item")));
+
+        } else {
+            throw new ParserException("Invalid slot: " + slot);
         }
     }
     

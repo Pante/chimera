@@ -35,7 +35,7 @@ public class ValueStackComponentTest {
     @Rule
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/banner.xml"), null);
     
-    private Server server;
+    private StubServer server;
     private ValueStackComponent component;
     private ItemMetaComponent meta;
     

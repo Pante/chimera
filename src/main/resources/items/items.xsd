@@ -28,9 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    
-    
-    <xs:element name = "item-meta" type = "itemType"/>
         
     <xs:complexType name = "itemType">
             <xs:sequence>
@@ -57,9 +54,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <xs:attribute name = "display-name" type = "xs:string"/>
     </xs:complexType>
     
-    
-    <xs:element name = "banner-meta" type = "bannerType"/>
-    
     <xs:complexType name = "bannerType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -83,9 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </xs:complexContent>
     </xs:complexType>
     
-    
-    <xs:element name = "book-meta" type = "bookType"/>
-    
     <xs:complexType name = "bookType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -106,9 +97,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </xs:complexContent>
     </xs:complexType>
     
-    
-    <xs:element name = "leather-armour-meta" type = "leatherArmorType"/>
-    
     <xs:complexType name = "leatherArmorType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -118,9 +106,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
-    
-    <xs:element name = "potion-meta" type = "potionType"/>
     
     <xs:complexType name = "potionType">
         <xs:complexContent>
@@ -149,9 +134,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </xs:complexContent>
     </xs:complexType>
     
-    
-    <xs:element name = "storage-meta" type = "storageType"/>
-    
     <xs:complexType name = "storageType">
         <xs:complexContent>
             <xs:extension base = "itemType">
@@ -163,7 +145,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
     
     
     

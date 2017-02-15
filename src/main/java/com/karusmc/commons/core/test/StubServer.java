@@ -44,14 +44,19 @@ import static org.mockito.Mockito.*;
 
 public class StubServer implements Server {
     
-    public static final Server INSTANCE = new StubServer();
+    public static final StubServer INSTANCE;
+    
+    static {
+        INSTANCE = new StubServer();
+        Bukkit.setServer(INSTANCE);
+    }
     
     
     private BukkitScheduler scheduler;
     private Logger logger;
     
     
-    public StubServer() {
+    private StubServer() {
         scheduler = new StubScheduler();
         logger = mock(Logger.class);
     }

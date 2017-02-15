@@ -20,114 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified">
     
-    <xs:complexType name = "enchantmentsType">
-        <xs:sequence>
-            <xs:element name = "enchantment" minOccurs = "1" maxOccurs = "unbounded">
-                <xs:complexType>
-                    <xs:attribute name = "type" type = "xs:string" use = "required"/>
-                    <xs:attribute name = "level" type = "xs:positiveInteger" default = "1"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
-    <xs:element name = "item-meta" type = "itemType"/>
-        
-    <xs:complexType name = "itemType">
-            <xs:sequence>
-                
-                <xs:element name = "enchantments" type = "enchantmentsType" minOccurs = "0" maxOccurs = "1"/>
-                
-                <xs:element name = "description" minOccurs = "0" maxOccurs = "1">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name = "line" type = "xs:string" minOccurs = "1" maxOccurs = "unbounded"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-                <xs:element name = "flags" minOccurs = "0" maxOccurs = "1">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name = "flag" type = "xs:string" minOccurs = "1" maxOccurs = "unbounded"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
-                
-            </xs:sequence>
-            <xs:attribute name = "display-name" type = "xs:string"/>
-    </xs:complexType>
-    
-    
-    <xs:element name = "banner-meta" type = "bannerType"/>
-    
-    <xs:complexType name = "bannerType">
-        <xs:complexContent>
-            <xs:extension base = "itemType">
-                <xs:sequence>
-                    
-                    <xs:element name = "patterns" minOccurs = "0" maxOccurs = "1">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name = "pattern">
-                                    <xs:complexType>
-                                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
-                                        <xs:attribute name = "color" type = "xs:string" use = "required"/>
-                                    </xs:complexType>
-                                </xs:element>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-        
-    
-    <xs:element name = "leather-armour-meta" type = "leatherArmorType"/>
-    
-    <xs:complexType name = "leatherArmorType">
-        <xs:complexContent>
-            <xs:extension base = "itemType">
-                <xs:attribute name = "r" type = "xs:nonNegativeInteger" default = "0"/>
-                <xs:attribute name = "g" type = "xs:nonNegativeInteger" default = "0"/>
-                <xs:attribute name = "b" type = "xs:nonNegativeInteger" default = "0"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    
-    <xs:element name = "potion-meta" type = "potionType"/>
-    
-    <xs:complexType name = "potionType">
-        <xs:complexContent>
-            <xs:extension base = "itemType">
-                <xs:sequence>
-                    
-                    <xs:element name = "effects" minOccurs = "0" maxOccurs = "1">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name = "effect">
-                                    <xs:complexType>
-                                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
-                                        <xs:attribute name = "duration" type = "xs:nonNegativeInteger" use = "required"/>
-                                        <xs:attribute name = "level" type = "xs:positiveInteger" use = "required"/>
-                                        <xs:attribute name = "ambient" type = "xs:boolean" default = "false"/>
-                                        <xs:attribute name = "particles" type = "xs:boolean" default = "true"/>
-                                    </xs:complexType>
-                                </xs:element>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    
-                </xs:sequence>
-                <xs:attribute name = "color" type = "xs:string" default = "ORANGE"/>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    
     <xs:element name = "menu">
         <xs:complexType>
             <xs:sequence>
@@ -164,5 +56,102 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             
         </xs:complexType>
     </xs:element>
+    
+    <xs:complexType name = "enchantmentsType">
+        <xs:sequence>
+            <xs:element name = "enchantment" minOccurs = "1" maxOccurs = "unbounded">
+                <xs:complexType>
+                    <xs:attribute name = "type" type = "xs:string" use = "required"/>
+                    <xs:attribute name = "level" type = "xs:positiveInteger" default = "1"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+        
+    <xs:complexType name = "itemType">
+            <xs:sequence>
+                
+                <xs:element name = "enchantments" type = "enchantmentsType" minOccurs = "0" maxOccurs = "1"/>
+                
+                <xs:element name = "description" minOccurs = "0" maxOccurs = "1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name = "line" type = "xs:string" minOccurs = "1" maxOccurs = "unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name = "flags" minOccurs = "0" maxOccurs = "1">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name = "flag" type = "xs:string" minOccurs = "1" maxOccurs = "unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+            </xs:sequence>
+            <xs:attribute name = "display-name" type = "xs:string"/>
+    </xs:complexType>
+    
+    <xs:complexType name = "bannerType">
+        <xs:complexContent>
+            <xs:extension base = "itemType">
+                <xs:sequence>
+                    
+                    <xs:element name = "patterns" minOccurs = "0" maxOccurs = "1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name = "pattern">
+                                    <xs:complexType>
+                                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
+                                        <xs:attribute name = "color" type = "xs:string" use = "required"/>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name = "leatherArmorType">
+        <xs:complexContent>
+            <xs:extension base = "itemType">
+                <xs:attribute name = "r" type = "xs:nonNegativeInteger" default = "0"/>
+                <xs:attribute name = "g" type = "xs:nonNegativeInteger" default = "0"/>
+                <xs:attribute name = "b" type = "xs:nonNegativeInteger" default = "0"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    
+    <xs:complexType name = "potionType">
+        <xs:complexContent>
+            <xs:extension base = "itemType">
+                <xs:sequence>
+                    
+                    <xs:element name = "effects" minOccurs = "0" maxOccurs = "1">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name = "effect">
+                                    <xs:complexType>
+                                        <xs:attribute name = "type" type = "xs:string" use = "required"/>
+                                        <xs:attribute name = "duration" type = "xs:nonNegativeInteger" use = "required"/>
+                                        <xs:attribute name = "level" type = "xs:positiveInteger" use = "required"/>
+                                        <xs:attribute name = "ambient" type = "xs:boolean" default = "false"/>
+                                        <xs:attribute name = "particles" type = "xs:boolean" default = "true"/>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    
+                </xs:sequence>
+                <xs:attribute name = "color" type = "xs:string" default = "ORANGE"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 
 </xs:schema>
