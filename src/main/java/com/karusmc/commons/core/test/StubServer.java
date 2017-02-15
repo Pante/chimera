@@ -42,6 +42,12 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * Represents a stub Bukkit server implementation.
+ * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
+ * In general, methods that schedule tasks without delay and/or repetition are stubbed and will run the task
+ * on the calling thread.
+ */
 public class StubServer implements Server {
     
     public static final StubServer INSTANCE;
