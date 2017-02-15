@@ -3,7 +3,10 @@ com.karusmc.commons.commands.events
 com.karusmc.commons.commands.reference
 com.karusmc.commons.commands.xml
 com.karusmc.commons.concurrency
+com.karusmc.commons.core.annotations
 com.karusmc.commons.core.test
 com.karusmc.commons.core.xml
 com.karusmc.commons.items
 com.karusmc.commons.items.meta
+com.karusmc.commons.menu
+com.karusmc.commons.menu.xml
