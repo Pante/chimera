@@ -72,16 +72,19 @@ public class StubServer implements Server {
     
     
     @Override
+    @Supported
     public String getName() {
         return "";
     }
 
     @Override
+    @Supported
     public String getVersion() {
         return "";
     }
 
     @Override
+    @Supported
     public String getBukkitVersion() {
         return "";
     }
@@ -278,6 +281,7 @@ public class StubServer implements Server {
     }
 
     @Override
+    @Supported
     public Logger getLogger() {
         return logger;
     }
@@ -508,6 +512,7 @@ public class StubServer implements Server {
     }
 
     @Override
+    @Supported
     public ItemFactory getItemFactory() {
         return CraftItemFactory.instance();
     }

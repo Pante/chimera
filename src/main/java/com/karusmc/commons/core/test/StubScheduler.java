@@ -92,9 +92,11 @@ public class StubScheduler implements BukkitScheduler {
     }
 
     @Override
+    @Supported
     public void cancelTask(int taskId) {}
 
     @Override
+    @Supported
     public void cancelTasks(Plugin plugin) {}
 
     @Override
@@ -123,24 +125,28 @@ public class StubScheduler implements BukkitScheduler {
     }
 
     @Override
+    @Supported
     public BukkitTask runTask(Plugin plugin, Runnable task) throws IllegalArgumentException {
         task.run();
         return null;
     }
 
     @Override
+    @Supported
     public BukkitTask runTask(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {
         task.run();
         return null;
     }
 
     @Override
+    @Supported
     public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable task) throws IllegalArgumentException {
         task.run();
         return null;
     }
 
     @Override
+    @Supported
     public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {
         task.run();
         return null;
