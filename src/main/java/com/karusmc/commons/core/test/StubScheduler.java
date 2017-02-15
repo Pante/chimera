@@ -18,6 +18,8 @@ package com.karusmc.commons.core.test;
 
 import com.karusmc.commons.concurrency.UncheckedExecutionException;
 
+import com.karusmc.commons.core.annotations.Supported;
+
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -27,7 +29,7 @@ import org.bukkit.scheduler.*;
 /**
  * Represents a stub BukkitScheduler implementation.
  * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * In general, methods that schedule tasks without delay and/or repetition are stubbed and will run the task
+ * <br>Methods denoted by {@link com.karusmc.commons.core.annotations.Supported} are implemented and will run the task
  * on the calling thread.
  */
 public class StubScheduler implements BukkitScheduler {
@@ -78,6 +80,7 @@ public class StubScheduler implements BukkitScheduler {
     }
 
     @Override
+    @Supported
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task) {
         try {
             task.call();

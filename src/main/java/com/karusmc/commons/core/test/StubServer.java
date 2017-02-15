@@ -18,6 +18,8 @@ package com.karusmc.commons.core.test;
 
 import com.avaje.ebean.config.ServerConfig;
 
+import com.karusmc.commons.core.annotations.Supported;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
@@ -220,6 +222,7 @@ public class StubServer implements Server {
     }
 
     @Override
+    @Supported
     public BukkitScheduler getScheduler() {
         return scheduler;
     }
