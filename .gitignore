@@ -50,3 +50,6 @@ Temporary Items
 /Core/target/
 /Items/target/
 /Core/target/
+*.java
+src/main/java/com/karuslabs/commons/commands/Command.java
+*.java
