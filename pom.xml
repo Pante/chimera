@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     
     <name>Karus-Commons</name>
-    <groupId>com.karusmc</groupId>
+    <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
     <version>1.0.2</version>
     <packaging>jar</packaging>
