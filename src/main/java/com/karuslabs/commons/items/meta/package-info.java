@@ -17,6 +17,6 @@
 
 
 /**
- * Classes that provide a foundation for XML deserialization.
+ * Classes used to deserialize item-meta types from XML documents
  */
-package com.karusmc.commons.core.xml;
+package com.karuslabs.commons.items.meta;

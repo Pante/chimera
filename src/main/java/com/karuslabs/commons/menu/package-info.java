@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Essential classes that commands are built upon.
+ * Classes used to build a GUI menu.
  */
-package com.karusmc.commons.commands;
+package com.karuslabs.commons.menu;

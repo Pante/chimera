@@ -18,4 +18,4 @@
 /**
  * Classes used to deserialize GUI menus from XML.
  */
-package com.karusmc.commons.menu.xml;
+package com.karuslabs.commons.menu.xml;

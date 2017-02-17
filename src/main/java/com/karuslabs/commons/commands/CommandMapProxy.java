@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package com.karuslabs.commons.commands;
 
@@ -32,8 +32,8 @@ import org.bukkit.plugin.PluginManager;
  * Acts as a proxy for the server's internal CommandMap implementation.
  * 
  * This class does not replace the server's internal CommandMap implementation.
- * Allows plug-ins to listen for {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} registered via this class.
- * {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} will be called only when commands are registered through
+ * Allows plug-ins to listen for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} registered via this class.
+ * {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} will be called only when commands are registered through
  * this class and not if directly through the underlying CommandMap implementation.
  */
 public class CommandMapProxy {
@@ -62,7 +62,7 @@ public class CommandMapProxy {
     
     
     /**
-     * Registers all commands and notifies all {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} listeners.
+     * Registers all commands and notifies all {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} listeners.
      * 
      * @param commands The commands to be registered
      */
@@ -72,7 +72,7 @@ public class CommandMapProxy {
     
     
     /**
-     * Registers a command and notifies all {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} listeners.
+     * Registers a command and notifies all {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} listeners.
      * 
      * @param fallbackPrefix A prefix which is prepended to the command with a ':' one or more times to make the command unique
      * @param command The command to be registered

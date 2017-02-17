@@ -15,7 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * Classes used to deserialize items from XML documents.
+ * Classes provide implementations of commonly used commands.
  */
-package com.karusmc.commons.items;
+package com.karuslabs.commons.commands.reference;

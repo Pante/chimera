@@ -71,7 +71,7 @@ public class SharedMenu implements Menu {
      * 
      * @param slot The slot to bind the button to
      * @param button The button to be binded
-     * @return 
+     * @return this
      */
     public SharedMenu bind(int slot, Button button) {
         buttons.put(slot, button);
@@ -103,15 +103,16 @@ public class SharedMenu implements Menu {
     
     
     /**
-     * Retu
+     * Returns the default behavior for when no button has been binded to a slot.
      * 
-     * @return 
+     * @return the default button
      */
     public Button getDefaultButton() {
         return defaultButton;
     }
     
     /**
+     * Sets the default behavior for slots for which no buttons have been binded.
      * 
      * @param defaultButton 
      */

@@ -23,7 +23,7 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * Represents a {@link com.karusmc.commons.commands.Command} belonging to a plug-in
+ * Represents a {@link com.karuslabs.commons.commands.Command} belonging to a plug-in
  */
 public abstract class PluginCommand extends Command implements PluginIdentifiableCommand {
     

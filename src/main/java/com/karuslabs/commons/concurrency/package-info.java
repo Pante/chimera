@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Classes that provide stub implementations of Bukkit classes for testing purposes.
+ * Utility classes commonly useful in concurrent programming.
  */
-package com.karusmc.commons.core.test;
+package com.karuslabs.commons.concurrency;

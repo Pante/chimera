@@ -22,7 +22,7 @@ import org.bukkit.event.*;
 
 
 /**
- * Called when a command is registered to a {@link com.karusmc.commons.commands.CommandMapProxy}
+ * Called when a command is registered to a {@link com.karuslabs.commons.commands.CommandMapProxy}
  */
 public class CommandRegistrationEvent extends Event implements Cancellable {
 

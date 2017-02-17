@@ -35,7 +35,7 @@ import static com.karuslabs.commons.commands.Utility.*;
 
 /**
  * Represents a command which retrieves and displays the owning plug-in's commands and their usages.
- * Listens for {@link com.karusmc.commons.commands.events.CommandRegistrationEvent} and automatically
+ * Listens for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} and automatically
  * updates itself. Command hierarchy is flatten when stored to optimize look-up performance.
  */
 public class HelpCommand extends PluginCommand implements Listener {
@@ -111,7 +111,7 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     /**
-     * Called when a command is registered to a {@link com.karusmc.commons.commands.CommandMapProxy}.
+     * Called when a command is registered to a {@link com.karuslabs.commons.commands.CommandMapProxy}.
      * 
      * @param event The event called
      */

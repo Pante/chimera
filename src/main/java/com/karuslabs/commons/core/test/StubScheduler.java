@@ -29,7 +29,7 @@ import org.bukkit.scheduler.*;
 /**
  * Represents a stub BukkitScheduler implementation.
  * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * <br>Methods denoted by {@link com.karusmc.commons.core.annotations.Supported} are implemented and will run the task
+ * <br>Methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented and will run the task
  * on the calling thread.
  */
 public class StubScheduler implements BukkitScheduler {

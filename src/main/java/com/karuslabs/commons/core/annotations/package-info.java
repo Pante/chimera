@@ -18,4 +18,4 @@
 /**
  * Commonly used annotations.
  */
-package com.karusmc.commons.core.annotations;
+package com.karuslabs.commons.core.annotations;

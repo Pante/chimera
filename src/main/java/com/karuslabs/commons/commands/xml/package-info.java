@@ -17,6 +17,6 @@
 
 
 /**
- * Classes provide implementations of commonly used commands.
+ * Classes used to deserialize commands from XML documents.
  */
-package com.karusmc.commons.commands.reference;
+package com.karuslabs.commons.commands.xml;

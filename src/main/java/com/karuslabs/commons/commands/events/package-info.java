@@ -17,6 +17,6 @@
 
 
 /**
- * Classes used to deserialize commands from XML documents.
+ * Events related to {@link com.karusmc.commons.commands.Command}
  */
-package com.karusmc.commons.commands.xml;
+package com.karuslabs.commons.commands.events;

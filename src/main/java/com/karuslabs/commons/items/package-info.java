@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /**
- * Events related to {@link com.karusmc.commons.commands.Command}
+ * Classes used to deserialize items from XML documents.
  */
-package com.karusmc.commons.commands.events;
+package com.karuslabs.commons.items;

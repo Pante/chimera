@@ -47,7 +47,7 @@ import static org.mockito.Mockito.*;
 /**
  * Represents a stub Bukkit server implementation.
  * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * <br>Methods denoted by {@link com.karusmc.commons.core.annotations.Supported} are implemented.
+ * <br>Methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented.
  */
 public class StubServer implements Server {
     
@@ -240,7 +240,7 @@ public class StubServer implements Server {
     /**
      * Gets the scheduler for managing scheduled events.
      * 
-     * @return a {@link com.karusmc.commons.core.test.StubScheduler} instance
+     * @return a {@link com.karuslabs.commons.core.test.StubScheduler} instance
      */
     @Override
     @Supported
