@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.menu;
 
-import com.karuslabs.commons.menu.Menu;
-import com.karuslabs.commons.menu.MenuPool;
 import junitparams.*;
 
 import org.bukkit.entity.HumanEntity;

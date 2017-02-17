@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.menu;
 
-import com.karuslabs.commons.menu.Button;
-import com.karuslabs.commons.menu.SharedMenu;
 import junitparams.*;
 
 import org.bukkit.event.inventory.InventoryClickEvent;

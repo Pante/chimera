@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.menu.xml;
 
-import com.karuslabs.commons.menu.xml.InventoryParser;
-import com.karuslabs.commons.menu.xml.ItemStackComponent;
 import com.karuslabs.commons.core.test.XMLResource;
 import com.karuslabs.commons.core.xml.ParserException;
 

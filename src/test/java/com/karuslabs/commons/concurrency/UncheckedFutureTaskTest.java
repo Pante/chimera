@@ -16,9 +16,6 @@
  */
 package com.karuslabs.commons.concurrency;
 
-import com.karuslabs.commons.concurrency.UncheckedInterruptedException;
-import com.karuslabs.commons.concurrency.UncheckedExecutionException;
-import com.karuslabs.commons.concurrency.UncheckedFutureTask;
 import java.util.concurrent.ExecutionException;
 
 import junitparams.*;
