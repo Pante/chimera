@@ -17,16 +17,24 @@
 package com.karuslabs.commons.concurrency;
 
 import java.util.concurrent.*;
+import java.util.function.*;
 
 
-public class UncheckedFutureTask<T> extends FutureTask<T> {
+public class OptionalFuture<T> extends FutureTask<T> {
     
-    public UncheckedFutureTask(Callable<T> callable) {
+    public OptionalFuture(Callable<T> callable) {
         super(callable);
     }
     
-    public UncheckedFutureTask(Runnable runnable, T result) {
+    public OptionalFuture(Runnable runnable, T result) {
         super(runnable, result);
+    }
+    
+    
+    public void ifDone(Consumer<T> consumer) {
+        if (isDone()) {
+            consumer.accept(getUnchecked());
+        }
     }
     
     
@@ -49,6 +57,16 @@ public class UncheckedFutureTask<T> extends FutureTask<T> {
         } else {
             return defaultValue;
         }
-    } 
+    }
+    
+    
+    public <E extends RuntimeException> T getOrThrow(Supplier<? extends E> supplier) {
+        if (isDone()) {
+            return getUnchecked();
+            
+        } else {
+            throw supplier.get();
+        }
+    }
     
 }
