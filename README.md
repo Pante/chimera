@@ -15,7 +15,7 @@ _Java 8 artifact:_
       <dependency>
           <groupId>com.karusmc</groupId>
           <artifactId>commons</artifactId>
-          <version>1.0.1</version>
+          <version>1.0.2</version>
       </dependency>
   </dependencies>
 ```
