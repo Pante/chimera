@@ -17,21 +17,22 @@
 package com.karuslabs.commons.concurrency;
 
 import java.util.concurrent.*;
+import java.util.function.*;
 
 
 /**
- * Represents a FutureTask with convenience methods to retrieve the result.
+ * Represents a Optional FutureTask.
  * 
  * @param <T> The computation result type
  */
-public class UncheckedFutureTask<T> extends FutureTask<T> {
+public class OptionalFuture<T> extends FutureTask<T> {
     
     /**
      * Constructs this that will, upon running, execute the given Callable.
      * 
      * @param callable the callable task
      */
-    public UncheckedFutureTask(Callable<T> callable) {
+    public OptionalFuture(Callable<T> callable) {
         super(callable);
     }
     
@@ -41,8 +42,20 @@ public class UncheckedFutureTask<T> extends FutureTask<T> {
      * @param runnable the runnable task
      * @param result the result to return on successful completion.
      */
-    public UncheckedFutureTask(Runnable runnable, T result) {
+    public OptionalFuture(Runnable runnable, T result) {
         super(runnable, result);
+    }
+    
+    
+    /**
+     * If the computation is completed, invoke the specified consumer with the value, otherwise do nothing.
+     * 
+     * @param consumer block to be executed if the computation has completed
+     */
+    public void ifDone(Consumer<T> consumer) {
+        if (isDone()) {
+            consumer.accept(getUnchecked());
+        }
     }
     
     
@@ -77,6 +90,23 @@ public class UncheckedFutureTask<T> extends FutureTask<T> {
         } else {
             return defaultValue;
         }
-    } 
+    }
+    
+    
+    /**
+     * Return the computation, if completed, otherwise throw an unchecked exception to be created by the provided supplier.
+     * 
+     * @param <E> Type of the unchecked exception to be thrown
+     * @param supplier The supplier which will return the unchecked exception to be thrown
+     * @return the completed computation
+     */
+    public <E extends RuntimeException> T getOrThrow(Supplier<? extends E> supplier) {
+        if (isDone()) {
+            return getUnchecked();
+            
+        } else {
+            throw supplier.get();
+        }
+    }
     
 }

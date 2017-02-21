@@ -29,20 +29,20 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class UncheckedFutureTaskTest {
+public class OptionFuture {
     
     @Rule
     public ExpectedException exception;
     
-    private UncheckedFutureTask<Object> task;
+    private OptionalFuture<Object> task;
     private Object object;
     
     
-    public UncheckedFutureTaskTest() {
+    public OptionFuture() {
         exception = ExpectedException.none();
         
         object = new Object();
-        task = spy(new UncheckedFutureTask<>(() -> object));
+        task = spy(new OptionalFuture<>(() -> object));
     }
     
     
