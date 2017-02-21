@@ -51,6 +51,16 @@ public class OptionalFuture<T> extends FutureTask<T> {
     }
     
     
+    public T getIfDone() {
+        if (isDone()) {
+            return getUnchecked();
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
     public T getOrDefault(T defaultValue) {
         if (isDone()) {
             return getUnchecked();

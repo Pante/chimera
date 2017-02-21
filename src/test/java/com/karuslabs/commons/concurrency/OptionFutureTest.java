@@ -17,6 +17,7 @@
 package com.karuslabs.commons.concurrency;
 
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import junitparams.*;
 
@@ -29,20 +30,32 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class OptionFuture {
+public class OptionFutureTest {
+    
+    private static Object object = new Object();;
     
     @Rule
     public ExpectedException exception;
     
     private OptionalFuture<Object> task;
-    private Object object;
     
     
-    public OptionFuture() {
+    public OptionFutureTest() {
         exception = ExpectedException.none();
-        
-        object = new Object();
         task = spy(new OptionalFuture<>(() -> object));
+    }
+    
+    
+    @Test
+    @Parameters({"true, 1", "false, 0"})
+    public void ifDone(boolean done, int times) {
+        doReturn(done).when(task).isDone();
+        doReturn(object).when(task).getUnchecked();
+        Consumer consumer = mock(Consumer.class);
+        
+        task.ifDone(consumer);
+        
+        verify(consumer, times(times)).accept(object);
     }
     
     
@@ -56,11 +69,29 @@ public class OptionFuture {
         task.getUnchecked();
     }
     
-    
     protected Object[] parametersForGetUnchecked() {
         return new Object[] {
             new Object[] {new InterruptedException(), new UncheckedInterruptedException()},
             new Object[] {new ExecutionException(null), new UncheckedExecutionException()}
+        };
+    }
+    
+    
+    @Test
+    @Parameters
+    public void getIfDone(boolean done, Object object, Object expected) {
+        doReturn(done).when(task).isDone();
+        doReturn(object).when(task).getUnchecked();
+        
+        Object returned = task.getIfDone();
+        
+        assertEquals(expected, returned);
+    }
+    
+    protected Object[] parametersForGetIfDone() {
+        return new Object[] {
+            new Object[] {true, object, object},
+            new Object[] {false, object, null}
         };
     }
     
@@ -75,7 +106,6 @@ public class OptionFuture {
         
         assertEquals(expected, returned);
     }
-    
     
     protected Object[] parametersForGetOrDefault() {
         return new Object[] {
