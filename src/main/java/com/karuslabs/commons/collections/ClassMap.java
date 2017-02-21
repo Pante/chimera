@@ -19,28 +19,64 @@ package com.karuslabs.commons.collections;
 import java.util.*;
 
 
+/**
+ * Represents a map with the class of a value as the key and is an implementation of Josh Bloch's 
+ * type-safe heterogeneous container.
+ * 
+ * Delegates most {@link java.util.Map} methods to an internal map.
+ * 
+ * @param <T> The lower bound
+ */
 public class ClassMap<T> implements Map<Class<? extends T>, T> {
     
     private Map<Class<? extends T>, T> map;
     
     
+    /**
+     * Constructs this with a {@link java.util.HashMap} as the internal map.
+     */
     public ClassMap() {
         this(new HashMap<>());
     }
     
+    /**
+     * Constructs this with a {@link java.util.HashMap} as the internal map and the specified default capacity.
+     * 
+     * @param capacity The default capacity
+     */
     public ClassMap(int capacity) {
         this(new HashMap<>(capacity));
     }
     
+    /**
+     * Constructs this with the specified map as the internal map.
+     * 
+     * @param map The specified internal map
+     */
     public ClassMap(Map<Class<? extends T>, T> map) {
         this.map = map;
     }
     
     
+    /**
+     * Returns the casted value to which the specified key is mapped, or null if this map contains no mapping for the key.
+     * 
+     * @param <U> A type that extends the lower bound specified for this
+     * @param type The object the key the value is mapped to and will be casted to
+     * @return The casted value to which the specified key is mapped, or null if this map contains no mapping for the key
+     */
     public <U extends T> U getCasted(Class<U> type) {
         return type.cast(map.get(type));
     }
     
+    /**
+     * Returns the casted value to which the specified key is mapped, or value if this map contains no mapping for the key.
+     * 
+     * @param <U> A type that extends the lower bound specified for this
+     * @param type The object the key the value is mapped to and will be casted to
+     * @param value the default mapping of the key
+     * @return The casted value to which the specified key is mapped, or value if this map contains no mapping for the key
+     */
     public <U extends T> U getCastedOrDefault(Class<U> type, U value) {
         T uncasted = map.get(type);
         if (uncasted != null) {
@@ -51,7 +87,7 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
         }
     }
     
-
+    
     @Override
     public int size() {
         return map.size();

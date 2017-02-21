@@ -46,10 +46,3 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
-/Commands/target/
-/Core/target/
-/Items/target/
-/Core/target/
-*.java
-src/main/java/com/karuslabs/commons/commands/Command.java
-*.java
