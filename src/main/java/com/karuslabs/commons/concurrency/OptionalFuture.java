@@ -48,7 +48,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * If the computation is completed, invoke the specified consumer with the value, otherwise do nothing.
+     * Invoke the specified consumer with the value if the computation is completed, otherwise do nothing.
      * 
      * @param consumer block to be executed if the computation has completed
      */
@@ -77,6 +77,21 @@ public class OptionalFuture<T> extends FutureTask<T> {
         }
     }
     
+    
+    /**
+     * Returns the computation result, or null if the computation has not completed yet.
+     * 
+     * @return the computation result, if completed; else null
+     */
+    public T getIfDone() {
+        if (isDone()) {
+            return getUnchecked();
+            
+        } else {
+            return null;
+        }
+    }
+
     
     /**
      * Returns the computation result, or the given default value if the computation has not completed yet.
