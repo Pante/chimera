@@ -22,22 +22,30 @@ import org.bukkit.event.inventory.*;
 /**
  * Processes click and drag events for a {@link Menu} slot binded to it.
  */
-@FunctionalInterface
 public interface Button {
+    
+    /**
+     * Button which cancels the event when called.
+     */
+    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    
     
     /**
      * Processes a InventoryClickEvent for a {@link Menu} slot binded to it.
      * 
-     * @param event A InventoryClickEvent instance
+     * @param event An InventoryClickEvent instance
      */
-    public void onClick(InventoryClickEvent event);
+    public void onClick(Menu menu, InventoryClickEvent event);
+    
     
     /**
      * Processes a InventoryDragEvent for a {@link Menu} slot binded to it.
      * Default implementation ignores the event.
      * 
-     * @param event A InventoryDragEvent instance
+     * @param event An InventoryDragEvent instance
      */
-    public default void onDrag(InventoryDragEvent event) {}
+    public default void onDrag(Menu menu, InventoryDragEvent event) {
+        event.setCancelled(true);
+    }
     
 }

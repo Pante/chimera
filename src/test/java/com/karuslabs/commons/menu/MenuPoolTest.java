@@ -44,14 +44,14 @@ public class MenuPoolTest {
     
     @Before
     public void setup() {
-        pool.getMenus().clear();
+        pool.getActive().clear();
     }
     
     
     @Test
     @Parameters
     public void onClick(HumanEntity entity, int times) {
-        pool.getMenus().put(entity, menu);
+        pool.getActive().put(entity, menu);
         
         InventoryClickEvent event = mock(InventoryClickEvent.class);
         when(event.getWhoClicked()).thenReturn(humanEntity);
@@ -71,7 +71,7 @@ public class MenuPoolTest {
     @Test
     @Parameters
     public void onDrag(HumanEntity entity, int times) {
-        pool.getMenus().put(entity, menu);
+        pool.getActive().put(entity, menu);
         
         InventoryDragEvent event = mock(InventoryDragEvent.class);
         when(event.getWhoClicked()).thenReturn(humanEntity);

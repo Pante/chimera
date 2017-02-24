@@ -30,7 +30,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     /**
      * Constructs this that will, upon running, execute the given Callable.
      * 
-     * @param callable the callable task
+     * @param callable The callable task
      */
     public OptionalFuture(Callable<T> callable) {
         super(callable);
@@ -39,8 +39,8 @@ public class OptionalFuture<T> extends FutureTask<T> {
     /**
      * Constructs this that will, upon running, execute the given Runnable, and arrange that get will return the given result on successful completion.
      * 
-     * @param runnable the runnable task
-     * @param result the result to return on successful completion.
+     * @param runnable The runnable task
+     * @param result The result to return on successful completion.
      */
     public OptionalFuture(Runnable runnable, T result) {
         super(runnable, result);
@@ -50,7 +50,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     /**
      * Invoke the specified consumer with the value if the computation is completed, otherwise do nothing.
      * 
-     * @param consumer block to be executed if the computation has completed
+     * @param consumer Bblock to be executed if the computation has completed
      */
     public void ifDone(Consumer<T> consumer) {
         if (isDone()) {
@@ -63,7 +63,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
      * Waits if necessary for the computation to complete, and then retrieves its result.
      * Wraps any thrown {@link java.util.concurrent.ExecutionException}s and {@link java.lang.InterruptedException}s in {@link UncheckedExecutionException}s and {@link UncheckedInterruptedException}s.
      * 
-     * @return the computed result
+     * @return The computed result
      */
     public T getUnchecked() {
         try {
@@ -81,7 +81,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     /**
      * Returns the computation result, or null if the computation has not completed yet.
      * 
-     * @return the computation result, if completed; else null
+     * @return The computation result, if completed; else null
      */
     public T getIfDone() {
         if (isDone()) {
@@ -96,8 +96,8 @@ public class OptionalFuture<T> extends FutureTask<T> {
     /**
      * Returns the computation result, or the given default value if the computation has not completed yet.
      * 
-     * @param defaultValue the value to return if the computation has yet to be completed
-     * @return the computation result, if completed; else the default value
+     * @param defaultValue The value to return if the computation has yet to be completed
+     * @return The computation result, if completed; else the default value
      */
     public T getOrDefault(T defaultValue) {
         if (isDone()) {
@@ -113,7 +113,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
      * 
      * @param <E> Type of the unchecked exception to be thrown
      * @param supplier The supplier which will return the unchecked exception to be thrown
-     * @return the completed computation
+     * @return The completed computation
      */
     public <E extends RuntimeException> T getOrThrow(Supplier<? extends E> supplier) {
         if (isDone()) {

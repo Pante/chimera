@@ -17,47 +17,142 @@
 package com.karuslabs.commons.menu;
 
 import java.util.*;
+import java.util.function.Consumer;
 
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.*;
 
 
 /**
- * Represents a GUI menu that provides a graphical view and delegates event handling to the specific {@link Button} instances.
+ * Represents a graphical item menu.
+ * 
+ * @param <GenericInventory> A inventory type
  */
-public interface Menu {
+public class Menu<GenericInventory extends Inventory> implements InventoryHolder {
     
     /**
-     * Delegates event handling to a {@link Button} instance binded to the slot.
-     * 
-     * @param event A InventoryClickEvent instance
+     * Consumer which unbinds the menu from the player in {@link MenuPool} when the menu is closed.
      */
-    public void onClick(InventoryClickEvent event);
+    public static final Consumer<HumanEntity> REMOVE = player -> MenuPool.INSTANCE.getActive().remove(player);
+    
+    
+    private GenericInventory inventory;
+    private Map<Integer, Button> buttons;
+    
+    private Button defaultButton;
+    private Consumer<HumanEntity> closure;
+    
     
     /**
-     * Delegates event handling to a {@link Button} instance binded to the slot.
-     * Default implementation cancels and ignores the event.
+     * Constructs this with the specified inventory, {@link #REMOVE} and {{@link Button#CANCEL}.
      * 
-     * @param event A InventoryDragEvent instance
+     * @param inventory An inventory
      */
-    public default void onDrag(InventoryDragEvent event) {
-        event.setCancelled(true);
+    public Menu(GenericInventory inventory) {
+        this(inventory, Button.CANCEL, REMOVE);
+    }
+    
+    /**
+     * Constructs this with the specified inventory, default button and consumer.
+     * 
+     * @param inventory An inventory
+     * @param defaultButton A button
+     * @param closure The consumer which is called when {@link #onClose(org.bukkit.event.inventory.InventoryCloseEvent)} is called.
+     */
+    public Menu(GenericInventory inventory, Button defaultButton, Consumer<HumanEntity> closure) {
+        this.inventory = inventory;
+        buttons = new HashMap<>(inventory.getSize());
+        
+        this.defaultButton = defaultButton;
+        this.closure = closure;
     }
     
     
     /**
-     * Returns an Inventory instance.
+     * Delegates event handling to the binded button or the default if no button is binded to the slot.
      * 
-     * @return The Inventory instance
+     * @param event An InventoryClickEvent
      */
-    public Inventory getInventory();
+    public void onClick(InventoryClickEvent event) {
+        buttons.getOrDefault(event.getRawSlot(), defaultButton).onClick(this, event);
+    }
+    
+    /**
+     * Delegates event handling to the binded button or the default if no button is binded to the slot.
+     * 
+     * @param event An InventoryDragEvent
+     */
+    public void onDrag(InventoryDragEvent event) {
+        event.getRawSlots().forEach(slot -> buttons.getOrDefault(slot, defaultButton).onDrag(this, event));
+    }
+    
+    /**
+     * Delegates event handling to the binded button or the default if no button is binded to the slot.
+     * 
+     * @param event An InventoryClosEvent
+     */
+    public void onClose(InventoryCloseEvent event) {
+        closure.accept(event.getPlayer());
+    }
     
     
     /**
-     * Returns the menu's slots and buttons binded to them.
+     * Binds the item(s) to the specified slots.
      * 
-     * @return the menu's slots and binded buttons.
+     * @param item The item(s) to bind
+     * @param slots The slots to bind the specified item(s) to
+     * @return this
      */
-    public Map<Integer, Button> getButtons();
+    public Menu bind(ItemStack item, int... slots) {
+        for (int slot : slots) {
+            inventory.setItem(slot, item);
+        }
+        
+        return this;
+    }
+    
+    /**
+     * Binds the button(s) to the specified slots.
+     * 
+     * @param button The button(s) to bind
+     * @param slots The slots to bind the specified button(s) to
+     * @return this
+     */
+    public Menu bind(Button button, int... slots) {
+        for (int slot : slots) {
+            buttons.put(slot, button);
+        }
+        
+        return this;
+    }
+     
+        
+    @Override
+    public GenericInventory getInventory() {
+        return inventory;
+    }
+    
+    public Map<Integer, Button> getButtons() {
+        return buttons;
+    }
+    
+    
+    public Button getDefaultButton() {
+        return defaultButton;
+    }
+    
+    public void setDefaultButton(Button defaultButton) {
+        this.defaultButton = defaultButton;
+    }
+    
+    
+    public Consumer<HumanEntity> getClosure() {
+        return closure;
+    }
+    
+    public void setClosure(Consumer<HumanEntity> closure) {
+        this.closure = closure;
+    }
     
 }

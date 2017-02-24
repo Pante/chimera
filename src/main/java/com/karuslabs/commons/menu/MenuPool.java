@@ -18,7 +18,7 @@ package com.karuslabs.commons.menu;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
+    
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
@@ -33,13 +33,13 @@ public class MenuPool implements Listener {
     public static final MenuPool INSTANCE = new MenuPool();
     
     
-    private ConcurrentHashMap<String, Menu> pooledMenus;
-    private WeakHashMap<HumanEntity, Menu> menus;
+    private ConcurrentHashMap<String, Menu> pooled;
+    private WeakHashMap<HumanEntity, Menu> active;
     
     
     protected MenuPool() {
-        pooledMenus = new ConcurrentHashMap<>();
-        menus = new WeakHashMap<>();
+        pooled = new ConcurrentHashMap<>();
+        active = new WeakHashMap<>();
     }
     
     
@@ -51,8 +51,9 @@ public class MenuPool implements Listener {
      */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (menus.containsKey(event.getWhoClicked())) {
-            menus.get(event.getWhoClicked()).onClick(event);
+        HumanEntity player = event.getWhoClicked();
+        if (active.containsKey(player)) {
+            active.get(player).onClick(event);
         }
     }
     
@@ -65,8 +66,18 @@ public class MenuPool implements Listener {
      */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
-        if (menus.containsKey(event.getWhoClicked())) {
-            menus.get(event.getWhoClicked()).onDrag(event);
+        HumanEntity player = event.getWhoClicked();
+        if (active.containsKey(player)) {
+            active.get(player).onDrag(event);
+        }
+    }
+    
+    
+    @EventHandler
+    public void onClose(InventoryCloseEvent event) {
+        HumanEntity player = event.getPlayer();
+        if (active.containsKey(player)) {
+            active.get(player);
         }
     }
 
@@ -76,8 +87,8 @@ public class MenuPool implements Listener {
      * 
      * @return A thread-safe map containing the pooled menus.
      */
-    public ConcurrentHashMap<String, Menu> getPooledMenus() {
-        return pooledMenus;
+    public ConcurrentHashMap<String, Menu> getPooled() {
+        return pooled;
     }
 
     
@@ -86,8 +97,8 @@ public class MenuPool implements Listener {
      * 
      * @return The registered players and menus
      */
-    public Map<HumanEntity, Menu> getMenus() {
-        return menus;
+    public Map<HumanEntity, Menu> getActive() {
+        return active;
     }
     
 }
