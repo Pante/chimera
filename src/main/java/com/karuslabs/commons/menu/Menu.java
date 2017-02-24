@@ -37,11 +37,11 @@ public class Menu<GenericInventory extends Inventory> implements InventoryHolder
     public static final Consumer<HumanEntity> REMOVE = player -> MenuPool.INSTANCE.getActive().remove(player);
     
     
-    private GenericInventory inventory;
-    private Map<Integer, Button> buttons;
+    protected GenericInventory inventory;
+    protected Map<Integer, Button> buttons;
     
-    private Button defaultButton;
-    private Consumer<HumanEntity> closure;
+    protected Button defaultButton;
+    protected Consumer<HumanEntity> closure;
     
     
     /**
