@@ -1,0 +1,13 @@
+com.karuslabs.commons.collections
+com.karuslabs.commons.commands
+com.karuslabs.commons.commands.events
+com.karuslabs.commons.commands.reference
+com.karuslabs.commons.commands.xml
+com.karuslabs.commons.concurrency
+com.karuslabs.commons.core.annotations
+com.karuslabs.commons.core.test
+com.karuslabs.commons.core.xml
+com.karuslabs.commons.items
+com.karuslabs.commons.items.meta
+com.karuslabs.commons.menu
+com.karuslabs.commons.menu.xml
