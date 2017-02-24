@@ -16,49 +16,103 @@
  */
 package com.karuslabs.commons.menu;
 
-import java.util.Map;
+import com.google.common.collect.Sets
+        ;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.function.Consumer;
 
+import junitparams.*;
+
+import org.bukkit.Material;
+import org.bukkit.entity.*;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.*;
 
-import org.junit.Test;
+import org.junit.*;
 
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 
+@RunWith(JUnitParamsRunner.class)
 public class MenuTest {
     
-    private Menu stub;
-    private InventoryDragEvent event;
+    private Menu<Inventory> menu;
+    private Inventory inventory;
+    private Consumer<HumanEntity> closure;
+    
+    private Button defaultButton;
+    private Button button;
     
     
     public MenuTest() {
-        stub = new Menu() {
-            @Override
-            public void onClick(InventoryClickEvent event) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Inventory getInventory() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Map<Integer, Button> getButtons() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
+        inventory = mock(Inventory.class);
+        closure = mock(Consumer.class);
         
-        event = mock(InventoryDragEvent.class);
+        defaultButton = mock(Button.class);
+        button = mock(Button.class);
+        
+        menu = new Menu(inventory, defaultButton, closure);
+        menu.bind(button, 0);
     }
     
     
     @Test
-    public void onDrag() {
-        stub.onDrag(event);
+    @Parameters({"1, 0, 1", "0, 1, 0"})
+    public void onClick(int slot, int bindedTimes, int defaultTimes) {
+        InventoryClickEvent event = mock(InventoryClickEvent.class);
+        when(event.getRawSlot()).thenReturn(slot);
         
-        verify(event, times(1)).setCancelled(true);
+        menu.onClick(event);
+        
+        verify(button, times(bindedTimes)).onClick(any(Menu.class), any(InventoryClickEvent.class));
+        verify(defaultButton, times(defaultTimes)).onClick(any(Menu.class), any(InventoryClickEvent.class));
+    }
+    
+    
+    @Test
+    @Parameters({"1, 0, 1", "0, 1, 0"})
+    public void onDrag(int slot, int bindedTimes, int defaultTimes) {
+        InventoryDragEvent event = mock(InventoryDragEvent.class);
+        HashSet<Integer> set = Sets.newHashSet(slot);
+        when(event.getRawSlots()).thenReturn(set);
+        
+        menu.onDrag(event);
+        
+        verify(button, times(bindedTimes)).onDrag(any(Menu.class), any(InventoryDragEvent.class));
+        verify(defaultButton, times(defaultTimes)).onDrag(any(Menu.class), any(InventoryDragEvent.class));
+    }
+    
+    
+    @Test
+    public void onClose() {
+        Player player = mock(Player.class);
+        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
+        
+        when(event.getPlayer()).thenReturn(player);
+        
+        menu.onClose(event);
+        
+        verify(closure, times(1)).accept(player);
+    }
+    
+    
+    @Test
+    public void bind_Item() {
+        menu.bind(new ItemStack(Material.AIR), 1, 10);
+        
+        verify(inventory, times(2)).setItem(any(int.class), any(ItemStack.class));
+    }
+    
+    
+    @Test
+    public void bind_Buttons() {
+        menu.bind(button, 1, 10);
+        
+        assertTrue(menu.getButtons().keySet().containsAll(Arrays.asList(1, 10)));
     }
     
 }
