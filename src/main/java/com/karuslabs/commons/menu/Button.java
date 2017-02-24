@@ -33,7 +33,8 @@ public interface Button {
     /**
      * Processes a InventoryClickEvent for a {@link Menu} slot binded to it.
      * 
-     * @param event An InventoryClickEvent instance
+     * @param menu A menu
+     * @param event An InventoryClickEvent
      */
     public void onClick(Menu menu, InventoryClickEvent event);
     
@@ -42,7 +43,8 @@ public interface Button {
      * Processes a InventoryDragEvent for a {@link Menu} slot binded to it.
      * Default implementation ignores the event.
      * 
-     * @param event An InventoryDragEvent instance
+     * @param menu A menu
+     * @param event An InventoryDragEvent
      */
     public default void onDrag(Menu menu, InventoryDragEvent event) {
         event.setCancelled(true);
