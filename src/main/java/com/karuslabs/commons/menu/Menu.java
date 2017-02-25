@@ -47,7 +47,7 @@ public class Menu<GenericInventory extends Inventory> implements InventoryHolder
         this.defaultButton = defaultButton;
         this.closure = closure;
     }
-    
+    //TODO FIX DEFAULT BUTTON TRIGGERING IN PLAYER INVENTORY
     
     public void onClick(InventoryClickEvent event) {
         buttons.getOrDefault(event.getRawSlot(), defaultButton).onClick(this, event);
