@@ -50,11 +50,18 @@ public class Menu<GenericInventory extends Inventory> implements InventoryHolder
     
     
     public void onClick(InventoryClickEvent event) {
-        buttons.getOrDefault(event.getRawSlot(), defaultButton).onClick(this, event);
+        int slot = event.getRawSlot();
+        if (slot < inventory.getSize()) {
+            buttons.getOrDefault(slot, defaultButton).onClick(this, event);
+        }
     }
     
     public void onDrag(InventoryDragEvent event) {
-        event.getRawSlots().forEach(slot -> buttons.getOrDefault(slot, defaultButton).onDrag(this, event));
+        event.getRawSlots().forEach(slot -> {
+            if (slot < inventory.getSize()) {
+                buttons.getOrDefault(slot, defaultButton).onDrag(this, event);
+            }
+        });
     }
     
     public void onClose(InventoryCloseEvent event) {
