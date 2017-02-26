@@ -5,7 +5,7 @@
     <name>Karus-Commons</name>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
     
     <properties>
@@ -17,12 +17,7 @@
     </properties>
     
     <repositories>
-    
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-
+        
         <repository>
             <id>craftbukkit-repo</id>
             <url>https://pante.github.io/Karus-Commons/</url>
@@ -31,13 +26,6 @@
     </repositories>
      
     <dependencies>
-        
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -80,18 +68,6 @@
             <artifactId>mockito-core</artifactId>
             <version>2.7.9</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-async</artifactId>
-            <version>3.2.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.4.1</version>
         </dependency>
         
     </dependencies>

@@ -562,11 +562,6 @@ public class StubServer implements Server {
     }
 
     @Override
-    public Spigot spigot() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void sendPluginMessage(Plugin source, String channel, byte[] message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
