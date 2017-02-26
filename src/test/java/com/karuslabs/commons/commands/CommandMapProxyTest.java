@@ -16,6 +16,9 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.karuslabs.commons.commands.CommandMapProxy;
+import com.karuslabs.commons.commands.PluginCommand;
+import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.events.CommandRegistrationEvent;
 
 import java.util.*;
