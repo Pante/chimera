@@ -16,14 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.items.meta.BookMetaComponent;
-import com.karuslabs.commons.items.meta.LeatherArmorMetaComponent;
-import com.karuslabs.commons.items.meta.ItemMetaComponent;
-import com.karuslabs.commons.items.meta.PotionMetaComponent;
-import com.karuslabs.commons.items.meta.EnchantmentStorageMetaComponent;
-import com.karuslabs.commons.items.meta.BannerMetaComponent;
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.Component;
+import com.karuslabs.commons.items.meta.*;
+import com.karuslabs.commons.core.xml.*;
 
 import java.util.*;
 

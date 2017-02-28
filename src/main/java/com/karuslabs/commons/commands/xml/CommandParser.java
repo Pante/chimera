@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.SetterParser;
-import com.karuslabs.commons.core.xml.SetterComponent;
+import com.karuslabs.commons.core.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;

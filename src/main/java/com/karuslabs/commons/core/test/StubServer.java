@@ -44,6 +44,7 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
 
 import static org.mockito.Mockito.*;
 
+
 public class StubServer implements Server {
     
     public static final StubServer INSTANCE;

@@ -16,101 +16,11 @@
  */
 package com.karuslabs.commons.menu;
 
-import java.util.*;
-import java.util.function.Consumer;
-
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
 
 
-public class Menu<GenericInventory extends Inventory> implements InventoryHolder {
+public class Menu {
     
-    public static final Consumer<HumanEntity> REMOVE = player -> MenuPool.INSTANCE.getActive().remove(player);
-    
-    
-    protected GenericInventory inventory;
-    protected Map<Integer, Button> buttons;
-    
-    protected Button defaultButton;
-    protected Consumer<HumanEntity> closure;
-    
-    
-    public Menu(GenericInventory inventory) {
-        this(inventory, Button.CANCEL, REMOVE);
-    }
-    
-    public Menu(GenericInventory inventory, Button defaultButton, Consumer<HumanEntity> closure) {
-        this.inventory = inventory;
-        buttons = new HashMap<>(inventory.getSize());
-        
-        this.defaultButton = defaultButton;
-        this.closure = closure;
-    }
-    
-    
-    public void onClick(InventoryClickEvent event) {
-        int slot = event.getRawSlot();
-        if (slot < inventory.getSize()) {
-            buttons.getOrDefault(slot, defaultButton).onClick(this, event);
-        }
-    }
-    
-    public void onDrag(InventoryDragEvent event) {
-        event.getRawSlots().forEach(slot -> {
-            if (slot < inventory.getSize()) {
-                buttons.getOrDefault(slot, defaultButton).onDrag(this, event);
-            }
-        });
-    }
-    
-    public void onClose(InventoryCloseEvent event) {
-        closure.accept(event.getPlayer());
-    }
-    
-    
-    public Menu bind(ItemStack item, int... slots) {
-        for (int slot : slots) {
-            inventory.setItem(slot, item);
-        }
-        
-        return this;
-    }
-    
-    public Menu bind(Button button, int... slots) {
-        for (int slot : slots) {
-            buttons.put(slot, button);
-        }
-        
-        return this;
-    }
-     
-        
-    @Override
-    public GenericInventory getInventory() {
-        return inventory;
-    }
-    
-    public Map<Integer, Button> getButtons() {
-        return buttons;
-    }
-    
-    
-    public Button getDefaultButton() {
-        return defaultButton;
-    }
-    
-    public void setDefaultButton(Button defaultButton) {
-        this.defaultButton = defaultButton;
-    }
-    
-    
-    public Consumer<HumanEntity> getClosure() {
-        return closure;
-    }
-    
-    public void setClosure(Consumer<HumanEntity> closure) {
-        this.closure = closure;
-    }
+    private Inventory inventory;
     
 }

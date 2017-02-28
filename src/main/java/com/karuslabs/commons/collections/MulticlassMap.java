@@ -17,26 +17,25 @@
 package com.karuslabs.commons.collections;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 
-public class ClassMap<T> implements Map<Class<? extends T>, T> {
+public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> {
     
-    private Map<Class<? extends T>, T> map;
+    private Map<Key<? extends T>, T> map;
     
     
-    public ClassMap() {
+    public MulticlassMap() {
         this(new HashMap<>());
     }
     
-    public ClassMap(int capacity) {
+    public MulticlassMap(int capacity) {
         this(new HashMap<>(capacity));
     }
     
-    public ClassMap(Map<Class<? extends T>, T> map) {
+    public MulticlassMap(Map<Key<? extends T>, T> map) {
         this.map = map;
     }
-
+    
     
     @Override
     public void clear() {
@@ -54,7 +53,7 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     }
 
     @Override
-    public Set<Entry<Class<? extends T>, T>> entrySet() {
+    public Set<Map.Entry<Key<? extends T>, T>> entrySet() {
         return map.entrySet();
     }
         
@@ -63,14 +62,14 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
         return map.get(key);
     }
     
-    public <U extends T> U get(Class<U> type) {
-        return type.cast(map.get(type));
+    public <U extends T> U get(Key<U> key) {
+        return key.type.cast(map.get(key));
     }
     
-    public <U extends T> U getOrDefault(Class<U> type, U value) {
-        T uncasted = map.get(type);
+    public <U extends T> U getOrDefault(Key<U> key, U value) {
+        T uncasted = map.get(key);
         if (uncasted != null) {
-            return type.cast(uncasted);
+            return key.type.cast(uncasted);
             
         } else {
             return value;
@@ -78,12 +77,12 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     }
     
     @Override
-    public T put(Class<? extends T> key, T value) {
+    public T put(Key<? extends T> key, T value) {
         return map.put(key, value);
     }
     
     @Override
-    public void putAll(Map<? extends Class<? extends T>, ? extends T> map) {
+    public void putAll(Map<? extends Key<? extends T>, ? extends T> map) {
         this.map.putAll(map);
     }
 
@@ -94,7 +93,7 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     }
 
     @Override
-    public Set<Class<? extends T>> keySet() {
+    public Set<Key<? extends T>> keySet() {
         return map.keySet();
     }
     
@@ -113,5 +112,42 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     public Collection<T> values() {
         return map.values();
     }
+    
+    
+    public static <U> Key<U> key(String name, Class<U> type) {
+        return new Key(name , type);
+    }
+    
+    
+    public static class Key<U> {
+        
+        private String name;
+        private Class<U> type;
+        
+        
+        public Key(String name, Class<U> type) {
+            this.name = name;
+            this.type = type;
+        }
+        
+        @Override
+        public boolean equals(Object object) {
+            if (object instanceof Key) {
+                Key key = (Key) object;
+                return this.name.equals(key.name) && this.type.equals(key.type);
+            }
+            
+            return false;
+        }
 
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 53 * hash + Objects.hashCode(this.name);
+            hash = 53 * hash + Objects.hashCode(this.type);
+            return hash;
+        }
+        
+    }
+    
 }

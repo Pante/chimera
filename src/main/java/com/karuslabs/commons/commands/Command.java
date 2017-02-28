@@ -50,4 +50,40 @@ public abstract class Command extends org.bukkit.command.Command {
         return criteria;
     }
     
+    
+    public Command newAliases(List<String> aliases) {
+        setAliases(aliases);
+        return this;
+    }
+    
+    public Command newDescription(String description) {
+        setDescription(description);
+        return this;
+    }
+    
+    public Command newLabel(String label) {
+        setLabel(label);
+        return this;
+    }
+    
+    public Command newName(String name) {
+        setName(name);
+        return this;
+    }
+    
+    public Command newPermission(String permission) {
+        setPermission(permission);
+        return this;
+    }
+    
+    public Command newPermissionMessage(String message) {
+        setPermissionMessage(message);
+        return this;
+    }
+    
+    public Command newUsage(String usage) {
+        setUsage(usage);
+        return this;
+    }
+    
 }

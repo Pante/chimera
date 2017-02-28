@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.core.test;
 
-import com.karuslabs.commons.core.test.PotionResource;
 import org.bukkit.potion.*;
 
 import org.junit.Test;

@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.commands.xml.CommandsComponent;
-import com.karuslabs.commons.commands.xml.CommandParser;
 import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.reference.MarshallCommand;
 

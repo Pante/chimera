@@ -31,11 +31,8 @@ public class LeatherArmorMetaComponent extends ItemMetaComponent<LeatherArmorMet
         super.parse(element, meta);
         
         try {
-            int r = element.getAttribute("r").getIntValue();
-            int g = element.getAttribute("g").getIntValue();
-            int b = element.getAttribute("b").getIntValue();
-
-            meta.setColor(Color.fromRGB(r, g, b));
+            meta.setColor(Color.fromRGB(element.getAttribute("r").getIntValue(), element.getAttribute("g").getIntValue(), element.getAttribute("b").getIntValue()));
+            
         } catch (DataConversionException e) {
             throw new ParserException("Failed to parse element: " + element.getName(), e);
         }

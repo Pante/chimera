@@ -16,10 +16,8 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.SetterComponent;
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.commands.Marshall;
+import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
 
@@ -41,11 +39,11 @@ public class CommandComponent implements SetterComponent<Command> {
         Element meta = element.getChild("meta");
         Element permission = element.getChild("permission");
         Element commands = element.getChild("commands");
-        
+     
         command.setAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")));
         command.setDescription(meta.getAttribute("description").getValue());
         command.setUsage(meta.getAttribute("usage").getValue());
-        
+            
         command.setPermission(permission.getAttribute("permission").getValue());
         command.setPermissionMessage(permission.getAttribute("message").getValue());
             

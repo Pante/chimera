@@ -17,17 +17,17 @@
 package com.karuslabs.commons.menu;
 
 import org.bukkit.event.inventory.*;
-
+    
 
 @FunctionalInterface
 public interface Button {
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    public static final Button CANCEL = event -> event.setCancelled(true);
     
     
-    public void onClick(Menu menu, InventoryClickEvent event);
+    public void onClick(InventoryClickEvent event);
     
-    public default void onDrag(Menu menu, InventoryDragEvent event) {
+    public default void onDrag(InventoryDragEvent event) {
         event.setCancelled(true);
     }
     

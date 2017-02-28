@@ -16,37 +16,65 @@
  */
 package com.karuslabs.commons.menu;
 
+import java.util.*;
+
+import org.bukkit.inventory.ItemStack;
+
 
 public class Region {
     
+    private int layer;
     private int length;
     private int min, max;
     
+    private Map<Integer, ItemStack> items;
+    private Map<Integer, Button> buttons;
     
-    public Region(int length, int min, int max) {
+    
+    public Region(int layer, int length, int min, int max) {
+        this.layer = layer;   
         this.length = length;
+        
         this.min = min;
         this.max = max;
+        
+        items = new HashMap<>();
+        buttons = new HashMap<>();
     }
     
     
-    public boolean inRegion(int slot) {
+    public boolean within(int slot) {
         int row = slot % length;
-        double coloumn = slot / (double) length;
+        double column = slot / (double) length;
         
         boolean withinLength = row >= min % length && row <= max % length;
-        boolean withinWidth = coloumn >= min / length && coloumn <= max / length;
+        boolean withinColumn = column >= min / length && column <= max / length;
         
-        return withinLength && withinWidth;
+        return withinLength && withinColumn;
     }
     
     
-    public int getMin() {
-        return min;
+    public Region bind(ItemStack item, int... slots) {
+        for (int slot : slots) {
+            items.put(slot, item);
+        }
+        return this;
     }
     
-    public int getMax() {
-        return max;
+    public Region bind(Button button, int... slots) {
+        for (int slot : slots) {
+            buttons.put(slot, button);
+        }
+        return this;
+    }
+    
+    
+    public Map<Integer, ItemStack> getItems() {
+        return items;
+    }
+    
+    public Map<Integer, Button> getButtons() {
+        return buttons;
     }
     
 }

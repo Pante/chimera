@@ -16,9 +16,7 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.reference.MarshallCommand;
-import com.karuslabs.commons.commands.PluginCommand;
-import com.karuslabs.commons.commands.Command;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
 

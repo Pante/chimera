@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.Criteria;
-import com.karuslabs.commons.commands.PluginCommand;
+import com.karuslabs.commons.commands.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

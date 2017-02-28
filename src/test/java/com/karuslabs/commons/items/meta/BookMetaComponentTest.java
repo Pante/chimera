@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.items.meta.BookMetaComponent;
 import com.karuslabs.commons.core.test.XMLResource;
 
 import org.bukkit.ChatColor;
