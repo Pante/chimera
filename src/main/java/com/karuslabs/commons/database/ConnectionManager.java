@@ -10,31 +10,23 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConnectionManager {
 
-    private volatile static ConnectionManager uniqueInstance;
     private MongoClient client;
-    private FileConfiguration config;
 
-    private ConnectionManager(FileConfiguration config) {
-        this.config = config;
-        client = MongoClients.create(connectionStringBuilder());
+    public ConnectionManager(String connectionString) {
+        client = MongoClients.create(connectionString);
     }
 
-    public static ConnectionManager getInstance(FileConfiguration config) {
-        synchronized (ConnectionManager.class) {
-            if (uniqueInstance == null) {
-                uniqueInstance = new ConnectionManager(config);
-            }
-        }
-        return uniqueInstance;
+    public ConnectionManager(DatabaseConfiguration dc) {
+        client = MongoClients.create(connectionStringBuilder(dc));
     }
 
-    protected String connectionStringBuilder() {
-        String configHost = config.getString("host", "127.0.0.1");
-        int configPort = config.getInt("port", 27017);
-        String configDB = config.getString("db", "mydb");
-        boolean configAuth = config.getBoolean("auth", false);
-        String configUser = config.getString("user", "user");
-        String configPass = config.getString("pass", "pass");
+    protected String connectionStringBuilder(DatabaseConfiguration dc) {
+        String configHost = dc.getHost();
+        int configPort = dc.getPort();
+        String configDB = dc.getDb();
+        boolean configAuth = dc.isAuth();
+        String configUser = dc.getUser();
+        String configPass = dc.getPass();
 
         String connectionURL = "mongodb://";
         if (configAuth)
@@ -46,7 +38,6 @@ public class ConnectionManager {
 
     public void disconnect() {
         client.close();
-        uniqueInstance = null;
     }
 
     public MongoClient getClient() {

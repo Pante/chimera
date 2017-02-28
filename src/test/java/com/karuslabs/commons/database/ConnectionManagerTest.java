@@ -20,10 +20,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(JUnitParamsRunner.class)
 public class ConnectionManagerTest {
-    @Mock
-    private FileConfiguration fileConfiguration;
 
     private ConnectionManager connectionManager;
+    private DatabaseConfiguration databaseConfiguration;
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -32,16 +31,13 @@ public class ConnectionManagerTest {
     @Parameters
     public void testConnectionStringBuilder(String host, int port, String db, boolean auth, String user, String pass,
                                             String values) throws Exception {
-        when(fileConfiguration.getString("host", "127.0.0.1")).thenReturn(host);
-        when(fileConfiguration.getInt("port", 27017)).thenReturn(port);
-        when(fileConfiguration.getString("db", "mydb")).thenReturn(db);
-        when(fileConfiguration.getBoolean("auth", false)).thenReturn(auth);
-        when(fileConfiguration.getString("user", "user")).thenReturn(user);
-        when(fileConfiguration.getString("pass", "pass")).thenReturn(pass);
 
-        connectionManager = ConnectionManager.getInstance(fileConfiguration);
+        if (auth) databaseConfiguration = new DatabaseConfiguration(host, port, db, user, pass);
+        else databaseConfiguration = new DatabaseConfiguration(host, port, db);
 
-        assertEquals(values, connectionManager.connectionStringBuilder());
+        connectionManager = new ConnectionManager(databaseConfiguration);
+
+        assertEquals(values, connectionManager.connectionStringBuilder(databaseConfiguration));
     }
 
     @After
