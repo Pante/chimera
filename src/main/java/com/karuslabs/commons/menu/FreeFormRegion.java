@@ -16,19 +16,35 @@
  */
 package com.karuslabs.commons.menu;
 
-import org.bukkit.event.inventory.*;
+import java.util.Set;
+import java.util.stream.*;
+
+import org.bukkit.inventory.Inventory;
+
+
+public class FreeFormRegion extends Region {
+    
+    private Set<Integer> slots;
+
+    
+    public FreeFormRegion(Inventory inventory, int... slots) {
+        this(inventory, Button.CANCEL, slots);
+    }
+    
+    public FreeFormRegion(Inventory inventory, Button defaultButton, int... slots) {
+        super(inventory, defaultButton);
+        this.slots = IntStream.of(slots).boxed().collect(Collectors.toSet());
+    }
     
 
-@FunctionalInterface
-public interface Button {
+    @Override
+    public boolean within(int slot) {
+        return slots.contains(slot);
+    }
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
     
-    
-    public void onClick(Menu menu, InventoryClickEvent event);
-    
-    public default void onDrag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
+    public Set<Integer> getSlots() {
+        return slots;
     }
     
 }

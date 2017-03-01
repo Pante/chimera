@@ -18,63 +18,79 @@ package com.karuslabs.commons.menu;
 
 import java.util.*;
 
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 
 
-public class Region {
+public abstract class Region implements InventoryHolder {
     
-    private int layer;
-    private int length;
-    private int min, max;
-    
-    private Map<Integer, ItemStack> items;
-    private Map<Integer, Button> buttons;
+    protected Inventory inventory;
+    protected Map<Integer, Button> buttons;
+    protected Button defaultButton;
     
     
-    public Region(int layer, int length, int min, int max) {
-        this.layer = layer;   
-        this.length = length;
-        
-        this.min = min;
-        this.max = max;
-        
-        items = new HashMap<>();
+    public Region(Inventory inventory) {
+        this(inventory, Button.CANCEL);
+    }
+    
+    public Region(Inventory inventory, Button defaultButton) {
+        this.inventory = inventory;
         buttons = new HashMap<>();
+        this.defaultButton = defaultButton;
     }
     
     
-    public boolean within(int slot) {
-        int row = slot % length;
-        double column = slot / (double) length;
-        
-        boolean withinLength = row >= min % length && row <= max % length;
-        boolean withinColumn = column >= min / length && column <= max / length;
-        
-        return withinLength && withinColumn;
-    }
+    public abstract boolean within(int slot);
     
+    
+    public Region bind(ItemStack item, Button button, int... slots) {
+        for (int slot : slots) {
+            if (within(slot)) {
+                inventory.setItem(slot, item);
+                buttons.put(slot, button);
+            }
+        }
+        return this;
+    }
     
     public Region bind(ItemStack item, int... slots) {
         for (int slot : slots) {
-            items.put(slot, item);
+            if (within(slot)) {
+                inventory.setItem(slot, item);
+            }
         }
         return this;
     }
     
     public Region bind(Button button, int... slots) {
         for (int slot : slots) {
-            buttons.put(slot, button);
+            if (within(slot)) {
+                buttons.put(slot, button);
+            }
         }
         return this;
     }
     
     
-    public Map<Integer, ItemStack> getItems() {
-        return items;
+    public Button getButton(int slot) {
+        return buttons.getOrDefault(slot, defaultButton);
+    }
+    
+    
+    @Override
+    public Inventory getInventory() {
+        return inventory;
     }
     
     public Map<Integer, Button> getButtons() {
         return buttons;
+    }
+
+    public Button getDefaultButton() {
+        return defaultButton;
+    }
+
+    public void setDefaultButton(Button defaultButton) {
+        this.defaultButton = defaultButton;
     }
     
 }
