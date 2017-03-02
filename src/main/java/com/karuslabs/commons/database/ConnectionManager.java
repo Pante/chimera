@@ -4,14 +4,14 @@
  */
 package com.karuslabs.commons.database;
 
-import com.mongodb.async.client.MongoClient;
-import com.mongodb.async.client.MongoClients;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.mongodb.async.client.*;
+
 
 public class ConnectionManager {
 
     private MongoClient client;
 
+    
     public ConnectionManager(String connectionString) {
         client = MongoClients.create(connectionString);
     }
@@ -20,6 +20,7 @@ public class ConnectionManager {
         client = MongoClients.create(connectionStringBuilder(dc));
     }
 
+    
     protected String connectionStringBuilder(DatabaseConfiguration dc) {
         String configHost = dc.getHost();
         int configPort = dc.getPort();
@@ -36,6 +37,7 @@ public class ConnectionManager {
         return connectionURL;
     }
 
+    
     public void disconnect() {
         client.close();
     }

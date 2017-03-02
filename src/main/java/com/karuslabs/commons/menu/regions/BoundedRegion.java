@@ -14,26 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.regions;
 
-import org.bukkit.inventory.Inventory;
+import com.google.common.base.Preconditions;
+
+import com.karuslabs.commons.menu.Button;
+
+import org.bukkit.inventory.*;
 
 
-public class RectangularRegion extends Region {
+public class BoundedRegion extends Region {
     
     private int length;
     private int min, max;
     
     
-    public RectangularRegion(Inventory inventory, int length, int min, int max) {
-        this(inventory, Button.CANCEL, length, min, max);
+    public BoundedRegion(Inventory inventory, int min, int max) {
+        this(inventory, Button.CANCEL, min, max);
     }
     
-    public RectangularRegion(Inventory inventory, Button defaultButton, int length, int min, int max) {
+    public BoundedRegion(Inventory inventory, Button defaultButton, int min, int max) {
         super(inventory, defaultButton);
-        this.length = length;
-        this.min = min;
-        this.max = max;
+        length = BoundedRegionUtility.getLength(inventory.getType());
+        
+        int size = inventory.getSize();
+        
+        this.min = Preconditions.checkElementIndex(min, size);
+        this.max = Preconditions.checkElementIndex(max, size);
     }
     
 
@@ -42,16 +49,12 @@ public class RectangularRegion extends Region {
         int row = slot % length;
         double column = slot / (double) length;
         
-        boolean withinLength = row >= min % length && row <= max % length;
-        boolean withinColumn = column >= min / length && column <= max / length;
+        boolean withinRows = row >= min % length && row <= max % length;
+        boolean withinColumns = column >= min / length && column <= max / length;
         
-        return withinLength && withinColumn;
+        return withinRows && withinColumns;
     }
     
-    
-    public int getLength() {
-        return length;
-    }
     
     public int getMin() {
         return min;

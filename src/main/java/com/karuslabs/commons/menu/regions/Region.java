@@ -14,9 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.regions;
+
+import com.karuslabs.commons.menu.Button;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import org.bukkit.inventory.*;
 
@@ -43,47 +46,44 @@ public abstract class Region implements InventoryHolder {
     
     
     public Region bind(ItemStack item, Button button, int... slots) {
-        for (int slot : slots) {
-            if (within(slot)) {
-                inventory.setItem(slot, item);
-                buttons.put(slot, button);
-            }
-        }
-        return this;
+        return bind(slot -> {inventory.setItem(slot, item); buttons.put(slot, button);}, slots);
     }
-    
+
     public Region bind(ItemStack item, int... slots) {
-        for (int slot : slots) {
-            if (within(slot)) {
-                inventory.setItem(slot, item);
-            }
-        }
-        return this;
+        return bind(slot -> inventory.setItem(slot, item), slots);
     }
-    
+        
     public Region bind(Button button, int... slots) {
+        return bind(slot -> buttons.put(slot, button), slots);
+    }
+ 
+    
+    private Region bind(Consumer<Integer> binder, int... slots) {
         for (int slot : slots) {
             if (within(slot)) {
-                buttons.put(slot, button);
+                binder.accept(slot);
+            } else {
+                throw new IllegalArgumentException("Slot is out of bound: " + slot);
             }
         }
         return this;
-    }
-    
-    
-    public Button getButtonOrDefault(int slot) {
-        return buttons.getOrDefault(slot, defaultButton);
     }
     
     
     @Override
     public Inventory getInventory() {
         return inventory;
+    }      
+    
+    
+    public Button getButtonOrDefault(int slot) {
+        return buttons.getOrDefault(slot, defaultButton);
     }
     
     public Map<Integer, Button> getButtons() {
         return buttons;
     }
+    
 
     public Button getDefaultButton() {
         return defaultButton;

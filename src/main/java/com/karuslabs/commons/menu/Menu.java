@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.menu;
 
+import com.karuslabs.commons.menu.regions.Region;
+
 import java.util.*;
 
 import org.bukkit.event.inventory.*;
@@ -28,7 +30,11 @@ public class Menu extends Region {
     
     
     public Menu(Inventory inventory) {
-        super(inventory);
+        this(inventory, Button.CANCEL);
+    }
+    
+    public Menu(Inventory inventory, Button defaultButton) {
+        super(inventory, defaultButton);
         regions = new HashSet<>();
     }
     

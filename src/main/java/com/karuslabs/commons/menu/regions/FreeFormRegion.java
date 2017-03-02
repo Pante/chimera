@@ -14,7 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.regions;
+
+import com.google.common.base.Preconditions;
+
+import com.karuslabs.commons.menu.Button;
 
 import java.util.Set;
 import java.util.stream.*;
@@ -33,7 +37,9 @@ public class FreeFormRegion extends Region {
     
     public FreeFormRegion(Inventory inventory, Button defaultButton, int... slots) {
         super(inventory, defaultButton);
+        int size = inventory.getSize();
         this.slots = IntStream.of(slots).boxed().collect(Collectors.toSet());
+        this.slots.forEach(slot -> Preconditions.checkElementIndex(slot, size));
     }
     
 
