@@ -27,8 +27,4 @@ public interface Button {
     
     public void onClick(Menu menu, InventoryClickEvent event);
     
-    public default void onDrag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
-    }
-    
 }

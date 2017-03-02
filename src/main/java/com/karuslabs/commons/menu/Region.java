@@ -71,7 +71,7 @@ public abstract class Region implements InventoryHolder {
     }
     
     
-    public Button getButton(int slot) {
+    public Button getButtonOrDefault(int slot) {
         return buttons.getOrDefault(slot, defaultButton);
     }
     

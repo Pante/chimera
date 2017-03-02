@@ -17,7 +17,6 @@
 package com.karuslabs.commons.menu;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
@@ -26,35 +25,26 @@ import org.bukkit.inventory.Inventory;
 public class Menu extends Region {
     
     private Set<Region> regions;
-    private BiConsumer<Menu, InventoryCloseEvent> close;
     
     
     public Menu(Inventory inventory) {
-        super(inventory, Button.CANCEL);
-        close = (menu, event) -> {};
-    }
-    
-    public Menu(Inventory inventory, Button defaultButton, BiConsumer<Menu, InventoryCloseEvent> close) {
-        super(inventory, defaultButton);
+        super(inventory);
         regions = new HashSet<>();
-        this.close = close;
     }
     
     
-    //REDO
     public void onClick(InventoryClickEvent event) {
         int slot = event.getRawSlot();
         if (within(slot)) {
             for (Region region : regions) {
                 if (region.within(slot)) {
-                    region.getButton(slot).onClick(this, event);
+                    region.getButtonOrDefault(slot).onClick(this, event);
                     return;
                 }
             }
             
-            buttons.getOrDefault(slot, defaultButton).onClick(this, event);
+            getButtonOrDefault(slot).onClick(this, event);
         }
-        
     }
     
     public void onDrag(InventoryDragEvent event) {
@@ -62,13 +52,9 @@ public class Menu extends Region {
     }
     
     public void onClose(InventoryCloseEvent event) {
-        close.accept(this, event);
+        MenuPool.INSTANCE.getActive().remove(event.getPlayer());
     }
     
-    
-    public Set<Region> getRegions() {
-        return regions;
-    }
 
     @Override
     public boolean within(int slot) {
