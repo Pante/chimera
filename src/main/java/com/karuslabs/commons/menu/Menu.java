@@ -67,4 +67,9 @@ public class Menu extends Region {
         return slot >= 0 && slot < inventory.getSize();
     }
     
+    
+    public Set<Region> getRegions() {
+        return regions;
+    }
+    
 }

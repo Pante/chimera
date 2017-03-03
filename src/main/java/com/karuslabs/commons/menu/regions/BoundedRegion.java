@@ -28,6 +28,9 @@ public class BoundedRegion extends Region {
     private int length;
     private int min, max;
     
+    private int minRow, maxRow;
+    private double minColumn, maxColumn;
+    
     
     public BoundedRegion(Inventory inventory, int min, int max) {
         this(inventory, Button.CANCEL, min, max);
@@ -41,6 +44,9 @@ public class BoundedRegion extends Region {
         
         this.min = Preconditions.checkElementIndex(min, size);
         this.max = Preconditions.checkElementIndex(max, size);
+        
+        minRow = min % length; maxRow = max % length;
+        minColumn = (double) min / length; maxColumn = (double) max / length;
     }
     
 
@@ -49,8 +55,8 @@ public class BoundedRegion extends Region {
         int row = slot % length;
         double column = slot / (double) length;
         
-        boolean withinRows = row >= min % length && row <= max % length;
-        boolean withinColumns = column >= min / length && column <= max / length;
+        boolean withinRows = row >= minRow && row <= maxRow;
+        boolean withinColumns = column >= minColumn && column <= maxColumn;
         
         return withinRows && withinColumns;
     }

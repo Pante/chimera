@@ -58,7 +58,7 @@ public abstract class Region implements InventoryHolder {
     }
  
     
-    private Region bind(Consumer<Integer> binder, int... slots) {
+    protected Region bind(Consumer<Integer> binder, int... slots) {
         for (int slot : slots) {
             if (within(slot)) {
                 binder.accept(slot);

@@ -442,21 +442,25 @@ public class StubServer implements Server {
     }
 
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, InventoryType type) {
         return new CraftInventoryCustom(owner, type);
     }
 
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, InventoryType type, String title) {
         return new CraftInventoryCustom(owner, type, title);
     }
 
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, int size) throws IllegalArgumentException {
         return new CraftInventoryCustom(owner, size);
     }
 
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, int size, String title) throws IllegalArgumentException {
         return new CraftInventoryCustom(owner, size, title);
     }

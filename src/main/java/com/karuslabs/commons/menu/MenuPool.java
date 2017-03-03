@@ -61,7 +61,7 @@ public class MenuPool implements Listener {
     public void onClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (active.containsKey(player)) {
-            active.get(player);
+            active.get(player).onClose(event);
         }
     }
 

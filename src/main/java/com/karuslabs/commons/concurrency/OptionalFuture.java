@@ -70,7 +70,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     }
     
     
-    public <E extends RuntimeException> T getOrThrow(Supplier<? extends E> supplier) {
+    public T getOrThrow(Supplier<? extends RuntimeException> supplier) {
         if (isDone()) {
             return getUnchecked();
             
