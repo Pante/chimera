@@ -17,6 +17,6 @@
 
 
 /**
- * Essential classes that commands are built upon.
+ * Essential command-related classes.
  */
 package com.karuslabs.commons.commands;

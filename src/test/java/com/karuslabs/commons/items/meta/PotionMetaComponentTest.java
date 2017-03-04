@@ -16,9 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.items.meta.PotionMetaComponent;
-import com.karuslabs.commons.core.test.PotionResource;
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.core.test.*;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.PotionMeta;

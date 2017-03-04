@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.SetterComponent;
+import com.karuslabs.commons.core.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
@@ -26,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Parses the (sub)commands nodes in a XML Document.
+ * Represents a component for parsing <code>&ltcommands</code> nodes.
  */
 public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
@@ -34,16 +33,16 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     
     /**
-     * Constructs this with the default {@link CommandComponent}.
+     * Creates a new component with a {@link CommandComponent} for parsing <code>&ltcommand&gt</code> nodes.
      */
     public CommandsComponent() {
         component = new CommandComponent(this);
     }
     
     /**
-     * Constructs this with the specified component.
+     * Creates a new component with a component for parsing <code>&ltcommand&gt</code> nodes specified.
      * 
-     * @param component The component used to parse the command nodes
+     * @param component the component for parsing <code>&ltcommand&gt</code> nodes
      */
     public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
@@ -51,11 +50,10 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     
     /**
-     * Parses the commands component. Delegates the parsing of the command nodes
-     * to the component specified in this constructor.
+     * Parses a <code>&ltcommands&gt</code> node and sets the associated values for the commands specified.
      * 
-     * @param root The starting element of the node
-     * @param commands The commands used to set the information
+     * @param root the <code>&ltcommands&gt</code>
+     * @param commands the values of the commands to set
      */
     @Override
     public void parse(Element root, Map<String, Command> commands) {

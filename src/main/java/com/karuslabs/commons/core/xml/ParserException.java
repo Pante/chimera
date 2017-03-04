@@ -18,24 +18,24 @@ package com.karuslabs.commons.core.xml;
 
 
 /**
- * Thrown when an unhandled exception occurs while parsing a file.
+ * Unchecked exception which is thrown when an error occurs while parsing a XML document.
  */
 public class ParserException extends RuntimeException {
     
     /**
-     * Constructs this with the specified message.
+     * Creates a new exception with the detail message specified.
      * 
-     * @param message The detail message
+     * @param message the detail message
      */
     public ParserException(String message) {
         super(message);
     }
     
     /**
-     * Constructs this with the specified message and cause.
+     * Creates a new exception with the detail message and cause specified.
      * 
-     * @param message The detail message
-     * @param cause The cause
+     * @param message the detail message
+     * @param cause the cause
      */
     public ParserException(String message, Throwable cause) {
         super(message, cause);

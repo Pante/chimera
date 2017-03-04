@@ -16,103 +16,66 @@
  */
 package com.karuslabs.commons.menu;
 
-import com.google.common.collect.Sets;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.function.Consumer;
+import com.karuslabs.commons.core.test.StubServer;
+import com.karuslabs.commons.menu.regions.Region;
 
 import junitparams.*;
 
-import org.bukkit.Material;
-import org.bukkit.entity.*;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
 
-import org.junit.*;
-
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
 public class MenuTest {
     
-    private Menu<Inventory> menu;
-    private Inventory inventory;
-    private Consumer<HumanEntity> closure;
-    
-    private Button defaultButton;
+    private Menu menu;
     private Button button;
     
-    
     public MenuTest() {
-        inventory = mock(Inventory.class);
-        closure = mock(Consumer.class);
-        
-        defaultButton = mock(Button.class);
         button = mock(Button.class);
-        
-        menu = new Menu(inventory, defaultButton, closure);
-        menu.bind(button, 0);
+        menu = spy(new Menu(StubServer.INSTANCE.createInventory(null, 27), button));
     }
     
     
     @Test
-    @Parameters({"1, 0, 1", "0, 1, 0"})
-    public void onClick(int slot, int bindedTimes, int defaultTimes) {
+    @Parameters({"true, 1, 0", "false, 0, 1"})
+    public void onClick(boolean within, int regionTimes, int menuTimes) {
         InventoryClickEvent event = mock(InventoryClickEvent.class);
-        when(event.getRawSlot()).thenReturn(slot);
+        when(event.getRawSlot()).thenReturn(10);
+        
+        Region region = mock(Region.class);
+        Button button = mock(Button.class);
+        when(region.getButtonOrDefault(any(int.class))).thenReturn(button);
+        when(region.within(any(int.class))).thenReturn(within);
+        
+        menu.getRegions().add(region);
         
         menu.onClick(event);
         
-        verify(button, times(bindedTimes)).onClick(any(Menu.class), any(InventoryClickEvent.class));
-        verify(defaultButton, times(defaultTimes)).onClick(any(Menu.class), any(InventoryClickEvent.class));
+        verify(button, times(regionTimes)).onClick(menu, event);
+        verify(this.button, times(menuTimes)).onClick(menu, event);
     }
     
     
     @Test
-    @Parameters({"1, 0, 1", "0, 1, 0"})
-    public void onDrag(int slot, int bindedTimes, int defaultTimes) {
+    public void onDrag() {
         InventoryDragEvent event = mock(InventoryDragEvent.class);
-        HashSet<Integer> set = Sets.newHashSet(slot);
-        when(event.getRawSlots()).thenReturn(set);
         
         menu.onDrag(event);
         
-        verify(button, times(bindedTimes)).onDrag(any(Menu.class), any(InventoryDragEvent.class));
-        verify(defaultButton, times(defaultTimes)).onDrag(any(Menu.class), any(InventoryDragEvent.class));
+        verify(event, times(1)).setCancelled(true);
     }
     
     
     @Test
-    public void onClose() {
-        Player player = mock(Player.class);
-        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
-        
-        when(event.getPlayer()).thenReturn(player);
-        
-        menu.onClose(event);
-        
-        verify(closure, times(1)).accept(player);
-    }
-    
-    
-    @Test
-    public void bind_Item() {
-        menu.bind(new ItemStack(Material.AIR), 1, 10);
-        
-        verify(inventory, times(2)).setItem(any(int.class), any(ItemStack.class));
-    }
-    
-    
-    @Test
-    public void bind_Buttons() {
-        menu.bind(button, 1, 10);
-        
-        assertTrue(menu.getButtons().keySet().containsAll(Arrays.asList(1, 10)));
+    @Parameters({"-1", "28"})
+    public void within(int slot) {
+        assertFalse(menu.within(slot));
     }
     
 }

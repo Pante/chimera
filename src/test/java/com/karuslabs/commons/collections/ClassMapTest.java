@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.collections;
 
-import java.util.*;
+import java.util.concurrent.*;
 
 import junitparams.*;
 
@@ -24,15 +24,16 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 
 @RunWith(JUnitParamsRunner.class)
 public class ClassMapTest {
     
-    private static Class<ArrayList> key = ArrayList.class;
-    private static ArrayList value = new ArrayList<>(0);
+    private static Class<FutureTask> key = FutureTask.class;
+    private static FutureTask value = mock(FutureTask.class);
     
-    private ClassMap<List> map;
+    private ClassMap<Runnable> map;
     
     
     public ClassMapTest() {
@@ -47,44 +48,28 @@ public class ClassMapTest {
     
     
     @Test
-    @Parameters
-    public void getCasted(ArrayList value) {
+    public void get() {
         map.put(key, value);
-        ArrayList returned = map.getCasted(key);
+        FutureTask returned = map.get(key);
         
         assertEquals(value, returned);
-    }
-    
-    protected Object[] parametersForGetCasted() {
-        return new Object[] {
-            value, null
-        };
     }
     
     
     @Test
     @Parameters
-    public void getCastedOrDefault(ArrayList value, ArrayList defaultValue, ArrayList expected) {
+    public void getOrDefault(FutureTask value, FutureTask defaultValue, FutureTask expected) {
         map.put(key, value);
-        ArrayList returned = map.getCastedOrDefault(key, defaultValue);
+        FutureTask returned = map.getOrDefault(key, defaultValue);
         
         assertEquals(expected, returned);
     }
     
-    protected Object[] parametersForGetCastedOrDefault() {
+    protected Object[] parametersForGetOrDefault() {
         return new Object[] {
             new Object[] {value, null, value},
             new Object[] {null, value, value}
         };
     }
-    
-    
-    @Test
-    public void get() {
-        map.put(key, value);
-        List returned = map.get(key);
-        
-        assertEquals(value, returned);
-    }
-    
+
 }

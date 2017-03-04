@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.reference.MarshallCommand;
 
 import java.util.*;

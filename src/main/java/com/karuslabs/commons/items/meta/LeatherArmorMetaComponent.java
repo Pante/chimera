@@ -25,26 +25,23 @@ import org.jdom2.*;
 
 
 /**
- * Parses the Leather-Armor-Meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltleather-armor-meta&gt</code> nodes
  */
 public class LeatherArmorMetaComponent extends ItemMetaComponent<LeatherArmorMeta> {
     
     /**
-     * Parses a leather-armor-meta node.
+     * Parses a <code>&ltleather-armor-meta&gt</code> node.
      * 
-     * @param element The starting element of the node
-     * @param meta The LeatherArmorMeta to modify
+     * @param element the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element element, LeatherArmorMeta meta) {
         super.parse(element, meta);
         
         try {
-            int r = element.getAttribute("r").getIntValue();
-            int g = element.getAttribute("g").getIntValue();
-            int b = element.getAttribute("b").getIntValue();
-
-            meta.setColor(Color.fromRGB(r, g, b));
+            meta.setColor(Color.fromRGB(element.getAttribute("r").getIntValue(), element.getAttribute("g").getIntValue(), element.getAttribute("b").getIntValue()));
+            
         } catch (DataConversionException e) {
             throw new ParserException("Failed to parse element: " + element.getName(), e);
         }

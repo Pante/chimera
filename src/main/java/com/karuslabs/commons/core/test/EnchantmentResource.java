@@ -26,8 +26,7 @@ import static org.mockito.Mockito.*;
 
 
 /**
- * Provides classes with a singleton test resource which stub implementation of Enchantment.
- * Meant for testing purposes and should never be used in production code.
+ * Represents a stub, singleton implementation of <code>Enchantment</code>.
  */
 public class EnchantmentResource extends ExternalResource {
     
@@ -52,20 +51,20 @@ public class EnchantmentResource extends ExternalResource {
     
     
     /**
-     * Convenience method for obtaining an Enchantment based on its ID.
+     * Convenience method for obtaining an <code>Enchantment</code> based on its ID.
      * 
-     * @param id The enchantment ID
-     * @return The Enchantment with the specified ID
+     * @param id the enchantment ID
+     * @return the <code>Enchantment</code> with the specified ID
      */
     public Enchantment getById(int id) {
         return Enchantment.getById(id);
     }
     
     /**
-     * Convenience method for obtaining an Enchantment based on its name.
+     * Convenience method for obtaining an <code>Enchantment</code> based on its name.
      * 
-     * @param name The enchantment name
-     * @return The Enchantment with the specified name
+     * @param name the enchantment name
+     * @return the <code>Enchantment</code> with the specified name
      */
     public Enchantment getByName(String name) {
         return Enchantment.getByName(name);

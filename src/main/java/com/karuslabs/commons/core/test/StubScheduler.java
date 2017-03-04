@@ -28,9 +28,7 @@ import org.bukkit.scheduler.*;
 
 /**
  * Represents a stub BukkitScheduler implementation.
- * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * <br>Methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented and will run the task
- * on the calling thread.
+ * <br><b>Warning:</b> Only methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented.
  */
 public class StubScheduler implements BukkitScheduler {
 
@@ -78,7 +76,15 @@ public class StubScheduler implements BukkitScheduler {
     public int scheduleAsyncRepeatingTask(Plugin plugin, Runnable task, long delay, long period) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
+    /**
+     * Runs the task on the calling thread.
+     * 
+     * @param <T> the task's return type
+     * @param plugin a plugin
+     * @param task the task to run
+     * @return FutureTask related to the task
+     */
     @Override
     @Supported
     public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> task) {
@@ -90,11 +96,21 @@ public class StubScheduler implements BukkitScheduler {
         
         return new FutureTask<>(task);
     }
-
+    
+    /**
+     * Does nothing.
+     * 
+     * @param taskId the task id
+     */
     @Override
     @Supported
     public void cancelTask(int taskId) {}
-
+    
+    /**
+     * Does nothing.
+     * 
+     * @param plugin the plugin
+     */
     @Override
     @Supported
     public void cancelTasks(Plugin plugin) {}
@@ -123,21 +139,42 @@ public class StubScheduler implements BukkitScheduler {
     public List<BukkitTask> getPendingTasks() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
+    /**
+     * Runs the task on the calling thread.
+     * 
+     * @param plugin the plugin
+     * @param task the task to run
+     * @return <code>null</code>
+     */
     @Override
     @Supported
     public BukkitTask runTask(Plugin plugin, Runnable task) throws IllegalArgumentException {
         task.run();
         return null;
     }
-
+    
+    /**
+     * Runs the task on the calling thread.
+     * 
+     * @param plugin the plugin
+     * @param task the task to run
+     * @return <code>null</code>
+     */
     @Override
     @Supported
     public BukkitTask runTask(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {
         task.run();
         return null;
     }
-
+    
+    /**
+     * Runs the task on the calling thread.
+     * 
+     * @param plugin the plugin
+     * @param task the task to run
+     * @return <code>null</code>
+     */
     @Override
     @Supported
     public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable task) throws IllegalArgumentException {
@@ -145,6 +182,13 @@ public class StubScheduler implements BukkitScheduler {
         return null;
     }
 
+    /**
+     * Runs the task on the calling thread.
+     * 
+     * @param plugin the plugin
+     * @param task the task to run
+     * @return <code>null</code>
+     */
     @Override
     @Supported
     public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {

@@ -26,15 +26,15 @@ import org.jdom2.*;
 
 
 /**
- * Parses the Potion-meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltpotion-meta&gt</code> nodes.
  */
 public class PotionMetaComponent extends ItemMetaComponent<PotionMeta> {
     
     /**
-     * Parses a potion-meta node.
+     * Parses a <code>&ltpotion-meta&gt</code> node.
      * 
-     * @param root The starting element of the node
-     * @param meta The PotionMeta to modify
+     * @param root the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element root, PotionMeta meta) {

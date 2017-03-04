@@ -16,143 +16,96 @@
  */
 package com.karuslabs.commons.menu;
 
-import java.util.*;
-import java.util.function.Consumer;
+import com.karuslabs.commons.menu.regions.Region;
 
-import org.bukkit.entity.HumanEntity;
+import java.util.*;
+
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
 
 
 /**
- * Represents a graphical item menu.
- * 
- * @param <GenericInventory> A inventory type
+ * Represents an in-game menu which may contain regions.
  */
-public class Menu<GenericInventory extends Inventory> implements InventoryHolder {
+public class Menu extends Region {
     
-    /**
-     * Consumer which unbinds the menu from the player in {@link MenuPool} when the menu is closed.
-     */
-    public static final Consumer<HumanEntity> REMOVE = player -> MenuPool.INSTANCE.getActive().remove(player);
-    
-    
-    protected GenericInventory inventory;
-    protected Map<Integer, Button> buttons;
-    
-    protected Button defaultButton;
-    protected Consumer<HumanEntity> closure;
+    private Set<Region> regions;
     
     
     /**
-     * Constructs this with the specified inventory, {@link #REMOVE} and {{@link Button#CANCEL}.
+     * Creates a new menu with the backing inventory specified.
      * 
-     * @param inventory An inventory
+     * @param inventory the inventory
      */
-    public Menu(GenericInventory inventory) {
-        this(inventory, Button.CANCEL, REMOVE);
+    public Menu(Inventory inventory) {
+        this(inventory, Button.CANCEL);
     }
     
     /**
-     * Constructs this with the specified inventory, default button and consumer.
+     * Creates a new menu with the backing inventory and default button specified.
      * 
-     * @param inventory An inventory
-     * @param defaultButton A button
-     * @param closure The consumer which is called when {@link #onClose(org.bukkit.event.inventory.InventoryCloseEvent)} is called.
-     */
-    public Menu(GenericInventory inventory, Button defaultButton, Consumer<HumanEntity> closure) {
-        this.inventory = inventory;
-        buttons = new HashMap<>(inventory.getSize());
-        
-        this.defaultButton = defaultButton;
-        this.closure = closure;
+     * @param inventory the inventory
+     * @param defaultButton the button
+     */    
+    public Menu(Inventory inventory, Button defaultButton) {
+        super(inventory, defaultButton);
+        regions = new HashSet<>();
     }
     
     
     /**
-     * Delegates event handling to the binded button or the default if no button is binded to the slot.
+     * Delegates event handling to a region, if the slot is within a region; else the internally associated button.
      * 
-     * @param event An InventoryClickEvent
+     * @param event the <code>InventoryClickEvent</code>
      */
     public void onClick(InventoryClickEvent event) {
-        buttons.getOrDefault(event.getRawSlot(), defaultButton).onClick(this, event);
+        int slot = event.getRawSlot();
+        if (within(slot)) {
+            for (Region region : regions) {
+                if (region.within(slot)) {
+                    region.getButtonOrDefault(slot).onClick(this, event);
+                    return;
+                }
+            }
+            
+            getButtonOrDefault(slot).onClick(this, event);
+        }
     }
     
     /**
-     * Delegates event handling to the binded button or the default if no button is binded to the slot.
+     * Cancels the event.
      * 
-     * @param event An InventoryDragEvent
+     * @param event the <code>InventoryDragEvent</code>
      */
     public void onDrag(InventoryDragEvent event) {
-        event.getRawSlots().forEach(slot -> buttons.getOrDefault(slot, defaultButton).onDrag(this, event));
+        event.setCancelled(true);
     }
     
     /**
-     * Delegates event handling to the binded button or the default if no button is binded to the slot.
+     * Removes the menu from the <code>MenuPool</code>.
+     * @see MenuPool
      * 
-     * @param event An InventoryClosEvent
+     * @param event the <code>InventoryClosEvent</code>
      */
     public void onClose(InventoryCloseEvent event) {
-        closure.accept(event.getPlayer());
-    }
-    
-    
-    /**
-     * Binds the item(s) to the specified slots.
-     * 
-     * @param item The item(s) to bind
-     * @param slots The slots to bind the specified item(s) to
-     * @return this
-     */
-    public Menu bind(ItemStack item, int... slots) {
-        for (int slot : slots) {
-            inventory.setItem(slot, item);
-        }
-        
-        return this;
-    }
-    
-    /**
-     * Binds the button(s) to the specified slots.
-     * 
-     * @param button The button(s) to bind
-     * @param slots The slots to bind the specified button(s) to
-     * @return this
-     */
-    public Menu bind(Button button, int... slots) {
-        for (int slot : slots) {
-            buttons.put(slot, button);
-        }
-        
-        return this;
+        MenuPool.INSTANCE.getActive().remove(event.getPlayer());
     }
      
-        
+    
+    /**
+     * Determines if the slot specified is within the menu.
+     * 
+     * @param slot the slot
+     * @return <code>true</code>, if the slot is not negative and is less than the backing inventory size; else <code>false</code>
+     */
     @Override
-    public GenericInventory getInventory() {
-        return inventory;
-    }
-    
-    public Map<Integer, Button> getButtons() {
-        return buttons;
+    public boolean within(int slot) {
+        return slot >= 0 && slot < inventory.getSize();
     }
     
     
-    public Button getDefaultButton() {
-        return defaultButton;
-    }
-    
-    public void setDefaultButton(Button defaultButton) {
-        this.defaultButton = defaultButton;
-    }
-    
-    
-    public Consumer<HumanEntity> getClosure() {
-        return closure;
-    }
-    
-    public void setClosure(Consumer<HumanEntity> closure) {
-        this.closure = closure;
+    public Set<Region> getRegions() {
+        return regions;
     }
     
 }

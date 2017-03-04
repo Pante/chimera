@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.reference.AboutCommand;
 import com.karuslabs.commons.commands.Criteria;
 
 import java.util.Arrays;

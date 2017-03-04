@@ -21,26 +21,27 @@ import java.util.function.*;
 
 
 /**
- * Represents a Optional FutureTask.
+ * Represents an implementation of both a {@link java.util.Optional} and {@link java.util.concurrent.FutureTask}.
  * 
- * @param <T> The computation result type
+ * @param <T> the type of the computation
  */
 public class OptionalFuture<T> extends FutureTask<T> {
     
     /**
-     * Constructs this that will, upon running, execute the given Callable.
+     * Creates a new <code>OptionalFuture</code> which will, upon running, execute the given <code>Callable</code>.
      * 
-     * @param callable The callable task
+     * @param callable the callable task
      */
     public OptionalFuture(Callable<T> callable) {
         super(callable);
     }
     
     /**
-     * Constructs this that will, upon running, execute the given Runnable, and arrange that get will return the given result on successful completion.
+     * Creates a new <code>OptionalFuture</code> which will, upon running, execute the given Runnable, 
+     * and arrange that {@link #get()} will return the given result on successful completion.
      * 
-     * @param runnable The runnable task
-     * @param result The result to return on successful completion.
+     * @param runnable the runnable task
+     * @param result the result to return on successful completion
      */
     public OptionalFuture(Runnable runnable, T result) {
         super(runnable, result);
@@ -48,9 +49,9 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * Invoke the specified consumer with the value if the computation is completed, otherwise do nothing.
+     * Invoke the specified consumer with the value if the computation is completed; else do nothing.
      * 
-     * @param consumer Bblock to be executed if the computation has completed
+     * @param consumer block to be executed if the computation has completed
      */
     public void ifDone(Consumer<T> consumer) {
         if (isDone()) {
@@ -60,8 +61,11 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * Waits if necessary for the computation to complete, and then retrieves its result.
-     * Wraps any thrown {@link java.util.concurrent.ExecutionException}s and {@link java.lang.InterruptedException}s in {@link UncheckedExecutionException}s and {@link UncheckedInterruptedException}s.
+     * Waits if necessary for the computation to complete, and then retrieves its result, 
+     * transforming any checked exceptions thrown to their unchecked variants.
+     * 
+     * @see UncheckedExecutionException
+     * @see UncheckedInterruptedException
      * 
      * @return The computed result
      */
@@ -79,9 +83,9 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * Returns the computation result, or null if the computation has not completed yet.
+     * Returns the computation result, if the computation has completed; else <code>null</code>.
      * 
-     * @return The computation result, if completed; else null
+     * @return the computation result, if completed; else null
      */
     public T getIfDone() {
         if (isDone()) {
@@ -94,10 +98,10 @@ public class OptionalFuture<T> extends FutureTask<T> {
 
     
     /**
-     * Returns the computation result, or the given default value if the computation has not completed yet.
+     * Returns the computation result, if the computation has completed; else the default value
      * 
-     * @param defaultValue The value to return if the computation has yet to be completed
-     * @return The computation result, if completed; else the default value
+     * @param defaultValue the value to return if the computation has yet to be completed
+     * @return the computation result, if completed; else the default value
      */
     public T getOrDefault(T defaultValue) {
         if (isDone()) {
@@ -109,13 +113,13 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * Return the computation, if completed, otherwise throw an unchecked exception to be created by the provided supplier.
+     * Return the computation, if completed; else throw an unchecked exception to be created by the provided supplier.
      * 
-     * @param <E> Type of the unchecked exception to be thrown
-     * @param supplier The supplier which will return the unchecked exception to be thrown
-     * @return The completed computation
+     * @param supplier the supplier which will return the unchecked exception to be thrown
+     * @return the completed computation
+     * @throws RuntimeException or any other unchecked exceptions specified by the <code>suppiler</code>
      */
-    public <E extends RuntimeException> T getOrThrow(Supplier<? extends E> supplier) {
+    public T getOrThrow(Supplier<? extends RuntimeException> supplier) {
         if (isDone()) {
             return getUnchecked();
             

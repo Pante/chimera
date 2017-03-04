@@ -17,6 +17,6 @@
 
 
 /**
- * Classes provide implementations of commonly used commands.
+ * Implementations of frequently used commands.
  */
 package com.karuslabs.commons.commands.reference;

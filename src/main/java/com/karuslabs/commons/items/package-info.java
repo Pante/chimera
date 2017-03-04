@@ -16,6 +16,6 @@
  */
 
 /**
- * Classes used to deserialize items from XML documents.
+ * Classes for parsing <code>ValueStack</code> related XML documents.
  */
 package com.karuslabs.commons.items;

@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 
 /**
- * Represents an ItemStack with buy and sell prices.
+ * Represents an <code>ItemStack</code> with buy and sell prices.
  */
 public class ValueStack {
     
@@ -31,12 +31,12 @@ public class ValueStack {
     
     
     /**
-     * Constructs this with the specified name, itemstack, buy and sell prices.
+     * Creates a new ValueStack with the name, <code>ItemStack</code>, buy and sell prices specified.
      * 
-     * @param name The name
-     * @param item The ItemStack
-     * @param buy The buy price
-     * @param sell The sell price
+     * @param name the name
+     * @param item the <code>ItemStack</code>
+     * @param buy the buy price
+     * @param sell the sell price
      */
     public ValueStack(String name, ItemStack item, float buy, float sell) {
         this.name = name;
@@ -46,30 +46,21 @@ public class ValueStack {
     }
 
     
-    /**
-     * @return The name
-     */
     public String getName() {
         return name;
     }
     
-    /**
-     * @return The item
-     */
+    
     public ItemStack getItem() {
         return item;
     }
     
-    /**
-     * @return The buy price
-     */
+    
     public float getBuy() {
         return buy;
     }
 
-    /**
-     * @return The sell price
-     */
+
     public float getSell() {
         return sell;
     }

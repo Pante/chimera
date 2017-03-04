@@ -20,17 +20,18 @@ import org.jdom2.Element;
 
 
 /**
- * Parses a node in an XMl Document and returns a parsed object.
+ * Represents a component for parsing a XML node and returns a parsed object.
+ * @see SetterComponent
  * 
- * @param <ParsedComponent> The object type to parse to
+ * @param <ParsedComponent> The type of the parsed object
  */
 public interface Component<ParsedComponent> {
     
     /**
      * Parses the specified element and returns a parsed object.
      * 
-     * @param element The start of the node
-     * @return The parsed object
+     * @param element the node
+     * @return the parsed object
      */
     public ParsedComponent parse(Element element);
     

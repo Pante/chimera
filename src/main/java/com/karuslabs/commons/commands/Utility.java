@@ -20,7 +20,7 @@ import java.util.*;
 
 
 /**
- * Provides classes with utility methods.
+ * Command-related utility methods.
  */
 public class Utility {
     
@@ -28,10 +28,10 @@ public class Utility {
     
     
     /**
-     * Trims the specified array and removes the first value.
+     * Removes the first value of the array specified.
      * 
-     * @param args The arguments to trim
-     * @return Returns the trimmed array or an empty array if the arrays length was less than or equal to 1
+     * @param args the array to trim
+     * @return Returns a copy of the array with the first value removed if the array size is greater than 1; else an empty array.
      */
     public static String[] trim(String[] args) {
         if (args.length <= 1) {
@@ -44,13 +44,12 @@ public class Utility {
     
     
     /**
-     * Gets the value at the specified index or the specified default argument if the specified index
-     * was out of bounds.
+     * Returns the value at the index, or the default value if th index specified is out of bounds.
      * 
-     * @param args The arguments containing the value
-     * @param index The index of the value
-     * @param defaultArgument The default argument to return if the index was out of bounds
-     * @return The value at the specified index or the default argument if the index was out of bounds.
+     * @param args the array to retrieve the value from
+     * @param index the index of the value
+     * @param defaultArgument the value to return if the index was out of bounds
+     * @return the value at the index, if within bounds; else the default value
      */
     public static String getArgumentOrDefault(String[] args, int index, String defaultArgument) {
         if (index < args.length) {
@@ -63,10 +62,10 @@ public class Utility {
     
     
     /**
-     * Parses the specified string to an integer.
+     * Parses the string to an <code>int</code>.
      * 
-     * @param argument The argument to parse
-     * @return The parsed value or 1 if the specified string was not a integer
+     * @param argument The string to parse
+     * @return the parsed value if the string is a <code>int</code>; else 1
      */
     public static int toInt(String argument) {
         if (argument.matches("\\d+")) {
@@ -79,11 +78,11 @@ public class Utility {
     
     
     /**
-     * Gets the total number of pages based on the specified entries and page size.
+     * Returns the total number of pages based on the entries and page size specified.
      * 
-     * @param totalEntries The total entries
-     * @param pageSize The number of entries on each page
-     * @return The number of pages or 0 if the total entries or page size was less than 0
+     * @param totalEntries the total entries
+     * @param pageSize the size of each page
+     * @return the total number of pages, if the entries and size of a page is greater than 0; else 0
      */
     public static int getTotalPages(int totalEntries, int pageSize) {
         if (totalEntries > 0 && pageSize > 0) {
@@ -96,12 +95,12 @@ public class Utility {
     
     
     /**
-     * Gets the index of the first entry on a page based on the specified entries, page size and page.
+     * Returns the index of the first entry on the page specified.
      * 
-     * @param totalEntries The total entries
-     * @param pageSize The number of entries on each page
-     * @param page The page
-     * @return The index of the first entry on a page or the total number of entries if the index was out of bounds.
+     * @param totalEntries the total entries
+     * @param pageSize the size of a page
+     * @param page the page number
+     * @return the index of the first entry on a page, if within the total entries; else the total number of entries
      */
     public static int getFirstIndex(int totalEntries, int pageSize, int page) {
         int firstOnPage = (page * pageSize) - pageSize;
@@ -111,12 +110,12 @@ public class Utility {
     
     
     /**
-     * Gets the index of the last entry o a page based on the specified entries, page size and page.
+     * Returns the index of the last entry on the page specified.
      * 
-     * @param totalEntries The total entries
-     * @param pageSize The number of entries on each page
-     * @param page The page
-     * @return The index of the last entry on a page or the total number of entries if the index was out of bounds.
+     * @param totalEntries the total entries
+     * @param pageSize the size of a page
+     * @param page the page number
+     * @return the index of the last entry on a page, if within the total entries; else the total number of entries
      */
     public static int getLastIndex(int totalEntries, int pageSize, int page) {
         int lastOnPage = (page * pageSize);
@@ -126,14 +125,11 @@ public class Utility {
 
     
     /**
-     * Converts the tree structured commands into a flat format.
+     * Operates on the command specified and recursively maps the subcommands by appending the name of the subcommand to the parent command.
      * 
-     * For example, if a command with the name, "command" contains a subcommand with the name "subcommand".
-     * Using this method on the command will add both to the map as "command" and "command subcommand" respectively.
-     * 
-     * @param name The name of the command
-     * @param command The command to be mapped
-     * @param commands The map the commands are to be mapped to
+     * @param name the name of the command
+     * @param command the command to be operated on
+     * @param commands the map the subcommands will be mapped to
      */
     public static void flapMap(String name, Command command, Map<String, Command> commands) {
         if (command instanceof Marshall) {

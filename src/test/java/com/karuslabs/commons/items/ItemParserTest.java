@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.items.ValueStack;
-import com.karuslabs.commons.items.ItemParser;
 import com.karuslabs.commons.core.test.XMLResource;
 import com.karuslabs.commons.core.xml.Component;
 

@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.SetterParser;
-import com.karuslabs.commons.core.xml.SetterComponent;
+import com.karuslabs.commons.core.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
@@ -26,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Parses a XML Document and transforms it into command information.
+ * Represents a parser for parsing XML documents to <code>Command</code>s.
  */
 public class CommandParser extends SetterParser<Map<String, Command>> {
     
@@ -34,9 +33,9 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
     
     
     /**
-     * Constructs this with the specified component and the default XML schema.
+     * Creates a new parser with the component for parsing <code>&ltcommands&gt</code> nodes specified.
      * 
-     * @param component The component used to parse commands nodes
+     * @param component the component for parsing <code>&ltcommands&gt</code> nodes
      */
     public CommandParser(SetterComponent<Map<String, Command>> component) {
         super(null);
@@ -47,10 +46,10 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
    
     
     /**
-     * Constructs this with the specified component and XML schema.
+     * Creates a new parser with the component for parsing <code>&ltcommands&gt</code> nodes and XML schema specified.
      * 
-     * @param component The component used to parse commands nodes
-     * @param schemaPath The path to the XML schema
+     * @param component the component for parsing <code>&ltcommands&gt</code> nodes
+     * @param schemaPath the XML schema path
      */
     public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
         super(schemaPath);

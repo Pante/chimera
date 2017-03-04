@@ -16,14 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.items.meta.BookMetaComponent;
-import com.karuslabs.commons.items.meta.LeatherArmorMetaComponent;
-import com.karuslabs.commons.items.meta.ItemMetaComponent;
-import com.karuslabs.commons.items.meta.PotionMetaComponent;
-import com.karuslabs.commons.items.meta.EnchantmentStorageMetaComponent;
-import com.karuslabs.commons.items.meta.BannerMetaComponent;
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.Component;
+import com.karuslabs.commons.items.meta.*;
+import com.karuslabs.commons.core.xml.*;
 
 import java.util.*;
 
@@ -35,7 +29,7 @@ import org.jdom2.*;
 
 
 /**
- * Parses the item nodes in a XML document and transforms it into a {@link ValueStack}.
+ * Represents a component for parsing <code>&ltitem&gt</code> nodes.
  */
 public class ValueStackComponent implements Component<ValueStack> {
 
@@ -43,7 +37,7 @@ public class ValueStackComponent implements Component<ValueStack> {
     
     
     /**
-     * Constructs this with the default Item-meta components.
+     * Creates a new component.
      */
     public ValueStackComponent() {
         components = new HashMap<>(6);
@@ -56,9 +50,9 @@ public class ValueStackComponent implements Component<ValueStack> {
     }
     
     /**
-     * Constructs this with the specified Item-meta components.
+     * Creates a new component with the components for parsing <code>ItemMeta</code>s specified.
      * 
-     * @param components The Item-meta components
+     * @param components the components for parsing variants of <code>&ltItemMeta&gt</code>s
      */
     public ValueStackComponent(Map<String, ItemMetaComponent> components) {
         this.components = components;
@@ -66,10 +60,10 @@ public class ValueStackComponent implements Component<ValueStack> {
     
     
     /**
-     * Parses the item nodes. Delegates the parsing of item-meta nodes to a registered item-meta component.
+     * Parses a <code>&ltitem&gt</code> node.
      * 
-     * @param element The starting element of the node
-     * @return The parsed ValueStack
+     * @param element the node
+     * @return the parsed <code>ValueStack</code>
      */
     @Override
     public ValueStack parse(Element element) {
@@ -108,7 +102,7 @@ public class ValueStackComponent implements Component<ValueStack> {
     
     
     /**
-     * @return The registered Item-meta components
+     * @return the components for parsing variants of <code>&ltItemmeta&gt</code>
      */
     public Map<String, ItemMetaComponent> getComponents() {
         return components;

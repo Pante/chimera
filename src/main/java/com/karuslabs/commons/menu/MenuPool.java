@@ -25,8 +25,8 @@ import org.bukkit.event.inventory.*;
 
 
 /**
- * Serves as a singleton entry point for the menu framework and should be registered to the server.
- * Delegation of event handling requires the client to manually register and unregister menus and the players viewing them.
+ * Represents a singleton facade for accessing menu-related functions and contains pool <code>Menu</code>s.
+ * May listen for inventory related events and delegate events to registered menus.
  */
 public class MenuPool implements Listener {
     
@@ -44,10 +44,9 @@ public class MenuPool implements Listener {
     
     
     /**
-     * Checks if there are any corresponding players registered to the MenuPool
-     * and delegates event handling to the menu registered with the player if present.
+     * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
      * 
-     * @param event The InventoryClickEvent instance
+     * @param event the <code>InventoryClickEvent</code>
      */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -59,10 +58,9 @@ public class MenuPool implements Listener {
     
     
     /**
-     * Checks if there are any corresponding players registered to the MenuPool
-     * and delegates event handling to the menu registered with the player if present.
+     * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
      * 
-     * @param event The InvntoryDragEvent event
+     * @param event the <code>InvntoryDragEvent</code>
      */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
@@ -73,19 +71,22 @@ public class MenuPool implements Listener {
     }
     
     
+    /**
+     * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
+     * 
+     * @param event the <code>InventoryCloseEvent</code>
+     */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (active.containsKey(player)) {
-            active.get(player);
+            active.get(player).onClose(event);
         }
     }
 
     
     /**
-     * Returns a thread-safe view of the pooled menus with their titles as keys.
-     * 
-     * @return A thread-safe map containing the pooled menus.
+     * @return the pooled <code>Menus</code>.
      */
     public ConcurrentHashMap<String, Menu> getPooled() {
         return pooled;
@@ -93,9 +94,7 @@ public class MenuPool implements Listener {
 
     
     /**
-     * Returns the currently registered players and menus.
-     * 
-     * @return The registered players and menus
+     * @return the menus currently in use by players
      */
     public Map<HumanEntity, Menu> getActive() {
         return active;

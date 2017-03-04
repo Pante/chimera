@@ -28,8 +28,7 @@ import org.junit.rules.ExternalResource;
 
 
 /**
- * Provides classes with a XML test resource.
- * Meant for testing purposes and should never be used in production code.
+ * Represents a XML resource.
  */
 public class XMLResource extends ExternalResource {
     
@@ -37,12 +36,12 @@ public class XMLResource extends ExternalResource {
     
     
     /**
-     * Loads the XML document from the specified file using the specified XML schema.
-     * Not providing a schema causes this to build the document without validation.
+     * Loads the XML document with the XML schema specified.
+     * Setting the schema path as <code>null</code> will load the document without validation.
      * 
-     * @param file The XML file
-     * @param schemaPath The schema path
-     * @return this
+     * @param file the XML document
+     * @param schemaPath the XML schema path
+     * @return <code>this</code>
      */
     public XMLResource load(File file, String schemaPath) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
@@ -57,12 +56,12 @@ public class XMLResource extends ExternalResource {
     
     
     /**
-     * Loads the XML Document from the specified inputstream using the specified XML schema.
-     * Not providing a schema causes this to build the document without validation.
+     * Loads the XML document from the <code>inputstream</code> with the XML schema specified.
+     * Setting the schema path as <code>null</code> will load the document without validation.
      * 
-     * @param stream The inputstream
-     * @param schemaPath The schema path
-     * @return this
+     * @param stream the inputstream
+     * @param schemaPath the XML schema path
+     * @return <code>this</code>
      */
     public XMLResource load(InputStream stream, String schemaPath) {
         try {
@@ -81,14 +80,14 @@ public class XMLResource extends ExternalResource {
     
     
     /**
-     * @return The currently loaded document
+     * @return the currently loaded document
      */
     public Document getDocument() {
         return document;
     }
     
     /*
-     * @return The root element of the currently loaded document
+     * @return the root element of the currently loaded document
      */
     public Element getRoot() {
         return document.getRootElement();

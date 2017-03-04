@@ -24,9 +24,10 @@ import org.jdom2.input.sax.XMLReaders;
 
 
 /**
- * Parses a XML Document and modifies the argument object accordingly.
+ * Represents a parser which parses a XML Document and setting the values of the object.
+ * @see Parser
  * 
- * @param <Argument> The object type of the modifiable argument
+ * @param <Argument> The type of the object to set
  */
 public abstract class SetterParser<Argument> {
     
@@ -35,19 +36,19 @@ public abstract class SetterParser<Argument> {
     
     
     /**
-     * Constructs this with the specified schema and a default schema validating SAXBuilder.
+     * Creates a new, schema validating parser with the XML schema specified.
      * 
-     * @param schemaPath The schema path
+     * @param schemaPath the XML schema path
      */
     public SetterParser(String schemaPath) {
         this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
     }
     
     /**
-     * Constructs this with the specified schema and SAXBuilder.
+     * Creates a new parser with the XML schema and SAXBuilder specified.
      * 
-     * @param schemaPath The schema path
-     * @param builder The SAXBuilder
+     * @param schemaPath the XML schema path
+     * @param builder the SAXBuilder
      */
     public SetterParser(String schemaPath, SAXBuilder builder) {
         this.schemaPath = schemaPath;
@@ -56,10 +57,10 @@ public abstract class SetterParser<Argument> {
     
     
     /**
-     * Parses a file and modifies the argument.
+     * Parses a XML document and sets the values of the object specified.
      * 
-     * @param file The file to parse
-     * @param argument The object to be modified
+     * @param file the XML document
+     * @param argument the object to set
      */
     public void parse(File file, Argument argument) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
@@ -71,10 +72,10 @@ public abstract class SetterParser<Argument> {
     }
     
     /**
-     * Parses an inputstream and modifies the argument.
+     * Parses a XML document from the <code>inputstream</code> and sets the values of the object specified.
      * 
-     * @param stream The inputstream to parse
-     * @param argument The object to be modified
+     * @param stream the <code>inputstream</code>
+     * @param argument the object to set
      */
     public void parse(InputStream stream, Argument argument) {
         try {
@@ -88,10 +89,10 @@ public abstract class SetterParser<Argument> {
     
     
     /**
-     * Contains the parsing logic. Used in the template methods, {@link #parse(java.io.File, java.lang.Object) } and {@link #parse(java.io.InputStream, java.lang.Object) }.
+     * Parses a XML document starting from the root element specified and sets the values of the object specified.
      * 
-     * @param element The element to parse
-     * @param argument The object to be modified
+     * @param element the root element of a XML document
+     * @param argument the object to set
      */
     protected abstract void parse(Element element, Argument argument);
     

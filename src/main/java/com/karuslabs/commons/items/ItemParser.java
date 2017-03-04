@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.core.xml.Component;
-import com.karuslabs.commons.core.xml.Parser;
+import com.karuslabs.commons.core.xml.*;
 
 import java.util.*;
 
@@ -25,7 +24,7 @@ import org.jdom2.Element;
 
 
 /**
- * Parses a XML document and transform it into item information.
+ * Represents a parser for parsing XML documents to <code>ItemStack</code>s.
  */
 public class ItemParser extends Parser<Map<String, ValueStack>> {
     
@@ -33,10 +32,10 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     
     
     /**
-     * Constructs this with the specified component and schema path.
+     * Creates a new parser with the component for parsing <code>&ltitem&gt</code> nodes and XML schema path specified.
      * 
-     * @param component The component used to parse item nodes
-     * @param schemaPath The schema path
+     * @param component the component used to parse <code>&ltitem&gt</code> nodes
+     * @param schemaPath the XML schema path
      */
     public ItemParser(Component<ValueStack> component, String schemaPath) {
         super(schemaPath);
@@ -44,9 +43,9 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     }
     
     /**
-     * Constructs this with the specified component and default schema.
+     * Creates a new parer with the component for parsing <code>&ltitem&gt</code> nodes.
      * 
-     * @param component The component used to parse item nodes
+     * @param component the component used to parse <code>&ltitem&gt</code> nodes
      */
     public ItemParser(Component<ValueStack> component) {
         super(null);

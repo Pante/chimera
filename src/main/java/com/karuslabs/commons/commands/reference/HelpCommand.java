@@ -16,10 +16,7 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.Criteria;
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.commands.Utility;
-import com.karuslabs.commons.commands.PluginCommand;
+import com.karuslabs.commons.commands.*;
 import com.karuslabs.commons.commands.events.CommandRegistrationEvent;
 
 import java.util.*;
@@ -34,9 +31,9 @@ import static com.karuslabs.commons.commands.Utility.*;
 
 
 /**
- * Represents a command which retrieves and displays the owning plug-in's commands and their usages.
- * Listens for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} and automatically
- * updates itself. Command hierarchy is flatten when stored to optimize look-up performance.
+ * Represents a command which lists the plugin's command information.
+ * May listen for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} to
+ * update itself. Command structure is flatten when stored to optimize look-up performance.
  */
 public class HelpCommand extends PluginCommand implements Listener {
     
@@ -45,23 +42,23 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     /**
-     * Constructs this with the specified name and owning plug-in.
+     * Creates a new command with the name and owning plugin specified.
      * 
-     * @param name The name of this command
-     * @param plugin The owning plug-in of this command
+     * @param name the name of the command
+     * @param plugin the owning plugin of the command
      */
     public HelpCommand(String name, Plugin plugin) {
         this(name, plugin, (command, sender, args) -> Criteria.PERMITTED.test(command, sender, args) && Criteria.within(args, 0, 2), new HashMap<>(), 3);
     }
     
     /**
-     * Constructs this with the specified name, owning plug-in, execution criteria, commands and page size.
+     * Creates a new command with the name, owning plugin, criteria, initial commands and page size specified.
      * 
-     * @param name The name of this command
-     * @param plugin The owning plug-in of this command
-     * @param criteria The execution criteria
-     * @param commands The map containing flatten hierarchy of commands
-     * @param size The number of commands on each page page
+     * @param name the name of the command
+     * @param plugin the owning plugin of the command
+     * @param criteria the criteria which must be satisfied for execution to proceed
+     * @param commands the initial, flatten commands
+     * @param size the size of a page
      */
     public HelpCommand(String name, Plugin plugin, Criteria criteria, Map<String, Command> commands, int size) {
         super(name, plugin, criteria);
@@ -71,10 +68,10 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     /**
-     * Tests the criteria and displays the processed command information.
+     * Displays the information of the commands if the criteria is satisfied; else displays the permission message. 
      * 
-     * @param sender Source object which is executing this command
-     * @param args All arguments passed to the command, split via ' '
+     * @param sender source object which is executing the command
+     * @param args all arguments passed to the command, split via ' '
      */
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -89,6 +86,14 @@ public class HelpCommand extends PluginCommand implements Listener {
         }
     }
     
+    /**
+     * Returns an array of command usages based on the sender, page and search criteria specified.
+     * 
+     * @param sender source object which is executing the command
+     * @param page the page of command usages
+     * @param search the search criteria which a command's name must start with
+     * @return an array of command usages
+     */
     protected String[] getUsages(CommandSender sender, int page, String search) {
         List<String> usages = commands.values().stream()
                 .filter(command -> command.getName().startsWith(search) && command.testPermissionSilent(sender))
@@ -111,9 +116,11 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     /**
-     * Called when a command is registered to a {@link com.karuslabs.commons.commands.CommandMapProxy}.
+     * Registers the command contained in the <code>event</code> specified to the list of known commands.
      * 
-     * @param event The event called
+     * @see com.karuslabs.commons.commands.CommandMapProxy
+     * 
+     * @param event the command event
      */
     @EventHandler
     public void onRegister(CommandRegistrationEvent event) {
@@ -123,7 +130,7 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     /** 
-     * @return A flatten representation of commands.
+     * @return a flatten map of commands
      */
     public Map<String, Command> getCommands() {
         return commands;

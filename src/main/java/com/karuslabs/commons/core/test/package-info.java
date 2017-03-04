@@ -17,6 +17,6 @@
 
 
 /**
- * Classes that provide stub implementations of Bukkit classes for testing purposes.
+ * Test resources and stub implementations of Bukkit classes for testing purposes.
  */
 package com.karuslabs.commons.core.test;

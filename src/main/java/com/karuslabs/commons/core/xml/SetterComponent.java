@@ -20,17 +20,18 @@ import org.jdom2.Element;
 
 
 /**
- * Parses a node in an XMl Document and modifies the argument object accordingly.
+ * Represents a component for parsing a XML node and setting the values of an object.
+ * @see Component
  * 
- * @param <ParseObject> The object to modify
+ * @param <ParseObject> the type of the object to set
  */
 public interface SetterComponent<ParseObject> {
     
     /**
-     * Parses the specified element and modifies the argument object.
+     * Parses the element and sets the object specified.
      * 
-     * @param element The start of the node
-     * @param argument The argument object to modify
+     * @param element the node
+     * @param argument the object to set
      */
     public void parse(Element element, ParseObject argument);
 

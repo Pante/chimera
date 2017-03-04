@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.SetterComponent;
+import com.karuslabs.commons.core.xml.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,18 +30,18 @@ import org.jdom2.*;
 
 
 /**
- * Parses the item-meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltitem-meta&gt</code> nodes.
  * 
- * @param <GenericMeta> The meta type to modify
+ * @param <GenericMeta> the type of <code>ItemMeta</code>
  */
 public class ItemMetaComponent<GenericMeta extends ItemMeta> implements SetterComponent<GenericMeta> {
     
     
     /**
-     * Parses a item-meta node.
+     * Parses a <code>&ltitem-meta&gt</code> node.
      * 
-     * @param root The starting element of the node
-     * @param meta The ItemMeta to modify
+     * @param root the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element root, GenericMeta meta) {

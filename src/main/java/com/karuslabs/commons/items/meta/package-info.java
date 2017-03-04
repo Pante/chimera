@@ -17,6 +17,6 @@
 
 
 /**
- * Classes used to deserialize item-meta types from XML documents
+ * Classes for parsing <code>ItemMeta</code> related XML nodes.
  */
 package com.karuslabs.commons.items.meta;

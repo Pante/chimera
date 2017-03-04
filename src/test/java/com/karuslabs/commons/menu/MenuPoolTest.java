@@ -88,4 +88,23 @@ public class MenuPoolTest {
     }
     
     
+    @Test
+    @Parameters
+    public void onClose(HumanEntity entity, int times) {
+        pool.getActive().put(entity, menu);
+        
+        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
+        when(event.getPlayer()).thenReturn(humanEntity);
+        pool.onClose(event);
+        
+        verify(menu, times(times)).onClose(event);
+    }
+    
+    protected Object[] parametersForOnClose() {
+        return new Object[] {
+            new Object[] {humanEntity, 1},
+            new Object[] {mock(HumanEntity.class), 0}
+        };
+    }
+    
 }

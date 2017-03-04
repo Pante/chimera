@@ -45,9 +45,8 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Represents a stub Bukkit server implementation.
- * <br><br><b>Warning:</b> Not all methods are implemented and may throw UnsupportedOperationException.
- * <br>Methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented.
+ * Represents a stub, singleton Bukkit server implementation.
+ * <br><b>Warning:</b> Only methods denoted by {@link com.karuslabs.commons.core.annotations.Supported} are implemented.
  */
 public class StubServer implements Server {
     
@@ -70,9 +69,7 @@ public class StubServer implements Server {
     
     
     /**
-     * Gets the name of this server implementation.
-     * 
-     * @return An empty string
+     * @return an empty string
      */
     @Override
     @Supported
@@ -81,9 +78,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * Gets the version string of this server implementation.
-     * 
-     * @return An empty string
+     * @return an empty string
      */
     @Override
     @Supported
@@ -92,9 +87,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * Gets the Bukkit version that this server is running.
-     * 
-     * @return An empty string
+     * @return an empty string
      */
     @Override
     @Supported
@@ -238,9 +231,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * Gets the scheduler for managing scheduled events.
-     * 
-     * @return a {@link com.karuslabs.commons.core.test.StubScheduler} instance
+     * @return a {@link com.karuslabs.commons.core.test.StubScheduler}
      */
     @Override
     @Supported
@@ -299,9 +290,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * Returns the primary logger associated with this server instance.
-     * 
-     * @return a mocked logger instance
+     * @return a mocked logger
      */
     @Override
     @Supported
@@ -468,23 +457,39 @@ public class StubServer implements Server {
     public HelpMap getHelpMap() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * @return a <code>CraftInventoryCustom</code>
+     */
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, InventoryType type) {
         return new CraftInventoryCustom(owner, type);
     }
-
+    
+    /**
+     * @return a <code>CraftInventoryCustom</code>
+     */
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, InventoryType type, String title) {
         return new CraftInventoryCustom(owner, type, title);
     }
-
+    
+    /**
+     * @return a <code>CraftInventoryCustom</code>
+     */
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, int size) throws IllegalArgumentException {
         return new CraftInventoryCustom(owner, size);
     }
-
+    
+    /**
+     * @return a <code>CraftInventoryCustom</code>
+     */
     @Override
+    @Supported
     public Inventory createInventory(InventoryHolder owner, int size, String title) throws IllegalArgumentException {
         return new CraftInventoryCustom(owner, size, title);
     }
@@ -535,9 +540,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * Gets the instance of the item factory.
-     * 
-     * @return a CraftItemFactory instance
+     * @return a singleton <code>CraftItemFactory</code>
      */
     @Override
     @Supported

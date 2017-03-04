@@ -17,15 +17,14 @@
 package com.karuslabs.commons.collections;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
- * Represents a map with the class of a value as the key and is an implementation of Josh Bloch's 
- * type-safe heterogeneous container.
+ * Represents a map with the value's class as the key. 
+ * This is a single-value implementation of Josh Bloch's type-safe heterogeneous container.
  * 
- * Delegates most {@link java.util.Map} methods to an internal map.
- * 
- * @param <T> The lower bound
+ * @param <T> the type of mapped values
  */
 public class ClassMap<T> implements Map<Class<? extends T>, T> {
     
@@ -33,65 +32,99 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     
     
     /**
-     * Constructs this with a {@link java.util.HashMap} as the internal map.
+     * Creates a new, empty map with a backing {@link java.util.HashMap}.
      */
     public ClassMap() {
         this(new HashMap<>());
     }
     
     /**
-     * Constructs this with a {@link java.util.HashMap} as the internal map and the specified default capacity.
+     * Creates a new, empty map with a backing {@link java.util.HashMap} and an initial table size 
+     * accommodating the specified number of elements without the need to dynamically resize.
      * 
-     * @param capacity The default capacity
+     * @param capacity the initial capacity
      */
     public ClassMap(int capacity) {
         this(new HashMap<>(capacity));
     }
     
     /**
-     * Constructs this with the specified map as the internal map.
+     * Creates a new, empty map with the backing map specified.
      * 
-     * @param map The specified internal map
+     * @param map the backing map
      */
     public ClassMap(Map<Class<? extends T>, T> map) {
         this.map = map;
     }
+
     
+
+    @Override
+    public void clear() {
+        map.clear();
+    }
+    
+
+    @Override
+    public boolean containsKey(Object key) {
+        return map.containsKey(key);
+    }
+
+
+    @Override
+    public boolean containsValue(Object value) {
+        return map.containsValue(value);
+    }
+    
+    @Override
+    public Set<Entry<Class<? extends T>, T>> entrySet() {
+        return map.entrySet();
+    }
+        
+    @Override
+    public T get(Object key) {
+        return map.get(key);
+    }
     
     /**
-     * Returns the casted value to which the specified key is mapped, or null if this map contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
      * 
-     * @param <U> A type that extends the lower bound specified for this
-     * @param type The object the key the value is mapped to and will be casted to
-     * @return The casted value to which the specified key is mapped, or null if this map contains no mapping for the key
+     * @param <U> the type of the value
+     * @param type the class of the value the value is mapped to
+     * @return the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key
      */
-    public <U extends T> U getCasted(Class<U> type) {
+    public <U extends T> U get(Class<U> type) {
         return type.cast(map.get(type));
     }
     
     /**
-     * Returns the casted value to which the specified key is mapped, or value if this map contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
      * 
-     * @param <U> A type that extends the lower bound specified for this
-     * @param type The object the key the value is mapped to and will be casted to
-     * @param value the default mapping of the key
-     * @return The casted value to which the specified key is mapped, or value if this map contains no mapping for the key
+     * @param <U> the type of the value
+     * @param type the class of the value the value is mapped to
+     * @param value the value to return if this map contains no mapping for the given key
+     * @return the mapping for the key, if present; else the default value
      */
-    public <U extends T> U getCastedOrDefault(Class<U> type, U value) {
+    public <U extends T> U getOrDefault(Class<U> type, U value) {
         T uncasted = map.get(type);
         if (uncasted != null) {
-            return type.cast(map.get(type));
+            return type.cast(uncasted);
             
         } else {
             return value;
         }
     }
     
+    @Override
+    public T put(Class<? extends T> key, T value) {
+        return map.put(key, value);
+    }
     
     @Override
-    public int size() {
-        return map.size();
+    public void putAll(Map<? extends Class<? extends T>, ? extends T> map) {
+        this.map.putAll(map);
     }
+
 
     @Override
     public boolean isEmpty() {
@@ -99,53 +132,24 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     }
 
     @Override
-    public boolean containsKey(Object key) {
-        return map.containsKey(key);
+    public Set<Class<? extends T>> keySet() {
+        return map.keySet();
     }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return map.containsValue(value);
-    }
-
-    @Override
-    public T get(Object key) {
-        return map.get(key);
-    }
-
-    @Override
-    public T put(Class<? extends T> key, T value) {
-        return map.put(key, value);
-    }
-
+    
     @Override
     public T remove(Object key) {
         return map.remove(key);
     }
 
     @Override
-    public void putAll(Map<? extends Class<? extends T>, ? extends T> map) {
-        this.map.putAll(map);
+    public int size() {
+        return map.size();
     }
 
-    @Override
-    public void clear() {
-        map.clear();
-    }
-
-    @Override
-    public Set<Class<? extends T>> keySet() {
-        return map.keySet();
-    }
 
     @Override
     public Collection<T> values() {
         return map.values();
     }
 
-    @Override
-    public Set<Entry<Class<? extends T>, T>> entrySet() {
-        return map.entrySet();
-    }
-    
 }

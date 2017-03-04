@@ -16,6 +16,6 @@
  */
 
 /**
- * Generic collection classes.
+ * Collection classes.
  */
 package com.karuslabs.commons.collections;

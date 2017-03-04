@@ -24,15 +24,15 @@ import org.jdom2.Element;
 
 
 /**
- * Parses the banner-meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltbanner-meta&gt</code> nodes.
  */
 public class BannerMetaComponent extends ItemMetaComponent<BannerMeta> {
     
     /**
-     * Parses a banner-meta node.
+     * Parses a <code>&ltbanner-meta&gt</code> node.
      * 
-     * @param root The starting element of the node
-     * @param meta The BannerMeta to modify
+     * @param root the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element root, BannerMeta meta) {

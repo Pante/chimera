@@ -21,9 +21,7 @@ import org.bukkit.entity.Player;
 
 
 /**
- * Represents a criteria for executing a command.
- * 
- * Contains implementations of commonly used criteria.
+ * Represents a criteria which must be satisfied for execution to proceed.
  */
 @FunctionalInterface
 public interface Criteria {
@@ -35,23 +33,23 @@ public interface Criteria {
   
     
     /**
-     * Tests if the criteria passes.
+     * Asserts if the criteria is satisfied.
      * 
-     * @param command The command
-     * @param sender Source object which is executing this command
-     * @param args The command's arguments
-     * @return true if the criteria passes and false otherwise
+     * @param command the command to assert
+     * @param sender source object which is executing this command
+     * @param args all of the command's arguments
+     * @return <code>true</code> if the criteria is satisfied; else <code>false</code> 
      */
     public boolean test(Command command, CommandSender sender, String[] args);
     
     
     /**
-     * Tests if the number of arguments is within the specified boundaries.
+     * Asserts if the array size is within the bounds specified.
      * 
-     * @param args The command's arguments
-     * @param min The inclusive minimum number of arguments
-     * @param max The inclusive maximum number of arguments
-     * @return true if within the boundaries and false otherwise
+     * @param args all of the command's arguments
+     * @param min minimum array size, inclusive
+     * @param max maximum array size, inclusive
+     * @return <code>true</code> if within the boundaries; else <code>false</code>
      */
     public static boolean within(String[] args, int min, int max) {
         return min <= args.length && args.length <= max;

@@ -24,9 +24,10 @@ import org.jdom2.input.sax.XMLReaders;
 
 
 /**
- * Parses a XML Document and returns a parsed object.
+ * Represents a parser which parses a XML Document and returns a parsed object.
+ * @see SetterParser
  * 
- * @param <ParsedObject> The object type to be parsed to
+ * @param <ParsedObject> the type of the parsed object
  */
 public abstract class Parser<ParsedObject> {
     
@@ -35,19 +36,19 @@ public abstract class Parser<ParsedObject> {
     
     
     /**
-     * Constructs this with the specified schema and a default schema validating SAXBuilder.
+     * Creates a new, schema validating parser with the XML schema specified.
      * 
-     * @param schemaPath The schema path
+     * @param schemaPath the XML schema path
      */
     public Parser(String schemaPath) {
         this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
     }
     
     /**
-     * Constructs this with the specified schema and SAXBuilder.
+     * Creates a new parser with the XML schema and SAXBuilder specified.
      * 
-     * @param schemaPath The schema path
-     * @param builder The SAXBuilder
+     * @param schemaPath the XML schema path
+     * @param builder the SAXBuilder
      */
     public Parser(String schemaPath, SAXBuilder builder) {
         this.schemaPath = schemaPath;
@@ -56,10 +57,10 @@ public abstract class Parser<ParsedObject> {
     
     
     /**
-     * Parses a file and returns a parsed object.
+     * Parses a XML document and returns a parsed object.
      * 
-     * @param file The file to parse
-     * @return The parsed object
+     * @param file the XML document
+     * @return the parsed object
      */
     public ParsedObject parse(File file) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
@@ -71,10 +72,10 @@ public abstract class Parser<ParsedObject> {
     }
     
     /**
-     * Parses an inputstream and returns a parsed object.
+     * Parses a XML document from the <code>inputstream</code> specified and returns a parsed object.
      * 
-     * @param stream The inputstream to parse
-     * @return The parsed object
+     * @param stream the <code>inputstream</code>
+     * @return the parsed object
      */
     public ParsedObject parse(InputStream stream) {
         try {
@@ -87,10 +88,10 @@ public abstract class Parser<ParsedObject> {
     }
     
     /**
-     * Contains the parsing logic. Used in the template methods, {@link #parse(java.io.File)} and {@link #parse(java.io.InputStream)}.
+     * Parses a XML document starting from the root element specified and returns a parsed object.
      * 
-     * @param element The element to parse
-     * @return The parsed object
+     * @param element the root element of a XML document
+     * @return the parsed object
      */
     protected abstract ParsedObject parse(Element element);
     

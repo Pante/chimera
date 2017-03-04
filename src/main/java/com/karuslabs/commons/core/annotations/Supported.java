@@ -20,8 +20,8 @@ import java.lang.annotation.*;
 
 
 /**
- * Signifies that a stub implementation's method is supported.
- * Used extensively in {@link com.karuslabs.commons.core.test} package.
+ * Signifies that a stub implementation's method is implemented.
+ * @see com.karuslabs.commons.core.test
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

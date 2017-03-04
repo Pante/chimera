@@ -17,37 +17,25 @@
 package com.karuslabs.commons.menu;
 
 import org.bukkit.event.inventory.*;
-
+    
 
 /**
- * Processes click and drag events for a {@link Menu} slot binded to it.
+ * Represents an action to be performed when a {@link Menu} slot is clicked.
  */
 public interface Button {
     
     /**
-     * Button which cancels the event when called.
+     * Button which cancels the event.
      */
     public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
     
     
     /**
-     * Processes a InventoryClickEvent for a {@link Menu} slot binded to it.
+     * Processes the event specified.
      * 
-     * @param menu A menu
-     * @param event An InventoryClickEvent
+     * @param menu a menu
+     * @param event a <code>InventoryClickEvent</code>
      */
     public void onClick(Menu menu, InventoryClickEvent event);
-    
-    
-    /**
-     * Processes a InventoryDragEvent for a {@link Menu} slot binded to it.
-     * Default implementation ignores the event.
-     * 
-     * @param menu A menu
-     * @param event An InventoryDragEvent
-     */
-    public default void onDrag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
-    }
-    
+
 }

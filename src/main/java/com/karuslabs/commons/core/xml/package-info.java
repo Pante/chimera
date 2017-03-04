@@ -17,6 +17,6 @@
 
 
 /**
- * Classes that provide a foundation for XML deserialization.
+ * XML parsing related classes.
  */
 package com.karuslabs.commons.core.xml;

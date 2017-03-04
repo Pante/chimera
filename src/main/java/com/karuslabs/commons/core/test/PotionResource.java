@@ -26,8 +26,7 @@ import static org.mockito.Mockito.*;
 
 
 /**
- * Provides classes with a singleton test resource which stub implementation of PotionEffectType.
- * Meant for testing purposes and should never be used in production code.
+ * Represents a stub, singleton implementation of <code>PotionEffectType</code>.
  */
 public class PotionResource extends ExternalResource {
     
@@ -52,20 +51,20 @@ public class PotionResource extends ExternalResource {
     
     
     /**
-     * Convenience method for obtaining a PotionEffectType based on its ID.
+     * Convenience method for obtaining a <code>PotionEffectType</code> based on its ID.
      * 
-     * @param id The PotionEffectType ID
-     * @return The PotionEffectType with the specified ID
+     * @param id the <code>PotionEffectType</code> ID
+     * @return the <code>PotionEffectType</code> with the specified ID
      */
     public PotionEffectType getById(int id) {
         return PotionEffectType.getById(id);
     }
     
     /**
-     * Convenience method for obtaining a PotionEffectType based on its name.
+     * Convenience method for obtaining a <code>PotionEffectType</code> based on its name.
      * 
-     * @param name The PotionEffectType name
-     * @return The PotionEffectType with the specified name
+     * @param name the <code>PotionEffectType</code> name
+     * @return the <code>PotionEffectType</code> with the specified name
      */
     public PotionEffectType getByName(String name) {
         return PotionEffectType.getByName(name);

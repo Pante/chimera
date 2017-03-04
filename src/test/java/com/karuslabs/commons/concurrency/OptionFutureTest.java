@@ -114,4 +114,24 @@ public class OptionFutureTest {
         };
     }
     
+    
+    @Test
+    public void getOrThrow() {
+        doReturn(true).when(task).isDone();
+        doReturn(null).when(task).getUnchecked();
+        
+        task.getOrThrow(null);
+        
+        verify(task, times(1)).getUnchecked();
+    }
+    
+    
+    @Test
+    public void getOrThrow_ThrowsException() {
+        exception.expect(IllegalArgumentException.class);
+        
+        doReturn(false).when(task).isDone();
+        
+        task.getOrThrow(IllegalArgumentException::new);
+    }
 }

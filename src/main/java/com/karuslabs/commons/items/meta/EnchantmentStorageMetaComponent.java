@@ -25,16 +25,16 @@ import org.jdom2.*;
 
 
 /**
- * Parses the enchantment-storage-meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltstorage-metaa&gt</code> nodes.
  */
 public class EnchantmentStorageMetaComponent extends ItemMetaComponent<EnchantmentStorageMeta> {
     
     
     /**
-     * Parses a enchantment-storage-meta node.
+     * Parses a <code>&ltstorage-meta&gt</code> node.
      * 
-     * @param root The starting element of the node
-     * @param meta The EnchantmentStorageMeta to modify
+     * @param root the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element root, EnchantmentStorageMeta meta) {

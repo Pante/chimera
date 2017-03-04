@@ -22,7 +22,7 @@ import org.bukkit.command.CommandSender;
 
 
 /**
- * Represents a Command, which executes various tasks upon user input.
+ * Represents a <code>Command</code> which executes various tasks upon user input.
  */
 public abstract class Command extends org.bukkit.command.Command {
     
@@ -30,23 +30,23 @@ public abstract class Command extends org.bukkit.command.Command {
     
     
     /**
-     * Constructs this with the specified name and and execution criteria.
+     * Creates a new command with the name and criteria specified.
      * 
-     * @param name The name of this command
-     * @param criteria The execution criteria
+     * @param name the name of the command
+     * @param criteria the criteria which must be satisfied for execution to proceed
      */
     public Command(String name, Criteria criteria) {
         this(name, criteria, "", "", new ArrayList<>());
     }
     
     /**
-     * Constructs that with the specified name, execution criteria, description, permission message, and aliases.
+     * Creates a new command with the name, criteria, description, permission message and aliases specified.
      * 
-     * @param name The name of this command
-     * @param criteria The execution criteria
-     * @param description The description of this command
-     * @param message The permission message of this command
-     * @param aliases The aliases of this command
+     * @param name the name of the command
+     * @param criteria the criteria which must be satisfied for execution to proceed
+     * @param description the description of the command
+     * @param message the permission message of the command
+     * @param aliases the aliases of the command
      */
     public Command(String name, Criteria criteria, String description, String message, List<String> aliases) {
         super(name, description, message, aliases);
@@ -55,12 +55,12 @@ public abstract class Command extends org.bukkit.command.Command {
     
     
     /**
-     * Wrapper method that delegates execution to {@link #execute(org.bukkit.command.CommandSender, java.lang.String[])}
+     * Delegates execution to {@link #execute(org.bukkit.command.CommandSender, java.lang.String[])} when called.
      * 
-     * @param sender Source object which is executing this command
-     * @param label The alias of the command used
-     * @param args All arguments passed to the command, split via ' '
-     * @return always returns true
+     * @param sender source object which is executing this command
+     * @param label the alias of the command used
+     * @param args all arguments passed to the command, split via ' '
+     * @return <code>true</code>
      */
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -72,17 +72,50 @@ public abstract class Command extends org.bukkit.command.Command {
     /**
      * Executes the command.
      * 
-     * @param sender Source object which is executing this command
-     * @param args All arguments passed to the command, split via ' '
+     * @param sender source object which is executing this command
+     * @param args all arguments passed to the command, split via ' '
      */
     public abstract void execute(CommandSender sender, String[] args);
     
     
-    /**
-     * @return The execution criteria for this command
-     */
     public Criteria getCriteria() {
         return criteria;
+    }
+    
+    
+    public Command newAliases(List<String> aliases) {
+        setAliases(aliases);
+        return this;
+    }
+    
+    public Command newDescription(String description) {
+        setDescription(description);
+        return this;
+    }
+    
+    public Command newLabel(String label) {
+        setLabel(label);
+        return this;
+    }
+    
+    public Command newName(String name) {
+        setName(name);
+        return this;
+    }
+    
+    public Command newPermission(String permission) {
+        setPermission(permission);
+        return this;
+    }
+    
+    public Command newPermissionMessage(String message) {
+        setPermissionMessage(message);
+        return this;
+    }
+    
+    public Command newUsage(String usage) {
+        setUsage(usage);
+        return this;
     }
     
 }

@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.core.test;
 
-import com.karuslabs.commons.core.test.EnchantmentResource;
 import org.bukkit.enchantments.*;
 
 import org.junit.Test;

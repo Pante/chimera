@@ -16,10 +16,7 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.Criteria;
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.commands.Marshall;
-import com.karuslabs.commons.commands.PluginCommand;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,8 +29,8 @@ import static com.karuslabs.commons.commands.Utility.trim;
 
 
 /**
- * Represents a decorator which decorates a command and allows it to contain subcommands.
- * Delegates all getter methods to the decorated command.
+ * Represents a decorator <code>Command</code> which allows subcommands to be registered to it.
+ * Delegates most methods to the decorated command.
  */
 public class MarshallCommand extends PluginCommand implements Marshall {
     
@@ -42,19 +39,19 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
     
     /**
-     * Constructs this with the specified command.
+     * Creates a new command which decorates the command specified.
      * 
-     * @param command The command to be decorated
+     * @param command the command to decorate
      */
     public MarshallCommand(PluginCommand command) {
         this(command, new HashMap<>(0));
     }
     
     /**
-     * Constructs this with the specified command and subcommands.
+     * Creates a new command with the subcommands specified which decorates the command.
      * 
-     * @param command The command to be decorated
-     * @param commands The subcommands
+     * @param command the command to decorate
+     * @param commands the subcommands with aliases and names as keys
      */
     public MarshallCommand(PluginCommand command, Map<String, Command> commands) {
         super(null, null, null);
@@ -65,13 +62,10 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
     
     /**
-     * Delegates execution to the decorated command or subcommands.
-     * Checks if a subcommand with the same name as the first argument exists
-     * and trims the arguments and delegates execution to it. Otherwise delegates
-     * execution to the decorated command.
+     * Executes the decorated command if there are no subcommands associated with the first argument; else the subcommand.
      * 
-     * @param sender Source object which is executing this command
-     * @param args All arguments passed to the command, split via ' '
+     * @param sender source object which is executing the command
+     * @param args all arguments passed to the command, split via ' '
      */
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -85,15 +79,12 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
    
     /**
-     * Delegates tab completion to the decorated command or subcommands.
-     * Checks if a subcommand with a name starting with the first argument exists and adds it to a list.
-     * If the number of arguments is greater than 1, and a subcommand with the same name as the first argument exists, delegate tab completion to it.
-     * Otherwise return the decorated commands aliases.
+     * Returns the decorated command's aliases if there are no arguments; else delegate tab completion to the subcommands.
      * 
-     * @param sender Source object which is executing this command
-     * @param alias The alias being used
-     * @param args All arguments passed to the command, split via ' '
-     * @return A list of tab-completions for the specified arguments. This will never be null. List may be immutable.
+     * @param sender source object which is executing the command
+     * @param alias the alias used
+     * @param args all arguments passed to the command, split via ' '
+     * @return a list of tab-completions which will never be null
      */
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
@@ -111,7 +102,7 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
     
     /**
-     * {@inheritDoc}
+     * @return the subcommands with aliases and names as keys
      */
     @Override
     public Map<String, Command> getCommands() {

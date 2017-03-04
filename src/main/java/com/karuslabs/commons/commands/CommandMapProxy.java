@@ -29,12 +29,11 @@ import org.bukkit.plugin.PluginManager;
 
 
 /**
- * Acts as a proxy for the server's internal CommandMap implementation.
- * 
- * This class does not replace the server's internal CommandMap implementation.
- * Allows plug-ins to listen for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} registered via this class.
- * {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} will be called only when commands are registered through
- * this class and not if directly through the underlying CommandMap implementation.
+ * Represents a proxy for a server's <code>CommandMap</code>.
+ * <br>
+ * The proxy dispatches {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent}s when commands
+ * are registered to it. Registering commands via a server's <code>CommandMap</code> does not 
+ * dispatch {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent}s.
  */
 public class CommandMapProxy {
  
@@ -43,7 +42,7 @@ public class CommandMapProxy {
     
     
     /**
-     * Constructs this with the specified server's CommandMap implementation obtained via reflection.
+     * Creates a new proxy with the specified server's <code>CommandMap</code>
      * 
      * @param server the server
      */
@@ -62,9 +61,9 @@ public class CommandMapProxy {
     
     
     /**
-     * Registers all commands and notifies all {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} listeners.
+     * Registers all commands and dispatches a {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} for each.
      * 
-     * @param commands The commands to be registered
+     * @param commands the commands to be registered
      */
     public void register(Map<String, Command> commands) {
         commands.forEach(this::register);
@@ -72,10 +71,10 @@ public class CommandMapProxy {
     
     
     /**
-     * Registers a command and notifies all {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} listeners.
+     * Registers a command and dispatches a {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent}.
      * 
-     * @param fallbackPrefix A prefix which is prepended to the command with a ':' one or more times to make the command unique
-     * @param command The command to be registered
+     * @param fallbackPrefix the prefix which is prepended to the command with a ':' one or more times to make the command unique
+     * @param command the command to be registered
      */
     public void register(String fallbackPrefix, Command command) {
         CommandRegistrationEvent event = new CommandRegistrationEvent(command);
@@ -88,10 +87,10 @@ public class CommandMapProxy {
     
     
     /**
-     * Retrieves a specified plug-in's commands.
+     * Retrieves the commands of the plug-in specified.
      * 
-     * @param pluginName The name of the plug-in
-     * @return A map of command names and commands
+     * @param pluginName the name of the plug-in
+     * @return a map of the plug-in's commands.
      */
     public Map<String, org.bukkit.command.Command> getPluginCommands(String pluginName) {
         return map.getCommands().stream()
@@ -102,7 +101,7 @@ public class CommandMapProxy {
     
     /**
      * 
-     * @return The proxied CommandMap implementation
+     * @return the server's <code>CommandMap</code>
      */
     public SimpleCommandMap getCommandMap() {
         return map;

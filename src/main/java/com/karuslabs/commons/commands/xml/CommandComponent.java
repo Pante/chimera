@@ -16,10 +16,8 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.ParserException;
-import com.karuslabs.commons.core.xml.SetterComponent;
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.commands.Marshall;
+import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
 
@@ -27,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Parses the command nodes in a XML document.
+ * Represents a component for parsing <code>&ltcommand&gt</code> nodes.
  */
 public class CommandComponent implements SetterComponent<Command> {
     
@@ -35,9 +33,9 @@ public class CommandComponent implements SetterComponent<Command> {
     
     
     /**
-     * Constructs this with the specified component.
+     * Creates a new component with a component for parsing <code>&ltcommand&gt</code> nodes specified.
      * 
-     * @param component The component used to parse the (sub)commands nodes.
+     * @param component the component for parsing <code>&ltcommand&gt</code> nodes
      */
     public CommandComponent(SetterComponent<Map<String, Command>> component) {
         this.subcomponent = component;
@@ -45,22 +43,21 @@ public class CommandComponent implements SetterComponent<Command> {
     
     
     /**
-     * Parses the command component. Delegates the parsing of the commands nodes
-     * to the component specified in this constructor.
+     * Parses a <code>&ltcommand&gt</code> node and sets the associated values for the <code>Command</code> specified.
      * 
-     * @param element The starting element of the node
-     * @param command The command used to set the information
+     * @param element the <code>&ltcommand&gt</code>
+     * @param command the values of a <code>Command</code> to set
      */
     @Override
     public void parse(Element element, Command command) {
         Element meta = element.getChild("meta");
         Element permission = element.getChild("permission");
         Element commands = element.getChild("commands");
-        
+     
         command.setAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")));
         command.setDescription(meta.getAttribute("description").getValue());
         command.setUsage(meta.getAttribute("usage").getValue());
-        
+            
         command.setPermission(permission.getAttribute("permission").getValue());
         command.setPermissionMessage(permission.getAttribute("message").getValue());
             
@@ -76,7 +73,7 @@ public class CommandComponent implements SetterComponent<Command> {
 
     
     /**
-     * @return The component used to parse the (sub)commands nodes
+     * @return the component used to parse <code>&ltcommand&gt</code> nodes.
      */
     public SetterComponent<Map<String, Command>> getSubcomponent() {
         return subcomponent;

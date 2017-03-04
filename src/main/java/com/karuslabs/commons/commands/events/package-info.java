@@ -17,6 +17,6 @@
 
 
 /**
- * Events related to {@link com.karuslabs.commons.commands.Command}
+ * Events related to {@link com.karuslabs.commons.commands.Command}.
  */
 package com.karuslabs.commons.commands.events;

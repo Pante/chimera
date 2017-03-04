@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.xml.CommandsComponent;
-import com.karuslabs.commons.commands.xml.CommandParser;
+import com.karuslabs.commons.commands.xml.*;
 import com.karuslabs.commons.core.xml.SetterParser;
 
 import java.io.File;
@@ -27,7 +26,7 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * Acts as a facade for registering and parsing commands from XML Documents.
+ * Represents a facade for accessing command-related functions.
  */
 public class Manager {
     
@@ -36,19 +35,19 @@ public class Manager {
     
     
     /**
-     * Constructs this with the specified owning plug-in.
+     * Creates a new manager for the plug-in specified.
      * 
-     * @param owningPlugin The owning plug-in of this CommandManager
+     * @param owningPlugin the owning plug-in of the manager
      */
     public Manager(Plugin owningPlugin) {
         this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent()));
     }
     
     /**
-     * Constructs this with the specified CommandMapProxy and Parser.
+     * Creates a new manager for the plug-in with the <code>CommandMapProxy</code> and <code>Parser<code> specified
      * 
-     * @param proxy A CommandMapProxy
-     * @param parser A Parser
+     * @param proxy a proxy
+     * @param parser a parser
      */
     public Manager(CommandMapProxy proxy, SetterParser<Map<String, Command>> parser) {
         this.proxy = proxy;
@@ -57,10 +56,10 @@ public class Manager {
 
     
     /**
-     * Parses command information from the file and registers the commands.
+     * Loads and registers the commands from the file specified.
      * 
-     * @param commandsFile The file containing the command information
-     * @param commands The commands to be parsed and registered
+     * @param commandsFile the file to load the commands from
+     * @param commands the commands to be registered
      */
     public void load(File commandsFile, Map<String, Command> commands) {
         parser.parse(commandsFile, commands);
@@ -68,17 +67,11 @@ public class Manager {
     }
 
     
-    /**
-     * @return a CommandMapProxy
-     */
     public CommandMapProxy getProxy() {
         return proxy;
     }
 
-    
-    /**
-     * @return a SetterParser
-     */
+
     public SetterParser<Map<String, Command>> getParser() {
         return parser;
     }

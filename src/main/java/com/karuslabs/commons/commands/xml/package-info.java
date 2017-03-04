@@ -17,6 +17,6 @@
 
 
 /**
- * Classes used to deserialize commands from XML documents.
+ * Classes for parsing <code>Command</code> related XML documents.
  */
 package com.karuslabs.commons.commands.xml;

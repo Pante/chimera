@@ -18,17 +18,18 @@ package com.karuslabs.commons.concurrency;
 
 
 /**
- * Thrown when an {@link java.lang.InterruptedException} occurs when calling {@link OptionalFuture}'s methods.
+ * Unchecked variant of {@link java.lang.InterruptedException}.
+ * @see OptionalFuture
  */
 public class UncheckedInterruptedException extends RuntimeException {
     
     /**
-     * Constructs this with no detail message.
+     * Creates a new exception with no detail message.
      */
     public UncheckedInterruptedException() {}
     
     /**
-     * Constructs this with the specified detail message.
+     * Creates a new exception with the detail message specified.
      * 
      * @param message the detail message
      */
@@ -37,7 +38,7 @@ public class UncheckedInterruptedException extends RuntimeException {
     }
     
     /**
-     * Constructs this with the specified detail message and cause.
+     * Creates a new exception with the detail message and cause specified.
      * 
      * @param message the detail message
      * @param cause the cause

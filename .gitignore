@@ -46,3 +46,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
+<<<<<<< HEAD
+=======
+/Commands/target/
+/Core/target/
+/Items/target/
+
+# JetBrains .gitignore
+.idea/
+>>>>>>> refs/remotes/origin/master

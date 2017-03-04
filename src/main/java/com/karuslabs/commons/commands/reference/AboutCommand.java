@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.Criteria;
-import com.karuslabs.commons.commands.PluginCommand;
+import com.karuslabs.commons.commands.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -25,8 +24,7 @@ import org.bukkit.plugin.*;
 
 
 /**
- * Represents a command which formats and returns information as defined in the owning plug-ins
- * plugin.yml file.
+ * Represents a <code>Command</code> which returns the information defined in the plugin.yml file of the owning plug-in.
  */
 public class AboutCommand extends PluginCommand {
     
@@ -34,21 +32,21 @@ public class AboutCommand extends PluginCommand {
     
     
     /**
-     * Constructs this with the specified name and owning plug-in
+     * Creates a new command with the name and owning plug-in specified.
      * 
-     * @param name The name of this command
-     * @param plugin The owning plug-in of this command
+     * @param name the name of the command
+     * @param plugin the owning plug-in of the command
      */
     public AboutCommand(String name, Plugin plugin) {
         this(name, plugin, Criteria.PERMITTED);
     }
     
     /**
-     * Constructs this with the specified name, owning plug-in and execution criteria.
+     * Creates a new command with the name, owning plug-in and criteria specified.
      * 
-     * @param name The name of this command
-     * @param plugin The owning plug-in of this command
-     * @param criteria The execution criteria
+     * @param name the name of the command
+     * @param plugin the owning plug-in of the command
+     * @param criteria the criteria which must be satisfied for execution to proceed
      */
     public AboutCommand(String name, Plugin plugin, Criteria criteria) {
         super(name, plugin,  criteria);
@@ -64,10 +62,10 @@ public class AboutCommand extends PluginCommand {
     
     
     /**
-     * Tests the criteria and displays the owning plug-in's information to the sender.
+     * Displays the plug-in information to the sender if the criteria is satisfied; else displays the permission message
      * 
-     * @param sender Source object which is executing this command
-     * @param args All arguments passed to the command, split via ' '
+     * @param sender source object which is executing the command
+     * @param args all arguments passed to the command, split via ' '
      */
     @Override
     public void execute(CommandSender sender, String[] args) {

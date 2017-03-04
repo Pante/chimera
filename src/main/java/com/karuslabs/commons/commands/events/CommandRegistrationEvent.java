@@ -22,7 +22,7 @@ import org.bukkit.event.*;
 
 
 /**
- * Called when a command is registered to a {@link com.karuslabs.commons.commands.CommandMapProxy}
+ * Called when a {@link com.karuslabs.commons.commands.Command} is registered via a {@link com.karuslabs.commons.commands.CommandMapProxy}
  */
 public class CommandRegistrationEvent extends Event implements Cancellable {
 
@@ -34,46 +34,33 @@ public class CommandRegistrationEvent extends Event implements Cancellable {
 
     
     /**
-     * Constructs this with the specified command.
+     * Creates a new event with the <code>command</code> specified.
      * 
-     * @param command The command that was registered
+     * @param command the command which was registered
      */
     public CommandRegistrationEvent(Command command) {
         this.command = command;
         cancelled = false;
     }
     
-    
-    /**
-     * @return The command that was registered
-     */
+
     public Command getCommand() {
         return command;
     }
     
-    
-    /**
-     * @return The HandlerList
-     */
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
-    
-    /**
-     * @return true if the event is cancelled and false otherwise
-     */
+
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
 
-    /**
-     * Sets whether the event is cancelled.
-     * 
-     * @param cancelled true if the event is cancelled and false otherwise
-     */
+    
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;

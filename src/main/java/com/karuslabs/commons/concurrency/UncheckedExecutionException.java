@@ -18,18 +18,19 @@ package com.karuslabs.commons.concurrency;
 
 
 /**
- * Thrown when an {@link java.util.concurrent.ExecutionException} occurs when calling {@link OptionalFuture}'s methods.
+ * Unchecked variant of {@link java.util.concurrent.ExecutionException}.
+ * @see OptionalFuture
  */
 public class UncheckedExecutionException extends RuntimeException {
     
     
     /**
-     * Constructs this with no detail message.
+     * Creates a new exception with no detail message.
      */
     public UncheckedExecutionException() {}
     
     /**
-     * Constructs this with the specified detail message.
+     * Creates a new exception with the detail message specified.
      * 
      * @param message the detail message
      */
@@ -38,7 +39,7 @@ public class UncheckedExecutionException extends RuntimeException {
     }
     
     /**
-     * Constructs this with the specified detail message and cause.
+     * Creates a new exception with the detail message and cause specified.
      * 
      * @param message the detail message
      * @param cause the cause
@@ -48,7 +49,7 @@ public class UncheckedExecutionException extends RuntimeException {
     }
     
     /**
-     * Constructs this with the specified cause.
+     * Creates a new exception with the cause specified.
      * 
      * @param cause the cause
      */

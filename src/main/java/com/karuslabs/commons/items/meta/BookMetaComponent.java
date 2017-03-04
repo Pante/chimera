@@ -23,15 +23,15 @@ import org.jdom2.Element;
 
 
 /**
- * Parses the book-meta nodes in a XML document.
+ * Represents a component for parsing <code>&ltbook-meta&gt</code> nodes.
  */
 public class BookMetaComponent extends ItemMetaComponent<BookMeta> {
     
     /**
-     * Parses a book-meta node.
+     * Parses a <code>&ltbook-meta&gt</code> node.
      * 
-     * @param root The starting element of the node
-     * @param meta The BookMeta to modify
+     * @param root the node
+     * @param meta the meta to set
      */
     @Override
     public void parse(Element root, BookMeta meta) {
