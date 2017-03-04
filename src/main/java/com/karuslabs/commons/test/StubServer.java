@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
+package com.karuslabs.commons.test;
 
 import com.avaje.ebean.config.ServerConfig;
 
-import com.karuslabs.commons.core.annotations.Supported;
+import com.karuslabs.commons.annotations.Supported;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

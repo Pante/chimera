@@ -16,28 +16,25 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.meta.BookMeta;
 
-import org.bukkit.inventory.meta.ItemMeta;
-
-import org.junit.*;
-
-import static org.mockito.Mockito.*;
+import org.jdom2.Element;
 
 
-public class ItemMetaComponentTest {
+public class BookComponent extends ItemComponent<BookMeta> {
     
-    @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/ItemMeta.xml"), null);
-    
-    @Rule
-    public ItemMetaResource resource = new ItemMetaResource(new ItemMetaComponent(), mock(ItemMeta.class));
-    
-    
-    @Test
-    public void parse() {
-        resource.parse(xml.getRoot());
-        resource.assertMeta();
+    @Override
+    public void parse(Element root, BookMeta meta) {
+        super.parse(root, meta);
+        
+        meta.setAuthor(ChatColor.translateAlternateColorCodes('&', root.getAttribute("author").getValue()));
+        meta.setTitle(ChatColor.translateAlternateColorCodes('&', root.getAttribute("title").getValue()));
+        
+        Element pages = root.getChild("pages");
+        if (pages != null) {
+            pages.getChildren("page").forEach(element -> meta.addPage(ChatColor.translateAlternateColorCodes('&', element.getTextNormalize())));
+        }
     }
     
 }

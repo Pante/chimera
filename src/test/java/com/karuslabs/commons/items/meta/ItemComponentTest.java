@@ -14,13 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.xml;
+package com.karuslabs.commons.items.meta;
 
-import org.jdom2.Element;
+import com.karuslabs.commons.test.XMLResource;
+
+import org.bukkit.inventory.meta.ItemMeta;
+
+import org.junit.*;
+
+import static org.mockito.Mockito.*;
 
 
-public interface Component<ParsedComponent> {
+public class ItemComponentTest {
     
-    public ParsedComponent parse(Element element);
+    @Rule
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/ItemMeta.xml"), null);
+    
+    @Rule
+    public StubItemMeta resource = new StubItemMeta(new ItemComponent(), mock(ItemMeta.class));
+    
+    
+    @Test
+    public void parse() {
+        resource.parse(xml.getRoot());
+        resource.assertMeta();
+    }
     
 }

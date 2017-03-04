@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.menu.regions;
 
-import com.karuslabs.commons.core.test.StubServer;
+import com.karuslabs.commons.test.StubServer;
 
 import junitparams.*;
 

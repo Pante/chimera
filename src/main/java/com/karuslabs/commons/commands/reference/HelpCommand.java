@@ -57,7 +57,7 @@ public class HelpCommand extends PluginCommand implements Listener {
             displayUsages(sender, page, search, getUsages(sender, page, search));
             
         } else {
-            sender.sendMessage(ChatColor.RED + "You either do not have permission or an invalid number of arguments were specified.");
+            sender.sendMessage(getPermissionMessage());
         }
     }
     

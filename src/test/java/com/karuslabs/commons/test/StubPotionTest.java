@@ -14,40 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands.xml;
+package com.karuslabs.commons.test;
 
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.xml.SetterComponent;
-
-import java.util.*;
-
-import org.jdom2.Element;
+import com.karuslabs.commons.test.StubPotionEffectType;
+import org.bukkit.potion.*;
 
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 
-public class CommandParserTest {
+public class StubPotionTest {
     
-    private CommandParser parser;
-    private SetterComponent<Map<String, Command>> component;
+    private StubPotionEffectType resource;
     
     
-    public CommandParserTest() {
-        component = mock(SetterComponent.class);
-        parser = new CommandParser(component);
+    public StubPotionTest() {
+        resource = StubPotionEffectType.INSTANCE;
     }
     
     
     @Test
-    public void parse() {
-        Element element = mock(Element.class);
-        Map<String, Command> commands = new HashMap<>(0);
-        
-        parser.parse(element, commands);
-        
-        verify(component, times(1)).parse(element, commands);
+    public void getById() {
+        PotionEffectType effect = PotionEffectType.getById(1);
+        assertEquals(PotionEffectType.SPEED, effect);
+    }
+    
+    @Test
+    public void getByName() {
+        PotionEffectType effect = PotionEffectType.getByName("SPEED");
+        assertEquals(PotionEffectType.SPEED, effect);
     }
     
 }

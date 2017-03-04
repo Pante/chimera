@@ -16,10 +16,11 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.ParserException;
+import com.karuslabs.commons.xml.SetterComponent;
 import com.karuslabs.commons.commands.Command;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
 import java.util.*;
 

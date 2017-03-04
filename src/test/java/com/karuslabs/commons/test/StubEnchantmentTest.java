@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
+package com.karuslabs.commons.test;
 
 import org.bukkit.enchantments.*;
 
@@ -23,13 +23,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-public class EnchantmentResourceTest {
+public class StubEnchantmentTest {
     
-    private EnchantmentResource resource;
+    private StubEnchantment resource;
     
     
-    public EnchantmentResourceTest() {
-        resource = EnchantmentResource.RESOURCE;
+    public StubEnchantmentTest() {
+        resource = StubEnchantment.INSTANCE;
     }
     
     

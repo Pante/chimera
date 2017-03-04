@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.*;
 
 import java.util.*;
@@ -40,12 +40,11 @@ public class CommandComponent implements SetterComponent<Command> {
         Element permission = element.getChild("permission");
         Element commands = element.getChild("commands");
      
-        command.setAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")));
-        command.setDescription(meta.getAttribute("description").getValue());
-        command.setUsage(meta.getAttribute("usage").getValue());
-            
-        command.setPermission(permission.getAttribute("permission").getValue());
-        command.setPermissionMessage(permission.getAttribute("message").getValue());
+        command.newAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")))
+                .newDescription(meta.getAttribute("description").getValue())
+                .newUsage(meta.getAttribute("usage").getValue())
+                .newPermission(permission.getAttribute("permission").getValue())
+                .newPermissionMessage(permission.getAttribute("message").getValue());
             
         if (commands != null) {
             if (command instanceof Marshall) {

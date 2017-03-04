@@ -16,7 +16,8 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.*;
+import com.karuslabs.commons.test.StubEnchantment;
+import com.karuslabs.commons.test.StubServer;
 
 import java.util.Arrays;
 
@@ -32,25 +33,25 @@ import org.junit.rules.ExternalResource;
 import static org.mockito.Mockito.*;
 
 
-public class ItemMetaResource<GenericMeta extends ItemMeta> extends ExternalResource {
+public class StubItemMeta<GenericMeta extends ItemMeta> extends ExternalResource {
     
     private StubServer server;
-    private EnchantmentResource enchantments;
+    private StubEnchantment enchantments;
     
-    private ItemMetaComponent<GenericMeta> component;
+    private ItemComponent<GenericMeta> component;
     private GenericMeta meta;
     
     
-    public ItemMetaResource(ItemMetaComponent<GenericMeta> component, GenericMeta meta) {
+    public StubItemMeta(ItemComponent<GenericMeta> component, GenericMeta meta) {
         server = StubServer.INSTANCE;
-        enchantments = EnchantmentResource.RESOURCE;
+        enchantments = StubEnchantment.INSTANCE;
         
         this.component = component;
         this.meta = meta;
     }
 
     
-    public ItemMetaComponent<GenericMeta> getComponent() {
+    public ItemComponent<GenericMeta> getComponent() {
         return component;
     }
 

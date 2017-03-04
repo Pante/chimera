@@ -14,45 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
+package com.karuslabs.commons.test;
 
 import java.lang.reflect.Field;
 
-import org.bukkit.potion.*;
+import org.bukkit.enchantments.*;
 
 import org.junit.rules.ExternalResource;
 
 import static org.mockito.Mockito.*;
 
 
-public class PotionResource extends ExternalResource {
+public class StubEnchantment extends ExternalResource {
     
-    public static final PotionResource RESOURCE = new PotionResource();
+    public static final StubEnchantment INSTANCE = new StubEnchantment();
     
     
-    public PotionResource() {
+    private StubEnchantment() {
         try {
-            for (Field field : PotionEffectType.class.getFields()) {
-                if (field.getType().equals(PotionEffectType.class)) {
-                    PotionEffectType effect = spy((PotionEffectType) field.get(null));
-                    doReturn(field.getName()).when(effect).getName();
-
-                    PotionEffectType.registerPotionEffectType(effect);
+            for (Field field : Enchantment.class.getFields()) {
+                if (field.getType().equals(Enchantment.class)) {
+                    Enchantment enchantment = spy((Enchantment) field.get(null));
+                    doReturn(field.getName()).when(enchantment).getName();
+                    
+                    Enchantment.registerEnchantment(enchantment);
                 }
             }
-
+            
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
     }
     
     
-    public PotionEffectType getById(int id) {
-        return PotionEffectType.getById(id);
+    public Enchantment getById(int id) {
+        return Enchantment.getById(id);
     }
     
-    public PotionEffectType getByName(String name) {
-        return PotionEffectType.getByName(name);
+    public Enchantment getByName(String name) {
+        return Enchantment.getByName(name);
     }
     
 }

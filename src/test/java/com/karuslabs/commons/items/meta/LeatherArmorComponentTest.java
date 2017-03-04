@@ -16,39 +16,33 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.*;
+import com.karuslabs.commons.test.XMLResource;
 
 import org.bukkit.Color;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.*;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import org.junit.*;
 
 import static org.mockito.Mockito.*;
 
 
-public class PotionMetaComponentTest {
+public class LeatherArmorComponentTest {
     
     @Rule
-    public PotionResource potionResource = PotionResource.RESOURCE;
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/LeatherArmorMeta.xml"), null);
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/PotionMeta.xml"), null);
+    public StubItemMeta<LeatherArmorMeta> resource = new StubItemMeta(new LeatherArmorComponent(), mock(LeatherArmorMeta.class));
     
-    @Rule
-    public ItemMetaResource<PotionMeta> resource = new ItemMetaResource(new PotionMetaComponent(), mock(PotionMeta.class));
-
     
     @Test
     public void parse() {
         resource.parse(xml.getRoot());
         resource.assertMeta();
         
-        PotionMeta meta = resource.getMeta();
+        LeatherArmorMeta meta = resource.getMeta();
         
-        verify(meta, times(1)).setColor(Color.SILVER);
-        verify(meta, times(1)).addCustomEffect(new PotionEffect(PotionEffectType.getByName("JUMP"), 10, 3, true, true), true);
+        verify(meta, times(1)).setColor(Color.fromRGB(1, 2, 3));
     }
-    
     
 }

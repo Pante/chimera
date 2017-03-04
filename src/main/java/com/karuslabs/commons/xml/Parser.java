@@ -14,9 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
-
-import com.karuslabs.commons.core.xml.ParserException;
+package com.karuslabs.commons.xml;
 
 import java.io.*;
 
@@ -24,48 +22,44 @@ import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.input.sax.XMLReaders;
 
-import org.junit.rules.ExternalResource;
 
-
-public class XMLResource extends ExternalResource {
+public abstract class Parser<ParsedObject> {
     
-    private Document document;
+    protected String schemaPath;
+    protected SAXBuilder builder;
     
     
-    public XMLResource load(File file, String schemaPath) {
+    public Parser(String schemaPath) {
+        this(schemaPath, new SAXBuilder(XMLReaders.XSDVALIDATING));
+    }
+    
+    public Parser(String schemaPath, SAXBuilder builder) {
+        this.schemaPath = schemaPath;
+        this.builder = builder;
+    }
+    
+    
+    
+    public ParsedObject parse(File file) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
-            load(stream, schemaPath);
-            
-            return this;
+            return parse(stream);
             
         } catch (IOException e) {
             throw new ParserException("Failed to parse file: " + file.getName(), e);
         }
     }
     
-    
-    public XMLResource load(InputStream stream, String schemaPath) {
+    public ParsedObject parse(InputStream stream) {
         try {
-            if (schemaPath == null) {
-                document = new SAXBuilder(XMLReaders.NONVALIDATING).build(stream);
-            } else {
-                document = new SAXBuilder(XMLReaders.XSDVALIDATING).build(stream, schemaPath);
-            }
+            Element element = builder.build(stream, schemaPath).getRootElement();
+            return parse(element);
             
-            return this;
-
-        } catch (IOException | JDOMException e) {
+        } catch (JDOMException | IOException e) {
             throw new ParserException("Failed to parse XML Document", e);
         }
     }
     
     
-    public Document getDocument() {
-        return document;
-    }
-    
-    public Element getRoot() {
-        return document.getRootElement();
-    }
+    protected abstract ParsedObject parse(Element element);
     
 }

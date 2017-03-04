@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
+package com.karuslabs.commons.test;
 
 import com.karuslabs.commons.concurrency.UncheckedExecutionException;
+import com.karuslabs.commons.annotations.Supported;
 
-import com.karuslabs.commons.core.annotations.Supported;
-
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 import org.bukkit.plugin.Plugin;
@@ -95,9 +94,8 @@ public class StubScheduler implements BukkitScheduler {
     public void cancelTasks(Plugin plugin) {}
 
     @Override
-    public void cancelAllTasks() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    @Supported
+    public void cancelAllTasks() {}
 
     @Override
     public boolean isCurrentlyRunning(int taskId) {
@@ -115,34 +113,35 @@ public class StubScheduler implements BukkitScheduler {
     }
 
     @Override
+    @Supported
     public List<BukkitTask> getPendingTasks() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     @Supported
-    public BukkitTask runTask(Plugin plugin, Runnable task) throws IllegalArgumentException {
+    public BukkitTask runTask(Plugin plugin, Runnable task) {
         task.run();
         return null;
     }
 
     @Override
     @Supported
-    public BukkitTask runTask(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {
+    public BukkitTask runTask(Plugin plugin, BukkitRunnable task) {
         task.run();
         return null;
     }
 
     @Override
     @Supported
-    public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable task) throws IllegalArgumentException {
+    public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable task) {
         task.run();
         return null;
     }
 
     @Override
     @Supported
-    public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable task) throws IllegalArgumentException {
+    public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable task) {
         task.run();
         return null;
     }

@@ -14,35 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.test;
+package com.karuslabs.commons.xml;
 
-import org.bukkit.potion.*;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.jdom2.Element;
 
 
-public class PotionResourceTest {
+public interface SetterComponent<ParseObject> {
     
-    private PotionResource resource;
-    
-    
-    public PotionResourceTest() {
-        resource = PotionResource.RESOURCE;
-    }
-    
-    
-    @Test
-    public void getById() {
-        PotionEffectType effect = PotionEffectType.getById(1);
-        assertEquals(PotionEffectType.SPEED, effect);
-    }
-    
-    @Test
-    public void getByName() {
-        PotionEffectType effect = PotionEffectType.getByName("SPEED");
-        assertEquals(PotionEffectType.SPEED, effect);
-    }
-    
+    public void parse(Element element, ParseObject argument);
+
 }

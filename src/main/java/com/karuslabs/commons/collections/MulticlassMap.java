@@ -19,9 +19,9 @@ package com.karuslabs.commons.collections;
 import java.util.*;
 
 
-public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> {
+public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> {
     
-    private Map<Key<? extends T>, T> map;
+    private Map<Key<? extends V>, V> map;
     
     
     public MulticlassMap() {
@@ -32,7 +32,7 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
         this(new HashMap<>(capacity));
     }
     
-    public MulticlassMap(Map<Key<? extends T>, T> map) {
+    public MulticlassMap(Map<Key<? extends V>, V> map) {
         this.map = map;
     }
     
@@ -53,21 +53,21 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
     }
 
     @Override
-    public Set<Map.Entry<Key<? extends T>, T>> entrySet() {
+    public Set<Map.Entry<Key<? extends V>, V>> entrySet() {
         return map.entrySet();
     }
         
     @Override
-    public T get(Object key) {
+    public V get(Object key) {
         return map.get(key);
     }
     
-    public <U extends T> U get(Key<U> key) {
+    public <U extends V> U get(Key<U> key) {
         return key.type.cast(map.get(key));
     }
     
-    public <U extends T> U getOrDefault(Key<U> key, U value) {
-        T uncasted = map.get(key);
+    public <U extends V> U getOrDefault(Key<U> key, U value) {
+        V uncasted = map.get(key);
         if (uncasted != null) {
             return key.type.cast(uncasted);
             
@@ -77,12 +77,12 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
     }
     
     @Override
-    public T put(Key<? extends T> key, T value) {
+    public V put(Key<? extends V> key, V value) {
         return map.put(key, value);
     }
     
     @Override
-    public void putAll(Map<? extends Key<? extends T>, ? extends T> map) {
+    public void putAll(Map<? extends Key<? extends V>, ? extends V> map) {
         this.map.putAll(map);
     }
 
@@ -93,12 +93,12 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
     }
 
     @Override
-    public Set<Key<? extends T>> keySet() {
+    public Set<Key<? extends V>> keySet() {
         return map.keySet();
     }
     
     @Override
-    public T remove(Object key) {
+    public V remove(Object key) {
         return map.remove(key);
     }
 
@@ -109,23 +109,23 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
 
 
     @Override
-    public Collection<T> values() {
+    public Collection<V> values() {
         return map.values();
     }
     
     
-    public static <U> Key<U> key(String name, Class<U> type) {
+    public static <T> Key<T> key(String name, Class<T> type) {
         return new Key(name , type);
     }
     
     
-    public static class Key<U> {
+    public static class Key<T> {
         
         private String name;
-        private Class<U> type;
+        private Class<T> type;
         
         
-        public Key(String name, Class<U> type) {
+        public Key(String name, Class<T> type) {
             this.name = name;
             this.type = type;
         }

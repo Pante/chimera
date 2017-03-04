@@ -16,23 +16,23 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
-import org.bukkit.Color;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.*;
 
 import static org.mockito.Mockito.*;
 
 
-public class LeatherArmorMetaComponentTest {
+public class StorageComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/LeatherArmorMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/StorageMeta.xml"), null);
     
     @Rule
-    public ItemMetaResource<LeatherArmorMeta> resource = new ItemMetaResource(new LeatherArmorMetaComponent(), mock(LeatherArmorMeta.class));
+    public StubItemMeta<EnchantmentStorageMeta> resource = new StubItemMeta(new StorageComponent(), mock(EnchantmentStorageMeta.class));
     
     
     @Test
@@ -40,9 +40,9 @@ public class LeatherArmorMetaComponentTest {
         resource.parse(xml.getRoot());
         resource.assertMeta();
         
-        LeatherArmorMeta meta = resource.getMeta();
+        EnchantmentStorageMeta meta = resource.getMeta();
         
-        verify(meta, times(1)).setColor(Color.fromRGB(1, 2, 3));
+        verify(meta, times(1)).addStoredEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
     }
     
 }

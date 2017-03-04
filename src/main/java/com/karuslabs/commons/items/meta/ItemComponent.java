@@ -16,7 +16,8 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.SetterComponent;
+import com.karuslabs.commons.xml.ParserException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jdom2.*;
 
 
-public class ItemMetaComponent<GenericMeta extends ItemMeta> implements SetterComponent<GenericMeta> {
+public class ItemComponent<GenericMeta extends ItemMeta> implements SetterComponent<GenericMeta> {
 
     @Override
     public void parse(Element root, GenericMeta meta) {

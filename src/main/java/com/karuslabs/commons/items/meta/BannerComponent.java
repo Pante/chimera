@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.jdom2.Element;
 
 
-public class BannerMetaComponent extends ItemMetaComponent<BannerMeta> {
+public class BannerComponent extends ItemComponent<BannerMeta> {
     
     @Override
     public void parse(Element root, BannerMeta meta) {

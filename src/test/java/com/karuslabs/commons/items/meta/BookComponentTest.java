@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.BookMeta;
@@ -26,13 +26,13 @@ import org.junit.*;
 import static org.mockito.Mockito.*;
 
 
-public class BookMetaComponentTest {
+public class BookComponentTest {
     
     @Rule
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/BookMeta.xml"), null);
     
     @Rule
-    public ItemMetaResource<BookMeta> resource = new ItemMetaResource(new BookMetaComponent(), mock(BookMeta.class));
+    public StubItemMeta<BookMeta> resource = new StubItemMeta(new BookComponent(), mock(BookMeta.class));
     
     
     @Test

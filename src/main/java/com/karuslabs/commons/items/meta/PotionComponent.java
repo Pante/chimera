@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.xml.ParserException;
+import com.karuslabs.commons.xml.ParserException;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -25,7 +25,7 @@ import org.bukkit.potion.*;
 import org.jdom2.*;
 
 
-public class PotionMetaComponent extends ItemMetaComponent<PotionMeta> {
+public class PotionComponent extends ItemComponent<PotionMeta> {
     
     @Override
     public void parse(Element root, PotionMeta meta) {

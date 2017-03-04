@@ -16,23 +16,24 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.DyeColor;
+import org.bukkit.block.banner.*;
+import org.bukkit.inventory.meta.BannerMeta;
 
 import org.junit.*;
 
 import static org.mockito.Mockito.*;
 
 
-public class EnchantmentStorageMetaComponentTest {
+public class BannerComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/StorageMeta.xml"), null);
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/BannerMeta.xml"), null);
     
     @Rule
-    public ItemMetaResource<EnchantmentStorageMeta> resource = new ItemMetaResource(new EnchantmentStorageMetaComponent(), mock(EnchantmentStorageMeta.class));
+    public StubItemMeta<BannerMeta> resource = new StubItemMeta(new BannerComponent(), mock(BannerMeta.class));
     
     
     @Test
@@ -40,9 +41,9 @@ public class EnchantmentStorageMetaComponentTest {
         resource.parse(xml.getRoot());
         resource.assertMeta();
         
-        EnchantmentStorageMeta meta = resource.getMeta();
+        BannerMeta meta = resource.getMeta();
         
-        verify(meta, times(1)).addStoredEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
+        verify(meta, times(1)).addPattern(new Pattern(DyeColor.CYAN, PatternType.BORDER));
     }
     
 }

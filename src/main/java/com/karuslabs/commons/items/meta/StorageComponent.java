@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.xml.ParserException;
+import com.karuslabs.commons.xml.ParserException;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jdom2.*;
 
 
-public class EnchantmentStorageMetaComponent extends ItemMetaComponent<EnchantmentStorageMeta> {
+public class StorageComponent extends ItemComponent<EnchantmentStorageMeta> {
     
     @Override
     public void parse(Element root, EnchantmentStorageMeta meta) {

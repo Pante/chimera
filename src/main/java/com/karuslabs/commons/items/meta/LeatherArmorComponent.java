@@ -16,24 +16,25 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import org.bukkit.ChatColor;
-import org.bukkit.inventory.meta.BookMeta;
+import com.karuslabs.commons.xml.ParserException;
 
-import org.jdom2.Element;
+import org.bukkit.Color;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+
+import org.jdom2.*;
 
 
-public class BookMetaComponent extends ItemMetaComponent<BookMeta> {
+public class LeatherArmorComponent extends ItemComponent<LeatherArmorMeta> {
     
     @Override
-    public void parse(Element root, BookMeta meta) {
-        super.parse(root, meta);
+    public void parse(Element element, LeatherArmorMeta meta) {
+        super.parse(element, meta);
         
-        meta.setAuthor(ChatColor.translateAlternateColorCodes('&', root.getAttribute("author").getValue()));
-        meta.setTitle(ChatColor.translateAlternateColorCodes('&', root.getAttribute("title").getValue()));
-        
-        Element pages = root.getChild("pages");
-        if (pages != null) {
-            pages.getChildren("page").forEach(element -> meta.addPage(ChatColor.translateAlternateColorCodes('&', element.getTextNormalize())));
+        try {
+            meta.setColor(Color.fromRGB(element.getAttribute("r").getIntValue(), element.getAttribute("g").getIntValue(), element.getAttribute("b").getIntValue()));
+            
+        } catch (DataConversionException e) {
+            throw new ParserException("Failed to parse element: " + element.getName(), e);
         }
     }
     

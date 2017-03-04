@@ -16,11 +16,12 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.ParserException;
+import com.karuslabs.commons.xml.SetterComponent;
 import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.reference.MarshallCommand;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
 import java.util.*;
 
@@ -55,12 +56,12 @@ public class CommandComponentTest {
     public void parse() {
         component.parse(resource.getRoot(), command);
         
-        verify(command, times(1)).setAliases(Arrays.asList(new String[] {"cmd", "comm"}));
-        verify(command, times(1)).setDescription("command description");
-        verify(command, times(1)).setUsage("command usage");
+        verify(command, times(1)).newAliases(Arrays.asList(new String[] {"cmd", "comm"}));
+        verify(command, times(1)).newDescription("command description");
+        verify(command, times(1)).newUsage("command usage");
         
-        verify(command, times(1)).setPermission("command.permission");
-        verify(command, times(1)).setPermissionMessage("You do not have permission to use this command");
+        verify(command, times(1)).newPermission("command.permission");
+        verify(command, times(1)).newPermissionMessage("You do not have permission to use this command");
         
         verify(setter, times(1)).parse(any(), any());
     }

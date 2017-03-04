@@ -16,7 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.Component;
+import com.karuslabs.commons.xml.Parser;
 
 import java.util.*;
 

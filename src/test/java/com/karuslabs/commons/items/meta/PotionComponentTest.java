@@ -16,34 +16,40 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
+import com.karuslabs.commons.test.StubPotionEffectType;
 
-import org.bukkit.DyeColor;
-import org.bukkit.block.banner.*;
-import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.Color;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.*;
 
 import org.junit.*;
 
 import static org.mockito.Mockito.*;
 
 
-public class BannerMetaComponentTest {
+public class PotionComponentTest {
     
     @Rule
-    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/BannerMeta.xml"), null);
+    public StubPotionEffectType potionResource = StubPotionEffectType.INSTANCE;
     
     @Rule
-    public ItemMetaResource<BannerMeta> resource = new ItemMetaResource(new BannerMetaComponent(), mock(BannerMeta.class));
+    public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/PotionMeta.xml"), null);
     
+    @Rule
+    public StubItemMeta<PotionMeta> resource = new StubItemMeta(new PotionComponent(), mock(PotionMeta.class));
+
     
     @Test
     public void parse() {
         resource.parse(xml.getRoot());
         resource.assertMeta();
         
-        BannerMeta meta = resource.getMeta();
+        PotionMeta meta = resource.getMeta();
         
-        verify(meta, times(1)).addPattern(new Pattern(DyeColor.CYAN, PatternType.BORDER));
+        verify(meta, times(1)).setColor(Color.SILVER);
+        verify(meta, times(1)).addCustomEffect(new PotionEffect(PotionEffectType.getByName("JUMP"), 10, 3, true, true), true);
     }
+    
     
 }

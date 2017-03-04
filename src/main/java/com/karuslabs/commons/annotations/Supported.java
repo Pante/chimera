@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Karus Labs
+ * Copyright (C) 2017 Karus Labs
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,17 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.core.xml;
+package com.karuslabs.commons.annotations;
 
+import java.lang.annotation.*;
 
-public class ParserException extends RuntimeException {
-    
-    public ParserException(String message) {
-        super(message);
-    }
-    
-    public ParserException(String message, Throwable cause) {
-        super(message, cause);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
+public @interface Supported {
     
 }

@@ -16,8 +16,9 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.xml.*;
-import com.karuslabs.commons.core.xml.SetterParser;
+import com.karuslabs.commons.commands.xml.CommandParser;
+import com.karuslabs.commons.commands.xml.CommandsComponent;
+import com.karuslabs.commons.xml.SetterParser;
 
 import java.io.File;
 import java.util.Map;

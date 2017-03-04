@@ -16,8 +16,9 @@
  */
 package com.karuslabs.commons.items;
 
+import com.karuslabs.commons.xml.Component;
+import com.karuslabs.commons.xml.ParserException;
 import com.karuslabs.commons.items.meta.*;
-import com.karuslabs.commons.core.xml.*;
 
 import java.util.*;
 
@@ -30,20 +31,20 @@ import org.jdom2.*;
 
 public class ValueStackComponent implements Component<ValueStack> {
 
-    private Map<String, ItemMetaComponent> components;
+    private Map<String, ItemComponent> components;
     
     
     public ValueStackComponent() {
         components = new HashMap<>(6);
-        components.put("banner-meta", new BannerMetaComponent());
-        components.put("book-meta", new BookMetaComponent());
-        components.put("storage-meta", new EnchantmentStorageMetaComponent());
-        components.put("item-meta", new ItemMetaComponent());
-        components.put("leather-armor-meta", new LeatherArmorMetaComponent());
-        components.put("potion-meta", new PotionMetaComponent());
+        components.put("banner-meta", new BannerComponent());
+        components.put("book-meta", new BookComponent());
+        components.put("storage-meta", new StorageComponent());
+        components.put("item-meta", new ItemComponent());
+        components.put("leather-armor-meta", new LeatherArmorComponent());
+        components.put("potion-meta", new PotionComponent());
     }
     
-    public ValueStackComponent(Map<String, ItemMetaComponent> components) {
+    public ValueStackComponent(Map<String, ItemComponent> components) {
         this.components = components;
     }
     
@@ -84,7 +85,7 @@ public class ValueStackComponent implements Component<ValueStack> {
     }
     
     
-    public Map<String, ItemMetaComponent> getComponents() {
+    public Map<String, ItemComponent> getComponents() {
         return components;
     }
     

@@ -43,7 +43,7 @@ public abstract class Command extends org.bukkit.command.Command {
     }
     
     
-    public abstract void execute(CommandSender sender, String[] args);
+    public void execute(CommandSender sender, String[] args) {}
     
     
     public Criteria getCriteria() {

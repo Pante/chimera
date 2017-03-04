@@ -16,8 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.core.test.XMLResource;
-import com.karuslabs.commons.core.xml.Component;
+import com.karuslabs.commons.test.XMLResource;
+import com.karuslabs.commons.xml.Component;
 
 import org.jdom2.Element;
 
