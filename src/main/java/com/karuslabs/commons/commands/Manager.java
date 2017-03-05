@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.xml.CommandParser;
-import com.karuslabs.commons.commands.xml.CommandsComponent;
+import com.karuslabs.commons.commands.xml.*;
 import com.karuslabs.commons.xml.SetterParser;
 
 import java.io.File;
@@ -32,8 +31,8 @@ public class Manager {
     private SetterParser<Map<String, Command>> parser;
     
     
-    public Manager(Plugin owningPlugin) {
-        this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent()));
+    public Manager(Plugin plugin) {
+        this(new CommandMapProxy(plugin.getServer()), new CommandParser(new CommandsComponent()));
     }
     
     public Manager(CommandMapProxy proxy, SetterParser<Map<String, Command>> parser) {

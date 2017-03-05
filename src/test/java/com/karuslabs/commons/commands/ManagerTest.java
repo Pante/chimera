@@ -28,9 +28,9 @@ import static org.mockito.Mockito.*;
 
 public class ManagerTest {
     
+    private SetterParser<Map<String, Command>> parser;
     private Manager manager;
     private CommandMapProxy proxy;
-    private SetterParser<Map<String, Command>> parser;
     
     
     public ManagerTest() {
@@ -44,7 +44,7 @@ public class ManagerTest {
     @Test
     public void load() {
         File file = mock(File.class);
-        Map<String, Command> commands = new HashMap<>(0);
+        Map<String, Command> commands = Collections.EMPTY_MAP;
         
         manager.load(file, commands);
         

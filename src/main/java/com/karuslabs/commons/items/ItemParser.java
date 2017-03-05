@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.xml.Component;
-import com.karuslabs.commons.xml.Parser;
+import com.karuslabs.commons.xml.*;
 
 import java.util.*;
 
@@ -28,15 +27,15 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     
     private Component<ValueStack> component;
     
-    
-    public ItemParser(Component<ValueStack> component, String schemaPath) {
-        super(schemaPath);
-        this.component = component;
-    }
-    
+      
     public ItemParser(Component<ValueStack> component) {
         super(null);
         schemaPath = getClass().getClassLoader().getResource("items/items.xsd").getPath();
+        this.component = component;
+    }
+    
+    public ItemParser(Component<ValueStack> component, String schemaPath) {
+        super(schemaPath);
         this.component = component;
     }
 

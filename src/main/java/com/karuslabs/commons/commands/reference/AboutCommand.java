@@ -37,8 +37,7 @@ public class AboutCommand extends PluginCommand {
         PluginDescriptionFile description = plugin.getDescription();
         
         information = ChatColor.translateAlternateColorCodes('&', 
-                "&6" + description.getName() 
-                + " version: &c" + description.getVersion() 
+                "&6" + description.getName() + " version: &c" + description.getVersion() 
                 + "\n&6" + description.getDescription()
                 + "\nAuthor(s): &c" + description.getAuthors().toString() 
                 + "\n&6Source code & development resources: &c" + description.getWebsite());

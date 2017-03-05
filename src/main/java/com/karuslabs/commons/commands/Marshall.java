@@ -21,6 +21,6 @@ import java.util.Map;
 
 public interface Marshall {
     
-    public Map<String, Command> getCommands();
+    public Map<String, Command> getSubcommands();
     
 }

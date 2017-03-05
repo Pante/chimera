@@ -38,10 +38,15 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
     
     
     @Override
-    public void clear() {
-        map.clear();
+    public int size() {
+        return map.size();
     }
     
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+        
     @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
@@ -51,12 +56,7 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-
-    @Override
-    public Set<Map.Entry<Key<? extends V>, V>> entrySet() {
-        return map.entrySet();
-    }
-        
+           
     @Override
     public V get(Object key) {
         return map.get(key);
@@ -65,6 +65,41 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
     public <U extends V> U get(Key<U> key) {
         return key.type.cast(map.get(key));
     }
+    
+    @Override
+    public V put(Key<? extends V> key, V value) {
+        return map.put(key, value);
+    }
+        
+    @Override
+    public V remove(Object key) {
+        return map.remove(key);
+    }
+    
+    @Override
+    public void putAll(Map<? extends Key<? extends V>, ? extends V> map) {
+        this.map.putAll(map);
+    }
+    
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public Set<Key<? extends V>> keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return map.values();
+    }
+
+    @Override
+    public Set<Entry<Key<? extends V>, V>> entrySet() {
+        return map.entrySet();
+    }   
     
     public <U extends V> U getOrDefault(Key<U> key, U value) {
         V uncasted = map.get(key);
@@ -76,46 +111,9 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
         }
     }
     
-    @Override
-    public V put(Key<? extends V> key, V value) {
-        return map.put(key, value);
-    }
-    
-    @Override
-    public void putAll(Map<? extends Key<? extends V>, ? extends V> map) {
-        this.map.putAll(map);
-    }
-
-
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
-    public Set<Key<? extends V>> keySet() {
-        return map.keySet();
-    }
-    
-    @Override
-    public V remove(Object key) {
-        return map.remove(key);
-    }
-
-    @Override
-    public int size() {
-        return map.size();
-    }
-
-
-    @Override
-    public Collection<V> values() {
-        return map.values();
-    }
-    
     
     public static <T> Key<T> key(String name, Class<T> type) {
-        return new Key(name , type);
+        return new Key(name, type);
     }
     
     
@@ -129,6 +127,7 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
             this.name = name;
             this.type = type;
         }
+        
         
         @Override
         public boolean equals(Object object) {

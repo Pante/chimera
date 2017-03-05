@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.test.StubEnchantment;
-import com.karuslabs.commons.test.StubServer;
+import com.karuslabs.commons.test.*;
 
 import java.util.Arrays;
 

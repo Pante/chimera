@@ -75,9 +75,7 @@ public class HelpCommand extends PluginCommand implements Listener {
     
     
     private void displayUsages(CommandSender sender, int page, String search, String[] usages) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', 
-                "&6==== Help: &c" + search
-                + " &6=== Page: &c" + page + "/" + " &6===="));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6==== Help: &c" + search + " &6=== Page: &c" + page + "/" + " &6===="));
         sender.sendMessage(usages);
     }
     

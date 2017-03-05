@@ -19,8 +19,8 @@ package com.karuslabs.commons.xml;
 import org.jdom2.Element;
 
 
-public interface SetterComponent<ParseObject> {
+public interface SetterComponent<Argument> {
     
-    public void parse(Element element, ParseObject argument);
+    public void parse(Element element, Argument argument);
 
 }

@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.xml.SetterComponent;
-import com.karuslabs.commons.xml.SetterParser;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
@@ -36,7 +35,6 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
         schemaPath = getClass().getClassLoader().getResource("commands/commands.xsd").getPath();
         this.component = component;
     }
-   
     
     public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {
         super(schemaPath);

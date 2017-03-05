@@ -43,7 +43,7 @@ public class CommandParserTest {
     @Test
     public void parse() {
         Element element = mock(Element.class);
-        Map<String, Command> commands = new HashMap<>(0);
+        Map<String, Command> commands = Collections.EMPTY_MAP;
         
         parser.parse(element, commands);
         

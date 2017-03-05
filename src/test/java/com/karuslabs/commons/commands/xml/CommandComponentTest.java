@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.xml.ParserException;
-import com.karuslabs.commons.xml.SetterComponent;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.reference.MarshallCommand;
 
@@ -34,10 +33,11 @@ import static org.mockito.Mockito.*;
 public class CommandComponentTest {
     
     @Rule
-    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands-component.xml"), null);
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands.xml"), null);
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
+    
     
     private CommandComponent component;
     private SetterComponent<Map<String, Command>> setter;
@@ -46,9 +46,8 @@ public class CommandComponentTest {
     
     public CommandComponentTest() {
         setter = mock(SetterComponent.class);
-        command = mock(MarshallCommand.class);
-        
         component = new CommandComponent(setter);
+        command = spy(new MarshallCommand(null, null));
     }
     
     
@@ -70,9 +69,9 @@ public class CommandComponentTest {
     @Test
     public void parse_ThrowsException() {
         exception.expect(ParserException.class);
-        exception.expectMessage("Command: \"null\" does not implement the Marshall interface, unable to retrieve child commands");
+        exception.expectMessage("Command: name does not implement the Marshall interface, unable to retrieve child commands");
         
-        component.parse(resource.getRoot(), mock(Command.class));
+        component.parse(resource.getRoot(), new Command("name", null) {});
     }
     
 }

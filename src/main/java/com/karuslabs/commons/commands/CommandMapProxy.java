@@ -52,25 +52,24 @@ public class CommandMapProxy {
         commands.forEach(this::register);
     }
     
-    
     public void register(String fallbackPrefix, Command command) {
         CommandRegistrationEvent event = new CommandRegistrationEvent(command);
-        
         manager.callEvent(event);
+        
         if (!event.isCancelled()) {
             map.register(fallbackPrefix, command);
         }
     }
     
     
-    public Map<String, org.bukkit.command.Command> getPluginCommands(String pluginName) {
+    public Map<String, org.bukkit.command.Command> getPluginCommands(String name) {
         return map.getCommands().stream()
-                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName)) 
+                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(name))
                 .collect(Collectors.toMap(command -> command.getName(), command -> command));
     }
     
     
-    public SimpleCommandMap getCommandMap() {
+    public SimpleCommandMap getSimpleCommandMap() {
         return map;
     }
     

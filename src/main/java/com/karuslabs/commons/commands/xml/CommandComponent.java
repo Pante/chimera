@@ -39,7 +39,7 @@ public class CommandComponent implements SetterComponent<Command> {
         Element meta = element.getChild("meta");
         Element permission = element.getChild("permission");
         Element commands = element.getChild("commands");
-     
+        
         command.newAliases(Arrays.asList(meta.getAttribute("aliases").getValue().split("\\s*,\\s*")))
                 .newDescription(meta.getAttribute("description").getValue())
                 .newUsage(meta.getAttribute("usage").getValue())
@@ -48,10 +48,10 @@ public class CommandComponent implements SetterComponent<Command> {
             
         if (commands != null) {
             if (command instanceof Marshall) {
-                subcomponent.parse(commands, ((Marshall) command).getCommands());
+                subcomponent.parse(commands, ((Marshall) command).getSubcommands());
                 
             } else {
-                throw new ParserException("Command: \"" + command.getName() + "\" does not implement the Marshall interface, unable to retrieve child commands");
+                throw new ParserException("Command: " + command.getName() + " does not implement the Marshall interface, unable to retrieve child commands");
             }
         }
     }

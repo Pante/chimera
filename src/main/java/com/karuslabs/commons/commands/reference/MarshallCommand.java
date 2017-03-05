@@ -21,7 +21,6 @@ import com.karuslabs.commons.commands.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -30,41 +29,44 @@ import static com.karuslabs.commons.commands.Utility.trim;
 
 public class MarshallCommand extends PluginCommand implements Marshall {
     
-    private PluginCommand command;
-    private Map<String, Command> commands;
+    private Map<String, Command> subcommands;
     
     
-    public MarshallCommand(PluginCommand command) {
-        this(command, new HashMap<>(0));
+    public MarshallCommand(String name, Plugin plugin) {
+        this(name, plugin, Criteria.NONE);
     }
     
-    public MarshallCommand(PluginCommand command, Map<String, Command> commands) {
-        super(null, null, null);
-        
-        this.command = command;
-        this.commands = commands;
+    public MarshallCommand(String name, Plugin plugin, Criteria criteria) {
+        this(name, plugin, criteria, new HashMap<>());
+    }
+    
+    public MarshallCommand(String name, Plugin plugin, Criteria criteria, Map<String, Command> commands) {
+        super(name, plugin, criteria);
+        this.subcommands = commands;
     }
     
     
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length >= 1 && commands.containsKey(args[0])) {
-            commands.get(args[0]).execute(sender, trim(args));
+        if (args.length >= 1 && subcommands.containsKey(args[0])) {
+            subcommands.get(args[0]).execute(sender, trim(args));
             
         } else {
-           command.execute(sender, args);
+           execute(sender);
         }
     }
+    
+    public void execute(CommandSender sender) {}
     
    
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         String argument;
         if (args.length == 1) {
-            return commands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
+            return subcommands.keySet().stream().filter(command -> command.startsWith(args[0])).collect(Collectors.toList());
             
-        } else if (args.length >= 2 && commands.containsKey(argument = args[0])) {
-            return commands.get(argument).tabComplete(sender, argument, trim(args));
+        } else if (args.length >= 2 && subcommands.containsKey(argument = args[0])) {
+            return subcommands.get(argument).tabComplete(sender, argument, trim(args));
             
         } else {
             return getAliases();
@@ -72,124 +74,16 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     }
     
     
-    @Override
-    public Map<String, Command> getCommands() {
-        return commands;
-    }
-
-
-    @Override
-    public String getName() {
-        return command.getName();
-    }
-
-    @Override
-    public boolean setName(String name) {
-        return command.setName(name);
-    }
-
-
-    @Override
-    public String getPermission() {
-        return command.getPermission();
-    }
-
-    @Override
-    public void setPermission(String permission) {
-        command.setPermission(permission);
-    }
-
-
-    @Override
-    public boolean testPermission(CommandSender target) {
-        return command.testPermission(target);
-    }
-
-    @Override
-    public boolean testPermissionSilent(CommandSender target) {
-        return command.testPermissionSilent(target);
-    }
-
-
-    @Override
-    public String getLabel() {
-        return command.getLabel();
-    }
-
-    @Override
-    public boolean setLabel(String name) {
-        return command.setLabel(name);
-    }
-
-
-    @Override
-    public boolean register(CommandMap commandMap) {
-        return command.register(commandMap);
-    }
-
-    @Override
-    public boolean unregister(CommandMap commandMap) {
-        return command.unregister(commandMap);
-    }
- 
-    @Override
-    public boolean isRegistered() {
-        return command.isRegistered();
-    }
-
-    
-    @Override
-    public List<String> getAliases() {
-        return command.getAliases();
-    }
-    
-    @Override
-    public org.bukkit.command.Command setAliases(List<String> aliases) {
-        return command.setAliases(aliases);
+    public MarshallCommand register(Command command) {
+        subcommands.put(command.getName(), command);
+        command.getAliases().forEach(alias -> subcommands.put(alias, command));
+        return this;
     }
     
     
     @Override
-    public String getPermissionMessage() {
-        return command.getPermissionMessage();
-    }
-    
-    @Override
-    public org.bukkit.command.Command setPermissionMessage(String permissionMessage) {
-        return command.setPermissionMessage(permissionMessage);
-    }
-
-    
-    @Override
-    public String getDescription() {
-        return command.getDescription();
-    }
-    
-    @Override
-    public org.bukkit.command.Command setDescription(String description) {
-        return command.setDescription(description);
-    }
-
-    
-    @Override
-    public String getUsage() {
-        return command.getUsage();
-    }
-    
-    @Override
-    public org.bukkit.command.Command setUsage(String usage) {
-        return command.setUsage(usage);
-    }
-
-
-    @Override
-    public Criteria getCriteria() {
-        return command.getCriteria();
-    }
-
-    @Override
-    public Plugin getPlugin() {
-        return command.getPlugin();
+    public Map<String, Command> getSubcommands() {
+        return subcommands;
     }
     
 }

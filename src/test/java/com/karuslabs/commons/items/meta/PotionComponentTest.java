@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.test.XMLResource;
-import com.karuslabs.commons.test.StubPotionEffectType;
+import com.karuslabs.commons.test.*;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.meta.PotionMeta;

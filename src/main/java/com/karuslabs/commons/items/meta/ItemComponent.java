@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items.meta;
 
-import com.karuslabs.commons.xml.SetterComponent;
-import com.karuslabs.commons.xml.ParserException;
+import com.karuslabs.commons.xml.*;
 
 import java.util.List;
 import java.util.stream.Collectors;

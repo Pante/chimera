@@ -56,11 +56,15 @@ public class StubServer implements Server {
     
     
     private BukkitScheduler scheduler;
+    private PluginManager manager;
+    private SimpleCommandMap commandMap;
     private Logger logger;
     
     
-    private StubServer() {
+    public StubServer() {
         scheduler = new StubScheduler();
+        manager = mock(PluginManager.class);
+        commandMap = mock(SimpleCommandMap.class);
         logger = mock(Logger.class);
     }
     
@@ -215,8 +219,9 @@ public class StubServer implements Server {
     }
 
     @Override
+    @Supported
     public PluginManager getPluginManager() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return manager;
     }
 
     @Override
@@ -228,6 +233,10 @@ public class StubServer implements Server {
     @Override
     public ServicesManager getServicesManager() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public SimpleCommandMap getSimpleCommandMap() {
+        return commandMap;
     }
 
     @Override

@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.xml.SetterComponent;
-import com.karuslabs.commons.xml.ParserException;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
@@ -48,7 +47,7 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
                 component.parse(element, commands.get(name));
 
             } else {
-                throw new ParserException("No such registered command with name: \"" + name + "\"");
+                throw new ParserException("No such registered command with name: " + name);
             }
         });
     }

@@ -39,13 +39,13 @@ public class CommandParserIT {
         parser = new CommandParser(new CommandsComponent());
         commands = new HashMap<>(1);
         
-        command = mock(MarshallCommand.class);
+        command = spy(new MarshallCommand(null, null));
         when(command.getName()).thenReturn("command");
         
-        subcommand = mock(Command.class);
+        subcommand = spy(new Command(null, null) {});
         when(subcommand.getName()).thenReturn("subcommand");
 
-        when(command.getCommands()).thenReturn(Collections.singletonMap("subcommand", subcommand));
+        when(command.getSubcommands()).thenReturn(Collections.singletonMap("subcommand", subcommand));
         
         commands.put("command", command);
     }

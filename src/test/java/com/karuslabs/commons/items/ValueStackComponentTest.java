@@ -16,8 +16,7 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.test.XMLResource;
-import com.karuslabs.commons.test.StubServer;
+import com.karuslabs.commons.test.*;
 import com.karuslabs.commons.items.meta.ItemComponent;
 
 import java.util.HashMap;

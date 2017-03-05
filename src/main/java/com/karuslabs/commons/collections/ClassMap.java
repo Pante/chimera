@@ -36,13 +36,18 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     public ClassMap(Map<Class<? extends V>, V> map) {
         this.map = map;
     }
-
+    
     
     @Override
-    public void clear() {
-        map.clear();
+    public int size() {
+        return map.size();
     }
     
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+        
     @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
@@ -52,12 +57,7 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-
-    @Override
-    public Set<Entry<Class<? extends V>, V>> entrySet() {
-        return map.entrySet();
-    }
-        
+           
     @Override
     public V get(Object key) {
         return map.get(key);
@@ -66,7 +66,42 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     public <U extends V> U get(Class<U> type) {
         return type.cast(map.get(type));
     }
+        
+    @Override
+    public V put(Class<? extends V> key, V value) {
+        return map.put(key, value);
+    }
+        
+    @Override
+    public V remove(Object key) {
+        return map.remove(key);
+    }
     
+    @Override
+    public void putAll(Map<? extends Class<? extends V>, ? extends V> map) {
+        this.map.putAll(map);
+    }
+    
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public Set<Class<? extends V>> keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return map.values();
+    }
+
+    @Override
+    public Set<Entry<Class<? extends V>, V>> entrySet() {
+        return map.entrySet();
+    }    
+        
     public <U extends V> U getOrDefault(Class<U> type, U value) {
         V uncasted = map.get(type);
         if (uncasted != null) {
@@ -75,43 +110,6 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
         } else {
             return value;
         }
-    }
-    
-    @Override
-    public V put(Class<? extends V> key, V value) {
-        return map.put(key, value);
-    }
-    
-    @Override
-    public void putAll(Map<? extends Class<? extends V>, ? extends V> map) {
-        this.map.putAll(map);
-    }
-
-
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
-    public Set<Class<? extends V>> keySet() {
-        return map.keySet();
-    }
-    
-    @Override
-    public V remove(Object key) {
-        return map.remove(key);
-    }
-
-    @Override
-    public int size() {
-        return map.size();
-    }
-
-
-    @Override
-    public Collection<V> values() {
-        return map.values();
     }
 
 }
