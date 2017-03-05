@@ -27,6 +27,6 @@ public interface Marshall {
     /**
      * @return a map of subcommands.
      */
-    public Map<String, Command> getCommands();
+    public Map<String, Command> getSubcommands();
     
 }

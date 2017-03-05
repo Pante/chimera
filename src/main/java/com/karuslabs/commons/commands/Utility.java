@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class Utility {
     
-    private static final String[] EMPTY = new String[] {};
+    private static final String[] EMPTY = new String[0];
     
     
     /**
@@ -133,7 +133,7 @@ public class Utility {
      */
     public static void flapMap(String name, Command command, Map<String, Command> commands) {
         if (command instanceof Marshall) {
-            ((Marshall) command).getCommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));
+            ((Marshall) command).getSubcommands().values().forEach(subcommand -> flapMap(name + " " + subcommand.getName(), subcommand, commands));
         }
         
         commands.put(name, command);

@@ -16,8 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
-import com.karuslabs.commons.core.test.*;
-import com.karuslabs.commons.items.meta.ItemMetaComponent;
+import com.karuslabs.commons.test.*;
+import com.karuslabs.commons.items.meta.ItemComponent;
 
 import java.util.HashMap;
 
@@ -37,13 +37,13 @@ public class ValueStackComponentTest {
     
     private StubServer server;
     private ValueStackComponent component;
-    private ItemMetaComponent meta;
+    private ItemComponent meta;
     
     
     public ValueStackComponentTest() {
         server = StubServer.INSTANCE;
         component = new ValueStackComponent(new HashMap<>(1));
-        component.getComponents().put("banner-meta", meta = mock(ItemMetaComponent.class));
+        component.getComponents().put("banner-meta", meta = mock(ItemComponent.class));
     }
     
     

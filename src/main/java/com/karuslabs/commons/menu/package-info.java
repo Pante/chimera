@@ -16,6 +16,6 @@
  */
 
 /**
- * Classes used to build an in-game menu.
+ * Classes used to build in-game menus.
  */
 package com.karuslabs.commons.menu;

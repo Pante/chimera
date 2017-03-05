@@ -16,11 +16,11 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 import com.karuslabs.commons.commands.reference.MarshallCommand;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
 import java.util.*;
 
@@ -33,10 +33,11 @@ import static org.mockito.Mockito.*;
 public class CommandComponentTest {
     
     @Rule
-    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands-component.xml"), null);
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands.xml"), null);
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
+    
     
     private CommandComponent component;
     private SetterComponent<Map<String, Command>> setter;
@@ -45,9 +46,8 @@ public class CommandComponentTest {
     
     public CommandComponentTest() {
         setter = mock(SetterComponent.class);
-        command = mock(MarshallCommand.class);
-        
         component = new CommandComponent(setter);
+        command = spy(new MarshallCommand(null, null));
     }
     
     
@@ -55,12 +55,12 @@ public class CommandComponentTest {
     public void parse() {
         component.parse(resource.getRoot(), command);
         
-        verify(command, times(1)).setAliases(Arrays.asList(new String[] {"cmd", "comm"}));
-        verify(command, times(1)).setDescription("command description");
-        verify(command, times(1)).setUsage("command usage");
+        verify(command, times(1)).newAliases(Arrays.asList(new String[] {"cmd", "comm"}));
+        verify(command, times(1)).newDescription("command description");
+        verify(command, times(1)).newUsage("command usage");
         
-        verify(command, times(1)).setPermission("command.permission");
-        verify(command, times(1)).setPermissionMessage("You do not have permission to use this command");
+        verify(command, times(1)).newPermission("command.permission");
+        verify(command, times(1)).newPermissionMessage("You do not have permission to use this command");
         
         verify(setter, times(1)).parse(any(), any());
     }
@@ -69,9 +69,9 @@ public class CommandComponentTest {
     @Test
     public void parse_ThrowsException() {
         exception.expect(ParserException.class);
-        exception.expectMessage("Command: \"null\" does not implement the Marshall interface, unable to retrieve child commands");
+        exception.expectMessage("Command: name does not implement the Marshall interface, unable to retrieve child commands");
         
-        component.parse(resource.getRoot(), mock(Command.class));
+        component.parse(resource.getRoot(), new Command("name", null) {});
     }
     
 }

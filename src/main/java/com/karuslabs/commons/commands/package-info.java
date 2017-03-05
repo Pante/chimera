@@ -17,6 +17,6 @@
 
 
 /**
- * Essential command-related classes.
+ * Foundational command-related classes.
  */
 package com.karuslabs.commons.commands;

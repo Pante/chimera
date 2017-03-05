@@ -32,17 +32,16 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnitParamsRunner.class)
 public class MarshallCommandTest {
     
+    private static final String[] EMPTY = new String[0];
+    
     private MarshallCommand command;
-    private PluginCommand delegate;
     private Map<String, Command> subcommands;
     private Command subcommand;
     
     
     public MarshallCommandTest() {
-        delegate = mock(PluginCommand.class);
         subcommands = Collections.singletonMap("subcommand", subcommand = mock(Command.class));
-        
-        command = new MarshallCommand(delegate, subcommands);
+        command = spy(new MarshallCommand(null, null, null, subcommands));
     }
     
     
@@ -51,13 +50,13 @@ public class MarshallCommandTest {
     public void execute(String[] args, int delegateTimes, int subcommandTimes) {
         command.execute(null, args);
         
-        verify(delegate, times(delegateTimes)).execute(any(), any());
+        verify(command, times(delegateTimes)).execute(any());
         verify(subcommand, times(subcommandTimes)).execute(any(), any());
     }
     
     public Object[] parametersForExecute() {
         return new Object[] {
-            new Object[] {new String[] {}, 1, 0},
+            new Object[] {EMPTY, 1, 0},
             new Object[] {new String[] {"argument"}, 1, 0},
             new Object[] {new String[] {"subcommand", "subcommand argument"}, 0, 1}
         };
@@ -76,7 +75,7 @@ public class MarshallCommandTest {
     public Object[] parametersForTabComplete() {
         List emptyList = Collections.emptyList();
         return new Object[] {
-            new Object[] {new String[] {}, 0, emptyList},
+            new Object[] {EMPTY, 0, emptyList},
             new Object[] {new String[] {"subcommand"}, 0, Arrays.asList("subcommand")},
             new Object[] {new String[] {"invalid"}, 0, emptyList},
             new Object[] {new String[] {"subcommand", "blah"}, 1, emptyList},

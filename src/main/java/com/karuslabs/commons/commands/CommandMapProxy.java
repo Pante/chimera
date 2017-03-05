@@ -78,8 +78,8 @@ public class CommandMapProxy {
      */
     public void register(String fallbackPrefix, Command command) {
         CommandRegistrationEvent event = new CommandRegistrationEvent(command);
-        
         manager.callEvent(event);
+        
         if (!event.isCancelled()) {
             map.register(fallbackPrefix, command);
         }
@@ -89,12 +89,12 @@ public class CommandMapProxy {
     /**
      * Retrieves the commands of the plug-in specified.
      * 
-     * @param pluginName the name of the plug-in
-     * @return a map of the plug-in's commands.
+     * @param name the name of the plug-in
+     * @return a map of the plugin's commands.
      */
-    public Map<String, org.bukkit.command.Command> getPluginCommands(String pluginName) {
+    public Map<String, org.bukkit.command.Command> getPluginCommands(String name) {
         return map.getCommands().stream()
-                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(pluginName)) 
+                .filter(command -> command instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) command).getPlugin().getName().equals(name))
                 .collect(Collectors.toMap(command -> command.getName(), command -> command));
     }
     
@@ -103,7 +103,7 @@ public class CommandMapProxy {
      * 
      * @return the server's <code>CommandMap</code>
      */
-    public SimpleCommandMap getCommandMap() {
+    public SimpleCommandMap getSimpleCommandMap() {
         return map;
     }
     

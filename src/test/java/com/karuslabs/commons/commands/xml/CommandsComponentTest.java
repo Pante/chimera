@@ -16,10 +16,10 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 
-import com.karuslabs.commons.core.test.XMLResource;
+import com.karuslabs.commons.test.XMLResource;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 public class CommandsComponentTest {
     
     @Rule
-    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands-component.xml"), null);
+    public XMLResource resource = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("commands/commands.xml"), null);
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -70,7 +70,7 @@ public class CommandsComponentTest {
     @Test
     public void parse_ThrowsException() {
         exception.expect(ParserException.class);
-        exception.expectMessage("No such registered command with name: \"subcommand\"");
+        exception.expectMessage("No such registered command with name: subcommand");
         
         commands.put("command", mock(Command.class));
         component.parse(resource.getRoot().getChild("commands"), commands);

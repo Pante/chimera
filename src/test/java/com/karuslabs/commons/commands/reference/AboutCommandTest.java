@@ -16,9 +16,9 @@
  */
 package com.karuslabs.commons.commands.reference;
 
-import com.karuslabs.commons.commands.Criteria;
+import com.google.common.collect.Lists;
 
-import java.util.Arrays;
+import com.karuslabs.commons.commands.Criteria;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -31,19 +31,17 @@ import static org.mockito.Mockito.*;
 
 public class AboutCommandTest {
     
-    private AboutCommand command;
     private Plugin plugin;
     private PluginDescriptionFile file;
     private CommandSender sender;
     
     
     public AboutCommandTest() {
-        file = mock(PluginDescriptionFile.class);
         plugin = mock(Plugin.class);
+        file = mock(PluginDescriptionFile.class);  
+        sender = mock(CommandSender.class);
         
         when(plugin.getDescription()).thenReturn(file);
-        
-        sender = mock(CommandSender.class);
     }
     
     
@@ -52,17 +50,16 @@ public class AboutCommandTest {
         when(file.getName()).thenReturn("name");
         when(file.getVersion()).thenReturn("does it matter?");
         when(file.getDescription()).thenReturn("Going to be rewritten sooner or latter");
-        when(file.getAuthors()).thenReturn(Arrays.asList(new String[] {"Pante"}));
-        when(file.getWebsite()).thenReturn("www.karusmc.com/sell-out");
+        when(file.getAuthors()).thenReturn(Lists.newArrayList("Pante"));
+        when(file.getWebsite()).thenReturn("www.karuslabs.com/sell-out");
         
-        command = new AboutCommand("name", plugin, Criteria.NONE);
-        command.execute(sender, null);
+        new AboutCommand("name", plugin, Criteria.NONE).execute(sender, null);
         
         verify(sender, times(1)).sendMessage(ChatColor.translateAlternateColorCodes('&', 
                 "&6name version: &cdoes it matter?"
                 + "\n&6Going to be rewritten sooner or latter"
                 + "\nAuthor(s): &c[Pante]"
-                + "\n&6Source code & development resources: &cwww.karusmc.com/sell-out"));
+                + "\n&6Source code & development resources: &cwww.karuslabs.com/sell-out"));
     }
     
 }

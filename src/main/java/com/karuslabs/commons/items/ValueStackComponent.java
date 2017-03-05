@@ -16,8 +16,8 @@
  */
 package com.karuslabs.commons.items;
 
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.items.meta.*;
-import com.karuslabs.commons.core.xml.*;
 
 import java.util.*;
 
@@ -29,11 +29,11 @@ import org.jdom2.*;
 
 
 /**
- * Represents a component for parsing <code>&ltitem&gt</code> nodes.
+ * Represents a component for parsing <code>&lt;item&gt;</code> nodes.
  */
 public class ValueStackComponent implements Component<ValueStack> {
 
-    private Map<String, ItemMetaComponent> components;
+    private Map<String, ItemComponent> components;
     
     
     /**
@@ -41,26 +41,26 @@ public class ValueStackComponent implements Component<ValueStack> {
      */
     public ValueStackComponent() {
         components = new HashMap<>(6);
-        components.put("banner-meta", new BannerMetaComponent());
-        components.put("book-meta", new BookMetaComponent());
-        components.put("storage-meta", new EnchantmentStorageMetaComponent());
-        components.put("item-meta", new ItemMetaComponent());
-        components.put("leather-armor-meta", new LeatherArmorMetaComponent());
-        components.put("potion-meta", new PotionMetaComponent());
+        components.put("banner-meta", new BannerComponent());
+        components.put("book-meta", new BookComponent());
+        components.put("storage-meta", new StorageComponent());
+        components.put("item-meta", new ItemComponent());
+        components.put("leather-armor-meta", new LeatherArmorComponent());
+        components.put("potion-meta", new PotionComponent());
     }
     
     /**
      * Creates a new component with the components for parsing <code>ItemMeta</code>s specified.
      * 
-     * @param components the components for parsing variants of <code>&ltItemMeta&gt</code>s
+     * @param components the components for parsing variants of <code>&lt;ItemMeta&gt;</code>s
      */
-    public ValueStackComponent(Map<String, ItemMetaComponent> components) {
+    public ValueStackComponent(Map<String, ItemComponent> components) {
         this.components = components;
     }
     
     
     /**
-     * Parses a <code>&ltitem&gt</code> node.
+     * Parses a <code>&lt;item&gt;</code> node.
      * 
      * @param element the node
      * @return the parsed <code>ValueStack</code>
@@ -102,9 +102,9 @@ public class ValueStackComponent implements Component<ValueStack> {
     
     
     /**
-     * @return the components for parsing variants of <code>&ltItemmeta&gt</code>
+     * @return the components for parsing variants of <code>&lt;Itemmeta&gt;</code>
      */
-    public Map<String, ItemMetaComponent> getComponents() {
+    public Map<String, ItemComponent> getComponents() {
         return components;
     }
     

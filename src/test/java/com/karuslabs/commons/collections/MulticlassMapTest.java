@@ -22,7 +22,7 @@ import java.util.concurrent.FutureTask;
 
 import junitparams.*;
 
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static com.karuslabs.commons.collections.MulticlassMap.key;
@@ -33,20 +33,28 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnitParamsRunner.class)
 public class MulticlassMapTest {
     
-    private static FutureTask value = mock(FutureTask.class);
-    
-    private MulticlassMap<Runnable> map;
+    private MulticlassMap<Object> map;
+    private Key<FutureTask> key;
+    private FutureTask value;
     
     
     public MulticlassMapTest() {
         map = new MulticlassMap<>();
+        key = key("name", FutureTask.class);
+        value = mock(FutureTask.class);
+    }
+    
+    
+    @Before
+    public void setup() {
+        map.clear();
     }
     
     
     @Test
     public void get() {
-        map.put(key("future", FutureTask.class), value);
-        FutureTask returned = map.get(key("future", FutureTask.class));
+        map.put(key, value);
+        FutureTask returned = map.get(key);
         
         assertEquals(value, returned);
     }
@@ -55,8 +63,8 @@ public class MulticlassMapTest {
     @Test
     @Parameters
     public void getOrDefault(FutureTask value, FutureTask defaultValue, FutureTask expected) {
-        map.put(key("future", FutureTask.class), value);
-        FutureTask returned = map.getOrDefault(key("future", FutureTask.class), defaultValue);
+        map.put(key, value);
+        FutureTask returned = map.getOrDefault(key, defaultValue);
         
         assertEquals(expected, returned);
     }
@@ -71,34 +79,32 @@ public class MulticlassMapTest {
     
     @Test
     @Parameters
-    public void keyEquals(Key<? extends Runnable> key1, Key<? extends Runnable> key2, boolean equals) {
-        assertEquals(key1.equals(key2), equals);
+    public void equals(Key<?> aKey, boolean isEqual) {
+        assertEquals(isEqual, key.equals(aKey));
     }
     
-    protected Object[] parametersForKeyEquals() {
-        Key<FutureTask> key = key("name", FutureTask.class);
+    protected Object[] parametersForEquals() {
         return new Object[] {
-            new Object[] {key, key("name", Runnable.class), false},
-            new Object[] {key, key("wrong-name", FutureTask.class), false},
-            new Object[] {key, key("wrong-name", Runnable.class), false},
-            new Object[] {key, key("name", FutureTask.class), true}
+            new Object[] {key("name", FutureTask.class), true},
+            new Object[] {key("name", Runnable.class), false},
+            new Object[] {key("wrong-name", FutureTask.class), false},
+            new Object[] {key("wrong-name", Runnable.class), false}
         };
     }
     
     
     @Test
     @Parameters
-    public void keyHashCode(Key<? extends Runnable> key1, Key<? extends Runnable> key2, boolean equals) {
-        assertEquals(key1.hashCode() == key2.hashCode(), equals);
+    public void hashCode(Key<?> aKey, boolean isEqual) {
+        assertEquals(isEqual, key.hashCode() == aKey.hashCode());
     }
     
-    protected Object[] parametersForKeyHashCode() {
-        Key<FutureTask> key = key("name", FutureTask.class);
+    protected Object[] parametersForHashCode() {
         return new Object[] {
-            new Object[] {key, key("name", Runnable.class), false},
-            new Object[] {key, key("wrong-name", FutureTask.class), false},
-            new Object[] {key, key("wrong-name", Runnable.class), false},
-            new Object[] {key, key("name", FutureTask.class), true}
+            new Object[] {key("name", Runnable.class), false},
+            new Object[] {key("wrong-name", FutureTask.class), false},
+            new Object[] {key("wrong-name", Runnable.class), false},
+            new Object[] {key("name", FutureTask.class), true}
         };
     }
     

@@ -16,6 +16,9 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.google.common.collect.Sets;
+import com.karuslabs.commons.commands.reference.MarshallCommand;
+
 import java.util.*;
 
 import junitparams.*;
@@ -24,10 +27,14 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
 public class UtilityTest {
+    
+    private static final String[] EMPTY = new String[0];
+    
     
     @Test
     @Parameters
@@ -36,11 +43,11 @@ public class UtilityTest {
         assertArrayEquals(expected, returned);
     }
     
-    public Object[] parametersForTrim() {
+    protected Object[] parametersForTrim() {
         return new Object[] {
             new Object[] {new String[] {"1", "2", "3"}, new String[] {"2", "3"}},
-            new Object[] {new String[] {"1"}, new String[] {}},
-            new Object[] {new String[] {}, new String[] {}}
+            new Object[] {new String[] {"1"}, EMPTY},
+            new Object[] {EMPTY, EMPTY}
         };
     }
     
@@ -52,7 +59,7 @@ public class UtilityTest {
         assertEquals(expected, returned);
     }
     
-    public Object[] parametersForGetArgumentOrDefault() {
+    protected Object[] parametersForGetArgumentOrDefault() {
         return new Object[] {
             new Object[] {new String[] {"1", "2", "3"}, 1, "2"},
             new Object[] {new String[] {"1", "2", "3"}, 2, "3"},
@@ -94,12 +101,37 @@ public class UtilityTest {
     
     
     @Test
-    @Parameters(source = CommandProvider.class)
+    @Parameters
     public void flatMap(Command command, Set<String> expected) {
-        Map<String, Command> commands = new HashMap<>(2);
-        Utility.flapMap(command.getName(), command, commands);
+        Map<String, Command> returned = new HashMap<>(2);
+        Utility.flapMap(command.getName(), command, returned);
         
-        assertEquals(commands.keySet(), expected);
+        assertEquals(expected, returned.keySet());
+    }
+    
+    protected Object[] parametersForFlatMap() {
+        MarshallCommand root = (MarshallCommand) stub("root", true);
+        MarshallCommand command = (MarshallCommand) stub("command", true);
+        Command subcommand = stub("subcommand", false);
+        
+        when(root.getSubcommands()).thenReturn(Collections.singletonMap("command", command));
+        when(command.getSubcommands()).thenReturn(Collections.singletonMap("subcommand", subcommand));
+        
+        return new Object[] {
+            root, Sets.newHashSet("root", "root command", "root command subcommand")
+        };
+    }
+    
+    protected Command stub(String name, boolean isMarshall) {
+        Command command;
+        if (isMarshall) {
+            command = mock(MarshallCommand.class);
+        } else {
+            command = mock(Command.class);
+        }
+        
+        when(command.getName()).thenReturn(name);
+        return command;
     }
     
     

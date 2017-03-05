@@ -39,13 +39,13 @@ public class CommandParserIT {
         parser = new CommandParser(new CommandsComponent());
         commands = new HashMap<>(1);
         
-        command = mock(MarshallCommand.class);
+        command = spy(new MarshallCommand(null, null));
         when(command.getName()).thenReturn("command");
         
-        subcommand = mock(Command.class);
+        subcommand = spy(new Command(null, null) {});
         when(subcommand.getName()).thenReturn("subcommand");
 
-        when(command.getCommands()).thenReturn(Collections.singletonMap("subcommand", subcommand));
+        when(command.getSubcommands()).thenReturn(Collections.singletonMap("subcommand", subcommand));
         
         commands.put("command", command);
     }
@@ -55,20 +55,20 @@ public class CommandParserIT {
     public void parse() {
         parser.parse(getClass().getClassLoader().getResourceAsStream("commands/commands.xml"), commands);
         
-        verify(command, times(1)).setAliases(Arrays.asList(new String[] {"cmd", "comm"}));
-        verify(command, times(1)).setDescription("command description");
-        verify(command, times(1)).setUsage("command usage");
+        verify(command, times(1)).newAliases(Arrays.asList(new String[] {"cmd", "comm"}));
+        verify(command, times(1)).newDescription("command description");
+        verify(command, times(1)).newUsage("command usage");
         
-        verify(command, times(1)).setPermission("command.permission");
-        verify(command, times(1)).setPermissionMessage("You do not have permission to use this command");
+        verify(command, times(1)).newPermission("command.permission");
+        verify(command, times(1)).newPermissionMessage("You do not have permission to use this command");
         
         
-        verify(subcommand, times(1)).setAliases(Arrays.asList(new String[] {"subcmd", "subcomm"}));
-        verify(subcommand, times(1)).setDescription("subcommand description");
-        verify(subcommand, times(1)).setUsage("subcommand usage");
+        verify(subcommand, times(1)).newAliases(Arrays.asList(new String[] {"subcmd", "subcomm"}));
+        verify(subcommand, times(1)).newDescription("subcommand description");
+        verify(subcommand, times(1)).newUsage("subcommand usage");
         
-        verify(subcommand, times(1)).setPermission("subcommand.permission");
-        verify(subcommand, times(1)).setPermissionMessage("You do not have permission to use this subcommand");
+        verify(subcommand, times(1)).newPermission("subcommand.permission");
+        verify(subcommand, times(1)).newPermissionMessage("You do not have permission to use this subcommand");
     }
     
 }

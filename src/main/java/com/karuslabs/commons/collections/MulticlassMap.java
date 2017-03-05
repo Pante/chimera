@@ -23,11 +23,11 @@ import java.util.*;
  * Represents a map with the value's class and a <code>string</code> as the key.
  * This is a multi-value implementation of Josh Bloch's type-safe heterogeneous container.
  * 
- * @param <T> the type of mapped values
+ * @param <V> the type of mapped values
  */
-public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> {
+public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> {
     
-    private Map<Key<? extends T>, T> map;
+    private Map<Key<? extends V>, V> map;
     
     
     /**
@@ -52,16 +52,21 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
      * 
      * @param map the backing map
      */
-    public MulticlassMap(Map<Key<? extends T>, T> map) {
+    public MulticlassMap(Map<Key<? extends V>, V> map) {
         this.map = map;
     }
     
     
     @Override
-    public void clear() {
-        map.clear();
+    public int size() {
+        return map.size();
     }
     
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+        
     @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
@@ -71,38 +76,68 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-
+           
     @Override
-    public Set<Map.Entry<Key<? extends T>, T>> entrySet() {
-        return map.entrySet();
-    }
-        
-    @Override
-    public T get(Object key) {
+    public V get(Object key) {
         return map.get(key);
     }
-    
+
     /**
      * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
      * 
-     * @param <U> the type of the key & value
+     * @param <U> the type of the key and value
      * @param key the key whose associated value is to be returned
      * @return the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key
      */
-    public <U extends T> U get(Key<U> key) {
+    public <U extends V> U get(Key<U> key) {
         return key.type.cast(map.get(key));
     }
     
+    @Override
+    public V put(Key<? extends V> key, V value) {
+        return map.put(key, value);
+    }
+        
+    @Override
+    public V remove(Object key) {
+        return map.remove(key);
+    }
+    
+    @Override
+    public void putAll(Map<? extends Key<? extends V>, ? extends V> map) {
+        this.map.putAll(map);
+    }
+    
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public Set<Key<? extends V>> keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return map.values();
+    }
+
+    @Override
+    public Set<Entry<Key<? extends V>, V>> entrySet() {
+        return map.entrySet();
+    }   
+
     /**
      * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
      * 
-     * @param <U> the type of the key & value
+     * @param <U> the type of the key and value
      * @param key the key whose associated value is to be returned
      * @param value the value to return if this map contains no mapping for the given key
      * @return the mapping for the key, if present; else the default value
      */
-    public <U extends T> U getOrDefault(Key<U> key, U value) {
-        T uncasted = map.get(key);
+    public <U extends V> U getOrDefault(Key<U> key, U value) {
+        V uncasted = map.get(key);
         if (uncasted != null) {
             return key.type.cast(uncasted);
             
@@ -111,54 +146,17 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
         }
     }
     
-    @Override
-    public T put(Key<? extends T> key, T value) {
-        return map.put(key, value);
-    }
-    
-    @Override
-    public void putAll(Map<? extends Key<? extends T>, ? extends T> map) {
-        this.map.putAll(map);
-    }
-
-
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
-    public Set<Key<? extends T>> keySet() {
-        return map.keySet();
-    }
-    
-    @Override
-    public T remove(Object key) {
-        return map.remove(key);
-    }
-
-    @Override
-    public int size() {
-        return map.size();
-    }
-
-
-    @Override
-    public Collection<T> values() {
-        return map.values();
-    }
-    
     
     /**
      * Convenience method that creates a new key with the name and type specified.
      * 
-     * @param <U> the type of the key
+     * @param <T> the type of the key
      * @param name the name of the key
      * @param type the type of the key
      * @return a new key with the name and type specified
      */
-    public static <U> Key<U> key(String name, Class<U> type) {
-        return new Key(name , type);
+    public static <T> Key<T> key(String name, Class<T> type) {
+        return new Key(name, type);
     }
     
     
@@ -166,12 +164,12 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
      * Represents a key to which a value is associated with.
      * Equality is determined by the name and type of the key.
      * 
-     * @param <U> the type of the key
+     * @param <T> the type of the key
      */
-    public static class Key<U> {
+    public static class Key<T> {
         
         private String name;
-        private Class<U> type;
+        private Class<T> type;
         
         
         /**
@@ -180,10 +178,11 @@ public class MulticlassMap<T> implements Map<MulticlassMap.Key<? extends T>, T> 
          * @param name the name of the key
          * @param type the type of the key
          */
-        public Key(String name, Class<U> type) {
+        public Key(String name, Class<T> type) {
             this.name = name;
             this.type = type;
         }
+        
         
         @Override
         public boolean equals(Object object) {

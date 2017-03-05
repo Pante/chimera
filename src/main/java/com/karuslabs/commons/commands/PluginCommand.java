@@ -23,7 +23,7 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * Represents a plug-in's {@link com.karuslabs.commons.commands.Command}.
+ * Represents a plugin's {@link com.karuslabs.commons.commands.Command}.
  */
 public abstract class PluginCommand extends Command implements PluginIdentifiableCommand {
     
@@ -31,10 +31,10 @@ public abstract class PluginCommand extends Command implements PluginIdentifiabl
     
     
     /**
-     * Creates a new command with the name, plug-in and criteria specified.
+     * Creates a new command with the name, plugin and criteria specified.
      * 
      * @param name the name of the command
-     * @param plugin the owning plug-in of the command
+     * @param plugin the owning plugin of the command
      * @param criteria the criteria which must be met for execution to proceed
      */
     public PluginCommand(String name, Plugin plugin, Criteria criteria) {
@@ -43,10 +43,10 @@ public abstract class PluginCommand extends Command implements PluginIdentifiabl
     }
     
     /**
-     * Constructs this with the specified name, plug-in, criteria, description, message and aliases.
+     * Constructs this with the specified name, plugin, criteria, description, message and aliases.
      * 
      * @param name the name of the command
-     * @param plugin the owning plug-in of the command
+     * @param plugin the owning plugin of the command
      * @param criteria the criteria which must be met for execution to proceed
      * @param description the description of the command
      * @param message the permission message of the command
@@ -59,7 +59,7 @@ public abstract class PluginCommand extends Command implements PluginIdentifiabl
     
     
     /**
-     * @return the owning plug-in of the command
+     * @return the owning plugin of the command
      */
     @Override
     public Plugin getPlugin() {

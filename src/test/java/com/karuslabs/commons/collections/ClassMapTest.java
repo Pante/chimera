@@ -30,14 +30,15 @@ import static org.mockito.Mockito.mock;
 @RunWith(JUnitParamsRunner.class)
 public class ClassMapTest {
     
-    private static Class<FutureTask> key = FutureTask.class;
-    private static FutureTask value = mock(FutureTask.class);
-    
-    private ClassMap<Runnable> map;
+    private ClassMap<Object> map;
+    private Class<FutureTask> key;
+    private FutureTask value;
     
     
     public ClassMapTest() {
         map = new ClassMap<>();
+        key = FutureTask.class;
+        value = mock(FutureTask.class);
     }
     
     

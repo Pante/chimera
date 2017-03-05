@@ -17,19 +17,21 @@
 package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.commands.events.CommandRegistrationEvent;
+import com.karuslabs.commons.test.StubServer;
 
 import java.util.*;
 
 import junitparams.*;
 
 import org.bukkit.Server;
-import org.bukkit.command.*;
 import org.bukkit.event.Cancellable;
 import org.bukkit.plugin.*;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
+import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -42,17 +44,14 @@ public class CommandMapProxyTest {
     public ExpectedException exception = ExpectedException.none();
     
     private CommandMapProxy proxy;
-    private Server server;
-    private SimpleCommandMap map;
-    private PluginManager manager;
+    private StubServer server;
+    private PluginCommand command;
     
     
-    public CommandMapProxyTest() {
-        map = mock(SimpleCommandMap.class);
-        manager = mock(PluginManager.class);
-        
-        server = new StubServer(map, manager);
+    public CommandMapProxyTest() {        
+        server = new StubServer();
         proxy = spy(new CommandMapProxy(server));
+        command = mock(PluginCommand.class);
     }
     
     
@@ -67,10 +66,7 @@ public class CommandMapProxyTest {
     
     @Test
     public void register_Map() {
-        doNothing().when(proxy).register(any(), any());
-        
         Map<String, Command> commands = new HashMap<>(1);
-        Command command = mock(Command.class);
         commands.put("command", command);
         
         proxy.register(commands);
@@ -82,47 +78,42 @@ public class CommandMapProxyTest {
     @Test
     @Parameters({"false, 1", "true, 0"})
     public void register_Command(boolean cancelled, int times) {
-        doAnswer(invocation -> {
+        Answer<Void> setCancelled = invocation -> {
             ((Cancellable) invocation.getArgument(0)).setCancelled(cancelled);
-            return invocation.getArgument(0);
-        }).when(manager).callEvent(any(CommandRegistrationEvent.class));
+            return null;
+        };
         
-        proxy.register("", mock(Command.class));
+        doAnswer(setCancelled).when(server.getPluginManager()).callEvent(any(CommandRegistrationEvent.class));
         
-        verify(map, times(times)).register(any(), any());
+        proxy.register("", command);
+        
+        verify(server.getSimpleCommandMap(), times(times)).register(any(), any());
     }
     
     
     @Test
     @Parameters
     public void getPluginCommands(Command command, Set<String> expected) {
-        List<org.bukkit.command.Command> commands = new ArrayList<>(1);
-        commands.add(command);
-        when(map.getCommands()).thenReturn(commands);
+        List<org.bukkit.command.Command> bukkitCommands = Arrays.asList(command);
+        
+        when(server.getSimpleCommandMap().getCommands()).thenReturn(bukkitCommands);
         
         Set<String> returned = proxy.getPluginCommands("test").keySet();
         assertEquals(expected, returned);
     }
     
-    public Object[] parametersForGetPluginCommands() {
-        Command nonPluginCommand = mock(Command.class);
-        PluginCommand differentPluginCommand = mock(PluginCommand.class);
-        PluginCommand command = mock(PluginCommand.class);
-        
-        Plugin aPlugin = mock(Plugin.class);
-        when(aPlugin.getName()).thenReturn("differentPlugin");
-        when(differentPluginCommand.getPlugin()).thenReturn(aPlugin);
-        
-        Plugin plugin = mock(Plugin.class);
-        when(plugin.getName()).thenReturn("test");
-        when(command.getPlugin()).thenReturn(plugin);
-        when(command.getName()).thenReturn("command name");
-        
+    protected Object[] parametersForGetPluginCommands() {        
         return new Object[] {
-            new Object[] {nonPluginCommand, Collections.<String>emptySet()},
-            new Object[] {differentPluginCommand, Collections.<String>emptySet()},
-            new Object[] {command, Collections.singleton("command name")}
+            new Object[] {stub("command name", "test"), Collections.singleton("command name")},
+            new Object[] {stub("", "differentPlugin"), Collections.<String>emptySet()},
+            new Object[] {new Command("", Criteria.NONE) {}, Collections.<String>emptySet()}
         };
+    }
+    
+    protected PluginCommand stub(String name, String pluginName) {
+        Plugin plugin = mock(Plugin.class);
+        when(plugin.getName()).thenReturn(pluginName);
+        return new PluginCommand(name, plugin, Criteria.NONE) {};
     }
     
 }

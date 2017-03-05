@@ -63,10 +63,10 @@ public class CriteriaTest {
     protected Object[] parametersForPermittedPlayer() {
         Player player = mock(Player.class);
         return new Object[] {
-            new Object[] {sender, true, false},
-            new Object[] {sender, false, false},
             new Object[] {player, true, true},
-            new Object[] {player, false, false}
+            new Object[] {player, false, false},
+            new Object[] {sender, true, false},
+            new Object[] {sender, false, false}
         };
     }
     

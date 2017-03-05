@@ -75,7 +75,7 @@ public abstract class Command extends org.bukkit.command.Command {
      * @param sender source object which is executing this command
      * @param args all arguments passed to the command, split via ' '
      */
-    public abstract void execute(CommandSender sender, String[] args);
+    public void execute(CommandSender sender, String[] args) {}
     
     
     public Criteria getCriteria() {

@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.commands.xml;
 
-import com.karuslabs.commons.core.xml.*;
+import com.karuslabs.commons.xml.*;
 import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
@@ -25,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Represents a component for parsing <code>&ltcommands</code> nodes.
+ * Represents a component for parsing <code>&lt;commands</code> nodes.
  */
 public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
@@ -33,16 +33,16 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     
     /**
-     * Creates a new component with a {@link CommandComponent} for parsing <code>&ltcommand&gt</code> nodes.
+     * Creates a new component with a {@link CommandComponent} for parsing <code>&lt;command&gt;</code> nodes.
      */
     public CommandsComponent() {
         component = new CommandComponent(this);
     }
     
     /**
-     * Creates a new component with a component for parsing <code>&ltcommand&gt</code> nodes specified.
+     * Creates a new component with a component for parsing <code>&lt;command&gt;</code> nodes specified.
      * 
-     * @param component the component for parsing <code>&ltcommand&gt</code> nodes
+     * @param component the component for parsing <code>&lt;command&gt;</code> nodes
      */
     public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
@@ -50,9 +50,9 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
     
     /**
-     * Parses a <code>&ltcommands&gt</code> node and sets the associated values for the commands specified.
+     * Parses a <code>&lt;commands&gt;</code> node and sets the associated values for the commands specified.
      * 
-     * @param root the <code>&ltcommands&gt</code>
+     * @param root the <code>&lt;commands&gt;</code>
      * @param commands the values of the commands to set
      */
     @Override
@@ -64,7 +64,7 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
                 component.parse(element, commands.get(name));
 
             } else {
-                throw new ParserException("No such registered command with name: \"" + name + "\"");
+                throw new ParserException("No such registered command with name: " + name);
             }
         });
     }

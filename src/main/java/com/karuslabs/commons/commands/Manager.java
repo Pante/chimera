@@ -17,7 +17,7 @@
 package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.commands.xml.*;
-import com.karuslabs.commons.core.xml.SetterParser;
+import com.karuslabs.commons.xml.SetterParser;
 
 import java.io.File;
 import java.util.Map;
@@ -37,14 +37,14 @@ public class Manager {
     /**
      * Creates a new manager for the plug-in specified.
      * 
-     * @param owningPlugin the owning plug-in of the manager
+     * @param plugin the owning plugin of the manager
      */
-    public Manager(Plugin owningPlugin) {
-        this(new CommandMapProxy(owningPlugin.getServer()), new CommandParser(new CommandsComponent()));
+    public Manager(Plugin plugin) {
+        this(new CommandMapProxy(plugin.getServer()), new CommandParser(new CommandsComponent()));
     }
     
     /**
-     * Creates a new manager for the plug-in with the <code>CommandMapProxy</code> and <code>Parser<code> specified
+     * Creates a new manager for the plugin with the <code>CommandMapProxy</code> and <code>Parser</code> specified
      * 
      * @param proxy a proxy
      * @param parser a parser

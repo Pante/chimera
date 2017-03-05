@@ -134,4 +134,5 @@ public class OptionFutureTest {
         
         task.getOrThrow(IllegalArgumentException::new);
     }
+    
 }

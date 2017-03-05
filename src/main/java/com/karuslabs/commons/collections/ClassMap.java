@@ -21,14 +21,14 @@ import java.util.Map.Entry;
 
 
 /**
- * Represents a map with the value's class as the key. 
+ * Represents a map with the values class as the key. 
  * This is a single-value implementation of Josh Bloch's type-safe heterogeneous container.
  * 
- * @param <T> the type of mapped values
+ * @param <V> the type of mapped values
  */
-public class ClassMap<T> implements Map<Class<? extends T>, T> {
+public class ClassMap<V> implements Map<Class<? extends V>, V> {
     
-    private Map<Class<? extends T>, T> map;
+    private Map<Class<? extends V>, V> map;
     
     
     /**
@@ -53,18 +53,23 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
      * 
      * @param map the backing map
      */
-    public ClassMap(Map<Class<? extends T>, T> map) {
+    public ClassMap(Map<Class<? extends V>, V> map) {
         this.map = map;
     }
-
+    
     
 
     @Override
-    public void clear() {
-        map.clear();
+    public int size() {
+        return map.size();
     }
     
 
+    @Override
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+        
     @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
@@ -75,17 +80,12 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-    
+
     @Override
-    public Set<Entry<Class<? extends T>, T>> entrySet() {
-        return map.entrySet();
-    }
-        
-    @Override
-    public T get(Object key) {
+    public V get(Object key) {
         return map.get(key);
     }
-    
+
     /**
      * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
      * 
@@ -93,8 +93,43 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
      * @param type the class of the value the value is mapped to
      * @return the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key
      */
-    public <U extends T> U get(Class<U> type) {
+    public <U extends V> U get(Class<U> type) {
         return type.cast(map.get(type));
+    }
+        
+    @Override
+    public V put(Class<? extends V> key, V value) {
+        return map.put(key, value);
+    }
+        
+    @Override
+    public V remove(Object key) {
+        return map.remove(key);
+    }
+    
+    @Override
+    public void putAll(Map<? extends Class<? extends V>, ? extends V> map) {
+        this.map.putAll(map);
+    }
+    
+    @Override
+    public void clear() {
+        map.clear();
+    }
+
+    @Override
+    public Set<Class<? extends V>> keySet() {
+        return map.keySet();
+    }
+
+    @Override
+    public Collection<V> values() {
+        return map.values();
+    }
+
+    @Override
+    public Set<Entry<Class<? extends V>, V>> entrySet() {
+        return map.entrySet();
     }
     
     /**
@@ -105,51 +140,14 @@ public class ClassMap<T> implements Map<Class<? extends T>, T> {
      * @param value the value to return if this map contains no mapping for the given key
      * @return the mapping for the key, if present; else the default value
      */
-    public <U extends T> U getOrDefault(Class<U> type, U value) {
-        T uncasted = map.get(type);
+    public <U extends V> U getOrDefault(Class<U> type, U value) {
+        V uncasted = map.get(type);
         if (uncasted != null) {
             return type.cast(uncasted);
             
         } else {
             return value;
         }
-    }
-    
-    @Override
-    public T put(Class<? extends T> key, T value) {
-        return map.put(key, value);
-    }
-    
-    @Override
-    public void putAll(Map<? extends Class<? extends T>, ? extends T> map) {
-        this.map.putAll(map);
-    }
-
-
-    @Override
-    public boolean isEmpty() {
-        return map.isEmpty();
-    }
-
-    @Override
-    public Set<Class<? extends T>> keySet() {
-        return map.keySet();
-    }
-    
-    @Override
-    public T remove(Object key) {
-        return map.remove(key);
-    }
-
-    @Override
-    public int size() {
-        return map.size();
-    }
-
-
-    @Override
-    public Collection<T> values() {
-        return map.values();
     }
 
 }
