@@ -25,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Represents a component for parsing <code>&lt;;command&gt;;</code> nodes.
+ * Represents a component for parsing <code>&lt;command&gt;;</code> nodes.
  */
 public class CommandComponent implements SetterComponent<Command> {
     
@@ -33,7 +33,7 @@ public class CommandComponent implements SetterComponent<Command> {
     
     
     /**
-     * Creates a new component with a component for parsing <code>&lt;;command&gt;;</code> nodes specified.
+     * Creates a new component with a component for parsing <code>&lt;command&gt;</code> nodes specified.
      * 
      * @param component the component for parsing <code>&lt;command&gt;</code> nodes
      */
@@ -43,9 +43,9 @@ public class CommandComponent implements SetterComponent<Command> {
     
     
     /**
-     * Parses a <code>&lt;;command&gt;;</code> node and sets the associated values for the <code>Command</code> specified.
+     * Parses a <code>&lt;command&gt;;</code> node and sets the associated values for the <code>Command</code> specified.
      * 
-     * @param element the <code>&lt;;command&gt;;</code>
+     * @param element the <code>&lt;command&gt;;</code>
      * @param command the values of a <code>Command</code> to set
      */
     @Override
