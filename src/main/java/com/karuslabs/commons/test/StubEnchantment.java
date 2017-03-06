@@ -20,15 +20,13 @@ import java.lang.reflect.Field;
 
 import org.bukkit.enchantments.*;
 
-import org.junit.rules.ExternalResource;
-
 import static org.mockito.Mockito.*;
 
 
 /**
  * Represents a stub, singleton implementation of <code>Enchantment</code>.
  */
-public class StubEnchantment extends ExternalResource {
+public class StubEnchantment {
     
     public static final StubEnchantment INSTANCE = new StubEnchantment();
     

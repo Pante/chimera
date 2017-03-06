@@ -20,15 +20,13 @@ import java.lang.reflect.Field;
 
 import org.bukkit.potion.*;
 
-import org.junit.rules.ExternalResource;
-
 import static org.mockito.Mockito.*;
 
 
 /**
  * Represents a stub, singleton implementation of <code>PotionEffectType</code>.
  */
-public class StubPotionEffectType extends ExternalResource {
+public class StubPotionEffectType {
     
     public static final StubPotionEffectType INSTANCE = new StubPotionEffectType();
     
