@@ -25,7 +25,7 @@ import org.junit.rules.ExternalResource;
 import static org.mockito.Mockito.*;
 
 
-public class StubEnchantment extends ExternalResource {
+public class StubEnchantment {
     
     public static final StubEnchantment INSTANCE = new StubEnchantment();
     

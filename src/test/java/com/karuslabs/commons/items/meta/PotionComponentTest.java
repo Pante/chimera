@@ -30,14 +30,14 @@ import static org.mockito.Mockito.*;
 public class PotionComponentTest {
     
     @Rule
-    public StubPotionEffectType potionResource = StubPotionEffectType.INSTANCE;
-    
-    @Rule
     public XMLResource xml = new XMLResource().load(getClass().getClassLoader().getResourceAsStream("items/meta/PotionMeta.xml"), null);
     
     @Rule
     public StubItemMeta<PotionMeta> resource = new StubItemMeta(new PotionComponent(), mock(PotionMeta.class));
-
+    
+        
+    private StubPotionEffectType potionResource = StubPotionEffectType.INSTANCE;
+    
     
     @Test
     public void parse() {

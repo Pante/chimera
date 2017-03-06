@@ -25,7 +25,7 @@ import org.junit.rules.ExternalResource;
 import static org.mockito.Mockito.*;
 
 
-public class StubPotionEffectType extends ExternalResource {
+public class StubPotionEffectType {
     
     public static final StubPotionEffectType INSTANCE = new StubPotionEffectType();
     
