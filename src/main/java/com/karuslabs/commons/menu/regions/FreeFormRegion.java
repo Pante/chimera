@@ -36,7 +36,7 @@ public class FreeFormRegion extends Region {
 
     
     /**
-     * Creates a new region with the backing inventory and slots specified.
+     * Creates a new region with the backing <code>Inventory</code> and slots specified.
      * 
      * @param inventory the inventory
      * @param slots the slots
@@ -46,7 +46,7 @@ public class FreeFormRegion extends Region {
     }
     
     /**
-     * Creates a new inventory with the backing inventory, default button, and slots specified.
+     * Creates a new inventory with the backing <code>Inventory</code>, default button, and slots specified.
      * 
      * @param inventory the inventory
      * @param defaultButton the default button
@@ -64,7 +64,7 @@ public class FreeFormRegion extends Region {
      * Determines if the slot specified is within the region.
      * 
      * @param slot the slot
-     * @return <code>true</code>, if within the region; else <code>false</code>
+     * @return true, if within the region; else false
      */
     @Override
     public boolean within(int slot) {

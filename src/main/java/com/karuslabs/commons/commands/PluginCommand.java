@@ -23,7 +23,7 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * Represents a plugin's {@link com.karuslabs.commons.commands.Command}.
+ * Represents a {@link com.karuslabs.commons.commands.Command} of a plugin.
  */
 public abstract class PluginCommand extends Command implements PluginIdentifiableCommand {
     
@@ -43,7 +43,7 @@ public abstract class PluginCommand extends Command implements PluginIdentifiabl
     }
     
     /**
-     * Constructs this with the specified name, plugin, criteria, description, message and aliases.
+     * Constructs this with the name, plugin, criteria, description, permission message and aliases specified.
      * 
      * @param name the name of the command
      * @param plugin the owning plugin of the command

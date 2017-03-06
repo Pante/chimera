@@ -71,7 +71,7 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
     
     /**
-     * Executes {@link #execute(org.bukkit.command.CommandSender)} if there are no subcommands associated with the first argument; else the subcommand.
+     * Calls {@link #execute(CommandSender)} if there are no subcommands associated with the first argument; else the subcommand.
      * 
      * @param sender source object which is executing the command
      * @param args all arguments passed to the command, split via ' '
@@ -87,7 +87,7 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     }
     
     /**
-     * Does nothing. Executed by {@link #execute(org.bukkit.command.CommandSender, java.lang.String[])}, if there are no subcommands associated with the first argument.
+     * Does nothing. Executed by {@link #execute(CommandSender, String[])}, if there are no subcommands associated with the first argument.
      * 
      * @param sender source object which is executing the command
      */
@@ -95,7 +95,7 @@ public class MarshallCommand extends PluginCommand implements Marshall {
     
    
     /**
-     * Returns the command's aliases if there are no arguments; else delegate tab completion to the subcommands.
+     * Returns the aliases of the command, if there are no arguments; else delegate tab completion to the subcommands.
      * 
      * @param sender source object which is executing the command
      * @param alias the alias used

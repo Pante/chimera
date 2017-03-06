@@ -44,7 +44,7 @@ public class Utility {
     
     
     /**
-     * Returns the value at the index, or the default value if th index specified is out of bounds.
+     * Returns the value at the index, or the default value if the index specified is out of bounds.
      * 
      * @param args the array to retrieve the value from
      * @param index the index of the value
@@ -64,8 +64,8 @@ public class Utility {
     /**
      * Parses the string to an <code>int</code>.
      * 
-     * @param argument The string to parse
-     * @return the parsed value if the string is a <code>int</code>; else 1
+     * @param argument the string to parse
+     * @return the parsed value if the string is a int; else 1
      */
     public static int toInt(String argument) {
         if (argument.matches("\\d+")) {
@@ -125,7 +125,8 @@ public class Utility {
 
     
     /**
-     * Operates on the command specified and recursively maps the subcommands by appending the name of the subcommand to the parent command.
+     * Recursively traverses the <code>Command</code> and maps the subcommands to the <code>Map</code> specified by 
+     * appending the name of the subcommand to the parent command.
      * 
      * @param name the name of the command
      * @param command the command to be operated on

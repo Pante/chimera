@@ -74,7 +74,7 @@ public abstract class SetterParser<Argument> {
     /**
      * Parses a XML document from the <code>inputstream</code> and sets the values of the object specified.
      * 
-     * @param stream the <code>inputstream</code>
+     * @param stream the inputstream
      * @param argument the object to set
      */
     public void parse(InputStream stream, Argument argument) {

@@ -34,7 +34,7 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     /**
      * Creates a new parer with the component for parsing <code>&lt;item&gt;</code> nodes.
      * 
-     * @param component the component used to parse <code>&lt;item&gt;</code> nodes
+     * @param component the component used to parse &lt;item&gt; nodes
      */
     public ItemParser(Component<ValueStack> component) {
         super(null);
@@ -45,7 +45,7 @@ public class ItemParser extends Parser<Map<String, ValueStack>> {
     /**
      * Creates a new parser with the component for parsing <code>&lt;item&gt;</code> nodes and XML schema path specified.
      * 
-     * @param component the component used to parse <code>&lt;item&gt;</code> nodes
+     * @param component the component used to parse &lt;item&gt; nodes
      * @param schemaPath the XML schema path
      */
     public ItemParser(Component<ValueStack> component, String schemaPath) {

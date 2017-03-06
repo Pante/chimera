@@ -52,7 +52,7 @@ public class StubEnchantment {
      * Convenience method for obtaining an <code>Enchantment</code> based on its ID.
      * 
      * @param id the enchantment ID
-     * @return the <code>Enchantment</code> with the specified ID
+     * @return the Enchantment with the specified ID
      */
     public Enchantment getById(int id) {
         return Enchantment.getById(id);
@@ -62,7 +62,7 @@ public class StubEnchantment {
      * Convenience method for obtaining an <code>Enchantment</code> based on its name.
      * 
      * @param name the enchantment name
-     * @return the <code>Enchantment</code> with the specified name
+     * @return the Enchantment with the specified name
      */
     public Enchantment getByName(String name) {
         return Enchantment.getByName(name);

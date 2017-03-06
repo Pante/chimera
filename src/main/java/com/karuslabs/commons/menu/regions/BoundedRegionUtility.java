@@ -20,7 +20,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 
 /**
- * <code>BoundedRegion</code> related utility methods.
+ * {@link BoundedRegion} related utility methods.
  */
 public class BoundedRegionUtility {
     

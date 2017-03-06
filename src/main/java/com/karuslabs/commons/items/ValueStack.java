@@ -34,7 +34,7 @@ public class ValueStack {
      * Creates a new ValueStack with the name, <code>ItemStack</code>, buy and sell prices specified.
      * 
      * @param name the name
-     * @param item the <code>ItemStack</code>
+     * @param item the ItemStack
      * @param buy the buy price
      * @param sell the sell price
      */

@@ -25,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Represents a component for parsing <code>&lt;commands</code> nodes.
+ * Represents a component for parsing <code>&lt;commands&gt;</code> nodes.
  */
 public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     
@@ -42,7 +42,7 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     /**
      * Creates a new component with a component for parsing <code>&lt;command&gt;</code> nodes specified.
      * 
-     * @param component the component for parsing <code>&lt;command&gt;</code> nodes
+     * @param component the component for parsing &lt;command&gt; nodes
      */
     public CommandsComponent(SetterComponent<Command> component) {
         this.component = component;
@@ -52,7 +52,7 @@ public class CommandsComponent implements SetterComponent<Map<String, Command>>{
     /**
      * Parses a <code>&lt;commands&gt;</code> node and sets the associated values for the commands specified.
      * 
-     * @param root the <code>&lt;commands&gt;</code>
+     * @param root the &lt;commands&gt; node
      * @param commands the values of the commands to set
      */
     @Override

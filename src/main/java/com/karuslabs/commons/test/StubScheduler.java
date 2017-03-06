@@ -144,7 +144,7 @@ public class StubScheduler implements BukkitScheduler {
      * 
      * @param plugin the plugin
      * @param task the task to run
-     * @return <code>null</code>
+     * @return null
      */
     @Override
     @Supported
@@ -158,7 +158,7 @@ public class StubScheduler implements BukkitScheduler {
      * 
      * @param plugin the plugin
      * @param task the task to run
-     * @return <code>null</code>
+     * @return null
      */
     @Override
     @Supported
@@ -172,7 +172,7 @@ public class StubScheduler implements BukkitScheduler {
      * 
      * @param plugin the plugin
      * @param task the task to run
-     * @return <code>null</code>
+     * @return null
      */
     @Override
     @Supported
@@ -186,7 +186,7 @@ public class StubScheduler implements BukkitScheduler {
      * 
      * @param plugin the plugin
      * @param task the task to run
-     * @return <code>null</code>
+     * @return null
      */
     @Override
     @Supported

@@ -55,12 +55,12 @@ public abstract class Command extends org.bukkit.command.Command {
     
     
     /**
-     * Delegates execution to {@link #execute(org.bukkit.command.CommandSender, java.lang.String[])} when called.
+     * Delegates execution to {@link #execute(CommandSender, String[])} when called.
      * 
      * @param sender source object which is executing this command
      * @param label the alias of the command used
      * @param args all arguments passed to the command, split via ' '
-     * @return <code>true</code>
+     * @return true
      */
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
@@ -70,7 +70,7 @@ public abstract class Command extends org.bukkit.command.Command {
     
     
     /**
-     * Executes the command.
+     * Does nothing.
      * 
      * @param sender source object which is executing this command
      * @param args all arguments passed to the command, split via ' '

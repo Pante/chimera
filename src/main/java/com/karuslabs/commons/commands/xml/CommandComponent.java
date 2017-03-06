@@ -25,7 +25,7 @@ import org.jdom2.Element;
 
 
 /**
- * Represents a component for parsing <code>&lt;command&gt;;</code> nodes.
+ * Represents a component for parsing <code>&lt;command&gt;</code> nodes.
  */
 public class CommandComponent implements SetterComponent<Command> {
     
@@ -35,7 +35,7 @@ public class CommandComponent implements SetterComponent<Command> {
     /**
      * Creates a new component with a component for parsing <code>&lt;command&gt;</code> nodes specified.
      * 
-     * @param component the component for parsing <code>&lt;command&gt;</code> nodes
+     * @param component the component for parsing &lt;command&gt; nodes
      */
     public CommandComponent(SetterComponent<Map<String, Command>> component) {
         this.subcomponent = component;
@@ -43,10 +43,10 @@ public class CommandComponent implements SetterComponent<Command> {
     
     
     /**
-     * Parses a <code>&lt;command&gt;;</code> node and sets the associated values for the <code>Command</code> specified.
+     * Parses a <code>&lt;command&gt;</code> node and sets the associated values for the <code>Command</code> specified.
      * 
-     * @param element the <code>&lt;command&gt;;</code>
-     * @param command the values of a <code>Command</code> to set
+     * @param element the &lt;command&gt;
+     * @param command the values of a Command to set
      */
     @Override
     public void parse(Element element, Command command) {
@@ -72,7 +72,7 @@ public class CommandComponent implements SetterComponent<Command> {
 
     
     /**
-     * @return the component used to parse <code>&lt;command&gt;</code> nodes.
+     * @return the component used to parse &lt;command&gt; nodes.
      */
     public SetterComponent<Map<String, Command>> getSubcomponent() {
         return subcomponent;

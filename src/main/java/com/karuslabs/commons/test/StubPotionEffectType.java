@@ -51,8 +51,8 @@ public class StubPotionEffectType {
     /**
      * Convenience method for obtaining a <code>PotionEffectType</code> based on its ID.
      * 
-     * @param id the <code>PotionEffectType</code> ID
-     * @return the <code>PotionEffectType</code> with the specified ID
+     * @param id the PotionEffectType ID
+     * @return the PotionEffectType with the specified ID
      */
     public PotionEffectType getById(int id) {
         return PotionEffectType.getById(id);
@@ -61,8 +61,8 @@ public class StubPotionEffectType {
     /**
      * Convenience method for obtaining a <code>PotionEffectType</code> based on its name.
      * 
-     * @param name the <code>PotionEffectType</code> name
-     * @return the <code>PotionEffectType</code> with the specified name
+     * @param name the PotionEffectType name
+     * @return the PotionEffectType with the specified name
      */
     public PotionEffectType getByName(String name) {
         return PotionEffectType.getByName(name);

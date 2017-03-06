@@ -24,7 +24,7 @@ import org.bukkit.plugin.*;
 
 
 /**
- * Represents a <code>Command</code> which returns the information defined in the plugin.yml file of the owning plug-in.
+ * Represents a <code>Command</code> which returns the information defined in the plugin.yml file of the owning plugin.
  */
 public class AboutCommand extends PluginCommand {
     
@@ -32,20 +32,20 @@ public class AboutCommand extends PluginCommand {
     
     
     /**
-     * Creates a new command with the name and owning plug-in specified.
+     * Creates a new command with the name and owning plugin specified.
      * 
      * @param name the name of the command
-     * @param plugin the owning plug-in of the command
+     * @param plugin the owning plugin of the command
      */
     public AboutCommand(String name, Plugin plugin) {
         this(name, plugin, Criteria.PERMITTED);
     }
     
     /**
-     * Creates a new command with the name, owning plug-in and criteria specified.
+     * Creates a new command with the name, owning plugin and criteria specified.
      * 
      * @param name the name of the command
-     * @param plugin the owning plug-in of the command
+     * @param plugin the owning plugin of the command
      * @param criteria the criteria which must be satisfied for execution to proceed
      */
     public AboutCommand(String name, Plugin plugin, Criteria criteria) {
@@ -61,7 +61,7 @@ public class AboutCommand extends PluginCommand {
     
     
     /**
-     * Displays the plug-in information to the sender if the criteria is satisfied; else displays the permission message
+     * Displays the plugin information to the sender if the criteria is satisfied; else the permission message.
      * 
      * @param sender source object which is executing the command
      * @param args all arguments passed to the command, split via ' '

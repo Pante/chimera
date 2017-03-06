@@ -230,7 +230,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a stub <code>PluginManager</code>
+     * @return a stub PluginManager
      */
     @Override
     @Supported
@@ -253,7 +253,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a stub <code>SimpleCommandMap</code>
+     * @return a stub SimpleCommandMap
      */
     public SimpleCommandMap getSimpleCommandMap() {
         return commandMap;
@@ -305,7 +305,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a mocked logger
+     * @return a stub logger
      */
     @Override
     @Supported
@@ -474,7 +474,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a <code>CraftInventoryCustom</code>
+     * @return a CraftInventoryCustom
      */
     @Override
     @Supported
@@ -483,7 +483,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a <code>CraftInventoryCustom</code>
+     * @return a CraftInventoryCustom
      */
     @Override
     @Supported
@@ -492,7 +492,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a <code>CraftInventoryCustom</code>
+     * @return a CraftInventoryCustom
      */
     @Override
     @Supported
@@ -501,7 +501,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a <code>CraftInventoryCustom</code>
+     * @return a CraftInventoryCustom
      */
     @Override
     @Supported
@@ -555,7 +555,7 @@ public class StubServer implements Server {
     }
     
     /**
-     * @return a singleton <code>CraftItemFactory</code>
+     * @return a singleton CraftItemFactory
      */
     @Override
     @Supported

@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 
 
 /**
- * Represents a map with the values class as the key. 
+ * Represents a map with the <code>class</code> of a value as the key. 
  * This is a single-value implementation of Josh Bloch's type-safe heterogeneous container.
  * 
  * @param <V> the type of mapped values
@@ -49,7 +49,7 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     }
     
     /**
-     * Creates a new, empty map with the backing map specified.
+     * Creates a new, empty map with the backing <code>map</code> specified.
      * 
      * @param map the backing map
      */
@@ -87,11 +87,11 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     }
 
     /**
-     * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or <code>null</code> if the map contains no mapping for the key.
      * 
      * @param <U> the type of the value
-     * @param type the class of the value the value is mapped to
-     * @return the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key
+     * @param type the class of the value whose associated value is to be returned
+     * @return the mapping for the key, if present; else null
      */
     public <U extends V> U get(Class<U> type) {
         return type.cast(map.get(type));
@@ -133,10 +133,10 @@ public class ClassMap<V> implements Map<Class<? extends V>, V> {
     }
     
     /**
-     * Returns the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or the default value if this map contains no mapping for the key.
      * 
      * @param <U> the type of the value
-     * @param type the class of the value the value is mapped to
+     * @param type the class of the value whose associated value is to be returned
      * @param value the value to return if this map contains no mapping for the given key
      * @return the mapping for the key, if present; else the default value
      */

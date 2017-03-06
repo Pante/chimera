@@ -31,10 +31,10 @@ public interface Button {
     
     
     /**
-     * Processes the event specified.
+     * Processes the <code>InventoryClickEvent</code> specified.
      * 
      * @param menu a menu
-     * @param event a <code>InventoryClickEvent</code>
+     * @param event a InventoryClickEvent
      */
     public void onClick(Menu menu, InventoryClickEvent event);
 

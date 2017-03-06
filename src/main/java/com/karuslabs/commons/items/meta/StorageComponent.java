@@ -25,7 +25,7 @@ import org.jdom2.*;
 
 
 /**
- * Represents a component for parsing <code>&lt;storage-metaa&gt;</code> nodes.
+ * Represents a component for parsing <code>&lt;storage-meta&gt;</code> nodes.
  */
 public class StorageComponent extends ItemComponent<EnchantmentStorageMeta> {
     

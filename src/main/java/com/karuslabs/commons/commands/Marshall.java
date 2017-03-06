@@ -25,7 +25,7 @@ import java.util.Map;
 public interface Marshall {
     
     /**
-     * @return a map of subcommands.
+     * @return the subcommands
      */
     public Map<String, Command> getSubcommands();
     

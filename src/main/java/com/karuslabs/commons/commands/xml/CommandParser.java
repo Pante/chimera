@@ -35,7 +35,7 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
     /**
      * Creates a new parser with the component for parsing <code>&lt;commands&gt;</code> nodes specified.
      * 
-     * @param component the component for parsing <code>&lt;commands&gt;</code> nodes
+     * @param component the component for parsing &lt;commands&gt; nodes
      */
     public CommandParser(SetterComponent<Map<String, Command>> component) {
         super(null);
@@ -47,7 +47,7 @@ public class CommandParser extends SetterParser<Map<String, Command>> {
     /**
      * Creates a new parser with the component for parsing <code>&lt;commands&gt;</code> nodes and XML schema specified.
      * 
-     * @param component the component for parsing <code>&lt;commands&gt;</code> nodes
+     * @param component the component for parsing &lt;commands&gt; nodes
      * @param schemaPath the XML schema path
      */
     public CommandParser(SetterComponent<Map<String, Command>> component, String schemaPath) {

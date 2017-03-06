@@ -21,7 +21,7 @@ import java.util.function.*;
 
 
 /**
- * Represents an implementation of both a {@link java.util.Optional} and {@link java.util.concurrent.FutureTask}.
+ * Represents an implementation of both an {@link java.util.Optional} and {@link java.util.concurrent.FutureTask}.
  * 
  * @param <T> the type of the computation
  */
@@ -37,7 +37,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
     }
     
     /**
-     * Creates a new <code>OptionalFuture</code> which will, upon running, execute the given Runnable, 
+     * Creates a new <code>OptionalFuture</code> which will, upon running, execute the given <code>Runnable</code>, 
      * and arrange that {@link #get()} will return the given result on successful completion.
      * 
      * @param runnable the runnable task
@@ -67,7 +67,7 @@ public class OptionalFuture<T> extends FutureTask<T> {
      * @see UncheckedExecutionException
      * @see UncheckedInterruptedException
      * 
-     * @return The computed result
+     * @return the computed result
      */
     public T getUnchecked() {
         try {
@@ -113,11 +113,11 @@ public class OptionalFuture<T> extends FutureTask<T> {
     
     
     /**
-     * Return the computation, if completed; else throw an unchecked exception to be created by the provided supplier.
+     * Return the computation, if completed; else throw an unchecked exception to be created by the provided <code>supplier</code>.
      * 
      * @param supplier the supplier which will return the unchecked exception to be thrown
      * @return the completed computation
-     * @throws RuntimeException or any other unchecked exceptions specified by the <code>suppiler</code>
+     * @throws RuntimeException or any other unchecked exceptions specified by the suppiler
      */
     public T getOrThrow(Supplier<? extends RuntimeException> supplier) {
         if (isDone()) {

@@ -32,8 +32,9 @@ import static com.karuslabs.commons.commands.Utility.*;
 
 /**
  * Represents a command which lists the plugin's command information.
- * May listen for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} to
- * update itself. Command structure is flatten when stored to optimize look-up performance.
+ * May listen for {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent} and
+ * update itself. Stored commands are flatten to optimize look-up performance.
+ * @see com.karuslabs.commons.commands.Utility#flapMap(String, Command, Map) 
  */
 public class HelpCommand extends PluginCommand implements Listener {
     

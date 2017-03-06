@@ -46,7 +46,7 @@ public class MenuPool implements Listener {
     /**
      * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
      * 
-     * @param event the <code>InventoryClickEvent</code>
+     * @param event the InventoryClickEvent
      */
     @EventHandler
     public void onClick(InventoryClickEvent event) {
@@ -60,7 +60,7 @@ public class MenuPool implements Listener {
     /**
      * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
      * 
-     * @param event the <code>InvntoryDragEvent</code>
+     * @param event the InvntoryDragEvent
      */
     @EventHandler
     public void onDrag(InventoryDragEvent event) {
@@ -74,7 +74,7 @@ public class MenuPool implements Listener {
     /**
      * Delegates event handling to the menu, if the menu is currently used by a player; else ignore.
      * 
-     * @param event the <code>InventoryCloseEvent</code>
+     * @param event the InventoryCloseEvent
      */
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
@@ -86,7 +86,7 @@ public class MenuPool implements Listener {
 
     
     /**
-     * @return the pooled <code>Menus</code>.
+     * @return the pooled Menus
      */
     public ConcurrentHashMap<String, Menu> getPooled() {
         return pooled;

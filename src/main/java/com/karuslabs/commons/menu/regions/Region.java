@@ -36,7 +36,7 @@ public abstract class Region implements InventoryHolder {
     
     
     /**
-     * Creates a new region with the backing inventory specified.
+     * Creates a new region with the backing <code>Inventory</code> specified.
      * 
      * @param inventory the inventory
      */
@@ -45,7 +45,7 @@ public abstract class Region implements InventoryHolder {
     }
     
     /**
-     * Creates a new region with the backing inventory and default button specified.
+     * Creates a new region with the backing <code>Inventory</code> and default button specified.
      * 
      * @param inventory the inventory
      * @param defaultButton the default button
@@ -61,17 +61,17 @@ public abstract class Region implements InventoryHolder {
      * Determines if the slot specified is within the region.
      * 
      * @param slot the slot
-     * @return <code>true</code>, if within the region; else <code>false</code>
+     * @return true, if within the region; else false
      */
     public abstract boolean within(int slot);
     
     /**
      * Binds an <code>ItemStack</code> and button to the slots specified.
      * 
-     * @param item the <code>ItemStack</code>
+     * @param item the ItemStack
      * @param button the button
      * @param slots the slots
-     * @return <code>this</code>
+     * @return this
      */
     public Region bind(ItemStack item, Button button, int... slots) {
         return bind(slot -> {inventory.setItem(slot, item); buttons.put(slot, button);}, slots);
@@ -80,9 +80,9 @@ public abstract class Region implements InventoryHolder {
     /**
      * Binds an <code>ItemStack</code> to the slots specified.
      * 
-     * @param item the <code>ItemStack</code>
+     * @param item the ItemStack
      * @param slots the slots
-     * @return <code>this</code>
+     * @return this
      */
     public Region bind(ItemStack item, int... slots) {
         return bind(slot -> inventory.setItem(slot, item), slots);
@@ -93,7 +93,7 @@ public abstract class Region implements InventoryHolder {
      * 
      * @param button the button
      * @param slots the slots
-     * @return <code>this</code>
+     * @return this
      */
     public Region bind(Button button, int... slots) {
         return bind(slot -> buttons.put(slot, button), slots);
@@ -105,7 +105,7 @@ public abstract class Region implements InventoryHolder {
      * 
      * @param binder the block to be executed for each slot specified
      * @param slots the slots
-     * @return <code>this</code>
+     * @return this
      * @throws IllegalArgumentException if the slot is not within the region
      */
     protected Region bind(Consumer<Integer> binder, int... slots) {

@@ -37,7 +37,7 @@ public class BoundedRegion extends Region {
     
     
     /**
-     * Creates a new region with the backing inventory and corners specified.
+     * Creates a new region with the backing <code>Inventory</code> and corners specified.
      * 
      * @param inventory the inventory
      * @param min the first corner of the region
@@ -48,7 +48,7 @@ public class BoundedRegion extends Region {
     }
     
     /**
-     * Creates a new region with the backing inventory, default button and corners specified.
+     * Creates a new region with the backing <code>Inventory</code>, default button and corners specified.
      * 
      * @param inventory the inventory
      * @param defaultButton the button
@@ -73,7 +73,7 @@ public class BoundedRegion extends Region {
      * Determines if the slot specified is within the region.
      * 
      * @param slot the slot
-     * @return <code>true</code>, if within the rectangular region; else <code>false</code>
+     * @return true, if within the rectangular region; else false
      */
     @Override
     public boolean within(int slot) {

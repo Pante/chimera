@@ -41,7 +41,7 @@ public class XMLResource extends ExternalResource {
      * 
      * @param file the XML document
      * @param schemaPath the XML schema path
-     * @return <code>this</code>
+     * @return this
      */
     public XMLResource load(File file, String schemaPath) {
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
@@ -61,7 +61,7 @@ public class XMLResource extends ExternalResource {
      * 
      * @param stream the inputstream
      * @param schemaPath the XML schema path
-     * @return <code>this</code>
+     * @return this
      */
     public XMLResource load(InputStream stream, String schemaPath) {
         try {

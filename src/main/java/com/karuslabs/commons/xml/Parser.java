@@ -74,7 +74,7 @@ public abstract class Parser<ParsedObject> {
     /**
      * Parses a XML document from the <code>inputstream</code> specified and returns a parsed object.
      * 
-     * @param stream the <code>inputstream</code>
+     * @param stream the inputstream
      * @return the parsed object
      */
     public ParsedObject parse(InputStream stream) {

@@ -52,7 +52,7 @@ public class ValueStackComponent implements Component<ValueStack> {
     /**
      * Creates a new component with the components for parsing <code>ItemMeta</code>s specified.
      * 
-     * @param components the components for parsing variants of <code>&lt;ItemMeta&gt;</code>s
+     * @param components the components for parsing variants of &lt;ItemMeta&gt;s
      */
     public ValueStackComponent(Map<String, ItemComponent> components) {
         this.components = components;
@@ -63,7 +63,7 @@ public class ValueStackComponent implements Component<ValueStack> {
      * Parses a <code>&lt;item&gt;</code> node.
      * 
      * @param element the node
-     * @return the parsed <code>ValueStack</code>
+     * @return the parsed ValueStack
      */
     @Override
     public ValueStack parse(Element element) {
@@ -102,7 +102,7 @@ public class ValueStackComponent implements Component<ValueStack> {
     
     
     /**
-     * @return the components for parsing variants of <code>&lt;Itemmeta&gt;</code>
+     * @return the components for parsing variants of &lt;ItemMeta&gt;
      */
     public Map<String, ItemComponent> getComponents() {
         return components;

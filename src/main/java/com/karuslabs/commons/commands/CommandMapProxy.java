@@ -29,10 +29,10 @@ import org.bukkit.plugin.PluginManager;
 
 
 /**
- * Represents a proxy for a server's <code>CommandMap</code>.
- * <br>
+ * Represents a proxy for the <code>SimpleCommandMap</code> of a <code>Server</code>.
  * The proxy dispatches {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent}s when commands
- * are registered to it. Registering commands via a server's <code>CommandMap</code> does not 
+ * are registered to it.<br>
+ * Directly registering commands via the <code>SimpleCommandMap</code> will not 
  * dispatch {@link com.karuslabs.commons.commands.events.CommandRegistrationEvent}s.
  */
 public class CommandMapProxy {
@@ -42,7 +42,7 @@ public class CommandMapProxy {
     
     
     /**
-     * Creates a new proxy with the specified server's <code>CommandMap</code>
+     * Creates a new proxy with the <code>SimpleCommandMap</code> of the <code>Server</code> specified.
      * 
      * @param server the server
      */
@@ -87,10 +87,10 @@ public class CommandMapProxy {
     
     
     /**
-     * Retrieves the commands of the plug-in specified.
+     * Retrieves the commands of the plugin specified.
      * 
-     * @param name the name of the plug-in
-     * @return a map of the plugin's commands.
+     * @param name the name of the plugin
+     * @return the commands of the plugin
      */
     public Map<String, org.bukkit.command.Command> getPluginCommands(String name) {
         return map.getCommands().stream()
@@ -101,7 +101,7 @@ public class CommandMapProxy {
     
     /**
      * 
-     * @return the server's <code>CommandMap</code>
+     * @return the servers <code>SimpleCommandMap</code>
      */
     public SimpleCommandMap getSimpleCommandMap() {
         return map;

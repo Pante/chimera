@@ -20,7 +20,7 @@ import java.util.*;
 
 
 /**
- * Represents a map with the value's class and a <code>string</code> as the key.
+ * Represents a map with the <code>class</code> of a value and a <code>string</code> as the key.
  * This is a multi-value implementation of Josh Bloch's type-safe heterogeneous container.
  * 
  * @param <V> the type of mapped values
@@ -48,7 +48,7 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
     }
     
     /**
-     * Creates a new, empty map with the backing map specified.
+     * Creates a new, empty map with the backing <code>map</code> specified.
      * 
      * @param map the backing map
      */
@@ -87,7 +87,7 @@ public class MulticlassMap<V> implements Map<MulticlassMap.Key<? extends V>, V> 
      * 
      * @param <U> the type of the key and value
      * @param key the key whose associated value is to be returned
-     * @return the value to which the specified key is mapped, or <code>null</code> if this map contains no mapping for the key
+     * @return the mapping for the key, if present; else null
      */
     public <U extends V> U get(Key<U> key) {
         return key.type.cast(map.get(key));

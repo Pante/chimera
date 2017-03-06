@@ -35,7 +35,7 @@ public class Manager {
     
     
     /**
-     * Creates a new manager for the plug-in specified.
+     * Creates a new manager for the plugin specified.
      * 
      * @param plugin the owning plugin of the manager
      */
@@ -44,7 +44,7 @@ public class Manager {
     }
     
     /**
-     * Creates a new manager for the plugin with the <code>CommandMapProxy</code> and <code>Parser</code> specified
+     * Creates a new manager with the <code>CommandMapProxy</code> and <code>Parser</code> specified.
      * 
      * @param proxy a proxy
      * @param parser a parser

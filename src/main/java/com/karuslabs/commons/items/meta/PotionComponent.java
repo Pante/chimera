@@ -62,10 +62,10 @@ public class PotionComponent extends ItemComponent<PotionMeta> {
     }
     
     /**
-     * Parses the specified color name to a Color object
+     * Parses the specified color name to a <code>Color</code> object.
      * 
-     * @param color The color name
-     * @return The color with the matching name
+     * @param color the color name
+     * @return the color with the matching name
      */
     public Color fromString(String color) {
         switch (color) {

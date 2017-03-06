@@ -26,19 +26,34 @@ import org.bukkit.entity.Player;
 @FunctionalInterface
 public interface Criteria {
     
+    /**
+     * Criteria which always returns <code>true</code>
+     */
     public static final Criteria NONE = (command, sender, args) -> true;
+    
+    /**
+     * Criteria which returns <code>true</code>, if the <code>sender</code> has permission; else <code>false</code>
+     */
     public static final Criteria PERMITTED = (command, sender, args) -> command.testPermissionSilent(sender);
+    
+    /**
+     * Criteria which returns <code>true</code>, if the <code>sender</code> has permission and is a <code>Player</code>; else <code>false</code>
+     */
     public static final Criteria PERMITTED_PLAYER = (command, sender, args) -> sender instanceof Player && command.testPermissionSilent(sender);
+    
+    /**
+     * Criteria which returns <code>true</code>, if there are no arguments; else <code>false</code>
+     */
     public static final Criteria NO_ARGUMENTS = (command, sender, args) -> args.length == 0;
   
     
     /**
-     * Asserts if the criteria is satisfied.
+     * Asserts whether the criteria is satisfied.
      * 
-     * @param command the command to assert
+     * @param command the command
      * @param sender source object which is executing this command
      * @param args all of the command's arguments
-     * @return <code>true</code> if the criteria is satisfied; else <code>false</code> 
+     * @return true, if the criteria is satisfied; else false
      */
     public boolean test(Command command, CommandSender sender, String[] args);
     
@@ -49,7 +64,7 @@ public interface Criteria {
      * @param args all of the command's arguments
      * @param min minimum array size, inclusive
      * @param max maximum array size, inclusive
-     * @return <code>true</code> if within the boundaries; else <code>false</code>
+     * @return true, if within bounds; else false
      */
     public static boolean within(String[] args, int min, int max) {
         return min <= args.length && args.length <= max;
