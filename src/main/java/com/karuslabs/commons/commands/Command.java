@@ -16,74 +16,25 @@
  */
 package com.karuslabs.commons.commands;
 
-import java.util.*;
+import java.util.Map;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.plugin.Plugin;
 
 
-public abstract class Command extends org.bukkit.command.Command {
-
-    protected Criteria criteria;
+public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
-    
-    public Command(String name, Criteria criteria) {
-        this(name, criteria, "", "", new ArrayList<>());
-    }
-    
-    public Command(String name, Criteria criteria, String description, String message, List<String> aliases) {
-        super(name, description, message, aliases);
-        this.criteria = criteria;
-    }
+    protected Plugin plugin;
+    protected Map<String, Command> commands;
     
     
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
-        execute(sender, args);
-        return true;
+    public Plugin getPlugin() {
+        return plugin;
     }
     
-    
-    public void execute(CommandSender sender, String[] args) {}
-    
-    
-    public Criteria getCriteria() {
-        return criteria;
-    }
-    
-    
-    public Command newAliases(List<String> aliases) {
-        setAliases(aliases);
-        return this;
-    }
-    
-    public Command newDescription(String description) {
-        setDescription(description);
-        return this;
-    }
-    
-    public Command newLabel(String label) {
-        setLabel(label);
-        return this;
-    }
-    
-    public Command newName(String name) {
-        setName(name);
-        return this;
-    }
-    
-    public Command newPermission(String permission) {
-        setPermission(permission);
-        return this;
-    }
-    
-    public Command newPermissionMessage(String message) {
-        setPermissionMessage(message);
-        return this;
-    }
-    
-    public Command newUsage(String usage) {
-        setUsage(usage);
-        return this;
+    public Map<String, Command> getNestedCommands() {
+        return commands;
     }
     
 }
