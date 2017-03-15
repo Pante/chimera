@@ -34,7 +34,7 @@ public class CommandBuilder {
     
     
     public CommandBuilder newCommand(String name) {
-        command = new Command(name, plugin, NestedCommandCallable.NONE, TabCallable.INSTANCE);
+        command = new Command(name, plugin, NestedCommandExecutor.NONE, TabCompleter.INSTANCE);
         return this;
     }
     
@@ -79,13 +79,13 @@ public class CommandBuilder {
         return this;
     }
     
-    public CommandBuilder commandCallable(CommandCallable callable) {
-        command.setCommandCallable(callable);
+    public CommandBuilder commandCallable(CommandExecutor callable) {
+        command.setExecutor(callable);
         return this;
     }
     
-    public CommandBuilder tabCallable(TabCallable callable) {
-        command.setTabCallable(callable);
+    public CommandBuilder tabCallable(TabCompleter callable) {
+        command.setTabCompleter(callable);
         return this;
     }
     

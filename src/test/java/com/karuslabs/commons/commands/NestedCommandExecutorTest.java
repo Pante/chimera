@@ -27,29 +27,40 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class NestedCommandCallableTest {
+public class NestedCommandExecutorTest {
     
-    private NestedCommandCallable callable;
+    private static final String[] EMPTY = new String[0];
+    
+    private NestedCommandExecutor executor;
     private Command command;
+    private Command subcommand;
     
     
-    public NestedCommandCallableTest() {
-        callable = spy(NestedCommandCallable.NONE);
+    public NestedCommandExecutorTest() {
+        executor = mock(NestedCommandExecutor.class, CALLS_REAL_METHODS);
+        
         command = new Command("", mock(Plugin.class), null, null);
+        subcommand = mock(Command.class);
+        
+        command.getNestedCommands().put("subcommand", subcommand);
     }
-    
-    
-    @Before
-    public void setup() {
-        command.getNestedCommands().clear();
-    }
-    
     
     
     @Test
     @Parameters
-    public void onExecute(String[] args) {
-        callable.onExecute(null, command, null, args);
+    public void onExecute(String[] args, int commandTimes, int executeTimes) {
+        executor.onExecute(null, command, null, args);
+        
+        verify(subcommand, times(commandTimes)).execute(any(), any(), any());
+        verify(executor, times(executeTimes)).execute(any(), any(), any(), any());
+    }
+    
+    public Object[] parametersForOnExecute() {
+        return new Object[] {
+            new Object[] {EMPTY, 0, 1},
+            new Object[] {new String[] {"argument"}, 0, 1},
+            new Object[] {new String[] {"subcommand", "argument"}, 1, 0}
+        };
     }
     
 }

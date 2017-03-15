@@ -24,9 +24,10 @@ import org.bukkit.command.CommandSender;
 import static com.karuslabs.commons.commands.Utility.trim;
 
 
-public interface TabCallable {
+@FunctionalInterface
+public interface TabCompleter {
     
-    public static TabCallable INSTANCE = (sender, command, alias, args) -> {
+    public static TabCompleter INSTANCE = (sender, command, alias, args) -> {
         String argument;
         Map<String, Command> commands = command.getNestedCommands();
         

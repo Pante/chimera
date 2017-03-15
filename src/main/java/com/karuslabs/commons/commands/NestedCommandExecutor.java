@@ -16,12 +16,30 @@
  */
 package com.karuslabs.commons.commands;
 
+import java.util.*;
+
 import org.bukkit.command.CommandSender;
+
+import static com.karuslabs.commons.commands.Utility.trim;
 
 
 @FunctionalInterface
-public interface CommandCallable {
+public interface NestedCommandExecutor extends CommandExecutor {
     
-    public void onExecute(CommandSender sender, Command command, String label, String[] args);
+    public static NestedCommandExecutor NONE = (sender, command, label, args) -> {};
+    
+    
+    @Override
+    public default void onExecute(CommandSender sender, Command command, String label, String[] args) {
+        Map<String, Command> commands = command.getNestedCommands();
+        if (args.length >= 1 && commands.containsKey(args[0])) {
+            commands.get(args[0]).execute(sender, label, trim(args));
+            
+        } else {
+           execute(sender, command, label, args);
+        }
+    }
+    
+    public void execute(CommandSender sender, Command command, String label, String[] args);
     
 }

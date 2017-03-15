@@ -40,8 +40,8 @@ public class CommandBuilderTest {
     
     @Test
     public void get() {
-        NestedCommandCallable commandCallable = mock(NestedCommandCallable.class);
-        TabCallable tab = mock(TabCallable.class);
+        NestedCommandExecutor commandCallable = mock(NestedCommandExecutor.class);
+        TabCompleter tab = mock(TabCompleter.class);
         
         Command command = builder.newCommand("command")
                 .description("description").aliases(Arrays.asList("cmd"))
@@ -57,8 +57,8 @@ public class CommandBuilderTest {
         assertEquals("message", command.getPermissionMessage());
         assertEquals("usage", command.getUsage());
         assertEquals("label", command.getLabel());
-        assertEquals(commandCallable, command.getCommandCallable());
-        assertEquals(tab, command.getTabCallable());
+        assertEquals(commandCallable, command.getExecutor());
+        assertEquals(tab, command.getTabCompleter());
         assertTrue(command.getNestedCommands().containsKey("name"));
     }
     

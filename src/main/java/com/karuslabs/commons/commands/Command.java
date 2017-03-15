@@ -27,32 +27,32 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     protected Plugin plugin;
     protected Map<String, Command> commands;
-    protected CommandCallable command;
-    protected TabCallable tab;
+    protected CommandExecutor executor;
+    protected TabCompleter completer;
     
     
-    public Command(String name, Plugin plugin, CommandCallable commandCallable, TabCallable tabCallable) {
-        this(name, "", "", new ArrayList<>(0), plugin, new HashMap<>(0), commandCallable, tabCallable);
+    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer) {
+        this(name, "", "", new ArrayList<>(0), plugin, new HashMap<>(0), executor, completer);
     }
     
-    public Command(String name, String description, String usageMessage, List<String> aliases, Plugin plugin, Map<String, Command> nestedCommands, CommandCallable commandCallable, TabCallable tabCallable) {
+    public Command(String name, String description, String usageMessage, List<String> aliases, Plugin plugin, Map<String, Command> commands, CommandExecutor executor, TabCompleter completer) {
         super(name, description, usageMessage, aliases);
         this.plugin = plugin;
-        commands = nestedCommands;
-        command = commandCallable;
-        tab = tabCallable;
+        this.commands = commands;
+        this.executor = executor;
+        this.completer = completer;
     }
     
     
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        command.onExecute(sender, this, label, args);
+        executor.onExecute(sender, this, label, args);
         return true;
     }
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return tab.complete(sender, this, alias, args);
+        return completer.complete(sender, this, alias, args);
     }
     
     
@@ -70,21 +70,21 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     
-    public CommandCallable getCommandCallable() {
-        return command;
+    public CommandExecutor getExecutor() {
+        return executor;
     }
     
-    public void setCommandCallable(CommandCallable callable) {
-        command = callable;
+    public void setExecutor(CommandExecutor executor) {
+        this.executor = executor;
     }
     
     
-    public TabCallable getTabCallable() {
-        return tab;
+    public TabCompleter getTabCompleter() {
+        return completer;
     }
     
-    public void setTabCallable(TabCallable callable) {
-        tab = callable;
+    public void setTabCompleter(TabCompleter completer) {
+        this.completer = completer;
     }
     
 }

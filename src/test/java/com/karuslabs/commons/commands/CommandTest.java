@@ -27,14 +27,14 @@ public class CommandTest {
     
     private Command command;
     private Plugin plugin;
-    private NestedCommandCallable commandCallable;
-    private TabCallable tabCallable;
+    private NestedCommandExecutor commandCallable;
+    private TabCompleter tabCallable;
     
     
     public CommandTest() {
         plugin = mock(Plugin.class);
-        commandCallable = mock(NestedCommandCallable.class);
-        tabCallable = mock(TabCallable.class);
+        commandCallable = mock(NestedCommandExecutor.class);
+        tabCallable = mock(TabCompleter.class);
         
         command = new Command("", plugin, commandCallable, tabCallable);
     }
