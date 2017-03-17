@@ -1,19 +1,17 @@
-command:
-  name: command
+command-name:
   description: description
   aliases: [cmd, comm]
   permission: command.permission
   permission-message: message
-  usage: use me
+  usage: usage
   
   nested-commands:
-    command:
-      name: subcommand
+    subcommand-name:
       description: subdescription
       aliases: [subcmd]
       permission: subcommand.permission
       permission-message: submessage
-      usage: use me
+      usage: subusage
       
       
       

@@ -43,12 +43,12 @@ public class CommandBuilderTest {
         NestedCommandExecutor commandCallable = mock(NestedCommandExecutor.class);
         TabCompleter tab = mock(TabCompleter.class);
         
-        Command command = builder.newCommand("command")
+        Command command = builder.command("command")
                 .description("description").aliases(Arrays.asList("cmd"))
                 .permission("permission").message("message")
                 .usage("usage").label("label")
-                .commandCallable(commandCallable).tabCallable(tab)
-                .nestedCommand("name", mock(Command.class)).get();
+                .executor(commandCallable).tabCompleter(tab)
+                .nestedCommand("name", mock(Command.class)).build();
         
         assertEquals("command", command.getName());
         assertEquals("description", command.getDescription());

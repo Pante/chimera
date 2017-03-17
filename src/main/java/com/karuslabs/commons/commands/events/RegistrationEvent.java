@@ -14,37 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands;
+package com.karuslabs.commons.commands.events;
+
+import com.karuslabs.commons.commands.Command;
 
 import java.util.*;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.event.*;
 
 
-public class Utility {
+public class RegistrationEvent extends Event {
     
-    private static final String[] EMPTY = new String[0];
+    private static HandlerList handlers = new HandlerList();
     
     
-    @SafeVarargs
-    public static String[] trim(String... args) {
-        if (args.length <= 1) {
-            return EMPTY;
-            
-        } else {
-            return Arrays.copyOfRange(args, 1, args.length);
-        }
+    private List<Command> commands;
+
+    
+    public RegistrationEvent(List<Command> commands) {
+        this.commands = Collections.unmodifiableList(commands);
+    }
+
+    
+    public List<Command> getCommands() {
+        return commands;
     }
     
     
-    @SafeVarargs
-    public static boolean within(int min, int max, String... args) {
-        return min <= args.length && args.length <= max;
-    }
-    
-    public static boolean isPermittedPlayer(CommandSender sender, Command command) {
-        return sender instanceof Player && command.testPermissionSilent(sender);
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
     
 }

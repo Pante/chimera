@@ -16,41 +16,59 @@
  */
 package com.karuslabs.commons.commands.yml;
 
-import com.karuslabs.commons.commands.*;
+import com.karuslabs.commons.commands.Command;
+import com.karuslabs.commons.commands.CommandBuilder;
 
-import java.util.List;
+import java.util.*;
+import org.bukkit.ChatColor;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 
 public class Parser {
     
-    private Plugin plugin;
-    private FileConfiguration config;
     private CommandBuilder builder;
     
     
-    public Parser(Plugin plugin, FileConfiguration config, CommandBuilder builder) {
-        this.plugin = plugin;
-        this.config = config;
+    public Parser(CommandBuilder builder) {
         this.builder = builder;
     }
     
     
-    public List<Command> parse() {
-        for (String command : config.getKeys(false)) {
-            
-        }
+    public Map<String, Command> parse(String path) {
+        return parse(YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream(path)));
     }
     
-    protected Command parse(String path) {
-        return builder.newCommand(config.getString(path + ".name", ""))
-                .description(config.getString(path + ".description", ""))
-                .aliases(aliases)
-                .permission(config.getString(path + ".permission", ""))
-                .message(config.getString(path + ".message", ""))
-                .usage(config.getString(path + ".usage", "")).get();
+    public Map<String, Command> parse(ConfigurationSection root) {
+        return parseCommands(root, false);
+    }
+    
+    protected Map<String, Command> parseCommands(ConfigurationSection root, boolean includeAliases) {
+        Map<String, Command> commands = new HashMap<>(0);
+        root.getKeys(false).stream().map(key -> parseCommand(root.getConfigurationSection(key)))
+                .forEach(command -> {
+                    commands.put(command.getName(), command);
+                    if (includeAliases) command.getAliases().forEach(alias -> commands.put(alias, command));
+                });
+        
+        return commands;
+    }
+    
+    protected Command parseCommand(ConfigurationSection section) {        
+        Command command =  builder.command(section.getName())
+                .description(ChatColor.translateAlternateColorCodes('&', section.getString("description")))
+                .aliases(section.getStringList("aliases"))
+                .permission(section.getString("permission"))
+                .message(ChatColor.translateAlternateColorCodes('&', section.getString("permission-message")))
+                .usage(ChatColor.translateAlternateColorCodes('&', section.getString("usage"))).build();
+        
+        ConfigurationSection nested = section.getConfigurationSection("nested-commands");
+        if (nested != null) {
+            command.setNestedCommands(parseCommands(nested, true));
+        }
+        
+        return command;
     }
     
 }

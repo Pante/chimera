@@ -29,12 +29,12 @@ public class CommandBuilder {
     
     public CommandBuilder(Plugin plugin) {
         this.plugin = plugin;
-        command = null;
+        command = new Command("", plugin);;
     }
     
     
-    public CommandBuilder newCommand(String name) {
-        command = new Command(name, plugin, NestedCommandExecutor.NONE, TabCompleter.INSTANCE);
+    public CommandBuilder command(String name) {
+        command = new Command(name, plugin);
         return this;
     }
     
@@ -79,18 +79,18 @@ public class CommandBuilder {
         return this;
     }
     
-    public CommandBuilder commandCallable(CommandExecutor callable) {
-        command.setExecutor(callable);
+    public CommandBuilder executor(CommandExecutor executor) {
+        command.setExecutor(executor);
         return this;
     }
     
-    public CommandBuilder tabCallable(TabCompleter callable) {
-        command.setTabCompleter(callable);
+    public CommandBuilder tabCompleter(TabCompleter completer) {
+        command.setTabCompleter(completer);
         return this;
     }
     
     
-    public Command get() {
+    public Command build() {
         return command;
     }
     

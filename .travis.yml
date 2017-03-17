@@ -4,4 +4,5 @@ jdk:
 branches:
   - master
   
-script: mvn clean verify
+script: mvn --setting travis-settings.xml clean verify deploy
+  

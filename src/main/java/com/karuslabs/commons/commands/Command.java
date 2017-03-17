@@ -31,6 +31,10 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     protected TabCompleter completer;
     
     
+    public Command(String name, Plugin plugin) {
+        this(name, plugin, NestedCommandExecutor.NONE, TabCompleter.INSTANCE);
+    }
+    
     public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer) {
         this(name, "", "", new ArrayList<>(0), plugin, new HashMap<>(0), executor, completer);
     }
