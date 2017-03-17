@@ -6,7 +6,7 @@
           
   <servers>
     <server>
-      <id>karus-commons</id>
+      <id>karus</id>
       <username>${env.SONATYPE_USERNAME}</username>
       <password>${env.SONATYPE_PASSWORD}</password>
     </server>
