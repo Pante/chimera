@@ -4,6 +4,7 @@
 <a href = "https://travis-ci.org/Pante/Karus-Commons">
   <img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/>
 </a>
+
 ***
 _Java 8 artifact:_
 ```XML
