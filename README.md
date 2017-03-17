@@ -1,14 +1,15 @@
 <p align = "center">
   <img src = "http://i.imgur.com/hlLPWau.jpg"/>
 </p>
-<img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/>
-
+<a href = "https://travis-ci.org/Pante/Karus-Commons">
+  <img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/>
+</a>
 ***
 _Java 8 artifact:_
 ```XML
     <repository>
-      <id>karus-repo</id>
-      <url>https://pante.github.io/Karus-Commons/</url>
+      <id>karus-commons</id>
+      <url>http://repo.karuslabs.com/repository/karus-commons/snapshots/</url>
     </repository>
 
     <dependencies>
