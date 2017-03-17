@@ -1,7 +1,7 @@
 <p align = "center">
   <img src = "http://i.imgur.com/hlLPWau.jpg"/>
 </p>
-[![Build Status](https://travis-ci.org/Pante/Karus-Commons.svg?branch=master)](https://travis-ci.org/Pante/Karus-Commons)
+<img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/>
 
 ***
 _Java 8 artifact:_
