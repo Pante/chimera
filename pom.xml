@@ -12,11 +12,11 @@
     <distributionManagement>
         <repository>
             <id>karus</id>
-            <url>http://repo.karuslabs.com/repository/craftbukkit/releases</url>
+            <url>http://repo.karuslabs.com/repository/karus-commons/releases</url>
         </repository>
         <snapshotRepository>
             <id>karus</id>
-            <url>http://repo.karuslabs.com/repository/craftbukkit/snapshots</url>
+            <url>http://repo.karuslabs.com/repository/karus-commons/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     
