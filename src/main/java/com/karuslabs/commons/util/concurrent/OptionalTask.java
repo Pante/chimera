@@ -20,13 +20,13 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 
-public class OptionalFuture<T> extends FutureTask<T> {
+public class OptionalTask<T> extends FutureTask<T> {
     
-    public OptionalFuture(Callable<T> callable) {
+    public OptionalTask(Callable<T> callable) {
         super(callable);
     }
     
-    public OptionalFuture(Runnable runnable, T result) {
+    public OptionalTask(Runnable runnable, T result) {
         super(runnable, result);
     }
     

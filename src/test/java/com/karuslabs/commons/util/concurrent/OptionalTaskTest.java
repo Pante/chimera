@@ -30,19 +30,19 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class OptionalFutureTest {
+public class OptionalTaskTest {
     
     private static Object object = new Object();;
     
     @Rule
     public ExpectedException exception;
     
-    private OptionalFuture<Object> task;
+    private OptionalTask<Object> task;
     
     
-    public OptionalFutureTest() {
+    public OptionalTaskTest() {
         exception = ExpectedException.none();
-        task = spy(new OptionalFuture<>(() -> object));
+        task = spy(new OptionalTask<>(() -> object));
     }
     
     
