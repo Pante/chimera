@@ -29,23 +29,31 @@ import org.bukkit.scheduler.*;
 public class StubScheduler implements BukkitScheduler {
 
     @Override
+    @Implemented
     public int scheduleSyncDelayedTask(Plugin plugin, Runnable task, long delay) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return 0;
     }
 
     @Override
+    @Implemented
     public int scheduleSyncDelayedTask(Plugin plugin, BukkitRunnable task, long delay) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return 0;
     }
 
     @Override
+    @Implemented
     public int scheduleSyncDelayedTask(Plugin plugin, Runnable task) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return 0;
     }
 
     @Override
+    @Implemented
     public int scheduleSyncDelayedTask(Plugin plugin, BukkitRunnable task) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return 0;
     }
 
     @Override
