@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.karuslabs.commons.commands.executors.CommandExecutor;
+
 import java.util.*;
 
 import org.bukkit.plugin.Plugin;

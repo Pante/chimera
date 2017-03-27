@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.karuslabs.commons.commands.executors.CommandExecutor;
+
 import java.util.Arrays;
 
 import org.bukkit.plugin.Plugin;
@@ -40,14 +42,14 @@ public class CommandBuilderTest {
     
     @Test
     public void get() {
-        NestedCommandExecutor commandCallable = mock(NestedCommandExecutor.class);
-        TabCompleter tab = mock(TabCompleter.class);
+        CommandExecutor executor = mock(CommandExecutor.class);
+        TabCompleter completer = mock(TabCompleter.class);
         
         Command command = builder.command("command")
                 .description("description").aliases(Arrays.asList("cmd"))
                 .permission("permission").message("message")
                 .usage("usage").label("label")
-                .executor(commandCallable).tabCompleter(tab)
+                .executor(executor).tabCompleter(completer)
                 .nestedCommand("name", mock(Command.class)).build();
         
         assertEquals("command", command.getName());
@@ -57,8 +59,9 @@ public class CommandBuilderTest {
         assertEquals("message", command.getPermissionMessage());
         assertEquals("usage", command.getUsage());
         assertEquals("label", command.getLabel());
-        assertEquals(commandCallable, command.getExecutor());
-        assertEquals(tab, command.getTabCompleter());
+        
+        assertEquals(executor, command.getExecutor());
+        assertEquals(completer, command.getTabCompleter());
         assertTrue(command.getNestedCommands().containsKey("name"));
     }
     

@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands;
+package com.karuslabs.commons.commands.executors;
+
+import com.karuslabs.commons.commands.Command;
 
 import junitparams.*;
 
@@ -48,14 +50,14 @@ public class NestedCommandExecutorTest {
     
     @Test
     @Parameters
-    public void onExecute(String[] args, int commandTimes, int executeTimes) {
-        executor.onExecute(null, command, null, args);
+    public void execute(String[] args, int commandTimes, int executeTimes) {
+        executor.execute(null, command, null, args);
         
         verify(subcommand, times(commandTimes)).execute(any(), any(), any());
-        verify(executor, times(executeTimes)).execute(any(), any(), any(), any());
+        verify(executor, times(executeTimes)).onExecute(any(), any(), any(), any());
     }
     
-    public Object[] parametersForOnExecute() {
+    public Object[] parametersForExecute() {
         return new Object[] {
             new Object[] {EMPTY, 0, 1},
             new Object[] {new String[] {"argument"}, 0, 1},

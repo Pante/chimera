@@ -16,12 +16,11 @@
  */
 package com.karuslabs.commons.commands.yml;
 
-import com.karuslabs.commons.commands.Command;
-import com.karuslabs.commons.commands.CommandBuilder;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
-import org.bukkit.ChatColor;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 

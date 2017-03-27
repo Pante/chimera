@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.karuslabs.commons.commands.executors.CommandExecutor;
+
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
@@ -27,16 +29,16 @@ public class CommandTest {
     
     private Command command;
     private Plugin plugin;
-    private NestedCommandExecutor commandCallable;
-    private TabCompleter tabCallable;
+    private CommandExecutor executor;
+    private TabCompleter completer;
     
     
     public CommandTest() {
         plugin = mock(Plugin.class);
-        commandCallable = mock(NestedCommandExecutor.class);
-        tabCallable = mock(TabCompleter.class);
+        executor = mock(CommandExecutor.class);
+        completer = mock(TabCompleter.class);
         
-        command = new Command("", plugin, commandCallable, tabCallable);
+        command = new Command("", plugin, executor, completer);
     }
     
     
@@ -44,7 +46,7 @@ public class CommandTest {
     public void execute() {
         command.execute(null, null, null);
         
-        verify(commandCallable, times(1)).onExecute(null, command, null, null);
+        verify(executor, times(1)).execute(null, command, null, null);
     }
     
     
@@ -52,7 +54,7 @@ public class CommandTest {
     public void tabComplete() {
         command.tabComplete(null, null, null);
         
-        verify(tabCallable, times(1)).complete(null, command, null, null);
+        verify(completer, times(1)).complete(null, command, null, null);
     }
     
 }

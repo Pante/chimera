@@ -34,7 +34,6 @@ public class StubEnchantment extends Enchantment {
             for (Field field : Enchantment.class.getFields()) {
                 Enchantment wrapper = (Enchantment) field.get(null);
                 Enchantment.registerEnchantment(new StubEnchantment(wrapper.getId(), field.getName()));
-                System.out.println(field.getName());
             }
             
         } catch (ReflectiveOperationException e) {

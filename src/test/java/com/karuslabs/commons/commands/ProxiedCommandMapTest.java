@@ -18,19 +18,16 @@ package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.test.StubServer;
 
-import java.util.*;
+import java.util.Collections;
 
 import junitparams.*;
 
 import org.bukkit.Server;
-import org.bukkit.event.Cancellable;
-import org.bukkit.plugin.*;
+import org.bukkit.plugin.Plugin;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -60,6 +57,46 @@ public class ProxiedCommandMapTest {
         exception.expectMessage("Server contains an incompatible CommandMap implementation");
         
         new ProxiedCommandMap(mock(Server.class));
+    }
+    
+    
+    @Test
+    @Parameters
+    public void getCommand(org.bukkit.command.Command command, Command expected) {
+        when(proxy.getProxiedMap().getCommand(any(String.class))).thenReturn(command);
+        
+        assertEquals(expected, proxy.getCommand("name"));
+    }
+    
+    protected Object[] parametersForGetCommand() {
+        Command command = new Command(null, null);
+        return new Object[] {
+            new Object[] {command, command},
+            new Object[] {mock(org.bukkit.command.Command.class), null}
+        };
+    }
+    
+    
+    @Test
+    @Parameters
+    public void getCommands(org.bukkit.command.Command command, Plugin plugin, boolean empty) {
+        when(proxy.getProxiedMap().getCommands()).thenReturn(Collections.singleton(command));
+        
+        assertEquals(empty, proxy.getCommands(plugin).isEmpty());
+    }
+    
+    protected Object[] parametersForGetCommands() {
+        Plugin plugin = mock(Plugin.class);
+        Command command = new Command("", plugin);
+        
+        org.bukkit.command.Command mock = mock(org.bukkit.command.Command.class);
+        
+        return new Object[] {
+            new Object[] {command, plugin, false},
+            new Object[] {command, mock(Plugin.class), true},
+            new Object[] {mock, plugin, true},
+            new Object[] {mock, mock(Plugin.class), true}
+        };
     }
 
 }

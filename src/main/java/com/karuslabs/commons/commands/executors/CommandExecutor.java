@@ -14,31 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands;
+package com.karuslabs.commons.commands.executors;
 
-import java.util.*;
+import com.karuslabs.commons.commands.Command;
 
 import org.bukkit.command.CommandSender;
 
-import static com.karuslabs.commons.commands.Utility.trim;
-
 
 @FunctionalInterface
-public interface NestedCommandExecutor extends CommandExecutor {
+public interface CommandExecutor {
     
-    public static NestedCommandExecutor NONE = (sender, command, label, args) -> {};
-    
-    
-    @Override
-    public default void onExecute(CommandSender sender, Command command, String label, String[] args) {
-        Map<String, Command> commands = command.getNestedCommands();
-        if (args.length >= 1 && commands.containsKey(args[0])) {
-            commands.get(args[0]).execute(sender, label, trim(args));
-            
-        } else {
-           execute(sender, command, label, args);
-        }
-    }
+    public static final CommandExecutor NONE = (sender, cmd, label, args) -> {};
     
     public void execute(CommandSender sender, Command command, String label, String[] args);
     

@@ -16,13 +16,12 @@
  */
 package com.karuslabs.commons.commands.yml;
 
-import com.karuslabs.commons.commands.CommandBuilder;
-import com.karuslabs.commons.commands.Command;
+import com.karuslabs.commons.commands.*;
+
 import com.google.common.collect.Sets;
 
 import java.util.*;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;

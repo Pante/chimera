@@ -14,14 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands;
+package com.karuslabs.commons.commands.extensions;
 
+import com.karuslabs.commons.commands.Command;
+
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 
 @FunctionalInterface
-public interface CommandExecutor {
+public interface Extension {
     
-    public void onExecute(CommandSender sender, Command command, String label, String[] args);
+    public static final Extension USAGE = (sender, cmd, label, args) -> {
+        if (sender.hasPermission(cmd.getPermission()))
+            sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.RED + cmd.getUsage());
+    };
+    
+    
+    public void execute(CommandSender sender, Command command, String label, String[] args);
     
 }

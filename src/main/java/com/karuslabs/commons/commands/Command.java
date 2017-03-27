@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
+import com.karuslabs.commons.commands.executors.*;
+
 import java.util.*;
 
 import org.bukkit.command.CommandSender;
@@ -50,7 +52,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        executor.onExecute(sender, this, label, args);
+        executor.execute(sender, this, label, args);
         return true;
     }
     

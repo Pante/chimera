@@ -38,7 +38,7 @@ public class StubPotionEffectType extends PotionEffectType {
 
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
-}
+        }
     }
     
     
