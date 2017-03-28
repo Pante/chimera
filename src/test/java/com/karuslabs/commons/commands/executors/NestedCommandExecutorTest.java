@@ -19,6 +19,7 @@ package com.karuslabs.commons.commands.executors;
 import com.karuslabs.commons.commands.Command;
 
 import junitparams.*;
+import org.bukkit.command.CommandSender;
 
 import org.bukkit.plugin.Plugin;
 
@@ -42,6 +43,8 @@ public class NestedCommandExecutorTest {
         executor = mock(NestedCommandExecutor.class, CALLS_REAL_METHODS);
         
         command = new Command("", mock(Plugin.class), null, null);
+        command.setPermission("");
+        
         subcommand = mock(Command.class);
         
         command.getNestedCommands().put("subcommand", subcommand);
@@ -50,18 +53,24 @@ public class NestedCommandExecutorTest {
     
     @Test
     @Parameters
-    public void execute(String[] args, int commandTimes, int executeTimes) {
-        executor.execute(null, command, null, args);
+    public void execute(boolean hasPermission, String[] args, int commandTimes, int executeTimes, int messageTimes) {
+        CommandSender sender = mock(CommandSender.class);
+        when(sender.hasPermission(any(String.class))).thenReturn(hasPermission);
+        
+        executor.execute(sender, command, null, args);
         
         verify(subcommand, times(commandTimes)).execute(any(), any(), any());
         verify(executor, times(executeTimes)).onExecute(any(), any(), any(), any());
+        verify(sender, times(messageTimes)).sendMessage((String) null);
     }
     
     public Object[] parametersForExecute() {
         return new Object[] {
-            new Object[] {EMPTY, 0, 1},
-            new Object[] {new String[] {"argument"}, 0, 1},
-            new Object[] {new String[] {"subcommand", "argument"}, 1, 0}
+            new Object[] {true, EMPTY, 0, 1, 0},
+            new Object[] {true, new String[] {"argument"}, 0, 1, 0},
+            new Object[] {true, new String[] {"subcommand"}, 1, 0, 0},
+            new Object[] {false, new String[] {"subcommand"}, 1, 0, 0},
+            new Object[] {false, EMPTY, 0, 0, 1}
         };
     }
     

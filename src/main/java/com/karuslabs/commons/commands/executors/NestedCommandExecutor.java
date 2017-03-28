@@ -37,8 +37,11 @@ public interface NestedCommandExecutor extends CommandExecutor {
         if (args.length >= 1 && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, label, trim(args));
             
-        } else {
+        } else if (sender.hasPermission(command.getPermission())) {
            onExecute(sender, command, label, args);
+           
+        } else {
+            sender.sendMessage(command.getPermissionMessage());
         }
     }
     
