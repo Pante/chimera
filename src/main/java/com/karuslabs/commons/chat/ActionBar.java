@@ -26,7 +26,7 @@ import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 
-public class ActionBar {
+public class ActionBar implements Bar {
     
     public static final ActionBar INSTANCE = new ActionBar();
     
@@ -34,11 +34,13 @@ public class ActionBar {
     private ActionBar() {}
     
     
+    @Override
     public void sendMessage(Player player, String message) {
         sendMessage(player, message, 10, 70, 20);
     }
     
     
+    @Override
     public void sendMessage(Player player, String message, int fadeIn, int stay, int fadeOut) {
         IChatBaseComponent component = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
         PacketPlayOutTitle packet = new PacketPlayOutTitle(EnumTitleAction.ACTIONBAR, component, fadeIn, stay, fadeOut);
