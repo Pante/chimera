@@ -78,4 +78,18 @@ public class ParserTest {
         assertEquals("subusage", command.getUsage());
     }
     
+    
+    @Test
+    public void parseCommands_Default() {
+        Command command = parser.parseCommand(config.getConfigurationSection("blankcommand-name"));
+        
+        assertEquals("blankcommand-name", command.getName());
+        assertEquals("", command.getDescription());
+        assertEquals(Collections.EMPTY_LIST, command.getAliases());
+        assertEquals("", command.getPermission());
+        assertEquals("", command.getPermissionMessage());
+        assertTrue(command.getNestedCommands().isEmpty());
+        assertEquals("", command.getUsage());
+    }
+    
 }

@@ -56,11 +56,11 @@ public class Parser {
     
     protected Command parseCommand(ConfigurationSection section) {        
         Command command =  builder.command(section.getName())
-                .description(ChatColor.translateAlternateColorCodes('&', section.getString("description")))
+                .description(ChatColor.translateAlternateColorCodes('&', section.getString("description", "")))
                 .aliases(section.getStringList("aliases"))
-                .permission(section.getString("permission"))
-                .message(ChatColor.translateAlternateColorCodes('&', section.getString("permission-message")))
-                .usage(ChatColor.translateAlternateColorCodes('&', section.getString("usage"))).build();
+                .permission(section.getString("permission", ""))
+                .message(ChatColor.translateAlternateColorCodes('&', section.getString("permission-message", "")))
+                .usage(ChatColor.translateAlternateColorCodes('&', section.getString("usage", ""))).build();
         
         ConfigurationSection nested = section.getConfigurationSection("nested-commands");
         if (nested != null) {

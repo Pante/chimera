@@ -44,7 +44,7 @@ public class ParserIT {
     public void parse() {
         Map<String, Command> commands = parser.parse("commands/commands.yml");
         
-        assertEquals(1, commands.size());
+        assertEquals(2, commands.size());
         
         Command command = commands.get("command-name");
         

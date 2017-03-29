@@ -13,5 +13,8 @@ command-name:
       permission-message: submessage
       usage: subusage
       
+blankcommand-name:
+    invalid: invalid
+      
       
       
