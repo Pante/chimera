@@ -20,15 +20,32 @@ public class LazyLocation extends Location {
     private Location location;
 
     
+    public LazyLocation(String name, double x, double y, double z) {
+        this(name, new Location(null, x, y, z, 0, 0));
+    }
+    
+    public LazyLocation(String name, double x, double y, double z, float yaw, float pitch) {
+        this(name, new Location(null, x, y, z, yaw, pitch));
+    }
+    
     public LazyLocation(String name, Location location) {
         this(name, Bukkit.getServer(), location);
-    }
+    }  
     
     public LazyLocation(String name, Server server, Location location) {
         super(null, 0, 0, 0);
         this.name = name;
         this.server = server;
         this.location = location;
+    }
+    
+    
+    public boolean isLoaded() {
+        return location.getWorld() != null;
+    }
+    
+    public void load() {
+        location.setWorld(server.getWorld(name));
     }
     
 
@@ -47,6 +64,7 @@ public class LazyLocation extends Location {
         
         return location.getWorld();
     }
+    
     
     @Proxied
     @Override
