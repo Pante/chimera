@@ -76,7 +76,7 @@ public class ClassMapTest {
     
     @Test
     public void putInstance() {
-        map.putInstance(Integer.class, 1);
+        map.putInstance(int.class, 1);
         
         assertTrue(map.map.containsKey(Integer.class));
     }
