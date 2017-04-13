@@ -48,10 +48,4 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
         }
     }
     
-    
-    public <U extends V> U putInstance(Class<U> type, U value) {
-        map.put(type, value);
-        return value;
-    }
-    
 }
