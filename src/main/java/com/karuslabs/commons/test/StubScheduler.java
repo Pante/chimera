@@ -25,6 +25,8 @@ import java.util.concurrent.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.*;
 
+import static org.mockito.Mockito.*;
+
 
 public class StubScheduler implements BukkitScheduler {
 
@@ -142,7 +144,7 @@ public class StubScheduler implements BukkitScheduler {
     @Implemented
     public BukkitTask runTask(Plugin plugin, BukkitRunnable task) {
         task.run();
-        return null;
+        return when(mock(BukkitTask.class).getTaskId()).thenReturn(0).getMock();
     }
     
 
@@ -150,7 +152,7 @@ public class StubScheduler implements BukkitScheduler {
     @Implemented
     public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable task) {
         task.run();
-        return null;
+        return when(mock(BukkitTask.class).getTaskId()).thenReturn(0).getMock();
     }
 
 
@@ -158,7 +160,7 @@ public class StubScheduler implements BukkitScheduler {
     @Implemented
     public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable task) {
         task.run();
-        return null;
+        return when(mock(BukkitTask.class).getTaskId()).thenReturn(0).getMock();
     }
 
     @Override
@@ -185,14 +187,14 @@ public class StubScheduler implements BukkitScheduler {
     @Implemented
     public BukkitTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period) throws IllegalArgumentException {
         task.run();
-        return null;
+        return when(mock(BukkitTask.class).getTaskId()).thenReturn(0).getMock();
     }
 
     @Override
     @Implemented
     public BukkitTask runTaskTimer(Plugin plugin, BukkitRunnable task, long delay, long period) throws IllegalArgumentException {
         task.run();
-        return null;
+        return when(mock(BukkitTask.class).getTaskId()).thenReturn(0).getMock();
     }
 
     @Override
