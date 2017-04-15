@@ -182,13 +182,17 @@ public class StubScheduler implements BukkitScheduler {
     }
 
     @Override
+    @Implemented
     public BukkitTask runTaskTimer(Plugin plugin, Runnable task, long delay, long period) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return null;
     }
 
     @Override
+    @Implemented
     public BukkitTask runTaskTimer(Plugin plugin, BukkitRunnable task, long delay, long period) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        task.run();
+        return null;
     }
 
     @Override
