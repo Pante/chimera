@@ -20,11 +20,13 @@ import java.util.*;
 
 import junitparams.*;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static java.util.Collections.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -35,38 +37,52 @@ public class TabCompleterTest {
     private static final String[] EMPTY = new String[0];
     
     private TabCompleter completer;
+    private TabCompleter playerNames;
     private Command command;
     private Command subcommand;
     
     
     public TabCompleterTest() {
-        completer = TabCompleter.INSTANCE;
+        completer = spy(new StubCompleter());
+        playerNames = TabCompleter.PLAYER_NAMES;
         
         command = new Command("", mock(Plugin.class), null, null);
         subcommand = mock(Command.class);
         
         command.getNestedCommands().put("subcommand", subcommand);
+        command.getNestedNames().add("subcommand");
     }
     
     
     @Test
     @Parameters
-    public void complete(String[] arguments, int times, List<String> expected) {
-        List<String> returned = completer.complete(null, command, null, arguments);
+    public void tabComplete(String[] arguments, int subcommandTimes, int playerTimes, List<String> expected) {
+        List<String> returned = completer.tabComplete(null, command, null, arguments);
         
-        verify(subcommand, times(times)).tabComplete(any(), any(), any());
+        verify(subcommand, times(subcommandTimes)).tabComplete(any(), any(), any());
+        verify(completer, times(playerTimes)).onTabComplete(null, command, null, arguments);
+        
         assertEquals(expected, returned);
     }
     
-    public Object[] parametersForComplete() {
-        List<String> emptyList = Collections.emptyList();
+    protected Object[] parametersForTabComplete() {
         return new Object[] {
-            new Object[] {EMPTY, 0, emptyList},
-            new Object[] {new String[] {"subcommand"}, 0, Arrays.asList("subcommand")},
-            new Object[] {new String[] {"invalid"}, 0, emptyList},
-            new Object[] {new String[] {"subcommand", "blah"}, 1, emptyList},
-            new Object[] {new String[] {"invalid", "blah"}, 0, emptyList}
+            new Object[] {EMPTY, 0, 1, EMPTY_LIST},
+            new Object[] {new String[] {"subcommand"}, 0, 0, singletonList("subcommand")},
+            new Object[] {new String[] {"invalid"}, 0, 0, EMPTY_LIST},
+            new Object[] {new String[] {"subcommand", "blah"}, 1, 0, EMPTY_LIST},
+            new Object[] {new String[] {"invalid", "blah"}, 0, 1, EMPTY_LIST}
         };
-}
+    }
+    
+    
+    private static class StubCompleter implements TabCompleter {
+
+        @Override
+        public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+            return EMPTY_LIST;
+        }
+        
+    }
     
 }

@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.executors.CommandExecutor;
-
 import java.util.*;
 
 import org.bukkit.plugin.Plugin;
@@ -25,21 +23,18 @@ import org.bukkit.plugin.Plugin;
 
 public class CommandBuilder {
     
-    private Plugin plugin;
     private Command command;
     
     
     public CommandBuilder(Plugin plugin) {
-        this.plugin = plugin;
-        command = new Command("", plugin);;
+        command = new Command("", plugin, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
     }
     
     
-    public CommandBuilder command(String name) {
-        command = new Command(name, plugin);
+    public CommandBuilder name(String name) {
+        command.setName(name);
         return this;
     }
-    
     
     public CommandBuilder description(String description) {
         command.setDescription(description);
@@ -71,22 +66,28 @@ public class CommandBuilder {
         return this;
     }
     
-    public CommandBuilder nestedCommands(Map<String, Command> commands) {
-        command.setNestedCommands(commands);
+    public CommandBuilder command(Command command) {
+        command.getAliases().forEach(alias -> this.command.getNestedCommands().put(alias, command));
+        this.command.getNestedCommands().put(command.getName(), command);
+        this.command.getNestedNames().add(command.getName());
+        
         return this;
     }
     
-    public CommandBuilder nestedCommand(String name, Command command) {
-        this.command.getNestedCommands().put(name, command);
+    public CommandBuilder extension(String name, Extension extension) {
+        command.getExtensions().put(name, extension);
+        command.getNestedNames().add(name);
+        
         return this;
     }
+    
     
     public CommandBuilder executor(CommandExecutor executor) {
         command.setExecutor(executor);
         return this;
     }
     
-    public CommandBuilder tabCompleter(TabCompleter completer) {
+    public CommandBuilder completer(TabCompleter completer) {
         command.setTabCompleter(completer);
         return this;
     }

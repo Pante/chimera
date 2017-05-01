@@ -14,37 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands.executors;
+package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.Command;
-
-import java.util.*;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 
 import static com.karuslabs.commons.commands.Utility.trim;
 
 
-@FunctionalInterface
-public interface NestedCommandExecutor extends CommandExecutor {
+public interface CommandExecutor {
     
-    public static NestedCommandExecutor NONE = (sender, command, label, args) -> {};
+    public static final CommandExecutor NONE = (sender, command, label, args) -> {};
     
     
-    @Override
     public default void execute(CommandSender sender, Command command, String label, String[] args) {
         Map<String, Command> commands = command.getNestedCommands();
-        if (args.length >= 1 && commands.containsKey(args[0])) {
+        Map<String, Extension> extensions = command.getExtensions();
+        
+        boolean hasArguments = args.length >= 1;
+        
+        if (hasArguments && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, label, trim(args));
             
-        } else if (sender.hasPermission(command.getPermission())) {
-           onExecute(sender, command, label, args);
+        } else if (hasArguments && extensions.containsKey(args[0])) {
+           extensions.get(args[0]).execute(sender, command);
            
+        } else if (sender.hasPermission(command.getPermission())) {
+            onExecute(sender, command, label, args);
+            
         } else {
-            sender.sendMessage(command.getPermissionMessage());
+            onInvalid(sender, command, label, args);
         }
     }
     
     public void onExecute(CommandSender sender, Command command, String label, String[] args);
+    
+    
+    public default void onInvalid(CommandSender sender, Command command, String label, String[] args) {
+        sender.sendMessage(ChatColor.RED + command.getPermissionMessage());
+    }
     
 }

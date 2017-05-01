@@ -16,12 +16,12 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.annotations.Proxied;
 import com.karuslabs.commons.commands.events.RegistrationEvent;
 import com.karuslabs.commons.commands.yml.Parser;
 
 import java.util.*;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.*;
 
 
@@ -34,7 +34,17 @@ public class CommandManager {
     
     
     public CommandManager(Plugin plugin) {
-        this(plugin, plugin.getServer().getPluginManager(), new ProxiedCommandMap(plugin.getServer()), new Parser(new CommandBuilder(plugin)));
+        this.plugin = plugin;
+        this.manager = plugin.getServer().getPluginManager();
+        this.map = new ProxiedCommandMap(plugin.getServer());
+        
+        Map<String, Extension> extensions = new HashMap<>();
+        extensions.put("aliases", Extension.ALIASSES);
+        extensions.put("description", Extension.DESCRIPTION);
+        extensions.put("subcommands", Extension.NONE);
+        extensions.put("help", Extension.HELP);
+        
+        this.parser = new Parser(plugin, extensions);
     }
     
     public CommandManager(Plugin plugin, PluginManager manager, ProxiedCommandMap map, Parser parser) {
@@ -45,20 +55,19 @@ public class CommandManager {
     }
     
     
-    public Map<String, Command> load() {
+    public List<Command> load() {
         return load("commands.yml");
     }
     
-    public Map<String, Command> load(String path) {
-        Map<String, Command> commands = parser.parse(path);
-        map.registerAll(plugin.getName(), new ArrayList<>(commands.values()));
-        manager.callEvent(new RegistrationEvent(new ArrayList<>(commands.values())));
+    public List<Command> load(String path) {
+        List<Command> commands = parser.parse(YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream(path)));
+        map.registerAll(plugin.getName(), commands);
+        manager.callEvent(new RegistrationEvent(commands));
         
         return commands;
     }
     
     
-    @Proxied
     public Command getCommand(String name) {
         return map.getCommand(name);
     }
@@ -66,6 +75,10 @@ public class CommandManager {
     
     public ProxiedCommandMap getProxiedCommandMap() {
         return map;
+    }
+
+    public Parser getParser() {
+        return parser;
     }
     
 }

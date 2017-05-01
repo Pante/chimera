@@ -14,14 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.annotations;
+package com.karuslabs.commons.util;
 
-import java.lang.annotation.*;
+import org.bukkit.configuration.ConfigurationSection;
 
 
-@Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.METHOD)
-@Documented
-public @interface Implemented {
+public class Databases {
+    
+    public static String getMongoURL(ConfigurationSection section) {
+        String url = "mongodb://";
+        if (section.getBoolean("authentication", false)) {
+            url += section.getString("host", "") + ":" + section.getString("password", "") + "@";
+        } 
+        url += section.getString("host", "") + ":" + section.getInt("port", 27018) + "/" + section.getString("name", "");
+        
+        return url;
+    }
     
 }

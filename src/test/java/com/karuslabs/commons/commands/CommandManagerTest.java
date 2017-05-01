@@ -18,13 +18,17 @@ package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.commands.events.RegistrationEvent;
 import com.karuslabs.commons.commands.yml.Parser;
+import com.karuslabs.mockkit.stub.StubServer;
 
 import java.util.*;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.*;
 
 import org.junit.Test;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -48,25 +52,36 @@ public class CommandManagerTest {
     
     
     @Test
+    public void commandManager() {
+        Plugin plugin = when(mock(Plugin.class).getServer()).thenReturn(StubServer.INSTANCE).getMock();
+        CommandManager manager = new CommandManager(plugin);
+        
+        Set<String> names = newHashSet("aliases", "description", "subcommands", "help");
+        
+        assertEquals(names, manager.getParser().getExtensions().keySet());
+    }
+    
+    
+    @Test
     public void load() {
-        doReturn(Collections.EMPTY_MAP).when(manager).load("commands.yml");
+        doReturn(Collections.EMPTY_LIST).when(manager).load("commands.yml");
         
         manager.load();
         
-        verify(manager, times(1)).load("commands.yml");
+        verify(manager).load("commands.yml");
     }
     
     
     @Test
     public void load_Path() {
         when(plugin.getName()).thenReturn("");
-        doReturn(Collections.EMPTY_MAP).when(parser).parse("commands/commands.yml");
+        doReturn(Collections.EMPTY_LIST).when(parser).parse(any(ConfigurationSection.class));
         
         manager.load("commands/commands.yml");
         
-        verify(parser, times(1)).parse("commands/commands.yml");
-        verify(map, times(1)).registerAll(any(String.class), any(List.class));
-        verify(pluginManager, times(1)).callEvent(any(RegistrationEvent.class));
+        verify(parser).parse(any(ConfigurationSection.class));
+        verify(map).registerAll(any(String.class), any(List.class));
+        verify(pluginManager).callEvent(any(RegistrationEvent.class));
     }
     
     
@@ -74,7 +89,7 @@ public class CommandManagerTest {
     public void getCommand() {
         manager.getCommand("name");
         
-        verify(map, times(1)).getCommand("name");
+        verify(map).getCommand("name");
     }
     
 }

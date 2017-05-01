@@ -35,7 +35,7 @@ public class RegistrationEventTest {
     
     
     public RegistrationEventTest() {
-        event = new RegistrationEvent(new ArrayList<>(1));
+        event = new RegistrationEvent(new ArrayList<>(0));
     }
     
     

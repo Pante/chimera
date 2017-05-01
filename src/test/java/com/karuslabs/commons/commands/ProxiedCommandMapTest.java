@@ -16,7 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.test.StubServer;
+import com.karuslabs.mockkit.rule.MockkitRule;
+import com.karuslabs.mockkit.stub.StubServer;
 
 import java.util.Collections;
 
@@ -39,14 +40,16 @@ public class ProxiedCommandMapTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
+    @Rule
+    public MockkitRule mockkit = MockkitRule.INSTANCE;
+    
+    
     private ProxiedCommandMap proxy;
-    private StubServer server;
     private Command command;
     
     
-    public ProxiedCommandMapTest() {        
-        server = new StubServer();
-        proxy = spy(new ProxiedCommandMap(server));
+    public ProxiedCommandMapTest() {
+        proxy = spy(new ProxiedCommandMap(StubServer.INSTANCE));
         command = mock(Command.class);
     }
     
@@ -69,7 +72,7 @@ public class ProxiedCommandMapTest {
     }
     
     protected Object[] parametersForGetCommand() {
-        Command command = new Command(null, null);
+        Command command = new Command(null, null, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
         return new Object[] {
             new Object[] {command, command},
             new Object[] {mock(org.bukkit.command.Command.class), null}
@@ -87,7 +90,7 @@ public class ProxiedCommandMapTest {
     
     protected Object[] parametersForGetCommands() {
         Plugin plugin = mock(Plugin.class);
-        Command command = new Command("", plugin);
+        Command command = new Command("", plugin, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
         
         org.bukkit.command.Command mock = mock(org.bukkit.command.Command.class);
         

@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.executors.CommandExecutor;
-
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
@@ -46,7 +44,7 @@ public class CommandTest {
     public void execute() {
         command.execute(null, null, null);
         
-        verify(executor, times(1)).execute(null, command, null, null);
+        verify(executor).execute(null, command, null, null);
     }
     
     
@@ -54,7 +52,7 @@ public class CommandTest {
     public void tabComplete() {
         command.tabComplete(null, null, null);
         
-        verify(completer, times(1)).complete(null, command, null, null);
+        verify(completer).tabComplete(null, command, null, null);
     }
     
 }

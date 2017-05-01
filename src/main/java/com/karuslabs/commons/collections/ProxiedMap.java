@@ -14,9 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
-
-import com.karuslabs.commons.annotations.Proxied;
+package com.karuslabs.commons.collections;
 
 import java.util.*;
 
@@ -40,73 +38,61 @@ public class ProxiedMap<K, V> implements Map<K, V> {
     
     
     @Override
-    @Proxied
     public int size() {
         return map.size();
     }
 
     @Override
-    @Proxied
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
     @Override
-    @Proxied
     public boolean containsKey(Object key) {
         return map.containsKey(key);
     }
 
     @Override
-    @Proxied
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
 
     @Override
-    @Proxied
     public V get(Object key) {
         return map.get(key);
     }
 
     @Override
-    @Proxied
     public V put(K key, V value) {
         return map.put(key, value);
     }
 
     @Override
-    @Proxied
     public V remove(Object key) {
         return map.remove(key);
     }
 
     @Override
-    @Proxied
     public void putAll(Map<? extends K, ? extends V> m) {
         map.putAll(m);
     }
 
     @Override
-    @Proxied
     public void clear() {
         map.clear();
     }
 
     @Override
-    @Proxied
     public Set<K> keySet() {
         return map.keySet();
     }
 
     @Override
-    @Proxied
     public Collection<V> values() {
         return map.values();
     }
 
     @Override
-    @Proxied
     public Set<Entry<K, V>> entrySet() {
         return map.entrySet();
     }

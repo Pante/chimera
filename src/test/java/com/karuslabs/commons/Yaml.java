@@ -14,18 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.commands.executors;
+package com.karuslabs.commons;
 
-import com.karuslabs.commons.commands.Command;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.bukkit.command.CommandSender;
 
-
-@FunctionalInterface
-public interface CommandExecutor {
+public class Yaml {
     
-    public static final CommandExecutor NONE = (sender, cmd, label, args) -> {};
+    public static final YamlConfiguration ANIMATION = YamlConfiguration.loadConfiguration(Yaml.class.getClassLoader().getResourceAsStream("animation/animation.yml"));
     
-    public void execute(CommandSender sender, Command command, String label, String[] args);
+    public static final MemoryConfiguration BLANK = new MemoryConfiguration();
     
 }

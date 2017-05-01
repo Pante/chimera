@@ -14,23 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.util;
 
 
-public class UncheckedInterruptedException extends RuntimeException {
-    
-    public UncheckedInterruptedException() {}
-    
-    public UncheckedInterruptedException(String message) {
-        super(message);
-    }
-    
-    public UncheckedInterruptedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UncheckedInterruptedException(Throwable cause) {
-        super(cause);
-    }
+public class DatabasesTest {
     
 }

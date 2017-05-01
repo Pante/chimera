@@ -43,6 +43,11 @@
             <url>http://repo.karuslabs.com/repository/craftbukkit/snapshots</url>
         </repository>
         
+        <repository>
+            <id>mockkit-repo</id>
+            <url>http://repo.karuslabs.com/repository/mockkit/snapshots</url>
+        </repository>
+        
     </repositories>
      
     <dependencies>
@@ -62,14 +67,6 @@
         </dependency>
         
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -86,9 +83,23 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.7.19</version>
-            <scope>provided</scope>
+            <version>2.7.22</version>
+            <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>mockkit</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+        </dependency>
+
         
     </dependencies>
     
@@ -130,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.20</version>
                 <executions>
                     <execution>
                         <goals>

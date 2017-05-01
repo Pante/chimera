@@ -16,14 +16,14 @@
  */
 package com.karuslabs.commons.commands.yml;
 
-import com.karuslabs.commons.commands.*;
-
 import com.google.common.collect.Sets;
+import com.karuslabs.commons.commands.*;
 
 import java.util.*;
 
 import junitparams.*;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -42,31 +42,39 @@ public class ParserTest {
     
     
     public ParserTest() {
-        parser = spy(new Parser(new CommandBuilder(mock(Plugin.class))));
+        parser = spy(new Parser(mock(Plugin.class), Collections.singletonMap("help", Extension.HELP)));
         config = YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream("commands/commands.yml"));
     }
     
     
     @Test
-    @Parameters
-    public void parseCommands(boolean includeAliases, Set<String> keys) {
-        Map<String, Command> commands = parser.parseCommands(config.getConfigurationSection("command-name.nested-commands"), includeAliases);
+    public void parse() {
+        doReturn(mock(Command.class)).when(parser).parseCommand(any(ConfigurationSection.class));
         
-        verify(parser, times(1)).parseCommand(any());
+        parser.parse(config.getConfigurationSection("command-name.nested-commands"));
         
-        assertEquals(keys, commands.keySet());
-    }
-    
-    protected Object[] parametersForParseCommands() {
-        return new Object[] {
-            new Object[] {true, Sets.newHashSet("subcommand-name", "subcmd")},
-            new Object[] {false, Sets.newHashSet("subcommand-name")}
-        };
+        verify(parser).parseCommand(any(ConfigurationSection.class));
     }
     
     
     @Test
     public void parseCommand() {
+        Command command = parser.parseCommand(config.getConfigurationSection("command-name"));
+        
+        assertEquals("command-name", command.getName());
+        assertEquals("description", command.getDescription());
+        assertEquals(Arrays.asList("cmd", "comm"), command.getAliases());
+        assertEquals("command.permission", command.getPermission());
+        assertEquals("message", command.getPermissionMessage());
+        assertTrue(command.getNestedCommands().keySet().containsAll(Sets.newHashSet("subcommand-name")));
+        assertTrue(command.getNestedNames().contains("subcommand-name"));
+        assertTrue(command.getExtensions().containsKey("name"));
+        assertEquals("usage", command.getUsage());
+    }
+    
+    
+    @Test
+    public void parseCommand_NoNested() {
         Command command = parser.parseCommand(config.getConfigurationSection("command-name.nested-commands.subcommand-name"));
         
         assertEquals("subcommand-name", command.getName());
@@ -75,21 +83,9 @@ public class ParserTest {
         assertEquals("subcommand.permission", command.getPermission());
         assertEquals("submessage", command.getPermissionMessage());
         assertTrue(command.getNestedCommands().isEmpty());
+        assertTrue(command.getNestedNames().isEmpty());
+        assertTrue(command.getExtensions().isEmpty());
         assertEquals("subusage", command.getUsage());
-    }
-    
-    
-    @Test
-    public void parseCommands_Default() {
-        Command command = parser.parseCommand(config.getConfigurationSection("blankcommand-name"));
-        
-        assertEquals("blankcommand-name", command.getName());
-        assertEquals("", command.getDescription());
-        assertEquals(Collections.EMPTY_LIST, command.getAliases());
-        assertEquals("", command.getPermission());
-        assertEquals("", command.getPermissionMessage());
-        assertTrue(command.getNestedCommands().isEmpty());
-        assertEquals("", command.getUsage());
     }
     
 }

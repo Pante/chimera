@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.annotations.Proxied;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.*;
@@ -48,24 +46,20 @@ public class ProxiedCommandMap {
         commands.forEach(command -> register(fallbackPrefix, command));
     }
 
-    @Proxied
     public boolean register(String label, String fallbackPrefix, Command command) {
         return map.register(label, fallbackPrefix, command);
     }
 
-    @Proxied
     public boolean register(String fallbackPrefix, Command command) {
         return map.register(fallbackPrefix, command);
     }
     
     
-    @Proxied
     public boolean dispatch(CommandSender sender, String cmdLine) {
         return map.dispatch(sender, cmdLine);
     }
 
     
-    @Proxied
     public void clearCommands() {
         map.clearCommands();
     }
@@ -82,12 +76,10 @@ public class ProxiedCommandMap {
     }
     
     
-    @Proxied
     public List<String> tabComplete(CommandSender sender, String cmdLine)  {
         return map.tabComplete(sender, cmdLine);
     }
-
-    @Proxied
+    
     public List<String> tabComplete(CommandSender sender, String cmdLine, Location location) {
         return map.tabComplete(sender, cmdLine, location);
     }

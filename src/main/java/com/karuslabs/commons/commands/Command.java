@@ -16,8 +16,6 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.executors.*;
-
 import java.util.*;
 
 import org.bukkit.command.CommandSender;
@@ -28,53 +26,48 @@ import org.bukkit.plugin.Plugin;
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
     protected Plugin plugin;
-    protected Map<String, Command> commands;
     protected CommandExecutor executor;
-    protected TabCompleter completer;
+    private TabCompleter completer;
     
+    protected Map<String, Extension> extensions;
+    protected Map<String, Command> commands;
+    protected List<String> names;
     
-    public Command(String name, Plugin plugin) {
-        this(name, plugin, NestedCommandExecutor.NONE, TabCompleter.INSTANCE);
-    }
     
     public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer) {
-        this(name, "", "", new ArrayList<>(0), plugin, new HashMap<>(0), executor, completer);
+        this(name, plugin, executor, completer, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>(), new ArrayList<>());
     }
     
-    public Command(String name, String description, String usageMessage, List<String> aliases, Plugin plugin, Map<String, Command> commands, CommandExecutor executor, TabCompleter completer) {
-        super(name, description, usageMessage, aliases);
+    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, List<String> aliases,
+                    Map<String, Extension> extensions, Map<String, Command> commands, List<String> names) {
+        
+        super(name, description, usage, aliases);
         this.plugin = plugin;
-        this.commands = commands;
         this.executor = executor;
         this.completer = completer;
+        
+        this.extensions = extensions;
+        this.commands = commands;
+        this.names = names;
     }
     
     
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
-        executor.execute(sender, this, label, args);
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        executor.execute(sender, this, commandLabel, args);
         return true;
     }
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return completer.complete(sender, this, alias, args);
+        return completer.tabComplete(sender, this, alias, args);
     }
-    
+
     
     @Override
     public Plugin getPlugin() {
         return plugin;
     }
-    
-    public Map<String, Command> getNestedCommands() {
-        return commands;
-    }
-    
-    public void setNestedCommands(Map<String, Command> commands) {
-        this.commands = commands;
-    }
-    
     
     public CommandExecutor getExecutor() {
         return executor;
@@ -83,14 +76,26 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
     }
-    
-    
+
     public TabCompleter getTabCompleter() {
         return completer;
     }
-    
+
     public void setTabCompleter(TabCompleter completer) {
         this.completer = completer;
+    }
+
+    
+    public Map<String, Extension> getExtensions() {
+        return extensions;
+    }
+    
+    public Map<String, Command> getNestedCommands() {
+        return commands;
+    }
+    
+    public List<String> getNestedNames() {
+        return names;
     }
     
 }

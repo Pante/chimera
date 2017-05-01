@@ -19,55 +19,59 @@ package com.karuslabs.commons.commands.yml;
 import com.karuslabs.commons.commands.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 
 public class Parser {
     
-    private CommandBuilder builder;
+    private Plugin plugin;
+    private Map<String, Extension> extensions;
     
     
-    public Parser(CommandBuilder builder) {
-        this.builder = builder;
+    public Parser(Plugin plugin, Map<String, Extension> extensions) {
+        this.plugin = plugin;
+        this.extensions = extensions;
     }
     
     
-    public Map<String, Command> parse(String path) {
-        return parse(YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream(path)));
+    public List<Command> parse(ConfigurationSection config) {
+        return config.getKeys(false).stream().map(name -> parseCommand(config.getConfigurationSection(name))).collect(Collectors.toList());
     }
     
-    public Map<String, Command> parse(ConfigurationSection root) {
-        return parseCommands(root, false);
-    }
-    
-    protected Map<String, Command> parseCommands(ConfigurationSection root, boolean includeAliases) {
-        Map<String, Command> commands = new HashMap<>(0);
-        root.getKeys(false).stream().map(key -> parseCommand(root.getConfigurationSection(key)))
-                .forEach(command -> {
-                    commands.put(command.getName(), command);
-                    if (includeAliases) command.getAliases().forEach(alias -> commands.put(alias, command));
-                });
+    protected Command parseCommand(ConfigurationSection config) {
+        CommandBuilder builder = parseCommandInformation(config);
         
-        return commands;
-    }
-    
-    protected Command parseCommand(ConfigurationSection section) {        
-        Command command =  builder.command(section.getName())
-                .description(ChatColor.translateAlternateColorCodes('&', section.getString("description", "")))
-                .aliases(section.getStringList("aliases"))
-                .permission(section.getString("permission", ""))
-                .message(ChatColor.translateAlternateColorCodes('&', section.getString("permission-message", "")))
-                .usage(ChatColor.translateAlternateColorCodes('&', section.getString("usage", ""))).build();
-        
-        ConfigurationSection nested = section.getConfigurationSection("nested-commands");
-        if (nested != null) {
-            command.setNestedCommands(parseCommands(nested, true));
+        ConfigurationSection commandsSection = config.getConfigurationSection("nested-commands");
+        if (commandsSection != null) {
+            parse(commandsSection).forEach(builder::command);
         }
         
-        return command;
+        ConfigurationSection extensionsSection = config.getConfigurationSection("extensions");
+        if (extensionsSection != null) {
+            extensionsSection.getKeys(false).forEach(
+                name -> builder.extension(name, extensions.getOrDefault(extensionsSection.getString(name).toLowerCase(), Extension.NONE))
+            );
+        }
+        
+        return builder.build();
+    }
+    
+    protected CommandBuilder parseCommandInformation(ConfigurationSection config) {
+        return new CommandBuilder(plugin).name(config.getName())
+                .description(ChatColor.translateAlternateColorCodes('&', config.getString("description", "")))
+                .aliases(config.getStringList("aliases"))
+                .permission(config.getString("permission", ""))
+                .message(ChatColor.translateAlternateColorCodes('&', config.getString("permission-message", "")))
+                .usage(ChatColor.translateAlternateColorCodes('&', config.getString("usage", "")));
+    }
+
+    
+    public Map<String, Extension> getExtensions() {
+        return extensions;
     }
     
 }

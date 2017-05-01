@@ -27,6 +27,9 @@ public class Utility {
     private static final String[] EMPTY = new String[0];
     
     
+    private Utility() {}
+    
+    
     @SafeVarargs
     public static String[] trim(String... args) {
         if (args.length <= 1) {

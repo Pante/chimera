@@ -16,14 +16,15 @@
  */
 package com.karuslabs.commons.commands;
 
-import com.karuslabs.commons.commands.executors.CommandExecutor;
-
-import java.util.Arrays;
+import java.util.*;
 
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -31,30 +32,38 @@ import static org.mockito.Mockito.*;
 public class CommandBuilderTest {
     
     private CommandBuilder builder;
-    private Plugin plugin;
+    private Command subcommand;
     
     
     public CommandBuilderTest() {
-        plugin = mock(Plugin.class);
-        builder = new CommandBuilder(plugin);
+        builder = new CommandBuilder(mock(Plugin.class));
+        subcommand = when(mock(Command.class).getName()).thenReturn("subcommand").getMock();
+        when(subcommand.getAliases()).thenReturn(singletonList("subcmd"));
     }
     
     
     @Test
-    public void get() {
+    public void build() {
         CommandExecutor executor = mock(CommandExecutor.class);
         TabCompleter completer = mock(TabCompleter.class);
+        Extension extension = mock(Extension.class);
         
-        Command command = builder.command("command")
-                .description("description").aliases(Arrays.asList("cmd"))
-                .permission("permission").message("message")
-                .usage("usage").label("label")
-                .executor(executor).tabCompleter(completer)
-                .nestedCommand("name", mock(Command.class)).build();
+        Command command = builder.name("command")
+                .description("description")
+                .aliases(singletonList("cmd"))
+                .permission("permission")
+                .message("message")
+                .usage("usage")
+                .label("label")
+                .executor(executor)
+                .completer(completer)
+                .command(subcommand)
+                .extension("ext", extension)
+                .build();
         
         assertEquals("command", command.getName());
         assertEquals("description", command.getDescription());
-        assertEquals(Arrays.asList("cmd"), command.getAliases());
+        assertEquals(singletonList("cmd"), command.getAliases());
         assertEquals("permission", command.getPermission());
         assertEquals("message", command.getPermissionMessage());
         assertEquals("usage", command.getUsage());
@@ -62,7 +71,13 @@ public class CommandBuilderTest {
         
         assertEquals(executor, command.getExecutor());
         assertEquals(completer, command.getTabCompleter());
-        assertTrue(command.getNestedCommands().containsKey("name"));
+        
+        Set<String> nested = newHashSet("subcmd, subcommand");
+        List<String> names = newArrayList("subcommand, ext");
+        
+        assertEquals(singletonMap("ext", extension), command.getExtensions());
+//        assertEquals(nested, command.getNestedCommands().keySet());
+//        assertEquals(names, command.getNestedNames());
     }
     
 }

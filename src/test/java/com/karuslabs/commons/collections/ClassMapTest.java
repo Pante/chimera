@@ -14,9 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
-
-import com.karuslabs.commons.util.MultiClassMap.Key;
+package com.karuslabs.commons.collections;
 
 import junitparams.*;
 
@@ -24,23 +22,20 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static com.karuslabs.commons.util.MultiClassMap.key;
 import static org.junit.Assert.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class MultiClassMapTest {
+public class ClassMapTest {
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
-    private MultiClassMap<Object> map;
-    private Key<Integer> key;
+    private ClassMap<Object> map;
     
     
-    public MultiClassMapTest() {
-        map = new MultiClassMap<>();
-        key = new MultiClassMap.Key<>("", Integer.class);
+    public ClassMapTest() {
+        map = new ClassMap<>();
     }
     
     
@@ -54,18 +49,18 @@ public class MultiClassMapTest {
     public void getInstance_ThrowsException() {
         exception.expect(ClassCastException.class);
         
-        map.map.put(key, "");
+        map.map.put(int.class, "");
         
-        map.getInstance(key);
+        map.getInstance(int.class);
     }
     
     
     @Test
     @Parameters
     public void getInstanceOrDefault(Object object, int expected) {
-        map.map.put(key, object);
+        map.map.put(Integer.class, object);
         
-        int returned = map.getInstanceOrDefault(key, 0);
+        int returned = map.getInstanceOrDefault(Integer.class, 0);
         
         assertEquals(expected, returned);
     }
@@ -77,37 +72,5 @@ public class MultiClassMapTest {
             new Object[] {"", 0}
         };
     }
-    
-    
-    @Test
-    public void putInstance() {
-        map.putInstance(key, 1);
-        
-        assertTrue(map.map.containsKey(key));
-    }
-    
-    
-    @Test
-    @Parameters(method = "parametersForKey")
-    public void equals(Key<?> aKey, boolean isEqual) {
-        assertEquals(isEqual, key.equals(aKey));
-    }
-    
-    
-    @Test
-    @Parameters(method = "parametersForKey")
-    public void hashCode(Key<?> aKey, boolean isEqual) {
-        assertEquals(isEqual, key.hashCode() == aKey.hashCode());
-    }
-    
-    
-    protected Object[] parametersForKey() {
-        return new Object[] {
-            new Object[] {key("", Integer.class), true},
-            new Object[] {key("", String.class), false},
-            new Object[] {key("wrong", Integer.class), false},
-            new Object[] {key("wrong", String.class), false}
-        };
-}
     
 }
