@@ -57,7 +57,7 @@ public class MusicTest {
     
     
     @Test
-    public void play_Sound() {
+    public void play_Location() {
         music.play(location);
         
         verify(location.getWorld()).playSound(location, music.getSound(), music.getCategory(), music.getVolume(), music.getPitch());

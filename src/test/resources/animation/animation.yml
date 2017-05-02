@@ -6,7 +6,7 @@ actionbar:
 helix:
     radius: 6.9
     particles: FLAME
-    thickness: 10
+    amount: 10
     height: 5.5
     curve: 4.5
     

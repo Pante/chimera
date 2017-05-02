@@ -30,25 +30,22 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     private TabCompleter completer;
     
     protected Map<String, Extension> extensions;
-    protected Map<String, Command> commands;
-    protected List<String> names;
+    protected Map<String, Command> subcommands;
     
     
     public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer) {
-        this(name, plugin, executor, completer, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>(), new ArrayList<>());
+        this(name, plugin, executor, completer, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, List<String> aliases,
-                    Map<String, Extension> extensions, Map<String, Command> commands, List<String> names) {
-        
+    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, 
+                    List<String> aliases, Map<String, Extension> extensions, Map<String, Command> subcommands) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = executor;
         this.completer = completer;
         
         this.extensions = extensions;
-        this.commands = commands;
-        this.names = names;
+        this.subcommands = subcommands;
     }
     
     
@@ -90,12 +87,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return extensions;
     }
     
-    public Map<String, Command> getNestedCommands() {
-        return commands;
-    }
-    
-    public List<String> getNestedNames() {
-        return names;
+    public Map<String, Command> getSubcommands() {
+        return subcommands;
     }
     
 }

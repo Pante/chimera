@@ -27,7 +27,7 @@ public class CommandBuilder {
     
     
     public CommandBuilder(Plugin plugin) {
-        command = new Command("", plugin, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
+        command = new Command("", plugin, CommandExecutor.DEFAULT, TabCompleter.PLAYER_NAMES);
     }
     
     
@@ -67,17 +67,13 @@ public class CommandBuilder {
     }
     
     public CommandBuilder command(Command command) {
-        command.getAliases().forEach(alias -> this.command.getNestedCommands().put(alias, command));
-        this.command.getNestedCommands().put(command.getName(), command);
-        this.command.getNestedNames().add(command.getName());
-        
+        command.getAliases().forEach(alias -> this.command.getSubcommands().put(alias, command));
+        this.command.getSubcommands().put(command.getName(), command);
         return this;
     }
     
     public CommandBuilder extension(String name, Extension extension) {
         command.getExtensions().put(name, extension);
-        command.getNestedNames().add(name);
-        
         return this;
     }
     

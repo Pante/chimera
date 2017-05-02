@@ -29,7 +29,7 @@ public class HelixTest {
     public void helix() {
         assertEquals(6.9, helix.getRadius(), 0);
         assertEquals(Particle.FLAME, helix.getParticles());
-        assertEquals(10, helix.getThickness());
+        assertEquals(10, helix.getAmount());
         assertEquals(5.5, helix.getHeight(), 0);
         assertEquals(4.5, helix.getCurve(), 0);
     }
@@ -41,7 +41,7 @@ public class HelixTest {
         
         assertEquals(2, helix.getRadius(), 0);
         assertEquals(Particle.ENCHANTMENT_TABLE, helix.getParticles());
-        assertEquals(50, helix.getThickness());
+        assertEquals(50, helix.getAmount());
         assertEquals(12, helix.getHeight(), 0);
         assertEquals(4, helix.getCurve(), 0);
     }

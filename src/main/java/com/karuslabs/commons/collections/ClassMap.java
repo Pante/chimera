@@ -40,12 +40,17 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     
     public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
         V uncasted = map.get(type);
-        if (uncasted != null && uncasted.getClass().equals(type)) {
+        if (uncasted != null && uncasted.getClass() == type) {
             return type.cast(uncasted);
             
         } else {
             return value;
         }
+    }
+    
+    
+    public <U extends V> void putInstance(Class<U> type, U value) {
+        map.put(type, value);
     }
     
 }

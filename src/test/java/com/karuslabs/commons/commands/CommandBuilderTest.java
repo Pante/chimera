@@ -16,15 +16,14 @@
  */
 package com.karuslabs.commons.commands;
 
-import java.util.*;
+import com.google.common.collect.ImmutableMap;
 
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.*;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -49,21 +48,21 @@ public class CommandBuilderTest {
         Extension extension = mock(Extension.class);
         
         Command command = builder.name("command")
-                .description("description")
-                .aliases(singletonList("cmd"))
-                .permission("permission")
-                .message("message")
-                .usage("usage")
-                .label("label")
-                .executor(executor)
-                .completer(completer)
-                .command(subcommand)
-                .extension("ext", extension)
-                .build();
+                            .description("description")
+                            .aliases(singletonList("cmd"))
+                            .permission("permission")
+                            .message("message")
+                            .usage("usage")
+                            .label("label")
+                            .executor(executor)
+                            .completer(completer)
+                            .command(subcommand)
+                            .extension("ext", extension)
+                            .build();
         
         assertEquals("command", command.getName());
         assertEquals("description", command.getDescription());
-        assertEquals(singletonList("cmd"), command.getAliases());
+        assertThat(command.getAliases(), equalTo(singletonList("cmd")));
         assertEquals("permission", command.getPermission());
         assertEquals("message", command.getPermissionMessage());
         assertEquals("usage", command.getUsage());
@@ -72,12 +71,8 @@ public class CommandBuilderTest {
         assertEquals(executor, command.getExecutor());
         assertEquals(completer, command.getTabCompleter());
         
-        Set<String> nested = newHashSet("subcmd, subcommand");
-        List<String> names = newArrayList("subcommand, ext");
-        
-        assertEquals(singletonMap("ext", extension), command.getExtensions());
-//        assertEquals(nested, command.getNestedCommands().keySet());
-//        assertEquals(names, command.getNestedNames());
+        assertThat(command.getExtensions(), equalTo(singletonMap("ext", extension)));
+        assertThat(command.getSubcommands(), equalTo(ImmutableMap.of("subcommand", subcommand, "subcmd", subcommand)));
     }
     
 }

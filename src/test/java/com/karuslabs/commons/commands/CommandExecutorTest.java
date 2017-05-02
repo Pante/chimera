@@ -50,8 +50,16 @@ public class CommandExecutorTest {
         subcommand = mock(Command.class);
         extension = mock(Extension.class);
         
-        command.getNestedCommands().put("subcommand", subcommand);
+        command.subcommands.put("subcommand", subcommand);
         command.getExtensions().put("extension", extension);
+    }
+    
+    
+    @Test
+    public void default_CommandExeuctor() {
+        CommandExecutor.DEFAULT.onExecute(sender, command, null, EMPTY);
+        
+        verify(sender).sendMessage(ChatColor.RED + "Unknown command! Type / help for more information");
     }
     
     
@@ -92,6 +100,7 @@ public class CommandExecutorTest {
     }
     
     
+    // Workaround until Mockito supports stubbing lambda expressions
     private static class StubExecutor implements CommandExecutor {
 
         @Override

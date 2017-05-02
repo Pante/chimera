@@ -73,4 +73,12 @@ public class ClassMapTest {
         };
     }
     
+    
+    @Test
+    public void putInstance() {
+        map.putInstance(int.class, 10);
+        
+        assertEquals(10, map.get(int.class));
+    }
+    
 }

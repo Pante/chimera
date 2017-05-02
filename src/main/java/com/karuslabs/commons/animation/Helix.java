@@ -6,13 +6,14 @@ package com.karuslabs.commons.animation;
 
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 
 public class Helix {
     
     private double radius;
     private Particle particles;
-    private int thickness;
+    private int amount;
     private double height;
     private double curve;
     
@@ -20,7 +21,7 @@ public class Helix {
     public Helix(ConfigurationSection config) {
         radius = config.getDouble("radius", 2);
         particles = Particle.valueOf(config.getString("particles", "ENCHANTMENT_TABLE"));
-        thickness = config.getInt("thickness", 50);
+        amount = config.getInt("amount", 50);
         height = config.getDouble("height", 12);
         curve = config.getDouble("curve", 4);
     }
@@ -35,7 +36,7 @@ public class Helix {
         for (double y = 0; y <= height; y += 0.05) {
             double x = radius * Math.cos(curve * y);
             double z = radius * Math.sin(curve * y);
-            world.spawnParticle(particles, baseX + x, baseY + y, baseZ + z, thickness);
+            world.spawnParticle(particles, baseX + x, baseY + y, baseZ + z, amount);
         }
     }
 
@@ -48,8 +49,8 @@ public class Helix {
         return particles;
     }
 
-    public int getThickness() {
-        return thickness;
+    public int getAmount() {
+        return amount;
     }
 
     public double getHeight() {

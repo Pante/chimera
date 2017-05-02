@@ -72,7 +72,7 @@ public class ProxiedCommandMapTest {
     }
     
     protected Object[] parametersForGetCommand() {
-        Command command = new Command(null, null, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
+        Command command = new Command(null, null, CommandExecutor.DEFAULT, TabCompleter.PLAYER_NAMES);
         return new Object[] {
             new Object[] {command, command},
             new Object[] {mock(org.bukkit.command.Command.class), null}
@@ -90,7 +90,7 @@ public class ProxiedCommandMapTest {
     
     protected Object[] parametersForGetCommands() {
         Plugin plugin = mock(Plugin.class);
-        Command command = new Command("", plugin, CommandExecutor.NONE, TabCompleter.PLAYER_NAMES);
+        Command command = new Command("", plugin, CommandExecutor.DEFAULT, TabCompleter.PLAYER_NAMES);
         
         org.bukkit.command.Command mock = mock(org.bukkit.command.Command.class);
         

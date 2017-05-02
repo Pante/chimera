@@ -16,10 +16,12 @@
  */
 package com.karuslabs.commons.commands;
 
+
 import org.bukkit.plugin.Plugin;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
@@ -42,8 +44,7 @@ public class CommandTest {
     
     @Test
     public void execute() {
-        command.execute(null, null, null);
-        
+        assertTrue(command.execute(null, null, null));
         verify(executor).execute(null, command, null, null);
     }
     

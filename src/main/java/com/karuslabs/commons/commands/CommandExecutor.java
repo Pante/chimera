@@ -28,22 +28,24 @@ public interface CommandExecutor {
     
     public static final CommandExecutor NONE = (sender, command, label, args) -> {};
     
+    public static final CommandExecutor DEFAULT = (sender, command, label, args) -> sender.sendMessage(ChatColor.RED + "Unknown command! Type /" + command.getName() + " help for more information");
+    
     
     public default void execute(CommandSender sender, Command command, String label, String[] args) {
-        Map<String, Command> commands = command.getNestedCommands();
+        Map<String, Command> commands = command.getSubcommands();
         Map<String, Extension> extensions = command.getExtensions();
         
         boolean hasArguments = args.length >= 1;
         
         if (hasArguments && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, label, trim(args));
-            
+
         } else if (hasArguments && extensions.containsKey(args[0])) {
-           extensions.get(args[0]).execute(sender, command);
-           
+            extensions.get(args[0]).execute(sender, command);
+
         } else if (sender.hasPermission(command.getPermission())) {
             onExecute(sender, command, label, args);
-            
+
         } else {
             onInvalid(sender, command, label, args);
         }

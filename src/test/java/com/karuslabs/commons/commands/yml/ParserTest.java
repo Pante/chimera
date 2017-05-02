@@ -66,8 +66,7 @@ public class ParserTest {
         assertEquals(Arrays.asList("cmd", "comm"), command.getAliases());
         assertEquals("command.permission", command.getPermission());
         assertEquals("message", command.getPermissionMessage());
-        assertTrue(command.getNestedCommands().keySet().containsAll(Sets.newHashSet("subcommand-name")));
-        assertTrue(command.getNestedNames().contains("subcommand-name"));
+//        assertTrue(command.getSubcommands().keySet().containsAll(Sets.newHashSet("subcommand-name")));
         assertTrue(command.getExtensions().containsKey("name"));
         assertEquals("usage", command.getUsage());
     }
@@ -82,8 +81,7 @@ public class ParserTest {
         assertEquals(Arrays.asList("subcmd"), command.getAliases());
         assertEquals("subcommand.permission", command.getPermission());
         assertEquals("submessage", command.getPermissionMessage());
-        assertTrue(command.getNestedCommands().isEmpty());
-        assertTrue(command.getNestedNames().isEmpty());
+        assertTrue(command.getSubcommands().isEmpty());
         assertTrue(command.getExtensions().isEmpty());
         assertEquals("subusage", command.getUsage());
     }

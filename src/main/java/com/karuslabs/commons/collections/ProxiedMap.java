@@ -19,7 +19,7 @@ package com.karuslabs.commons.collections;
 import java.util.*;
 
 
-public class ProxiedMap<K, V> implements Map<K, V> {
+public abstract class ProxiedMap<K, V> implements Map<K, V> {
     
     protected Map<K, V> map;
     

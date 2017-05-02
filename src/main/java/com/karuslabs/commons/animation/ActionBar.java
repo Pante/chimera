@@ -29,13 +29,13 @@ public class ActionBar {
     
     private String message;
     private ChatColor color;
-    private int frames;
+    private int maxLength;
     
     
     public ActionBar(ConfigurationSection config) {
         message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
         color = ChatColor.valueOf(config.getString("color", "WHITE"));
-        frames = config.getInt("frames", 4);
+        maxLength = config.getInt("frames", 4) * 2 + message.length();
     }
     
     
@@ -44,7 +44,6 @@ public class ActionBar {
     }
     
     public void animate(Player player, int delay) {
-        int maxLength = message.length() + frames * 2;
         for (int length = message.length(); length <= maxLength; length += 2, delay += 3) {
             int capturedLength = length;
             scheduler.scheduleSyncDelayedTask(plugin, 
@@ -63,8 +62,8 @@ public class ActionBar {
         return color;
     }
 
-    public int getFrames() {
-        return frames;
+    public int getMaxLength() {
+        return maxLength;
     }
     
 }

@@ -32,18 +32,16 @@ public interface Extension {
        
     public static final Extension DESCRIPTION = (sender, command) -> sender.sendMessage(ChatColor.GOLD + command.getDescription() + "\n" + command.getUsage());
     
-    public static final Extension SUBCOMMANDS = (sender, command) -> sender.sendMessage(ChatColor.GOLD + command.getNestedNames().toString());
-    
     
     public static final Extension HELP = (sender, command) -> {
-        List<String> subcommands = command.getNestedNames().stream()
-                .filter(name -> sender.hasPermission(command.getNestedCommands().get(name).getPermission()))
-                .collect(Collectors.toList());
+        List<String> names = command.getSubcommands().values().stream()
+                .filter(cmd -> sender.hasPermission(cmd.getPermission()))
+                .map(Command::getName).collect(Collectors.toList());
         
         sender.sendMessage(ChatColor.GOLD + "==== Help for: " + command.getName() + " ====");
         sender.sendMessage(ChatColor.GOLD + "Description: " + ChatColor.RED + command.getDescription());
         sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.RED + command.getUsage());
-        sender.sendMessage(ChatColor.GOLD + "==== Subcommands: ====" + "\n" + ChatColor.RED + subcommands);
+        sender.sendMessage(ChatColor.GOLD + "\n==== Subcommands: ====" + "\n" + ChatColor.RED + names);
     };
     
     
