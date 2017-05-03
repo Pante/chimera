@@ -14,8 +14,8 @@ import org.bukkit.util.Vector;
 public class LazyLocation extends Location {
     
     private String name;
-    private Server server;
-    private Location location;
+    protected Server server;
+    protected Location location;
 
     
     public LazyLocation(String name, double x, double y, double z) {
