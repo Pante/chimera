@@ -65,26 +65,26 @@ public class CommandExecutorTest {
     
     @Test
     @Parameters
-    public void execute(boolean permission, String[] args, int commandTimes, int extensionTimes, int executeTimes, int invalidTimes) {
+    public void execute(boolean permission, String[] args, int commandTimes, int extensionTimes, int executeTimes, int permissionTimes) {
         when(sender.hasPermission(any(String.class))).thenReturn(permission);
-       
-        doNothing().when(executor).onInvalid(sender, command, null, args);
-        
+
+        doNothing().when(executor).onNoPermission(sender, command, null, args);
+    
         executor.execute(sender, command, null, args);
-        
+
         verify(subcommand, times(commandTimes)).execute(any(), any(), any());
         verify(extension, times(extensionTimes)).execute(sender, command);
         verify(executor, times(executeTimes)).onExecute(any(), any(), any(), any());
-        verify(executor, times(invalidTimes)).onInvalid(sender, command, null, args);
+        verify(executor, times(permissionTimes)).onNoPermission(sender, command, null, args);
     }
     
-    public Object[] parametersForExecute() {
+    protected Object[] parametersForExecute() {
         return new Object[] {
-            new Object[] {true, EMPTY, 0, 0, 1, 0},
-            new Object[] {true, new String[] {"extension"}, 0, 1, 0, 0},
-            new Object[] {true, new String[] {"argument"}, 0, 0, 1, 0},
             new Object[] {true, new String[] {"subcommand"}, 1, 0, 0, 0},
             new Object[] {false, new String[] {"subcommand"}, 1, 0, 0, 0},
+            new Object[] {true, new String[] {"extension"}, 0, 1, 0, 0},
+            new Object[] {true, EMPTY, 0, 0, 1, 0},
+            new Object[] {true, new String[] {"argument"}, 0, 0, 1, 0},
             new Object[] {false, EMPTY, 0, 0, 0, 1}
         };
     }
@@ -94,13 +94,13 @@ public class CommandExecutorTest {
     public void onInvalid() {
         command.setPermissionMessage("message");
         
-        executor.onInvalid(sender, command, null, EMPTY);
+        executor.onNoPermission(sender, command, null, EMPTY);
         
         verify(sender).sendMessage(ChatColor.RED + "message");
     }
     
     
-    // Workaround until Mockito supports stubbing lambda expressions
+    // Workaround until Mockito supports spying lambda expressions
     private static class StubExecutor implements CommandExecutor {
 
         @Override

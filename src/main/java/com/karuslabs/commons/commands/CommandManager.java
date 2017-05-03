@@ -31,20 +31,10 @@ public class CommandManager {
     private PluginManager manager;
     private ProxiedCommandMap map;
     private Parser parser;
-    
+
     
     public CommandManager(Plugin plugin) {
-        this.plugin = plugin;
-        this.manager = plugin.getServer().getPluginManager();
-        this.map = new ProxiedCommandMap(plugin.getServer());
-        
-        Map<String, Extension> extensions = new HashMap<>();
-        extensions.put("aliases", Extension.ALIASSES);
-        extensions.put("description", Extension.DESCRIPTION);
-        extensions.put("subcommands", Extension.NONE);
-        extensions.put("help", Extension.HELP);
-        
-        this.parser = new Parser(plugin, extensions);
+        this(plugin, plugin.getServer().getPluginManager(), new ProxiedCommandMap(plugin.getServer()), new Parser(plugin));
     }
     
     public CommandManager(Plugin plugin, PluginManager manager, ProxiedCommandMap map, Parser parser) {

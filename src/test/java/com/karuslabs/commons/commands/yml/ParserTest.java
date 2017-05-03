@@ -17,6 +17,7 @@
 package com.karuslabs.commons.commands.yml;
 
 import com.google.common.collect.Sets;
+
 import com.karuslabs.commons.commands.*;
 
 import java.util.*;
@@ -30,6 +31,7 @@ import org.bukkit.plugin.Plugin;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -42,7 +44,7 @@ public class ParserTest {
     
     
     public ParserTest() {
-        parser = spy(new Parser(mock(Plugin.class), Collections.singletonMap("help", Extension.HELP)));
+        parser = spy(new Parser(mock(Plugin.class)));
         config = YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream("commands/commands.yml"));
     }
     
@@ -51,7 +53,7 @@ public class ParserTest {
     public void parse() {
         doReturn(mock(Command.class)).when(parser).parseCommand(any(ConfigurationSection.class));
         
-        parser.parse(config.getConfigurationSection("command-name.nested-commands"));
+        parser.parse(config.getConfigurationSection("command-name.subcommands"));
         
         verify(parser).parseCommand(any(ConfigurationSection.class));
     }
@@ -66,7 +68,7 @@ public class ParserTest {
         assertEquals(Arrays.asList("cmd", "comm"), command.getAliases());
         assertEquals("command.permission", command.getPermission());
         assertEquals("message", command.getPermissionMessage());
-//        assertTrue(command.getSubcommands().keySet().containsAll(Sets.newHashSet("subcommand-name")));
+        assertThat(command.getSubcommands().keySet(), equalTo(Sets.newHashSet("subcommand-name", "subcmd")));
         assertTrue(command.getExtensions().containsKey("name"));
         assertEquals("usage", command.getUsage());
     }
@@ -74,7 +76,7 @@ public class ParserTest {
     
     @Test
     public void parseCommand_NoNested() {
-        Command command = parser.parseCommand(config.getConfigurationSection("command-name.nested-commands.subcommand-name"));
+        Command command = parser.parseCommand(config.getConfigurationSection("command-name.subcommands.subcommand-name"));
         
         assertEquals("subcommand-name", command.getName());
         assertEquals("subdescription", command.getDescription());

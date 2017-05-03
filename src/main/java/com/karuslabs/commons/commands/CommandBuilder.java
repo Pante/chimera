@@ -66,25 +66,26 @@ public class CommandBuilder {
         return this;
     }
     
-    public CommandBuilder command(Command command) {
-        command.getAliases().forEach(alias -> this.command.getSubcommands().put(alias, command));
-        this.command.getSubcommands().put(command.getName(), command);
-        return this;
-    }
-    
-    public CommandBuilder extension(String name, Extension extension) {
-        command.getExtensions().put(name, extension);
-        return this;
-    }
-    
     
     public CommandBuilder executor(CommandExecutor executor) {
         command.setExecutor(executor);
         return this;
     }
     
-    public CommandBuilder completer(TabCompleter completer) {
+    public CommandBuilder tabCompleter(TabCompleter completer) {
         command.setTabCompleter(completer);
+        return this;
+    }
+    
+    
+    public CommandBuilder subcommand(Command subcommand) {
+        subcommand.getAliases().forEach(alias -> command.getSubcommands().put(alias, subcommand));
+        command.getSubcommands().put(subcommand.getName(), subcommand);
+        return this;
+    }
+    
+    public CommandBuilder extension(String name, Extension extension) {
+        command.getExtensions().put(name, extension);
         return this;
     }
     

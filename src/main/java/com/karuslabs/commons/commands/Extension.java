@@ -24,19 +24,20 @@ import org.bukkit.command.CommandSender;
 
 
 public interface Extension {
-        
-    public static final Extension NONE = (sender, command) -> {};
     
-    
-    public static final Extension ALIASSES = (sender, command) -> sender.sendMessage(ChatColor.GOLD + command.getAliases().toString());
+    public static final Extension ALIASSES = (sender, command) -> sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.RED + command.getAliases().toString());
        
-    public static final Extension DESCRIPTION = (sender, command) -> sender.sendMessage(ChatColor.GOLD + command.getDescription() + "\n" + command.getUsage());
-    
+    public static final Extension DESCRIPTION = (sender, command) -> sender.sendMessage(
+        ChatColor.GOLD  + "Description: " + ChatColor.RED + command.getDescription() + ChatColor.GOLD  +"\nUsage: " + ChatColor.RED + command.getUsage()
+    );
+            
+    public static final Extension NONE = (sender, command) -> {};
     
     public static final Extension HELP = (sender, command) -> {
         List<String> names = command.getSubcommands().values().stream()
-                .filter(cmd -> sender.hasPermission(cmd.getPermission()))
-                .map(Command::getName).collect(Collectors.toList());
+                                    .filter(cmd -> sender.hasPermission(cmd.getPermission()))
+                                    .map(Command::getName)
+                                    .collect(Collectors.toList());
         
         sender.sendMessage(ChatColor.GOLD + "==== Help for: " + command.getName() + " ====");
         sender.sendMessage(ChatColor.GOLD + "Description: " + ChatColor.RED + command.getDescription());

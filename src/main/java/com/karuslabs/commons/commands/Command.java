@@ -37,8 +37,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         this(name, plugin, executor, completer, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, 
-                    List<String> aliases, Map<String, Extension> extensions, Map<String, Command> subcommands) {
+    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, List<String> aliases, Map<String, Extension> extensions, Map<String, Command> subcommands) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = executor;
@@ -50,8 +49,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        executor.execute(sender, this, commandLabel, args);
+    public boolean execute(CommandSender sender, String label, String[] args) {
+        executor.execute(sender, this, label, args);
         return true;
     }
     

@@ -18,7 +18,6 @@ package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.commands.events.RegistrationEvent;
 import com.karuslabs.commons.commands.yml.Parser;
-import com.karuslabs.mockkit.stub.StubServer;
 
 import java.util.*;
 
@@ -27,8 +26,6 @@ import org.bukkit.plugin.*;
 
 import org.junit.Test;
 
-import static com.google.common.collect.Sets.newHashSet;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -52,17 +49,6 @@ public class CommandManagerTest {
     
     
     @Test
-    public void commandManager() {
-        Plugin plugin = when(mock(Plugin.class).getServer()).thenReturn(StubServer.INSTANCE).getMock();
-        CommandManager manager = new CommandManager(plugin);
-        
-        Set<String> names = newHashSet("aliases", "description", "subcommands", "help");
-        
-        assertEquals(names, manager.getParser().getExtensions().keySet());
-    }
-    
-    
-    @Test
     public void load() {
         doReturn(Collections.EMPTY_LIST).when(manager).load("commands.yml");
         
@@ -81,7 +67,7 @@ public class CommandManagerTest {
         
         verify(parser).parse(any(ConfigurationSection.class));
         verify(map).registerAll(any(String.class), any(List.class));
-        verify(pluginManager).callEvent(any(RegistrationEvent.class));
+        verify(pluginManager).callEvent(argThat((RegistrationEvent event) -> event.getCommands().isEmpty()));
     }
     
     

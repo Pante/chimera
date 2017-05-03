@@ -16,6 +16,7 @@
  */
 package com.karuslabs.commons.commands.yml;
 
+import com.karuslabs.commons.collections.Maps;
 import com.karuslabs.commons.commands.*;
 
 import java.util.*;
@@ -32,6 +33,13 @@ public class Parser {
     private Map<String, Extension> extensions;
     
     
+    public Parser(Plugin plugin) {
+        this(
+            plugin, 
+            Maps.builder("aliases", Extension.ALIASSES).put("description", Extension.DESCRIPTION).put("help", Extension.HELP).build()
+        );
+    }
+    
     public Parser(Plugin plugin, Map<String, Extension> extensions) {
         this.plugin = plugin;
         this.extensions = extensions;
@@ -45,9 +53,9 @@ public class Parser {
     protected Command parseCommand(ConfigurationSection config) {
         CommandBuilder builder = parseCommandInformation(config);
         
-        ConfigurationSection commandsSection = config.getConfigurationSection("nested-commands");
+        ConfigurationSection commandsSection = config.getConfigurationSection("subcommands");
         if (commandsSection != null) {
-            parse(commandsSection).forEach(builder::command);
+            parse(commandsSection).forEach(builder::subcommand);
         }
         
         ConfigurationSection extensionsSection = config.getConfigurationSection("extensions");

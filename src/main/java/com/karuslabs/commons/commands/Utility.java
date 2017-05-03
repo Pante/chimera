@@ -47,7 +47,7 @@ public class Utility {
     }
     
     public static boolean isPermittedPlayer(CommandSender sender, Command command) {
-        return sender instanceof Player && command.testPermissionSilent(sender);
+        return sender instanceof Player && sender.hasPermission(command.getPermission());
     }
     
 }

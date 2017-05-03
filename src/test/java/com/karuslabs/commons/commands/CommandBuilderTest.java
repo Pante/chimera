@@ -55,8 +55,8 @@ public class CommandBuilderTest {
                             .usage("usage")
                             .label("label")
                             .executor(executor)
-                            .completer(completer)
-                            .command(subcommand)
+                            .tabCompleter(completer)
+                            .subcommand(subcommand)
                             .extension("ext", extension)
                             .build();
         

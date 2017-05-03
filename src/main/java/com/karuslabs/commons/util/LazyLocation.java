@@ -19,7 +19,7 @@ public class LazyLocation extends Location {
 
     
     public LazyLocation(String name, double x, double y, double z) {
-        this(name, new Location(null, x, y, z, 0, 0));
+        this(name, x, y, z, 0, 0);
     }
     
     public LazyLocation(String name, double x, double y, double z, float yaw, float pitch) {

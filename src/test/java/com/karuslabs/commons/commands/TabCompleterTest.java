@@ -23,11 +23,12 @@ import junitparams.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static java.util.Collections.*;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -37,49 +38,58 @@ public class TabCompleterTest {
     private static final String[] EMPTY = new String[0];
     
     private TabCompleter completer;
-    private TabCompleter playerNames;
     private Command command;
     private Command subcommand;
+    private CommandSender sender;
     
     
     public TabCompleterTest() {
         completer = spy(new StubCompleter());
-        playerNames = TabCompleter.PLAYER_NAMES;
+
+        subcommand = when(mock(Command.class).tabComplete(any(), any(), any())).thenReturn(singletonList("subcommand tabComplete")).getMock();
+        when(subcommand.getName()).thenReturn("subcommand");
+        when(subcommand.getPermission()).thenReturn("");
         
         command = new Command("", mock(Plugin.class), null, null);
-        subcommand = mock(Command.class);
         
-        command.getSubcommands().put("subcommand", subcommand);
+        sender = when(mock(CommandSender.class).hasPermission(anyString())).thenReturn(true).getMock();
     }
     
     
+    @Before
+    public void setup() {
+        command.getSubcommands().clear();
+    }
+
+    
     @Test
     @Parameters
-    public void tabComplete(String[] arguments, int subcommandTimes, int playerTimes, List<String> expected) {
-//        List<String> returned = completer.tabComplete(null, command, null, arguments);
-//        
-//        verify(subcommand, times(subcommandTimes)).tabComplete(any(), any(), any());
-//        verify(completer, times(playerTimes)).onTabComplete(null, command, null, arguments);
-//        
-//        assertEquals(expected, returned);
+    public void tabComplete(boolean empty, String[] args, List<String> expected) {
+        if (!empty) {
+            command.getSubcommands().put(subcommand.getName(), subcommand);
+        }
+        
+        List<String> returned = completer.tabComplete(sender, command, null, args);
+        
+        assertThat(returned, equalTo(expected));
     }
     
     protected Object[] parametersForTabComplete() {
         return new Object[] {
-            new Object[] {EMPTY, 0, 1, EMPTY_LIST},
-            new Object[] {new String[] {"subcommand"}, 0, 0, singletonList("subcommand")},
-            new Object[] {new String[] {"invalid"}, 0, 0, EMPTY_LIST},
-            new Object[] {new String[] {"subcommand", "blah"}, 1, 0, EMPTY_LIST},
-            new Object[] {new String[] {"invalid", "blah"}, 0, 1, EMPTY_LIST}
+            new Object[]{false, new String[]{"sub"}, singletonList("subcommand")},
+            new Object[]{true, new String[]{"sub"}, singletonList("Pante")},
+            new Object[]{false, new String[]{"subcommand", "argument"}, singletonList("subcommand tabComplete")},
+            new Object[]{true, new String[]{"argument", "argument"}, singletonList("Pante")}
         };
     }
     
     
+    // Workaround until Mockito supports spying lambda expressions
     private static class StubCompleter implements TabCompleter {
 
         @Override
         public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-            return EMPTY_LIST;
+            return singletonList("Pante");
         }
         
     }

@@ -39,7 +39,7 @@ public class UtilityTest {
     
     
     public UtilityTest() {
-        command = mock(Command.class);
+        command = when(mock(Command.class).getPermission()).thenReturn("").getMock();
         sender = mock(CommandSender.class);
     }
     
@@ -69,8 +69,8 @@ public class UtilityTest {
     
     @Test
     @Parameters
-    public void isPermittedPlayer(CommandSender sender, boolean permission, boolean expected) {
-        when(command.testPermissionSilent(any(CommandSender.class))).thenReturn(permission);
+    public void isPermittedPlayer(CommandSender sender, boolean has, boolean expected) {
+        when(sender.hasPermission(anyString())).thenReturn(has);
         
         assertEquals(expected, Utility.isPermittedPlayer(sender, command));
     }

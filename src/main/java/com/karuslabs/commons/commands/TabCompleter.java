@@ -35,7 +35,6 @@ public interface TabCompleter {
         }
         
         String argument = args[args.length - 1];
-        sender.sendMessage("Argument: " + argument);
         Stream<? extends Player> stream = sender.getServer().getOnlinePlayers().stream();
         
         if (sender instanceof Player) {
@@ -43,17 +42,18 @@ public interface TabCompleter {
             stream = stream.filter(p -> player.canSee(p));
         }
         
-        return stream.filter(p -> { sender.sendMessage(p.getName()); return StringUtils.startsWithIgnoreCase(p.getName(), argument); }).map(Player::getName).collect(Collectors.toList());
+        return stream.filter(p -> StringUtils.startsWithIgnoreCase(p.getName(), argument)).map(Player::getName).collect(Collectors.toList());
     };
     
-       
+    
     public default List<String> tabComplete(CommandSender sender, Command command, String alias, String[] args) {
         String argument;
         Map<String, Command> commands = command.getSubcommands();
         
         if (args.length == 1 && !command.getSubcommands().isEmpty()) {
+            argument = args[0];
             return command.getSubcommands().values().stream()
-                    .filter(cmd -> sender.hasPermission(cmd.getPermission()) && cmd.getName().startsWith(args[0]))
+                    .filter(cmd -> sender.hasPermission(cmd.getPermission()) && cmd.getName().startsWith(argument))
                     .map(Command::getName)
                     .collect(Collectors.toList());
             

@@ -5,7 +5,7 @@ command-name:
   permission-message: message
   usage: usage
   
-  nested-commands:
+  subcommands:
     subcommand-name:
       description: subdescription
       aliases: [subcmd]

@@ -36,7 +36,6 @@ public interface CommandExecutor {
         Map<String, Extension> extensions = command.getExtensions();
         
         boolean hasArguments = args.length >= 1;
-        
         if (hasArguments && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, label, trim(args));
 
@@ -47,14 +46,14 @@ public interface CommandExecutor {
             onExecute(sender, command, label, args);
 
         } else {
-            onInvalid(sender, command, label, args);
+            onNoPermission(sender, command, label, args);
         }
     }
     
     public void onExecute(CommandSender sender, Command command, String label, String[] args);
     
     
-    public default void onInvalid(CommandSender sender, Command command, String label, String[] args) {
+    public default void onNoPermission(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage(ChatColor.RED + command.getPermissionMessage());
     }
     
