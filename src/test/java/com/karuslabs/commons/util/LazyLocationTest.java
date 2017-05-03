@@ -47,16 +47,4 @@ public class LazyLocationTest {
         verify(lazy.location).setWorld(any(World.class));
     }
     
-    
-    @Test
-    @Parameters({"true, 1", "false, 0"})
-    public void getWorld(boolean isNull, int times) {
-        if (isNull) {
-            World world = mock(World.class);
-            when(lazy.location.getWorld()).thenReturn(world);
-        }
-        
-        verify(lazy.location, times(times)).setWorld(any(World.class));
-    }
-    
 }
