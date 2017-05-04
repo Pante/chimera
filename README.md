@@ -1,9 +1,8 @@
 <p align = "center">
   <img src = "http://i.imgur.com/hlLPWau.jpg"/>
 </p>
-<a href = "https://travis-ci.org/Pante/Karus-Commons">
-  <img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/>
-</a>
+<a href = "https://travis-ci.org/Pante/Karus-Commons"><img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/></a><a href="https://codecov.io/gh/Pante/Karus-Commons"><img src="https://codecov.io/gh/Pante/Karus-Commons/branch/master/graph/badge.svg" alt="Codecov" /></a>
+
 
 ***
 _Java 8 artifact:_
@@ -17,7 +16,7 @@ _Java 8 artifact:_
       <dependency>
           <groupId>com.karusmc</groupId>
           <artifactId>commons</artifactId>
-          <version>1.0.3</version>
+          <version>2.0.0-SNAPSHOT</version>
       </dependency>
   </dependencies>
 ```
