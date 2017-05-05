@@ -16,7 +16,26 @@
  */
 package com.karuslabs.commons.menu;
 
+import java.util.*;
 
-public interface Button {
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.InventoryHolder;
+
+
+public interface Region extends InventoryHolder {
+    
+    public boolean within(int slot);
+    
+    
+    public void click(InventoryClickEvent event);
+    
+    public void drag(InventoryDragEvent event);
+    
+    
+    public Button[][] getButtons();
+    
+    public default Set<Region> getChildRegions() {
+        return Collections.EMPTY_SET;
+    }
     
 }

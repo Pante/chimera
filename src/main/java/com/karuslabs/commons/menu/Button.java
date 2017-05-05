@@ -16,7 +16,16 @@
  */
 package com.karuslabs.commons.menu;
 
+import org.bukkit.event.inventory.*;
 
-public interface Region {
+
+@FunctionalInterface
+public interface Button {
+    
+    public void click(Region region, InventoryClickEvent event);
+    
+    public default void drag(Region region, InventoryDragEvent event) {
+        event.setCancelled(true);
+    }
     
 }
