@@ -18,13 +18,11 @@ package com.karuslabs.commons.menu;
 
 import java.util.*;
 
-import org.bukkit.inventory.Inventory;
 
-
-public class BoundedRegion extends Region {
+public class BoxRegion extends Region {
     
-    public BoundedRegion(Inventory inventory, Set<Region> regions, Map<Integer, Button> buttons) {
-        super(inventory, regions, buttons);
+    public BoxRegion(Set<Region> regions, Map<Integer, Button> buttons) {
+        super(regions, buttons);
     }
     
 }

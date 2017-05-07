@@ -19,47 +19,37 @@ package com.karuslabs.commons.menu;
 import java.util.*;
 
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
 
 
-public class Region {
+public class Menu extends Region implements InventoryHolder {
     
-    protected Set<Region> regions;
-    protected Map<Integer, Button> buttons;
+    private Inventory inventory;
     
     
-    public Region(Set<Region> regions, Map<Integer, Button> buttons) {
-        this.regions = regions;
-        this.buttons = buttons;
+    public Menu(Set<Region> regions, Map<Integer, Button> buttons) {
+        super(regions, buttons);
     }
     
     
+    @Override
     public boolean contains(int slot) {
-        return buttons.containsKey(slot);
+        return 0 <= slot && slot < inventory.getSize();
     }
+    
+    
+    public void click(InventoryClickEvent event) {
+        click(this, event);
+    }
+    
+    public void drag(InventoryDragEvent event) {
+        drag(this, event);
+    }
+    
 
-    public void click(Menu menu, InventoryClickEvent event) {
-        Button button = buttons.get(event.getRawSlot());
-        if (button != null) {
-            button.click(menu, event);
-        }
-    }
-
-    public void drag(Menu menu, InventoryDragEvent event) {
-        event.getRawSlots().forEach(slot -> {
-            Button button = buttons.get(slot);
-            if (button != null) {
-                button.drag(menu, event);
-            }
-        });
-    }
-    
-    
-    public Set<Region> getNestedRegions() {
-        return regions;
-    }
-    
-    public Map<Integer, Button> getButtons() {
-        return buttons;
+    @Override
+    public Inventory getInventory() {
+        return inventory;
     }
     
 }

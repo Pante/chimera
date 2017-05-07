@@ -22,9 +22,9 @@ import org.bukkit.event.inventory.*;
 @FunctionalInterface
 public interface Button {
     
-    public void click(Region region, InventoryClickEvent event);
+    public void click(Menu menu, InventoryClickEvent event);
     
-    public default void drag(Region region, InventoryDragEvent event) {
+    public default void drag(Menu menu, InventoryDragEvent event) {
         event.setCancelled(true);
     }
     
