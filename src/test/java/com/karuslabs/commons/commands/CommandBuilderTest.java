@@ -45,7 +45,7 @@ public class CommandBuilderTest {
     public void build() {
         CommandExecutor executor = mock(CommandExecutor.class);
         TabCompleter completer = mock(TabCompleter.class);
-        Extension extension = mock(Extension.class);
+        Option option = mock(Option.class);
         
         Command command = builder.name("command")
                             .description("description")
@@ -57,7 +57,7 @@ public class CommandBuilderTest {
                             .executor(executor)
                             .tabCompleter(completer)
                             .subcommand(subcommand)
-                            .extension("ext", extension)
+                            .option("opt", option)
                             .build();
         
         assertEquals("command", command.getName());
@@ -71,7 +71,7 @@ public class CommandBuilderTest {
         assertEquals(executor, command.getExecutor());
         assertEquals(completer, command.getTabCompleter());
         
-        assertThat(command.getExtensions(), equalTo(singletonMap("ext", extension)));
+        assertThat(command.getOptions(), equalTo(singletonMap("opt", option)));
         assertThat(command.getSubcommands(), equalTo(ImmutableMap.of("subcommand", subcommand, "subcmd", subcommand)));
     }
     

@@ -37,7 +37,7 @@ public class CommandExecutorTest {
     private CommandSender sender;
     private Command command;
     private Command subcommand;
-    private Extension extension;
+    private Option option;
     
     
     public CommandExecutorTest() {
@@ -48,10 +48,10 @@ public class CommandExecutorTest {
         command.setPermission("");
         
         subcommand = mock(Command.class);
-        extension = mock(Extension.class);
+        option = mock(Option.class);
         
         command.subcommands.put("subcommand", subcommand);
-        command.getExtensions().put("extension", extension);
+        command.getOptions().put("option", option);
     }
     
     
@@ -73,7 +73,7 @@ public class CommandExecutorTest {
         executor.execute(sender, command, null, args);
 
         verify(subcommand, times(commandTimes)).execute(any(), any(), any());
-        verify(extension, times(extensionTimes)).execute(sender, command);
+        verify(option, times(extensionTimes)).execute(sender, command);
         verify(executor, times(executeTimes)).onExecute(any(), any(), any(), any());
         verify(executor, times(permissionTimes)).onNoPermission(sender, command, null, args);
     }
@@ -82,7 +82,7 @@ public class CommandExecutorTest {
         return new Object[] {
             new Object[] {true, new String[] {"subcommand"}, 1, 0, 0, 0},
             new Object[] {false, new String[] {"subcommand"}, 1, 0, 0, 0},
-            new Object[] {true, new String[] {"extension"}, 0, 1, 0, 0},
+            new Object[] {true, new String[] {"option"}, 0, 1, 0, 0},
             new Object[] {true, EMPTY, 0, 0, 1, 0},
             new Object[] {true, new String[] {"argument"}, 0, 0, 1, 0},
             new Object[] {false, EMPTY, 0, 0, 0, 1}

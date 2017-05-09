@@ -35,8 +35,6 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnitParamsRunner.class)
 public class TabCompleterTest {
     
-    private static final String[] EMPTY = new String[0];
-    
     private TabCompleter completer;
     private Command command;
     private Command subcommand;

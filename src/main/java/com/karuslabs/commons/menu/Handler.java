@@ -16,13 +16,27 @@
  */
 package com.karuslabs.commons.menu;
 
-import java.util.Map;
+import org.bukkit.event.inventory.*;
 
 
-public class BoxRegion extends Region {
+public interface Handler {
     
-    public BoxRegion(Map<Integer, Button> buttons, String permission, String message) {
-        super(buttons, permission, message);
+    public static final Handler DEFAULT = (menu, event) -> menu.getRegions().forEach(region -> region.click(menu, event));
+    
+    
+    public void click(Menu menu, InventoryClickEvent event);
+    
+    public default void drag(Menu menu, InventoryDragEvent event) {
+        menu.getRegions().forEach(region -> region.drag(menu, event));
+    }
+    
+    
+    public default void open(Menu menu, InventoryOpenEvent event) {
+        
+    }
+    
+    public default void close(Menu menu, InventoryCloseEvent event) {
+        
     }
     
 }

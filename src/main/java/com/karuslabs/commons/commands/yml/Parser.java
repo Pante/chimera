@@ -18,6 +18,7 @@ package com.karuslabs.commons.commands.yml;
 
 import com.karuslabs.commons.collections.Maps;
 import com.karuslabs.commons.commands.*;
+import com.karuslabs.commons.util.Configurations;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,19 +31,19 @@ import org.bukkit.plugin.Plugin;
 public class Parser {
     
     private Plugin plugin;
-    private Map<String, Extension> extensions;
+    private Map<String, Option> options;
     
     
     public Parser(Plugin plugin) {
         this(
             plugin, 
-            Maps.builder("aliases", Extension.ALIASSES).put("description", Extension.DESCRIPTION).put("help", Extension.HELP).build()
+            Maps.builder("aliases", Option.ALIASSES).put("description", Option.DESCRIPTION).put("help", Option.HELP).build()
         );
     }
     
-    public Parser(Plugin plugin, Map<String, Extension> extensions) {
+    public Parser(Plugin plugin, Map<String, Option> options) {
         this.plugin = plugin;
-        this.extensions = extensions;
+        this.options = options;
     }
     
     
@@ -53,17 +54,10 @@ public class Parser {
     protected Command parseCommand(ConfigurationSection config) {
         CommandBuilder builder = parseCommandInformation(config);
         
-        ConfigurationSection commandsSection = config.getConfigurationSection("subcommands");
-        if (commandsSection != null) {
-            parse(commandsSection).forEach(builder::subcommand);
-        }
+        parse(Configurations.getOrBlank(config.getConfigurationSection("subcommands"))).forEach(builder::subcommand);
         
-        ConfigurationSection extensionsSection = config.getConfigurationSection("extensions");
-        if (extensionsSection != null) {
-            extensionsSection.getKeys(false).forEach(
-                name -> builder.extension(name, extensions.getOrDefault(extensionsSection.getString(name).toLowerCase(), Extension.NONE))
-            );
-        }
+        ConfigurationSection optionsSection = Configurations.getOrBlank(config.getConfigurationSection("options"));
+        optionsSection.getKeys(false).forEach(name -> builder.option(name, options.getOrDefault(optionsSection.getString(name).toLowerCase(), Option.NONE)));
         
         return builder.build();
     }
@@ -78,8 +72,8 @@ public class Parser {
     }
 
     
-    public Map<String, Extension> getExtensions() {
-        return extensions;
+    public Map<String, Option> getOptions() {
+        return options;
     }
     
 }

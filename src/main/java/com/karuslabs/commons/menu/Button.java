@@ -22,6 +22,17 @@ import org.bukkit.event.inventory.*;
 @FunctionalInterface
 public interface Button {
     
+    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    
+    public static final Button NONE = new Button() {
+        @Override
+        public void click(Menu menu, InventoryClickEvent event) {}
+        
+        @Override
+        public void drag(Menu menu, InventoryDragEvent event) {}
+    };
+    
+    
     public void click(Menu menu, InventoryClickEvent event);
     
     public default void drag(Menu menu, InventoryDragEvent event) {

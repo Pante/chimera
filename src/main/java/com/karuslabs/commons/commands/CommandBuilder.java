@@ -84,8 +84,8 @@ public class CommandBuilder {
         return this;
     }
     
-    public CommandBuilder extension(String name, Extension extension) {
-        command.getExtensions().put(name, extension);
+    public CommandBuilder option(String name, Option option) {
+        command.getOptions().put(name, option);
         return this;
     }
     

@@ -23,43 +23,70 @@ import org.bukkit.event.inventory.*;
 
 public class Region {
     
-    protected Set<Region> regions;
     protected Map<Integer, Button> buttons;
+    protected String permission;
+    protected String message;
     
     
-    public Region(Set<Region> regions, Map<Integer, Button> buttons) {
-        this.regions = regions;
+    public Region(Map<Integer, Button> buttons, String permission, String message) {  
         this.buttons = buttons;
+        this.permission = permission;
+        this.message = message;
     }
     
     
     public boolean contains(int slot) {
         return buttons.containsKey(slot);
     }
-
+    
     public void click(Menu menu, InventoryClickEvent event) {
-        Button button = buttons.get(event.getRawSlot());
-        if (button != null) {
-            button.click(menu, event);
+        if (event.getWhoClicked().hasPermission(permission)) {
+            buttons.getOrDefault(event.getRawSlot(), Button.NONE).click(menu, event);
+            
+        } else {
+            onInvalidPermission(menu, event);
         }
     }
-
+    
+    protected void onInvalidPermission(Menu menu, InventoryClickEvent event) {
+        event.setCancelled(true);
+    }
+    
+    
     public void drag(Menu menu, InventoryDragEvent event) {
-        event.getRawSlots().forEach(slot -> {
-            Button button = buttons.get(slot);
-            if (button != null) {
-                button.drag(menu, event);
-            }
-        });
+        if (event.getWhoClicked().hasPermission(permission)) {
+            event.getRawSlots().forEach(slot -> buttons.getOrDefault(slot, Button.NONE).drag(menu, event));
+            
+        } else {
+            onInvalidPermission(menu, event);
+        } 
     }
     
-    
-    public Set<Region> getNestedRegions() {
-        return regions;
+    protected void onInvalidPermission(Menu menu, InventoryDragEvent event) {
+        event.setCancelled(true);
     }
+    
     
     public Map<Integer, Button> getButtons() {
         return buttons;
+    }
+
+    
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    
+    public String getPermissionMessage() {
+        return message;
+    }
+
+    public void setPermissionMessage(String message) {
+        this.message = message;
     }
     
 }

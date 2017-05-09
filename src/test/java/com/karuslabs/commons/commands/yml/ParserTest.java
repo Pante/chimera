@@ -69,7 +69,7 @@ public class ParserTest {
         assertEquals("command.permission", command.getPermission());
         assertEquals("message", command.getPermissionMessage());
         assertThat(command.getSubcommands().keySet(), equalTo(Sets.newHashSet("subcommand-name", "subcmd")));
-        assertTrue(command.getExtensions().containsKey("name"));
+        assertTrue(command.getOptions().containsKey("name"));
         assertEquals("usage", command.getUsage());
     }
     
@@ -84,7 +84,7 @@ public class ParserTest {
         assertEquals("subcommand.permission", command.getPermission());
         assertEquals("submessage", command.getPermissionMessage());
         assertTrue(command.getSubcommands().isEmpty());
-        assertTrue(command.getExtensions().isEmpty());
+        assertTrue(command.getOptions().isEmpty());
         assertEquals("subusage", command.getUsage());
     }
     

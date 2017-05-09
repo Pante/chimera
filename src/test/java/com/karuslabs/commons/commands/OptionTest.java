@@ -25,14 +25,14 @@ import static java.util.Collections.singletonList;;
 import static org.mockito.Mockito.*;
 
 
-public class ExtensionTest {
+public class OptionTest {
     
     private CommandSender sender;
     private Command command;
     private Command subcommand;
     
     
-    public ExtensionTest() {
+    public OptionTest() {
         sender = when(mock(CommandSender.class).hasPermission(anyString())).thenReturn(true).getMock();
         subcommand = new Command("subcommand", null, null, null);
         command = new CommandBuilder(null).name("command").aliases(singletonList("cmd")).description("desc").usage("usage").subcommand(subcommand).build();
@@ -41,7 +41,7 @@ public class ExtensionTest {
     
     @Test
     public void aliases() {
-        Extension.ALIASSES.execute(sender, command);
+        Option.ALIASSES.execute(sender, command);
         
         verify(sender).sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.RED + command.getAliases().toString());
     }
@@ -49,7 +49,7 @@ public class ExtensionTest {
     
     @Test
     public void description() {
-        Extension.DESCRIPTION.execute(sender, command);
+        Option.DESCRIPTION.execute(sender, command);
         
         verify(sender).sendMessage(ChatColor.GOLD  + "Description: " + ChatColor.RED + command.getDescription() + ChatColor.GOLD  +"\nUsage: " + ChatColor.RED + command.getUsage());
     }
@@ -57,7 +57,7 @@ public class ExtensionTest {
     
     @Test
     public void help() {
-        Extension.HELP.execute(sender, command);
+        Option.HELP.execute(sender, command);
         
         verify(sender, times(4)).sendMessage(anyString());
     }

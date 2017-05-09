@@ -23,17 +23,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 
-public interface Extension {
+public interface Option {
     
-    public static final Extension ALIASSES = (sender, command) -> sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.RED + command.getAliases().toString());
+    public static final Option ALIASSES = (sender, command) -> sender.sendMessage(ChatColor.GOLD + "Aliases: " + ChatColor.RED + command.getAliases().toString());
        
-    public static final Extension DESCRIPTION = (sender, command) -> sender.sendMessage(
+    public static final Option DESCRIPTION = (sender, command) -> sender.sendMessage(
         ChatColor.GOLD  + "Description: " + ChatColor.RED + command.getDescription() + ChatColor.GOLD  +"\nUsage: " + ChatColor.RED + command.getUsage()
     );
             
-    public static final Extension NONE = (sender, command) -> {};
+    public static final Option NONE = (sender, command) -> {};
     
-    public static final Extension HELP = (sender, command) -> {
+    public static final Option HELP = (sender, command) -> {
         List<String> names = command.getSubcommands().values().stream()
                                     .filter(cmd -> sender.hasPermission(cmd.getPermission()))
                                     .map(Command::getName)

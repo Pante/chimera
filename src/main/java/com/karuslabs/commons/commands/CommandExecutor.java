@@ -33,14 +33,14 @@ public interface CommandExecutor {
     
     public default void execute(CommandSender sender, Command command, String label, String[] args) {
         Map<String, Command> commands = command.getSubcommands();
-        Map<String, Extension> extensions = command.getExtensions();
+        Map<String, Option> options = command.getOptions();
         
         boolean hasArguments = args.length >= 1;
         if (hasArguments && commands.containsKey(args[0])) {
             commands.get(args[0]).execute(sender, label, trim(args));
 
-        } else if (hasArguments && extensions.containsKey(args[0])) {
-            extensions.get(args[0]).execute(sender, command);
+        } else if (hasArguments && options.containsKey(args[0])) {
+            options.get(args[0]).execute(sender, command);
 
         } else if (sender.hasPermission(command.getPermission())) {
             onExecute(sender, command, label, args);

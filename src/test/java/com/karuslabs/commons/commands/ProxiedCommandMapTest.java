@@ -36,12 +36,12 @@ import static org.mockito.Mockito.*;
 
 @RunWith(JUnitParamsRunner.class)
 public class ProxiedCommandMapTest {
+        
+    @ClassRule
+    public static MockkitRule mockkit = MockkitRule.INSTANCE;
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
-    
-    @Rule
-    public MockkitRule mockkit = MockkitRule.INSTANCE;
     
     
     private ProxiedCommandMap proxy;

@@ -14,15 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.util;
 
-import java.util.Map;
+import org.bukkit.configuration.*;
 
 
-public class BoxRegion extends Region {
+public class Configurations {
     
-    public BoxRegion(Map<Integer, Button> buttons, String permission, String message) {
-        super(buttons, permission, message);
+    private static final ConfigurationSection BLANK = new MemoryConfiguration();
+    
+    
+    public static ConfigurationSection getOrBlank(ConfigurationSection config) {
+        return config != null ? config : BLANK;
     }
     
 }
