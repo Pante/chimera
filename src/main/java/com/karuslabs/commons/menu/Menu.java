@@ -24,42 +24,33 @@ import org.bukkit.inventory.Inventory;
 
 public class Menu {
     
-    protected Handler handler;
     protected Inventory inventory;
     protected Set<Region> regions;
     
     
+    public Menu(Inventory inventory, Set<Region> regions) {
+        this.inventory = inventory;
+        this.regions = regions;
+    }
+    
+    
     public void click(InventoryClickEvent event) {
-        handler.click(this, event);
+        regions.forEach(region -> region.click(this, event));
     }
     
     public void drag(InventoryDragEvent event) {
-        handler.drag(this, event);
+        regions.forEach(region -> region.drag(this, event));
     }
     
     
-    public void open(InventoryOpenEvent event) {
-        handler.open(this, event);
-    }
+    public void open(InventoryOpenEvent event) {}
     
-    public void close(InventoryCloseEvent event) {
-        handler.close(this, event);
-    }
-    
-    
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
+    public void close(InventoryCloseEvent event) {}
 
     
     public Inventory getInventory() {
         return inventory;
     }
-
     
     public Set<Region> getRegions() {
         return regions;

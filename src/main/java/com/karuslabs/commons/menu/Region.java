@@ -28,6 +28,10 @@ public class Region {
     protected String message;
     
     
+    public Region() {
+        this(new HashMap<>(), "", "");
+    }
+    
     public Region(Map<Integer, Button> buttons, String permission, String message) {  
         this.buttons = buttons;
         this.permission = permission;
@@ -38,6 +42,7 @@ public class Region {
     public boolean contains(int slot) {
         return buttons.containsKey(slot);
     }
+    
     
     public void click(Menu menu, InventoryClickEvent event) {
         if (event.getWhoClicked().hasPermission(permission)) {
@@ -87,6 +92,47 @@ public class Region {
 
     public void setPermissionMessage(String message) {
         this.message = message;
+    }
+    
+    
+    public static RegionBuilder builder() {
+        return new RegionBuilder(new Region());
+    }
+    
+    
+    public static class RegionBuilder<GenericRegion extends Region> {
+        
+        protected GenericRegion region;
+        
+        
+        protected RegionBuilder(GenericRegion region) {
+            this.region = region;
+        }
+        
+        
+        public RegionBuilder button(int slot, Button button) {
+            region.buttons.put(slot, button);
+            return this;
+        }
+        
+        public RegionBuilder buttons(Button button, int... slots) {
+            for (int slot : slots) {
+                region.buttons.put(slot, button);
+            }
+            return this;
+        }
+        
+        
+        public RegionBuilder permission(String permission) {
+            region.permission = permission;
+            return this;
+        }
+        
+        public RegionBuilder message(String message) {
+            region.message = message;
+            return this;
+        }
+        
     }
     
 }
