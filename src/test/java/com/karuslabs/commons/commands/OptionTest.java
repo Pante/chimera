@@ -34,7 +34,7 @@ public class OptionTest {
     
     public OptionTest() {
         sender = when(mock(CommandSender.class).hasPermission(anyString())).thenReturn(true).getMock();
-        subcommand = new Command("subcommand", null, null, null);
+        subcommand = new Command("subcommand", null, null);
         command = new CommandBuilder(null).name("command").aliases(singletonList("cmd")).description("desc").usage("usage").subcommand(subcommand).build();
     }
     

@@ -16,6 +16,7 @@
  */
 package com.karuslabs.commons.menu;
 
+import com.karuslabs.commons.menu.buttons.Button;
 import java.util.*;
 
 import org.bukkit.event.inventory.*;
@@ -24,8 +25,8 @@ import org.bukkit.event.inventory.*;
 public class BoxRegion extends Region {
     
     private int length;
-    protected int min;
-    protected int max;
+    private int min;
+    private int max;
     
     private double x1, y1;
     private double x2, y2;
@@ -35,17 +36,17 @@ public class BoxRegion extends Region {
         this(new HashMap<>(), "", "", 9, 0, 0);
     }
     
-    public BoxRegion(Map<Integer, Button> buttons, String permission, String message, int length, int min, int max) {
+    public BoxRegion(Map<Integer, Button> buttons, String permission, String message, int inventoryLength, int min, int max) {
         super(buttons, permission, message);
-        this.length = length;
+        this.length = inventoryLength;
         this.min = min;
         this.max = max;
         
-        x1 = min % length; 
-        y1 = (double) min / length;
+        x1 = min % inventoryLength; 
+        y1 = (double) min / inventoryLength;
         
-        x2 = max % length;
-        y2 = (double) max / length;
+        x2 = max % inventoryLength;
+        y2 = (double) max / inventoryLength;
     }
     
     
@@ -91,9 +92,22 @@ public class BoxRegion extends Region {
     public int getMin() {
         return min;
     }
-
+    
+    public void setMin(int min) {
+        this.min = min;
+        x1 = min % length; 
+        y1 = (double) min / length;
+    }
+    
+    
     public int getMax() {
         return max;
+    }
+    
+    public void setMax(int max) {
+        this.max = max;
+        x2 = max % length;
+        y2 = (double) max / length;
     }
     
     
@@ -106,6 +120,26 @@ public class BoxRegion extends Region {
         
         public BoxRegionBuilder(BoxRegion region) {
             super(region);
+        }
+        
+        
+        public BoxRegionBuilder inventoryLength(int length) {
+            region.length = length;
+            region.setMin(region.min);
+            region.setMax(region.max);
+            
+            return this;
+        }
+        
+        
+        public BoxRegionBuilder min(int min) {
+            region.setMin(min);
+            return this;
+        }
+        
+        public BoxRegionBuilder max(int max) {
+            region.setMax(max);
+            return this;
         }
         
     }

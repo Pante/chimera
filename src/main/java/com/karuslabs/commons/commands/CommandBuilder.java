@@ -27,7 +27,7 @@ public class CommandBuilder {
     
     
     public CommandBuilder(Plugin plugin) {
-        command = new Command("", plugin, CommandExecutor.DEFAULT, TabCompleter.PLAYER_NAMES);
+        command = new Command("", plugin, CommandExecutor.DEFAULT);
     }
     
     
@@ -69,11 +69,6 @@ public class CommandBuilder {
     
     public CommandBuilder executor(CommandExecutor executor) {
         command.setExecutor(executor);
-        return this;
-    }
-    
-    public CommandBuilder tabCompleter(TabCompleter completer) {
-        command.setTabCompleter(completer);
         return this;
     }
     

@@ -30,15 +30,13 @@ public class CommandTest {
     private Command command;
     private Plugin plugin;
     private CommandExecutor executor;
-    private TabCompleter completer;
     
     
     public CommandTest() {
         plugin = mock(Plugin.class);
         executor = mock(CommandExecutor.class);
-        completer = mock(TabCompleter.class);
         
-        command = new Command("", plugin, executor, completer);
+        command = new Command("", plugin, executor);
     }
     
     
@@ -53,7 +51,7 @@ public class CommandTest {
     public void tabComplete() {
         command.tabComplete(null, null, null);
         
-        verify(completer).tabComplete(null, command, null, null);
+        verify(executor).tabComplete(null, command, null, null);
     }
     
 }

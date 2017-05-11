@@ -16,10 +16,11 @@
  */
 package com.karuslabs.commons.commands;
 
-import java.util.Map;
+import java.util.*;
+import java.util.stream.*;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.ChatColor;
+import org.bukkit.ChatColor;;
 
 import static com.karuslabs.commons.commands.Utility.trim;
 
@@ -52,9 +53,37 @@ public interface CommandExecutor {
     
     public void onExecute(CommandSender sender, Command command, String label, String[] args);
     
-    
     public default void onNoPermission(CommandSender sender, Command command, String label, String[] args) {
         sender.sendMessage(ChatColor.RED + command.getPermissionMessage());
+    }
+    
+    
+    public default List<String> tabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        String argument;
+        Map<String, Command> commands = command.getSubcommands();
+        
+        if (args.length == 1 && !command.getSubcommands().isEmpty()) {
+            argument = args[0];
+            return command.getSubcommands().values().stream()
+                    .filter(cmd -> sender.hasPermission(cmd.getPermission()) && cmd.getName().startsWith(argument))
+                    .map(Command::getName)
+                    .collect(Collectors.toList());
+            
+        } else if (args.length >= 2 && commands.containsKey(argument = args[0])) {
+            return commands.get(argument).tabComplete(sender, argument, trim(args));
+            
+        } else {
+            return onTabComplete(sender, command, alias, args);
+        }
+    }
+    
+    public default List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 0) {
+            return Collections.EMPTY_LIST;
+            
+        } else {
+            return Argument.PLAYER_NAMES.complete(sender, command, args[args.length - 1]);
+        }
     }
     
 }

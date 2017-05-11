@@ -20,23 +20,15 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.commons.lang.StringUtils;
-    
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.karuslabs.commons.commands.Utility.trim;
 
-
-public interface TabCompleter {
+public interface Argument {
     
-    public static final TabCompleter PLAYER_NAMES = (sender, command, alias, args) -> {
-        if (args.length == 0) {
-            return Collections.EMPTY_LIST;
-        }
-        
-        String argument = args[args.length - 1];
+    public static final Argument PLAYER_NAMES = (sender, command, argument) -> {
         Stream<? extends Player> stream = sender.getServer().getOnlinePlayers().stream();
-        
         if (sender instanceof Player) {
             Player player = (Player) sender;
             stream = stream.filter(p -> player.canSee(p));
@@ -45,26 +37,9 @@ public interface TabCompleter {
         return stream.filter(p -> StringUtils.startsWithIgnoreCase(p.getName(), argument)).map(Player::getName).collect(Collectors.toList());
     };
     
+    public static final Argument NONE = (sender, command, argument) -> Collections.EMPTY_LIST;
     
-    public default List<String> tabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        String argument;
-        Map<String, Command> commands = command.getSubcommands();
-        
-        if (args.length == 1 && !command.getSubcommands().isEmpty()) {
-            argument = args[0];
-            return command.getSubcommands().values().stream()
-                    .filter(cmd -> sender.hasPermission(cmd.getPermission()) && cmd.getName().startsWith(argument))
-                    .map(Command::getName)
-                    .collect(Collectors.toList());
-            
-        } else if (args.length >= 2 && commands.containsKey(argument = args[0])) {
-            return commands.get(argument).tabComplete(sender, argument, trim(args));
-            
-        } else {
-            return onTabComplete(sender, command, alias, args);
-        }
-    }
     
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args);
+    public List<String> complete(CommandSender sender, Command command, String argument);
     
 }

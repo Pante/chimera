@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.commands;
 
+import java.util.*;
+
 import junitparams.*;
 
 import org.bukkit.ChatColor;
@@ -44,7 +46,7 @@ public class CommandExecutorTest {
         executor = spy(new StubExecutor());
         sender = mock(CommandSender.class);
         
-        command = new Command("", mock(Plugin.class), null, null);
+        command = new Command("", mock(Plugin.class), null);
         command.setPermission("");
         
         subcommand = mock(Command.class);
@@ -106,6 +108,12 @@ public class CommandExecutorTest {
         @Override
         public void onExecute(CommandSender sender, Command command, String label, String[] args) {
             
+        }
+        
+        
+        @Override
+        public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+            return Collections.EMPTY_LIST;
         }
         
     }

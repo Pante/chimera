@@ -27,21 +27,19 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     protected Plugin plugin;
     protected CommandExecutor executor;
-    private TabCompleter completer;
     
     protected Map<String, Option> options;
     protected Map<String, Command> subcommands;
     
     
-    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer) {
-        this(name, plugin, executor, completer, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>());
+    public Command(String name, Plugin plugin, CommandExecutor executor) {
+        this(name, plugin, executor, "", "", new ArrayList<>(), new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, Plugin plugin, CommandExecutor executor, TabCompleter completer, String description, String usage, List<String> aliases, Map<String, Option> options, Map<String, Command> subcommands) {
+    public Command(String name, Plugin plugin, CommandExecutor executor, String description, String usage, List<String> aliases, Map<String, Option> options, Map<String, Command> subcommands) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = executor;
-        this.completer = completer;
         
         this.options = options;
         this.subcommands = subcommands;
@@ -56,7 +54,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return completer.tabComplete(sender, this, alias, args);
+        return executor.tabComplete(sender, this, alias, args);
     }
 
     
@@ -71,14 +69,6 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
-    }
-
-    public TabCompleter getTabCompleter() {
-        return completer;
-    }
-
-    public void setTabCompleter(TabCompleter completer) {
-        this.completer = completer;
     }
 
     

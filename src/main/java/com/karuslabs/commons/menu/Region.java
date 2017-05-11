@@ -16,6 +16,7 @@
  */
 package com.karuslabs.commons.menu;
 
+import com.karuslabs.commons.menu.buttons.Button;
 import java.util.*;
 
 import org.bukkit.event.inventory.*;
