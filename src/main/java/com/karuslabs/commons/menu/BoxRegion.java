@@ -22,7 +22,7 @@ import java.util.*;
 import org.bukkit.event.inventory.*;
 
 
-public class BoxRegion extends Region {
+public class BoxRegion extends Region<Button> {
     
     private int length;
     private int min;

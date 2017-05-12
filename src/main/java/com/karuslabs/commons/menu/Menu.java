@@ -16,44 +16,7 @@
  */
 package com.karuslabs.commons.menu;
 
-import java.util.Set;
-
-import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.Inventory;
-
 
 public class Menu {
-    
-    protected Inventory inventory;
-    protected Set<Region> regions;
-    
-    
-    public Menu(Inventory inventory, Set<Region> regions) {
-        this.inventory = inventory;
-        this.regions = regions;
-    }
-    
-    
-    public void click(InventoryClickEvent event) {
-        regions.forEach(region -> region.click(this, event));
-    }
-    
-    public void drag(InventoryDragEvent event) {
-        regions.forEach(region -> region.drag(this, event));
-    }
-    
-    
-    public void open(InventoryOpenEvent event) {}
-    
-    public void close(InventoryCloseEvent event) {}
-
-    
-    public Inventory getInventory() {
-        return inventory;
-    }
-    
-    public Set<Region> getRegions() {
-        return regions;
-    }
     
 }

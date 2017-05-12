@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.commands;
 
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -25,11 +25,7 @@ public abstract class ArgumentExecutor implements CommandExecutor {
     
     protected Argument[] arguments;
     protected Argument defaultArgument;
-    
-    
-    public ArgumentExecutor(int size) {
-        this(size, Argument.PLAYER_NAMES);
-    }
+
     
     public ArgumentExecutor(int size, Argument defaultArgument) {
         this(new Argument[size], defaultArgument);
@@ -43,14 +39,17 @@ public abstract class ArgumentExecutor implements CommandExecutor {
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        int last = args.length - 1;
-        Argument argument = arguments[last];
+        int lastIndex = args.length - 1;    
+        Argument argument;
         
-        if (argument != null) {
-            return argument.complete(sender, command, args[last]);
+        if (lastIndex < 0) {
+            return Collections.EMPTY_LIST;
+                    
+        } else if (lastIndex < arguments.length && (argument = arguments[lastIndex]) != null) {
+            return argument.complete(sender, command, args[lastIndex]);
             
         } else {
-            return defaultArgument.complete(sender, command, args[last]);
+            return defaultArgument.complete(sender, command, args[lastIndex]);
         }
     }
 
@@ -58,6 +57,11 @@ public abstract class ArgumentExecutor implements CommandExecutor {
     public Argument[] getArguments() {
         return arguments;
     }
+    
+    public void setArguments(Argument[] arguments) {
+        this.arguments = arguments;
+    }
+    
 
     public Argument getDefaultArgument() {
         return defaultArgument;

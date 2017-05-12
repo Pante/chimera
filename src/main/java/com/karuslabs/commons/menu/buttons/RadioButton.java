@@ -16,29 +16,12 @@
  */
 package com.karuslabs.commons.menu.buttons;
 
-import com.karuslabs.commons.menu.Menu;
-
-import org.bukkit.event.inventory.*;
+import com.karuslabs.commons.menu.*;
 
 
-@FunctionalInterface
-public interface Button {
+public abstract class RadioButton implements Button {
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    protected RadioRegion region;
     
-    public static final Button NONE = new Button() {
-        @Override
-        public void click(Menu menu, InventoryClickEvent event) {}
-        
-        @Override
-        public void drag(Menu menu, InventoryDragEvent event) {}
-    };
-    
-    
-    public void click(Menu menu, InventoryClickEvent event);
-    
-    public default void drag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
-    }
     
 }

@@ -22,9 +22,9 @@ import java.util.*;
 import org.bukkit.event.inventory.*;
 
 
-public class Region {
+public class Region<GenericButton extends Button> {
     
-    protected Map<Integer, Button> buttons;
+    protected Map<Integer, GenericButton> buttons;
     protected String permission;
     protected String message;
     
@@ -33,7 +33,7 @@ public class Region {
         this(new HashMap<>(), "", "");
     }
     
-    public Region(Map<Integer, Button> buttons, String permission, String message) {  
+    public Region(Map<Integer, GenericButton> buttons, String permission, String message) {  
         this.buttons = buttons;
         this.permission = permission;
         this.message = message;
@@ -47,7 +47,10 @@ public class Region {
     
     public void click(Menu menu, InventoryClickEvent event) {
         if (event.getWhoClicked().hasPermission(permission)) {
-            buttons.getOrDefault(event.getRawSlot(), Button.NONE).click(menu, event);
+            Button button = buttons.get(event.getRawSlot());
+            if (button != null)  {
+                button.click(menu, event);
+            }
             
         } else {
             onInvalidPermission(menu, event);
@@ -61,7 +64,12 @@ public class Region {
     
     public void drag(Menu menu, InventoryDragEvent event) {
         if (event.getWhoClicked().hasPermission(permission)) {
-            event.getRawSlots().forEach(slot -> buttons.getOrDefault(slot, Button.NONE).drag(menu, event));
+            event.getRawSlots().forEach(slot -> {
+                Button button = buttons.get(slot);
+                if (button != null) {
+                    button.drag(menu, event);
+                }
+            });
             
         } else {
             onInvalidPermission(menu, event);
@@ -73,7 +81,7 @@ public class Region {
     }
     
     
-    public Map<Integer, Button> getButtons() {
+    public Map<Integer, GenericButton> getButtons() {
         return buttons;
     }
 

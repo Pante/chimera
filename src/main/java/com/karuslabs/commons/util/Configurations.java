@@ -21,7 +21,7 @@ import org.bukkit.configuration.*;
 
 public class Configurations {
     
-    private static final ConfigurationSection BLANK = new MemoryConfiguration();
+    public static final ConfigurationSection BLANK = new MemoryConfiguration();
     
     
     public static ConfigurationSection getOrBlank(ConfigurationSection config) {

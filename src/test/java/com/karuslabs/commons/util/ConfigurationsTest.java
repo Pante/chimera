@@ -14,31 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.buttons;
+package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.menu.Menu;
+import org.bukkit.configuration.ConfigurationSection;
 
-import org.bukkit.event.inventory.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Button {
+public class ConfigurationsTest {
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    @Test
+    public void getOrBlank() {
+        ConfigurationSection config = mock(ConfigurationSection.class);
+        assertTrue(config == Configurations.getOrBlank(config));
+    }
     
-    public static final Button NONE = new Button() {
-        @Override
-        public void click(Menu menu, InventoryClickEvent event) {}
-        
-        @Override
-        public void drag(Menu menu, InventoryDragEvent event) {}
-    };
-    
-    
-    public void click(Menu menu, InventoryClickEvent event);
-    
-    public default void drag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
+    @Test
+    public void getOrBlank_ReturnsBlank() {
+        assertTrue(Configurations.BLANK == Configurations.getOrBlank(null));
     }
     
 }

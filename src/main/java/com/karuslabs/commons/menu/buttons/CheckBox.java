@@ -18,27 +18,44 @@ package com.karuslabs.commons.menu.buttons;
 
 import com.karuslabs.commons.menu.Menu;
 
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 
-@FunctionalInterface
-public interface Button {
+public class CheckBox implements Button {
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
-    
-    public static final Button NONE = new Button() {
-        @Override
-        public void click(Menu menu, InventoryClickEvent event) {}
-        
-        @Override
-        public void drag(Menu menu, InventoryDragEvent event) {}
-    };
+    protected boolean checked;
     
     
-    public void click(Menu menu, InventoryClickEvent event);
+    public CheckBox(boolean state) {
+        this.checked = state;
+    }
     
-    public default void drag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
+    
+    @Override
+    public void click(Menu menu, InventoryClickEvent event) {
+        if (!checked) {
+            checked = check(menu, event);
+            
+        } else {
+            checked = uncheck(menu, event);
+        }
+    }
+    
+    protected boolean check(Menu menu, InventoryClickEvent event) {
+        return true;
+    }
+    
+    protected boolean uncheck(Menu menu, InventoryClickEvent event) {
+        return false;
+    }
+    
+    
+    public boolean isChecked() {
+        return checked;
+    }
+    
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
     
 }

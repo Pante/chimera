@@ -14,31 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.buttons;
+package com.karuslabs.commons.menu;
 
-import com.karuslabs.commons.menu.Menu;
-
-import org.bukkit.event.inventory.*;
+import com.karuslabs.commons.menu.buttons.RadioButton;
 
 
-@FunctionalInterface
-public interface Button {
+public class RadioRegion extends Region<RadioButton> {
     
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    private int checkedSlot;
     
-    public static final Button NONE = new Button() {
-        @Override
-        public void click(Menu menu, InventoryClickEvent event) {}
+    
+    public void uncheckAll() {
         
-        @Override
-        public void drag(Menu menu, InventoryDragEvent event) {}
-    };
-    
-    
-    public void click(Menu menu, InventoryClickEvent event);
-    
-    public default void drag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
     }
     
 }

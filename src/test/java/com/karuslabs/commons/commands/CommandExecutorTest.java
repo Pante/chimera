@@ -27,6 +27,9 @@ import org.bukkit.plugin.Plugin;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
+import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -44,16 +47,25 @@ public class CommandExecutorTest {
     
     public CommandExecutorTest() {
         executor = spy(new StubExecutor());
-        sender = mock(CommandSender.class);
+        sender = when(mock(CommandSender.class).hasPermission(anyString())).thenReturn(true).getMock();
         
         command = new Command("", mock(Plugin.class), null);
         command.setPermission("");
         
-        subcommand = mock(Command.class);
+        subcommand = when(mock(Command.class).tabComplete(any(), any(), any())).thenReturn(singletonList("subcommand tabComplete")).getMock();
+        when(subcommand.getName()).thenReturn("subcommand");
+        when(subcommand.getPermission()).thenReturn("");
+        
         option = mock(Option.class);
         
         command.subcommands.put("subcommand", subcommand);
         command.getOptions().put("option", option);
+    }
+    
+    
+    @Before
+    public void setup() {
+        command.subcommands.clear();
     }
     
     
@@ -68,6 +80,8 @@ public class CommandExecutorTest {
     @Test
     @Parameters
     public void execute(boolean permission, String[] args, int commandTimes, int extensionTimes, int executeTimes, int permissionTimes) {
+        command.subcommands.put(subcommand.getName(), subcommand);
+        
         when(sender.hasPermission(any(String.class))).thenReturn(permission);
 
         doNothing().when(executor).onNoPermission(sender, command, null, args);
@@ -102,6 +116,28 @@ public class CommandExecutorTest {
     }
     
     
+    @Test
+    @Parameters
+    public void tabComplete(boolean empty, String[] args, List<String> expected) {
+        if (!empty) {
+            command.getSubcommands().put(subcommand.getName(), subcommand);
+        }
+
+        List<String> returned = executor.tabComplete(sender, command, null, args);
+
+        assertThat(returned, equalTo(expected));
+    }
+
+    protected Object[] parametersForTabComplete() {
+        return new Object[]{
+            new Object[]{false, new String[]{"sub"}, singletonList("subcommand")},
+            new Object[]{true, new String[]{"sub"}, singletonList("Pante")},
+            new Object[]{false, new String[]{"subcommand", "argument"}, singletonList("subcommand tabComplete")},
+            new Object[]{true, new String[]{"argument", "argument"}, singletonList("Pante")}
+        };
+    }
+    
+    
     // Workaround until Mockito supports spying lambda expressions
     private static class StubExecutor implements CommandExecutor {
 
@@ -112,8 +148,8 @@ public class CommandExecutorTest {
         
         
         @Override
-        public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-            return Collections.EMPTY_LIST;
+        public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+            return singletonList("Pante");
         }
         
     }
