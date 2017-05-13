@@ -14,12 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.items;
 
-/**
- *
- * @author Karus Labs
- */
-public class Menu {
+import org.bukkit.FireworkEffect;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+
+
+public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
+    
+    protected FireworkEffectBuilder(ItemStack item, FireworkEffectMeta meta) {
+        super(item, meta);
+    }
+    
+    
+    public FireworkEffectBuilder effect(FireworkEffect effect) {
+        meta.setEffect(effect);
+        return this;
+    }
+    
+    
+    @Override
+    protected FireworkEffectBuilder getThis() {
+        return this;
+    }
     
 }

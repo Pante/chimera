@@ -14,18 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.items;
 
-import com.karuslabs.commons.menu.buttons.RadioButton;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.*;
 
 
-public class RadioRegion extends Region<RadioButton> {
+public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     
-    private int checkedSlot;
+    public ItemBuilder() {
+        super(new ItemStack(Material.AIR));
+    }
+
     
-    
-    public void uncheckAll() {
+    public ItemBuilder material(Material material) {
+        item.setType(material);
+        //TODO: Fix meta
+        return this;
+    }
+
         
+    public BannerBuilder asBanner() {
+        return new BannerBuilder(item, (BannerMeta) meta);
     }
     
+    public PotionBuilder asPotion() {
+        return new PotionBuilder(item, (PotionMeta) meta);
+    }
+
+    
+    @Override
+    protected ItemBuilder getThis() {
+        return this;
+    }
+
 }

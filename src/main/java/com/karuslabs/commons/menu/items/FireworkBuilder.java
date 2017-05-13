@@ -14,14 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.buttons;
+package com.karuslabs.commons.menu.items;
 
-import com.karuslabs.commons.menu.*;
+import org.bukkit.FireworkEffect;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 
-public abstract class RadioButton implements Button {
+public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
+
+    protected FireworkBuilder(ItemStack item, FireworkMeta meta) {
+        super(item, meta);
+    }
     
-    protected RadioRegion region;
     
+    public FireworkBuilder effects(FireworkEffect... effects) {
+        meta.addEffects(effects);
+        return this;
+    }
+    
+    public FireworkBuilder power(int power) {
+        meta.setPower(power);
+        return this;
+    }
+
+    
+    @Override
+    protected FireworkBuilder getThis() {
+        return this;
+    }
     
 }

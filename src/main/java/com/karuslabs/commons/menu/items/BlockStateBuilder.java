@@ -14,12 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.items;
 
-/**
- *
- * @author Karus Labs
- */
-public class Menu {
+import org.bukkit.block.BlockState;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
+
+
+public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
+    
+    protected BlockStateBuilder(ItemStack item, BlockStateMeta meta) {
+        super(item, meta);
+    }
+    
+    
+    public BlockStateBuilder state(BlockState state) {
+        meta.setBlockState(state);
+        return this;
+    }
+    
+
+    @Override
+    protected BlockStateBuilder getThis() {
+        return this;
+    }
     
 }
