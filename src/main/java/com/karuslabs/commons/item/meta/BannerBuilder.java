@@ -14,28 +14,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
 
-import org.bukkit.FireworkEffect;
+import com.karuslabs.commons.item.Builder;
+
+import java.util.*;
+
+import org.bukkit.DyeColor;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.BannerMeta;
 
 
-public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
+public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
-    protected FireworkEffectBuilder(ItemStack item, FireworkEffectMeta meta) {
-        super(item, meta);
+    public BannerBuilder(ItemStack item) {
+        super(item);
     }
     
+    public BannerBuilder(Builder builder) {
+        super(builder);
+    }    
     
-    public FireworkEffectBuilder effect(FireworkEffect effect) {
-        meta.setEffect(effect);
+    
+    public BannerBuilder color(DyeColor color) {
+        meta.setBaseColor(color);
         return this;
     }
     
+    public BannerBuilder pattern(Pattern pattern) {
+        meta.addPattern(pattern);
+        return this;
+    }
     
+    public BannerBuilder patterns(List<Pattern> patterns) {
+        meta.getPatterns().addAll(patterns);
+        return this;
+    }
+    
+
     @Override
-    protected FireworkEffectBuilder getThis() {
+    protected BannerBuilder getThis() {
         return this;
     }
     

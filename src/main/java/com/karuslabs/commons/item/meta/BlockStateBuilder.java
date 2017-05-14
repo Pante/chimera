@@ -14,46 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
 
-import java.util.List;
+import com.karuslabs.commons.item.Builder;
 
-import org.bukkit.DyeColor;
-import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 
-public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
+public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
     
-    protected BannerBuilder(ItemStack item, BannerMeta meta) {
-        super(item, meta);
+    public BlockStateBuilder(ItemStack item) {
+        super(item);
+    }
+    
+    public BlockStateBuilder(Builder builder) {
+        super(builder);
     }
     
     
-    public BannerBuilder color(DyeColor color) {
-        meta.setBaseColor(color);
+    public BlockStateBuilder state(BlockState state) {
+        meta.setBlockState(state);
         return this;
     }
     
-    public BannerBuilder pattern(Pattern pattern) {
-        meta.addPattern(pattern);
-        return this;
-    }
     
-    public BannerBuilder pattern(int index, Pattern pattern) {
-        meta.setPattern(index, pattern);
-        return this;
-    }
-    
-    public BannerBuilder patterns(List<Pattern> patterns) {
-        meta.setPatterns(patterns);
-        return this;
-    }
-    
-
     @Override
-    protected BannerBuilder getThis() {
+    protected BlockStateBuilder getThis() {
         return this;
     }
     

@@ -14,28 +14,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
 
-import org.bukkit.block.BlockState;
+import com.karuslabs.commons.item.Builder;
+import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.MapMeta;
 
 
-public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
+public class MapBuilder extends Builder<MapBuilder, MapMeta> {
+
+    public MapBuilder(ItemStack item) {
+        super(item);
+    }
     
-    protected BlockStateBuilder(ItemStack item, BlockStateMeta meta) {
-        super(item, meta);
+    public MapBuilder(Builder builder) {
+        super(builder);
     }
     
     
-    public BlockStateBuilder state(BlockState state) {
-        meta.setBlockState(state);
+    public MapBuilder color(Color color) {
+        meta.setColor(color);
         return this;
     }
     
+    public MapBuilder locationName(String name) {
+        meta.setLocationName(name);
+        return this;
+    }
+    
+    public MapBuilder scaling(boolean value) {
+        meta.setScaling(value);
+        return this;
+    }
 
+    
     @Override
-    protected BlockStateBuilder getThis() {
+    protected MapBuilder getThis() {
         return this;
     }
     

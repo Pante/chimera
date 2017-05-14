@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item;
 
 import java.util.*;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,17 +30,22 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     protected GenericMeta meta;
 
     
+    public Builder(Material material) {
+        this(new ItemStack(material));
+    }
+    
     public Builder(ItemStack item) {
         this(item, (GenericMeta) item.getItemMeta());
     }
     
-    public Builder(ItemStack item, GenericMeta meta) {
+    public Builder(Builder builder) {
+        this(builder.item, (GenericMeta) builder.meta);
+    }
+
+    protected Builder(ItemStack item, GenericMeta meta) {
         this.item = item;
         this.meta = meta;
     }
-
-    
-    protected abstract GenericBuilder getThis();
 
     
     public GenericBuilder amount(int amount) {
@@ -53,7 +59,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
 
     public GenericBuilder enchantment(Enchantment enchantment, int level) {
-        item.addEnchantment(enchantment, level);
+        item.addUnsafeEnchantment(enchantment, level);
         return getThis();
     }
 
@@ -66,21 +72,27 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
         meta.setDisplayName(name);
         return getThis();
     }
-
-    public GenericBuilder lore(List<String> lore) {
-        meta.setLore(lore);
-        return getThis();
-    }
+    
 
     public GenericBuilder lore(String lore) {
         if (!meta.hasLore()) {
             meta.setLore(new ArrayList<>());
         }
         meta.getLore().add(lore);
-
+        
+        return getThis();
+    }
+    
+    public GenericBuilder lore(List<String> lore) {
+        if (!meta.hasLore()) {
+            meta.setLore(new ArrayList<>());
+        }
+        meta.getLore().addAll(lore);
+        
         return getThis();
     }
 
+    
     public GenericBuilder flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
         return getThis();
@@ -91,5 +103,8 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
         item.setItemMeta(meta);
         return item;
     }
+    
+    
+    protected abstract GenericBuilder getThis();
     
 }

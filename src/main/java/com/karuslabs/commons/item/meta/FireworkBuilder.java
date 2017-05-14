@@ -14,7 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
+
+import com.karuslabs.commons.item.Builder;
+
+import java.util.List;
 
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
@@ -22,9 +26,13 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 
 public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
-
-    protected FireworkBuilder(ItemStack item, FireworkMeta meta) {
-        super(item, meta);
+    
+    public FireworkBuilder(ItemStack item) {
+        super(item);
+    }
+    
+    public FireworkBuilder(Builder builder) {
+        super(builder);
     }
     
     
@@ -33,11 +41,16 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
         return this;
     }
     
+    public FireworkBuilder effects(List<FireworkEffect> effects) {
+        meta.addEffects(effects);
+        return this;
+    }
+    
     public FireworkBuilder power(int power) {
         meta.setPower(power);
         return this;
     }
-
+    
     
     @Override
     protected FireworkBuilder getThis() {

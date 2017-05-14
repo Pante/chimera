@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
+
+import com.karuslabs.commons.item.Builder;
 
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
@@ -24,18 +26,22 @@ import org.bukkit.potion.*;
 
 public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
-    protected PotionBuilder(ItemStack item, PotionMeta meta) {
-        super(item, meta);
+    public PotionBuilder(ItemStack item) {
+        super(item);
     }
     
-    
-    public PotionBuilder effect(PotionEffect effect, boolean override) {
-        meta.addCustomEffect(effect, override);
-        return this;
+    public PotionBuilder(Builder builder) {
+        super(builder);
     }
+    
     
     public PotionBuilder color(Color color) {
         meta.setColor(color);
+        return this;
+    }
+    
+    public PotionBuilder effect(PotionEffect effect, boolean override) {
+        meta.addCustomEffect(effect, override);
         return this;
     }
     

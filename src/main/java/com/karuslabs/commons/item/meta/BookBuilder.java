@@ -14,28 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
 
-import org.bukkit.enchantments.Enchantment;
+import com.karuslabs.commons.item.Builder;
+
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.BookMeta;
 
 
-public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder, EnchantmentStorageMeta> {
+public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     
-    protected EnchantmentStorageBuilder(ItemStack item, EnchantmentStorageMeta meta) {
-        super(item, meta);
+    public BookBuilder(ItemStack item) {
+        super(item);
     }
-
     
-    public EnchantmentStorageBuilder stored(Enchantment enchantment, int level, boolean ignoreRestriction) {
-        meta.addEnchant(enchantment, level, ignoreRestriction);
+    public BookBuilder(Builder builder) {
+        super(builder);
+    }
+    
+    
+    public BookBuilder title(String title) {
+        meta.setTitle(title);
         return this;
     }
     
+    public BookBuilder author(String author) {
+        meta.setAuthor(author);
+        return this;
+    }
+    
+    public BookBuilder pages(String... pages) {
+        meta.addPage(pages);
+        return this;
+    }
+    
+    public BookBuilder generation(BookMeta.Generation generation) {
+        meta.setGeneration(generation);
+        return this;
+    }
+
     
     @Override
-    protected EnchantmentStorageBuilder getThis() {
+    protected BookBuilder getThis() {
         return this;
     }
     

@@ -14,39 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.items;
+package com.karuslabs.commons.item.meta;
 
-import org.bukkit.Material;
+import com.karuslabs.commons.item.Builder;
+
+import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 
 
-public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
+public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
     
-    public ItemBuilder() {
-        super(new ItemStack(Material.AIR));
+    public FireworkEffectBuilder(ItemStack item) {
+        super(item);
     }
-
     
-    public ItemBuilder material(Material material) {
-        item.setType(material);
-        //TODO: Fix meta
+    public FireworkEffectBuilder(Builder builder) {
+        super(builder);
+    }
+    
+    
+    public FireworkEffectBuilder effect(FireworkEffect effect) {
+        meta.setEffect(effect);
         return this;
-    }
-
-        
-    public BannerBuilder asBanner() {
-        return new BannerBuilder(item, (BannerMeta) meta);
-    }
-    
-    public PotionBuilder asPotion() {
-        return new PotionBuilder(item, (PotionMeta) meta);
     }
 
     
     @Override
-    protected ItemBuilder getThis() {
+    protected FireworkEffectBuilder getThis() {
         return this;
     }
-
+    
+    
 }
