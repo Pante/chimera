@@ -14,9 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.item.meta;
+
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+
+import org.junit.Test;
+
+import static org.mockito.Mockito.*;
 
 
-public class Menu {
+public class SkullBuilderTest {
+    
+    private SkullBuilder builder;
+    private SkullMeta meta;
+    
+    
+    public SkullBuilderTest() {
+        meta = mock(SkullMeta.class);
+        builder = new SkullBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+    }
+    
+    
+    @Test
+    public void build() {
+        builder.owner("name");
+        
+        verify(meta).setOwner("name");
+    }
     
 }

@@ -49,7 +49,7 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     public EnchantmentStorageBuilder asEnchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
-    
+  
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
@@ -57,7 +57,6 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     public FireworkBuilder asFirework() {
         return new FireworkBuilder(this);
     }
-    
     
     public LeatherArmorBuilder asLeatherArmor() {
         return new LeatherArmorBuilder(this);

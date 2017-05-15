@@ -14,9 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu;
+package com.karuslabs.commons.menu.buttons;
+
+import com.karuslabs.commons.menu.Menu;
+
+import org.bukkit.event.inventory.*;
 
 
-public class Menu {
+public interface Button {
+    
+    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
+    
+    public static final Button NONE = (menu, event) -> {};
+    
+    
+    public void click(Menu menu, InventoryClickEvent event);
+    
+    public default void drag(Menu menu, InventoryDragEvent event) {
+        event.setCancelled(true);
+    }
     
 }
