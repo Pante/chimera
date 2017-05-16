@@ -16,7 +16,52 @@
  */
 package com.karuslabs.commons.menu.buttons;
 
+import com.google.common.collect.*;
+
+import com.karuslabs.commons.menu.Menu;
+
+import java.util.*;
+
+import org.bukkit.event.inventory.InventoryClickEvent;
+
 
 public abstract class CylicButton implements Button {
+   
+    public static interface State {
+        
+        public boolean click(Menu menu, InventoryClickEvent event);
+        
+    }
+    
+    
+    private List<State> states;
+    private PeekingIterator<State> cycle;
+    
+        
+    public CylicButton() {
+        this(new ArrayList<>());
+    }
+    
+    public CylicButton(List<State> states) {
+        this.states = states;
+        cycle = Iterators.peekingIterator(Iterators.cycle(states));
+    }
+    
+    
+    @Override
+    public void click(Menu menu, InventoryClickEvent event) {
+        if (cycle.hasNext() && cycle.peek().click(menu, event)) {
+            cycle.next();
+        }
+    }
+    
+    
+    public List<State> getStates() {
+        return states;
+    }
+    
+    public State getCurrentState() {
+        return cycle.peek();
+    }
     
 }
