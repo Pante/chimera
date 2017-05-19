@@ -23,6 +23,6 @@ import java.util.Map;
 
 public class Region<GenericButton extends Button> {
     
-    Map<Integer, Button> buttons;
+    protected Map<Integer, Button> buttons;
     
 }
