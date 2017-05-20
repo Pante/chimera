@@ -21,55 +21,17 @@ import com.karuslabs.commons.menu.Menu;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 
-public abstract class RadioButton implements Button {
+public interface RadioButton extends Button {  
     
-    private boolean selected;
+    public boolean select(Menu menu, InventoryClickEvent event);
     
-    
-    public RadioButton() {
-        this(false);
+    public default void unselect(Menu menu, InventoryClickEvent event) {
+        
     }
-    
-    public RadioButton(boolean selected) {
-        this.selected = selected;
-    }
-    
     
     @Override
-    public void click(Menu menu, InventoryClickEvent event) {
-        if (!selected) {
-            onSelect(menu, event);
-            
-        } else {
-            onUnselect(menu, event);
-        }
-    }
-    
-    
-    public void select(Menu menu, InventoryClickEvent event) {
-        if (!selected) {
-            selected = onSelect(menu, event);
-        }
-    }
-    
-    protected boolean onSelect(Menu menu, InventoryClickEvent event) {
-        return true;
-    }
-    
-    
-    public void unselect(Menu menu, InventoryClickEvent event) {
-        if (selected) {
-            selected = onUnselect(menu, event);
-        }
-    }
-    
-    protected boolean onUnselect(Menu menu, InventoryClickEvent event) {
-        return false;
-    }
-    
-    
-    public boolean isSelected() {
-        return selected;
+    public default void click(Menu menu, InventoryClickEvent event) {
+        select(menu, event);
     }
     
 }

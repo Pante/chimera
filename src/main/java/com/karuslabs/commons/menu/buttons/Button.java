@@ -34,4 +34,7 @@ public interface Button {
         event.setCancelled(true);
     }
     
+    
+    public default void reset(Menu menu) {};
+    
 }

@@ -14,60 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.buttons;
-
-import com.google.common.collect.*;
+package com.karuslabs.commons.menu.regions;
 
 import com.karuslabs.commons.menu.Menu;
-
-import java.util.*;
+import com.karuslabs.commons.menu.buttons.RadioButton;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 
-public abstract class CylicButton implements Button {
-   
-    public static interface State {
-        
-        public boolean click(Menu menu, InventoryClickEvent event);
-        
-    }
+public class RadioRegion extends Region<RadioButton> {
     
-    
-    private List<State> states;
-    private PeekingIterator<State> cycle;
-    
-        
-    public CylicButton() {
-        this(new ArrayList<>());
-    }
-    
-    public CylicButton(List<State> states) {
-        this.states = states;
-        cycle = Iterators.peekingIterator(Iterators.cycle(states));
-    }
+    protected int selected;
+    protected int selectedByDefault;
     
     
     @Override
     public void click(Menu menu, InventoryClickEvent event) {
-        if (cycle.hasNext() && cycle.peek().click(menu, event)) {
-            cycle.next();
+        RadioButton button = buttons.get(event.getRawSlot());
+        if (button != null && event.getWhoClicked().hasPermission(permission) && event.getRawSlot() != selected) {
+            if (button.select(menu, event)) {
+                selected = event.getRawSlot();
+                buttons.forEach((slot, b) -> {
+                    if (selected != slot) {
+                        button.unselect(menu, event);
+                    }
+                });
+            }
         }
     }
     
     
     @Override
     public void reset(Menu menu) {
-        cycle = Iterators.peekingIterator(Iterators.cycle(states));
-    }
-    
-    
-    public List<State> getStates() {
-        return states;
-    }
-    
-    public State getCurrentState() {
-        return cycle.peek();
+        selected = selectedByDefault;
     }
     
 }

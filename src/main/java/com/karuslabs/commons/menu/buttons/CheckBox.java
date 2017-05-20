@@ -24,6 +24,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public abstract class CheckBox implements Button {
     
     private boolean checked;
+    private boolean checkedByDefault;
     
     
     public CheckBox() {
@@ -32,6 +33,7 @@ public abstract class CheckBox implements Button {
     
     public CheckBox(boolean checked) {
         this.checked = checked;
+        this.checkedByDefault = checked;
     }
     
     
@@ -45,17 +47,27 @@ public abstract class CheckBox implements Button {
         }
     }
     
-    public boolean check(Menu menu, InventoryClickEvent event) {
+    protected boolean check(Menu menu, InventoryClickEvent event) {
         return true;
     }
     
-    public boolean uncheck(Menu menu, InventoryClickEvent event) {
+    protected boolean uncheck(Menu menu, InventoryClickEvent event) {
         return false;
+    }
+    
+    
+    @Override
+    public void reset(Menu menu) {
+        checked = checkedByDefault;
     }
     
     
     public boolean isChecked() {
         return checked;
+    }
+    
+    public boolean isCheckedByDefault() {
+        return checkedByDefault;
     }
     
 }

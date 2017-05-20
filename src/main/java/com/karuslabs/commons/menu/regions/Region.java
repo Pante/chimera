@@ -16,13 +16,106 @@
  */
 package com.karuslabs.commons.menu.regions;
 
+import com.karuslabs.commons.menu.Menu;
 import com.karuslabs.commons.menu.buttons.Button;
 
-import java.util.Map;
+import java.util.*;
+
+import org.bukkit.event.inventory.*;
 
 
 public class Region<GenericButton extends Button> {
     
-    protected Map<Integer, Button> buttons;
+    protected Map<Integer, GenericButton> buttons;
+    protected String permission;
+    
+    
+    public Region() {
+        this(new HashMap<>(), "");
+    }
+    
+    public Region(Map<Integer, GenericButton> buttons, String permission) {
+        this.permission = permission;
+    }
+    
+    
+    public boolean contains(int slot) {
+        return buttons.containsKey(slot);
+    }
+    
+    
+    public void click(Menu menu, InventoryClickEvent event) {
+        GenericButton button = buttons.get(event.getRawSlot());
+        if (button != null && event.getWhoClicked().hasPermission(permission)) {
+            button.click(menu, event);
+        }
+    }
+    
+    public void drag(Menu menu, InventoryDragEvent event) {
+        event.setCancelled(true);
+    }
+    
+    
+    public void reset(Menu menu) {
+        
+    }
+    
+    
+    public Map<Integer, GenericButton> getButtons() {
+        return buttons;
+    }
+    
+    public String getPermission() {
+        return permission;
+    }
+    
+    
+    public static RegionBuilder builder() {
+        return new RegionBuilder(new Region());
+    }
+    
+    
+    public static class RegionBuilder<GenericRegion extends Region> extends Builder<RegionBuilder, GenericRegion, Button> {
+
+        public RegionBuilder(GenericRegion region) {
+            super(region);
+        }
+
+        @Override
+        protected RegionBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
+    
+    public static abstract class Builder<GenericBuilder extends Builder, GenericRegion extends Region, GenericButton extends Button> {
+
+        protected GenericRegion region;
+
+        
+        public Builder(GenericRegion region) {
+            this.region = region;
+        }
+
+        
+        public GenericBuilder permission(String permission) {
+            region.permission = permission;
+            return getThis();
+        }
+
+        public GenericBuilder button(int slot, Button button) {
+            region.getButtons().put(slot, slot);
+            return getThis();
+        }
+
+        
+        public GenericRegion build() {
+            return region;
+        }
+
+        protected abstract GenericBuilder getThis();
+
+    }
     
 }
