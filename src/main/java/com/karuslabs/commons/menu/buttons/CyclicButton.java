@@ -20,54 +20,53 @@ import com.google.common.collect.*;
 
 import com.karuslabs.commons.menu.Menu;
 
-import java.util.*;
+import java.util.List;
+import java.util.function.BiFunction;
 
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 
 
-public abstract class CylicButton implements Button {
-   
-    public static interface State {
-        
-        public boolean click(Menu menu, InventoryClickEvent event);
-        
-    }
+public class CyclicButton implements Button {
+    
+    private List<BiFunction<Menu, InventoryClickEvent, Boolean>> states;
+    private PeekingIterator<BiFunction<Menu, InventoryClickEvent, Boolean>> cycle;
+    private boolean reset;
     
     
-    private List<State> states;
-    private PeekingIterator<State> cycle;
-    
-        
-    public CylicButton() {
-        this(new ArrayList<>());
-    }
-    
-    public CylicButton(List<State> states) {
+    public CyclicButton(List<BiFunction<Menu, InventoryClickEvent, Boolean>> states, boolean reset) {
         this.states = states;
-        cycle = Iterators.peekingIterator(Iterators.cycle(states));
+        this.cycle = Iterators.peekingIterator(Iterators.cycle(states));
+        this.reset = reset;
     }
     
     
     @Override
     public void click(Menu menu, InventoryClickEvent event) {
-        if (cycle.hasNext() && cycle.peek().click(menu, event)) {
+        if (cycle.hasNext() && cycle.peek().apply(menu, event)) {
             cycle.next();
         }
     }
-    
+
     
     @Override
-    public void reset(Menu menu) {
+    public void close(Menu menu, int slot, InventoryCloseEvent event) {
+        if (reset) {
+            onClose(menu, slot, event);
+        }
+    }
+    
+    protected void onClose(Menu menu, int slot, InventoryCloseEvent event) {
         cycle = Iterators.peekingIterator(Iterators.cycle(states));
     }
     
     
-    public List<State> getStates() {
+    
+    public List<BiFunction<Menu, InventoryClickEvent, Boolean>> getStates() {
         return states;
     }
     
-    public State getCurrentState() {
-        return cycle.peek();
+    public boolean resetOnClose() {
+        return reset;
     }
     
 }

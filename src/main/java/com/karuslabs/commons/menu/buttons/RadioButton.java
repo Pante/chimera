@@ -21,17 +21,15 @@ import com.karuslabs.commons.menu.Menu;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 
-public interface RadioButton extends Button {  
-    
-    public boolean select(Menu menu, InventoryClickEvent event);
-    
-    public default void unselect(Menu menu, InventoryClickEvent event) {
-        
-    }
+public interface RadioButton extends Button {
     
     @Override
     public default void click(Menu menu, InventoryClickEvent event) {
-        select(menu, event);
+        event.setCancelled(true);
     }
+    
+    public boolean select(Menu menu, InventoryClickEvent event);
+    
+    public void unselect(Menu menu, InventoryClickEvent event);
     
 }

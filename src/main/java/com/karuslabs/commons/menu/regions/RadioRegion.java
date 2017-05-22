@@ -19,34 +19,56 @@ package com.karuslabs.commons.menu.regions;
 import com.karuslabs.commons.menu.Menu;
 import com.karuslabs.commons.menu.buttons.RadioButton;
 
-import org.bukkit.event.inventory.InventoryClickEvent;
+import java.util.*;
+
+import org.bukkit.event.inventory.*;
 
 
 public class RadioRegion extends Region<RadioButton> {
     
     protected int selected;
-    protected int selectedByDefault;
+    protected boolean reset;
+    
+    
+    public RadioRegion(int selected, boolean reset) {
+        this(new HashMap<>(), "", selected, reset);
+    }
+    
+    public RadioRegion(Map<Integer, RadioButton> buttons, String permission, int selected, boolean reset) {
+        super(buttons, permission);
+        this.selected = selected;
+        this.reset = reset;
+    }
     
     
     @Override
     public void click(Menu menu, InventoryClickEvent event) {
-        RadioButton button = buttons.get(event.getRawSlot());
-        if (button != null && event.getWhoClicked().hasPermission(permission) && event.getRawSlot() != selected) {
-            if (button.select(menu, event)) {
-                selected = event.getRawSlot();
-                buttons.forEach((slot, b) -> {
-                    if (selected != slot) {
-                        button.unselect(menu, event);
-                    }
-                });
+        int slot = event.getRawSlot();
+        RadioButton button = buttons.get(slot);
+        
+        if (event.getWhoClicked().hasPermission(permission) && slot != selected && button != null && button.select(menu, event)) {
+            RadioButton oldSelected = buttons.get(selected);
+            if (oldSelected != null) {
+                oldSelected.unselect(menu, event);
             }
+            
+            selected = slot;
         }
     }
     
     
     @Override
-    public void reset(Menu menu) {
-        selected = selectedByDefault;
+    public void close(Menu menu, InventoryCloseEvent event) {
+        if (reset) {
+            onClose(menu, event);
+        }
+    } 
+    
+    protected void onClose(Menu menu, InventoryCloseEvent event) {
+        RadioButton button = buttons.get(selected);
+        if (button != null) {
+            button.close(menu, selected, event);
+        }
     }
     
 }

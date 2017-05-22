@@ -18,32 +18,28 @@ package com.karuslabs.commons.menu.buttons;
 
 import com.karuslabs.commons.menu.Menu;
 
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 
 
 public abstract class CheckBox implements Button {
     
     private boolean checked;
-    private boolean checkedByDefault;
+    private boolean reset;
     
     
-    public CheckBox() {
-        this(false);
-    }
-    
-    public CheckBox(boolean checked) {
+    public CheckBox(boolean checked, boolean reset) {
         this.checked = checked;
-        this.checkedByDefault = checked;
+        this.reset = reset;
     }
     
     
     @Override
     public void click(Menu menu, InventoryClickEvent event) {
-        if (!checked) {
-            checked = check(menu, event);
+        if (checked) {
+            checked = uncheck(menu, event);
             
         } else {
-            checked = uncheck(menu, event);
+            checked = check(menu, event);
         }
     }
     
@@ -57,8 +53,14 @@ public abstract class CheckBox implements Button {
     
     
     @Override
-    public void reset(Menu menu) {
-        checked = checkedByDefault;
+    public void close(Menu menu, int slot, InventoryCloseEvent event) {
+        if (reset) {
+            checked = onClose(menu, slot, event);
+        }
+    }
+    
+    protected boolean onClose(Menu menu, int slot, InventoryCloseEvent event) {
+        return false;
     }
     
     
@@ -66,8 +68,8 @@ public abstract class CheckBox implements Button {
         return checked;
     }
     
-    public boolean isCheckedByDefault() {
-        return checkedByDefault;
+    public boolean resetOnClose() {
+        return reset;
     }
     
 }

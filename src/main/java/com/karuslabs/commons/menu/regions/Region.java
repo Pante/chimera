@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.menu.regions;
 
-import com.karuslabs.commons.menu.Menu;
+import com.karuslabs.commons.menu.*;
 import com.karuslabs.commons.menu.buttons.Button;
 
 import java.util.*;
@@ -30,11 +30,8 @@ public class Region<GenericButton extends Button> {
     protected String permission;
     
     
-    public Region() {
-        this(new HashMap<>(), "");
-    }
-    
     public Region(Map<Integer, GenericButton> buttons, String permission) {
+        this.buttons = buttons;
         this.permission = permission;
     }
     
@@ -45,19 +42,30 @@ public class Region<GenericButton extends Button> {
     
     
     public void click(Menu menu, InventoryClickEvent event) {
-        GenericButton button = buttons.get(event.getRawSlot());
-        if (button != null && event.getWhoClicked().hasPermission(permission)) {
+        Button button = buttons.get(event.getRawSlot());
+        if (event.getWhoClicked().hasPermission(permission) && button != null) {
             button.click(menu, event);
         }
     }
     
     public void drag(Menu menu, InventoryDragEvent event) {
-        event.setCancelled(true);
+        if (event.getWhoClicked().hasPermission(permission)) {
+            event.getRawSlots().forEach(slot -> {
+                Button button = buttons.get(slot);
+                if (button != null) {
+                    button.drag(menu, event);
+                }
+            });
+        }
     }
     
+    public void open(Menu menu, InventoryOpenEvent event) {
+        buttons.forEach((slot, button) -> button.open(menu, slot, event));
+    }
     
-    public void reset(Menu menu) {
-        
+
+    public void close(Menu menu, InventoryCloseEvent event) {
+        buttons.forEach((slot, button) -> button.close(menu, slot, event));
     }
     
     
@@ -69,53 +77,8 @@ public class Region<GenericButton extends Button> {
         return permission;
     }
     
-    
-    public static RegionBuilder builder() {
-        return new RegionBuilder(new Region());
-    }
-    
-    
-    public static class RegionBuilder<GenericRegion extends Region> extends Builder<RegionBuilder, GenericRegion, Button> {
-
-        public RegionBuilder(GenericRegion region) {
-            super(region);
-        }
-
-        @Override
-        protected RegionBuilder getThis() {
-            return this;
-        }
-        
-    }
-    
-    
-    public static abstract class Builder<GenericBuilder extends Builder, GenericRegion extends Region, GenericButton extends Button> {
-
-        protected GenericRegion region;
-
-        
-        public Builder(GenericRegion region) {
-            this.region = region;
-        }
-
-        
-        public GenericBuilder permission(String permission) {
-            region.permission = permission;
-            return getThis();
-        }
-
-        public GenericBuilder button(int slot, Button button) {
-            region.getButtons().put(slot, slot);
-            return getThis();
-        }
-
-        
-        public GenericRegion build() {
-            return region;
-        }
-
-        protected abstract GenericBuilder getThis();
-
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
     
 }

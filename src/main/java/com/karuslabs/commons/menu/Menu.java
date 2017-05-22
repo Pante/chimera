@@ -16,7 +16,59 @@
  */
 package com.karuslabs.commons.menu;
 
+import com.karuslabs.commons.menu.regions.Region;
 
-public class Menu {
+import java.util.*;
+
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
+
+
+public class Menu implements InventoryHolder {
+    
+    private Inventory inventory;
+    private List<Region> regions;
+    
+    
+    public Menu(Inventory inventory) {
+        this(inventory, new ArrayList<>());
+    }
+    
+    public Menu(Inventory inventory, List<Region> regions) {
+        this.inventory = inventory;
+        this.regions = regions;
+    }
+    
+    
+    public void click(InventoryClickEvent event) {
+        regions.forEach(region -> region.click(this, event));
+    }
+    
+    public void drag(InventoryDragEvent event) {
+        regions.forEach(region -> region.drag(this, event));
+    }
+    
+    
+    public void open(InventoryOpenEvent event) {
+        regions.forEach(region -> region.open(this, event));
+    }
+    
+    public void close(InventoryCloseEvent event) {
+        regions.forEach(region -> region.close(this, event));
+    }
+            
+    
+    public String getTitle() {
+        return inventory.getTitle();
+    }
+    
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+    
+    public List<Region> getRegions() {
+        return regions;
+    }
     
 }

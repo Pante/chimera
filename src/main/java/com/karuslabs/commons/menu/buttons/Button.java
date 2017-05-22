@@ -16,17 +16,13 @@
  */
 package com.karuslabs.commons.menu.buttons;
 
-import com.karuslabs.commons.menu.Menu;
+import com.karuslabs.commons.menu.*;
 
 import org.bukkit.event.inventory.*;
 
 
+@FunctionalInterface
 public interface Button {
-    
-    public static final Button CANCEL = (menu, event) -> event.setCancelled(true);
-    
-    public static final Button NONE = (menu, event) -> {};
-    
     
     public void click(Menu menu, InventoryClickEvent event);
     
@@ -34,7 +30,8 @@ public interface Button {
         event.setCancelled(true);
     }
     
+    public default void open(Menu menu, int slot, InventoryOpenEvent event) {}
     
-    public default void reset(Menu menu) {};
+    public default void close(Menu menu, int slot, InventoryCloseEvent event) {}
     
 }
