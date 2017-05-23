@@ -16,10 +16,11 @@
  */
 package com.karuslabs.commons.menu.regions;
 
+import com.karuslabs.commons.menu.regions.builders.Builder;
 import com.karuslabs.commons.menu.Menu;
 import com.karuslabs.commons.menu.buttons.Button;
 
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.event.inventory.*;
 
@@ -36,19 +37,23 @@ public class BoxRegion extends Region<Button> {
     private double x2, y2;
     
     
-    public BoxRegion(Map<Integer, Button> buttons, String permission, Button defaultButton, int inventoryWidth, int minSlot, int maxSlot) {
+    public BoxRegion(int inventoryWidth, int minSlot, int maxSlot) {
+        this(new HashMap<>(), "", Button.CANCEL, inventoryWidth, minSlot, maxSlot);
+    }
+    
+    public BoxRegion(Map<Integer, Button> buttons, String permission, Button defaultButton, int inventoryWidth, int min, int max) {
         super(buttons, permission);
         this.defaultButton = defaultButton;
         
         this.width = inventoryWidth;
-        this.min = minSlot;
-        this.max = maxSlot;
+        this.min = min;
+        this.max = max;
         
-        x1 = minSlot % inventoryWidth; 
-        y1 = (double) minSlot / inventoryWidth;
+        x1 = min % inventoryWidth; 
+        y1 = (double) min / inventoryWidth;
         
-        x2 = maxSlot % inventoryWidth;
-        y2 = (double) maxSlot / inventoryWidth;
+        x2 = max % inventoryWidth;
+        y2 = (double) max / inventoryWidth;
     }
     
     
@@ -66,13 +71,10 @@ public class BoxRegion extends Region<Button> {
     @Override
     public void click(Menu menu, InventoryClickEvent event) {
         int slot = event.getRawSlot();
-        Button button = buttons.get(slot);
-
         if (event.getWhoClicked().hasPermission(permission) && contains(slot)) {
             buttons.getOrDefault(slot, defaultButton).click(menu, event);
         }
     }
-
     
     @Override
     public void drag(Menu menu, InventoryDragEvent event) {
@@ -86,22 +88,21 @@ public class BoxRegion extends Region<Button> {
     }
 
     
-    public int getMinSlot() {
+    public int getMin() {
         return min;
     }
     
-    public void setMinSlot(int min) {
+    public void setMin(int min) {
         this.min = min;
         x1 = min % width; 
         y1 = (double) min / width;
     }
     
-    
-    public int getMaxSlot() {
+    public int getMax() {
         return max;
     }
     
-    public void setMaxSlot(int max) {
+    public void setMax(int max) {
         this.max = max;
         x2 = max % width;
         y2 = (double) max / width;

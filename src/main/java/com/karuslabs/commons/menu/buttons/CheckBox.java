@@ -53,13 +53,13 @@ public abstract class CheckBox implements Button {
     
     
     @Override
-    public void close(Menu menu, int slot, InventoryCloseEvent event) {
+    public void close(Menu menu, InventoryCloseEvent event, int slot) {
         if (reset) {
-            checked = onClose(menu, slot, event);
+            checked = onClose(menu, event, slot);
         }
     }
     
-    protected boolean onClose(Menu menu, int slot, InventoryCloseEvent event) {
+    protected boolean onClose(Menu menu, InventoryCloseEvent event, int slot) {
         return false;
     }
     
@@ -68,7 +68,7 @@ public abstract class CheckBox implements Button {
         return checked;
     }
     
-    public boolean resetOnClose() {
+    public boolean resets() {
         return reset;
     }
     

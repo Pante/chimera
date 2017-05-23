@@ -19,20 +19,31 @@ package com.karuslabs.commons.menu;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 
 
 public class MenuManager implements Listener {
     
-    private ConcurrentHashMap<String, Menu> pooled;
+    private ConcurrentHashMap<String, Menu> pool;
     private WeakHashMap<HumanEntity, Menu> active;
     
     
     public MenuManager() {
-        pooled = new ConcurrentHashMap<>();
+        pool = new ConcurrentHashMap<>();
         active = new WeakHashMap<>();
+    }
+    
+    
+    public void setActiveFromPool(Player player, String key) {
+        Menu menu = pool.get(key);
+        if (menu != null) {
+            active.put(player, menu);
+            
+        } else {
+            throw new InvalidMenuException("No such menu with key: " + key);
+        }
     }
     
     
@@ -70,8 +81,8 @@ public class MenuManager implements Listener {
     }
     
     
-    public ConcurrentHashMap<String, Menu> getPooled() {
-        return pooled;
+    public ConcurrentHashMap<String, Menu> getPool() {
+        return pool;
     }
 
     public WeakHashMap<HumanEntity, Menu> getActive() {

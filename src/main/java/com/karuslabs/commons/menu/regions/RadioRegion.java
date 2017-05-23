@@ -67,7 +67,7 @@ public class RadioRegion extends Region<RadioButton> {
     protected void onClose(Menu menu, InventoryCloseEvent event) {
         RadioButton button = buttons.get(selected);
         if (button != null) {
-            button.close(menu, selected, event);
+            button.close(menu, event, selected);
         }
     }
     

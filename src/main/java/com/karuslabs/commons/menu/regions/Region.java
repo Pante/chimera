@@ -30,6 +30,10 @@ public class Region<GenericButton extends Button> {
     protected String permission;
     
     
+    public Region() {
+        this(new HashMap<>(), "");
+    }
+    
     public Region(Map<Integer, GenericButton> buttons, String permission) {
         this.buttons = buttons;
         this.permission = permission;
@@ -60,12 +64,11 @@ public class Region<GenericButton extends Button> {
     }
     
     public void open(Menu menu, InventoryOpenEvent event) {
-        buttons.forEach((slot, button) -> button.open(menu, slot, event));
+        buttons.forEach((slot, button) -> button.open(menu, event, slot));
     }
-    
 
     public void close(Menu menu, InventoryCloseEvent event) {
-        buttons.forEach((slot, button) -> button.close(menu, slot, event));
+        buttons.forEach((slot, button) -> button.close(menu, event, slot));
     }
     
     

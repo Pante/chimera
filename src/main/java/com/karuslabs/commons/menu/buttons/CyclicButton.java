@@ -20,7 +20,7 @@ import com.google.common.collect.*;
 
 import com.karuslabs.commons.menu.Menu;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import org.bukkit.event.inventory.*;
@@ -32,6 +32,10 @@ public class CyclicButton implements Button {
     private PeekingIterator<BiFunction<Menu, InventoryClickEvent, Boolean>> cycle;
     private boolean reset;
     
+    
+    public CyclicButton(boolean reset) {
+        this(new ArrayList<>(), reset);
+    }
     
     public CyclicButton(List<BiFunction<Menu, InventoryClickEvent, Boolean>> states, boolean reset) {
         this.states = states;
@@ -49,23 +53,26 @@ public class CyclicButton implements Button {
 
     
     @Override
-    public void close(Menu menu, int slot, InventoryCloseEvent event) {
+    public void close(Menu menu, InventoryCloseEvent event, int slot) {
         if (reset) {
-            onClose(menu, slot, event);
+            onClose(menu, event, slot);
         }
     }
     
-    protected void onClose(Menu menu, int slot, InventoryCloseEvent event) {
+    protected void onClose(Menu menu, InventoryCloseEvent event, int slot) {
         cycle = Iterators.peekingIterator(Iterators.cycle(states));
     }
     
     
+    public BiFunction<Menu, InventoryClickEvent, Boolean> getCurrentState() {
+        return cycle.peek();
+    }
     
     public List<BiFunction<Menu, InventoryClickEvent, Boolean>> getStates() {
         return states;
     }
     
-    public boolean resetOnClose() {
+    public boolean resets() {
         return reset;
     }
     
