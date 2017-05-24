@@ -72,6 +72,12 @@ public class CyclicButton implements Button {
         return states;
     }
     
+    public void nextState() {
+        if (cycle.hasNext()) {
+            cycle.next();
+        }
+    }
+    
     public boolean resets() {
         return reset;
     }

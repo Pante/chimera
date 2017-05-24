@@ -71,4 +71,40 @@ public class RadioRegion extends Region<RadioButton> {
         }
     }
     
+    
+    public int getSelectedSlot() {
+        return selected;
+    }
+    
+    
+    public static RadioRegionBuilder newRadionRegion() {
+        return new RadioRegionBuilder(new RadioRegion(-9999, false));
+    }
+    
+    
+    public static class RadioRegionBuilder extends Builder<RadioRegionBuilder, RadioRegion, RadioButton> {
+
+        public RadioRegionBuilder(RadioRegion region) {
+            super(region);
+        }
+        
+        
+        public RadioRegionBuilder selected(int selected) {
+            region.selected = selected;
+            return this;
+        }
+        
+        public RadioRegionBuilder reset(boolean reset) {
+            region.reset = reset;
+            return this;
+        }
+        
+
+        @Override
+        protected RadioRegionBuilder getThis() {
+            return this;
+        }
+
+    }
+    
 }

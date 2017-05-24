@@ -16,7 +16,6 @@
  */
 package com.karuslabs.commons.menu.regions;
 
-import com.karuslabs.commons.menu.regions.builders.Builder;
 import com.karuslabs.commons.menu.Menu;
 import com.karuslabs.commons.menu.buttons.Button;
 
@@ -106,6 +105,47 @@ public class BoxRegion extends Region<Button> {
         this.max = max;
         x2 = max % width;
         y2 = (double) max / width;
+    }
+    
+    
+    public static BoxRegionBuilder newBoxRegion() {
+        return new BoxRegionBuilder(new BoxRegion(9, 0, 0));
+    }
+    
+    
+    public static class BoxRegionBuilder extends Builder<BoxRegionBuilder, BoxRegion, Button> {
+
+        public BoxRegionBuilder(BoxRegion region) {
+            super(region);
+        }
+
+        
+        public BoxRegionBuilder defaultButton(Button defaultButton) {
+            region.defaultButton = defaultButton;
+            return this;
+        }
+
+        public BoxRegionBuilder inventoryWidth(int width) {
+            region.width = width;
+            return this;
+        }
+
+        public BoxRegionBuilder min(int min) {
+            region.setMin(min);
+            return this;
+        }
+
+        public BoxRegionBuilder max(int max) {
+            region.setMax(max);
+            return this;
+        }
+
+        
+        @Override
+        protected BoxRegionBuilder getThis() {
+            return this;
+        }
+
     }
     
 }

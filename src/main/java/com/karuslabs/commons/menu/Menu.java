@@ -19,6 +19,7 @@ package com.karuslabs.commons.menu;
 import com.karuslabs.commons.menu.regions.Region;
 
 import java.util.*;
+import org.bukkit.Bukkit;
 
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
@@ -26,8 +27,8 @@ import org.bukkit.inventory.*;
 
 public class Menu implements InventoryHolder {
     
-    private Inventory inventory;
-    private List<Region> regions;
+    protected Inventory inventory;
+    protected List<Region> regions;
     
     
     public Menu(Inventory inventory) {
@@ -69,6 +70,39 @@ public class Menu implements InventoryHolder {
     
     public List<Region> getRegions() {
         return regions;
+    }
+    
+    
+    public static MenuBuilder newMenu() {
+        return new MenuBuilder(new Menu(Bukkit.createInventory(null, 54)));
+    }
+    
+    
+    public static class MenuBuilder<GenericBuilder extends MenuBuilder, GenericMenu extends Menu> {
+        
+        private GenericMenu menu;
+        
+        
+        public MenuBuilder(GenericMenu menu) {
+            this.menu = menu;
+        }
+        
+        
+        public MenuBuilder inventory(Inventory inventory) {
+            menu.inventory = inventory;
+            return this;
+        }
+        
+        public MenuBuilder region(Region region) {
+            menu.regions.add(region);
+            return this;
+        }
+        
+        
+        public GenericMenu build() {
+            return menu;
+        }
+        
     }
     
 }

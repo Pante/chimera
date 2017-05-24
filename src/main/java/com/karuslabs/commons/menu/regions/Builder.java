@@ -14,22 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.menu.regions.builders;
+package com.karuslabs.commons.menu.regions;
 
 import com.karuslabs.commons.menu.buttons.Button;
-import com.karuslabs.commons.menu.regions.Region;
 
 
-public class RegionBuilder extends Builder<RegionBuilder, Region, Button> {
-
-    @Override
-    protected RegionBuilder getThis() {
-        return this;
+public abstract class Builder<GenericBuilder extends Builder, GenericRegion extends Region, GenericButton extends Button> {
+    
+    protected GenericRegion region;
+    
+    
+    public Builder(GenericRegion region) {
+        this.region = region;
     }
-
-    @Override
-    public Region build() {
-        return new Region(buttons, permission);
+    
+    
+    public GenericBuilder permission(String permission) {
+        region.setPermission(permission);
+        return getThis();
     }
-
+    
+    public GenericBuilder button(int slot, GenericButton button) {
+        region.getButtons().put(slot, button);
+        return getThis();
+    }
+    
+    
+    protected abstract GenericBuilder getThis();
+    
+    
+    public GenericRegion build() {
+        return region;
+    }
+    
 }

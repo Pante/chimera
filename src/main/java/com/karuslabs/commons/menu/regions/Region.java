@@ -84,4 +84,24 @@ public class Region<GenericButton extends Button> {
         this.permission = permission;
     }
     
+    
+    public static RegionBuilder newRegion() {
+        return new RegionBuilder(new Region());
+    }
+    
+    
+    public static class RegionBuilder extends Builder<RegionBuilder, Region, Button> {
+
+        public RegionBuilder(Region region) {
+            super(region);
+        }
+
+        
+        @Override
+        protected RegionBuilder getThis() {
+            return this;
+        }
+
+    }
+    
 }
