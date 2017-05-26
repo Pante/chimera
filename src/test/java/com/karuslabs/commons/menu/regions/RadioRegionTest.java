@@ -21,7 +21,7 @@ import com.karuslabs.commons.menu.buttons.RadioButton;
 import junitparams.*;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,6 +62,29 @@ public class RadioRegionTest {
         
         verify(oldButton, times(unselectTimes)).unselect(null, event);
         assertEquals(updated, region.getSelectedSlot() == slot);
+    }
+    
+    
+    @Test
+    @Parameters({"true, 1", "false, 0"})
+    public void close(boolean reset, int times) {
+        RadioRegion region = new RadioRegion(0, reset);
+        region.getButtons().put(0, button);
+        
+        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
+        
+        region.close(null, event);
+        
+        verify(button, times(times)).close(null, event, 0);
+        assertEquals(reset, region.resets());
+    }
+    
+    
+    @Test
+    public void newRadioRegion() {
+        RadioRegion region = RadioRegion.newRadionRegion().selected(6).reset(true).build();
+        assertEquals(6, region.getSelectedSlot());
+        assertEquals(true, region.resets());
     }
     
 }

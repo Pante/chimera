@@ -26,8 +26,8 @@ import org.bukkit.event.inventory.*;
 
 public class RadioRegion extends Region<RadioButton> {
     
-    protected int selected;
-    protected boolean reset;
+    private int selected;
+    private boolean reset;
     
     
     public RadioRegion(int selected, boolean reset) {
@@ -74,6 +74,10 @@ public class RadioRegion extends Region<RadioButton> {
     
     public int getSelectedSlot() {
         return selected;
+    }
+    
+    public boolean resets() {
+        return reset;
     }
     
     

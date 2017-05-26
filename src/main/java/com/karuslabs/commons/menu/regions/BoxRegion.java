@@ -26,9 +26,9 @@ import org.bukkit.event.inventory.*;
 
 public class BoxRegion extends Region<Button> {
     
-    private Button defaultButton;
+    protected Button defaultButton;
     
-    private int width;
+    protected int width;
     private int min;
     private int max;
     
@@ -61,8 +61,17 @@ public class BoxRegion extends Region<Button> {
         int x = slot % width;
         double y = slot / (double) width;
         
-        boolean containsX = x >= x1 && x <= x2;
-        boolean containsY = y >= y1 && y <= y2;
+        boolean containsX;
+        boolean containsY;
+        
+        if (x1 <= x2 && y1 <= y2) {
+            containsX = x1 <= x && x <= x2;
+            containsY = y1 <= y && y <= y2;
+            
+        } else {
+            containsX = x2 <= x && x <= x1;
+            containsY = y2 <= y && y <= y1;
+        }
         
         return containsX && containsY;
     }
@@ -80,12 +89,12 @@ public class BoxRegion extends Region<Button> {
         if (event.getWhoClicked().hasPermission(permission)) {
             event.getRawSlots().forEach(slot -> {
                 if (contains(slot)) {
-                    buttons.getOrDefault(menu, defaultButton).drag(menu, event);
+                    buttons.getOrDefault(slot, defaultButton).drag(menu, event);
                 }
             });
         }
     }
-
+    
     
     public int getMin() {
         return min;
@@ -93,7 +102,7 @@ public class BoxRegion extends Region<Button> {
     
     public void setMin(int min) {
         this.min = min;
-        x1 = min % width; 
+        x1 = min % width;
         y1 = (double) min / width;
     }
     
@@ -104,7 +113,7 @@ public class BoxRegion extends Region<Button> {
     public void setMax(int max) {
         this.max = max;
         x2 = max % width;
-        y2 = (double) max / width;
+        y2 = (double) max / width; 
     }
     
     

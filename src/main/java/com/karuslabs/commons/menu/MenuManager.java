@@ -42,7 +42,7 @@ public class MenuManager implements Listener {
             active.put(player, menu);
             
         } else {
-            throw new InvalidMenuException("No such menu with key: " + key);
+            throw new IllegalArgumentException("No such pooled menu with key: " + key);
         }
     }
     

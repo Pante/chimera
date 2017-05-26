@@ -6,7 +6,6 @@ package com.karuslabs.commons.animation;
 
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
 
 public class Helix {

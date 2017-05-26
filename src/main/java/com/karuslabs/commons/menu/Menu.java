@@ -19,8 +19,8 @@ package com.karuslabs.commons.menu;
 import com.karuslabs.commons.menu.regions.Region;
 
 import java.util.*;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
