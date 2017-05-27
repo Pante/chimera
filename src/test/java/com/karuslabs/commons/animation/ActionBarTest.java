@@ -34,7 +34,7 @@ public class ActionBarTest {
     public void actionbar() {
         assertEquals(ChatColor.RED + " test message", bar.getMessage());
         assertEquals(ChatColor.RED, bar.getColor());
-        assertEquals(25, bar.getMaxLength());
+        assertEquals(25, bar.getFrames());
     }
     
     
@@ -44,7 +44,7 @@ public class ActionBarTest {
         
         assertEquals("", bar.getMessage());
         assertEquals(ChatColor.WHITE, bar.getColor());
-        assertEquals(8, bar.getMaxLength());
+        assertEquals(8, bar.getFrames());
     }
     
     

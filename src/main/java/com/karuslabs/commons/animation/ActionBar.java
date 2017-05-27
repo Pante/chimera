@@ -29,19 +29,22 @@ public class ActionBar {
     
     private String message;
     private ChatColor color;
+    private int frames;
     private int maxLength;
     
     
     public ActionBar(ConfigurationSection config) {
         message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
         color = ChatColor.valueOf(config.getString("color", "WHITE"));
-        maxLength = config.getInt("frames", 4) * 2 + message.length();
+        frames = config.getInt("frames", 4);
+        maxLength = frames * 2 + message.length();
     }
     
-    public ActionBar(String message, ChatColor color, int maxLength) {
+    public ActionBar(String message, ChatColor color, int frames) {
         this.message = message;
         this.color = color;
-        this.maxLength = maxLength;
+        this.frames = frames;
+        this.maxLength = frames * 2 + message.length();
     }
     
     
@@ -68,8 +71,8 @@ public class ActionBar {
         return color;
     }
 
-    public int getMaxLength() {
-        return maxLength;
+    public int getFrames() {
+        return frames;
     }
     
 }
