@@ -38,6 +38,12 @@ public class ActionBar {
         maxLength = config.getInt("frames", 4) * 2 + message.length();
     }
     
+    public ActionBar(String message, ChatColor color, int maxLength) {
+        this.message = message;
+        this.color = color;
+        this.maxLength = maxLength;
+    }
+    
     
     public void animate(Player player) {
         animate(player, 0);

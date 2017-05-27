@@ -8,7 +8,7 @@ helix:
     particles: FLAME
     amount: 10
     height: 5.5
-    curve: 4.5
+    period: 4.5
     
 
 music:
