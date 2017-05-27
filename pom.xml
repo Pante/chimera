@@ -7,7 +7,23 @@
     <artifactId>commons</artifactId>
     <version>${commons.version}</version>
     <packaging>jar</packaging>
-
+    
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
     
     <distributionManagement>   
         <repository>
@@ -22,7 +38,7 @@
         
         <site>
             <id>karus</id>
-            <url>dav:http://repo.karuslabs.com/repository/karus-commons-docs/</url>
+            <url>dav:http://repo.karuslabs.com/repository/karus-commons-project/${commons.version}/</url>
         </site>
     </distributionManagement>
     
