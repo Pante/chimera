@@ -4,8 +4,9 @@ jdk:
 branches:
   only:
   - master
+  - Documentation
   
-script: mvn --settings travis-settings.xml clean test verify deploy
+script: mvn --settings travis-settings.xml clean test verify deploy site
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
