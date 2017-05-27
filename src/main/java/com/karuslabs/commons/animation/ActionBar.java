@@ -27,12 +27,25 @@ import org.bukkit.scheduler.BukkitScheduler;
 import static org.apache.commons.lang.StringUtils.center;
 
 
+/**
+ * Represents a Player's action bar. The <pre>ActionBar</pre> class must first be 
+ * initialized via {@link #initialise(BukkitScheduler, Plugin)} before calling either 
+ * {@link #animate(Player)} or {@link #animate(Player, int)}.
+ */
 public class ActionBar {    
                 
     private static BukkitScheduler scheduler;
     private static Plugin plugin;
     
     
+    /**
+     * Initializes the <pre>ActionBar</pre> class with the <pre>BukkitScheduler</pre> 
+     * and <pre>Plugin</pre> specified. Must be called before either 
+     * {@link #animate(Player)} or {@link #animate(Player, int)} may be called.
+     * 
+     * @param scheduler the server's <pre>BukkitScheduler</pre>
+     * @param plugin the plugin using the <pre>ActionBar</pre> class.
+     */
     public static void initialise(BukkitScheduler scheduler, Plugin plugin) {
         ActionBar.scheduler = scheduler;
         ActionBar.plugin = plugin;
@@ -44,23 +57,46 @@ public class ActionBar {
     private int maxLength;
     
     
+    /**
+     * 
+     * 
+     * @param config 
+     */
     public ActionBar(ConfigurationSection config) {
         message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
         color = ChatColor.valueOf(config.getString("color", "WHITE"));
         maxLength = config.getInt("frames", 4) * 2 + message.length();
     }
     
-    public ActionBar(String message, ChatColor color, int maxLength) {
+    /**
+     * 
+     * 
+     * @param message
+     * @param color
+     * @param frames 
+     */
+    public ActionBar(String message, ChatColor color, int frames) {
         this.message = message;
         this.color = color;
-        this.maxLength = maxLength;
+        this.maxLength = frames;
     }
     
     
+    /**
+     * 
+     * 
+     * @param player 
+     */
     public void animate(Player player) {
         animate(player, 0);
     }
     
+    /**
+     * 
+     * 
+     * @param player
+     * @param delay 
+     */
     public void animate(Player player, int delay) {
         for (int length = message.length(); length <= maxLength; length += 2, delay += 3) {
             int capturedLength = length;
@@ -72,14 +108,29 @@ public class ActionBar {
     }
 
     
+    /**
+     * 
+     * 
+     * @return 
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * 
+     * 
+     * @return 
+     */
     public ChatColor getColor() {
         return color;
     }
-
+    
+    /**
+     * 
+     * 
+     * @return 
+     */
     public int getMaxLength() {
         return maxLength;
     }
