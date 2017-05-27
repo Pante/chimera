@@ -43,8 +43,8 @@ public class ActionBar {
      * and <pre>Plugin</pre> specified. Must be called before either 
      * {@link #animate(Player)} or {@link #animate(Player, int)} may be called.
      * 
-     * @param scheduler the server's <pre>BukkitScheduler</pre>
-     * @param plugin the plugin using the <pre>ActionBar</pre> class.
+     * @param scheduler the server's BukkitScheduler
+     * @param plugin the plugin using the ActionBar class
      */
     public static void initialise(BukkitScheduler scheduler, Plugin plugin) {
         ActionBar.scheduler = scheduler;
@@ -59,9 +59,13 @@ public class ActionBar {
     
     
     /**
+     * Creates a new <pre>ActionBar</pre> with the <pre>ConfigurationSection</pre> specified.
+     * Reads the <pre>ConfigurationSection</pre> and retrieves the values associated with the keys
+     * or their default values if the key is non-existent. Valid keys and their default values are
+     * as follows: <pre>message: "", color: WHITE, frames: 4</pre>. Note that the value for
+     * <pre>color</pre> must be in all capital letters.
      * 
-     * 
-     * @param config 
+     * @param config the ConfigurationSection containing the values
      */
     public ActionBar(ConfigurationSection config) {
         message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
@@ -71,11 +75,11 @@ public class ActionBar {
     }
     
     /**
+     * Creates a new <pre>ActionBar</pre> with the message, color and frames specified.
      * 
-     * 
-     * @param message
-     * @param color
-     * @param frames 
+     * @param message the message
+     * @param color the color of the arrows
+     * @param frames the number of frames
      */
     public ActionBar(String message, ChatColor color, int frames) {
         this.message = message;
@@ -86,19 +90,19 @@ public class ActionBar {
     
     
     /**
+     * Displays an animated message on the action bar of the <pre>Player</pre> specified.
      * 
-     * 
-     * @param player 
+     * @param player the player the animation is to be displayed to
      */
     public void animate(Player player) {
         animate(player, 0);
     }
     
     /**
+     * Displays an animated message on the action bar of the <pre>Player</pre> after the initial delay specified.
      * 
-     * 
-     * @param player
-     * @param delay 
+     * @param player the player the animation is to be displayed to 
+     * @param delay the initial delay in ticks before the message is displayed
      */
     public void animate(Player player, int delay) {
         for (int length = message.length(); length <= maxLength; length += 2, delay += 3) {
@@ -112,27 +116,21 @@ public class ActionBar {
 
     
     /**
-     * 
-     * 
-     * @return 
+     * @return the message to be animated
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * 
-     * 
-     * @return 
+     * @return the color of the arrows
      */
     public ChatColor getColor() {
         return color;
     }
 
     /**
-     * 
-     * 
-     * @return 
+     * @return the number of animation frames
      */
     public int getFrames() {
         return frames;

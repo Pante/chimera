@@ -25,6 +25,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
+/**
+ * 
+ */
 public interface Argument {
     
     public static final Argument PLAYER_NAMES = (sender, command, argument) -> {
