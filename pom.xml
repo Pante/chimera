@@ -7,16 +7,7 @@
     <artifactId>commons</artifactId>
     <version>${commons.version}</version>
     <packaging>jar</packaging>
-    
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-            </plugin>
-        </plugins>
-    </reporting>
+
     
     <distributionManagement>   
         <repository>
@@ -28,11 +19,6 @@
             <id>karus</id>
             <url>http://repo.karuslabs.com/repository/karus-commons/snapshots</url>
         </snapshotRepository>
-        
-        <site>
-            <id>karus</id>
-            <url>dav:http://repo.karuslabs.com/repository/karus-commons/snapshots/${commons.version}</url>
-        </site>
     </distributionManagement>
     
     
@@ -203,15 +189,48 @@
             </plugin>
             
             <plugin>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.6</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>2.12</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals> 
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions> 
+                    <execution> 
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals> 
+                    </execution> 
+                </executions> 
+            </plugin>
+            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId> 
+                <version>2.8.2</version>
+                <executions> 
+                    <execution> 
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals> 
+                    </execution> 
+                </executions> 
             </plugin>
             
         </plugins>
