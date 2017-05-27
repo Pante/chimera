@@ -19,6 +19,11 @@
             <id>karus</id>
             <url>http://repo.karuslabs.com/repository/karus-commons/snapshots</url>
         </snapshotRepository>
+        
+        <site>
+            <id>karus</id>
+            <url>dav:http://repo.karuslabs.com/repository/karus-commons/snapshots/${commons.version}</url>
+        </site>
     </distributionManagement>
     
     
@@ -231,6 +236,18 @@
                         </goals> 
                     </execution> 
                 </executions> 
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.6</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>2.12</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             
         </plugins>
