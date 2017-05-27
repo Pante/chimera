@@ -30,11 +30,21 @@ public class Music {
     
     
     public Music(ConfigurationSection config) {
-        sound = Sound.valueOf(config.getString("sound", "BLOCK_GLASS_BREAK"));
-        category = SoundCategory.valueOf(config.getString("category", "PLAYERS"));
-        volume = (float) config.getDouble("volume", 1);
-        pitch = (float) config.getDouble("pitch", 1);
+        this(
+            Sound.valueOf(config.getString("sound", "BLOCK_GLASS_BREAK")),
+            SoundCategory.valueOf(config.getString("category", "PLAYERS")),
+            (float) config.getDouble("volume", 1),
+            (float) config.getDouble("pitch", 1)
+        );
     }
+    
+    public Music(Sound sound, SoundCategory category, float volume, float pitch) {
+        this.sound = sound;
+        this.category = category;
+        this.volume = volume;
+        this.pitch = pitch;
+    }
+    
     
     
     public void play(Player player) {
