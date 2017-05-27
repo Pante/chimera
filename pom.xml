@@ -22,7 +22,7 @@
         
         <site>
             <id>karus</id>
-            <url>dav:http://repo.karuslabs.com/repository/karus-commons/${commons.version}</url>
+            <url>dav:http://repo.karuslabs.com/repository/karus-commons/snapshots/${commons.version}</url>
         </site>
     </distributionManagement>
     
