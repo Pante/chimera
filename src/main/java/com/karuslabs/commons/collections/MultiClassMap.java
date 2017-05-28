@@ -92,9 +92,8 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
      * @param value
      * @return 
      */
-    public <U extends V> U putInstance(Key<U> key, U value) {
+    public <U extends V> void putInstance(Key<U> key, U value) {
         map.put(key, value);
-        return value;
     }
     
     
