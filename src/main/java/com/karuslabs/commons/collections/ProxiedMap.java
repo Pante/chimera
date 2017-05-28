@@ -19,19 +19,42 @@ package com.karuslabs.commons.collections;
 import java.util.*;
 
 
+/**
+ * Represents a map which delegates method calls to a backing map. Subclasses
+ * should override methods to modify the behaviour as per the decorator pattern.
+ * 
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
+ */
 public abstract class ProxiedMap<K, V> implements Map<K, V> {
     
+    /**
+     * The backing map, made <code>Protected</code> to facilitate subclassing.
+     */
     protected Map<K, V> map;
     
     
+    /**
+    * Constructs a <code>ProxiedMap</code> with a backing <code>HashMap</code>.
+    */
     public ProxiedMap() {
         this(new HashMap<>());
     }
     
+    /**
+     * Constructs a <code>ProxiedMap</code> with a backing <code>HashMap</code> and specified initial capacity.
+     * 
+     * @param capacity the initial capacity
+     */
     public ProxiedMap(int capacity) {
         this(new HashMap<>(capacity));
     }
     
+    /**
+     * Constructs a <code>ProxiedMap</code> with the backing map specified.
+     * 
+     * @param map the backing map
+     */
     public ProxiedMap(Map<K, V> map) {
         this.map = map;
     }

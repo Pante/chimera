@@ -19,25 +19,59 @@ package com.karuslabs.commons.collections;
 import java.util.*;
 
 
+/**
+ * Represents a decorator for <code>ProxiedMap</code> which maps a type to an instance.
+ * May contain a different value for a primitive type and its wrapper type.
+ * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
+ * Typesafe heterogeneous containers</a>.
+ * 
+ * @param <V> the common supertype which all entries must share
+ */
 public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     
+    /**
+     * Constructs a <code>ClassMap</code> with a backing <code>HashMap</code>.
+     */
     public ClassMap() {
         this(new HashMap<>());
     }
     
+    /**
+     * Constructs a <code>ClassMap</code> with a backing <code>HashMap</code> and specified initial capacity.
+     * 
+     * @param capacity the initial capacity
+     */
     public ClassMap(int capacity) {
         this(new HashMap<>(capacity));
     }
     
+    /**
+     * Constructs a <code>ClassMap</code> with the backing map specified.
+     * 
+     * @param map the backing map
+     */
     public ClassMap(Map<Class<? extends V>, V> map) {
         super(map);
     }
     
     
+    /**
+     * Returns the instance mapped to the specified <code>Class</code>, or null if there is no instance mapped to the <code>Class</code>.
+     * 
+     * @param type the Class whose associated instance is to be returned
+     * @return the instance to which the specified Class is mapped, or null if there is no instance mapped to the Class
+     */
     public <U extends V> U getInstance(Class<U> type) {
         return type.cast(map.get(type));
     }
     
+    /**
+     * Returns the instance mapped to the specified <code>Class</code>, or <code>value</code> if there is no instance mapped to the <code>Class</code>.
+     * 
+     * @param type the Class whose associated instance is to be returned
+     * @param value the default mapping of the Class
+     * @return the instance mapped to the specified <code>Class</code>, or <code>value</code> if there is no instance mapped to the <code>Class</code>.
+     */
     public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
         V uncasted = map.get(type);
         if (uncasted != null && uncasted.getClass() == type) {
@@ -49,6 +83,12 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     }
     
     
+    /**
+     * Associates the specified instance with the specified <code>Class</code> in this map.
+     * 
+     * @param type the Class with which the specified instance is to be associated
+     * @param value the instance to be associated with the specified Class
+     */
     public <U extends V> void putInstance(Class<U> type, U value) {
         map.put(type, value);
     }

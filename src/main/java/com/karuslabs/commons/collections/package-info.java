@@ -17,6 +17,6 @@
 
 
 /**
- * Animation related classes.
+ * Contains the collection classes.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.collections;

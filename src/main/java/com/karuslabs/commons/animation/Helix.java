@@ -21,9 +21,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 
-/**
- * Represents a geometrical helix composed of <pre>Particles</pre>.
- */
 public class Helix {
     
     private double radius;
@@ -33,15 +30,6 @@ public class Helix {
     private double period;
     
     
-    /**
-     * Creates a new <pre>Helix</pre> with the <pre>ConfigurationSection</pre> specified.
-     * Reads the <pre>ConfigurationSection</pre> and retrieves the values associated with the keys
-     * or their default values if the key is non-existent. Valid keys and their default values are
-     * as follows: <pre>radius: 2, particles: ENCHANTMENT_TABLE, amount: 50, height: 12, period: 4</pre>. 
-     * Note that the value for <pre>particles</pre> must be in all capital letters.
-     * 
-     * @param config the ConfigurationSection containing the values
-     */
     public Helix(ConfigurationSection config) {
         this(
             config.getDouble("radius", 2),
@@ -52,16 +40,6 @@ public class Helix {
         );
     }
     
-    /**
-     * Creates a new <pre>Helix</pre> with the radius, particles, amount, height and period
-     * specified.
-     * 
-     * @param radius the radius
-     * @param particles the particles the helix is composed of
-     * @param amount the amount of particles per location
-     * @param height the height
-     * @param period the period
-     */
     public Helix(double radius, Particle particles, int amount, double height, double period) {
         this.radius = radius;
         this.particles = particles;
@@ -71,23 +49,10 @@ public class Helix {
     }
     
     
-    /**
-     * Renders the helix at the <pre>Player</pre>'s location.
-     * Only visible to the <pre>Player</pre> specified.
-     * 
-     * @param player the player
-     */
     public void render(Player player) {
         render(player, player.getLocation());
     }
     
-    /**
-     * Renders the helix at the <pre>Location</pre> specified.
-     * Only visible to the <pre>Player</pre> specified.
-     * 
-     * @param player the player
-     * @param location the location
-     */
     public void render(Player player, Location location) {
         double baseX = location.getX();
         double baseY = location.getY();
@@ -101,12 +66,6 @@ public class Helix {
     }
     
     
-    /**
-     * Renders the helix at the <pre>Lcation</pre> specified.
-     * Visible to all <pre>Player</pre>s within range.
-     * 
-     * @param location the location
-     */
     public void render(Location location) {
         World world = location.getWorld();
         double baseX = location.getX();
@@ -121,37 +80,22 @@ public class Helix {
     }
 
     
-    /**
-     * @return the radius
-     */
     public double getRadius() {
         return radius;
     }
 
-    /**
-     * @return the particles the helix is composed of
-     */
     public Particle getParticles() {
         return particles;
     }
 
-    /**
-     * @return the amount of particles per location
-     */
     public int getAmount() {
         return amount;
     }
     
-    /**
-     * @return the height
-     */
     public double getHeight() {
         return height;
     }
 
-    /**
-     * @return the period
-     */
     public double getPeriod() {
         return period;
     }
