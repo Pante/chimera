@@ -86,11 +86,11 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
 
     
     /**
+     * Associates the specified instance with the specified <code>Key</code> in this map.
      * 
-     * @param <U>
-     * @param key
-     * @param value
-     * @return 
+     * @param <U> the type of the instance returned
+     * @param key the Key with which the specified instance is to be associated
+     * @param value the instance to be associated with the specified Key
      */
     public <U extends V> void putInstance(Key<U> key, U value) {
         map.put(key, value);
@@ -98,11 +98,13 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
+     * Convenience method which returns a new <code>Key</code> to be used in 
+     * conjunction with {@link MultiClassMap#getInstance(Key)} and {@link MultiClassMap#putInstance(Key, Object)}.
      * 
-     * @param <T>
-     * @param name
-     * @param type
-     * @return 
+     * @param <T> the type of the instance associated with this Key
+     * @param name the name used to uniquely identify this key
+     * @param type the Class of the instance associated with this key
+     * @return a new Key
      */
     public static <T> Key<T> key(String name, Class<T> type) {
         return new Key(name, type);
@@ -110,9 +112,13 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
+     * A unique key to which a instance is mapped to. Allows for multiple instances to be mapped to a type.
+     * Equality is determined by comparing the sum of the hashes of <code>name</code> and <code>type</code>.
      * 
+     * For example, <code>new Key("A", Object.class).equals(new Key("A", Object.class));</code> returns true,
+     * and conversely, <code>new Key("A", int.class).equals(new Key("A", Object.class));</code> returns false.
      * 
-     * @param <T> 
+     * @param <T> the type of the instance associated with this key
      */
     public static class Key<T> {
         
@@ -121,10 +127,10 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
         
         
         /**
+         * Constructs a new key with the given name and type.
          * 
-         * 
-         * @param name
-         * @param type 
+         * @param name the name of the Key used to uniquely identify this key
+         * @param type the type of the instance associated with this key which is also used to uniquely identify this key
          */
         public Key(String name, Class<T> type) {
             this.name = name;
