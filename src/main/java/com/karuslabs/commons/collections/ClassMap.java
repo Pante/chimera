@@ -21,6 +21,7 @@ import java.util.*;
 
 /**
  * Represents a decorator for <code>ProxiedMap</code> which maps a type to an instance.
+ * <p>
  * May contain a different value for a primitive type and its wrapper type.
  * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.

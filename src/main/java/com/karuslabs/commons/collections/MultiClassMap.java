@@ -21,6 +21,7 @@ import java.util.*;
 
 /**
  * Represents a decorator for <code>ProxiedMap</code> which maps a {@link MultiClassMap.Key} to an instance of the keys type.
+ * <p>
  * May contain a different value for a primitive type and its wrapper type.
  * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.
@@ -114,7 +115,7 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     /**
      * A unique key to which a instance is mapped to. Allows for multiple instances to be mapped to a type.
      * Equality is determined by comparing the sum of the hashes of <code>name</code> and <code>type</code>.
-     * 
+     * <p>
      * For example, <code>new Key("A", Object.class).equals(new Key("A", Object.class));</code> returns true,
      * and conversely, <code>new Key("A", int.class).equals(new Key("A", Object.class));</code> returns false.
      * 

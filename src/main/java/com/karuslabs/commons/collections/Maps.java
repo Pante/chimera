@@ -21,6 +21,7 @@ import java.util.*;
 
 /**
  * Consists exclusively of static methods that facilitates creation of <code>Map</code>s.
+ * <p>
  * This class is a temporary workaround until Java 9 and <a href = "http://openjdk.java.net/jeps/269">JEP 269</a>
  * has achieved general availability, after which this class may be removed.
  */
@@ -104,7 +105,7 @@ public class Maps {
         }
         
         /**
-         * Returns a unmodifiable version of the map which is decorated by {@link Collections.unmodifiableMap(Map)}.
+         * Returns a unmodifiable version of the map which is decorated by <code>Collections.unmodifiableMap(Map)</code>.
          * 
          * @return a unmodifiable version of the map
          */
