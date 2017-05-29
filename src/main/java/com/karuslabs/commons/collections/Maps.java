@@ -23,23 +23,23 @@ import java.util.*;
  * Consists exclusively of static methods that facilitates creation of <code>Map</code>s.
  * <p>
  * This class is a temporary workaround until Java 9 and <a href = "http://openjdk.java.net/jeps/269">JEP 269</a>
- * has achieved general availability, after which this class may be removed.
+ * has achieved general availability, after which this class will be removed.
  */
 public class Maps {
     
     /**
-     * Returns a new <code>Builder</code> for a <code>HashMap</code>.
+     * Returns a <code>Builder</code> which constructs a <code>HashMap</code>.
      * 
-     * @return a Builder which will create a HashMap
+     * @return a Builder which constructs a HashMap
      */
     public static <K, V> Builder<K, V> builder() {
         return builder(new HashMap<>());
     }
     
     /**
-     * Returns a new <code>Builder</code> for a <code>HashMap</code> with the first specified key-value pair.
+     * Returns a <code>Builder</code> which constructs a <code>HashMap</code> with the specified first key-value pair.
      * 
-     * @return a Builder which will create a HashMap
+     * @return a Builder which constructs a HashMap
      */
     public static <K, V> Builder<K, V> builder(K key, V value) {
         return builder().put(key, value);

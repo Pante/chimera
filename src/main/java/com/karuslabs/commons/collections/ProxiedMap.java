@@ -29,7 +29,7 @@ import java.util.*;
 public abstract class ProxiedMap<K, V> implements Map<K, V> {
     
     /**
-     * The backing map, made <code>Protected</code> to facilitate subclassing.
+     * The backing map, exposed to facilitate subclassing.
      */
     protected Map<K, V> map;
     
@@ -42,7 +42,7 @@ public abstract class ProxiedMap<K, V> implements Map<K, V> {
     }
     
     /**
-     * Constructs a <code>ProxiedMap</code> with a backing <code>HashMap</code> and specified initial capacity.
+     * Constructs a <code>ProxiedMap</code> with a backing <code>HashMap</code> with the specified initial capacity.
      * 
      * @param capacity the initial capacity
      */
@@ -51,7 +51,7 @@ public abstract class ProxiedMap<K, V> implements Map<K, V> {
     }
     
     /**
-     * Constructs a <code>ProxiedMap</code> with the backing map specified.
+     * Constructs a <code>ProxiedMap</code> with the specified backing map.
      * 
      * @param map the backing map
      */

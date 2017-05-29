@@ -27,12 +27,27 @@ import org.bukkit.scheduler.BukkitScheduler;
 import static org.apache.commons.lang.StringUtils.center;
 
 
+/**
+ * Represents a <code>Player</code>'s action bar. 
+ * <p>
+ * This class is Spigot exclusive. Attempts to run it with CraftBukkit will result in undefined behaviour.
+ * <code>ActionBar</code> must be initialised via {@link #initialise(BukkitScheduler, Plugin)} before <code>animate()</code> may be called.
+ * Instances are effectively immutable and contain a message to animate and display on a player's action bar.
+ */
 public class ActionBar {    
                 
     private static BukkitScheduler scheduler;
     private static Plugin plugin;
     
     
+    /**
+     * Initialises <code>ActionBar</code> with the specified <code>BukkitScheduler</code> and
+     * <code>Plugin</code>. This method must be called before {@link #animate(Player)} and {@link #animate(Player, int)}
+     * may be called.
+     * 
+     * @param scheduler
+     * @param plugin 
+     */
     public static void initialise(BukkitScheduler scheduler, Plugin plugin) {
         ActionBar.scheduler = scheduler;
         ActionBar.plugin = plugin;
@@ -45,6 +60,15 @@ public class ActionBar {
     private int maxLength;
     
     
+    /**
+     * Constructs a <code>ActionBar</code> with the specified <code>ConfigurationSection</code>.
+     * Obtains the values mapped to the keys from the specified <code>ConfigurationSection</code> if present; else the default values.
+     * <p>
+     * Valid keys and their default values are as follows: <pre>message: "", color: WHITE, frames: 4</pre>. Note that the value for
+     * <pre>color</pre> must be in all capital letters.
+     * 
+     * @param config the ConfigurationSection
+     */
     public ActionBar(ConfigurationSection config) {
         message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
         color = ChatColor.valueOf(config.getString("color", "WHITE"));
@@ -52,6 +76,13 @@ public class ActionBar {
         maxLength = frames * 2 + message.length();
     }
     
+    /**
+     * Constructs a <code>ActionBar</code> with the specified message, color and frames.
+     * 
+     * @param message the message to be animated and displayed to a player
+     * @param color the color of the arrows used in the animation
+     * @param frames the number of frames
+     */
     public ActionBar(String message, ChatColor color, int frames) {
         this.message = message;
         this.color = color;
@@ -59,11 +90,20 @@ public class ActionBar {
         this.maxLength = frames * 2 + message.length();
     }
     
-
+    
+    /**
+     * 
+     * @param player 
+     */
     public void animate(Player player) {
         animate(player, 0);
     }
     
+    /**
+     * 
+     * @param player
+     * @param delay 
+     */
     public void animate(Player player, int delay) {
         for (int length = message.length(); length <= maxLength; length += 2, delay += 3) {
             int capturedLength = length;
@@ -75,14 +115,23 @@ public class ActionBar {
     }
 
     
+    /**
+     * @return 
+     */
     public String getMessage() {
         return message;
     }
-
+    
+    /**
+     * @return 
+     */
     public ChatColor getColor() {
         return color;
     }
 
+    /**
+     * @return 
+     */
     public int getFrames() {
         return frames;
     }

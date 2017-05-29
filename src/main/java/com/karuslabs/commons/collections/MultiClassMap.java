@@ -20,9 +20,13 @@ import java.util.*;
 
 
 /**
- * Represents a decorator for <code>ProxiedMap</code> which maps a {@link MultiClassMap.Key} to an instance of the keys type.
+ * Represents a decorator for <code>ProxiedMap</code> which maps a {@link MultiClassMap.Key} to an instance of the <code>Key</code> type.
  * <p>
- * May contain a different value for a primitive type and its wrapper type.
+ * Casts the instance to the mapped type when retrieved via {@link #getInstance(MultiClassMap.Key)} or {@link #getInstanceOrDefault(MultiClassMap.Key, Object)}.
+ * Each <code>Key</code> is composed of a <code>name</code> and a <code>Class</code>. This allows multiple instances to be mapped to a type, which may be 
+ * uniquely identified by the <code>name</code> component of the <code>Key</code>.
+ * A primitive type and its corresponding wrapper type may be mapped to different values.
+ * <p>
  * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.
  * 
@@ -38,7 +42,7 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     }
     
     /**
-     * Constructs a <code>MultiClassMap</code> with a backing <code>HashMap</code> and specified initial capacity.
+     * Constructs a <code>MultiClassMap</code> with a backing <code>HashMap</code> with the specified initial capacity.
      * 
      * @param capacity the initial capacity
      */
@@ -47,7 +51,7 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     }
     
     /**
-     * Constructs a <code>MultiClassMap</code> with the backing map specified.
+     * Constructs a <code>MultiClassMap</code> with the specified backing map.
      * 
      * @param map the backing map
      */
@@ -57,23 +61,23 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
-     * Returns the instance mapped to the specified <code>Key</code>, or null if there is no instance mapped to the <code>Key</code>.
+     * Returns the instance mapped to the specified <code>Key</code> if present; else null.
      * 
      * @param <U> the type of the instance returned
      * @param key the Key whose associated instance is to be returned
-     * @return the instance to which the specified Class is mapped, or null if there is no instance mapped to the Key
+     * @return the instance mapped to the specified <code>Key</code> if present; else null
      */
     public <U extends V> U getInstance(Key<U> key) {
         return key.type.cast(map.get(key));
     }
     
     /**
-     * Returns the instance mapped to the specified <code>Key</code>, or <code>value</code> if there is no instance mapped to the <code>Key</code>.
+     * Returns the instance mapped to the specified <code>Key</code> if present; else the specified <code>value</code>.
      * 
      * @param <U> the type of the instance returned
      * @param key the Key whose associated instance is to be returned
      * @param value the default mapping of the Key
-     * @return the instance mapped to the specified <code>Key</code>, or <code>value</code> if there is no instance mapped to the <code>Key</code>.
+     * @return the instance mapped to the specified <code>Key</code> if present; else the specified <code>value</code>.
      */
     public <U extends V> U getInstanceOrDefault(Key<U> key, U value) {
         V uncasted = map.get(key);
@@ -113,8 +117,8 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
-     * A unique key to which a instance is mapped to. Allows for multiple instances to be mapped to a type.
-     * Equality is determined by comparing the sum of the hashes of <code>name</code> and <code>type</code>.
+     * A key to which an instance is mapped to. Allows for multiple instances to be mapped to a type each uniquely identified by the <code>name</code>.
+     * Equality is determined by comparing the combined hashes of <code>name</code> and <code>type</code>.
      * <p>
      * For example, <code>new Key("A", Object.class).equals(new Key("A", Object.class));</code> returns true,
      * and conversely, <code>new Key("A", int.class).equals(new Key("A", Object.class));</code> returns false.
@@ -128,10 +132,10 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
         
         
         /**
-         * Constructs a new key with the given name and type.
+         * Constructs a new key with the specified name and type.
          * 
-         * @param name the name of the Key used to uniquely identify this key
-         * @param type the type of the instance associated with this key which is also used to uniquely identify this key
+         * @param name the name of the Key used to determine equality
+         * @param type the type of the instance associated with this key which is also used to determine equality
          */
         public Key(String name, Class<T> type) {
             this.name = name;

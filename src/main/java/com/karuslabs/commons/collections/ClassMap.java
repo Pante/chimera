@@ -20,9 +20,12 @@ import java.util.*;
 
 
 /**
- * Represents a decorator for <code>ProxiedMap</code> which maps a type to an instance.
+ * Represents a decorator for <code>ProxiedMap</code> which maps a type to an instance of that type.
  * <p>
- * May contain a different value for a primitive type and its wrapper type.
+ * Casts the instance to the mapped type when retrieved via {@link #getInstance(Class)} or {@link #getInstanceOrDefault(Class, Object)}.
+ * Each type may only be mapped to a single instance of that type.
+ * A primitive type and its corresponding wrapper type may be mapped to different values.
+ * <p>
  * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.
  * 
@@ -38,7 +41,7 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     }
     
     /**
-     * Constructs a <code>ClassMap</code> with a backing <code>HashMap</code> and specified initial capacity.
+     * Constructs a <code>ClassMap</code> with a backing <code>HashMap</code> with the specified initial capacity.
      * 
      * @param capacity the initial capacity
      */
@@ -47,7 +50,7 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     }
     
     /**
-     * Constructs a <code>ClassMap</code> with the backing map specified.
+     * Constructs a <code>ClassMap</code> with the specified backing map.
      * 
      * @param map the backing map
      */
@@ -57,21 +60,21 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     
     
     /**
-     * Returns the instance mapped to the specified <code>Class</code>, or null if there is no instance mapped to the <code>Class</code>.
+     * Returns the instance mapped to the specified <code>Class</code> if present; else null.
      * 
      * @param type the Class whose associated instance is to be returned
-     * @return the instance to which the specified Class is mapped, or null if there is no instance mapped to the Class
+     * @return the instance to which the specified Class is mapped if present; else null
      */
     public <U extends V> U getInstance(Class<U> type) {
         return type.cast(map.get(type));
     }
     
     /**
-     * Returns the instance mapped to the specified <code>Class</code>, or <code>value</code> if there is no instance mapped to the <code>Class</code>.
+     * Returns the instance mapped to the specified <code>Class</code> if present; else the specified <code>value</code>.
      * 
      * @param type the Class whose associated instance is to be returned
      * @param value the default mapping of the Class
-     * @return the instance mapped to the specified <code>Class</code>, or <code>value</code> if there is no instance mapped to the <code>Class</code>.
+     * @return the instance mapped to the specified <code>Class</code> if present; else the specified <code>value</code>.
      */
     public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
         V uncasted = map.get(type);
