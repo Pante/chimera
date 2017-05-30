@@ -26,33 +26,63 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
 
+/**
+ * 
+ */
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
+    /**
+     *  
+     * @param item
+     */
     public BannerBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     *  
+     * @param builder
+     */
     public BannerBuilder(Builder builder) {
         super(builder);
     }    
     
     
+    /**
+     * 
+     * @param color
+     * @return 
+     */
     public BannerBuilder color(DyeColor color) {
         meta.setBaseColor(color);
         return this;
     }
     
+    /**
+     * 
+     * @param pattern
+     * @return 
+     */
     public BannerBuilder pattern(Pattern pattern) {
         meta.addPattern(pattern);
         return this;
     }
     
+    /**
+     * 
+     * @param patterns
+     * @return 
+     */
     public BannerBuilder patterns(List<Pattern> patterns) {
         meta.getPatterns().addAll(patterns);
         return this;
     }
     
-
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     protected BannerBuilder getThis() {
         return this;

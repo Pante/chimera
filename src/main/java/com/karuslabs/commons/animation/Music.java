@@ -21,6 +21,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 
+/**
+ * Represents a immutable wrapper for <code>Sound</code> which encapsulates additional dependent fields.
+ * <p>
+ * Generally, using <code>Sound</code> requires other variables such as volume and pitch which makes
+ * storing <code>Sound</code> and its related variables either extremely messy or hard-coded. Neither of
+ * which are desirable. This solves it by storing the related variables internally.
+ */
 public class Music {
     
     private Sound sound;
@@ -29,6 +36,14 @@ public class Music {
     private float pitch;
     
     
+    /**
+     * Constructs a <code>Music</code> with the specified <code>ConfigurationSection</code>.
+     * <p>
+     * Valid keys and their default values are as follows: <pre>sound: BLOCK_GLASS_BREAK, category: PLAYERS, volume: 1, pitch: 1</pre>. 
+     * Note that the values for <pre>sound</pre> and <pre>category</pre> must be in all capital letters.
+     * 
+     * @param config the ConfigurationSection
+     */
     public Music(ConfigurationSection config) {
         this(
             Sound.valueOf(config.getString("sound", "BLOCK_GLASS_BREAK")),
@@ -38,6 +53,14 @@ public class Music {
         );
     }
     
+    /**
+     * Constructs a <code>Music</code> with the specified sound, category, volume and pitch,
+     * 
+     * @param sound the sound
+     * @param category the category
+     * @param volume the volume
+     * @param pitch  the pitch
+     */
     public Music(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
         this.category = category;
@@ -47,27 +70,49 @@ public class Music {
     
     
     
+    /**
+     * Plays the sound to the specified <code>Player</code> only.
+     * 
+     * @param player the player
+     */
     public void play(Player player) {
         player.playSound(player.getLocation(), sound, category, volume, pitch);
     }
     
+    /**
+     * Plays the sound at the location to all players within range.
+     * 
+     * @param location the location
+     */
     public void play(Location location) {
         location.getWorld().playSound(location, sound, category, volume, pitch);
     }
     
     
+    /**
+     * @return the sound
+     */
     public Sound getSound() {
         return sound;
     }
-
+    
+    /**
+     * @return the category
+     */
     public SoundCategory getCategory() {
         return category;
     }
     
+    /**
+     * @return the volume
+     */
     public float getVolume() {
         return volume;
     }
-
+    
+    /**
+     * @return the pitch
+     */
     public float getPitch() {
         return pitch;
     }

@@ -92,17 +92,19 @@ public class ActionBar {
     
     
     /**
+     * Renders an animated message to the specified <code>Player</code>'s action bar.
      * 
-     * @param player 
+     * @param player the player
      */
     public void animate(Player player) {
         animate(player, 0);
     }
     
     /**
+     * Renders an animated message to the specified <code>Player</code>'s action bar after the specified initial delay.
      * 
-     * @param player
-     * @param delay 
+     * @param player the player
+     * @param delay the initial delay
      */
     public void animate(Player player, int delay) {
         for (int length = message.length(); length <= maxLength; length += 2, delay += 3) {
@@ -116,21 +118,21 @@ public class ActionBar {
 
     
     /**
-     * @return 
+     * @return the message to be animated and displayed
      */
     public String getMessage() {
         return message;
     }
     
     /**
-     * @return 
+     * @return the color of the arrows used in the animation
      */
     public ChatColor getColor() {
         return color;
     }
 
     /**
-     * @return 
+     * @return the number of frames to be rendered
      */
     public int getFrames() {
         return frames;
