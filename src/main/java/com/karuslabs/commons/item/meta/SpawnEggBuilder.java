@@ -22,24 +22,40 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-
+/**
+ * A builder system used to modify and create spawn eggs.
+ */
 public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
-    
+
+	/**
+	 * Constructs a <code>SpawnEggBuilder</code> from the specified <code>ItemStack</code>.
+	 * The material type of the <code>ItemStack</code> should be MONSTER_EGG
+	 */
     public SpawnEggBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a <code>SpawnEggBuilder</code> from the specified <code>ItemStack</code>.
+     */
     public SpawnEggBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the entity the spawn egg will spawn.
+     * 
+     * @params type the entity type
+     * @return the modified <code>SpawnEggBuilder</code> instance
+     */
     public SpawnEggBuilder spawned(EntityType type) {
         meta.setSpawnedType(type);
         return this;
     }
     
-    
+    /**
+     * @return the current <code>SpawnEggBuilder</code> instance
+     */
     @Override
     protected SpawnEggBuilder getThis() {
         return this;

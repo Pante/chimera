@@ -16,6 +16,6 @@
  */
 
 /**
- * 
+ * Contains the item related classes
  */
 package com.karuslabs.commons.item;
