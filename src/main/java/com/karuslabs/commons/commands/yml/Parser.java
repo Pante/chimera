@@ -18,7 +18,7 @@ package com.karuslabs.commons.commands.yml;
 
 import com.karuslabs.commons.collections.Maps;
 import com.karuslabs.commons.commands.*;
-import com.karuslabs.commons.util.Configurations;
+import com.karuslabs.commons.configuration.Configurations;
 
 import java.util.*;
 import java.util.stream.Collectors;

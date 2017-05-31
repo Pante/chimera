@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.configuration.Configurations;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -51,7 +53,7 @@ public class MusicTest {
     
     @Test
     public void music_Default() {
-        Music music = new Music(BLANK);
+        Music music = new Music(Configurations.BLANK);
         
         assertEquals(Sound.BLOCK_GLASS_BREAK, music.getSound());
         assertEquals(SoundCategory.PLAYERS, music.getCategory());

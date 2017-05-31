@@ -16,6 +16,8 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.configuration.Configurations;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -52,7 +54,7 @@ public class HelixTest {
     
     @Test
     public void helix_Default() {
-        Helix helix = new Helix(BLANK);
+        Helix helix = new Helix(Configurations.BLANK);
         
         assertEquals(2, helix.getRadius(), 0);
         assertEquals(Particle.ENCHANTMENT_TABLE, helix.getParticles());

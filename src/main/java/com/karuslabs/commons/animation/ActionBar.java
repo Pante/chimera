@@ -31,29 +31,11 @@ import static org.apache.commons.lang.StringUtils.center;
  * Represents a <code>Player</code>'s action bar. 
  * <p>
  * This class is Spigot exclusive. Attempts to run it with CraftBukkit will result in undefined behaviour.
- * <code>ActionBar</code> must be initialised via {@link #initialise(BukkitScheduler, Plugin)} before <code>animate()</code> may be called.
- * Instances are effectively immutable and contain a message to animate and display on a player's action bar.
  */
 public class ActionBar {    
-                
-    private static BukkitScheduler scheduler;
-    private static Plugin plugin;
-    
-    
-    /**
-     * Initialises <code>ActionBar</code> with the specified <code>BukkitScheduler</code> and
-     * <code>Plugin</code>. This method must be called before {@link #animate(Player)} and {@link #animate(Player, int)}
-     * may be called.
-     * 
-     * @param scheduler
-     * @param plugin 
-     */
-    public static void initialise(BukkitScheduler scheduler, Plugin plugin) {
-        ActionBar.scheduler = scheduler;
-        ActionBar.plugin = plugin;
-    }
-    
-    
+
+    private BukkitScheduler scheduler;
+    private Plugin plugin;
     private String message;
     private ChatColor color;
     private int frames;
@@ -61,29 +43,35 @@ public class ActionBar {
     
     
     /**
-     * Constructs a <code>ActionBar</code> with the specified <code>ConfigurationSection</code>.
+     * Constructs a <code>ActionBar</code> with the specified <code>Plugin</code> and <code>ConfigurationSection</code>.
      * Obtains the values mapped to the keys from the specified <code>ConfigurationSection</code> if present; else the default values.
      * <p>
      * Valid keys and their default values are as follows: <pre>message: "", color: WHITE, frames: 4</pre>. Note that the value for
      * <pre>color</pre> must be in all capital letters.
      * 
+     * @param plugin the plugin
      * @param config the ConfigurationSection
      */
-    public ActionBar(ConfigurationSection config) {
-        message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
-        color = ChatColor.valueOf(config.getString("color", "WHITE"));
-        frames = config.getInt("frames", 4);
-        maxLength = frames * 2 + message.length();
+    public ActionBar(Plugin plugin, ConfigurationSection config) {
+        this(
+            plugin,
+            ChatColor.translateAlternateColorCodes('&', config.getString("message", "")),
+            ChatColor.valueOf(config.getString("color", "WHITE")),
+            config.getInt("frames", 4)
+        );
     }
     
     /**
-     * Constructs a <code>ActionBar</code> with the specified message, color and frames.
+     * Constructs a <code>ActionBar</code> with the specified plugin, message, color and frames.
      * 
+     * @param plugin the plugin
      * @param message the message to be animated and displayed to a player
      * @param color the color of the arrows used in the animation
      * @param frames the number of frames
      */
-    public ActionBar(String message, ChatColor color, int frames) {
+    public ActionBar(Plugin plugin, String message, ChatColor color, int frames) {
+        this.scheduler = plugin.getServer().getScheduler();
+        this.plugin = plugin;
         this.message = message;
         this.color = color;
         this.frames = frames;

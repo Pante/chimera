@@ -2,8 +2,10 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.configuration;
 
+import com.karuslabs.commons.configuration.YamlFileConfiguration;
+import com.karuslabs.commons.util.UncheckedIOException;
 import java.io.*;
 
 import junitparams.*;
@@ -18,19 +20,19 @@ import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class ConfigurationTest {
+public class YamlFileConfigurationTest {
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
-    private Configuration config;
+    private YamlFileConfiguration config;
     private File file;
     private File parent;
     
     
-    public ConfigurationTest() {
+    public YamlFileConfigurationTest() {
         file = when(mock(File.class).getName()).thenReturn("name").getMock();
-        config = spy(new Configuration(file));
+        config = spy(new YamlFileConfiguration(file));
         parent = when(mock(File.class).mkdirs()).thenReturn(true).getMock();
         when(file.getParentFile()).thenReturn(parent);
     }

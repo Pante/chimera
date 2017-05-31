@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -27,10 +27,25 @@ import static org.mockito.Mockito.*;
 public class ConfigurationsTest {
     
     @Test
+    public void getOrDefault() {
+        ConfigurationSection config = mock(ConfigurationSection.class);
+        assertTrue(config == Configurations.getOrDefault(config, Configurations.BLANK));
+    }
+    
+    
+    @Test
+    public void getOrDefault_ReturnsDefault() {
+        ConfigurationSection config = mock(ConfigurationSection.class);
+        assertTrue(config == Configurations.getOrDefault(null, config));
+    }
+    
+    
+    @Test
     public void getOrBlank() {
         ConfigurationSection config = mock(ConfigurationSection.class);
         assertTrue(config == Configurations.getOrBlank(config));
     }
+    
     
     @Test
     public void getOrBlank_ReturnsBlank() {
