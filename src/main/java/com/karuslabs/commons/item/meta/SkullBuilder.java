@@ -22,20 +22,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 /**
- * A builder system used for information pertaining to skulls.
+ * Represents a specialised <code>Builder</code> for building items with <code>SkullMeta</code>.
  */
 public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
 	/**
-	 * Constructs a <code>SkullBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>SkullBuilder</code> with the specified <code>ItemStack</code>.
 	 * The material type of the <code>ItemStack<code> should be a skull
+	 * 
+	 * @param item the ItemStack
 	 */
     public SkullBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>SkullBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>SkullBuilder</code> with the specified <code>Builder</code>.
+     * 
+     * @param builder the Builder
      */
     public SkullBuilder(Builder builder) {
         super(builder);
@@ -45,7 +49,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
      * Sets the skull owner's name.
      * 
      * @param name the skull owner's name
-     * @return the modified <code>SkullBuilder</code> instance
+     * @return this
      */
     public SkullBuilder owner(String name) {
         meta.setOwner(name);
@@ -53,7 +57,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     }
     
     /**
-     * @return the current <code>SkullBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected SkullBuilder getThis() {

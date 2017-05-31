@@ -25,19 +25,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 /**
- * A builder system used to modify and create fireworks.
+ * Represents a specialised <code>Builder</code> for building items with <code>FireworkkMeta</code>.
  */
 public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     
 	/**
-	 * Constructs a <code>FireworkBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>FireworkBuilder</code> with the specified <code>ItemStack</code>.
+	 * 
+	 * @param item the ItemStack
 	 */
     public FireworkBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>FireworkBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>FireworkBuilder</code> with the specified <code>Builder</code>.
+     * 
+     * @param builder the Builder
      */
     public FireworkBuilder(Builder builder) {
         super(builder);
@@ -47,7 +51,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
      * Adds the specified array of firework effects.
      * 
      * @param effects the array of effects
-     * @return the modified <code>FireworkBuilder</code> instance
+     * @return this
      */
     public FireworkBuilder effects(FireworkEffect... effects) {
         meta.addEffects(effects);
@@ -58,7 +62,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
      * Adds the specified list of firework effects.
      * 
      * @param effects the list of effects
-     * @return the modified <code>FireworkBuilder</code> instance 
+     * @return this
      */
     public FireworkBuilder effects(List<FireworkEffect> effects) {
         meta.addEffects(effects);
@@ -69,7 +73,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
      * Sets the power of the firework.
      * 
      * @param power the power
-     * @return the modified <code>FireworkBuilder</code> instance 
+     * @return this
      */
     public FireworkBuilder power(int power) {
         meta.setPower(power);
@@ -77,7 +81,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     }
     
     /**
-     * @return the current <code>FireworkBuilder</code> instance.
+     * {@inheritDoc}
      */
     @Override
     protected FireworkBuilder getThis() {

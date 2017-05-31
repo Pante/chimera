@@ -23,20 +23,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
 /**
- * A builder system used to modify and create spawn eggs.
+ * Represents a specialised <code>Builder</code> for building items with <code>SpawnEggMeta</code>.
  */
 public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
 
 	/**
-	 * Constructs a <code>SpawnEggBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>SpawnEggBuilder</code> with the specified <code>ItemStack</code>.
 	 * The material type of the <code>ItemStack</code> should be MONSTER_EGG
+	 * 
+	 * @param item the ItemStack
 	 */
     public SpawnEggBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>SpawnEggBuilder</code> from the specified <code>ItemStack</code>.
+     * Copy constructor which constructs a <code>SpawnEggBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param builder the Builder 
      */
     public SpawnEggBuilder(Builder builder) {
         super(builder);
