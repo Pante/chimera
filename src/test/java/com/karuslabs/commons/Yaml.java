@@ -16,14 +16,11 @@
  */
 package com.karuslabs.commons;
 
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
 public class Yaml {
     
     public static final YamlConfiguration ANIMATION = YamlConfiguration.loadConfiguration(Yaml.class.getClassLoader().getResourceAsStream("animation/animation.yml"));
-    
-    public static final MemoryConfiguration BLANK = new MemoryConfiguration();
     
 }

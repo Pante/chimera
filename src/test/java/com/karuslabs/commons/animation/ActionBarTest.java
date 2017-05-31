@@ -4,11 +4,14 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.configuration.Configurations;
+
 import com.karuslabs.mockkit.stub.StubScheduler;
 
 import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -22,11 +25,12 @@ import static org.mockito.Mockito.*;
 public class ActionBarTest {
     
     private ActionBar bar;
-    
+    private Plugin plugin;
     
     public ActionBarTest() {
-        ActionBar.initialise(StubScheduler.INSTANCE, mock(Plugin.class));
-        bar = spy(new ActionBar(ANIMATION.getConfigurationSection("actionbar")));
+        Server server = when(mock(Server.class).getScheduler()).thenReturn(StubScheduler.INSTANCE).getMock();
+        plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
+        bar = spy(new ActionBar(plugin, ANIMATION.getConfigurationSection("actionbar")));
     }
     
     
@@ -40,7 +44,7 @@ public class ActionBarTest {
     
     @Test
     public void actionbar_default() {
-        ActionBar bar = new ActionBar(BLANK);
+        ActionBar bar = new ActionBar(plugin, Configurations.BLANK);
         
         assertEquals("", bar.getMessage());
         assertEquals(ChatColor.WHITE, bar.getColor());

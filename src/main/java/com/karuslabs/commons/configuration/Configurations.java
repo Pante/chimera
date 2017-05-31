@@ -14,18 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.configuration;
 
 import org.bukkit.configuration.*;
 
 
 public class Configurations {
+        
+    public static final ImmutableConfigurationSection BLANK = new ImmutableConfigurationSection(new MemoryConfiguration());
     
-    public static final ConfigurationSection BLANK = new MemoryConfiguration();
     
+    public static ConfigurationSection getOrDefault(ConfigurationSection config, ConfigurationSection defaultConfig) {
+        if (config != null) {
+            return config;
+            
+        } else {
+            return defaultConfig;
+        }
+    }
     
     public static ConfigurationSection getOrBlank(ConfigurationSection config) {
-        return config != null ? config : BLANK;
+        if (config != null) {
+            return config;
+            
+        } else {
+            return BLANK;
+        }
     }
     
 }

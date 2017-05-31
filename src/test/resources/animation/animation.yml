@@ -3,6 +3,12 @@ actionbar:
     color: RED
     frames: 5
     
+bar:
+    message: test message
+    color: BLUE
+    style: SOLID
+    
+    
 helix:
     radius: 6.9
     particles: FLAME

@@ -17,30 +17,26 @@ import static org.apache.commons.lang.StringUtils.center;
 
 public class ActionBar {    
                 
-    private static BukkitScheduler scheduler;
-    private static Plugin plugin;
-    
-    
-    public static void initialise(BukkitScheduler scheduler, Plugin plugin) {
-        ActionBar.scheduler = scheduler;
-        ActionBar.plugin = plugin;
-    }
-    
-    
+    private BukkitScheduler scheduler;
+    private Plugin plugin;
     private String message;
     private ChatColor color;
     private int frames;
     private int maxLength;
     
     
-    public ActionBar(ConfigurationSection config) {
-        message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
-        color = ChatColor.valueOf(config.getString("color", "WHITE"));
-        frames = config.getInt("frames", 4);
-        maxLength = frames * 2 + message.length();
+    public ActionBar(Plugin plugin, ConfigurationSection config) {
+        this(
+            plugin,
+            ChatColor.translateAlternateColorCodes('&', config.getString("message", "")),
+            ChatColor.valueOf(config.getString("color", "WHITE")),
+            config.getInt("frames", 4)
+        );
     }
     
-    public ActionBar(String message, ChatColor color, int frames) {
+    public ActionBar(Plugin plugin, String message, ChatColor color, int frames) {
+        this.scheduler = plugin.getServer().getScheduler();
+        this.plugin = plugin;
         this.message = message;
         this.color = color;
         this.frames = frames;

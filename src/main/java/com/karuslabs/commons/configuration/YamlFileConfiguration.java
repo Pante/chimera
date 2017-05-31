@@ -2,7 +2,9 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.configuration;
+
+import com.karuslabs.commons.util.UncheckedIOException;
 
 import java.io.*;
 
@@ -10,17 +12,17 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
-public class Configuration extends YamlConfiguration {
+public class YamlFileConfiguration extends YamlConfiguration {
     
     private File file;
     
     
-    public Configuration(File file) {
+    public YamlFileConfiguration(File file) {
         this.file = file;
     }
     
     
-    public Configuration load() {
+    public YamlFileConfiguration load() {
         try {
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
@@ -35,7 +37,7 @@ public class Configuration extends YamlConfiguration {
     }
     
     
-    public Configuration loadOrDefault(String path) {
+    public YamlFileConfiguration loadOrDefault(String path) {
         try {
             if (!file.exists()) {
                 load(getClass().getClassLoader().getResourceAsStream(path));
