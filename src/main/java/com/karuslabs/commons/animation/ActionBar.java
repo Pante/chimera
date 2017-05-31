@@ -30,7 +30,7 @@ import static org.apache.commons.lang.StringUtils.center;
 /**
  * Represents a <code>Player</code>'s action bar. 
  * <p>
- * This class is Spigot exclusive. Attempts to run it with CraftBukkit will result in undefined behaviour.
+ * This class is requires Spigot. Attempts to run it with only CraftBukkit will result in undefined behaviour.
  */
 public class ActionBar {    
 

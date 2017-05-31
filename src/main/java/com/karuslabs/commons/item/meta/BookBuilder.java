@@ -22,16 +22,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 /**
- * A builder system used to modify and create books.
+ * Represents a specialised <code>Builder</code> for building items with <code>BookMeta</code>.
  */
 public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     
-	/**
-	 * Constructs a <code>BookBuilder</code> from the specified <code>ItemStack</code>.
-	 * The material type of the specified <code>ItemStack</code> should be BOOK.
-	 * 
-	 * @param item the Book
-	 */
+    /**
+     * Constructs a <code>BookBuilder</code> from the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public BookBuilder(ItemStack item) {
         super(item);
     }
