@@ -22,24 +22,41 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
-
+/**
+ * A builder system used to store information relevant to enchantments.
+ */
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder, EnchantmentStorageMeta> {
     
+	/**
+	 * Constructs an <code>EnchantmentStorageBuilder</code> from the specified <code>ItemStack</code>.
+	 */
     public EnchantmentStorageBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs an <code>EnchantmentStorageBuilder</code> from the specified <code>Builder</code>.
+     */
     public EnchantmentStorageBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Stores an enchantment based on its type, level, and if it ignores restrictions.
+     * 
+     * @param enchantment the enchantment
+     * @param level the level
+     * @param ignoreRestriction if the applied enchant should ignore vanilla limits
+     * @return the modified <code>EnchantmentStorageBuilder</code> 
+     */
     public EnchantmentStorageBuilder stored(Enchantment enchantment, int level, boolean ignoreRestriction) {
         meta.addStoredEnchant(enchantment, level, ignoreRestriction);
         return this;
     }
     
-    
+    /**
+     * @return the current <code>EnchantmentStorageBuilder</code> instance
+     */
     @Override
     protected EnchantmentStorageBuilder getThis() {
         return this;

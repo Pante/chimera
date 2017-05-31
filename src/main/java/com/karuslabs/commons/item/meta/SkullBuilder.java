@@ -21,24 +21,40 @@ import com.karuslabs.commons.item.Builder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-
+/**
+ * A builder system used for information pertaining to skulls.
+ */
 public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
+	/**
+	 * Constructs a <code>SkullBuilder</code> from the specified <code>ItemStack</code>.
+	 * The material type of the <code>ItemStack<code> should be a skull
+	 */
     public SkullBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a <code>SkullBuilder</code> from the specified <code>Builder</code>.
+     */
     public SkullBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the skull owner's name.
+     * 
+     * @param name the skull owner's name
+     * @return the modified <code>SkullBuilder</code> instance
+     */
     public SkullBuilder owner(String name) {
         meta.setOwner(name);
         return this;
     }
     
-    
+    /**
+     * @return the current <code>SkullBuilder</code> instance
+     */
     @Override
     protected SkullBuilder getThis() {
         return this;

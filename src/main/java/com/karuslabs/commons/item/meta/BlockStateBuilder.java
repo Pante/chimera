@@ -22,24 +22,43 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-
+/**
+ * A builder system specifically used to modify and create various block states. 
+ */
 public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
     
+    /**
+     *  Constructs a <code>BlockStateBuilder</code> from the specified <code>ItemStack</code>.
+     *  
+     * @param item the ItemStack
+     */
     public BlockStateBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     *  Constructs a <code>BlockStateBuilder</code> from the specified <code>Builder</code>.
+     *  
+     * @param builder the Builder
+     */
     public BlockStateBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the block state to the specified <code>BlockState</code>.
+     * 
+     * @param state the Blockstate
+     * @return the modified <code>BlockStateBuilder</code> instance
+     */
     public BlockStateBuilder state(BlockState state) {
         meta.setBlockState(state);
         return this;
     }
     
-    
+    /**
+     * @return the current <code>BlockStateBuilder</code> instance
+     */
     @Override
     protected BlockStateBuilder getThis() {
         return this;

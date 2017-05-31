@@ -27,21 +27,24 @@ import org.bukkit.inventory.meta.BannerMeta;
 
 
 /**
- * 
+ * A builder system specifically used to modify and create banners.
  */
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     /**
+     *  Constructs a <code>BannerBuilder</code> from the specified <code>ItemStack</code>.
+     *  The material type of the specified <code>ItemStack</code> must be BANNER.
      *  
-     * @param item
+     * @param item the Banner
      */
     public BannerBuilder(ItemStack item) {
         super(item);
     }
     
     /**
+     *  Constructs a <code>BannerBuilder</code> from an existing <code>Builder</code>.
      *  
-     * @param builder
+     * @param builder the Builder
      */
     public BannerBuilder(Builder builder) {
         super(builder);
@@ -49,9 +52,10 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     
     /**
+     * Sets the base color to the specified <code>DyeColor</code>.
      * 
-     * @param color
-     * @return 
+     * @param color the Color 
+     * @return the modified <code>BannerBuilder</code> instance
      */
     public BannerBuilder color(DyeColor color) {
         meta.setBaseColor(color);
@@ -59,9 +63,10 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     }
     
     /**
+     * Adds the specified <code>Pattern</code>.
      * 
-     * @param pattern
-     * @return 
+     * @param pattern the Pattern
+     * @return the modified <code>BannerBuilder</code> instance
      */
     public BannerBuilder pattern(Pattern pattern) {
         meta.addPattern(pattern);
@@ -69,9 +74,10 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     }
     
     /**
+     * Adds all the specified <code>Pattern</code> to the meta.
      * 
-     * @param patterns
-     * @return 
+     * @param patterns the Patterns list
+     * @return the modified <code>BannerBuilder</code> instance
      */
     public BannerBuilder patterns(List<Pattern> patterns) {
         meta.getPatterns().addAll(patterns);
@@ -80,8 +86,7 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     
     /**
-     * 
-     * @return 
+     * @return the current <code>BannerBuilder</code> instance
      */
     @Override
     protected BannerBuilder getThis() {

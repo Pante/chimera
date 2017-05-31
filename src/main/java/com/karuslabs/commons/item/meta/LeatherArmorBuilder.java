@@ -22,24 +22,39 @@ import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-
+/**
+ * A builder system used to modify and create information for leather armor.
+ */
 public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
     
+	/**
+	 * Constructs a <code>LeatherArmorBuilder</code> from the specified <code>ItemStack</code>.
+	 */
     public LeatherArmorBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a <code>LeatherArmorBuilder</code> from the specified <code>Builder</code>.
+     */
     public LeatherArmorBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the color of the builder
+     * 
+     * @param color the color
+     * @return the modified <code>LeatherArmorBuilder</code> instance.
+     */
     public LeatherArmorBuilder color(Color color) {
         meta.setColor(color);
         return this;
     }
     
-    
+    /**
+     * @return the current <code>LeatherArmorBuilder</code> instance
+     */
     @Override
     protected LeatherArmorBuilder getThis() {
         return this;

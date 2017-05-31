@@ -22,24 +22,39 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 
-
+/**
+ * A builder system used to specifically build effects for fireworks.
+ */
 public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
     
+	/**
+	 * Constructs a <code>FireworkEffectBuilder</code> from the specified <code>ItemStack</code>.
+	 */
     public FireworkEffectBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a <code>FireworkEffectBuilder</code> from the specified <code>Builder</code>.
+     */
     public FireworkEffectBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the effect of the firework builder
+     * 
+     * @param effect the effect
+     * @return the modified <code>FireworkEffectBuilder</code> instance.
+     */
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);
         return this;
     }
 
-    
+    /**
+     * @return the current <code>FireworkEffectBuilder</code> instance
+     */
     @Override
     protected FireworkEffectBuilder getThis() {
         return this;
