@@ -46,9 +46,9 @@ public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta
     }
     
     /**
-     * Sets the block state to the specified <code>BlockState</code>.
+     * Sets the block state of the item.
      * 
-     * @param state the Blockstate
+     * @param state the BlockState
      * @return this
      */
     public BlockStateBuilder state(BlockState state) {

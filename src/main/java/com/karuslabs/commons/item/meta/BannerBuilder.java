@@ -51,9 +51,9 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     
     /**
-     * Sets the base colour to the specified <code>DyeColor</code>.
+     * Sets the base color of the banner.
      * 
-     * @param color the Color 
+     * @param color the color 
      * @return this
      */
     public BannerBuilder color(DyeColor color) {

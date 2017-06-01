@@ -27,12 +27,12 @@ import org.bukkit.inventory.meta.SpawnEggMeta;
  */
 public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
 
-	/**
-	 * Constructs a <code>SpawnEggBuilder</code> with the specified <code>ItemStack</code>.
-	 * The material type of the <code>ItemStack</code> should be MONSTER_EGG
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>SpawnEggBuilder</code> with the specified <code>ItemStack</code>.
+     * The material type of the <code>ItemStack</code> should be MONSTER_EGG
+     * 
+     * @param item the ItemStack
+     */
     public SpawnEggBuilder(ItemStack item) {
         super(item);
     }
@@ -49,8 +49,8 @@ public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
     /**
      * Sets the entity the spawn egg will spawn.
      * 
-     * @params type the entity type
-     * @return the modified <code>SpawnEggBuilder</code> instance
+     * @param type the entity type
+     * @return this
      */
     public SpawnEggBuilder spawned(EntityType type) {
         meta.setSpawnedType(type);
@@ -58,7 +58,7 @@ public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
     }
     
     /**
-     * @return the current <code>SpawnEggBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected SpawnEggBuilder getThis() {

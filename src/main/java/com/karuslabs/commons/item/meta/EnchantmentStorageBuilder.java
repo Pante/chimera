@@ -27,11 +27,11 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
  */
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder, EnchantmentStorageMeta> {
     
-	/**
-	 * Constructs an <code>EnchantmentStorageBuilder</code> with the specified <code>ItemStack</code>.
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs an <code>EnchantmentStorageBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public EnchantmentStorageBuilder(ItemStack item) {
         super(item);
     }
@@ -46,7 +46,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder
     }
     
     /**
-     * Stores an enchantment based on its type, level, and if it ignores restrictions.
+     * Stores the specified enchantment, its level and if it ignores restrictions.
      * 
      * @param enchantment the enchantment
      * @param level the level

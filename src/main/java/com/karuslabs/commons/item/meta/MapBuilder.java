@@ -17,6 +17,7 @@
 package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
+
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
@@ -26,11 +27,11 @@ import org.bukkit.inventory.meta.MapMeta;
  */
 public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
-	/**
-	 * Constructs a <code>MapBuilder</code> with the specified <code>ItemStack</code>.
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>MapBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public MapBuilder(ItemStack item) {
         super(item);
     }
@@ -45,7 +46,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
     
     /**
-     * Sets the color for the builder
+     * Sets the color of the map.
      * 
      * @param color the color
      * @return this
@@ -56,7 +57,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
     
     /**
-     * Sets the name of the map's location
+     * Sets the name of the maps location
      * 
      * @param name the name
      * @return this
@@ -67,9 +68,9 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
     
     /**
-     * Sets if the map follows scaling
+     * Sets whether the map follows scaling
      * 
-     * @param value if the map scales
+     * @param value whether the map scales
      * @return this
      */
     public MapBuilder scaling(boolean value) {

@@ -28,12 +28,11 @@ import org.bukkit.potion.*;
  */
 public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
-	/**
-	 * Constructs a <code>PotionBuilder</code> with the specified <code>ItemStack</code>.
-	 * The material type of the <code>ItemStack</code> should be a potion
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>PotionBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public PotionBuilder(ItemStack item) {
         super(item);
     }
@@ -48,7 +47,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     /**
-     * Sets the color data of the builder.
+     * Sets the color of the potion.
      * 
      * @param color the color
      * @return this
@@ -59,10 +58,10 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     /**
-     * Sets the effect of the potion and whether it should override prexisting effects.
+     * Adds the specified effect to the potion and whether it should override preexisting effects.
      * 
      * @param effect the potion effect
-     * @param whether the effect should be able to override prexisting effects
+     * @param override whether the effect should override preexisting effects
      * @return this
      */
     public PotionBuilder effect(PotionEffect effect, boolean override) {
@@ -71,7 +70,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     /**
-     * Sets the data for the potion.
+     * Sets the data of the potion.
      * 
      * @param data the potion data
      * @return this

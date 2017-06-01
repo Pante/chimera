@@ -29,11 +29,11 @@ import org.bukkit.inventory.meta.FireworkMeta;
  */
 public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     
-	/**
-	 * Constructs a <code>FireworkBuilder</code> with the specified <code>ItemStack</code>.
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>FireworkBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public FireworkBuilder(ItemStack item) {
         super(item);
     }
@@ -48,9 +48,9 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     }
     
     /**
-     * Adds the specified array of firework effects.
+     * Adds the specified firework effects.
      * 
-     * @param effects the array of effects
+     * @param effects the effects
      * @return this
      */
     public FireworkBuilder effects(FireworkEffect... effects) {
@@ -59,9 +59,9 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     }
     
     /**
-     * Adds the specified list of firework effects.
+     * Adds the specified firework effects.
      * 
-     * @param effects the list of effects
+     * @param effects the effects
      * @return this
      */
     public FireworkBuilder effects(List<FireworkEffect> effects) {

@@ -26,12 +26,11 @@ import org.bukkit.inventory.meta.SkullMeta;
  */
 public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
-	/**
-	 * Constructs a <code>SkullBuilder</code> with the specified <code>ItemStack</code>.
-	 * The material type of the <code>ItemStack<code> should be a skull
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>SkullBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public SkullBuilder(ItemStack item) {
         super(item);
     }
@@ -46,7 +45,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     }
     
     /**
-     * Sets the skull owner's name.
+     * Sets the name of the skulls owner.
      * 
      * @param name the skull owner's name
      * @return this

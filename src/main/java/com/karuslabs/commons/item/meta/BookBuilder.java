@@ -45,9 +45,9 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Sets the title to the specified parameter.
+     * Sets the title of the book.
      * 
-     * @param title the Title
+     * @param title the title
      * @return this
      */
     public BookBuilder title(String title) {
@@ -56,9 +56,9 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Sets the author to the specified parameter.
+     * Sets the author of the book.
      * 
-     * @param author the Author
+     * @param author the author
      * @return this
      */
     public BookBuilder author(String author) {
@@ -67,9 +67,9 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Adds the specified array of pages.
+     * Adds the specified pages.
      * 
-     * @param pages the array of pages
+     * @param pages the pages
      * @return this
      */
     public BookBuilder pages(String... pages) {
@@ -78,9 +78,9 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Sets the generation level to the specified parameter.
+     * Sets the generation level of the book.
      * 
-     * @param generation the Generation level
+     * @param generation the generation
      * @return this
      */
     public BookBuilder generation(BookMeta.Generation generation) {

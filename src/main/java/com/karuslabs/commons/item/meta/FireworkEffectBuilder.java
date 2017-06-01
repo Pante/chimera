@@ -27,17 +27,17 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
  */
 public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
     
-	/**
-	 * Constructs a <code>FireworkEffectBuilder</code> with the specified <code>ItemStack</code>.
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>FireworkEffectBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public FireworkEffectBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Copy constructor which onstructs a <code>FireworkEffectBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>FireworkEffectBuilder</code> with the specified <code>Builder</code>.
      * 
      * @param builder the Builder
      */
@@ -46,7 +46,7 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, Firewo
     }
     
     /**
-     * Sets the effect of the firework builder
+     * Sets the main <code>FireWorkEffect</code> of the firework.
      * 
      * @param effect the effect
      * @return this

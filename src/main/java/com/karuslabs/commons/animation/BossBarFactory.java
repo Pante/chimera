@@ -24,6 +24,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 
+/**
+ * 
+ */
 public class BossBarFactory {
     
     private static final BarFlag[] FLAGS = new BarFlag[0];
@@ -35,6 +38,11 @@ public class BossBarFactory {
     private BarFlag[] flags;
     
     
+    /**
+     * 
+     * @param server
+     * @param config 
+     */
     public BossBarFactory(Server server, ConfigurationSection config) {
         this.server = server;
         this.message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
@@ -43,10 +51,25 @@ public class BossBarFactory {
         
     }
     
+    /**
+     * 
+     * @param server
+     * @param message
+     * @param color
+     * @param style 
+     */
     public BossBarFactory(Server server, String message, BarColor color, BarStyle style) {
         this(server, message, color, style, FLAGS);
     }
     
+    /**
+     * 
+     * @param server
+     * @param message
+     * @param color
+     * @param style
+     * @param flags 
+     */
     public BossBarFactory(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags) {
         this.server = server;
         this.message = message;
@@ -56,6 +79,11 @@ public class BossBarFactory {
     }
 
     
+    /**
+     * 
+     * @param players
+     * @return 
+     */
     public BossBar newBar(Player... players) {
         BossBar bar = server.createBossBar(message, color, style, flags);
         for (Player player : players) {
@@ -65,6 +93,11 @@ public class BossBarFactory {
         return bar;
     }
     
+    /**
+     * 
+     * @param players
+     * @return 
+     */
     public BossBar newBar(Collection<Player> players) {
         BossBar bar = server.createBossBar(message, color, style, flags);
         players.forEach(bar::addPlayer);

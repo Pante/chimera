@@ -27,11 +27,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
  */
 public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
     
-	/**
-	 * Constructs a <code>LeatherArmorBuilder</code> with the specified <code>ItemStack</code>.
-	 * 
-	 * @param item the ItemStack
-	 */
+    /**
+     * Constructs a <code>LeatherArmorBuilder</code> with the specified <code>ItemStack</code>.
+     * 
+     * @param item the ItemStack
+     */
     public LeatherArmorBuilder(ItemStack item) {
         super(item);
     }
@@ -46,7 +46,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
     }
     
     /**
-     * Sets the color of the builder
+     * Sets the color of the leather armor.
      * 
      * @param color the color
      * @return this
