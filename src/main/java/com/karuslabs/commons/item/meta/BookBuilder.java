@@ -27,7 +27,7 @@ import org.bukkit.inventory.meta.BookMeta;
 public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     
     /**
-     * Constructs a <code>BookBuilder</code> from the specified <code>ItemStack</code>.
+     * Constructs a <code>BookBuilder</code> with the specified <code>ItemStack</code>.
      * 
      * @param item the ItemStack
      */
@@ -36,7 +36,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Constructs a <code>BookBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>BookBuilder</code> with the specified <code>Builder</code>.
      * 
      * @param builder the Builder
      */
@@ -48,7 +48,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
      * Sets the title to the specified parameter.
      * 
      * @param title the Title
-     * @return the modified <code>BookBuilder</code> instance
+     * @return this
      */
     public BookBuilder title(String title) {
         meta.setTitle(title);
@@ -59,7 +59,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
      * Sets the author to the specified parameter.
      * 
      * @param author the Author
-     * @return the modified <code>BookBuilder</code> instance
+     * @return this
      */
     public BookBuilder author(String author) {
         meta.setAuthor(author);
@@ -70,7 +70,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
      * Adds the specified array of pages.
      * 
      * @param pages the array of pages
-     * @return the modified <code>BookBuilder</code> instance 
+     * @return this
      */
     public BookBuilder pages(String... pages) {
         meta.addPage(pages);
@@ -81,7 +81,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
      * Sets the generation level to the specified parameter.
      * 
      * @param generation the Generation level
-     * @return the modified <code>BookBuilder</code> instance 
+     * @return this
      */
     public BookBuilder generation(BookMeta.Generation generation) {
         meta.setGeneration(generation);
@@ -89,7 +89,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
 
     /**
-     * @return the current <code>BookBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected BookBuilder getThis() {

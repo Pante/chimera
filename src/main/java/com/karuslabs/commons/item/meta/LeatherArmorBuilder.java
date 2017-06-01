@@ -23,19 +23,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 /**
- * A builder system used to modify and create information for leather armor.
+ * Represents a specialised <code>Builder</code> for building items with <code>LeatherArmorMeta</code>.
  */
 public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
     
 	/**
-	 * Constructs a <code>LeatherArmorBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>LeatherArmorBuilder</code> with the specified <code>ItemStack</code>.
+	 * 
+	 * @param item the ItemStack
 	 */
     public LeatherArmorBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>LeatherArmorBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>LeatherArmorBuilder</code> with the specified <code>Builder</code>.
+     * 
+     * @param builder the Builder
      */
     public LeatherArmorBuilder(Builder builder) {
         super(builder);
@@ -45,7 +49,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
      * Sets the color of the builder
      * 
      * @param color the color
-     * @return the modified <code>LeatherArmorBuilder</code> instance.
+     * @return this
      */
     public LeatherArmorBuilder color(Color color) {
         meta.setColor(color);
@@ -53,7 +57,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
     }
     
     /**
-     * @return the current <code>LeatherArmorBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected LeatherArmorBuilder getThis() {

@@ -22,19 +22,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 
 /**
- * A builder system used to create and modify map information.
+ * Represents a specialised <code>Builder</code> for building items with <code>MapMeta</code>.
  */
 public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
 	/**
-	 * Constructs a <code>MapBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>MapBuilder</code> with the specified <code>ItemStack</code>.
+	 * 
+	 * @param item the ItemStack
 	 */
     public MapBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>MapBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>MapBuilder</code> with the specified <code>Builder</code>.
+     * 
+     * @param builder the Builder
      */
     public MapBuilder(Builder builder) {
         super(builder);
@@ -44,7 +48,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
      * Sets the color for the builder
      * 
      * @param color the color
-     * @return the modified <code>MapBuilder</code> instance.
+     * @return this
      */
     public MapBuilder color(Color color) {
         meta.setColor(color);
@@ -55,7 +59,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
      * Sets the name of the map's location
      * 
      * @param name the name
-     * @return the modified <code>MapBuilder</code> instance.
+     * @return this
      */
     public MapBuilder locationName(String name) {
         meta.setLocationName(name);
@@ -66,7 +70,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
      * Sets if the map follows scaling
      * 
      * @param value if the map scales
-     * @return the modified <code>MapBuilder</code> instance. 
+     * @return this
      */
     public MapBuilder scaling(boolean value) {
         meta.setScaling(value);
@@ -74,7 +78,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
 
     /**
-     * @return the current <code>MapBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected MapBuilder getThis() {

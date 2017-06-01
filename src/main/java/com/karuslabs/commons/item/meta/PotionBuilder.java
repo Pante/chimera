@@ -24,20 +24,24 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
 /**
- * A builder system used to modify and create potion data. 
+ * Represents a specialised <code>Builder</code> for building items with <code>PotionBuilderMeta</code>.
  */
 public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
 	/**
-	 * Constructs a <code>PotionBuilder</code> from the specified <code>ItemStack</code>.
+	 * Constructs a <code>PotionBuilder</code> with the specified <code>ItemStack</code>.
 	 * The material type of the <code>ItemStack</code> should be a potion
+	 * 
+	 * @param item the ItemStack
 	 */
     public PotionBuilder(ItemStack item) {
         super(item);
     }
     
     /**
-     * Constructs a <code>PotionBuilder</code> from the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>PotionBuilder</code> with the specified <code>Builder</code>.
+     * 
+     * @param builder the Builder
      */
     public PotionBuilder(Builder builder) {
         super(builder);
@@ -47,7 +51,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
      * Sets the color data of the builder.
      * 
      * @param color the color
-     * @return the modified <code>PotionBuilder</code> instance 
+     * @return this
      */
     public PotionBuilder color(Color color) {
         meta.setColor(color);
@@ -59,7 +63,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
      * 
      * @param effect the potion effect
      * @param whether the effect should be able to override prexisting effects
-     * @return the modified <code>PotionBuilder</code> instance
+     * @return this
      */
     public PotionBuilder effect(PotionEffect effect, boolean override) {
         meta.addCustomEffect(effect, override);
@@ -70,7 +74,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
      * Sets the data for the potion.
      * 
      * @param data the potion data
-     * @return the modified <code>PotionBuilder</code> instance
+     * @return this
      */
     public PotionBuilder data(PotionData data) {
         meta.setBasePotionData(data);
@@ -78,7 +82,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     /**
-     * @return the current <code>PotionBuilder</code> instance
+     * {@inheritDoc}
      */
     @Override
     protected PotionBuilder getThis() {
