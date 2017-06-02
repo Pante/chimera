@@ -16,10 +16,60 @@
  */
 package com.karuslabs.commons.animation;
 
-/**
- *
- * @author Karus Labs
- */
+import java.util.Collections;
+
+import org.bukkit.Server;
+import org.bukkit.boss.*;
+import org.bukkit.entity.Player;
+
+import org.junit.Test;
+
+import static com.karuslabs.commons.Yaml.ANIMATION;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+
 public class BossBarFactoryTest {
+
+    private BossBarFactory factory;
+    private Server server;
+    private BossBar bar;
+    private Player player;
+    
+    
+    public BossBarFactoryTest() {
+        bar = mock(BossBar.class);
+        server = when(mock(Server.class).createBossBar("test message", BarColor.BLUE, BarStyle.SOLID, BarFlag.CREATE_FOG)).thenReturn(bar).getMock();
+        factory = new BossBarFactory(server, ANIMATION.getConfigurationSection("bar"));
+        player = mock(Player.class);
+    }
+    
+    
+    @Test
+    public void bossBarFactory() {
+        assertEquals("test message", factory.getMessage());
+        assertEquals(BarColor.BLUE, factory.getColor());
+        assertEquals(BarStyle.SOLID, factory.getStyle());
+        assertThat(factory.getFlags(), equalTo(new BarFlag[] {BarFlag.CREATE_FOG}));
+    }
+    
+    
+    @Test
+    public void newBar_Players() {
+        BossBar bar = factory.newBar(player);
+        
+        verify(server).createBossBar("test message", BarColor.BLUE, BarStyle.SOLID, BarFlag.CREATE_FOG);
+        verify(bar).addPlayer(player);
+    }
+    
+    
+    @Test
+    public void newBar_Collection() {
+        BossBar bar = factory.newBar(Collections.singleton(player));
+        
+        verify(server).createBossBar("test message", BarColor.BLUE, BarStyle.SOLID, BarFlag.CREATE_FOG);
+        verify(bar).addPlayer(player);
+    }
     
 }

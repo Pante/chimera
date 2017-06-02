@@ -7,6 +7,8 @@ bar:
     message: test message
     color: BLUE
     style: SOLID
+    flags:
+        - CREATE_FOG
     
     
 helix:

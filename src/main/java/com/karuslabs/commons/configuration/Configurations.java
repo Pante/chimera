@@ -16,12 +16,24 @@
  */
 package com.karuslabs.commons.configuration;
 
+import java.io.*;
+
 import org.bukkit.configuration.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 
 public class Configurations {
         
     public static final ImmutableConfigurationSection BLANK = new ImmutableConfigurationSection(new MemoryConfiguration());
+    
+    
+    public static YamlConfiguration loadResource(String name) {
+        return load(Configurations.class.getResourceAsStream(name));
+    }
+    
+    public static YamlConfiguration load(InputStream stream) {
+        return YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+    }
     
     
     public static ConfigurationSection getOrDefault(ConfigurationSection config, ConfigurationSection defaultConfig) {
