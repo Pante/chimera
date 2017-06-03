@@ -1,2 +1,5 @@
-## YAML Template.
----
+mongodb:
+    authentication: true
+    host: ahost
+    password: apassword
+    

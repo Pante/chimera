@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.ChatColor;;
+import org.bukkit.ChatColor;
 
 import static com.karuslabs.commons.commands.Utility.trim;
 

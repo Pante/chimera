@@ -25,13 +25,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Configurations {
         
     public static final ImmutableConfigurationSection BLANK = new ImmutableConfigurationSection(new MemoryConfiguration());
+
     
-    
-    public static YamlConfiguration loadResource(String name) {
-        return load(Configurations.class.getResourceAsStream(name));
-    }
-    
-    public static YamlConfiguration load(InputStream stream) {
+    public static YamlConfiguration from(InputStream stream) {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
     }
     

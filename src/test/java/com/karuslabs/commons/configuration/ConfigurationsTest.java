@@ -17,14 +17,22 @@
 package com.karuslabs.commons.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
 public class ConfigurationsTest {
+    
+    @Test
+    public void load() {
+        YamlConfiguration config = Configurations.from(getClass().getClassLoader().getResourceAsStream("util/config.yml"));
+        assertNotNull(config);
+    }
+    
     
     @Test
     public void getOrDefault() {

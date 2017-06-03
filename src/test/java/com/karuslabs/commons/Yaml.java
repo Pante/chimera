@@ -23,8 +23,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Yaml {
     
-    public static final YamlConfiguration ANIMATION = Configurations.loadResource("animation/animation.yml");
+    public static final YamlConfiguration ANIMATION = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("animation/animation.yml"));
     
-    public static final YamlConfiguration DATABASES = Configurations.loadResource("util/databases.yml");
+    public static final YamlConfiguration DATABASES = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("util/databases.yml"));
     
 }
