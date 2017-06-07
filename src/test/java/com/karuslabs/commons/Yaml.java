@@ -25,6 +25,8 @@ public class Yaml {
     
     public static final YamlConfiguration ANIMATION = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("animation/animation.yml"));
     
+    public static final YamlConfiguration CONFIGURATION = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("configuration/config.yml"));
+    
     public static final YamlConfiguration DATABASES = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("util/databases.yml"));
     
 }

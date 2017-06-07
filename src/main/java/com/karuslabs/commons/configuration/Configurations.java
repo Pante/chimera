@@ -16,8 +16,11 @@
  */
 package com.karuslabs.commons.configuration;
 
+import com.karuslabs.commons.util.LazyLocation;
+
 import java.io.*;
 
+import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -29,6 +32,29 @@ public class Configurations {
     
     public static YamlConfiguration from(InputStream stream) {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+    }
+    
+    
+    public static Location getLocation(ConfigurationSection config) {
+        return new Location(
+            Bukkit.getWorld(config.getString("world")),
+            config.getDouble("x"),
+            config.getDouble("y"),
+            config.getDouble("z"),
+            (float) config.getDouble("yaw"),
+            (float) config.getDouble("pitch")
+        );
+    }
+    
+    public static Location getLazyLocation(ConfigurationSection config) {
+        return new LazyLocation(
+            config.getString("world"),
+            config.getDouble("x"),
+            config.getDouble("y"),
+            config.getDouble("z"),
+            (float) config.getDouble("yaw"),
+            (float) config.getDouble("pitch")
+        );
     }
     
     
