@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
+import com.karuslabs.commons.display.BossBarFactory;
 import java.util.Collections;
 
 import org.bukkit.Server;
@@ -24,10 +25,10 @@ import org.bukkit.entity.Player;
 
 import org.junit.Test;
 
-import static com.karuslabs.commons.Yaml.ANIMATION;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static com.karuslabs.commons.Yaml.DISPLAY;
 
 
 public class BossBarFactoryTest {
@@ -41,7 +42,7 @@ public class BossBarFactoryTest {
     public BossBarFactoryTest() {
         bar = mock(BossBar.class);
         server = when(mock(Server.class).createBossBar("test message", BarColor.BLUE, BarStyle.SOLID, BarFlag.CREATE_FOG)).thenReturn(bar).getMock();
-        factory = new BossBarFactory(server, ANIMATION.getConfigurationSection("bar"));
+        factory = new BossBarFactory(server, DISPLAY.getConfigurationSection("bar"));
         player = mock(Player.class);
     }
     

@@ -2,8 +2,9 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
+import com.karuslabs.commons.display.ActionBar;
 import com.karuslabs.commons.configuration.Configurations;
 
 import com.karuslabs.mockkit.stub.StubScheduler;
@@ -30,7 +31,7 @@ public class ActionBarTest {
     public ActionBarTest() {
         Server server = when(mock(Server.class).getScheduler()).thenReturn(StubScheduler.INSTANCE).getMock();
         plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
-        bar = spy(new ActionBar(plugin, ANIMATION.getConfigurationSection("actionbar")));
+        bar = spy(new ActionBar(plugin, DISPLAY.getConfigurationSection("actionbar")));
     }
     
     

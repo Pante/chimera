@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
 import net.md_5.bungee.api.*;
 import net.md_5.bungee.api.chat.TextComponent;

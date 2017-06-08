@@ -14,19 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons;
+package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.configuration.Configurations;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-
-
-public class Yaml {
-    
-    public static final YamlConfiguration DISPLAY = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("display/display.yml"));
-    
-    public static final YamlConfiguration CONFIGURATION = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("configuration/config.yml"));
-    
-    public static final YamlConfiguration DATABASES = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("util/databases.yml"));
+/**
+ *
+ * @author Karus Labs
+ */
+public class Effect {
     
 }

@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;

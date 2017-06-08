@@ -8,16 +8,7 @@ bar:
     color: BLUE
     style: SOLID
     flags:
-        - CREATE_FOG
-    
-    
-helix:
-    radius: 6.9
-    particles: FLAME
-    amount: 10
-    height: 5.5
-    period: 4.5
-    
+        - CREATE_FOG  
 
 music:
     sound: BLOCK_ANVIL_BREAK
