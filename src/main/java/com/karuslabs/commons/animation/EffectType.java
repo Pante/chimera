@@ -16,10 +16,9 @@
  */
 package com.karuslabs.commons.animation;
 
-/**
- *
- * @author Karus Labs
- */
-public class Effect {
+
+public enum EffectType {
+    
+    INSTANT, REPEATING, INFINITE
     
 }
