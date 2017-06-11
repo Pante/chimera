@@ -16,12 +16,9 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.animation.particles.Particles;
 
-
-public abstract class Effect {
+public enum AnimationType {
     
-    private EffectType type;
-    private Particles particles;
+    INSTANT, REPEATING, INFINITE
     
 }
