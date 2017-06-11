@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
+import com.karuslabs.commons.display.Music;
 import com.karuslabs.commons.configuration.Configurations;
 
 import org.bukkit.*;
@@ -36,7 +37,7 @@ public class MusicTest {
     
     
     public MusicTest() {
-        music = new Music(ANIMATION.getConfigurationSection("music"));
+        music = new Music(DISPLAY.getConfigurationSection("music"));
         location = new Location(mock(World.class), 0, 0, 0);
         player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     }

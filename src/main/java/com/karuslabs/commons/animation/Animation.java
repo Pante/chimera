@@ -14,9 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.animation;
+
+import com.karuslabs.commons.animation.particles.Particles;
 
 
-public class DatabasesTest {
+public abstract class Animation {
+    
+    private AnimationType type;
+    private Particles particles;
     
 }

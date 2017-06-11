@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.*;
 import org.bukkit.boss.*;
@@ -44,11 +45,13 @@ public class BossBarFactory {
      * @param config 
      */
     public BossBarFactory(Server server, ConfigurationSection config) {
-        this.server = server;
-        this.message = ChatColor.translateAlternateColorCodes('&', config.getString("message", ""));
-        this.color = BarColor.valueOf(config.getString("color", "PURPLE"));
-        this.style = BarStyle.valueOf(config.getString("style", "SEGMENTED_10"));
-        
+        this(
+            server,
+            ChatColor.translateAlternateColorCodes('&', config.getString("message", "")),
+            BarColor.valueOf(config.getString("color", "PURPLE")),
+            BarStyle.valueOf(config.getString("style", "SEGMENTED_10")),
+            config.getStringList("flags").stream().map(BarFlag::valueOf).collect(Collectors.toList()).toArray(new BarFlag[0])
+        );
     }
     
     /**
@@ -100,9 +103,27 @@ public class BossBarFactory {
      */
     public BossBar newBar(Collection<Player> players) {
         BossBar bar = server.createBossBar(message, color, style, flags);
+        System.out.println(bar);
         players.forEach(bar::addPlayer);
         
         return bar;
+    }
+
+    
+    public String getMessage() {
+        return message;
+    }
+
+    public BarColor getColor() {
+        return color;
+    }
+
+    public BarStyle getStyle() {
+        return style;
+    }
+    
+    public BarFlag[] getFlags() {
+        return Arrays.copyOf(flags, flags.length);
     }
     
 }

@@ -16,11 +16,17 @@
  */
 package com.karuslabs.commons;
 
+import com.karuslabs.commons.configuration.Configurations;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
 public class Yaml {
     
-    public static final YamlConfiguration ANIMATION = YamlConfiguration.loadConfiguration(Yaml.class.getClassLoader().getResourceAsStream("animation/animation.yml"));
+    public static final YamlConfiguration DISPLAY = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("display/display.yml"));
+    
+    public static final YamlConfiguration CONFIGURATION = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("configuration/config.yml"));
+    
+    public static final YamlConfiguration DATABASES = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("util/databases.yml"));
     
 }

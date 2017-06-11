@@ -84,7 +84,7 @@ public class YamlFileConfigurationTest {
         doNothing().when(config).save(any(File.class));
         doNothing().when(config).load(any(File.class));
         
-        config.loadOrDefault("util/config.yml");
+        config.loadOrDefault("configuration/config.yml");
         
         verify(config, times(saveTimes)).load(any(InputStream.class));
         verify(config, times(saveTimes)).save(file);
@@ -100,7 +100,7 @@ public class YamlFileConfigurationTest {
         
         doThrow(IOException.class).when(config).save(file);
         
-        config.loadOrDefault("util/config.yml");
+        config.loadOrDefault("configuration/config.yml");
     }
     
     
@@ -113,7 +113,7 @@ public class YamlFileConfigurationTest {
         
         doThrow(InvalidConfigurationException.class).when(config).load(file);
         
-        config.loadOrDefault("util/config.yml");
+        config.loadOrDefault("configuration/config.yml");
     }
     
     

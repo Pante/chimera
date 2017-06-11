@@ -14,21 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
-
-import org.bukkit.configuration.ConfigurationSection;
+package com.karuslabs.commons.animation;
 
 
-public class Databases {
+public enum AnimationType {
     
-    public static String getMongoURL(ConfigurationSection section) {
-        String url = "mongodb://";
-        if (section.getBoolean("authentication", false)) {
-            url += section.getString("host", "") + ":" + section.getString("password", "") + "@";
-        } 
-        url += section.getString("host", "") + ":" + section.getInt("port", 27018) + "/" + section.getString("name", "");
-        
-        return url;
-    }
+    INSTANT, REPEATING, INFINITE
     
 }

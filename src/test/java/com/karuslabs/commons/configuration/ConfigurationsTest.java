@@ -16,15 +16,64 @@
  */
 package com.karuslabs.commons.configuration;
 
+import com.karuslabs.mockkit.rule.ServerRule;
+
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.junit.Test;
+import org.junit.*;
 
-import static org.junit.Assert.assertTrue;
+import static com.karuslabs.commons.Yaml.CONFIGURATION;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
 public class ConfigurationsTest {
+    
+    @Rule
+    public ServerRule server = new ServerRule();
+    
+    private World world;
+    
+    
+    public ConfigurationsTest() {
+        world = mock(World.class);
+        when(server.getServer().getWorld("name")).thenReturn(world).getMock();
+    }
+    
+    
+    @Test
+    public void getLocation() {
+        Location location = Configurations.getLocation(CONFIGURATION.getConfigurationSection("location"));
+        assertEquals(world, location.getWorld());
+        assertEquals(0, location.getX(), 0);
+        assertEquals(1, location.getY(), 0);
+        assertEquals(2, location.getZ(), 0);
+        assertEquals(0.3, location.getYaw(), 0.0001);
+        assertEquals(0.4, location.getPitch(), 0.0001);
+    }
+    
+    
+    @Test
+    public void getLazyLocation() {
+        Location location = Configurations.getLazyLocation(CONFIGURATION.getConfigurationSection("location"));
+        assertEquals(world, location.getWorld());
+        assertEquals(0, location.getX(), 0);
+        assertEquals(1, location.getY(), 0);
+        assertEquals(2, location.getZ(), 0);
+        assertEquals(0.3, location.getYaw(), 0.0001);
+        assertEquals(0.4, location.getPitch(), 0.0001);
+    }
+    
+    
+    
+    @Test
+    public void from() {
+        YamlConfiguration config = Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml"));
+        assertNotNull(config);
+    }
+    
     
     @Test
     public void getOrDefault() {

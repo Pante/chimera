@@ -26,7 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     
     public ItemBuilder(Material material) {
-        this(new ItemStack(material));
+        super(material);
     }
     
     public ItemBuilder(ItemStack item) {

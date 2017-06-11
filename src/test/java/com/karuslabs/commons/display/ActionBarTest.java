@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.display;
 
+import com.karuslabs.commons.display.ActionBar;
 import com.karuslabs.commons.configuration.Configurations;
 
 import com.karuslabs.mockkit.stub.StubScheduler;
@@ -42,7 +43,7 @@ public class ActionBarTest {
     public ActionBarTest() {
         Server server = when(mock(Server.class).getScheduler()).thenReturn(StubScheduler.INSTANCE).getMock();
         plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
-        bar = spy(new ActionBar(plugin, ANIMATION.getConfigurationSection("actionbar")));
+        bar = spy(new ActionBar(plugin, DISPLAY.getConfigurationSection("actionbar")));
     }
     
     
