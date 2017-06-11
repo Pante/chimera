@@ -21,6 +21,6 @@ _Java 8 artifact:_
   </dependencies>
 ```
 
-<a href = "http://repo.karuslabs.com/repository/karus-commons-project/2.0.0-SNAPSHOT/apidocs/overview-summary.html">Javadocs</a>
-<a href = "https://github.com/Pante/Karus-Commons/tree/Documentation">Documented source code</a>
+<a href = "http://repo.karuslabs.com/repository/karus-commons-project/2.0.0-SNAPSHOT/apidocs/overview-summary.html">Javadocs</a> | 
+<a href = "https://github.com/Pante/Karus-Commons/tree/Documentation">Documented source code</a> | 
 <a href = "http://repo.karuslabs.com/#browse/browse/assets:karus-commons">Repository</a>
