@@ -17,6 +17,6 @@
 
 
 /**
- * Contains the collection classes.
+ * Contains generic collection implementations, and other utilities for working with collections.
  */
 package com.karuslabs.commons.collections;

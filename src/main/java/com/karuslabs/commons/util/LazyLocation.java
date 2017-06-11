@@ -11,6 +11,9 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 
+/**
+ * Represents a location which stores the name of the world and lazily evaluates if the world is loaded.
+ */
 public class LazyLocation extends Location {
     
     private String name;
@@ -18,18 +21,49 @@ public class LazyLocation extends Location {
     protected Location location;
 
     
+    /**
+     * Constructs a <code>LazyLocation</code> with the specified world name, x, y and z coordinates.
+     * 
+     * @param name the world name
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z  the z coordinate
+     */
     public LazyLocation(String name, double x, double y, double z) {
         this(name, x, y, z, 0, 0);
     }
     
+    /**
+     * Constructs a <code>LazyLocation</code> with the specified world name, x, y and z coordinates, yaw and pitch.
+     * 
+     * @param name the world name
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z  the z coordinate
+     * @param yaw the yaw
+     * @param pitch the pitch
+     */
     public LazyLocation(String name, double x, double y, double z, float yaw, float pitch) {
         this(name, new Location(null, x, y, z, yaw, pitch));
     }
     
+    /**
+     * Constructs a <code>LazyLocation</code> with the specified world name and backing <code>Location</code>.
+     * 
+     * @param name the world name
+     * @param location the backing location
+     */
     public LazyLocation(String name, Location location) {
         this(name, Bukkit.getServer(), location);
     }  
     
+    /**
+     * Constructs a <code>LazyLocation</code> with the specified world name, server and backing <code>Location</code>.
+     * 
+     * @param name the world name
+     * @param server the server
+     * @param location the backing location
+     */
     public LazyLocation(String name, Server server, Location location) {
         super(null, 0, 0, 0);
         this.name = name;
@@ -38,10 +72,16 @@ public class LazyLocation extends Location {
     }
     
     
+    /**
+     * @return true if the world is loaded; else false 
+     */
     public boolean isLoaded() {
         return location.getWorld() != null;
     }
     
+    /**
+     * Attempts to load the world of the location.
+     */
     public void load() {
         location.setWorld(server.getWorld(name));
     }
@@ -52,6 +92,12 @@ public class LazyLocation extends Location {
         location.setWorld(world);
     }
     
+    /**
+     * Returns the world if loaded; else null.
+     * Lazily evaluates if the world is loaded, and attempts to load it if unloaded.
+     * 
+     * @return the world if loaded; else null
+     */
     @Override
     public World getWorld() {
         if (location.getWorld() == null) {

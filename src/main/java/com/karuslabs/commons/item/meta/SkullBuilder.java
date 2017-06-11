@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>SkullMeta</code>.
+ * Represents a builder for items with <code>SkullMeta</code>.
  */
 public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
@@ -36,7 +36,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>SkullBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>SkullBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

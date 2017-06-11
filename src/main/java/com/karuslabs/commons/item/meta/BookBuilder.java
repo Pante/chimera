@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>BookMeta</code>.
+ * Represents a builder for items with <code>BookMeta</code>.
  */
 public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     
@@ -36,7 +36,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>BookBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>BookBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

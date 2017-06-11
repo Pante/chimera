@@ -30,7 +30,7 @@ import static org.apache.commons.lang.StringUtils.center;
 /**
  * Represents a <code>Player</code>'s action bar. 
  * <p>
- * This class is requires Spigot. Attempts to run it with only CraftBukkit will result in undefined behaviour.
+ * <b>This class requires Spigot. Attempts to run it otherwise will result in undefined behaviour.</b>
  */
 public class ActionBar {    
 
@@ -44,6 +44,7 @@ public class ActionBar {
     
     /**
      * Constructs a <code>ActionBar</code> with the specified <code>Plugin</code> and <code>ConfigurationSection</code>.
+     * <p>
      * Obtains the values mapped to the keys from the specified <code>ConfigurationSection</code> if present; else the default values.
      * <p>
      * Valid keys and their default values are as follows: <pre>message: "", color: WHITE, frames: 4</pre>. Note that the value for
@@ -80,7 +81,7 @@ public class ActionBar {
     
     
     /**
-     * Renders an animated message to the specified <code>Player</code>'s action bar.
+     * Renders an animated message on the specified <code>Player</code>'s action bar.
      * 
      * @param player the player
      */
@@ -89,7 +90,7 @@ public class ActionBar {
     }
     
     /**
-     * Renders an animated message to the specified <code>Player</code>'s action bar after the specified initial delay.
+     * Renders an animated message on the specified <code>Player</code>'s action bar after the specified initial delay.
      * 
      * @param player the player
      * @param delay the initial delay

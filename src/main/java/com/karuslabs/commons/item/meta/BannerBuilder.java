@@ -27,7 +27,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>BannerMeta</code>.
+ * Represents a builder for items with <code>BannerMeta</code>.
  */
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
@@ -41,7 +41,7 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>BannerBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>BannerBuilder</code> with the specified builder.
      *  
      * @param builder the Builder
      */

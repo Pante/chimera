@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>LeatherArmorMeta</code>.
+ * Represents a builder for items with <code>LeatherArmorMeta</code>.
  */
 public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
     
@@ -37,7 +37,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
     }
     
     /**
-     * Copy constructor which constructs a <code>LeatherArmorBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>LeatherArmorBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

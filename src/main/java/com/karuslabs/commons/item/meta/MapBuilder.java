@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>MapMeta</code>.
+ * Represents a builder for items with <code>MapMeta</code>.
  */
 public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
@@ -37,7 +37,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>MapBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>MapBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

@@ -22,33 +22,33 @@ import java.util.*;
 /**
  * Consists exclusively of static methods that facilitates creation of <code>Map</code>s.
  * <p>
- * This class is a temporary workaround until Java 9 and <a href = "http://openjdk.java.net/jeps/269">JEP 269</a>
- * has achieved general availability, after which this class will be removed.
+ * This class is a temporary workaround until Java 9 has reached general availability, after which this class will be rendered
+ * obsolete by <a href = "http://openjdk.java.net/jeps/269">JEP 269</a> and subsequently be removed.
  */
 public class Maps {
     
     /**
-     * Returns a <code>Builder</code> which constructs a <code>HashMap</code>.
+     * Returns a builder for constructing a <code>HashMap</code>.
      * 
-     * @return a Builder which constructs a HashMap
+     * @return a builder which constructs a HashMap
      */
     public static <K, V> Builder<K, V> builder() {
         return builder(new HashMap<>());
     }
     
     /**
-     * Returns a <code>Builder</code> which constructs a <code>HashMap</code> with the specified first key-value pair.
+     * Returns a builder for constructing a <code>HashMap</code> with the specified first key-value pair.
      * 
-     * @return a Builder which constructs a HashMap
+     * @return a builder which constructs a HashMap
      */
     public static <K, V> Builder<K, V> builder(K key, V value) {
         return builder().put(key, value);
     }
     
     /**
-     * Returns a new <code>Builder</code> for the map specified.
+     * Returns a new builder for building the specified map.
      * 
-     * @return a Builder which will create the map specified
+     * @return a builder which will build the specified map
      */
     public static <K, V> Builder<K, V> builder(Map<K, V> map) {
         return new Builder(map);
@@ -56,7 +56,7 @@ public class Maps {
     
     
     /**
-     * Represents a Builder used to facilitate creation of <code>Map</code>s.
+     * Represents a builder used to facilitate creation of <code>Map</code>s.
      */
     public static class Builder<K, V> {
         
@@ -74,7 +74,7 @@ public class Maps {
         
         
         /**
-         * Associates the specified value with the specified key in the map to build.
+         * Maps the specified key to the specified value.
          * 
          * @param key key with which the specified value is to be associated
          * @param value value to be associated with the specified key
@@ -86,9 +86,9 @@ public class Maps {
         }
         
         /**
-         * Copies all of the mappings from the specified map to the map to build.
+         * Copies all of the mappings from the specified map.
          * 
-         * @param map mappings to be stored in this map
+         * @param map the map which contains mappings to be stored
          * @return this
          */
         public Builder putAll(Map<K, V> map) {
@@ -105,7 +105,7 @@ public class Maps {
         }
         
         /**
-         * Returns a unmodifiable version of the map which is decorated by <code>Collections.unmodifiableMap(Map)</code>.
+         * Returns a unmodifiable version of the map decorated via <code>Collections.unmodifiableMap(Map)</code>.
          * 
          * @return a unmodifiable version of the map
          */

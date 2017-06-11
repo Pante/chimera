@@ -20,14 +20,12 @@ import java.util.*;
 
 
 /**
- * Represents a decorator for <code>ProxiedMap</code> which maps a {@link MultiClassMap.Key} to an instance of the <code>Key</code> type.
+ * Represents a multi-value implementation of the typesafe heterogeneous container pattern.
  * <p>
- * Casts the instance to the mapped type when retrieved via {@link #getInstance(MultiClassMap.Key)} or {@link #getInstanceOrDefault(MultiClassMap.Key, Object)}.
- * Each <code>Key</code> is composed of a <code>name</code> and a <code>Class</code>. This allows multiple instances to be mapped to a type, which may be 
- * uniquely identified by the <code>name</code> component of the <code>Key</code>.
- * A primitive type and its corresponding wrapper type may be mapped to different values.
+ * This collection maps a {@link MultiClassMap.Key} consisting of a class and identifying string to an instance of that class, 
+ * Also contains typesafe operations for insertion and retrieval. A primitive type and its corresponding wrapper type may map to different values.
  * <p>
- * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
+ * For more details, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.
  * 
  * @param <V> the common supertype which all entries must share
@@ -65,19 +63,19 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
      * 
      * @param <U> the type of the instance returned
      * @param key the Key whose associated instance is to be returned
-     * @return the instance mapped to the specified <code>Key</code> if present; else null
+     * @return the instance mapped to the specified Key if present; else null
      */
     public <U extends V> U getInstance(Key<U> key) {
         return key.type.cast(map.get(key));
     }
     
     /**
-     * Returns the instance mapped to the specified <code>Key</code> if present; else the specified <code>value</code>.
+     * Returns the instance mapped to the specified <code>Key</code> if present; else the specified value.
      * 
      * @param <U> the type of the instance returned
      * @param key the Key whose associated instance is to be returned
-     * @param value the default mapping of the Key
-     * @return the instance mapped to the specified <code>Key</code> if present; else the specified <code>value</code>.
+     * @param value the default mapping for the specified Key
+     * @return the instance mapped to the specified Key if present; else the specified value.
      */
     public <U extends V> U getInstanceOrDefault(Key<U> key, U value) {
         V uncasted = map.get(key);
@@ -91,7 +89,7 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
 
     
     /**
-     * Associates the specified instance with the specified <code>Key</code> in this map.
+     * Maps the specified <code>Key</code> to the specified instance of the class contained in the specified <code>Key</code>.
      * 
      * @param <U> the type of the instance returned
      * @param key the Key with which the specified instance is to be associated
@@ -103,12 +101,12 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
-     * Convenience method which returns a new <code>Key</code> to be used in 
-     * conjunction with {@link MultiClassMap#getInstance(Key)} and {@link MultiClassMap#putInstance(Key, Object)}.
+     * Convenience method which constructs a <code>Key</code> to be used in 
+     * conjunction with the insertion and retrieval operations.
      * 
      * @param <T> the type of the instance associated with this Key
-     * @param name the name used to uniquely identify this key
-     * @param type the Class of the instance associated with this key
+     * @param name the name used to uniquely identify this Key
+     * @param type the class of the instance associated with this Key
      * @return a new Key
      */
     public static <T> Key<T> key(String name, Class<T> type) {
@@ -117,13 +115,14 @@ public class MultiClassMap<V> extends ProxiedMap<MultiClassMap.Key<? extends V>,
     
     
     /**
-     * A key to which an instance is mapped to. Allows for multiple instances to be mapped to a type each uniquely identified by the <code>name</code>.
+     * Represents a key which contains a identifying string and a class to which an instance of that class is mapped to.
+     * <p>
      * Equality is determined by comparing the combined hashes of <code>name</code> and <code>type</code>.
      * <p>
-     * For example, <code>new Key("A", Object.class).equals(new Key("A", Object.class));</code> returns true,
-     * and conversely, <code>new Key("A", int.class).equals(new Key("A", Object.class));</code> returns false.
+     * For example, <code>new Key("A", Object.class).equals(new Key("A", Object.class));</code> will return true,
+     * and conversely, <code>new Key("A", int.class).equals(new Key("A", Object.class));</code> will return false.
      * 
-     * @param <T> the type of the instance associated with this key
+     * @param <T> the type of the instance to be associated with this key
      */
     public static class Key<T> {
         

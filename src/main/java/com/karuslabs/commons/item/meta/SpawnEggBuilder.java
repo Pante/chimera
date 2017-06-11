@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>SpawnEggMeta</code>.
+ * Represents a builder for items with <code>SpawnEggMeta</code>.
  */
 public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
 

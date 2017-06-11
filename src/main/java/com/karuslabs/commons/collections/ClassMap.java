@@ -20,13 +20,12 @@ import java.util.*;
 
 
 /**
- * Represents a decorator for <code>ProxiedMap</code> which maps a type to an instance of that type.
+ * Represents a single value implementation of the typesafe heterogeneous container pattern.
  * <p>
- * Casts the instance to the mapped type when retrieved via {@link #getInstance(Class)} or {@link #getInstanceOrDefault(Class, Object)}.
- * Each type may only be mapped to a single instance of that type.
- * A primitive type and its corresponding wrapper type may be mapped to different values.
+ * This collection maps a class to an instance of that class. Also contains typesafe operations for insertion
+ * and retrieval. A primitive type and its corresponding wrapper type may map to different values.
  * <p>
- * For more detail, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
+ * For more details, please read this article on <a href = "https://gerardnico.com/wiki/design_pattern/typesafe_heterogeneous_container">
  * Typesafe heterogeneous containers</a>.
  * 
  * @param <V> the common supertype which all entries must share
@@ -60,21 +59,21 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     
     
     /**
-     * Returns the instance mapped to the specified <code>Class</code> if present; else null.
+     * Returns the instance mapped to the specified class if present; else null.
      * 
-     * @param type the Class whose associated instance is to be returned
-     * @return the instance to which the specified Class is mapped if present; else null
+     * @param type the class whose associated instance is to be returned
+     * @return the instance to which the specified class is mapped if present; else null
      */
     public <U extends V> U getInstance(Class<U> type) {
         return type.cast(map.get(type));
     }
     
     /**
-     * Returns the instance mapped to the specified <code>Class</code> if present; else the specified <code>value</code>.
+     * Returns the instance mapped to the specified class if present; else the specified <code>value</code>.
      * 
-     * @param type the Class whose associated instance is to be returned
-     * @param value the default mapping of the Class
-     * @return the instance mapped to the specified <code>Class</code> if present; else the specified <code>value</code>.
+     * @param type the class whose associated instance is to be returned
+     * @param value the default mapping for the specified class
+     * @return the instance mapped to the specified class if present; else the specified value.
      */
     public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
         V uncasted = map.get(type);
@@ -88,10 +87,10 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
     
     
     /**
-     * Associates the specified instance with the specified <code>Class</code> in this map.
+     * Maps the specified class to the specified instance of that class.
      * 
-     * @param type the Class with which the specified instance is to be associated
-     * @param value the instance to be associated with the specified Class
+     * @param type the class with which the specified instance is to be associated
+     * @param value the instance to be associated with the specified class
      */
     public <U extends V> void putInstance(Class<U> type, U value) {
         map.put(type, value);

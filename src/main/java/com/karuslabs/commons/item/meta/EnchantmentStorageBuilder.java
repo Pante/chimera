@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>EnchantmentStorageMeta</code>.
+ * Represents a builder for items with <code>EnchantmentStorageMeta</code>.
  */
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder, EnchantmentStorageMeta> {
     
@@ -37,7 +37,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder
     }
     
     /**
-     * Copy constructor which constructs an <code>EnchantmentStorageBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs an <code>EnchantmentStorageBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

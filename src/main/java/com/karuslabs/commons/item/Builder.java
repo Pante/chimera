@@ -25,50 +25,62 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 
 /**
+ * Represents a skeletal implementation of a builder for <code>ItemStack</code>s.
+ * <p>
+ * To implement a builder for a <code>ItemStack</code>, the programmer needs only to extend this class and provide an implementation
+ * for the <code>getThis</code> method which returns an instance of the overriding subclass. This is done to allow the implementing subclass to 
+ * leverage on the existing methods while allowing the subclass to include additional methods.
+ * <p>
+ * For more details please read this article on the <a href = "https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">
+ * Curiously recurring template pattern</a>.
  * 
- * @param <GenericBuilder>
- * @param <GenericMeta> 
+ * @param <GenericBuilder> the type of builder to be returned by the getThis() method, generally the implementing subclass
+ * @param <GenericMeta> the type of ItemMeta this builder is to contain
  */
 public abstract class Builder<GenericBuilder extends Builder, GenericMeta extends ItemMeta> { 
     
     /**
-     * 
+     * The <code>ItemStack</code> to build, exposed to facilitate subclassing.
      */
     protected ItemStack item;
     /**
-     * 
+     * The <code>ItemMeta</code> subclass to build, exposed to facilitate subclassing.
      */
     protected GenericMeta meta;
 
     
     /**
+     * Constructs a <code>Builder</code> with the specified material.
      * 
-     * @param material 
+     * @param material the material of the item
      */
     public Builder(Material material) {
         this(new ItemStack(material));
     }
     
     /**
+     * Constructs a <code>Builder</code> with the specified <code>ItemStack</code>.
      * 
-     * @param item 
+     * @param item the ItemStack to build
      */
     public Builder(ItemStack item) {
         this(item, (GenericMeta) item.getItemMeta());
     }
     
     /**
+     * Copy constructor which constructs a <code>Builder</code> with the specified builder.
      * 
-     * @param builder 
+     * @param builder the Builder
      */
     public Builder(Builder builder) {
         this(builder.item, (GenericMeta) builder.meta);
     }
     
     /**
+     * Constructs a <code>Builder</code> with the specified <code>ItemStack</code> and <code>ItemMeta</code> subclass.
      * 
-     * @param item
-     * @param meta 
+     * @param item the ItemStack to build
+     * @param meta the ItemMeta subclass to build
      */
     protected Builder(ItemStack item, GenericMeta meta) {
         this.item = item;
@@ -77,9 +89,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
 
     
     /**
+     * Sets the amount.
      * 
-     * @param amount
-     * @return 
+     * @param amount the amount
+     * @return this
      */
     public GenericBuilder amount(int amount) {
         item.setAmount(amount);
@@ -87,9 +100,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
     
     /**
+     * Sets the durability.
      * 
-     * @param data
-     * @return 
+     * @param data the durability
+     * @return this
      */
     public GenericBuilder durability(short data) {
         item.setDurability(data);
@@ -97,10 +111,11 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
     
     /**
+     * Adds the specified enchantment and corresponding level.
      * 
-     * @param enchantment
-     * @param level
-     * @return 
+     * @param enchantment the enchantment
+     * @param level the enchantment level
+     * @return this
      */
     public GenericBuilder enchantment(Enchantment enchantment, int level) {
         item.addUnsafeEnchantment(enchantment, level);
@@ -108,9 +123,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
     
     /**
+     * Adds the specified enchantments.
      * 
-     * @param enchantments
-     * @return 
+     * @param enchantments the enchantments
+     * @return this
      */
     public GenericBuilder enchantments(Map<Enchantment, Integer> enchantments) {
         item.addUnsafeEnchantments(enchantments);
@@ -118,9 +134,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
     
     /**
+     * Sets the the display.
      * 
-     * @param name
-     * @return 
+     * @param name the name
+     * @return this
      */
     public GenericBuilder name(String name) {
         meta.setDisplayName(name);
@@ -129,9 +146,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     
     
     /**
+     * Adds the specified line of lore.
      * 
-     * @param lore
-     * @return 
+     * @param lore the line
+     * @return  this
      */
     public GenericBuilder lore(String lore) {
         if (!meta.hasLore()) {
@@ -143,9 +161,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
     
     /**
+     * Adds the specified lines of lore.
      * 
-     * @param lore
-     * @return 
+     * @param lore the lore
+     * @return this
      */
     public GenericBuilder lore(List<String> lore) {
         if (!meta.hasLore()) {
@@ -158,9 +177,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
 
     
     /**
+     * Adds the specified <code>ItemFlag</code>s.
      * 
-     * @param flags
-     * @return 
+     * @param flags the ItemFlags
+     * @return this
      */
     public GenericBuilder flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
@@ -169,8 +189,9 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
 
     
     /**
+     * Builds the <code>ItemStack</code>.
      * 
-     * @return 
+     * @return the ItemStack
      */
     public ItemStack build() {
         item.setItemMeta(meta);
@@ -179,8 +200,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     
     
     /**
-     * 
-     * @return 
+     * @return a Builder subclass, generally the implementing subclass
      */
     protected abstract GenericBuilder getThis();
     

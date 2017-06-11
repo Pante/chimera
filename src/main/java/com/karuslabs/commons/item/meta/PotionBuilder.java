@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>PotionBuilderMeta</code>.
+ * Represents a builder for items with <code>PotionBuilderMeta</code>.
  */
 public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
@@ -38,7 +38,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>PotionBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>PotionBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */

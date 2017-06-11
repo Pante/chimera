@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>BlockStateMeta</code>.
+ * Represents a builder for items with <code>BlockStateMeta</code>.
  */
 public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
     
@@ -37,7 +37,7 @@ public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta
     }
     
     /**
-     * Copy constructor which constructs a <code>BannerBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>BannerBuilder</code> with the specified builder.
      *  
      * @param builder the Builder
      */

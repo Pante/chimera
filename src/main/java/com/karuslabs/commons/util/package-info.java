@@ -16,6 +16,6 @@
  */
 
 /**
- * Contains builders for <code>ItemStack</code>s.
+ * Contains utility and miscellaneous classes.
  */
-package com.karuslabs.commons.item;
+package com.karuslabs.commons.util;

@@ -16,6 +16,6 @@
  */
 
 /**
- * Contains specialised <code>Builder</code>s for the various <code>ItemMeta</code> subclasses.
+ * Contains builders for <code>ItemStack</code>s with various <code>ItemMeta</code> subclasses.
  */
 package com.karuslabs.commons.item.meta;

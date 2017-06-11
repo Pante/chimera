@@ -20,8 +20,9 @@ import java.util.*;
 
 
 /**
- * Represents a map which delegates method calls to a backing map. Subclasses
- * should override methods to modify the behaviour as per the decorator pattern.
+ * Represents a map which delegates method calls to a backing map.
+ * <p>
+ * Subclasses should override methods to modify the behaviour as per the decorator pattern.
  * 
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of mapped values

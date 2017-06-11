@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 /**
- * Represents a specialised <code>Builder</code> for building items with <code>FireworkkMeta</code>.
+ * Represents a builder for items with <code>FireworkkMeta</code>.
  */
 public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     
@@ -39,7 +39,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     }
     
     /**
-     * Copy constructor which constructs a <code>FireworkBuilder</code> with the specified <code>Builder</code>.
+     * Copy constructor which constructs a <code>FireworkBuilder</code> with the specified builder.
      * 
      * @param builder the Builder
      */
