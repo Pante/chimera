@@ -25,11 +25,46 @@ public class DynamicLocation {
     protected Location origin;
     protected Location current;
     
+    protected boolean relative;
     protected Vector offset;
-    protected float offsetYaw;
-    protected float offsetPitch;
+    protected Vector direction;
     
-    protected boolean updateLocation;
-    protected boolean updateDirection;
+    
+    public DynamicLocation(Location origin, boolean relative, Vector offset, Vector direction) {
+        this.origin = origin;
+        this.current = origin.clone();
+        
+        relative = true;
+        this.offset = offset;
+        this.direction = direction;
+    }
+    
+    
+    public void update() {
+        
+    }
+    
+    
+    public void from(Location location) {
+        origin = location;
+        current = location.clone();
+        
+        Vector aOffset = offset;
+        if (relative) {
+            aOffset = Vectors.rotate(location, offset);
+        }
+        
+        current.add(aOffset);
+    }
+    
+    
+    
+    public Location getOrigin() {
+        return origin;
+    }
+    
+    public Location getCurrent() {
+        return current;
+    }
     
 }

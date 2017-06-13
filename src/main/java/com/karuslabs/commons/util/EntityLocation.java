@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.DynamicLocation;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 
-public abstract class Animation<GenericLocation extends DynamicLocation> implements Runnable {
+public class EntityLocation extends DynamicLocation {
     
-    private AnimationType type;
-    private Particles particles;
-    private GenericLocation origin;
+    public EntityLocation(Location origin, boolean relative, Vector offset, Vector direction) {
+        super(origin, relative, offset, direction);
+    }
     
 }
