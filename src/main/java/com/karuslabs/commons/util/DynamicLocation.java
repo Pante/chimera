@@ -22,21 +22,19 @@ import org.bukkit.util.Vector;
 
 public class DynamicLocation {
     
-    protected Location origin;
-    protected Location current;
-    
+    protected Location location;
     protected boolean relative;
     protected Vector offset;
-    protected Vector direction;
     
     
-    public DynamicLocation(Location origin, boolean relative, Vector offset, Vector direction) {
-        this.origin = origin;
-        this.current = origin.clone();
-        
-        relative = true;
+    public DynamicLocation(Location location) {
+        this(location, true, new Vector(0, 0, 0));
+    }
+    
+    public DynamicLocation(Location location, boolean relative, Vector offset) {
+        this.location = location;
+        this.relative = relative;
         this.offset = offset;
-        this.direction = direction;
     }
     
     
@@ -44,27 +42,37 @@ public class DynamicLocation {
         
     }
     
-    
     public void from(Location location) {
-        origin = location;
-        current = location.clone();
-        
-        Vector aOffset = offset;
+        this.location = location;
         if (relative) {
-            aOffset = Vectors.rotate(location, offset);
+            location.add(Vectors.rotate(location, offset));
+            
+        } else {
+            location.add(offset);
         }
-        
-        current.add(aOffset);
     }
     
     
-    
-    public Location getOrigin() {
-        return origin;
+    public Location getLocation() {
+        return location;
     }
+
     
-    public Location getCurrent() {
-        return current;
+    public boolean isRelative() {
+        return relative;
+    }
+
+    public void setRelative(boolean relative) {
+        this.relative = relative;
+    }
+
+    
+    public Vector getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Vector offset) {
+        this.offset = offset;
     }
     
 }

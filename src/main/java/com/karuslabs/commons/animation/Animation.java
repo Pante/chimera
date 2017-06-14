@@ -24,6 +24,14 @@ public abstract class Animation<GenericLocation extends DynamicLocation> impleme
     
     private AnimationType type;
     private Particles particles;
+    
     private GenericLocation origin;
+    private GenericLocation target;
+    
+    
+    @Override
+    public void run() {
+        
+    }
     
 }

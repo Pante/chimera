@@ -16,14 +16,63 @@
  */
 package com.karuslabs.commons.util;
 
+import java.lang.ref.WeakReference;
+
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 
-public class EntityLocation extends DynamicLocation {
+public class EntityLocation<GenericEntity extends Entity> extends DynamicLocation {
     
-    public EntityLocation(Location origin, boolean relative, Vector offset, Vector direction) {
-        super(origin, relative, offset, direction);
+    protected WeakReference<GenericEntity> reference;
+    private boolean updateLocation;
+    private boolean updateDirection;
+    
+    
+    public EntityLocation(GenericEntity entity, Location location) {
+        this(entity, location, true, true);
+    }
+    
+    public EntityLocation(GenericEntity entity, Location location, boolean updateLocation, boolean updateDirection) {
+        this(entity, location, true, location.toVector().subtract(entity.getLocation().toVector()), updateLocation, updateDirection);
+    }
+    
+    public EntityLocation(GenericEntity entity, Location location, boolean relative, Vector offset, boolean updateLocation, boolean updateDirection) {
+        super(location, relative, offset);
+        this.reference = new WeakReference<>(entity);
+        this.updateLocation = updateLocation;
+        this.updateDirection = updateDirection;
+    }
+    
+    
+    @Override
+    public void update() {
+        Location entityLocation = getEntityLocation();
+        if (entityLocation != null) {
+            if (updateLocation) {
+                from(entityLocation);
+            }
+            
+            if (updateDirection) {
+                location.setDirection(entityLocation.getDirection());
+            }
+        }
+    }
+        
+    protected Location getEntityLocation() {
+        Entity entity = reference.get();
+        if (entity != null) {
+            return entity.getLocation();
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    public GenericEntity getEntity() {
+        return reference.get();
     }
     
 }
