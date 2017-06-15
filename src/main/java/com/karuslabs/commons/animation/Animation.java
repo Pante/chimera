@@ -28,9 +28,27 @@ public abstract class Animation<GenericLocation extends DynamicLocation> impleme
     private GenericLocation origin;
     private GenericLocation target;
     
+    private boolean asynchronous;
+    private boolean disappearWithOriginEntity;
+    private boolean disappearWithTargetEntity;
+    
     
     @Override
     public void run() {
+        
+    }
+    
+    protected void onRun() {
+
+    }
+    
+    
+    public void cancel() {
+        
+    }
+    
+    
+    protected void validate() {
         
     }
     
