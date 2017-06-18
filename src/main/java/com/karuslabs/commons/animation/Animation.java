@@ -19,33 +19,4 @@ package com.karuslabs.commons.animation;
 
 public abstract class Animation implements Runnable {
     
-    private Repetition type;
-    private boolean async;
-    
-    
-    public Animation(Repetition type) {
-        this.type = type;
-    }
-    
-    
-    public Repetition getRepetition() {
-        return type;
-    }
-    
-    public boolean isAsync() {
-        return async;
-    }
-    
-    public long getDelay() {
-        return 0;
-    }
-    
-    public long getPeriod() {
-        return 0;
-    }
-    
-    public Runnable getCallback() {
-        return null;
-    }
-    
 }

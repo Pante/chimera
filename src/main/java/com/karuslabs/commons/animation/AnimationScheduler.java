@@ -18,17 +18,18 @@ package com.karuslabs.commons.animation;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.*;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.*;
 
 
 public class AnimationScheduler {
-    
+
     private BukkitScheduler scheduler;
     private Plugin plugin;
     private ConcurrentMap<Animation, BukkitTask> animations;
-    
+    private ReadWriteLock lock;
     private AtomicBoolean shutdown;
     
     
@@ -36,44 +37,58 @@ public class AnimationScheduler {
         this.scheduler = scheduler;
         this.plugin = plugin;
         animations = new ConcurrentHashMap<>();
+        lock = new ReentrantReadWriteLock();
+        shutdown = new AtomicBoolean(false);
     }
     
     
     public void submit(Animation animation) {
-        if (shutdown.get()) {
-            throw new IllegalStateException("");
-        }
-        
         animations.compute(animation, (anAnimation, task) -> {
-            if (task == null) {
-                return anAnimation.getRepetition().schedule(scheduler, plugin, anAnimation);
+            if (task != null) {
+                throw new IllegalArgumentException();
             }
-            else {
-                throw new IllegalArgumentException("");
+            
+            try {
+                lock.readLock().lock();
+                if (!shutdown.get()) {
+                    return schedule(anAnimation);
+
+                } else {
+                    throw new IllegalStateException("The AnimationScheduler is already shutting down");
+                }
+            } finally {
+                lock.readLock().unlock();
             }
         });
     }
     
     
+    protected BukkitTask schedule(Animation animation) {
+        return null;
+    }
+    
+    
     public void shutdown() {
-        if (shutdown.compareAndSet(false, true)) {
-            cancel();
+        if (!shutdown.get()) {
+            try {
+                lock.writeLock().lock();
+                shutdown.set(true);
+                
+            } finally {
+                lock.writeLock().unlock();
+            }
+            animations.keySet().forEach(this::cancel);
             
         } else {
             throw new IllegalStateException();
         }
     }
     
-    
-    public void cancel() {
-        animations.keySet().forEach(this::cancel);
-    }
-
     public void cancel(Animation animation) {
         BukkitTask task = animations.remove(animation);
         if (task != null) {
             task.cancel();
-            scheduler.runTask(plugin, animation.getCallback());
+//            scheduler.runTask(plugin, animation.getCallback());
         }
     }
     
