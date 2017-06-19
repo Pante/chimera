@@ -16,9 +16,10 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.util.concurrent.*;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.*;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.*;
@@ -29,7 +30,7 @@ public class AnimationScheduler {
     private BukkitScheduler scheduler;
     private Plugin plugin;
     private ConcurrentMap<Animation, BukkitTask> animations;
-    private ReadWriteLock lock;
+    private CloseableReadWriteLock lock;
     private AtomicBoolean shutdown;
     
     
@@ -37,31 +38,28 @@ public class AnimationScheduler {
         this.scheduler = scheduler;
         this.plugin = plugin;
         animations = new ConcurrentHashMap<>();
-        lock = new ReentrantReadWriteLock();
+        lock = new CloseableReadWriteLock();
         shutdown = new AtomicBoolean(false);
     }
     
     
     public void submit(Animation animation) {
-        animations.compute(animation, (anAnimation, task) -> {
-            if (task != null) {
-                throw new IllegalArgumentException();
+        try (Janitor read = lock.readLock()) {
+            if (!shutdown.get()) {
+                animations.compute(animation, (anAnimation, task) -> {
+                    if (task == null) {
+                        return schedule(anAnimation);
+                        
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                });
+                
+            } else {
+                throw new IllegalStateException();
             }
-            
-            try {
-                lock.readLock().lock();
-                if (!shutdown.get()) {
-                    return schedule(anAnimation);
-
-                } else {
-                    throw new IllegalStateException("The AnimationScheduler is already shutting down");
-                }
-            } finally {
-                lock.readLock().unlock();
-            }
-        });
+        }
     }
-    
     
     protected BukkitTask schedule(Animation animation) {
         return null;
@@ -70,12 +68,8 @@ public class AnimationScheduler {
     
     public void shutdown() {
         if (!shutdown.get()) {
-            try {
-                lock.writeLock().lock();
+            try (Janitor write = lock.writeLock()) {
                 shutdown.set(true);
-                
-            } finally {
-                lock.writeLock().unlock();
             }
             animations.keySet().forEach(this::cancel);
             
