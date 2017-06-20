@@ -14,11 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.particles;
 
 
-public enum AnimationType {
-    
-    ONCE, MULTIPLE, INFINITE
+public class ColouredParticles {
     
 }

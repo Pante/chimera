@@ -67,15 +67,13 @@ public class AnimationScheduler {
     
     
     public void shutdown() {
-        if (!shutdown.get()) {
-            try (Janitor write = lock.writeLock()) {
-                shutdown.set(true);
+        try (Janitor write = lock.writeLock()) {
+            if (!shutdown.compareAndSet(false, true)) {
+                throw new IllegalStateException();
             }
-            animations.keySet().forEach(this::cancel);
-            
-        } else {
-            throw new IllegalStateException();
         }
+        
+        animations.keySet().forEach(this::cancel);
     }
     
     public void cancel(Animation animation) {
