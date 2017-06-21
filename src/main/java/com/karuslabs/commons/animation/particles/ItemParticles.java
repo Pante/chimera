@@ -20,6 +20,8 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import static org.bukkit.Particle.*;
+
 
 public class ItemParticles extends AnimationParticles {
     
@@ -31,7 +33,7 @@ public class ItemParticles extends AnimationParticles {
     }
     
     public ItemParticles(int amount, double offsetX, double offsetY, double offsetZ, double speed, ItemStack item) {
-        super(Particle.ITEM_CRACK, amount);
+        super(ITEM_CRACK, amount);
         this.item = item;
     }
 
@@ -47,7 +49,7 @@ public class ItemParticles extends AnimationParticles {
     }
     
     
-    public ItemStack getItemstack() {
+    public ItemStack getItem() {
         return item;
     }
     
@@ -66,7 +68,12 @@ public class ItemParticles extends AnimationParticles {
         
         @Override
         public ItemParticlesBuilder type(Particle type) {
-            throw new UnsupportedOperationException("ItemParticles may only be composed of ITEM_CRACK particles");
+            if (type != Particle.ITEM_CRACK) {
+                throw new IllegalArgumentException("Invalid Particles: " + type);
+                
+            } else {
+                return this;
+            }
         }
         
         public ItemParticlesBuilder item(ItemStack item) {

@@ -69,13 +69,21 @@ public class AnimationParticles extends Particles {
     }
     
     
-    public static ParticlesBuilder newAnimationParticles() {
-        return new ParticlesBuilder(new AnimationParticles(Particle.BARRIER, 0)) {
-            @Override
-            protected Builder getThis() {
-                return this;
-            }
-        };
+    public static AnimationParticlesBuilder newAnimationParticles() {
+        return new AnimationParticlesBuilder(new AnimationParticles(Particle.BARRIER, 0));
+    }
+    
+    
+    public static class AnimationParticlesBuilder extends ParticlesBuilder<AnimationParticlesBuilder, AnimationParticles> {
+
+        public AnimationParticlesBuilder(AnimationParticles particles) {
+            super(particles);
+        }
+
+        @Override
+        protected AnimationParticlesBuilder getThis() {
+            return this;
+        }
     }
 
     

@@ -16,12 +16,30 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import java.util.Set;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
+import static com.google.common.collect.Sets.immutableEnumSet;
+
+import static org.bukkit.Particle.*;
+
 
 public class MaterialParticles extends AnimationParticles {
+    
+    private static final Set<Particle> ALLOWED = immutableEnumSet(BLOCK_CRACK, BLOCK_DUST, FALLING_DUST);  
+        
+    protected static Particle validate(Particle type) {
+        if (ALLOWED.contains(type)) {
+            return type;
+            
+        } else {
+            throw new IllegalArgumentException("Invalid Particle: " + type);
+        }
+    }
+    
     
     private MaterialData data;
     
@@ -32,12 +50,8 @@ public class MaterialParticles extends AnimationParticles {
     
     public MaterialParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, MaterialData data) {
         super(type, amount, offsetX, offsetY, offsetZ, speed);
-        if (isCompatible(type)) {
-            this.data = data;
-            
-        } else {
-            throw new IllegalArgumentException("Invalid particle type:" + type);
-        }
+        validate(type);
+        this.data = data;
     }
     
     
@@ -56,14 +70,9 @@ public class MaterialParticles extends AnimationParticles {
         return data;
     }
     
-        
-    private static boolean isCompatible(Particle type) {
-        return type == Particle.BLOCK_CRACK || type == Particle.BLOCK_DUST || type == Particle.FALLING_DUST;
-    }
-    
     
     public static MaterialParticlesBuilder newMaterialParticles() {
-        return new MaterialParticlesBuilder(new MaterialParticles(Particle.BLOCK_CRACK, 0, new MaterialData(Material.AIR)));
+        return new MaterialParticlesBuilder(new MaterialParticles(BLOCK_CRACK, 0, new MaterialData(Material.AIR)));
     }
     
     
@@ -76,13 +85,8 @@ public class MaterialParticles extends AnimationParticles {
         
         @Override
         public MaterialParticlesBuilder type(Particle type) {
-            if (isCompatible(type)) {
-                particles.type = type;
-                return this;
-
-            } else {
-                throw new IllegalArgumentException("Invalid particle type:" + type);
-            }
+            particles.type = validate(type);
+            return this;
         }
         
         public MaterialParticlesBuilder data(MaterialData data) {

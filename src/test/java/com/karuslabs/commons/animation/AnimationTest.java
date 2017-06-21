@@ -16,11 +16,7 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.animation.particles.Particles;
 
-
-public abstract class Animation<GenericParticles extends Particles> implements Runnable {
-    
-    private GenericParticles particles;
+public class AnimationTest {
     
 }

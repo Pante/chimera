@@ -111,7 +111,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>22.0</version>
             <scope>provided</scope>
         </dependency>
         
