@@ -21,6 +21,13 @@ import com.karuslabs.commons.animation.particles.Particles;
 
 public abstract class Animation<GenericParticles extends Particles> implements Runnable {
     
-    private GenericParticles particles;
+    protected GenericParticles particles;
+    
+    protected boolean asynchronous;
+    protected int iterations;
+    protected int period;
+    protected int delay;
+    
+    protected Runnable callback;
     
 }
