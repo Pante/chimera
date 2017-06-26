@@ -16,10 +16,7 @@
  */
 package com.karuslabs.commons.util;
 
-/**
- *
- * @author Karus Labs
- */
+
 public class DynamicLocation {
     
 }

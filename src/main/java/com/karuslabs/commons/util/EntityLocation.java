@@ -16,10 +16,7 @@
  */
 package com.karuslabs.commons.util;
 
-/**
- *
- * @author Karus Labs
- */
-public class EntityLocation {
+
+public class EntityLocation extends DynamicLocation {
     
 }
