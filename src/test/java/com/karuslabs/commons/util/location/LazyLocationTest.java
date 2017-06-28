@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.util.location;
 
+import com.karuslabs.commons.util.location.LazyLocation;
 import junitparams.*;
 
 import org.bukkit.*;

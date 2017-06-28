@@ -14,9 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.util.location;
+
+import org.bukkit.Location;
 
 
 public class EntityLocation extends DynamicLocation {
+    
+    public EntityLocation(Location location) {
+        super(location);
+    }
     
 }

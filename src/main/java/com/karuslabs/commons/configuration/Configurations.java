@@ -16,7 +16,7 @@
  */
 package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.util.LazyLocation;
+import com.karuslabs.commons.util.location.LazyLocation;
 
 import java.io.*;
 

@@ -19,6 +19,7 @@ package com.karuslabs.commons.commands.yml;
 import com.google.common.collect.Sets;
 
 import com.karuslabs.commons.commands.*;
+import com.karuslabs.commons.configuration.Configurations;
 
 import java.util.*;
 
@@ -45,7 +46,7 @@ public class ParserTest {
     
     public ParserTest() {
         parser = spy(new Parser(mock(Plugin.class)));
-        config = YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream("commands/commands.yml"));
+        config = Configurations.from(getClass().getClassLoader().getResourceAsStream("commands/commands.yml"));
     }
     
     

@@ -18,6 +18,7 @@ package com.karuslabs.commons.commands;
 
 import com.karuslabs.commons.commands.events.RegistrationEvent;
 import com.karuslabs.commons.commands.yml.Parser;
+import com.karuslabs.commons.configuration.Configurations;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class CommandManager {
     }
     
     public List<Command> load(String path) {
-        List<Command> commands = parser.parse(YamlConfiguration.loadConfiguration(getClass().getClassLoader().getResourceAsStream(path)));
+        List<Command> commands = parser.parse(Configurations.from(getClass().getClassLoader().getResourceAsStream(path)));
         map.registerAll(plugin.getName(), commands);
         manager.callEvent(new RegistrationEvent(commands));
         

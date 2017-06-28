@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Karus Labs
  * All rights reserved.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.util.location;
 
 import java.util.Map;
 

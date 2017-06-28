@@ -4,8 +4,8 @@
  */
 package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.configuration.YamlFileConfiguration;
 import com.karuslabs.commons.util.UncheckedIOException;
+
 import java.io.*;
 
 import junitparams.*;
@@ -80,13 +80,13 @@ public class YamlFileConfigurationTest {
     @Parameters({"true, 0, 1", "false, 1, 0"})
     public void loadOrDefault(boolean exists, int saveTimes, int loadTimes) throws IOException, InvalidConfigurationException {
         when(file.exists()).thenReturn(exists);
-        doNothing().when(config).load(any(InputStream.class));
+        doNothing().when(config).load(any(InputStreamReader.class));
         doNothing().when(config).save(any(File.class));
         doNothing().when(config).load(any(File.class));
         
         config.loadOrDefault("configuration/config.yml");
         
-        verify(config, times(saveTimes)).load(any(InputStream.class));
+        verify(config, times(saveTimes)).load(any(InputStreamReader.class));
         verify(config, times(saveTimes)).save(file);
         
         verify(config, times(loadTimes)).load(any(File.class));

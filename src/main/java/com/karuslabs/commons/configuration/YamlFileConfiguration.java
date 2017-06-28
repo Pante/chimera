@@ -40,7 +40,7 @@ public class YamlFileConfiguration extends YamlConfiguration {
     public YamlFileConfiguration loadOrDefault(String path) {
         try {
             if (!file.exists()) {
-                load(getClass().getClassLoader().getResourceAsStream(path));
+                load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(path)));
                 save(file);
                         
             } else {
