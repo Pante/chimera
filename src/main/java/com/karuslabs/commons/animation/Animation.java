@@ -30,4 +30,13 @@ public abstract class Animation<GenericParticles extends Particles> implements R
     
     protected Runnable callback;
     
+    
+    public Animation(GenericParticles particles, boolean asynchronous, int iterations, int period, int delay, Runnable callback) {
+        this.particles = particles;
+        this.asynchronous = asynchronous;
+        this.iterations = iterations;
+        this.period = period;
+        this.delay = delay;
+    }
+    
 }
