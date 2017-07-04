@@ -1,25 +1,32 @@
-/*
- * Copyright (C) 2017 Karus Labs
+/* 
+ * The MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright 2017 Karus Labs.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.configuration;
 
 import com.karuslabs.mockkit.rule.ServerRule;
 
 import org.bukkit.*;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.junit.*;
@@ -78,7 +85,7 @@ public class ConfigurationsTest {
     @Test
     public void getOrDefault() {
         ConfigurationSection config = mock(ConfigurationSection.class);
-        assertTrue(config == Configurations.getOrDefault(config, Configurations.BLANK));
+        assertTrue(config == Configurations.getOrDefault(config, new MemoryConfiguration()));
     }
     
     
@@ -93,12 +100,6 @@ public class ConfigurationsTest {
     public void getOrBlank() {
         ConfigurationSection config = mock(ConfigurationSection.class);
         assertTrue(config == Configurations.getOrBlank(config));
-    }
-    
-    
-    @Test
-    public void getOrBlank_ReturnsBlank() {
-        assertTrue(Configurations.BLANK == Configurations.getOrBlank(null));
     }
     
 }

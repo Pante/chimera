@@ -1,22 +1,29 @@
-/*
- * Copyright (C) 2017 Karus Labs
+/* 
+ * The MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright 2017 Karus Labs.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.collections;
 
-import com.karuslabs.commons.collections.MultiClassMap.Key;
+import com.karuslabs.commons.collections.TokenMap.Key;
 
 import junitparams.*;
 
@@ -24,23 +31,23 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static com.karuslabs.commons.collections.MultiClassMap.key;
+import static com.karuslabs.commons.collections.TokenMap.key;
 import static org.junit.Assert.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class MultiClassMapTest {
+public class TokenMapTest {
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
-    private MultiClassMap<Object> map;
+    private TokenMap<Object> map;
     private Key<Integer> key;
     
     
-    public MultiClassMapTest() {
-        map = new MultiClassMap<>();
-        key = new MultiClassMap.Key<>("", Integer.class);
+    public TokenMapTest() {
+        map = new TokenMap<>();
+        key = new TokenMap.Key<>("", Integer.class);
     }
     
     
@@ -88,20 +95,18 @@ public class MultiClassMapTest {
     
     
     @Test
-    @Parameters(method = "parametersForKey")
+    @Parameters(method = "keys")
     public void equals(Key<?> aKey, boolean isEqual) {
         assertEquals(isEqual, key.equals(aKey));
     }
     
-    
     @Test
-    @Parameters(method = "parametersForKey")
+    @Parameters(method= "keys")
     public void hashCode(Key<?> aKey, boolean isEqual) {
         assertEquals(isEqual, key.hashCode() == aKey.hashCode());
     }
     
-    
-    protected Object[] parametersForKey() {
+    protected Object[] keys() {
         return new Object[] {
             new Object[] {key("", Integer.class), true},
             new Object[] {key("", String.class), false},

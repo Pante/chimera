@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,39 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.meta;
+package com.karuslabs.commons.command;
 
-import java.util.Collections;
-
-import org.bukkit.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-
-import org.junit.Test;
-
-import static org.mockito.Mockito.*;
+import java.util.List;
 
 
-public class FireworkBuilderTest {
-        
-    private FireworkBuilder builder;
-    private FireworkMeta meta;
-    
-    
-    public FireworkBuilderTest() {
-        meta = mock(FireworkMeta.class);
-        builder = new FireworkBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
-    
-    
-    @Test
-    public void build() {
-        FireworkEffect effect = FireworkEffect.builder().withColor(Color.SILVER).build();
-        builder.effects(effect).effects(Collections.singletonList(effect)).power(3);
-        
-        verify(meta).addEffects(effect);
-        verify(meta).addEffects(eq(Collections.singletonList(effect)));
-        verify(meta).setPower(3);
+public abstract class Command extends org.bukkit.command.Command {
+
+    public Command(String name, String description, String usage, List<String> aliases) {
+        super(name, description, usage, aliases);
     }
     
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -23,37 +23,33 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import java.util.Collections;
-
-import org.bukkit.*;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.KnowledgeBookMeta;
 
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
 
-public class FireworkBuilderTest {
-        
-    private FireworkBuilder builder;
-    private FireworkMeta meta;
+public class KnowledgeBookBuilderTest {
+    
+    private KnowledgeBookBuilder builder;
+    private KnowledgeBookMeta meta;
     
     
-    public FireworkBuilderTest() {
-        meta = mock(FireworkMeta.class);
-        builder = new FireworkBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+    public KnowledgeBookBuilderTest() {
+        meta = mock(KnowledgeBookMeta.class);
+        builder = new KnowledgeBookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     }
     
     
     @Test
     public void build() {
-        FireworkEffect effect = FireworkEffect.builder().withColor(Color.SILVER).build();
-        builder.effects(effect).effects(Collections.singletonList(effect)).power(3);
+        NamespacedKey recipe = mock(NamespacedKey.class);
+        builder.recipe(recipe);
         
-        verify(meta).addEffects(effect);
-        verify(meta).addEffects(eq(Collections.singletonList(effect)));
-        verify(meta).setPower(3);
+        verify(meta).addRecipe(recipe);
     }
     
 }
