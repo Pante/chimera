@@ -23,19 +23,9 @@
  */
 package com.karuslabs.commons.command;
 
-import java.util.List;
-import org.bukkit.command.CommandSender;
-
+@FunctionalInterface
+public interface CommandExecutor {
     
-public class Command extends org.bukkit.command.Command {
-
-    public Command(String name, String description, String usage, List<String> aliases) {
-        super(name, description, usage, aliases);
-    }
-
-    @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public void execute(CommandContext context, Arguments args);
     
 }

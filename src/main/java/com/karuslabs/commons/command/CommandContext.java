@@ -23,19 +23,54 @@
  */
 package com.karuslabs.commons.command;
 
-import java.util.List;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+
+public class CommandContext {
     
-public class Command extends org.bukkit.command.Command {
-
-    public Command(String name, String description, String usage, List<String> aliases) {
-        super(name, description, usage, aliases);
+    private static final String DEFAULT_LOCALE = "en";
+    
+    private CommandSender sender;
+    private Command caller;
+    
+    
+    public CommandContext(CommandSender sender, Command caller) {
+        this.sender = sender;
+        this.caller = caller;
     }
-
-    @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    
+    public Player asPlayer() {
+        if (sender instanceof Player) {
+            return (Player) sender;
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    public String getLocale() {
+        return getLocaleOrDefault(DEFAULT_LOCALE);
+    }
+    
+    public String getLocaleOrDefault(String defaultLocale) {
+        if (sender instanceof Player) {
+            return ((Player) sender).getLocale();
+            
+        } else {
+            return defaultLocale;
+        }
+    }
+    
+    
+    public CommandSender getCommandSender() {
+        return sender;
+    }
+    
+    public Command getCallingCommand() {
+        return caller;
     }
     
 }
