@@ -23,19 +23,32 @@
  */
 package com.karuslabs.commons.command;
 
-import java.util.List;
+import java.util.*;
+
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
     
 public class Command extends org.bukkit.command.Command {
-
-    public Command(String name, String description, String usage, List<String> aliases) {
+    
+    private Plugin plugin;
+    private Map<String, Command> subcommands;
+    
+    
+    public Command(Plugin plugin, String name, String description, String usage, List<String> aliases) {
         super(name, description, usage, aliases);
+        subcommands = new HashMap<>();
     }
 
+    
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
+    }
+    
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        return null;
     }
     
 }
