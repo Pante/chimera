@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.completion;
+
+import com.karuslabs.commons.command.*;
+
+import java.util.List;
 
 
 @FunctionalInterface
-public interface CommandExecutor {
-   
-    public boolean execute(CommandContext context, Arguments args);
+public interface CommandCompleter {
     
-    
-    public static final CommandExecutor NONE = (context, args) -> true;
+    public List<String> complete(CommandContext context, Arguments args);
     
 }

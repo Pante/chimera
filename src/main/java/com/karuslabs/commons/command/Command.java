@@ -23,32 +23,88 @@
  */
 package com.karuslabs.commons.command;
 
-import java.util.*;
+import com.karuslabs.commons.command.completion.CommandCompleter;
 
-import org.bukkit.command.CommandSender;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
     
-public class Command extends org.bukkit.command.Command {
+public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
+    
+    public static final Pattern PRESERVE_QUOTES = Pattern.compile(" (?=(([^'\"]*['\"]){2})*[^'\"]*$)");
+    
     
     private Plugin plugin;
+    private CommandExecutor executor;
     private Map<String, Command> subcommands;
+    private Map<Integer, CommandCompleter> completers;
     
     
     public Command(Plugin plugin, String name, String description, String usage, List<String> aliases) {
         super(name, description, usage, aliases);
-        subcommands = new HashMap<>();
+        this.plugin = plugin;
+        this.executor = CommandExecutor.NONE;
+        this.subcommands = new HashMap<>();
+        this.completers = new HashMap<>();
     }
 
     
     @Override
-    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        return true;
+    public boolean execute(CommandSender sender, String label, String[] args) {
+        return execute(new CommandContext(sender, label, this), new Arguments(PRESERVE_QUOTES.split(String.join(" ", args))));
     }
+    
+    public boolean execute(CommandContext context, Arguments args) {
+        Command subcommand;
+        if (args.hasLength(0) && (subcommand = subcommands.get(args.get(0))) != null) {
+            context.setCallingCommand(this);
+            context.setCalleeCommand(subcommand);
+            
+            args.trim();
+            
+            return subcommand.execute(context, args);
+
+        } else {
+            return executor.execute(context, args);
+        }
+    }
+    
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return null;
+        return tabComplete(new CommandContext(sender, alias, this), new Arguments(PRESERVE_QUOTES.split(String.join(" ", args))));
+    }
+    
+    public List<String> tabComplete(CommandContext context, Arguments args) {
+        Command subcommand;
+        if (args.hasLength(2) && (subcommand = subcommands.get(args.get(0))) != null) {
+            context.setCallingCommand(this);
+            context.setCalleeCommand(subcommand);
+            
+            args.trim();
+            
+            return subcommand.tabComplete(context, args);
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public Plugin getPlugin() {
+        return plugin;
+    }
+    
+    public CommandExecutor getExecutor() {
+        return executor;
+    }
+    
+    public void setExecutor(CommandExecutor executor) {
+        this.executor = executor;
     }
     
 }

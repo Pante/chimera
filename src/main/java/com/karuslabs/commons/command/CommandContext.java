@@ -32,16 +32,28 @@ public class CommandContext {
     private static final String DEFAULT_LOCALE = "en";
     
     private CommandSender sender;
+    private String label;
     private Command caller;
+    private Command callee;
     
     
-    public CommandContext(CommandSender sender, Command caller) {
-        this.sender = sender;
-        this.caller = caller;
+    public CommandContext(CommandSender sender, String label, Command callee) {
+        this(sender, label, null, callee);
     }
     
+    public CommandContext(CommandSender sender, String label, Command caller, Command callee) {
+        this.sender = sender;
+        this.label = label;
+        this.caller = caller;
+        this.callee = callee;
+    }
+
     
-    public Player asPlayer() {
+    public CommandSender getCommandSender() {
+        return sender;
+    }     
+    
+    public Player getPlayer() {
         if (sender instanceof Player) {
             return (Player) sender;
             
@@ -49,7 +61,7 @@ public class CommandContext {
             return null;
         }
     }
-    
+
     
     public String getLocale() {
         return getLocaleOrDefault(DEFAULT_LOCALE);
@@ -65,12 +77,29 @@ public class CommandContext {
     }
     
     
-    public CommandSender getCommandSender() {
-        return sender;
+    public String getLabel() {
+        return label;
     }
+    
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
     
     public Command getCallingCommand() {
         return caller;
+    }
+    
+    public void setCallingCommand(Command caller) {
+        this.caller = caller;
+    }
+    
+    public Command getCalleeCommand() {
+        return callee;
+    }
+    
+    public void setCalleeCommand(Command callee) {
+        this.callee = callee;
     }
     
 }

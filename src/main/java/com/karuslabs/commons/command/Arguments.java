@@ -4,7 +4,7 @@
  * Copyright 2017 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software and getsociated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -48,7 +48,7 @@ public class Arguments {
     }
     
     
-    public boolean exists(int index) {
+    public boolean hasLength(int index) {
         return  0 <= index && index < args.length;
     }
     
@@ -67,11 +67,11 @@ public class Arguments {
     }
     
     
-    public boolean asBoolean(int index) {
+    public boolean getBoolean(int index) {
         return Boolean.parseBoolean(args[index]);
     }
     
-    public boolean asBooleanOrDefault(int index, boolean value) {
+    public boolean getBooleanOrDefault(int index, boolean value) {
         String argument;
         if (index < args.length && (argument = args[index]).toLowerCase().matches("(true|false)")) {
             return Boolean.parseBoolean(argument);
@@ -82,11 +82,11 @@ public class Arguments {
     }
     
     
-    public int asInteger(int index) {
+    public int getInteger(int index) {
         return Integer.parseInt(args[index]);
     }
     
-    public int asIntegerOrDefault(int index, int value) {
+    public int getIntegerOrDefault(int index, int value) {
         Integer number;
         if (index < args.length && (number = Ints.tryParse(args[index])) != null) {
             return number;
@@ -97,11 +97,11 @@ public class Arguments {
     }
     
     
-    public double asDouble(int index) {
+    public double getDouble(int index) {
         return Double.parseDouble(args[index]);
     }
     
-    public double asDoubleOrDefault(int index, double value) {
+    public double getDoubleOrDefault(int index, double value) {
         Double number;
         if (index < args.length && (number = Doubles.tryParse(args[index])) != null) {
             return number;
@@ -112,11 +112,11 @@ public class Arguments {
     }
     
     
-    public float asFloat(int index) {
+    public float getFloat(int index) {
         return Float.parseFloat(args[index]);
     }
     
-    public float asFloatOrDefault(int index, float value) {
+    public float getFloatOrDefault(int index, float value) {
         Float number;
         if (index < args.length && (number = Floats.tryParse(args[index])) != null) {
             return number;
@@ -127,11 +127,11 @@ public class Arguments {
     }
     
     
-    public Player asPlayer(int index) {
+    public Player getPlayer(int index) {
         return Bukkit.getPlayer(args[index]);
     }
     
-    public Player asPlayerOrDefault(int index, Player value) {
+    public Player getPlayerOrDefault(int index, Player value) {
         Player player;
         if (index < args.length && (player = Bukkit.getPlayer(args[index])) != null) {
             return player;
@@ -142,11 +142,11 @@ public class Arguments {
     }
     
     
-    public World asWorld(int index) {
+    public World getWorld(int index) {
         return Bukkit.getWorld(args[index]);
     }
     
-    public World asWorldOrDefault(int index, World value) {
+    public World getWorldOrDefault(int index, World value) {
         World world;
         if (index < args.length && (world = Bukkit.getWorld(args[index])) != null) {
             return world;
