@@ -23,15 +23,16 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.completion.CommandCompleter;
+import com.karuslabs.commons.command.argument.Arguments;
+import com.karuslabs.commons.command.completion.Completer;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
-
     
+
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
     public static final Pattern PRESERVE_QUOTES = Pattern.compile(" (?=(([^'\"]*['\"]){2})*[^'\"]*$)");
@@ -40,7 +41,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     private Plugin plugin;
     private CommandExecutor executor;
     private Map<String, Command> subcommands;
-    private Map<Integer, CommandCompleter> completers;
+    private Map<Integer, Completer> completers;
     
     
     public Command(Plugin plugin, String name, String description, String usage, List<String> aliases) {
@@ -79,18 +80,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     public List<String> tabComplete(CommandContext context, Arguments args) {
-        Command subcommand;
-        if (args.hasLength(2) && (subcommand = subcommands.get(args.get(0))) != null) {
-            context.setCallingCommand(this);
-            context.setCalleeCommand(subcommand);
-            
-            args.trim();
-            
-            return subcommand.tabComplete(context, args);
-            
-        } else {
-            return null;
-        }
+        return null;
     }
     
     
@@ -99,12 +89,27 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return plugin;
     }
     
+    
     public CommandExecutor getExecutor() {
         return executor;
     }
     
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
+    }
+    
+    
+    public Map<Integer, Completer> getCompleters() {
+        return completers;
+    }
+    
+    public void setCompleters(Map<Integer, Completer> completers) {
+        this.completers = completers;
+    }
+    
+    
+    public Map<String, Command> getSubcommands() {
+        return subcommands;
     }
     
 }

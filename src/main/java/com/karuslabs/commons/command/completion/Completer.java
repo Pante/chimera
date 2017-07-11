@@ -23,14 +23,39 @@
  */
 package com.karuslabs.commons.command.completion;
 
+import com.karuslabs.commons.command.argument.Arguments;
 import com.karuslabs.commons.command.*;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang.StringUtils;
+
+import org.bukkit.entity.Player;
+
+import static java.util.stream.Collectors.toList;
 
 
 @FunctionalInterface
-public interface CommandCompleter {
+public interface Completer {
     
     public List<String> complete(CommandContext context, Arguments args);
+    
+    
+    public static final Completer PLAYER_NAMES = (context, args) -> {
+        Stream<? extends Player> players = context.getCommandSender().getServer().getOnlinePlayers().stream();
+        String argument = args.getLastString();
+        Player player = context.getPlayer();
+        
+        if (player != null) {
+            players = players.filter(p -> p.canSee(player));
+        }
+        
+        if (!argument.isEmpty()) {
+            players = players.filter(p -> StringUtils.startsWithIgnoreCase(p.getName(), argument));
+        }
+        
+        return players.map(Player::getName).collect(toList());
+    };
     
 }
