@@ -25,6 +25,8 @@ package com.karuslabs.commons.command.argument;
 
 import com.google.common.primitives.*;
 
+import java.util.*;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -137,6 +139,25 @@ public class Argument {
         } else {
             return value;
         }
+    }
+    
+    
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof Optional)) {
+            return false;
+        }
+
+        return Objects.equals(argument, ((Argument) object).argument);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(argument);
     }
     
 }

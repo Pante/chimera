@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.stream.Collectors.toList;
@@ -48,7 +50,7 @@ public interface Completer {
         Player player = context.getPlayer();
         
         if (player != null) {
-            players = players.filter(p -> p.canSee(player));
+            players = players.filter(p -> player.canSee(p));
         }
         
         if (!argument.isEmpty()) {
@@ -56,6 +58,31 @@ public interface Completer {
         }
         
         return players.map(Player::getName).collect(toList());
+    };
+    
+    
+    public static final Completer SUBCOMMANDS = (context, args) ->  {
+        Stream<Command> commands = context.getCalleeCommand().getSubcommands().values().stream();
+        String argument = args.getLastString();
+        CommandSender sender = context.getCommandSender();
+        
+        if (!argument.isEmpty()) {
+            commands.filter(command -> command.getName().startsWith(argument));
+        }
+        
+        return commands.filter(command -> sender.hasPermission(command.getPermission())).map(Command::getName).collect(toList());
+    };
+    
+    
+    public static final Completer WORLD_NAMES = (context, args) ->  {
+        Stream<World> worlds = context.getCommandSender().getServer().getWorlds().stream();
+        String argument = args.getLastString();
+        
+        if (!argument.isEmpty()) {
+            worlds.filter(world -> world.getName().startsWith(argument));
+        }
+        
+        return worlds.map(World::getName).collect(toList());
     };
     
 }

@@ -51,4 +51,9 @@ public class ListCompleter implements Completer {
         }
     }
     
+    
+    public List<String> getPossibilities() {
+        return possibilities;
+    }
+    
 }

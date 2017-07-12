@@ -4,7 +4,7 @@
  * Copyright 2017 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and getsociated documentation files (the "Software"), to deal
+ * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
@@ -56,10 +56,6 @@ public class Arguments {
             return "";
         }
     }
-
-    public String getLastString() {
-        return getString(args.length - 1);
-    }
     
     public String getStringOrDefault(int index, String value) {
         if (0 <= index && index < args.length) {
@@ -70,6 +66,10 @@ public class Arguments {
         }
     }
     
+    public String getLastString() {
+        return getString(args.length - 1);
+    }
+    
     
     public Argument get(int index) {
         if (0 <= index && index < args.length) {
@@ -78,12 +78,7 @@ public class Arguments {
         } else {
             return Argument.EMPTY;
         }
-    }
-    
-    public Argument getLast() {
-        return get(args.length - 1);
-    }
-    
+    }    
     
     public Argument getOrDefault(int index, String value) {
         if (0 <= index && index < args.length) {
@@ -101,6 +96,10 @@ public class Arguments {
         } else {
             return value;
         }
+    }
+        
+    public Argument getLast() {
+        return get(args.length - 1);
     }
     
     
