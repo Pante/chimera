@@ -36,20 +36,22 @@ import org.bukkit.plugin.Plugin;
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
     public static final Pattern PRESERVE_QUOTES = Pattern.compile(" (?=(([^'\"]*['\"]){2})*[^'\"]*$)");
-    
+
     
     private Plugin plugin;
     private CommandExecutor executor;
     private Map<String, Command> subcommands;
     private Map<Integer, Completer> completers;
+    private String bundle;
     
     
-    public Command(Plugin plugin, String name, String description, String usage, List<String> aliases) {
+    public Command(Plugin plugin, String name, String description, String usage, List<String> aliases, String bundle) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = CommandExecutor.NONE;
         this.subcommands = new HashMap<>();
         this.completers = new HashMap<>();
+        this.bundle = bundle;
     }
 
     
@@ -60,7 +62,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     public boolean execute(CommandContext context, Arguments args) {
         Command subcommand;
-        if (args.hasLength(0) && (subcommand = subcommands.get(args.get(0))) != null) {
+        if (args.hasLength(0) && (subcommand = subcommands.get(args.getString(0))) != null) {
             context.setCallingCommand(this);
             context.setCalleeCommand(subcommand);
             
@@ -88,7 +90,6 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public Plugin getPlugin() {
         return plugin;
     }
-    
     
     public CommandExecutor getExecutor() {
         return executor;

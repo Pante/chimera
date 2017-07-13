@@ -21,39 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
-
-import com.karuslabs.commons.command.argument.Arguments;
-import com.karuslabs.commons.command.*;
-
-import java.util.*;
-import static java.util.stream.Collectors.toList;
+package com.karuslabs.commons.language;
 
 
-public class ListCompleter implements Completer {
-    
-    private List<String> possibilities;
-    
-    
-    public ListCompleter(List<String> possibilities) {
-        this.possibilities = possibilities;
-    }
-    
-    
-    @Override
-    public List<String> complete(CommandContext context, Arguments args) {
-        String argument = args.getLastString();
-        if (argument.isEmpty()) {
-            return Collections.EMPTY_LIST;
-            
-        } else {
-            return possibilities.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
-        }
-    }
-    
-    
-    public List<String> getPossibilities() {
-        return possibilities;
-    }
+public class Languages {
     
 }
