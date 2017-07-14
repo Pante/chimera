@@ -21,39 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
+package com.karuslabs.commons.language;
 
-import com.karuslabs.commons.command.argument.Arguments;
-import com.karuslabs.commons.command.*;
-
-import java.util.*;
-import static java.util.stream.Collectors.toList;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 
-public class CachedCompleter implements Completer {
+public class Locales {
     
-    private List<String> possibilities;
-    
-    
-    public CachedCompleter(List<String> possibilities) {
-        this.possibilities = possibilities;
-    }
+    public static final Pattern SEPARATOR = Pattern.compile("_");
     
     
-    @Override
-    public List<String> complete(CommandContext context, Arguments args) {
-        String argument = args.getLastString();
-        if (argument.isEmpty()) {
-            return Collections.EMPTY_LIST;
-            
-        } else {
-            return possibilities.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    public static Locale from(String locale) {
+        String[] parts = SEPARATOR.split(locale);
+        switch (parts.length) {
+            case 1:
+                return new Locale(parts[0]);
+                
+            case 2:
+                return new Locale(parts[0], parts[1]);
+                
+            default:
+                return Locale.ENGLISH;
         }
     }
     
-    
-    public List<String> getPossibilities() {
-        return possibilities;
+    public static String from(Locale locale) {
+        return locale.getLanguage() + SEPARATOR + locale.getCountry();
     }
     
 }

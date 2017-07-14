@@ -21,27 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.language;
+package com.karuslabs.commons.command.completion;
 
-import java.util.concurrent.*;
+import com.karuslabs.commons.command.argument.Arguments;
+import com.karuslabs.commons.command.*;
+
+import java.util.*;
+import static java.util.stream.Collectors.toList;
 
 
-public class Languages {
+public class ListCompleter implements Completer {
     
-    private String path;
-    private Language defaultLanguage;
-    private ConcurrentMap<String, Language> cache;
+    private List<String> possibilities;
     
     
-    public Languages(String path, Language defaultLanguage) {
-        this.path = path;
-        this.defaultLanguage = defaultLanguage;
-        cache = new ConcurrentHashMap<>();
+    public ListCompleter(List<String> possibilities) {
+        this.possibilities = possibilities;
     }
     
     
-    public Language getLanguage(String locale) {
-        return null;
+    @Override
+    public List<String> complete(CommandContext context, Arguments args) {
+        String argument = args.getLastString();
+        if (argument.isEmpty()) {
+            return Collections.EMPTY_LIST;
+            
+        } else {
+            return possibilities.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+        }
+    }
+    
+    
+    public List<String> getPossibilities() {
+        return possibilities;
     }
     
 }

@@ -26,7 +26,7 @@ package com.karuslabs.commons.command.completion;
 import com.karuslabs.commons.command.argument.Arguments;
 import com.karuslabs.commons.command.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
@@ -44,6 +44,22 @@ public interface Completer {
     public List<String> complete(CommandContext context, Arguments args);
     
     
+    public static final Completer NONE = (context, args) -> Collections.EMPTY_LIST;
+    
+    
+    public static final Completer SUBCOMMANDS = (context, args) ->  {
+        Stream<Command> commands = context.getCalleeCommand().getSubcommands().values().stream();
+        String argument = args.getLastString();
+        CommandSender sender = context.getCommandSender();
+        
+        if (!argument.isEmpty()) {
+            commands.filter(command -> command.getName().startsWith(argument));
+        }
+        
+        return commands.filter(command -> sender.hasPermission(command.getPermission())).map(Command::getName).collect(toList());
+    };
+        
+    
     public static final Completer PLAYER_NAMES = (context, args) -> {
         Stream<? extends Player> players = context.getCommandSender().getServer().getOnlinePlayers().stream();
         String argument = args.getLastString();
@@ -58,19 +74,6 @@ public interface Completer {
         }
         
         return players.map(Player::getName).collect(toList());
-    };
-    
-    
-    public static final Completer SUBCOMMANDS = (context, args) ->  {
-        Stream<Command> commands = context.getCalleeCommand().getSubcommands().values().stream();
-        String argument = args.getLastString();
-        CommandSender sender = context.getCommandSender();
-        
-        if (!argument.isEmpty()) {
-            commands.filter(command -> command.getName().startsWith(argument));
-        }
-        
-        return commands.filter(command -> sender.hasPermission(command.getPermission())).map(Command::getName).collect(toList());
     };
     
     
