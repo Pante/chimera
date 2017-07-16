@@ -25,6 +25,8 @@ package com.karuslabs.commons.configuration;
 
 import com.karuslabs.mockkit.rule.ServerRule;
 
+import java.util.*;
+
 import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,6 +34,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.*;
 
 import static com.karuslabs.commons.Yaml.CONFIGURATION;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -47,6 +50,25 @@ public class ConfigurationsTest {
     public ConfigurationsTest() {
         world = mock(World.class);
         when(server.getServer().getWorld("name")).thenReturn(world).getMock();
+    }
+    
+    
+    @Test
+    public void flatten() {
+        Map<String, Object> flatten = Configurations.flatten(CONFIGURATION.getConfigurationSection("level-1"));
+        
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("level-2-1.level-3", "test");
+        expected.put("level-2-2.level-3", "test");
+        
+        assertThat(flatten, equalTo(expected));
+    }
+                
+    
+    @Test
+    public void from() {
+        YamlConfiguration config = Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml"));
+        assertNotNull(config);
     }
     
     
@@ -71,14 +93,6 @@ public class ConfigurationsTest {
         assertEquals(2, location.getZ(), 0);
         assertEquals(0.3, location.getYaw(), 0.0001);
         assertEquals(0.4, location.getPitch(), 0.0001);
-    }
-    
-    
-    
-    @Test
-    public void from() {
-        YamlConfiguration config = Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml"));
-        assertNotNull(config);
     }
     
     

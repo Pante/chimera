@@ -26,13 +26,22 @@ package com.karuslabs.commons.configuration;
 import com.karuslabs.commons.util.location.LazyLocation;
 
 import java.io.*;
+import java.util.Map;
 
 import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 
 public class Configurations {
+    
+    public static Map<String, Object> flatten(ConfigurationSection config) {
+        return config.getKeys(true).stream().filter(key -> !config.isConfigurationSection(key)).collect(toMap(identity(), config::get));
+    }
+
     
     public static YamlConfiguration from(InputStream stream) {
         try {

@@ -45,10 +45,77 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
         return this;
     }
     
+    public SkullBuilder owner(Skull skull) {
+        meta.setOwner(skull.getName());
+        return this;
+    }
+    
     
     @Override
     protected SkullBuilder getThis() {
         return this;
+    }
+    
+    
+    public static enum Skull {
+
+        ALEX("MHF_ALEX"),
+        BLAZE("MHF_BLAZE"),
+        CAVE_SPIDER("MHF_CaveSpider"),
+        CHICKEN("MHF_Chicken"),
+        COW("MHF_COW"),
+        CREEPER("MHF_Creeper"),
+        ENDERMAN("MHF_Enderman"),
+        GHAST("MHF_Ghast"),
+        GOLEM("MHF_Golem"),
+        HEROBRINE("MHF_Herobrine"),
+        LAVASLIME("MHF_LavaSlime"),
+        MUSHROOM_COW("MHF_MushroomCow"),
+        OCELOT("MHF_Ocelot"),
+        PIG("MHF_Pig"),
+        PIG_ZOMBIE("MHF_PigZombie"),
+        SHEEP("MHF_Sheep"),
+        SKELETON("MHF_Skeleton"),
+        SLIME("MHF_Slime"),
+        SPIDER("MHF_Spider"),
+        SQUID("MHF_Squid"),
+        STEVE("MHF_Steve"),
+        VILLAGER("MHF_Villager"),
+        WITHER_SKELETON("MHF_WSkeleton"),
+        ZOMBIE("MHF_Zombie"),
+        CACTUS("MHF_Cactus"),
+        
+        CAKE("MHF_Cake"),
+        CHEST("MHF_CHEST"),
+        BROWN_COCONUT("MHF_CoconutB"),
+        GREEN_COCONUT("MHF_CoconutG"),
+        MELON("MHF_Melon"),
+        OAK_LOG("MHF_OakLog"),
+        GREEN_PRESENT("MHF_Present1"),
+        RED_PRESENT("MHF_Present2"),
+        PUMPKIN("MHF_Pumpkin"),
+        DERPY_TNT("MHF_TNT"),
+        TNT("MHF_TNT2"),
+        
+        UP_ARROW("MHF_ArrowUp"),
+        DOWN_ARROW("MHF_ArrowDown"),
+        LEFT_ARROW("MHF_ArrowLeft"),
+        RIGHT_ARROW("MHF_ArrowRight"),
+        EXCLAMATION("MHF_Exclamation"),
+        QUESTION_MARK("MHF_Question");
+
+        
+        private final String name;
+
+        private Skull(String name) {
+            this.name = name;
+        }
+
+        
+        public String getName() {
+            return name;
+        }
+
     }
     
 }
