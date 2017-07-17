@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.language.bundle;
 
+import com.karuslabs.commons.configuration.Configurations;
+
 import java.util.*;
 
 
@@ -44,6 +46,36 @@ public class YamlResourceBundle extends ResourceBundle {
     @Override
     protected Object handleGetObject(String key) {
         return entries.get(key);
+    }
+    
+    
+    public static class Control extends ResourceBundle.Control {
+        
+        public static final Control INSTANCE = new Control();
+        
+        
+        private static final List<String> FORMATS = Arrays.asList("yml", "yaml");
+        
+        protected Control() {}
+        
+        
+        @Override
+        public List<String> getFormats(String baseName) {
+            return FORMATS;
+        }
+        
+        
+        @Override
+        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
+            if (FORMATS.contains(format)) {
+                String resource = toResourceName(toBundleName(baseName, locale), format);
+                return new YamlResourceBundle(Configurations.flatten(Configurations.from(loader.getResourceAsStream(resource))));
+                
+            } else {
+                return null;
+            }
+        }
+        
     }
     
 }

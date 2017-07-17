@@ -45,8 +45,8 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
         return this;
     }
     
-    public SkullBuilder owner(Skull skull) {
-        meta.setOwner(skull.getName());
+    public SkullBuilder owner(Name name) {
+        meta.setOwner(name.getName());
         return this;
     }
     
@@ -57,7 +57,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     }
     
     
-    public static enum Skull {
+    public static enum Name {
 
         ALEX("MHF_ALEX"),
         BLAZE("MHF_BLAZE"),
@@ -107,7 +107,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
         
         private final String name;
 
-        private Skull(String name) {
+        private Name(String name) {
             this.name = name;
         }
 
