@@ -23,7 +23,12 @@
  */
 package com.karuslabs.commons.language;
 
+import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentMap;
+
 
 public class Language {
+    
+    private ConcurrentMap<String, ResourceBundle> bundles;
     
 }
