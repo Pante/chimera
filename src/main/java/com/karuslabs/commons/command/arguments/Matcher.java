@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import java.util.function.Predicate;
+
 
 public class Matcher {
     
@@ -37,13 +39,13 @@ public class Matcher {
     }
 
     
-    public boolean matches(Match... matches) {
+    public boolean matches(Predicate<String>... matches) {
         if (last != matches.length) {
             throw new IllegalArgumentException("Number of arguments and matches supplied do not correspond.");
         }
         
         for (int i = first; i < last; i++) {
-            if (!matches[i].evaluate(arguments[i])) {
+            if (!matches[i].test(arguments[i])) {
                 return false;
             }
         }

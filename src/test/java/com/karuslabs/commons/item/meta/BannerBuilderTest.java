@@ -54,9 +54,8 @@ public class BannerBuilderTest {
         List<Pattern> patterns = Collections.singletonList(new Pattern(DyeColor.BLUE, PatternType.BASE));                
         when(meta.getPatterns()).thenReturn(new ArrayList<>());
         
-        builder.color(DyeColor.YELLOW).pattern(new Pattern(DyeColor.BLACK, PatternType.BASE)).patterns(patterns);
+        builder.pattern(new Pattern(DyeColor.BLACK, PatternType.BASE)).patterns(patterns);
         
-        verify(meta).setBaseColor(DyeColor.YELLOW);
         verify(meta).addPattern(new Pattern(DyeColor.BLACK, PatternType.BASE));
         assertThat(meta.getPatterns(), equalTo(patterns));
     }

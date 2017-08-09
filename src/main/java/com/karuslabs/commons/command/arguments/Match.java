@@ -23,10 +23,26 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import com.google.common.primitives.*;
+
+import java.util.function.Predicate;
+
+import org.bukkit.Bukkit;
+
 
 @FunctionalInterface
-public interface Match {
+public interface Match extends Predicate<String> {
     
-    public boolean evaluate(String argument);
+    public static final Match BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
+    
+    public static final Match INT = argument -> Ints.tryParse(argument) != null;
+    
+    public static final Match DOUBLE = argument -> Doubles.tryParse(argument) != null;
+    
+    public static final Match FLOAT = argument -> Floats.tryParse(argument) != null;
+    
+    public static final Match PLAYER = argument -> Bukkit.getPlayer(argument) != null;
+    
+    public static final Match WORLD = argument -> Bukkit.getWorld(argument) != null;
     
 }

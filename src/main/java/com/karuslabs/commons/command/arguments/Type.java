@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,47 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.meta;
+package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.item.Builder;
+import com.google.common.primitives.*;
 
-import java.util.*;
+import java.util.function.Function;
+import javax.annotation.Nullable;
 
 import org.bukkit.*;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.entity.Player;
 
 
-public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
+@FunctionalInterface
+public interface Type<T> extends Function<String, T> {
     
-    public BannerBuilder() {
-        this(new ItemStack(Material.BANNER));
-    }
-    
-    public BannerBuilder(ItemStack item) {
-        super(item);
-    }
-    
-    public BannerBuilder(Builder builder) {
-        super(builder);
-    }    
-
-    
-    public BannerBuilder pattern(Pattern pattern) {
-        meta.addPattern(pattern);
-        return this;
-    }
-    
-    public BannerBuilder patterns(List<Pattern> patterns) {
-        meta.getPatterns().addAll(patterns);
-        return this;
-    }
-    
-
     @Override
-    protected BannerBuilder getThis() {
-        return this;
-    }
+    @Nullable
+    public T apply(String argument);
+    
+    
+    public static final Type<String> STRING = argument -> argument;
+    
+    public static final Type<String> COLOURED_STRING = argument -> ChatColor.translateAlternateColorCodes('&', argument);
+    
+    
+    // Should they be kept?
+    public static final Type<Boolean> BOOLEAN = Boolean::parseBoolean;
+    
+    public static final Type<Integer> INT = Ints::tryParse;
+    
+    public static final Type<Double> DOUBLE = Doubles::tryParse;
+    
+    public static final Type<Float> FLOAT = Floats::tryParse;
+    
+    public static final Type<Player> PLAYER = Bukkit::getPlayer;
+    
+    public static final Type<World> WORLD = Bukkit::getWorld;
+    //
     
 }
