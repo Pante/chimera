@@ -21,17 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
-
-import com.karuslabs.commons.command.argument.Arguments;
+package com.karuslabs.commons.command.arguments;
 
 
-@FunctionalInterface
-public interface CommandExecutor {
-   
-    public boolean execute(CommandContext context, Arguments args);
+public class Argument {
+    
+    public static final Argument NONE = new Argument();
     
     
-    public static final CommandExecutor NONE = (context, args) -> true;
+    private String argument;
+    
+    
+    public Argument() {
+        this("");
+    }
+    
+    public Argument(String argument) {
+        this.argument = argument;
+    }
+    
+    
+    protected void set(String argument) {
+        this.argument = argument;
+    }
     
 }

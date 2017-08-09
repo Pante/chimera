@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collections;
+package com.karuslabs.commons.collection;
 
-import com.karuslabs.commons.collections.TokenMap.Key;
+import com.karuslabs.commons.collection.TokenMap.Key;
 
 import junitparams.*;
 
@@ -31,7 +31,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static com.karuslabs.commons.collections.TokenMap.key;
+import static com.karuslabs.commons.collection.TokenMap.key;
 import static org.junit.Assert.*;
 
 

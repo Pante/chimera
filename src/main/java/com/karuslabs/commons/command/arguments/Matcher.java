@@ -21,39 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
-
-import com.karuslabs.commons.command.argument.Arguments;
-import com.karuslabs.commons.command.*;
-
-import java.util.*;
-import static java.util.stream.Collectors.toList;
+package com.karuslabs.commons.command.arguments;
 
 
-public class ListCompleter implements Completer {
+public class Matcher {
     
-    private List<String> possibilities;
+    private String[] arguments;
+    private int first, last;
     
     
-    public ListCompleter(List<String> possibilities) {
-        this.possibilities = possibilities;
+    public Matcher(String[] arguments) {
+        this.arguments = arguments;
+        first = 0;
+        last = arguments.length;
+    }
+
+    
+    public boolean matches(Match... matches) {
+        if (last != matches.length) {
+            throw new IllegalArgumentException("Number of arguments and matches supplied do not correspond.");
+        }
+        
+        for (int i = first; i < last; i++) {
+            if (!matches[i].evaluate(arguments[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
     
-    @Override
-    public List<String> complete(CommandContext context, Arguments args) {
-        String argument = args.getLastString();
-        if (argument.isEmpty()) {
-            return Collections.EMPTY_LIST;
+    public Matcher starting(int first) {
+        return between(first, arguments.length);
+    }
+    
+    public Matcher between(int first, int last) {
+        if (0 <= first && first <= last && last <= arguments.length) {
+            this.first = first;
+            this.last = last;
+            return this;
             
         } else {
-            return possibilities.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+            throw new IllegalArgumentException("Invalid bounds specified.");
         }
     }
     
     
-    public List<String> getPossibilities() {
-        return possibilities;
+    public int length() {
+        return arguments.length;
+    }
+    
+    
+    protected void set(String[] arguments) {
+        this.arguments = arguments;
     }
     
 }

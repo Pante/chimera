@@ -21,17 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
-
-import com.karuslabs.commons.command.arguments.Arguments;
+package com.karuslabs.commons.command.arguments;
 
 
-public class Command {
+@FunctionalInterface
+public interface Match {
     
-    protected void test(Arguments args) {
-        if (args.match().matches(arg -> true, arg -> false)) {
-            
-        }
-    }
+    public boolean evaluate(String argument);
     
 }
