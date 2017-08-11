@@ -24,6 +24,7 @@
 package com.karuslabs.commons.collection;
 
 import java.util.*;
+import javax.annotation.Nullable;
 
 
 public abstract class ProxiedMap<K, V> implements Map<K, V> {
@@ -65,17 +66,17 @@ public abstract class ProxiedMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public V get(Object key) {
+    public @Nullable V get(Object key) {
         return map.get(key);
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         return map.put(key, value);
     }
 
     @Override
-    public V remove(Object key) {
+    public @Nullable V remove(Object key) {
         return map.remove(key);
     }
 

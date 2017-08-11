@@ -23,15 +23,9 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.arguments.Arguments;
-
 
 public class Command {
+
     
-    protected void test(Arguments args) {
-        if (args.match().matches(arg -> true, arg -> false)) {
-            
-        }
-    }
     
 }

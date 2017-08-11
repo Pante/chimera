@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,44 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collection;
+package com.karuslabs.commons.configuration;
 
-import java.util.*;
-import javax.annotation.Nullable;
+import java.io.*;
+import java.util.Map;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 
-public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
+public class Configurations {
     
-    public ClassMap() {
-        this(new HashMap<>());
+    public static Map<String, Object> flatten(ConfigurationSection config) {
+        return config.getKeys(true).stream().filter(key -> !config.isConfigurationSection(key)).collect(toMap(identity(), config::get));
     }
     
-    public ClassMap(int capacity) {
-        this(new HashMap<>(capacity));
-    }
-    
-    public ClassMap(Map<Class<? extends V>, V> map) {
-        super(map);
-    }
-    
-    
-    public <U extends V> @Nullable U getInstance(Class<U> type) {
-        return type.cast(map.get(type));
-    }
-    
-    public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
-        V uncasted = map.get(type);
-        if (uncasted != null && uncasted.getClass() == type) {
-            return type.cast(uncasted);
+    public static YamlConfiguration from(InputStream stream) {
+        try {
+            return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, "UTF-8"));
             
-        } else {
-            return value;
+        } catch (UnsupportedEncodingException e) {
+            throw new UncheckedIOException(e);
         }
-    }
-    
-    
-    public <U extends V> @Nullable U putInstance(Class<U> type, U value) {
-        return type.cast(map.put(type, value));
     }
     
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,44 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collection;
+package com.karuslabs.commons.locale;
 
 import java.util.*;
 import javax.annotation.Nullable;
 
+import org.bukkit.configuration.ConfigurationSection;
 
-public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
+import static com.karuslabs.commons.configuration.Configurations.flatten;
+import static java.util.Collections.*;
+
+
+public class YamlResourceBundle extends ResourceBundle {
     
-    public ClassMap() {
-        this(new HashMap<>());
-    }
-    
-    public ClassMap(int capacity) {
-        this(new HashMap<>(capacity));
-    }
-    
-    public ClassMap(Map<Class<? extends V>, V> map) {
-        super(map);
-    }
+    private Map<String, Object> messages;
     
     
-    public <U extends V> @Nullable U getInstance(Class<U> type) {
-        return type.cast(map.get(type));
-    }
-    
-    public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
-        V uncasted = map.get(type);
-        if (uncasted != null && uncasted.getClass() == type) {
-            return type.cast(uncasted);
-            
-        } else {
-            return value;
-        }
+    public YamlResourceBundle(ConfigurationSection config) {
+        messages = flatten(config);
     }
     
     
-    public <U extends V> @Nullable U putInstance(Class<U> type, U value) {
-        return type.cast(map.put(type, value));
+    @Override
+    public Enumeration<String> getKeys() {
+        return enumeration(messages.keySet());
+    }
+    
+    @Override
+    protected @Nullable Object handleGetObject(String key) {
+        return messages.get(key);
     }
     
 }

@@ -36,16 +36,13 @@ import org.bukkit.entity.Player;
 public interface Type<T> extends Function<String, T> {
     
     @Override
-    @Nullable
-    public T apply(String argument);
+    public @Nullable T apply(String argument);
     
     
     public static final Type<String> STRING = argument -> argument;
     
     public static final Type<String> COLOURED_STRING = argument -> ChatColor.translateAlternateColorCodes('&', argument);
     
-    
-    // Should they be kept?
     public static final Type<Boolean> BOOLEAN = Boolean::parseBoolean;
     
     public static final Type<Integer> INT = Ints::tryParse;
@@ -57,6 +54,5 @@ public interface Type<T> extends Function<String, T> {
     public static final Type<Player> PLAYER = Bukkit::getPlayer;
     
     public static final Type<World> WORLD = Bukkit::getWorld;
-    //
     
 }

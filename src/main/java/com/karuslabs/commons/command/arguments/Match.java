@@ -33,6 +33,8 @@ import org.bukkit.Bukkit;
 @FunctionalInterface
 public interface Match extends Predicate<String> {
     
+    public static final Match EMPTY = String::isEmpty;
+    
     public static final Match BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
     
     public static final Match INT = argument -> Ints.tryParse(argument) != null;

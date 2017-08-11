@@ -23,10 +23,17 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import java.util.function.*;
+
+import static java.util.Arrays.copyOfRange;
 
 
 public class Arguments {
+    
+    public static final String[] EMPTY = new String[] {};
+    
     
     private String[] arguments;
     private Matcher matcher;
@@ -43,15 +50,10 @@ public class Arguments {
     public boolean contains(int index) {
         return 0 <= index && index < arguments.length;
     }
-    
-    public int length() {
-        return arguments.length;
-    }
         
     
     public Matcher match() {
         matcher.set(arguments);
-        matcher.between(0, arguments.length);
         return matcher;
     }
     
@@ -65,12 +67,12 @@ public class Arguments {
     }
     
     
-    public Argument getImmutable(int index) {
-        return getOr(index, argument -> new Argument(argument), () -> Argument.NONE);
+    public @Immutable Argument getImmutable(int index) {
+        return getOr(index, Argument::new, () -> Argument.NONE);
     }
     
-    public Argument getLastImmutable() {
-        return getOr(arguments.length - 1, argument -> new Argument(argument), () -> Argument.NONE);
+    public @Immutable Argument getLastImmutable() {
+        return getOr(arguments.length - 1, Argument::new, () -> Argument.NONE);
     }
     
     
@@ -80,6 +82,21 @@ public class Arguments {
             
         } else {
             return supplier.get();
+        }
+    }
+    
+        
+    public int length() {
+        return arguments.length;
+    }
+    
+        
+    public void trim() {
+        if (arguments.length <= 1) {
+            arguments = EMPTY;
+            
+        } else {
+            arguments = copyOfRange(arguments, 1, arguments.length);
         }
     }
     

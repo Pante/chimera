@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,44 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collection;
+package com.karuslabs.commons.annotation;
 
-import java.util.*;
-import javax.annotation.Nullable;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
-    
-    public ClassMap() {
-        this(new HashMap<>());
-    }
-    
-    public ClassMap(int capacity) {
-        this(new HashMap<>(capacity));
-    }
-    
-    public ClassMap(Map<Class<? extends V>, V> map) {
-        super(map);
-    }
-    
-    
-    public <U extends V> @Nullable U getInstance(Class<U> type) {
-        return type.cast(map.get(type));
-    }
-    
-    public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
-        V uncasted = map.get(type);
-        if (uncasted != null && uncasted.getClass() == type) {
-            return type.cast(uncasted);
-            
-        } else {
-            return value;
-        }
-    }
-    
-    
-    public <U extends V> @Nullable U putInstance(Class<U> type, U value) {
-        return type.cast(map.put(type, value));
-    }
+@Documented
+@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE_USE})
+@Retention(RUNTIME)
+public @interface Immutable {
     
 }

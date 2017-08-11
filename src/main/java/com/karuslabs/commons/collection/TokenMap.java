@@ -24,6 +24,7 @@
 package com.karuslabs.commons.collection;
 
 import java.util.*;
+import javax.annotation.Nullable;
 
 
 public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
@@ -41,11 +42,11 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
     }
     
     
-    public <U extends V> U getInstance(Key<U> key) {
+    public <U extends V> @Nullable U getInstance(Key<U> key) {
         return key.type.cast(map.get(key));
     }
 
-    public <U extends V> U getInstanceOrDefault(Key<U> key, U value) {
+    public <U extends V> @Nullable U getInstanceOrDefault(Key<U> key, U value) {
         V uncasted = map.get(key);
         if (uncasted != null && uncasted.getClass().equals(key.type)) {
             return key.type.cast(uncasted);
@@ -56,7 +57,7 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
     }
 
     
-    public <U extends V> U putInstance(Key<U> key, U value) {
+    public <U extends V> @Nullable U putInstance(Key<U> key, U value) {
         return key.type.cast(map.put(key, value));
     }
     

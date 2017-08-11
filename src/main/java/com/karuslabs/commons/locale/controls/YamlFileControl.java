@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,44 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collection;
+package com.karuslabs.commons.locale.controls;
 
+import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.YamlResourceBundle;
+
+import java.io.File;
 import java.util.*;
-import javax.annotation.Nullable;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 
-public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
+public class YamlFileControl extends FileControl {
     
-    public ClassMap() {
-        this(new HashMap<>());
+    private static final @Immutable List<String> FORMATS = unmodifiableList(asList("yml", "yaml"));
+    
+    
+    public YamlFileControl(File root) {
+        super(root);
+    }
+
+    @Override
+    protected ResourceBundle load(ClassLoader loader, String path) {
+        return new YamlResourceBundle(YamlConfiguration.loadConfiguration(new File(root, path)));
     }
     
-    public ClassMap(int capacity) {
-        this(new HashMap<>(capacity));
-    }
-    
-    public ClassMap(Map<Class<? extends V>, V> map) {
-        super(map);
-    }
-    
-    
-    public <U extends V> @Nullable U getInstance(Class<U> type) {
-        return type.cast(map.get(type));
-    }
-    
-    public <U extends V> U getInstanceOrDefault(Class<U> type, U value) {
-        V uncasted = map.get(type);
-        if (uncasted != null && uncasted.getClass() == type) {
-            return type.cast(uncasted);
-            
-        } else {
-            return value;
-        }
-    }
-    
-    
-    public <U extends V> @Nullable U putInstance(Class<U> type, U value) {
-        return type.cast(map.put(type, value));
+    @Override
+    public @Immutable List<String> getFormats(String bundleName) {
+        return FORMATS;
     }
     
 }

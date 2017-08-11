@@ -45,6 +45,11 @@ public class Argument {
     }
     
     
+    public boolean match(Predicate<String> match) {
+        return match.test(argument);
+    }
+    
+    
     public @Nullable <T> T as(Function<String, T> type) {
         return type.apply(argument);
     }
@@ -67,11 +72,6 @@ public class Argument {
         } else {
             throw exception.get();
         }
-    }
-    
-    
-    public boolean match(Predicate<String> match) {
-        return match.test(argument);
     }
     
     
