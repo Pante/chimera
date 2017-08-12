@@ -23,26 +23,30 @@
  */
 package com.karuslabs.commons.locale.controls;
 
-import java.io.*;
-import java.util.ResourceBundle;
+import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.YamlResourceBundle;
+
+import java.util.*;
+
+import static com.karuslabs.commons.configuration.Configurations.from;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 
-public class PropertiesFileControl extends FileControl {
+public class YamlControl extends Control {
+    
+    public static final @Immutable List<String> FORMATS = unmodifiableList(asList("yml", "yaml"));
     
     
-    public PropertiesFileControl(File root) {
-        super(root);
-    }
-
     @Override
-    protected ResourceBundle load(ClassLoader loader, String name) {
-//TODO
-//        try (Reader{
-//            
-//        } catch (IOException e) {
-//            throw new UncheckedIOException(e);
-//        }
-return null;
+    protected ResourceBundle load(ClassLoader loader, String path) {
+        return new YamlResourceBundle(from(loader.getResourceAsStream(path)));
     }
-            
+    
+    @Override
+    public @Immutable List<String> getFormats(String bundleName) {
+        return FORMATS;
+    }
+    
 }
