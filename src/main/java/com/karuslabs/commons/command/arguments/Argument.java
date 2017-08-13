@@ -30,15 +30,11 @@ import javax.annotation.Nullable;
 
 public class Argument {
     
-    public static final Argument NONE = new Argument();
+    public static final Argument NONE = new Argument("");
     
     
     private String argument;
     
-    
-    public Argument() {
-        this("");
-    }
     
     public Argument(String argument) {
         this.argument = argument;

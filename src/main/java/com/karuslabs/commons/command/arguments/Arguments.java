@@ -42,8 +42,7 @@ public class Arguments {
     
     public Arguments(String[] arguments) {
         this.arguments = arguments;
-        matcher = new Matcher(arguments);
-        mutable = new Argument();
+        mutable = new Argument("");
     }
     
     
@@ -53,7 +52,13 @@ public class Arguments {
         
     
     public Matcher match() {
-        matcher.set(arguments);
+        if (matcher == null) {
+            matcher = new Matcher(arguments);
+            
+        } else {
+            matcher.set(arguments);
+        }
+        
         return matcher;
     }
     
