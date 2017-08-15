@@ -23,12 +23,15 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import java.util.*;
 import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import static com.karuslabs.commons.configuration.Configurations.flatten;
+import static com.karuslabs.commons.configuration.Configurations.*;
+import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 
 
@@ -50,6 +53,31 @@ public class YamlResourceBundle extends ResourceBundle {
     @Override
     protected @Nullable Object handleGetObject(String key) {
         return messages.get(key);
+    }
+    
+    
+    public static class Control extends ResourceBundle.Control {
+        
+        private static final @Immutable List<String> FORMATS = unmodifiableList(asList("yml", "yaml"));
+        
+        
+        @Override
+        public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
+            if (getFormats(baseName).contains(format)) {
+                String bundleName = toBundleName(baseName, locale);
+                String resourceName = toResourceName(bundleName, format);
+                return new YamlResourceBundle(from(loader.getResourceAsStream(resourceName)));
+
+            } else {
+                return null;
+            }
+        }
+        
+        @Override
+        public @Immutable List<String> getFormats(String bundleName) {
+            return FORMATS;
+        }
+        
     }
     
 }
