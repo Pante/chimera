@@ -21,47 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.locale.resources;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.io.*;
+import javax.annotation.Nullable;
 
 
-public class CloseableReentrantReadWriteLock extends ReentrantReadWriteLock {
+public class FileResource implements Resource {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    private File folder;
     
     
-    public CloseableReentrantReadWriteLock() {
-        this(false);
+    public FileResource(File folder) {
+        this.folder = folder;
     }
     
-    public CloseableReentrantReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+
+    @Override
+    public @Nullable InputStream load(String path) {
+        File file = new File(folder, path);
+        if (exists(file)) {
+            try {
+                return new BufferedInputStream(new FileInputStream(file));
+                
+            } catch (FileNotFoundException e) {
+                return null;
+            }
+            
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean exists(String path) {
+        return exists(new File(folder, path));
     }
     
-    
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
-    }
-    
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
-    }
-    
-    
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
+    private boolean exists(File folder) {
+        return folder.isFile() && folder.canRead();
     }
     
 }

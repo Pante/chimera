@@ -21,47 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.locale.controls;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import com.karuslabs.commons.locale.resources.Resource;
+
+import java.io.InputStream;
+import java.util.*;
+import javax.annotation.Nullable;
 
 
-public class CloseableReentrantReadWriteLock extends ReentrantReadWriteLock {
+public abstract class Control extends ResourceBundle.Control {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    private List<Resource> resources;
     
     
-    public CloseableReentrantReadWriteLock() {
-        this(false);
-    }
-    
-    public CloseableReentrantReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+    public Control(List<Resource> resources) {
+        this.resources = resources;
     }
     
     
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
+    @Override
+    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
+        if (getFormats(baseName).contains(format)) {
+            String bundleName = toBundleName(baseName, locale);
+            String path = toResourceName(bundleName, format);
+            for (Resource resource : resources) {
+                if (resource.exists(path)) {
+                    return load(resource.load(path));
+                }
+            }
+        }
+            
+        return null;
     }
     
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
+    protected abstract ResourceBundle load(InputStream stream);
+    
+    
+    public List<Resource> getResources() {
+        return resources;
     }
-    
-    
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
-    }
-    
+
 }

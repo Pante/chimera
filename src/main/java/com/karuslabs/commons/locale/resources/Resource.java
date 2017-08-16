@@ -23,13 +23,13 @@
  */
 package com.karuslabs.commons.locale.resources;
 
-import java.io.*;
+import java.io.InputStream;
 import javax.annotation.Nullable;
 
 
 public interface Resource {
     
-    public @Nullable InputStream load(String path);    
+    public @Nullable InputStream load(String path);
     
     public boolean exists(String path);
     

@@ -47,4 +47,9 @@ public class CloseableReentrantLock extends ReentrantLock {
         return janitor;
     }
     
+    public Janitor acquireInterruptibly() throws InterruptedException {
+        lockInterruptibly();
+        return janitor;
+    }
+    
 }

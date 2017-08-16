@@ -21,47 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.locale.resources;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.io.InputStream;
+import javax.annotation.Nullable;
 
 
-public class CloseableReentrantReadWriteLock extends ReentrantReadWriteLock {
+public class ClasspathResource implements Resource {
+
+    private ClassLoader loader;
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
     
-    
-    public CloseableReentrantReadWriteLock() {
-        this(false);
+    public ClasspathResource() {
+        this(ClasspathResource.class.getClassLoader());
     }
     
-    public CloseableReentrantReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+    public ClasspathResource(ClassLoader loader) {
+        this.loader = loader;
     }
     
     
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
+    @Override
+    public @Nullable InputStream load(String path) {
+        return loader.getResourceAsStream(path);
     }
-    
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
-    }
-    
-    
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
+
+    @Override
+    public boolean exists(String path) {
+        return loader.getResource(path) != null;
     }
     
 }

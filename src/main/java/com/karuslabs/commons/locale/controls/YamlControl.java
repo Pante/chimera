@@ -21,47 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.locale.controls;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.YamlResourceBundle;
+import com.karuslabs.commons.locale.resources.Resource;
+
+import java.io.InputStream;
+import java.util.*;
+
+import static com.karuslabs.commons.configuration.Configurations.from;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 
-public class CloseableReentrantReadWriteLock extends ReentrantReadWriteLock {
+public class YamlControl extends Control {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    private static final @Immutable List<String> FORMATS = unmodifiableList(asList("yml", "yaml"));
     
     
-    public CloseableReentrantReadWriteLock() {
-        this(false);
-    }
-    
-    public CloseableReentrantReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+    public YamlControl(List<Resource> resources) {
+        super(resources);
     }
     
     
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
-    }
-    
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
+    @Override
+    protected ResourceBundle load(InputStream stream) {
+       return new YamlResourceBundle(from(stream));
     }
     
     
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
+    @Override
+    public @Immutable List<String> getFormats(String bundleName) {
+        return FORMATS;
     }
     
 }
