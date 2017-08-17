@@ -21,46 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.controls;
-
-import com.karuslabs.commons.locale.resources.Resource;
-
-import java.io.InputStream;
-import java.util.*;
-import javax.annotation.Nullable;
+package com.karuslabs.commons.locale;
 
 
-public abstract class Control extends ResourceBundle.Control {
+public class Translation {
     
-    private List<Resource> resources;
-    
-    
-    public Control(List<Resource> resources) {
-        this.resources = resources;
-    }
-    
-    
-    @Override
-    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
-        if (getFormats(baseName).contains(format)) {
-            String bundleName = toBundleName(baseName, locale);
-            String path = toResourceName(bundleName, format);
-            for (Resource resource : resources) {
-                if (resource.exists(path)) {
-                    return load(resource.load(path));
-                }
-            }
-        }
-            
-        return null;
-    }
-    
-    
-    protected abstract ResourceBundle load(InputStream stream);
-    
-    
-    public List<Resource> getResources() {
-        return resources;
-    }
-
 }
