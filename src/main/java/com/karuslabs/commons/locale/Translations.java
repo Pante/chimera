@@ -23,62 +23,38 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.text.MessageFormat;
+import com.karuslabs.commons.locale.controls.Control;
+
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-public class Translation {
-
-    private ResourceBundle bundle;
-    private Text text;
-
+public class Translations {
     
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        text = new Text("", bundle.getLocale());
-    }
-
-    public Text text(String key) {
-        text.set(bundle.getString(key));
-        return text;
-    }
+    private static final Map<String, Locale> CACHE = new ConcurrentHashMap<>();
     
-    public Text immutableText(String key) {
-        return new Text(bundle.getString(key), bundle.getLocale());
+    private Control control;
+    private String path;
+    
+    
+    public Translations(Control control, String path) {
+        this.control = control;
+        this.path = path;
     }
     
     
-    public static class Text {
-
-        private String text;
-        private MessageFormat format;
-
+    public Translation get(String locale) {
+        Locale cached = CACHE.get(locale);
+        if (cached == null) {
+            
+        }
         
-        public Text(String text) {
-            this.text = text;
-            format = new MessageFormat("");
-        }
-
-        public Text(String text, Locale locale) {
-            this(text);
-            format.setLocale(locale);
-        }
-
-        
-        public String get() {
-            return text;
-        }
-
-        public String format(Object... arguments) {
-            format.applyPattern(text);
-            return format.format(arguments);
-        }
-
-        
-        public void set(String text) {
-            this.text = text;
-        }
-
+        return get(cached);
     }
-
+    
+    
+    public Translation get(Locale locale) {
+        return new Translation(ResourceBundle.getBundle(path, locale, getClass().getClassLoader(), control));
+    }
+    
 }

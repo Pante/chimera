@@ -71,7 +71,7 @@ public class Argument {
     }
     
     
-    protected void set(String argument) {
+    public void set(String argument) {
         this.argument = argument;
     }
     

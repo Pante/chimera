@@ -23,62 +23,32 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.Locale;
+import java.util.function.Function;
 
 
-public class Translation {
-
-    private ResourceBundle bundle;
-    private Text text;
-
-    
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        text = new Text("", bundle.getLocale());
-    }
-
-    public Text text(String key) {
-        text.set(bundle.getString(key));
-        return text;
-    }
-    
-    public Text immutableText(String key) {
-        return new Text(bundle.getString(key), bundle.getLocale());
-    }
+public class Locales {
     
     
-    public static class Text {
-
-        private String text;
-        private MessageFormat format;
-
+    
+    public static Locale parseOr(String locale, Function<String, Locale> function) {
+        if (locale == null) {
+            return function.apply(locale);
+        }
         
-        public Text(String text) {
-            this.text = text;
-            format = new MessageFormat("");
+        String[] parts = locale.split("_");
+        if (parts.length == 2) {
+            Locale aLocale = new Locale(parts[0], parts[1]);
+            if (aLocale.getISO3Country() != null && aLocale.getISO3Language() != null) {
+                return aLocale;
+                
+            } else {
+                return function.apply(locale);
+            }
+            
+        } else {
+            return function.apply(locale);
         }
-
-        public Text(String text, Locale locale) {
-            this(text);
-            format.setLocale(locale);
-        }
-
-        
-        public String get() {
-            return text;
-        }
-
-        public String format(Object... arguments) {
-            format.applyPattern(text);
-            return format.format(arguments);
-        }
-
-        
-        public void set(String text) {
-            this.text = text;
-        }
-
     }
-
+    
 }
