@@ -24,31 +24,22 @@
 package com.karuslabs.commons.locale;
 
 import java.util.Locale;
-import java.util.function.Function;
+import java.util.function.Supplier;
+import javax.annotation.Nullable;
 
 
 public class Locales {
     
+    public static @Nullable Locale parse(String locale) {
+        return parseOr(locale, () -> null);
+    }
     
+    public static Locale parseOrDefault(String locale, Locale value) {
+        return parseOr(locale, () -> value);
+    }
     
-    public static Locale parseOr(String locale, Function<String, Locale> function) {
-        if (locale == null) {
-            return function.apply(locale);
-        }
-        
-        String[] parts = locale.split("_");
-        if (parts.length == 2) {
-            Locale aLocale = new Locale(parts[0], parts[1]);
-            if (aLocale.getISO3Country() != null && aLocale.getISO3Language() != null) {
-                return aLocale;
-                
-            } else {
-                return function.apply(locale);
-            }
-            
-        } else {
-            return function.apply(locale);
-        }
+    public static Locale parseOr(String locale, Supplier<Locale> supplier) {
+        return null; //TODO
     }
     
 }

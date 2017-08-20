@@ -46,7 +46,8 @@ public class Translations {
     public Translation get(String locale) {
         Locale cached = CACHE.get(locale);
         if (cached == null) {
-            
+            cached = Locales.parseOrDefault(locale, Locale.getDefault());
+            CACHE.put(locale, cached);
         }
         
         return get(cached);
