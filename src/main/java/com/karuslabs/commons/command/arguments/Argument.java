@@ -46,6 +46,11 @@ public class Argument {
     }
     
     
+    public String raw() {
+        return argument;
+    }
+    
+    
     public @Nullable <T> T as(Function<String, T> type) {
         return type.apply(argument);
     }

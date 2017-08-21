@@ -21,9 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.completers;
+
+import com.karuslabs.commons.command.Context;
+
+import java.util.List;
 
 
-public class Command {
+@FunctionalInterface
+public interface Completer {
+    
+    public List<String> complete(Context context, String argument);
     
 }

@@ -26,12 +26,9 @@ package com.karuslabs.commons.locale;
 import com.karuslabs.commons.locale.controls.Control;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Translations {
-    
-    private static final Map<String, Locale> CACHE = new ConcurrentHashMap<>();
     
     private Control control;
     private String path;
@@ -44,15 +41,8 @@ public class Translations {
     
     
     public Translation get(String locale) {
-        Locale cached = CACHE.get(locale);
-        if (cached == null) {
-            cached = Locales.parseOrDefault(locale, Locale.getDefault());
-            CACHE.put(locale, cached);
-        }
-        
-        return get(cached);
+        return get(Locales.parseOrDefault(locale, Locale.getDefault()));
     }
-    
     
     public Translation get(Locale locale) {
         return new Translation(ResourceBundle.getBundle(path, locale, getClass().getClassLoader(), control));
