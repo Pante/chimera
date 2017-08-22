@@ -29,8 +29,8 @@ import javax.annotation.Nullable;
 
 public interface Resource {
     
-    public @Nullable InputStream load(String path);
+    public @Nullable InputStream load(String bundle);
     
-    public boolean exists(String path);
+    public boolean exists(String bundle);
     
 }

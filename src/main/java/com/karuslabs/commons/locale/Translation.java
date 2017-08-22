@@ -38,12 +38,12 @@ public class Translation {
         text = new Text("", bundle.getLocale());
     }
 
-    public Text text(String key) {
+    public Text get(String key) {
         text.set(bundle.getString(key));
         return text;
     }
     
-    public Text immutableText(String key) {
+    public Text getImmutable(String key) {
         return new Text(bundle.getString(key), bundle.getLocale());
     }
     
@@ -65,7 +65,7 @@ public class Translation {
         }
 
         
-        public String get() {
+        public String raw() {
             return text;
         }
 

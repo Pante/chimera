@@ -23,20 +23,18 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.controls.Control;
-
 import java.util.*;
 
 
 public class Translations {
     
     private Control control;
-    private String path;
+    private String bundle;
     
     
-    public Translations(Control control, String path) {
+    public Translations(Control control, String bundle) {
         this.control = control;
-        this.path = path;
+        this.bundle = bundle;
     }
     
     
@@ -45,7 +43,7 @@ public class Translations {
     }
     
     public Translation get(Locale locale) {
-        return new Translation(ResourceBundle.getBundle(path, locale, getClass().getClassLoader(), control));
+        return new Translation(ResourceBundle.getBundle(bundle, locale, getClass().getClassLoader(), control));
     }
     
 }

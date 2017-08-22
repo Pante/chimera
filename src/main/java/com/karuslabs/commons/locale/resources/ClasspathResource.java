@@ -23,32 +23,32 @@
  */
 package com.karuslabs.commons.locale.resources;
 
+import java.io.File;
 import java.io.InputStream;
 import javax.annotation.Nullable;
 
 
 public class ClasspathResource implements Resource {
 
-    private ClassLoader loader;
+    private String path;
     
     
-    public ClasspathResource() {
-        this(ClasspathResource.class.getClassLoader());
-    }
-    
-    public ClasspathResource(ClassLoader loader) {
-        this.loader = loader;
+    public ClasspathResource(String path) {
+        if (!path.endsWith("/")) {
+            path += "/";
+        }
+        this.path = path;
     }
     
     
     @Override
-    public @Nullable InputStream load(String path) {
-        return loader.getResourceAsStream(path);
+    public @Nullable InputStream load(String bundle) {
+        return getClass().getClassLoader().getResourceAsStream(path + bundle);
     }
 
     @Override
-    public boolean exists(String path) {
-        return loader.getResource(path) != null;
+    public boolean exists(String bundle) {
+        return getClass().getClassLoader().getResource(path + "/" + bundle) != null;
     }
     
 }

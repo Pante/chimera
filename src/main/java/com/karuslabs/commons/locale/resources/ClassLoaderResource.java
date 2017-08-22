@@ -21,39 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.controls;
-
-import com.karuslabs.commons.annotation.Immutable;
-import com.karuslabs.commons.locale.YamlResourceBundle;
-import com.karuslabs.commons.locale.resources.Resource;
+package com.karuslabs.commons.locale.resources;
 
 import java.io.InputStream;
-import java.util.*;
-
-import static com.karuslabs.commons.configuration.Configurations.from;
-import static java.util.Arrays.asList;
-import static java.util.Collections.unmodifiableList;
 
 
-public class YamlControl extends Control {
+public class ClassLoaderResource implements Resource {
     
-    private static final @Immutable List<String> FORMATS = unmodifiableList(asList("yml", "yaml"));
+    private ClassLoader loader;
     
     
-    public YamlControl(List<Resource> resources) {
-        super(resources);
+    public ClassLoaderResource(ClassLoader loader) {
+        this.loader = loader;
     }
     
     
     @Override
-    protected ResourceBundle load(InputStream stream) {
-       return new YamlResourceBundle(from(stream));
+    public InputStream load(String bundle) {
+        return loader.getResourceAsStream(bundle);
     }
-    
-    
+
     @Override
-    public @Immutable List<String> getFormats(String bundleName) {
-        return FORMATS;
+    public boolean exists(String bundle) {
+        return loader.getResource(bundle) != null;
     }
     
 }
