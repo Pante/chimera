@@ -23,45 +23,57 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
-public class CloseableReentrantReadWriteLock extends ReentrantReadWriteLock {
+public class CloseableLockTest {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     
     
-    public CloseableReentrantReadWriteLock() {
-        this(false);
-    }
+    private CloseableLock lock;
     
-    public CloseableReentrantReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+    
+    public CloseableLockTest() {
+        lock = spy(new CloseableLock());
     }
     
     
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
+    @Test
+    public void acquire() {
+        try (Janitor janitor = lock.acquire()) {
+            assertEquals(1, lock.getHoldCount());
+        }
+        
+        assertEquals(0, lock.getHoldCount());
     }
     
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
+    
+    @Test
+    public void acquireInterruptibly() throws InterruptedException {
+        try (Janitor janitor = lock.acquireInterruptibly()) {
+            assertEquals(1, lock.getHoldCount());
+        }
+        
+        assertEquals(0, lock.getHoldCount());
     }
     
     
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
+    @Test
+    public void acquireInterruptibly_ThrowsException() throws InterruptedException {
+        exception.expect(InterruptedException.class);
+        
+        when(lock.acquireInterruptibly()).thenThrow(InterruptedException.class);
+        try (Janitor janitor = lock.acquireInterruptibly()) {
+            fail();
+        }   
+        
+        assertEquals(0, lock.getHoldCount());
     }
     
 }

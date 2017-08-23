@@ -21,35 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.command;
 
-import java.util.concurrent.locks.*;
+import com.karuslabs.commons.locale.Locales;
+
+import java.util.Locale;
+import javax.annotation.Nullable;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
-public class CloseableReentrantLock extends ReentrantLock {
+public class Source {
     
-    private final Janitor janitor;
-
+    private CommandSender sender;
     
-    public CloseableReentrantLock() {
-        this(false);
+    
+    public Source(CommandSender sender) {
+        this.sender = sender;
     }
     
-    public CloseableReentrantLock(boolean fair) {
-        super(fair);
-        janitor = this::unlock;
+    
+    public CommandSender get() {
+        return sender;
     }
     
     
-    
-    public Janitor acquire() {
-        lock();
-        return janitor;
+    public boolean isPlayer() {
+        return sender instanceof Player;
     }
     
-    public Janitor acquireInterruptibly() throws InterruptedException {
-        lockInterruptibly();
-        return janitor;
+    public @Nullable Player asPlayer() {
+        if (isPlayer()) {
+            return (Player) sender;
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    public Locale getLocale() {
+        if (isPlayer()) {
+            return Locales.getOrDefault(((Player) sender).getLocale(), Locale.getDefault());
+            
+        } else {
+            return Locale.getDefault();
+        }
     }
     
 }

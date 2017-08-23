@@ -26,24 +26,24 @@ package com.karuslabs.commons.locale;
 import java.util.*;
 
 
-public class Translations {
+public class Translations {    
     
     private Control control;
-    private String bundle;
+    private String name;
+
     
-    
-    public Translations(Control control, String bundle) {
+    public Translations(Control control, String name) {
         this.control = control;
-        this.bundle = bundle;
+        this.name = name;
     }
     
     
     public Translation get(String locale) {
-        return get(Locales.parseOrDefault(locale, Locale.getDefault()));
+        return get(Locales.getOrDefault(locale, Locale.getDefault()));
     }
     
     public Translation get(Locale locale) {
-        return new Translation(ResourceBundle.getBundle(bundle, locale, getClass().getClassLoader(), control));
+        return new Translation(ResourceBundle.getBundle(name, locale, getClass().getClassLoader(), control));
     }
     
 }

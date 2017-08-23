@@ -23,34 +23,45 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertEquals;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
-public class CloseableReentrantLockTest {
+public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CloseableReentrantLock lock;
+    private final Janitor readJanitor;
+    private final Janitor writeJanitor;
     
     
-    public CloseableReentrantLockTest() {
-        lock = spy(new CloseableReentrantLock());
+    public CloseableReadWriteLock() {
+        this(false);
+    }
+    
+    public CloseableReadWriteLock(boolean fair) {
+        super(fair);
+        readJanitor = () -> readLock().unlock();
+        writeJanitor = () -> writeLock().unlock();
     }
     
     
-    @Test
-    public void acquire() {
-        try (Janitor janitor = lock.acquire()) {
-            assertEquals(1, lock.getHoldCount());
-        }
-        
-        assertEquals(0, lock.getHoldCount());
+    public Janitor acquireReadLock() {
+        readLock().lock();
+        return readJanitor;
+    }
+    
+    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
+        readLock().lockInterruptibly();
+        return readJanitor;
+    }
+    
+    
+    public Janitor acquireWriteLock() {
+        writeLock().lock();
+        return writeJanitor;
+    }
+    
+    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
+        writeLock().lockInterruptibly();
+        return writeJanitor;
     }
     
 }

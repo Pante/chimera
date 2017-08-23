@@ -21,33 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.concurrent;
 
-import java.io.InputStream;
-import javax.annotation.Nullable;
+import java.util.concurrent.locks.*;
 
 
-public class ClasspathResource implements Resource {
-
-    private String path;
+public class CloseableLock extends ReentrantLock {
     
+    private final Janitor janitor;
+
     
-    public ClasspathResource(String path) {
-        if (!path.isEmpty() && !path.endsWith("/")) {
-            path += "/";
-        }
-        this.path = path;
+    public CloseableLock() {
+        this(false);
+    }
+    
+    public CloseableLock(boolean fair) {
+        super(fair);
+        janitor = this::unlock;
     }
     
     
-    @Override
-    public @Nullable InputStream load(String bundle) {
-        return getClass().getClassLoader().getResourceAsStream(path + bundle);
+    
+    public Janitor acquire() {
+        lock();
+        return janitor;
     }
-
-    @Override
-    public boolean exists(String bundle) {
-        return getClass().getClassLoader().getResource(path + "/" + bundle) != null;
+    
+    public Janitor acquireInterruptibly() throws InterruptedException {
+        lockInterruptibly();
+        return janitor;
     }
     
 }

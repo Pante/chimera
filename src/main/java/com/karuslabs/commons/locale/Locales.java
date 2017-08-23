@@ -39,15 +39,15 @@ public class Locales {
     private static final Set<String> LANGUAGES = new HashSet<>(asList(Locale.getISOLanguages()));
     
     
-    public static @Nullable Locale parse(String locale) {
-        return parse(locale, () -> null);
+    public static @Nullable Locale get(String locale) {
+        return get(locale, () -> null);
     }
     
-    public static Locale parseOrDefault(String locale, Locale value) {
-        return parse(locale, () -> value);
+    public static Locale getOrDefault(String locale, Locale value) {
+        return get(locale, () -> value);
     }
     
-    public static Locale parse(String locale, Supplier<Locale> value) {
+    public static Locale get(String locale, Supplier<Locale> value) {
         if (CACHE.containsKey(locale)) {
             return CACHE.get(locale);
         }

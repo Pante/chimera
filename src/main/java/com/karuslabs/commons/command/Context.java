@@ -25,67 +25,49 @@ package com.karuslabs.commons.command;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 
 public class Context {
     
-    private CommandSender sender;
+    private Source source;
     private String label;
     
     private Command parent;
-    private Command calling;
+    private Command callee;
     
     
-    public Context(CommandSender sender, String label, Command parent, Command calling) {
-        this.sender = sender;
+    public Context(Source source, String label, Command callee) {
+        this(source, label, null, callee);
+    }
+    
+    public Context(Source source, String label, @Nullable Command parent, Command callee) {
+        this.source = source;
         this.label = label;
         this.parent = parent;
-        this.calling = calling;
+        this.callee = callee;
     }
     
     
-    public CommandSender getSender() {
-        return sender;
-    }
-    
-    public boolean isPlayer() {
-        return sender instanceof Player;
-    }
-    
-    public @Nullable Player getPlayer() {
-        if (sender instanceof Player) {
-            return (Player) sender;
-            
-        } else {
-            return null;
-        }
-    }
-    
-    
-    public void set(String label, Command calling) {
+    public void update(String label, Command callee) {
         this.label = label;
-        parent = this.calling;
-        this.calling = calling;
+        this.parent = this.callee;
+        this.callee = callee;
     }
 
-            
+    
+    public Source getSource() {
+        return source;
+    }
+
     public String getLabel() {
         return label;
     }
-    
-    public void setLabel(String label) {
-        this.label = label;
-    }
-         
-    
+
     public @Nullable Command getParent() {
         return parent;
     }
-    
-    public Command getCalling() {
-        return calling;
+
+    public Command getCallee() {
+        return callee;
     }
     
 }
