@@ -25,7 +25,7 @@ package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.locale.resources.Resource;
-
+    
 import java.io.*;
 import java.util.*;
 import javax.annotation.Nullable;
@@ -40,14 +40,10 @@ public class Control extends ResourceBundle.Control {
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("java.properties", "yml", "yaml"));
     
     
-    private List<Resource> resources;
+    private Resource[] resources;
     
     
     public Control(Resource... resources) {
-        this(asList(resources));
-    }
-    
-    public Control(List<Resource> resources) {
         this.resources = resources;
     }
     
@@ -55,8 +51,7 @@ public class Control extends ResourceBundle.Control {
     @Override
     public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
         if (getFormats(baseName).contains(format)) {
-            String bundleName = toBundleName(baseName, locale);
-            String bundle = toResourceName(bundleName, format);
+            String bundle = toResourceName(toBundleName(baseName, locale), format);
             for (Resource resource : resources) {
                 if (resource.exists(bundle)) {
                     return load(format, resource.load(bundle));
@@ -67,7 +62,7 @@ public class Control extends ResourceBundle.Control {
         return null;
     }
     
-    protected ResourceBundle load(String format, InputStream stream) {
+    protected @Nullable ResourceBundle load(String format, InputStream stream) {
         switch (format) {
             case "java.properties":
                 try (InputStream aStream = stream) {
@@ -88,12 +83,8 @@ public class Control extends ResourceBundle.Control {
 
     
     @Override
-    public List<String> getFormats(String bundleName) {
+    public @Immutable List<String> getFormats(String bundleName) {
         return FORMATS;
     }
     
-    public List<Resource> getResources() {
-        return resources;
-    }
-
 }

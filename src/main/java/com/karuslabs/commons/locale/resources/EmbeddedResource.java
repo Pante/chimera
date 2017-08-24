@@ -24,26 +24,30 @@
 package com.karuslabs.commons.locale.resources;
 
 import java.io.InputStream;
+import javax.annotation.Nullable;
 
 
-public class ClassLoaderResource implements Resource {
+public class EmbeddedResource implements Resource {
     
-    private ClassLoader loader;
+    private String path;
     
     
-    public ClassLoaderResource(ClassLoader loader) {
-        this.loader = loader;
+    public EmbeddedResource(String path) {
+        if (!path.isEmpty() && !path.endsWith("/")) {
+            path += "/";
+        }
+        this.path = path;
     }
     
     
     @Override
-    public InputStream load(String bundle) {
-        return loader.getResourceAsStream(bundle);
+    public @Nullable InputStream load(String name) {
+        return getClass().getClassLoader().getResourceAsStream(path + name);
     }
 
     @Override
-    public boolean exists(String bundle) {
-        return loader.getResource(bundle) != null;
+    public boolean exists(String name) {
+        return getClass().getClassLoader().getResource(path + name) != null;
     }
     
 }

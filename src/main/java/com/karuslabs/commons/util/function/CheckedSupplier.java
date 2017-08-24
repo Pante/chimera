@@ -21,44 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.function;
 
-import java.io.*;
-import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 
-public class FileResource implements Resource {
+@FunctionalInterface
+public interface CheckedSupplier<R, E extends Exception> {
     
-    private File folder;
-    
-    
-    public FileResource(File folder) {
-        this.folder = folder;
-    }
+    public R get() throws E;
     
     
-    @Override
-    public @Nullable InputStream load(String name) {
-        File file = new File(folder, name);
-        if (!exists(file)) {
-            return null;
-        }
-            
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean exists(String name) {
-        return exists(new File(folder, name));
-    }
-    
-    private boolean exists(File file) {
-        return file.isFile() && file.canRead();
+    public static <T, E extends Exception> Supplier<T> wrap(CheckedSupplier<T, E> supplier) {
+        return () -> {
+            try {
+                return supplier.get();
+                
+            } catch (Exception e) {
+                throw new UncheckedFunctionException(e);
+            }
+        };
     }
     
 }

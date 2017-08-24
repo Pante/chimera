@@ -21,44 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.function;
 
-import java.io.*;
-import javax.annotation.Nullable;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+
+import static org.mockito.Mockito.*;
 
 
-public class FileResource implements Resource {
+public class CheckedBiPredicateTest {
     
-    private File folder;
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     
     
-    public FileResource(File folder) {
-        this.folder = folder;
+    private CheckedBiPredicate<Object, Object, Exception> predicate;
+    
+    
+    public CheckedBiPredicateTest() {
+        predicate = mock(CheckedBiPredicate.class);
     }
     
     
-    @Override
-    public @Nullable InputStream load(String name) {
-        File file = new File(folder, name);
-        if (!exists(file)) {
-            return null;
-        }
-            
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean exists(String name) {
-        return exists(new File(folder, name));
+    @Test
+    public void wrap() throws Exception {
+        CheckedBiPredicate.wrap(predicate).test(null, null);
+        verify(predicate).test(null, null);
     }
     
-    private boolean exists(File file) {
-        return file.isFile() && file.canRead();
+    
+    @Test
+    public void wrap_ThrowsException() throws Exception {
+        exception.expect(UncheckedFunctionException.class);
+        
+        doThrow(Exception.class).when(predicate).test(null, null);
+        
+        CheckedBiPredicate.wrap(predicate).test(null, null);
     }
     
 }

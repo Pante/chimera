@@ -21,44 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.function;
 
-import java.io.*;
-import javax.annotation.Nullable;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+
+import static org.mockito.Mockito.*;
 
 
-public class FileResource implements Resource {
+public class CheckedConsumerTest {
     
-    private File folder;
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
     
     
-    public FileResource(File folder) {
-        this.folder = folder;
+    private CheckedConsumer<Object, Exception> consumer;
+    
+    
+    public CheckedConsumerTest() {
+        consumer = mock(CheckedConsumer.class);
     }
     
     
-    @Override
-    public @Nullable InputStream load(String name) {
-        File file = new File(folder, name);
-        if (!exists(file)) {
-            return null;
-        }
-            
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean exists(String name) {
-        return exists(new File(folder, name));
+    @Test
+    public void wrap() throws Exception {
+        CheckedConsumer.wrap(consumer).accept(null);
+        verify(consumer).accept(null);
     }
     
-    private boolean exists(File file) {
-        return file.isFile() && file.canRead();
+    
+    @Test
+    public void wrap_ThrowsException() throws Exception {
+        exception.expect(UncheckedFunctionException.class);
+        
+        doThrow(Exception.class).when(consumer).accept(null);
+        
+        CheckedConsumer.wrap(consumer).accept(null);
     }
     
 }

@@ -21,53 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.locale.Locales;
-
-import java.util.Locale;
-import javax.annotation.Nullable;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import java.util.function.BiConsumer;
 
 
-public class Source {
+@FunctionalInterface
+public interface CheckedBiConsumer<T, U, E extends Exception> {
     
-    private CommandSender sender;
+    public void accept(T t, U u) throws E;
     
-    
-    public Source(CommandSender sender) {
-        this.sender = sender;
-    }
-    
-    
-    public CommandSender get() {
-        return sender;
-    }
-    
-    
-    public boolean isPlayer() {
-        return sender instanceof Player;
-    }
-    
-    public @Nullable Player asPlayer() {
-        if (isPlayer()) {
-            return (Player) sender;
-            
-        } else {
-            return null;
-        }
-    }
-    
-    
-    public Locale getLocale() {
-        if (isPlayer()) {
-            return Locales.getOrDefault(((Player) sender).getLocale(), Locale.getDefault());
-            
-        } else {
-            return Locale.getDefault();
-        }
+        
+    public static<T, U, E extends Exception> BiConsumer<T, U> wrap(CheckedBiConsumer<T, U, E> consumer) {
+        return (t, u) -> {
+            try {
+                consumer.accept(t, u);
+                
+            } catch (Exception e) {
+                throw new UncheckedFunctionException(e);
+            }
+        };
     }
     
 }

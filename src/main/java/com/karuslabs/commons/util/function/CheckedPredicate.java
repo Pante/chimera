@@ -21,53 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.util.function;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 
-public class Context {
+@FunctionalInterface
+public interface CheckedPredicate<T, E extends Exception> {
     
-    private Source source;
-    private String label;
-    
-    private Command parent;
-    private Command callee;
+    public boolean test(T t) throws E;
     
     
-    public Context(Source source, String label, Command callee) {
-        this(source, label, null, callee);
-    }
-    
-    public Context(Source source, String label, @Nullable Command parent, Command callee) {
-        this.source = source;
-        this.label = label;
-        this.parent = parent;
-        this.callee = callee;
-    }
-    
-    
-    public void update(String label, Command callee) {
-        this.label = label;
-        this.parent = this.callee;
-        this.callee = callee;
-    }
-
-    
-    public Source getSource() {
-        return source;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public @Nullable Command getParent() {
-        return parent;
-    }
-
-    public Command getCallee() {
-        return callee;
+    public static <T, E extends Exception> Predicate<T> wrap(CheckedPredicate<T, E> predicate) {
+        return t -> {
+            try {
+                return predicate.test(t);
+                
+            } catch (Exception e) {
+                throw new UncheckedFunctionException(e);
+            }
+        };
     }
     
 }

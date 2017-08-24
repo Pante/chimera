@@ -21,16 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
-
-import com.karuslabs.commons.command.Context;
-
-import java.util.List;
+package com.karuslabs.commons.util.function;
 
 
-@FunctionalInterface
-public interface Completer {
+public class UncheckedFunctionException extends RuntimeException {
     
-    public List<String> complete(Context context, String argument);
+    public UncheckedFunctionException() {}
+    
+    public UncheckedFunctionException(String message) {
+        super(message);
+    }
+
+    public UncheckedFunctionException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public UncheckedFunctionException(Throwable cause) {
+        super(cause);
+    }
     
 }

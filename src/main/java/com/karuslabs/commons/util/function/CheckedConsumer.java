@@ -21,33 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.function;
 
-import java.io.InputStream;
-import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 
-public class ClasspathResource implements Resource {
-
-    private String path;
+@FunctionalInterface
+public interface CheckedConsumer<T, E extends Exception> {
+    
+    public void accept(T t) throws E;
     
     
-    public ClasspathResource(String path) {
-        if (!path.isEmpty() && !path.endsWith("/")) {
-            path += "/";
-        }
-        this.path = path;
-    }
-    
-    
-    @Override
-    public @Nullable InputStream load(String bundle) {
-        return getClass().getClassLoader().getResourceAsStream(path + bundle);
-    }
-
-    @Override
-    public boolean exists(String bundle) {
-        return getClass().getClassLoader().getResource(path + "/" + bundle) != null;
+    public static <T, E extends Exception> Consumer<T> wrap(CheckedConsumer<T, E> consumer) {
+        return t -> {
+            try {
+                consumer.accept(t);
+                
+            } catch (Exception e) {
+                throw new UncheckedFunctionException(e);
+            }
+        };
     }
     
 }

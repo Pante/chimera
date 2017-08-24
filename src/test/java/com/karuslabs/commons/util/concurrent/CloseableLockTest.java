@@ -23,13 +23,20 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import java.util.function.Supplier;
+
+import junitparams.*;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
+import static com.karuslabs.commons.util.function.CheckedSupplier.wrap;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
+@RunWith(JUnitParamsRunner.class)
 public class CloseableLockTest {
     
     @Rule
@@ -58,8 +65,8 @@ public class CloseableLockTest {
     public void acquireInterruptibly() throws InterruptedException {
         try (Janitor janitor = lock.acquireInterruptibly()) {
             assertEquals(1, lock.getHoldCount());
-        }
-        
+    }
+    
         assertEquals(0, lock.getHoldCount());
     }
     

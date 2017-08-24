@@ -21,44 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.util.function;
 
-import java.io.*;
-import javax.annotation.Nullable;
+import java.util.function.BiPredicate;
 
 
-public class FileResource implements Resource {
+@FunctionalInterface
+public interface CheckedBiPredicate<T, U, E extends Exception> {
     
-    private File folder;
-    
-    
-    public FileResource(File folder) {
-        this.folder = folder;
-    }
+    public boolean test(T t, U u) throws E;
     
     
-    @Override
-    public @Nullable InputStream load(String name) {
-        File file = new File(folder, name);
-        if (!exists(file)) {
-            return null;
-        }
-            
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean exists(String name) {
-        return exists(new File(folder, name));
-    }
-    
-    private boolean exists(File file) {
-        return file.isFile() && file.canRead();
+    public static<T, U, E extends Exception> BiPredicate<T, U> wrap(CheckedBiPredicate<T, U, E> predicate) {
+        return (t, u) -> {
+            try {
+               return predicate.test(t, u);
+                
+            } catch (Exception e) {
+                throw new UncheckedFunctionException(e);
+            }
+        };
     }
     
 }
