@@ -23,16 +23,28 @@
  */
 package com.karuslabs.commons.command;
 
+import java.util.*;
+
 import org.bukkit.command.CommandSender;
 
 
 public class Source {
     
     private CommandSender sender;
+    private Locale locale;
     
     
     public Source(CommandSender sender) {
         this.sender = sender;
+    }
+    
+        
+    public CommandSender getSender() {
+        return sender;
+    }
+    
+    public Locale getLocale() {
+        return locale;
     }
     
 }

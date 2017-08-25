@@ -40,20 +40,18 @@ public class Control extends ResourceBundle.Control {
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("java.properties", "yml", "yaml"));
     
     
-    private String bundleName;
     private Resource[] resources;
     
     
-    public Control(String bunldeName, Resource... resources) {
-        this.bundleName = bunldeName;
+    public Control(Resource... resources) {
         this.resources = resources;
     }
     
     
     @Override
-    public @Nullable ResourceBundle newBundle(@Unused String baseName, Locale locale, String format, @Unused ClassLoader loader, @Unused boolean reload) {
+    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, @Unused ClassLoader loader, @Unused boolean reload) {
         if (getFormats(baseName).contains(format)) {
-            String bundle = toResourceName(toBundleName(bundleName, locale), format);
+            String bundle = toResourceName(toBundleName(baseName, locale), format);
             for (Resource resource : resources) {
                 if (resource.exists(bundle)) {
                     return load(format, resource.load(bundle));
@@ -81,15 +79,6 @@ public class Control extends ResourceBundle.Control {
             default:
                 return null;
         }
-    }
-    
-    
-    public ResourceBundle getBundle(Locale locale) {
-        return ResourceBundle.getBundle(bundleName, locale, this);
-    }
-    
-    public String getBundleName() {
-        return bundleName;
     }
     
     

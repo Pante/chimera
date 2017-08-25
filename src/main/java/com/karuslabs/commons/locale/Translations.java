@@ -23,63 +23,38 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.text.MessageFormat;
+import com.karuslabs.commons.locale.resources.Resource;
+
 import java.util.*;
 
 
-public class Translation {
+public class Translations {
     
-    private ResourceBundle bundle;
-    private Text text;
-
+    private String bundle;
+    private Control control;
     
-    public Translation(ResourceBundle bundle) {
+    
+    public Translations(String bundle, Resource... resources) {
+        this(bundle, new Control(resources));
+    }
+    
+    public Translations(String bundle, Control control) {
         this.bundle = bundle;
-        this.text = new Text("", bundle.getLocale());
-    }
-
-    
-    public Text get(String key) {
-        text.set(bundle.getString(key));
-        return text;
-    }
-    
-    public Text getImmutable(String key) {
-        return new Text(bundle.getString(key), bundle.getLocale());
+        this.control = control;
     }
     
     
-    public static class Text {
-
-        private String text;
-        private MessageFormat format;
-
-        
-        public Text(String text) {
-            this.text = text;
-            format = new MessageFormat("");
-        }
-
-        public Text(String text, Locale locale) {
-            this(text);
-            format.setLocale(locale);
-        }
-
-        
-        public String raw() {
-            return text;
-        }
-
-        public String format(Object... arguments) {
-            format.applyPattern(text);
-            return format.format(arguments);
-        }
-
-        
-        protected void set(String text) {
-            this.text = text;
-        }
-
+    public Translation get(Locale locale) {
+        return new Translation(getBundle(locale));
     }
-
+    
+    public ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle(bundle, locale, control);
+    }
+    
+    
+    public String getBundleName() {
+        return bundle;
+    }
+    
 }

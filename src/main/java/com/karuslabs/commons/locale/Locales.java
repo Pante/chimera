@@ -23,8 +23,9 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.google.common.cache.*;
+
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
@@ -33,7 +34,7 @@ import static java.util.Arrays.asList;
 
 public class Locales {
     
-    private static final Map<String, Locale> CACHE = new ConcurrentHashMap<>();
+    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().softValues().build();
     
     private static final Set<String> COUNTRIES = new HashSet<>(asList(Locale.getISOCountries()));
     private static final Set<String> LANGUAGES = new HashSet<>(asList(Locale.getISOLanguages()));
@@ -48,13 +49,14 @@ public class Locales {
     }
     
     public static Locale get(String locale, Supplier<Locale> value) {
-        if (CACHE.containsKey(locale)) {
-            return CACHE.get(locale);
+        Locale aLocale = CACHE.getIfPresent(locale);
+        if (aLocale != null) {
+            return aLocale;
         }
         
         String[] parts = locale.split("_");
         if (parts.length == 2 && isValidLanguage(parts[0]) && isValidCountry(parts[1])) {
-            Locale aLocale = new Locale(parts[0], parts[1]);
+            aLocale = new Locale(parts[0], parts[1]);
             CACHE.put(locale, aLocale);
             return aLocale;
             

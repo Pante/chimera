@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.locale.Translation;
+
+import javax.annotation.Nullable;
+
 
 public class Context {
     
@@ -30,13 +34,23 @@ public class Context {
     private String label;
     private Command parent;
     private Command command;
+    private Translation translation;
     
     
-    public Context(Source source, String label, Command parent, Command command) {
+    public Context(Source source, String label, @Nullable Command parent, Command command) {
         this.source = source;
         this.label = label;
         this.parent = parent;
         this.command = command;
+        this.translation = command.getTranslations().get(source.getLocale());
+    }
+    
+    
+    public void update(String label, Command command) {
+        this.label = label;
+        this.parent = this.command;
+        this.command = command;
+        this.translation = command.getTranslations().get(source.getLocale());
     }
     
     
@@ -54,6 +68,10 @@ public class Context {
     
     public Command getCommand() {
         return command;
+    }
+    
+    public Translation getTranslation() {
+        return translation;
     }
     
 }
