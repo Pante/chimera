@@ -44,19 +44,19 @@ public class CheckedPredicateTest {
     
     
     @Test
-    public void wrap() throws Exception {
-        CheckedPredicate.wrap(predicate).test(null);
+    public void uncheck() throws Exception {
+        CheckedPredicate.uncheck(predicate).test(null);
         verify(predicate).test(null);
     }
     
     
     @Test
-    public void wrap_ThrowsException() throws Exception {
+    public void uncheck_ThrowsException() throws Exception {
         exception.expect(UncheckedFunctionException.class);
         
         doThrow(Exception.class).when(predicate).test(null);
         
-        CheckedPredicate.wrap(predicate).test(null);
+        CheckedPredicate.uncheck(predicate).test(null);
     }
     
 }

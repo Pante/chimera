@@ -44,19 +44,19 @@ public class CheckedBiConsumerTest {
     
     
     @Test
-    public void wrap() throws Exception {
-        CheckedBiConsumer.wrap(consumer).accept(null, null);
+    public void uncheck() throws Exception {
+        CheckedBiConsumer.uncheck(consumer).accept(null, null);
         verify(consumer).accept(null, null);
     }
     
     
     @Test
-    public void wrap_ThrowsException() throws Exception {
+    public void uncheck_ThrowsException() throws Exception {
         exception.expect(UncheckedFunctionException.class);
         
         doThrow(Exception.class).when(consumer).accept(null, null);
         
-        CheckedBiConsumer.wrap(consumer).accept(null, null);
+        CheckedBiConsumer.uncheck(consumer).accept(null, null);
     }
     
 }

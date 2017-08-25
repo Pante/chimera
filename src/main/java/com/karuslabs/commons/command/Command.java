@@ -23,7 +23,16 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.locale.Control;
+
 
 public class Command {
+    
+    private Control translations;
+    
+    
+    public Control getTranslations() {
+        return translations;
+    }
     
 }

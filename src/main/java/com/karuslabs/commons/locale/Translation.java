@@ -28,7 +28,7 @@ import java.util.*;
 
 
 public class Translation {
-
+    
     private ResourceBundle bundle;
     private Text text;
 
@@ -38,6 +38,7 @@ public class Translation {
         text = new Text("", bundle.getLocale());
     }
 
+    
     public Text get(String key) {
         text.set(bundle.getString(key));
         return text;
@@ -75,7 +76,7 @@ public class Translation {
         }
 
         
-        public void set(String text) {
+        protected void set(String text) {
             this.text = text;
         }
 

@@ -21,29 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command;
 
-import java.util.*;
+import org.bukkit.command.CommandSender;
 
 
-public class Translations {    
+public class Source {
     
-    private Control control;
-    private String name;
-
-    
-    public Translations(Control control, String name) {
-        this.control = control;
-        this.name = name;
-    }
+    private CommandSender sender;
     
     
-    public Translation get(String locale) {
-        return get(Locales.getOrDefault(locale, Locale.getDefault()));
-    }
-    
-    public Translation get(Locale locale) {
-        return new Translation(ResourceBundle.getBundle(name, locale, getClass().getClassLoader(), control));
+    public Source(CommandSender sender) {
+        this.sender = sender;
     }
     
 }

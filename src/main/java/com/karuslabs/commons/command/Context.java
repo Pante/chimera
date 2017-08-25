@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
-
-import java.util.function.BiConsumer;
+package com.karuslabs.commons.command;
 
 
-@FunctionalInterface
-public interface CheckedBiConsumer<T, U, E extends Exception> {
+public class Context {
     
-    public void accept(T t, U u) throws E;
+    private Source source;
+    private String label;
+    private Command parent;
+    private Command command;
     
-        
-    public static<T, U, E extends Exception> BiConsumer<T, U> uncheck(CheckedBiConsumer<T, U, E> consumer) {
-        return (t, u) -> {
-            try {
-                consumer.accept(t, u);
-                
-            } catch (Exception e) {
-                throw new UncheckedFunctionException(e);
-            }
-        };
+    
+    public Context(Source source, String label, Command parent, Command command) {
+        this.source = source;
+        this.label = label;
+        this.parent = parent;
+        this.command = command;
+    }
+    
+    
+    public Source getSource() {
+        return source;
+    }
+    
+    public String getLabel() {
+        return label;
+    }
+    
+    public Command getParentCommand() {
+        return parent;
+    }
+    
+    public Command getCommand() {
+        return command;
     }
     
 }

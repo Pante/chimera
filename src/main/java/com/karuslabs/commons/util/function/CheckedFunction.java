@@ -32,7 +32,7 @@ public interface CheckedFunction<T, R, E extends Exception> {
     public R apply(T t) throws Exception;
     
     
-    public static <T, R, E extends Exception> Function<T, R> wrap(CheckedFunction<T, R, E> function) {
+    public static <T, R, E extends Exception> Function<T, R> uncheck(CheckedFunction<T, R, E> function) {
         return t -> {
             try {
                 return function.apply(t);

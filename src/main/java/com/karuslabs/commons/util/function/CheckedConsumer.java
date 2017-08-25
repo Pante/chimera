@@ -32,7 +32,7 @@ public interface CheckedConsumer<T, E extends Exception> {
     public void accept(T t) throws E;
     
     
-    public static <T, E extends Exception> Consumer<T> wrap(CheckedConsumer<T, E> consumer) {
+    public static <T, E extends Exception> Consumer<T> uncheck(CheckedConsumer<T, E> consumer) {
         return t -> {
             try {
                 consumer.accept(t);

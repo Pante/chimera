@@ -44,19 +44,19 @@ public class CheckedBiFunctionTest {
     
     
     @Test
-    public void wrap() throws Exception {
-        CheckedBiFunction.wrap(function).apply(null, null);
+    public void uncheck() throws Exception {
+        CheckedBiFunction.uncheck(function).apply(null, null);
         verify(function).apply(null, null);
     }
     
     
     @Test
-    public void wrap_ThrowsException() throws Exception {
+    public void uncheck_ThrowsException() throws Exception {
         exception.expect(UncheckedFunctionException.class);
         
         doThrow(Exception.class).when(function).apply(null, null);
         
-        CheckedBiFunction.wrap(function).apply(null, null);
+        CheckedBiFunction.uncheck(function).apply(null, null);
     }
     
 }

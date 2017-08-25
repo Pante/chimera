@@ -44,19 +44,19 @@ public class CheckedFunctionTest {
     
     
     @Test
-    public void wrap() throws Exception {
-        CheckedFunction.wrap(function).apply(null);
+    public void uncheck() throws Exception {
+        CheckedFunction.uncheck(function).apply(null);
         verify(function).apply(null);
     }
     
     
     @Test
-    public void wrap_ThrowsException() throws Exception {
+    public void uncheck_ThrowsException() throws Exception {
         exception.expect(UncheckedFunctionException.class);
         
         doThrow(Exception.class).when(function).apply(null);
         
-        CheckedFunction.wrap(function).apply(null);
+        CheckedFunction.uncheck(function).apply(null);
     }
     
 }

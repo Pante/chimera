@@ -32,7 +32,7 @@ public interface CheckedSupplier<R, E extends Exception> {
     public R get() throws E;
     
     
-    public static <T, E extends Exception> Supplier<T> wrap(CheckedSupplier<T, E> supplier) {
+    public static <T, E extends Exception> Supplier<T> uncheck(CheckedSupplier<T, E> supplier) {
         return () -> {
             try {
                 return supplier.get();

@@ -32,7 +32,7 @@ public interface CheckedBiFunction<T, U, R, E extends Exception> {
     public R apply(T t, U u) throws E;
     
     
-    public static<T, U, R, E extends Exception> BiFunction<T, U, R> wrap(CheckedBiFunction<T, U, R, E> function) {
+    public static<T, U, R, E extends Exception> BiFunction<T, U, R> uncheck(CheckedBiFunction<T, U, R, E> function) {
         return (t, u) -> {
             try {
                 return function.apply(t, u);

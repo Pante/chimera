@@ -32,7 +32,7 @@ public interface CheckedPredicate<T, E extends Exception> {
     public boolean test(T t) throws E;
     
     
-    public static <T, E extends Exception> Predicate<T> wrap(CheckedPredicate<T, E> predicate) {
+    public static <T, E extends Exception> Predicate<T> uncheck(CheckedPredicate<T, E> predicate) {
         return t -> {
             try {
                 return predicate.test(t);

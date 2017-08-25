@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.locale.resources.Resource;
     
 import java.io.*;
@@ -35,23 +35,25 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 
-public class Control extends ResourceBundle.Control {
+public class Control extends ResourceBundle.Control {    
     
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("java.properties", "yml", "yaml"));
     
     
+    private String bundleName;
     private Resource[] resources;
     
     
-    public Control(Resource... resources) {
+    public Control(String bunldeName, Resource... resources) {
+        this.bundleName = bunldeName;
         this.resources = resources;
     }
     
     
     @Override
-    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) {
+    public @Nullable ResourceBundle newBundle(@Unused String baseName, Locale locale, String format, @Unused ClassLoader loader, @Unused boolean reload) {
         if (getFormats(baseName).contains(format)) {
-            String bundle = toResourceName(toBundleName(baseName, locale), format);
+            String bundle = toResourceName(toBundleName(bundleName, locale), format);
             for (Resource resource : resources) {
                 if (resource.exists(bundle)) {
                     return load(format, resource.load(bundle));
@@ -80,10 +82,19 @@ public class Control extends ResourceBundle.Control {
                 return null;
         }
     }
-
+    
+    
+    public ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle(bundleName, locale, this);
+    }
+    
+    public String getBundleName() {
+        return bundleName;
+    }
+    
     
     @Override
-    public @Immutable List<String> getFormats(String bundleName) {
+    public @Immutable List<String> getFormats(@Unused String bundleName) {
         return FORMATS;
     }
     

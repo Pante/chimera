@@ -31,9 +31,9 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static com.karuslabs.commons.util.function.CheckedSupplier.wrap;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
 
 
 @RunWith(JUnitParamsRunner.class)

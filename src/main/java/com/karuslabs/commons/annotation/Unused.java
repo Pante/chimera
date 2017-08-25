@@ -21,26 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
+package com.karuslabs.commons.annotation;
 
-import java.util.function.BiConsumer;
+import java.lang.annotation.*
+        ;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@FunctionalInterface
-public interface CheckedBiConsumer<T, U, E extends Exception> {
-    
-    public void accept(T t, U u) throws E;
-    
-        
-    public static<T, U, E extends Exception> BiConsumer<T, U> uncheck(CheckedBiConsumer<T, U, E> consumer) {
-        return (t, u) -> {
-            try {
-                consumer.accept(t, u);
-                
-            } catch (Exception e) {
-                throw new UncheckedFunctionException(e);
-            }
-        };
-    }
+@Documented
+@Target({TYPE, PARAMETER, TYPE_USE})
+@Retention(RUNTIME)
+public @interface Unused {
     
 }

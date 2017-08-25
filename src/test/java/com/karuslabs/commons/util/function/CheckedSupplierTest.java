@@ -44,19 +44,19 @@ public class CheckedSupplierTest {
     
     
     @Test
-    public void wrap() throws Exception {
-        CheckedSupplier.wrap(supplier).get();
+    public void uncheck() throws Exception {
+        CheckedSupplier.uncheck(supplier).get();
         verify(supplier).get();
     }
     
     
     @Test
-    public void wrap_ThrowsException() throws Exception {
+    public void uncheck_ThrowsException() throws Exception {
         exception.expect(UncheckedFunctionException.class);
         
         doThrow(Exception.class).when(supplier).get();
         
-        CheckedSupplier.wrap(supplier).get();
+        CheckedSupplier.uncheck(supplier).get();
     }
     
 }
