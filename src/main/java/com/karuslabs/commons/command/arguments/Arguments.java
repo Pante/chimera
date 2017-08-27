@@ -110,4 +110,8 @@ public class Arguments {
         return arguments;
     }
     
+    protected void set(String[] arguments) {
+        this.arguments = arguments;
+    }
+    
 }

@@ -42,7 +42,7 @@ public class Context {
         this.label = label;
         this.parent = parent;
         this.command = command;
-        this.translation = command.getTranslations().get(source.getLocale());
+        this.translation = null;
     }
     
     
@@ -50,7 +50,7 @@ public class Context {
         this.label = label;
         this.parent = this.command;
         this.command = command;
-        this.translation = command.getTranslations().get(source.getLocale());
+        this.translation = null;
     }
     
     
@@ -71,6 +71,10 @@ public class Context {
     }
     
     public Translation getTranslation() {
+        if (translation == null) {
+            translation = command.getTranslations().get(source.getLocale());
+        }
+        
         return translation;
     }
     

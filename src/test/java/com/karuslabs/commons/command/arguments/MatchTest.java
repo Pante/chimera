@@ -21,52 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.locale.Locales;
+import junitparams.*;
 
-import java.util.*;
-import javax.annotation.Nullable;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import static org.junit.Assert.assertEquals;
 
 
-public class Source {
+@RunWith(JUnitParamsRunner.class)
+public class MatchTest {
     
-    private CommandSender sender;
-    private Locale locale;
-    
-    
-    public Source(CommandSender sender) {
-        this(sender, Locales.get(((Player) sender).getLocale()));
+    @Test
+    @Parameters
+    public void test(Match match, String text, boolean expected) {
+        assertEquals(expected, match.test(text));
     }
     
-    public Source(CommandSender sender, Locale locale) {
-        this.sender = sender;
-        this.locale = locale;
-    }
-    
-        
-    public CommandSender getSender() {
-        return sender;
-    }
-    
-    public @Nullable Player getPlayer() {
-        return isPlayer() ? (Player) sender : null;
-    }
-        
-    public boolean isPlayer() {
-        return sender instanceof Player;
-    }
-    
-    
-    public Locale getLocale() {
-        return locale;
-    }
-    
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+    protected Object[] parametersForTest() {
+        return new Object[] {
+            new Object[] {Match.EMPTY, "", true},
+            new Object[] {Match.EMPTY, "full", false},
+            new Object[] {Match.BOOLEAN, "FALSE", true},
+            new Object[] {Match.BOOLEAN, "yes", false},
+            new Object[] {Match.INT, "-100", true},
+            new Object[] {Match.INT, "meh", false},
+            new Object[] {Match.DOUBLE, "-3.142", true},
+            new Object[] {Match.DOUBLE, "type", false},
+            new Object[] {Match.FLOAT, "-3.142", true},
+            new Object[] {Match.FLOAT, "type", false}
+        };
     }
     
 }

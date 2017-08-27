@@ -23,90 +23,76 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
+import java.util.function.Supplier;
 
+import junitparams.*;
+
+import org.junit.*;
+import org.junit.runner.RunWith;
+
+import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
-public class CloseableReadWriteLockTest {
+@RunWith(JUnitParamsRunner.class)
+public class CloseableReadWriteLockTest {    
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CloseableReadWriteLock lock;
-    
+    private static CloseableReadWriteLock lock = new CloseableReadWriteLock();
+    private CloseableReadWriteLock interrupted;
+            
     
     public CloseableReadWriteLockTest() {
-        lock = spy(new CloseableReadWriteLock());
+        interrupted = spy(new CloseableReadWriteLock());
     }
     
     
     @Test
-    public void acquireReadLock() {
-        try (Janitor janitor = lock.acquireReadLock()) {
-            assertEquals(1, lock.getReadHoldCount());
+    @Parameters
+    public void acquire(Supplier<Janitor> closeableLock, Supplier<Integer> count) {
+        try (Janitor janitor = closeableLock.get()) {
+            assertEquals(1, (int) count.get());
         }
         
-        assertEquals(0, lock.getReadHoldCount());
+        assertEquals(0, (int) count.get());
     }
     
-    
-    @Test
-    public void acquireReadLockInterruptibly() throws InterruptedException {
-        try (Janitor janitor = lock.acquireReadLockInterruptibly()) {
-            assertEquals(1, lock.getReadHoldCount());
-        }
-        
-        assertEquals(0, lock.getReadHoldCount());
+    protected Object[] parametersForAcquire() {
+        return new Object[] {
+            new Supplier[] {lock::acquireReadLock, lock::getReadHoldCount},
+            new Supplier[] {uncheck(lock::acquireReadLockInterruptibly), lock::getReadHoldCount},
+            new Supplier[] {lock::acquireWriteLock, lock::getWriteHoldCount},
+            new Supplier[] {uncheck(lock::acquireWriteLockInterruptibly), lock::getWriteHoldCount}
+        };
     }
 
-    
+   
     @Test
     public void acquireReadLockInterruptibly_ThrowsException() throws InterruptedException {
-        exception.expect(InterruptedException.class);
+        doThrow(InterruptedException.class).when(interrupted).acquireReadLockInterruptibly();
         
-        when(lock.acquireReadLockInterruptibly()).thenThrow(InterruptedException.class);
-        try (Janitor janitor = lock.acquireReadLockInterruptibly()) {
+        try (Janitor janitor = interrupted.acquireReadLockInterruptibly()) {
             fail();
+            
+        } catch (InterruptedException e) {
+            
         }
         
-        assertEquals(0, lock.getReadHoldCount());
+        assertEquals(0, interrupted.getReadLockCount());
     }
-    
-    
-    @Test
-    public void acquireWriteLock() {
-        try (Janitor janitor = lock.acquireWriteLock()) {
-            assertEquals(1, lock.getWriteHoldCount());
-        }
-        
-        assertEquals(0, lock.getWriteHoldCount());
-    }
-    
-    
-    @Test
-    public void acquireWriteLockInterruptibly() throws InterruptedException {
-        try (Janitor janitor = lock.acquireWriteLockInterruptibly()) {
-            assertEquals(1, lock.getWriteHoldCount());
-        }
-        
-        assertEquals(0, lock.getWriteHoldCount());
-    }
-    
     
     @Test
     public void acquireWriteLockInterruptibly_ThrowsException() throws InterruptedException {
-        exception.expect(InterruptedException.class);
+        doThrow(InterruptedException.class).when(interrupted).acquireWriteLockInterruptibly();
         
-        when(lock.acquireWriteLockInterruptibly()).thenThrow(InterruptedException.class);
-        try (Janitor janitor = lock.acquireWriteLockInterruptibly()) {
+        try (Janitor janitor = interrupted.acquireWriteLockInterruptibly()) {
             fail();
+            
+        } catch (InterruptedException e) {
+            
         }
         
-        assertEquals(0, lock.getWriteHoldCount());
+        assertEquals(0, interrupted.getWriteHoldCount());
     }
     
 }

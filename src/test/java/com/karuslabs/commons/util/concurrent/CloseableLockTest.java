@@ -28,57 +28,49 @@ import java.util.function.Supplier;
 import junitparams.*;
 
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class CloseableLockTest {
+public class CloseableLockTest {    
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CloseableLock lock;
-    
-    
-    public CloseableLockTest() {
-        lock = spy(new CloseableLock());
-    }
+    private static CloseableLock lock = new CloseableLock();
     
     
     @Test
-    public void acquire() {
-        try (Janitor janitor = lock.acquire()) {
+    @Parameters
+    public void acquire(Supplier<Janitor> closeableLock) {
+        try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, lock.getHoldCount());
         }
         
         assertEquals(0, lock.getHoldCount());
     }
     
-    
-    @Test
-    public void acquireInterruptibly() throws InterruptedException {
-        try (Janitor janitor = lock.acquireInterruptibly()) {
-            assertEquals(1, lock.getHoldCount());
+    protected Object[] parametersForAcquire() {
+        return new Supplier[] {
+            lock::acquire,
+            uncheck(lock::acquireInterruptibly)
+        };
     }
-    
-        assertEquals(0, lock.getHoldCount());
-    }
+
     
     
     @Test
     public void acquireInterruptibly_ThrowsException() throws InterruptedException {
-        exception.expect(InterruptedException.class);
+        CloseableLock aLock = spy(new CloseableLock());
+        doThrow(InterruptedException.class).when(aLock).acquireInterruptibly();
         
-        when(lock.acquireInterruptibly()).thenThrow(InterruptedException.class);
-        try (Janitor janitor = lock.acquireInterruptibly()) {
+        try (Janitor janitor = aLock.acquireInterruptibly()) {
             fail();
-        }   
+            
+        } catch (InterruptedException e) {
+            
+        }
         
         assertEquals(0, lock.getHoldCount());
     }

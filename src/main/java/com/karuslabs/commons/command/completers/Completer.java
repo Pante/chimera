@@ -21,52 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.completers;
 
-import com.karuslabs.commons.locale.Locales;
+import com.karuslabs.commons.command.Context;
 
-import java.util.*;
-import javax.annotation.Nullable;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import java.util.List;
 
 
-public class Source {
+@FunctionalInterface
+public interface Completer {
     
-    private CommandSender sender;
-    private Locale locale;
-    
-    
-    public Source(CommandSender sender) {
-        this(sender, Locales.get(((Player) sender).getLocale()));
-    }
-    
-    public Source(CommandSender sender, Locale locale) {
-        this.sender = sender;
-        this.locale = locale;
-    }
-    
-        
-    public CommandSender getSender() {
-        return sender;
-    }
-    
-    public @Nullable Player getPlayer() {
-        return isPlayer() ? (Player) sender : null;
-    }
-        
-    public boolean isPlayer() {
-        return sender instanceof Player;
-    }
-    
-    
-    public Locale getLocale() {
-        return locale;
-    }
-    
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
+    public List<String> complete(Context context, String argument);
     
 }

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import java.util.Objects;
 import java.util.function.*;
 import javax.annotation.Nullable;
 
@@ -65,7 +64,7 @@ public class Argument {
         }
     }
     
-    public <T> T asOrThrow(Function<String, T> type, Supplier<? extends RuntimeException> exception) {
+    public <T, E extends RuntimeException> T asOrThrow(Function<String, T> type, Supplier<E> exception) {
         T parsed = type.apply(argument);
         if (parsed != null) {
             return parsed;
@@ -78,25 +77,6 @@ public class Argument {
     
     public void set(String argument) {
         this.argument = argument;
-    }
-    
-    
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-
-        if (!(object instanceof Argument)) {
-            return false;
-        }
-
-        return Objects.equals(argument, ((Argument) object).argument);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(argument);
     }
     
 }

@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.completers;
 
-import com.google.common.primitives.*;
+import com.karuslabs.commons.command.Context;
 
-import java.util.function.Function;
-import javax.annotation.Nullable;
+import java.util.List;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 
-@FunctionalInterface
-public interface Type<T> extends Function<String, T> {
+public class CachedCompleter implements Completer {
+    
+    private List<String> possibilities;
+    
+    
+    public CachedCompleter(String... posibilities) {
+        this(asList(posibilities));
+    }
+    
+    public CachedCompleter(List<String> possibilities) {
+        this.possibilities = possibilities;
+    }
+    
     
     @Override
-    public @Nullable T apply(String argument);
-    
-    
-    public static final Type<String> STRING = argument -> argument;
-    
-    public static final Type<String> COLOURED_STRING = argument -> ChatColor.translateAlternateColorCodes('&', argument);
-    
-    public static final Type<Boolean> BOOLEAN = Boolean::parseBoolean;
-    
-    public static final Type<Integer> INT = Ints::tryParse;
-    
-    public static final Type<Double> DOUBLE = Doubles::tryParse;
-    
-    public static final Type<Float> FLOAT = Floats::tryParse;
-    
-    public static final Type<Player> PLAYER = Bukkit::getPlayer;
-    
-    public static final Type<World> WORLD = Bukkit::getWorld;
+    public List<String> complete(Context context, String argument) {
+        return possibilities.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    }
     
 }
