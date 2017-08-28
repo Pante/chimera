@@ -49,6 +49,7 @@ public class MatcherTest {
     
     
     public MatcherTest() {
+        matcher = spy(new Matcher(new String[] {"0", "1", "2", "3"}));
     }
     
     
@@ -74,6 +75,7 @@ public class MatcherTest {
     public void starting() {
         matcher.starting(2);
         
+        verify(matcher).between(2, 4);
     }
     
     
