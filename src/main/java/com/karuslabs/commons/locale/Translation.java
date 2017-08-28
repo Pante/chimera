@@ -66,7 +66,7 @@ public class Translation {
         }
 
         
-        public String raw() {
+        public String text() {
             return text;
         }
 

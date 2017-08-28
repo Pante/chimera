@@ -43,22 +43,31 @@ public class Matcher {
   
     
     public Matcher all() {
-        return between(0, arguments.length);
+        first = 0;
+        last = arguments.length;
+        return this;
     }
+    
     
     public Matcher starting(int first) {
         return between(first, arguments.length);
     }
 
     public Matcher between(int first, int last) {
-        if (0 <= first && first <= last && last <= arguments.length) {
+        if (isValid(first, last)) {
             this.first = first;
             this.last = last;
             return this;
             
         } else {
-            throw new IllegalArgumentException("Invalid bounds specified.");
+            throw new IndexOutOfBoundsException();
         }
+    }
+    
+    private boolean isValid(int first, int last) {
+        boolean empty = arguments.length == 0 && first == 0 && last == 0;
+        boolean between = 0 <= first && first < last && last <= arguments.length;
+        return empty || between;
     }
     
     
@@ -67,8 +76,8 @@ public class Matcher {
     }
     
     public boolean exact(Predicate<String>... matches) {
-        if (last - first != matches.length) {
-            throw new IllegalArgumentException("Mismatching number of arguments and matches specified.");
+        if (matches.length != length()) {
+            throw new IllegalArgumentException("Invalid number of matches specified.");
         }
         
         for (int i = first; i < last; i++) {
@@ -81,25 +90,24 @@ public class Matcher {
     }
     
     public boolean anySequence(Predicate<String>... matches) {
-        if (last - first <= matches.length) {
-            int i = 0;
-            for (String argument : arguments) {
-                if (matches[i].test(argument)) {
-                    i++;
-                    if (matches.length <= i) {
-                        return true;
-                    }
-
-                } else {
-                    i = 0;
-                }
-            }
-
-            return false;
-
-        } else {
-            throw new IllegalArgumentException("Invalid number of matche specified.");
+        if (matches.length > length()) {
+            throw new IllegalArgumentException("Invalid number of matches specified.");
         }
+        
+        int i = 0;
+        for (String argument : arguments) {
+            if (matches[i].test(argument)) {
+                i++;
+                if (matches.length <= i) {
+                    return true;
+                }
+
+            } else {
+                i = 0;
+            }
+        }
+
+        return false;
     }
     
     
@@ -108,7 +116,7 @@ public class Matcher {
     }
     
     
-    public int range() {
+    public int length() {
         return last - first;
     }
     

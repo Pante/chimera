@@ -32,7 +32,7 @@ import static java.util.Arrays.copyOfRange;
 
 public class Arguments {
     
-    public static final String[] EMPTY = new String[] {};
+    private static final String[] EMPTY = new String[] {};
     
     
     private String[] arguments;
@@ -51,7 +51,7 @@ public class Arguments {
     }
         
     
-    public Matcher match() {
+     public Matcher match() {        
         if (matcher == null) {
             matcher = new Matcher(arguments);
             
@@ -106,7 +106,7 @@ public class Arguments {
     }
     
     
-    public String[] getRaw() {
+    public String[] get() {
         return arguments;
     }
     

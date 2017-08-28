@@ -45,7 +45,7 @@ public class Argument {
     }
     
     
-    public String raw() {
+    public String text() {
         return argument;
     }
     
