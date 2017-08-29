@@ -63,7 +63,7 @@ public class LocalesTest {
     
     
     @Test
-    @Parameters({"Ss, true", "ZP, false", "ZPZ, true"})
+    @Parameters({"Ss, true", "ZP, false", "ZPZ, false"})
     public void isValidCountry(String country, boolean expected) {
         assertEquals(expected, Locales.isValidCountry(country));
     } 
