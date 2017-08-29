@@ -62,7 +62,7 @@ public class Context {
         return label;
     }
     
-    public Command getParentCommand() {
+    public @Nullable Command getParentCommand() {
         return parent;
     }
     

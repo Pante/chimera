@@ -21,28 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.command.Context;
+import java.util.Map;
 
-import java.util.List;
+import org.bukkit.configuration.ConfigurationSection;
 
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import org.junit.Test;
 
-import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
 
 
-@FunctionalInterface
-public interface Completer {
+public class ConfigurationsTest {
     
-    public List<String> complete(Context context, String argument);
+    @Test
+    public void flatten() {
+        Map<String, Object> map = Configurations.flatten(Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")));
+        assertEquals("name", map.get("location.world"));
+    }
     
     
-    public static final Completer PLAYER_NAMES = (context, argument) ->  
-        context.getSource().getSender().getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
-    
-    public static final Completer WORLD_NAMES = (context, argument) ->
-        context.getSource().getSender().getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    @Test
+    public void from() {
+        ConfigurationSection config = Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml"));
+        assertEquals("name", config.get("location.world"));
+    }
     
 }

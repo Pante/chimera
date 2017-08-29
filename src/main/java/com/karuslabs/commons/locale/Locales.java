@@ -58,6 +58,7 @@ public class Locales {
         if (parts.length == 2 && isValidLanguage(parts[0]) && isValidCountry(parts[1])) {
             aLocale = new Locale(parts[0], parts[1]);
             CACHE.put(locale, aLocale);
+            
             return aLocale;
             
         } else {

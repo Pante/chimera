@@ -54,22 +54,16 @@ public class Matcher {
     }
 
     public Matcher between(int first, int last) {
-        if (isValid(first, last)) {
+        if (0 <= first && first <= last && last <= arguments.length && (arguments.length == 0 || first < arguments.length)) {
             this.first = first;
             this.last = last;
             return this;
             
         } else {
-            throw new IndexOutOfBoundsException();
+            throw new IllegalArgumentException("Invalid bounds specified: " + first + ", " + last);
         }
     }
-    
-    private boolean isValid(int first, int last) {
-        boolean empty = arguments.length == 0 && first == 0 && last == 0;
-        boolean between = 0 <= first && first < last && last <= arguments.length;
-        return empty || between;
-    }
-    
+
     
     public Stream<String> stream() {
         return Stream.of(copyOfRange(arguments, first, last));

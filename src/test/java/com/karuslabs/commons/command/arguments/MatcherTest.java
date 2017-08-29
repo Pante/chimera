@@ -99,10 +99,11 @@ public class MatcherTest {
     
     
     @Test
-    @Parameters({"-1, 3", "1, 1", "1, 5"})
+    @Parameters({"-1, 3", "1, 5"})
     public void between_ThrowsException(int first, int last) {
-        exception.expect(IndexOutOfBoundsException.class);
-
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Invalid bounds specified: " + first + ", " + last);
+        
         matcher.between(first, last);
     }
     

@@ -21,28 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.locale.resources;
 
-import com.karuslabs.commons.command.Context;
+import java.io.File;
+import java.io.IOException;
 
-import java.util.List;
+import org.junit.*;
+import org.junit.rules.TemporaryFolder;
 
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.*;
 
 
-@FunctionalInterface
-public interface Completer {
+public class FileResourceTest {
     
-    public List<String> complete(Context context, String argument);
+    @Rule
+    public TemporaryFolder temporary = new TemporaryFolder();
+    
+    private FileResource resource;
+    private File file;
+
+    
+    @Before
+    public void before() throws IOException {
+        file = temporary.newFile("Resource.yml");
+        resource = new FileResource(file.getParentFile());
+    }
     
     
-    public static final Completer PLAYER_NAMES = (context, argument) ->  
-        context.getSource().getSender().getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    @Test
+    public void load() {
+        assertNotNull(resource.load("Resource.yml"));
+    }
     
-    public static final Completer WORLD_NAMES = (context, argument) ->
-        context.getSource().getSender().getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
+    @Test
+    public void exists() {
+        assertTrue(resource.exists("Resource.yml"));
+    }
+       
 }

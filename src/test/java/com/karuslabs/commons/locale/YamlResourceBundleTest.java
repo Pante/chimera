@@ -21,28 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.command.Context;
+import org.junit.Test;
 
-import java.util.List;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import static java.util.stream.Collectors.toList;
+import static com.karuslabs.commons.configuration.Configurations.from;
+import static org.junit.Assert.assertEquals;
 
 
-@FunctionalInterface
-public interface Completer {
+public class YamlResourceBundleTest {
     
-    public List<String> complete(Context context, String argument);
+    private YamlResourceBundle bundle;
     
     
-    public static final Completer PLAYER_NAMES = (context, argument) ->  
-        context.getSource().getSender().getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    public YamlResourceBundleTest() {
+        bundle = new YamlResourceBundle(from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")));
+    }
     
-    public static final Completer WORLD_NAMES = (context, argument) ->
-        context.getSource().getSender().getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    
+    @Test
+    public void get() {
+        assertEquals("name", bundle.getString("location.world"));
+    }
     
 }

@@ -23,7 +23,35 @@
  */
 package com.karuslabs.commons.locale.resources;
 
+import junitparams.*;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.*;
+
+
+@RunWith(JUnitParamsRunner.class)
 public class EmbeddedResourceTest {
+    
+    private EmbeddedResource resource;
+    
+    
+    public EmbeddedResourceTest() {
+        resource = new EmbeddedResource("locale/resources");
+    }
+    
+    
+    @Test
+    public void load() {
+        assertNotNull(resource.load("Resource.yml"));
+    }
+    
+    
+    @Test
+    @Parameters({"Resource.yml, true", "Failure.yml, false"})
+    public void exists(String path, boolean exists) {
+        assertEquals(exists, resource.exists(path));
+    }
     
 }
