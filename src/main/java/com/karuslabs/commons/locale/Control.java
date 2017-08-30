@@ -37,7 +37,7 @@ import static java.util.Collections.unmodifiableList;
 
 public class Control extends ResourceBundle.Control {    
     
-    public static final @Immutable List<String> FORMATS = unmodifiableList(asList("java.properties", "yml", "yaml"));
+    public static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
     
     
     private Resource[] resources;
@@ -64,7 +64,7 @@ public class Control extends ResourceBundle.Control {
     
     protected @Nullable ResourceBundle load(String format, InputStream stream) {
         switch (format) {
-            case "java.properties":
+            case "properties":
                 try (InputStream aStream = stream) {
                     return new PropertyResourceBundle(aStream);
 
