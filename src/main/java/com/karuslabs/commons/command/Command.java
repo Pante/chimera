@@ -63,6 +63,12 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return false;
     }
     
+    
+    @Override
+    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+        return null;
+    }
+    
 
     @Override
     public Plugin getPlugin() {
