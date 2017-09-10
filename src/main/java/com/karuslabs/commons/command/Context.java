@@ -23,22 +23,34 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.locale.Locales;
 import com.karuslabs.commons.locale.Translation;
 
+import java.util.Locale;
 import javax.annotation.Nullable;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class Context {
     
-    private Source source;
+    private CommandSender sender;
+    private Locale locale;
+    
     private String label;
     private Command parent;
     private Command command;
     private Translation translation;
     
     
-    public Context(Source source, String label, @Nullable Command parent, Command command) {
-        this.source = source;
+    public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
+        this(sender, sender instanceof CommandSender ? Locales.get(((Player) sender).getLocale()) : Locale.getDefault(), label, parent, command);
+    }
+    
+    public Context(CommandSender sender, Locale locale, String label, @Nullable Command parent, Command command) {
+        this.sender = sender;
+        this.locale = locale;
         this.label = label;
         this.parent = parent;
         this.command = command;
@@ -54,9 +66,26 @@ public class Context {
     }
     
     
-    public Source getSource() {
-        return source;
+    public CommandSender getSender() {
+        return sender;
     }
+    
+    public @Nullable Player getPlayer() {
+        return isPlayer() ? (Player) sender : null;
+    }
+        
+    public boolean isPlayer() {
+        return sender instanceof Player;
+    }
+    
+    public Locale getLocale() {
+        return locale;
+    }
+    
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+    
     
     public String getLabel() {
         return label;
@@ -72,7 +101,7 @@ public class Context {
     
     public Translation getTranslation() {
         if (translation == null) {
-            translation = command.getTranslations().get(source.getLocale());
+            translation = command.getTranslations().get(locale);
         }
         
         return translation;

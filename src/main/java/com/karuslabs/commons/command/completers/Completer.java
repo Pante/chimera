@@ -23,11 +23,10 @@
  */
 package com.karuslabs.commons.command.completers;
 
-import com.karuslabs.commons.command.Context;
-
 import java.util.List;
 
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.stream.Collectors.toList;
@@ -36,13 +35,13 @@ import static java.util.stream.Collectors.toList;
 @FunctionalInterface
 public interface Completer {
     
-    public List<String> complete(Context context, String argument);
+    public List<String> complete(CommandSender sender, String argument);
     
     
-    public static final Completer PLAYER_NAMES = (context, argument) ->  
-        context.getSource().getSender().getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    public static final Completer PLAYER_NAMES = (sender, argument) -> 
+            Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
-    public static final Completer WORLD_NAMES = (context, argument) ->
-        context.getSource().getSender().getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    public static final Completer WORLD_NAMES = (sender, argument) -> 
+            Bukkit.getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
 }

@@ -21,33 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.locale;
 
-import java.util.List;
+import java.util.ResourceBundle;
 
-import org.bukkit.command.CommandSender;
+import org.junit.Test;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-public class CachedCompleter implements Completer {
+public class TranslationTest {
     
-    private List<String> completions;
+    private Translation translation;
     
     
-    public CachedCompleter(String... completions) {
-        this(asList(completions));
-    }
-    
-    public CachedCompleter(List<String> completions) {
-        this.completions = completions;
+    public TranslationTest() {
+        ResourceBundle bundle = when(mock(ResourceBundle.class).getString("key")).thenReturn("message {0}").getMock();
+        translation = new Translation(bundle);
     }
     
     
-    @Override
-    public List<String> complete(CommandSender sender, String argument) {
-        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    @Test
+    public void get() {
+        assertEquals("message {0}", translation.get("key"));
+        assertEquals("message format", translation.get("key", "format"));
     }
     
 }

@@ -33,6 +33,9 @@ import java.util.regex.Pattern;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.stream.Collectors.toList;
+
 
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
@@ -40,38 +43,73 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     private Plugin plugin;
-    private Map<String, Command> subcommands;
-    private Map<Integer, Completer> completers;
+    private CommandExecutor executor;
     private Translations translations;
     
+    private Map<String, Command> subcommands;
+    private Map<Integer, Completer> completers;
     
-    public Command(Plugin plugin, String name, String description, String message, List<String> aliases, Translations translations) {
+    
+    public Command(String name, Plugin plugin, Translations translations) {
+        this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE, translations);
+    }
+    
+    public Command(String name, String description, String message, List<String> aliases, Plugin plugin, CommandExecutor executor, Translations translations) {
         super(name, description, message, aliases);
         this.plugin = plugin;
-        this.subcommands = new HashMap<>();
-        this.completers = new HashMap<>();
+        this.executor = executor;
         this.translations = translations;
+        
+        subcommands = new HashMap<>();
+        completers = new HashMap<>();
     }
 
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(new Source(sender), label, null, this), new Arguments(PATTERN.split(String.join(" ", args))));
+        return execute(new Context(sender, label, null, this), new Arguments(PATTERN.split(String.join(" ", args))));
     }
     
     public boolean execute(Context context, Arguments arguments) {
-        return false;
+        String argument = arguments.getLast().text();
+        Command subcommand = subcommands.get(argument);
+        
+        if (subcommand != null) {
+            context.update(argument, subcommand);
+            arguments.trim();
+            return subcommand.execute(context, arguments);
+            
+        } else {
+            return executor.execute(context, arguments);
+        }
     }
     
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return null;
+        return complete(sender, new Arguments(args));
     }
     
-    public List<String> tabComplete(Context context, String args) {
-        return null;
+    public List<String> complete(CommandSender sender, Arguments arguments) {
+        if (arguments.length() == 0) {
+            return EMPTY_LIST;
+        } 
+        
+        String argument = arguments.get()[0];
+        if (subcommands.containsKey(argument)) {
+            arguments.trim();
+            return subcommands.get(argument).complete(sender, arguments);
+            
+        } else if (arguments.length() == 1 && !subcommands.isEmpty()) {
+            return subcommands.values().stream()
+                    .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
+                    .map(Command::getName)
+                    .collect(toList());
+        } else {
+            return completers.getOrDefault(arguments.length() - 1, Completer.PLAYER_NAMES).complete(sender, arguments.getLast().text());
+        }
     }
+    
     
 
     @Override
@@ -79,9 +117,24 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return plugin;
     }
     
+    public CommandExecutor getExecutor() {
+        return executor;
+    }
+    
+    public void setExecutor(CommandExecutor executor) {
+        this.executor = executor;
+    }
     
     public Translations getTranslations() {
         return translations;
+    }
+    
+    public Map<String, Command> getSubcommands() {
+        return subcommands;
+    }
+
+    public Map<Integer, Completer> getCompleters() {
+        return completers;
     }
     
 }

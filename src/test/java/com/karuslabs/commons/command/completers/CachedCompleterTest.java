@@ -21,52 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.completers;
 
-import com.karuslabs.commons.locale.Locales;
+import java.util.List;
 
-import java.util.*;
-import javax.annotation.Nullable;
+import junitparams.*;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.EMPTY_LIST;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
-public class Source {
+@RunWith(JUnitParamsRunner.class)
+public class CachedCompleterTest {
     
-    private CommandSender sender;
-    private Locale locale;
+    private CachedCompleter completer;
     
     
-    public Source(CommandSender sender) {
-        this(sender, Locales.get(((Player) sender).getLocale()));
-    }
-    
-    public Source(CommandSender sender, Locale locale) {
-        this.sender = sender;
-        this.locale = locale;
-    }
-    
-        
-    public CommandSender getSender() {
-        return sender;
-    }
-    
-    public @Nullable Player getPlayer() {
-        return isPlayer() ? (Player) sender : null;
-    }
-        
-    public boolean isPlayer() {
-        return sender instanceof Player;
+    public CachedCompleterTest() {
+        completer = new CachedCompleter("arg", "argument", "another argument");
     }
     
     
-    public Locale getLocale() {
-        return locale;
+    @Test
+    @Parameters
+    public void complete(String argument, List<String> expected) {
+        assertThat(completer.complete(null, argument), equalTo(expected));
     }
     
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+    protected Object[] parametersForComplete() {
+        return new Object[] {
+            new Object[] {"argu", asList("argument")},
+            new Object[] {"a", asList("arg", "argument", "another argument")},
+            new Object[] {"non-existent", EMPTY_LIST}
+        };
     }
     
 }

@@ -30,56 +30,24 @@ import java.util.*;
 public class Translation {
     
     private ResourceBundle bundle;
-    private Text text;
+    private MessageFormat format;
 
     
     public Translation(ResourceBundle bundle) {
         this.bundle = bundle;
-        this.text = new Text("", bundle.getLocale());
+        this.format = new MessageFormat("", bundle.getLocale());
     }
 
     
-    public Text get(String key) {
-        text.set(bundle.getString(key));
-        return text;
-    }
-    
-    public Text getImmutable(String key) {
-        return new Text(bundle.getString(key), bundle.getLocale());
-    }
-    
-    
-    public static class Text {
-
-        private String text;
-        private MessageFormat format;
-
+    public String get(String key, Object... arguments) {
+        String message = bundle.getString(key);
         
-        public Text(String text) {
-            this.text = text;
-            format = new MessageFormat("");
+        if (arguments.length != 0) {
+            format.applyPattern(message);
+            message = format.format(arguments);
         }
-
-        public Text(String text, Locale locale) {
-            this(text);
-            format.setLocale(locale);
-        }
-
         
-        public String text() {
-            return text;
-        }
-
-        public String format(Object... arguments) {
-            format.applyPattern(text);
-            return format.format(arguments);
-        }
-
-        
-        protected void set(String text) {
-            this.text = text;
-        }
-
+        return message;
     }
 
 }

@@ -25,9 +25,40 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 
+import java.util.List;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
+import static java.util.stream.Collectors.toList;
+
 
 @FunctionalInterface
 public interface CommandExecutor {
+        
+    public static final CommandExecutor HELP = (context, arguments) -> {
+        Command command = context.getParentCommand();
+        CommandSender sender = context.getSender();
+        
+        if (command == null || !sender.hasPermission(command.getPermission())) {
+            return true;
+        }
+
+        List<String> names = command.getSubcommands().values().stream()
+                .filter(subcommand -> sender.hasPermission(subcommand.getPermission()))
+                .map(Command::getName)
+                .collect(toList());
+
+        sender.sendMessage(ChatColor.GOLD + "==== Help for: " + command.getName() + " ====");
+        sender.sendMessage(ChatColor.GOLD + "Description: " + ChatColor.RED + command.getDescription());
+        sender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.RED + command.getUsage());
+        sender.sendMessage(ChatColor.GOLD + "\n==== Subcommands: ====" + "\n" + ChatColor.RED + names);
+        
+        return true;
+    };
+    
+    public static final CommandExecutor NONE = (context, arguments) -> true;
+
     
     public boolean execute(Context context, Arguments arguments);
     
