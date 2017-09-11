@@ -38,7 +38,7 @@ public class TranslationsTest {
     
     
     public TranslationsTest() {
-        translations = new Translations("Resource", new EmbeddedResource("locale"));
+        translations = new Translations("Translation", new EmbeddedResource("locale"));
     }
     
     
