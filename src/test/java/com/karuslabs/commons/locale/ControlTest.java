@@ -57,7 +57,7 @@ public class ControlTest {
     
     protected Object[] parametersForNewBundle() {
         return new Object[] {
-            new Object[] {new Locale("en", "US"), "English"},
+            new Object[] {new Locale("en", "GB"), "English"},
             new Object[] {new Locale("zh", "CN"), "Chinese"},
         };
     }

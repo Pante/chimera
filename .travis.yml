@@ -4,6 +4,7 @@ jdk:
 branches:
   only:
   - master
+  - debug
   
 script: mvn --settings travis-settings.xml clean test verify deploy
 
