@@ -31,7 +31,6 @@ import java.util.*;
 import javax.annotation.Nullable;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
-import com.karuslabs.commons.locale.resources.EmbeddedResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -55,7 +54,6 @@ public class Control extends ResourceBundle.Control {
             String bundle = toResourceName(toBundleName(baseName, locale), format);
             for (Resource resource : resources) {
                 if (resource.exists(bundle)) {
-                    System.out.println("Bundle: " + bundle + " location: " + ((EmbeddedResource) resource).path);
                     return load(format, resource.load(bundle));
                 }
             }
