@@ -44,7 +44,7 @@ public class ControlTest {
     
     
     public ControlTest() {
-        control = new Control(new EmbeddedResource("locale/resources"), new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
+        control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
     }
     
     
@@ -59,7 +59,6 @@ public class ControlTest {
         return new Object[] {
             new Object[] {new Locale("en", "US"), "English"},
             new Object[] {new Locale("zh", "CN"), "Chinese"},
-            new Object[] {Locale.FRANCE, "English"}
         };
     }
     

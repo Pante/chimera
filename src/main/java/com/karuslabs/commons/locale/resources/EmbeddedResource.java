@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 
 public class EmbeddedResource implements Resource {
     
-    private String path;
+    public String path;
     
     
     public EmbeddedResource(String path) {

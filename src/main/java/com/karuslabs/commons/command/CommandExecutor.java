@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 
 @FunctionalInterface
 public interface CommandExecutor {
-        
+    
     public static final CommandExecutor HELP = (context, arguments) -> {
         Command command = context.getParentCommand();
         CommandSender sender = context.getSender();

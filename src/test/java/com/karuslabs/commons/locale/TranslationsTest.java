@@ -38,13 +38,13 @@ public class TranslationsTest {
     
     
     public TranslationsTest() {
-        translations = new Translations("Resource", new EmbeddedResource("locale/resources"));
+        translations = new Translations("Resource", new EmbeddedResource("locale"));
     }
     
     
     @Test
     public void get() {
-        assertEquals("English", translations.get(Locale.ITALY).get("test"));
+        assertEquals("default", translations.get(Locale.ITALY).get("test"));
     }
     
 }

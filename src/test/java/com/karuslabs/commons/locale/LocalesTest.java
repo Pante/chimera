@@ -54,10 +54,10 @@ public class LocalesTest {
     
     @Test
     @Parameters({"en_US, true, 0", "US_en, false, 1", "US, false, 1"})
-    public void get_Supplier(String locale, boolean expected, int times) {
+    public void getOrDefault_Supplier(String locale, boolean expected, int times) {
         Supplier<Locale> supplier = mock(Supplier.class);
         
-        assertEquals(expected, Locales.get(locale, supplier) != null);
+        assertEquals(expected, Locales.getOrDefault(locale, supplier) != null);
         verify(supplier, times(times)).get();
     }
     

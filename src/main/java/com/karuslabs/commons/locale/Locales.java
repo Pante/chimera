@@ -41,14 +41,14 @@ public class Locales {
     
     
     public static @Nullable Locale get(String locale) {
-        return get(locale, () -> null);
+        return getOrDefault(locale, () -> null);
     }
     
     public static Locale getOrDefault(String locale, Locale value) {
-        return get(locale, () -> value);
+        return getOrDefault(locale, () -> value);
     }
     
-    public static Locale get(String locale, Supplier<Locale> value) {
+    public static Locale getOrDefault(String locale, Supplier<Locale> value) {
         Locale aLocale = CACHE.getIfPresent(locale);
         if (aLocale != null) {
             return aLocale;
