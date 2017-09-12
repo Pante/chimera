@@ -29,7 +29,7 @@ import java.util.*;
 
 public class Translation {
     
-    public static final Translation NONE = new Translation(null) {
+    public static final Translation NONE = new Translation() {
         
         @Override
         public String get(String key, Object... arguments) {
@@ -47,6 +47,9 @@ public class Translation {
         this.bundle = bundle;
         this.format = new MessageFormat("", bundle.getLocale());
     }
+    
+    private Translation() {}
+    
 
     
     public String get(String key, Object... arguments) {
