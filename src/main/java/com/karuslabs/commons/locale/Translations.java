@@ -26,9 +26,25 @@ package com.karuslabs.commons.locale;
 import com.karuslabs.commons.locale.resources.Resource;
 
 import java.util.*;
+import javax.annotation.Nullable;
 
 
 public class Translations {
+    
+    public static final Translations NONE = new Translations("") {
+        
+        @Override
+        public Translation get(Locale locale) {
+            return Translation.NONE;
+        }
+        
+        @Override
+        public @Nullable ResourceBundle getBundle(Locale locale) {
+            return null;
+        }
+        
+    };
+    
     
     private String bundle;
     private Control control;
@@ -48,7 +64,7 @@ public class Translations {
         return new Translation(getBundle(locale));
     }
     
-    public ResourceBundle getBundle(Locale locale) {
+    public @Nullable ResourceBundle getBundle(Locale locale) {
         return ResourceBundle.getBundle(bundle, locale, control);
     }
     

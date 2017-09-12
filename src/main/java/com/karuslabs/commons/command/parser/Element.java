@@ -21,27 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.command.parser;
 
-import java.util.List;
-
-import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import static java.util.stream.Collectors.toList;
+import java.util.Map;
+import javax.annotation.Nullable;
 
 
-@FunctionalInterface
-public interface Completer {
+public interface Element<T> {
     
-    public List<String> complete(CommandSender sender, String argument);
+    public void define(String key, Object value);
+    
+    public @Nullable T parse(Object value);
     
     
-    public static final Completer PLAYER_NAMES = (sender, argument) -> 
-            Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
-    
-    public static final Completer WORLD_NAMES = (sender, argument) -> 
-            Bukkit.getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    public Map<String, T> getDefinitions();
     
 }

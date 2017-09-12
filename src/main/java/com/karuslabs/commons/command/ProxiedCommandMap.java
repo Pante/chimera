@@ -28,23 +28,23 @@ import java.util.*;
 import javax.annotation.Nullable;
 
 import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.Collections.EMPTY_MAP;
 import static java.util.stream.Collectors.toMap;
 
 
 public class ProxiedCommandMap {
     
-    private CommandMap map;
+    private SimpleCommandMap map;
     
     
     public ProxiedCommandMap(Server server) {
         try {
             Field field = server.getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
-            map = (CommandMap) field.get(server);
+            map = (SimpleCommandMap) field.get(server);
 
         } catch (ReflectiveOperationException | ClassCastException e) {
             throw new IllegalArgumentException("If you are reading this message, you're screwed.", e);
@@ -81,15 +81,9 @@ public class ProxiedCommandMap {
     
     
     public Map<String, Command> getCommands(Plugin plugin) {
-        if (map instanceof SimpleCommandMap) {
-            SimpleCommandMap map = (SimpleCommandMap) this.map;
-            return map.getCommands().stream()
-                .filter(command -> command instanceof Command && ((Command) command).getPlugin().equals(plugin))
-                .collect(toMap(command -> command.getName(), command -> (Command) command));
-            
-        } else {
-            return EMPTY_MAP;
-        }
+        return map.getCommands().stream()
+            .filter(command -> command instanceof Command && ((Command) command).getPlugin().equals(plugin))
+            .collect(toMap(command -> command.getName(), command -> (Command) command));
     }
     
     
@@ -102,7 +96,7 @@ public class ProxiedCommandMap {
     }
     
     
-    public CommandMap getProxiedMap() {
+    public SimpleCommandMap getProxiedMap() {
         return map;
     }
     

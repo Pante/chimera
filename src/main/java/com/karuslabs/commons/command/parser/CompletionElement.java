@@ -21,33 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.command.parser;
 
-import java.util.List;
+import com.karuslabs.commons.command.completion.CachedCompletion;
 
-import org.bukkit.command.CommandSender;
+import java.util.*;
+import javax.annotation.Nullable;
+import com.karuslabs.commons.command.completion.Completion;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 
-
-public class CachedCompleter implements Completer {
+public class CompletionElement implements Element<Completion> {
     
-    private List<String> completions;
+    private Map<String, Completion> completions;
     
     
-    public CachedCompleter(String... completions) {
-        this(asList(completions));
+    public CompletionElement() {
+        this(new HashMap<>());
+        completions.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
+        completions.put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
     
-    public CachedCompleter(List<String> completions) {
+    public CompletionElement(Map<String, Completion> completions) {
         this.completions = completions;
     }
     
     
     @Override
-    public List<String> complete(CommandSender sender, String argument) {
-        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    public void define(String key, Object value) {
+        Completion completer = parse(value);
+        if (completer != null) {
+            completions.put(key, completer);
+        }
+    }
+    
+    @Override
+    public @Nullable Completion parse(Object value) {
+        if (value instanceof String) {
+            return completions.get(value);
+            
+        } else if (value instanceof List) {
+            return new CachedCompletion((List<String>) value);
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public Map<String, Completion> getDefinitions() {
+        return completions;
     }
     
 }

@@ -21,43 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command.completion;
 
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
+
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 
-public class Translation {
+public class CachedCompletion implements Completion {
     
-    public static final Translation NONE = new Translation(null) {
-        
-        @Override
-        public String get(String key, Object... arguments) {
-            return key;
-        }
-        
-    };
+    private List<String> completions;
     
     
-    private ResourceBundle bundle;
-    private MessageFormat format;
-
-    
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        this.format = new MessageFormat("", bundle.getLocale());
+    public CachedCompletion(String... completions) {
+        this(asList(completions));
     }
-
     
-    public String get(String key, Object... arguments) {
-        String message = bundle.getString(key);
-        
-        if (arguments.length != 0) {
-            format.applyPattern(message);
-            message = format.format(arguments);
-        }
-        
-        return message;
+    public CachedCompletion(List<String> completions) {
+        this.completions = completions;
     }
-
+    
+    
+    @Override
+    public List<String> complete(CommandSender sender, String argument) {
+        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    }
+    
 }

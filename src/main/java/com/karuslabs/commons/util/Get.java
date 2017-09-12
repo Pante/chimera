@@ -21,43 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.util;
 
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
 
 
-public class Translation {
+public class Get {
     
-    public static final Translation NONE = new Translation(null) {
-        
-        @Override
-        public String get(String key, Object... arguments) {
-            return key;
-        }
-        
-    };
-    
-    
-    private ResourceBundle bundle;
-    private MessageFormat format;
-
-    
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        this.format = new MessageFormat("", bundle.getLocale());
+    public static <T> T orDefault(@Nullable T object, T value) {
+        return object != null ? object : value;
     }
-
     
-    public String get(String key, Object... arguments) {
-        String message = bundle.getString(key);
-        
-        if (arguments.length != 0) {
-            format.applyPattern(message);
-            message = format.format(arguments);
-        }
-        
-        return message;
+    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
+        return object != null ? object : value.get();
     }
-
+    
+    public static <T, E extends RuntimeException> T orThrow(@Nullable T object, Supplier<E> exception) {
+        if (object != null) {
+            return object;
+            
+        } else {
+            throw exception.get();
+        }
+    }
+    
 }

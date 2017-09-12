@@ -24,11 +24,12 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
-import com.karuslabs.commons.command.completers.Completer;
+import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.Translations;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
@@ -45,23 +46,25 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     private Plugin plugin;
     private CommandExecutor executor;
     private Translations translations;
-    
     private Map<String, Command> subcommands;
-    private Map<Integer, Completer> completers;
+    private Map<Integer, Completion> completions;
     
     
-    public Command(String name, Plugin plugin, Translations translations) {
+    public Command(String name, Plugin plugin, @Nullable Translations translations) {
         this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE, translations);
     }
     
-    public Command(String name, String description, String message, List<String> aliases, Plugin plugin, CommandExecutor executor, Translations translations) {
-        super(name, description, message, aliases);
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Translations translations) {
+        this(name, description, usage, aliases, plugin, executor, translations, new HashMap<>(), new HashMap<>());
+    }
+    
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Translations translations, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
+        super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = executor;
         this.translations = translations;
-        
-        subcommands = new HashMap<>();
-        completers = new HashMap<>();
+        this.subcommands = subcommands;
+        this.completions = completions;
     }
 
 
@@ -106,11 +109,10 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
                     .map(Command::getName)
                     .collect(toList());
         } else {
-            return completers.getOrDefault(arguments.length() - 1, Completer.PLAYER_NAMES).complete(sender, arguments.getLast().text());
+            return completions.getOrDefault(arguments.length() - 1, Completion.PLAYER_NAMES).complete(sender, arguments.getLast().text());
         }
     }
-    
-    
+       
 
     @Override
     public Plugin getPlugin() {
@@ -133,8 +135,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return subcommands;
     }
 
-    public Map<Integer, Completer> getCompleters() {
-        return completers;
+    public Map<Integer, Completion> getCompletions() {
+        return completions;
     }
     
 }

@@ -24,12 +24,60 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.Command;
-import java.io.InputStream;
+import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.Translations;
+
 import java.util.List;
 
+import org.bukkit.configuration.ConfigurationSection;
 
-public interface Parser {
+import static java.util.stream.Collectors.toList;
+
+
+public class Parser {
     
-    public List<Command> parse(InputStream stream);
+    private Element<Command> commands;
+    private Element<Completion> completions;
+    private Element<Translations> translations;
+    
+    
+    public Parser(Element<Command> commands, Element<Completion> completions, Element<Translations> translations) {
+        this.commands = commands;
+        this.completions = completions;
+        this.translations = translations;
+    }
+    
+    
+    public List<Command> parse(ConfigurationSection config) {
+        parseDefinitions(config.getConfigurationSection("define"));
+        return config.getKeys(false).stream().filter(key -> !key.equals("define")).map(key -> commands.parse(config.get(key))).collect(toList());
+    }
+    
+    protected void parseDefinitions(ConfigurationSection config) {
+        if (config != null) {
+            parseDefinitions(config.getConfigurationSection("completions"), completions);
+            parseDefinitions(config.getConfigurationSection("translations"), translations);
+            parseDefinitions(config.getConfigurationSection("commands"), commands);
+        }
+    }
+    
+    protected void parseDefinitions(ConfigurationSection config, Element<?> element) {
+        if (config != null) {
+            config.getKeys(false).forEach(key -> element.define(key, config.get(key)));
+        }
+    }
+
+    
+    public Element<Command> getCommands() {
+        return commands;
+    }
+
+    public Element<Completion> getCompletions() {
+        return completions;
+    }
+
+    public Element<Translations> getTranslations() {
+        return translations;
+    }
     
 }

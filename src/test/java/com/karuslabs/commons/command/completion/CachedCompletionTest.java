@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completers;
+package com.karuslabs.commons.command.completion;
 
+import com.karuslabs.commons.command.completion.CachedCompletion;
 import java.util.List;
 
 import junitparams.*;
@@ -37,13 +38,13 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class CachedCompleterTest {
+public class CachedCompletionTest {
     
-    private CachedCompleter completer;
+    private CachedCompletion completer;
     
     
-    public CachedCompleterTest() {
-        completer = new CachedCompleter("arg", "argument", "another argument");
+    public CachedCompletionTest() {
+        completer = new CachedCompletion("arg", "argument", "another argument");
     }
     
     

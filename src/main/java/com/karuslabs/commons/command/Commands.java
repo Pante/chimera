@@ -21,43 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command;
 
-import java.text.MessageFormat;
-import java.util.*;
+import com.karuslabs.commons.command.parser.*;
+
+import org.bukkit.plugin.Plugin;
+
+import static com.karuslabs.commons.configuration.Configurations.from;
 
 
-public class Translation {
+public class Commands {
     
-    public static final Translation NONE = new Translation(null) {
-        
-        @Override
-        public String get(String key, Object... arguments) {
-            return key;
-        }
-        
-    };
+    private Plugin plugin;
+    private ProxiedCommandMap map;
     
     
-    private ResourceBundle bundle;
-    private MessageFormat format;
-
-    
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        this.format = new MessageFormat("", bundle.getLocale());
+    public Commands(Plugin plugin) {
+        this(plugin, new ProxiedCommandMap(plugin.getServer()));
     }
-
     
-    public String get(String key, Object... arguments) {
-        String message = bundle.getString(key);
-        
-        if (arguments.length != 0) {
-            format.applyPattern(message);
-            message = format.format(arguments);
-        }
-        
-        return message;
+    public Commands(Plugin plugin, ProxiedCommandMap map) {
+        this.plugin = plugin;
+        this.map = map;
     }
-
+    
+    
+    public void load(String path) {
+        CompletionElement completion = new CompletionElement();
+        TranslationsElement translations = new TranslationsElement(plugin.getDataFolder());
+        
+        load(path, new Parser(new CommandElement(plugin, completion, translations), completion, translations));
+    }
+    
+    public void load(String path, Parser parser) {
+        map.registerAll(plugin.getName(), parser.parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+    }
+    
+    
+    public Command getCommand(String name) {
+        return map.getCommand(name);
+    }
+    
+    public ProxiedCommandMap getProxiedCommandMap() {
+        return map;
+    }
+    
 }

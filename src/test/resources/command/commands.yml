@@ -1,41 +1,33 @@
-definitions:
-  commands:
-    help:
-      aliases: [h, ?]
-      description: help command
-      permission: subcommand.permission
-      
-  translations:
-    RESOURCE:
-      name: Resource
-      embedded: [path]
-      plugin-directory: [path]
-      
-  completions:
-    ARGUMENTS: [a, b, c]
-    
-command:
-  aliases: [c, cmd]
-  description: command description
-  permission: command.permission
-  permission-message: permission message
-  subcommands:
-    help: defined
-    subcommand:
-      aliases: [subcmd]
-      description: subcommand description
-      permission: subcommand.permission
-      subcommands:
-        help: defined
-      completions:
-        0: [foo, bar]
-        1: PLAYER_NAMES
-        2: WORLD_NAMES
-        3: COMPLETION
-      translations:
-        name: Resource
-        embedded: [path]
-        plugin-directory: [path]
-  translations: RESOURCE
+define:
+    commands:
+        command:
+            aliases: [a, b, c]
+            description: description
+            permission: command.permission
+            permission-message: message
+            usage: usage
         
-      
+    completions:
+        completion: [a, b, c]
+        
+    translations:
+        translation:
+            bundle: Resource
+            embedded: [path]
+            folder: [path]
+
+command:
+    subcommands:
+        a: command
+        b:
+            translation:
+                bundle: Resource
+                embedded: [path]
+        
+    completions:
+        0: completion
+        1: [a, b, c]
+        
+    translation: translation
+    
+            

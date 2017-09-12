@@ -21,43 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command.completion;
 
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+
+import org.bukkit.*;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import static java.util.stream.Collectors.toList;
 
 
-public class Translation {
+@FunctionalInterface
+public interface Completion {
     
-    public static final Translation NONE = new Translation(null) {
-        
-        @Override
-        public String get(String key, Object... arguments) {
-            return key;
-        }
-        
-    };
+    public List<String> complete(CommandSender sender, String argument);
     
     
-    private ResourceBundle bundle;
-    private MessageFormat format;
-
+    public static final Completion PLAYER_NAMES = (sender, argument) -> 
+            Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        this.format = new MessageFormat("", bundle.getLocale());
-    }
-
+    public static final Completion WORLD_NAMES = (sender, argument) -> 
+            Bukkit.getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
-    public String get(String key, Object... arguments) {
-        String message = bundle.getString(key);
-        
-        if (arguments.length != 0) {
-            format.applyPattern(message);
-            message = format.format(arguments);
-        }
-        
-        return message;
-    }
-
 }
