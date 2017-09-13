@@ -35,10 +35,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import static java.util.stream.Collectors.toList;
 
 
-public class TranslationsElement implements Element<Translations> {
+public class TranslationsElement extends Element<Translations> {
     
     private File folder;
-    private Map<String, Translations> translations;
     
     
     public TranslationsElement(File folder) {
@@ -46,32 +45,12 @@ public class TranslationsElement implements Element<Translations> {
     }
     
     public TranslationsElement(File folder, Map<String, Translations> translations) {
+        super(translations);
         this.folder = folder;
-        this.translations = translations;
-    }
-    
-    
-    @Override
-    public void define(String key, Object value) {
-        Translations translation = parse(value);
-        if (translation != null) {
-            translations.put(key, translation);
-        }
     }
 
-    @Override
-    public @Nullable Translations parse(Object value) {
-        if (value instanceof String) {
-            return translations.get(value);
-            
-        } else if (value instanceof ConfigurationSection) {
-            return parse((ConfigurationSection) value);
-            
-        } else {
-            return null;
-        }
-    }
     
+    @Override
     protected @Nullable Translations parse(ConfigurationSection config) {
         String bundle = config.getString("bundle");
         if (bundle == null) {
@@ -83,12 +62,6 @@ public class TranslationsElement implements Element<Translations> {
         
         resources.addAll(embedded);
         return new Translations(bundle, new Control(resources.toArray(new Resource[] {})));
-    }
-    
-
-    @Override
-    public Map<String, Translations> getDefinitions() {
-        return translations;
     }
     
 }

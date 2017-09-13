@@ -43,6 +43,12 @@ public class TranslationTest {
     
     
     @Test
+    public void none() {
+        assertEquals("key", Translation.NONE.get("key"));
+    }
+    
+    
+    @Test
     public void get() {
         assertEquals("message {0}", translation.get("key"));
         assertEquals("message format", translation.get("key", "format"));

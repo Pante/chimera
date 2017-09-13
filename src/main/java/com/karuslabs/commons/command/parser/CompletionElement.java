@@ -30,47 +30,27 @@ import javax.annotation.Nullable;
 import com.karuslabs.commons.command.completion.Completion;
 
 
-public class CompletionElement implements Element<Completion> {
-    
-    private Map<String, Completion> completions;
-    
+public class CompletionElement extends Element<Completion> {    
     
     public CompletionElement() {
         this(new HashMap<>());
-        completions.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
-        completions.put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
     
     public CompletionElement(Map<String, Completion> completions) {
-        this.completions = completions;
+        super(completions);
+        definitions.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
+        definitions.put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
-    
-    
-    @Override
-    public void define(String key, Object value) {
-        Completion completer = parse(value);
-        if (completer != null) {
-            completions.put(key, completer);
-        }
-    }
+
     
     @Override
     public @Nullable Completion parse(Object value) {
-        if (value instanceof String) {
-            return completions.get(value);
-            
-        } else if (value instanceof List) {
+        if (value instanceof List) {
             return new CachedCompletion((List<String>) value);
             
         } else {
-            return null;
+            return super.parse(value);
         }
-    }
-    
-    
-    @Override
-    public Map<String, Completion> getDefinitions() {
-        return completions;
     }
     
 }

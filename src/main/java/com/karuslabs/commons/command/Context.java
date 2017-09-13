@@ -45,7 +45,7 @@ public class Context {
     
     
     public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
-        this(sender, sender instanceof CommandSender ? Locales.get(((Player) sender).getLocale()) : Locale.getDefault(), label, parent, command);
+        this(sender, sender instanceof Player ? Locales.get(((Player) sender).getLocale()) : Locale.getDefault(), label, parent, command);
     }
     
     public Context(CommandSender sender, Locale locale, String label, @Nullable Command parent, Command command) {

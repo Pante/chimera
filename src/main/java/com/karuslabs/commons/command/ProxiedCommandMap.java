@@ -76,13 +76,14 @@ public class ProxiedCommandMap {
 
     
     public @Nullable Command getCommand(String name) {
-        return map.getCommand(name) instanceof Command ? (Command) map.getCommand(name) : null;
+        org.bukkit.command.Command command = map.getCommand(name);
+        return command instanceof Command ? (Command) command : null;
     }
     
     
     public Map<String, Command> getCommands(Plugin plugin) {
         return map.getCommands().stream()
-            .filter(command -> command instanceof Command && ((Command) command).getPlugin().equals(plugin))
+            .filter(command -> command instanceof Command && plugin.equals(((Command) command).getPlugin()))
             .collect(toMap(command -> command.getName(), command -> (Command) command));
     }
     

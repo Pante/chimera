@@ -38,10 +38,9 @@ import static java.util.stream.Collectors.toMap;
 import com.karuslabs.commons.command.completion.Completion;
 
 
-public class CommandElement implements Element<Command> {
+public class CommandElement extends Element<Command> {
     
     private Plugin plugin;
-    private Map<String, Command> commands;
     private Element<Completion> completion;
     private Element<Translations> translation;
     
@@ -51,35 +50,15 @@ public class CommandElement implements Element<Command> {
     }
     
     public CommandElement(Plugin plugin, Map<String, Command> commands, Element<Completion> completion, Element<Translations> translation) {
+        super(commands);
         this.plugin = plugin;
-        this.commands = commands;
         this.completion = completion;
         this.translation = translation;
     }
-    
-    
-    @Override
-    public void define(String key, Object value) {
-        Command command = parse(value);
-        if (command != null) {
-            commands.put(key, command);
-        }
-    }
 
-    @Override
-    public @Nullable Command parse(Object value) {
-        if (value instanceof String) {
-            return commands.get(value);
-            
-        } else if (value instanceof ConfigurationSection) {
-            return parseCommand((ConfigurationSection) value);
-            
-        } else {
-            return null;
-        }
-    }
     
-    protected @Nullable Command parseCommand(ConfigurationSection config) {
+    @Override
+    protected @Nullable Command parse(ConfigurationSection config) {
         Command command = new Command(
             config.getName(),
             Get.orDefault(config.getString("description"), ""),
@@ -114,13 +93,6 @@ public class CommandElement implements Element<Command> {
         } else {
            return new HashMap<>(); 
         }
-    }
-    
-    
-
-    @Override
-    public Map<String, Command> getDefinitions() {
-        return commands;
     }
     
 }

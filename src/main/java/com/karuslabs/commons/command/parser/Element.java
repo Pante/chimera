@@ -23,17 +23,48 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Nullable;
 
+import org.bukkit.configuration.ConfigurationSection;
 
-public interface Element<T> {
+
+public abstract class Element<T> {    
     
-    public void define(String key, Object value);
-    
-    public @Nullable T parse(Object value);
+    protected Map<String, T> definitions;
     
     
-    public Map<String, T> getDefinitions();
+    public Element(Map<String, T> definitions) {
+        this.definitions = definitions;
+    }
+    
+    
+    public void define(String key, Object value) {
+        T object = parse(value);
+        if (object != null) {
+            definitions.put(key, object);
+        }
+    }
+    
+    public @Nullable T parse(Object value) {
+        if (value instanceof String) {
+            return definitions.get(value);
+            
+        } else if (value instanceof ConfigurationSection) {
+            return parse((ConfigurationSection) value);
+            
+        } else {
+            return null;
+        }
+    }
+    
+    protected @Nullable T parse(ConfigurationSection config) {
+        return null;
+    }
+    
+    
+    public Map<String, T> getDefinitions() {
+        return definitions;
+    }
     
 }

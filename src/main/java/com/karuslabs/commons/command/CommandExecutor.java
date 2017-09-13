@@ -53,8 +53,8 @@ public interface CommandExecutor {
     
     
     public static final CommandExecutor ALIASES = (context, arguments) -> wrap(context, arguments, 
-        (command, sender) -> sender.sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString()
-    ));
+        (command, sender) -> sender.sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString())
+    );
     
     public static final CommandExecutor DESCRIPTION = (context, arguments) -> wrap(context, arguments, 
         (command, sender) -> sender.sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage())
@@ -67,10 +67,12 @@ public interface CommandExecutor {
                     .map(Command::getName)
                     .collect(toList());
 
-            sender.sendMessage(GOLD + "==== Help for: " + command.getName() + " ====");
-            sender.sendMessage(GOLD + "Description: " + RED + command.getDescription());
-            sender.sendMessage(GOLD + "Usage: " + RED + command.getUsage());
-            sender.sendMessage(GOLD + "\n==== Subcommands: ====" + "\n" + RED + names);
+            sender.sendMessage(new String[] {
+                GOLD + "==== Help for: " + command.getName() + " ====",
+                GOLD + "Description: " + RED + command.getDescription(),
+                GOLD + "Usage: " + RED + command.getUsage(),
+                GOLD + "\n==== Subcommands: ====" + "\n" + RED + names
+            });
         }
     );
     
