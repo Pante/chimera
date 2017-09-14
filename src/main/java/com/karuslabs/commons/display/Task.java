@@ -38,15 +38,15 @@ import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 public class Task extends BukkitRunnable {
     
     private Set<Player> players;
-    private BiFunction<Player, Task, String> text;
+    private BiFunction<Player, Task, String> function;
     private Translation translation;
     private long total;
     private long current;
     
     
-    public Task(Set<Player> players, BiFunction<Player, Task, String> text, Translation translation, long frames) {
+    public Task(Set<Player> players, BiFunction<Player, Task, String> function, Translation translation, long frames) {
         this.players = players;
-        this.text = text;
+        this.function = function;
         this.translation = translation;
         total = frames;
         current = 0;
@@ -56,7 +56,7 @@ public class Task extends BukkitRunnable {
     @Override
     public void run() {
         if (current < total) {
-            players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(text.apply(player, this))));
+            players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
             current++;
             
         } else {
