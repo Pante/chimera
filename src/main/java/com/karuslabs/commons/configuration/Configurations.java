@@ -25,19 +25,30 @@ package com.karuslabs.commons.configuration;
 
 import java.io.*;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.*;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 
 public class Configurations {
-    
+        
     public static Map<String, Object> flatten(ConfigurationSection config) {
-        return config.getKeys(true).stream().filter(key -> !config.isConfigurationSection(key)).collect(toMap(identity(), config::get));
+        return stream(config).collect(toMap(identity(), config::get));
     }
+    
+    public static ConcurrentMap<String, Object> flattenConcurrent(ConfigurationSection config) {
+        return stream(config).collect(toConcurrentMap(identity(), config::get));
+    }
+    
+    private static Stream<String> stream(ConfigurationSection config) {
+        return config.getKeys(true).stream().filter(key -> !config.isConfigurationSection(key));
+    }
+    
     
     public static YamlConfiguration from(InputStream stream) {
         try {

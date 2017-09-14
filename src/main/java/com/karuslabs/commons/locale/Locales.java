@@ -26,6 +26,7 @@ package com.karuslabs.commons.locale;
 import com.google.common.cache.*;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
@@ -34,7 +35,7 @@ import static java.util.Arrays.asList;
 
 public class Locales {
     
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().softValues().build();
+    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, TimeUnit.MINUTES).build();
     
     private static final Set<String> COUNTRIES = new HashSet<>(asList(Locale.getISOCountries()));
     private static final Set<String> LANGUAGES = new HashSet<>(asList(Locale.getISOLanguages()));

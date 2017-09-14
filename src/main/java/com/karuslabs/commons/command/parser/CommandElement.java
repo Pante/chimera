@@ -24,8 +24,10 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.*;
-import com.karuslabs.commons.locale.Translations;
+import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.Get;
+
 
 import java.util.*;
 import javax.annotation.Nullable;
@@ -35,21 +37,20 @@ import org.bukkit.plugin.Plugin;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import com.karuslabs.commons.command.completion.Completion;
 
 
 public class CommandElement extends Element<Command> {
     
     private Plugin plugin;
     private Element<Completion> completion;
-    private Element<Translations> translation;
+    private Element<Translation> translation;
     
     
-    public CommandElement(Plugin plugin, Element<Completion> completion, Element<Translations> translation) {
+    public CommandElement(Plugin plugin, Element<Completion> completion, Element<Translation> translation) {
         this(plugin, new HashMap<>(), completion, translation);
     }
     
-    public CommandElement(Plugin plugin, Map<String, Command> commands, Element<Completion> completion, Element<Translations> translation) {
+    public CommandElement(Plugin plugin, Map<String, Command> commands, Element<Completion> completion, Element<Translation> translation) {
         super(commands);
         this.plugin = plugin;
         this.completion = completion;
@@ -66,7 +67,7 @@ public class CommandElement extends Element<Command> {
             config.getStringList("aliases"),
             plugin,
             CommandExecutor.NONE,
-            Get.orDefault(translation.parse(config.getConfigurationSection("translation")), Translations.NONE),
+            Get.orDefault(translation.parse(config.getConfigurationSection("translation")), Translation.NONE),
             parseCommands(config.getConfigurationSection("subcommands")),
             parseCompletions(config.getConfigurationSection("completions"))
         );

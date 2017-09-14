@@ -21,35 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.bundle.Control;
+import com.karuslabs.commons.locale.resources.*;
+
+import java.io.File;
 import java.util.*;
 import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import static com.karuslabs.commons.configuration.Configurations.*;
-import static java.util.Collections.*;
+import static java.util.stream.Collectors.toList;
 
 
-public class YamlResourceBundle extends ResourceBundle {
+public class TranslationElement extends Element<Translation> {
     
-    private Map<String, Object> messages;
+    private File folder;
     
     
-    public YamlResourceBundle(ConfigurationSection config) {
-        messages = flatten(config);
+    public TranslationElement(File folder) {
+        this(folder, new HashMap<>());
     }
     
-    
-    @Override
-    public Enumeration<String> getKeys() {
-        return enumeration(messages.keySet());
+    public TranslationElement(File folder, Map<String, Translation> translations) {
+        super(translations);
+        this.folder = folder;
     }
+
     
     @Override
-    protected @Nullable Object handleGetObject(String key) {
-        return messages.get(key);
+    protected @Nullable Translation parse(ConfigurationSection config) {
+        String bundle = config.getString("bundle");
+        if (bundle == null) {
+            return null;
+        }
+        
+        List<Resource> resources = config.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).collect(toList());
+        List<Resource> embedded = config.getStringList("embedded").stream().map(EmbeddedResource::new).collect(toList());
+        
+        resources.addAll(embedded);
+        return new BundledTranslation(bundle, new Control(resources.toArray(new Resource[] {})));
     }
     
 }

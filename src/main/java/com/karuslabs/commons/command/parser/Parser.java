@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.Command;
 import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.Translations;
+import com.karuslabs.commons.locale.Translation;
 
 import java.util.List;
 
@@ -38,10 +38,10 @@ public class Parser {
     
     private Element<Command> commands;
     private Element<Completion> completions;
-    private Element<Translations> translations;
+    private Element<Translation> translations;
     
     
-    public Parser(Element<Command> commands, Element<Completion> completions, Element<Translations> translations) {
+    public Parser(Element<Command> commands, Element<Completion> completions, Element<Translation> translations) {
         this.commands = commands;
         this.completions = completions;
         this.translations = translations;
@@ -76,7 +76,7 @@ public class Parser {
         return completions;
     }
 
-    public Element<Translations> getTranslations() {
+    public Element<Translation> getTranslations() {
         return translations;
     }
     

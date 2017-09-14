@@ -23,54 +23,43 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.resources.Resource;
-
-import java.util.*;
+import java.text.MessageFormat;
+import java.util.concurrent.ConcurrentMap;
 import javax.annotation.Nullable;
 
 
-public class Translations {
+public class SingleTranslation extends Translation {
     
-    public static final Translations NONE = new Translations("") {
-        
-        @Override
-        public Translation get(Locale locale) {
-            return Translation.NONE;
+    private ConcurrentMap<String, String> messages;
+    private MessageFormat format;
+
+    
+    public SingleTranslation(ConcurrentMap<String, String> cache) {
+        this.messages = cache;
+        format = new MessageFormat("");
+    }
+    
+    
+    @Override
+    public @Nullable String format(String key, Object... arguments) {
+        String message = messages.get(key);
+        if (message != null && arguments.length != 0) {
+            format.applyPattern(message);
+            message = format.format(arguments);
         }
         
-        @Override
-        public @Nullable ResourceBundle getBundle(Locale locale) {
-            return null;
-        }
-        
-    };
-    
-    
-    private String bundle;
-    private Control control;
-    
-    
-    public Translations(String bundle, Resource... resources) {
-        this(bundle, new Control(resources));
-    }
-    
-    public Translations(String bundle, Control control) {
-        this.bundle = bundle;
-        this.control = control;
+        return message;
     }
     
     
-    public Translation get(Locale locale) {
-        return new Translation(getBundle(locale));
+    public ConcurrentMap<String, String> getMessages() {
+        return messages;
     }
+
     
-    public @Nullable ResourceBundle getBundle(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
-    }
-    
-    
-    public String getBundleName() {
-        return bundle;
+    @Override
+    public SingleTranslation copy() {
+        return new SingleTranslation(messages);
     }
     
 }

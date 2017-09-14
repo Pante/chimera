@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.locale.Translations;
+import com.karuslabs.commons.locale.*;
 
 import java.util.Locale;
 
@@ -45,7 +44,7 @@ public class ContextTest {
     
     private static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
     private static final CommandSender SENDER = mock(CommandSender.class);
-    private static final Command COMMAND = when(mock(Command.class).getTranslations()).thenReturn(Translations.NONE).getMock();
+    private static final Command COMMAND = when(mock(Command.class).getTranslation()).thenReturn(Translation.NONE).getMock();
   
     
     @Test

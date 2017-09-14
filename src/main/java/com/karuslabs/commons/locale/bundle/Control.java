@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.bundle;
 
 import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.locale.resources.Resource;

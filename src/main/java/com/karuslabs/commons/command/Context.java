@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.locale.Locales;
-import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.locale.*;
 
 import java.util.Locale;
 import javax.annotation.Nullable;
@@ -101,7 +100,7 @@ public class Context {
     
     public Translation getTranslation() {
         if (translation == null) {
-            translation = command.getTranslations().get(locale);
+            translation = command.getTranslation().locale(locale);
         }
         
         return translation;

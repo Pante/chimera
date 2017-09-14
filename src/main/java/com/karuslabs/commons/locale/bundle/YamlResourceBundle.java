@@ -21,47 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.locale.bundle;
 
-import com.karuslabs.commons.locale.*;
-import com.karuslabs.commons.locale.resources.*;
-
-import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import static java.util.stream.Collectors.toList;
+import static com.karuslabs.commons.configuration.Configurations.*;
+import static java.util.Collections.*;
 
 
-public class TranslationsElement extends Element<Translations> {
+public class YamlResourceBundle extends ResourceBundle {
     
-    private File folder;
+    private ConcurrentMap<String, Object> messages;
     
     
-    public TranslationsElement(File folder) {
-        this(folder, new HashMap<>());
+    public YamlResourceBundle(ConfigurationSection config) {
+        messages = flattenConcurrent(config);
     }
     
-    public TranslationsElement(File folder, Map<String, Translations> translations) {
-        super(translations);
-        this.folder = folder;
-    }
-
     
     @Override
-    protected @Nullable Translations parse(ConfigurationSection config) {
-        String bundle = config.getString("bundle");
-        if (bundle == null) {
-            return null;
-        }
-        
-        List<Resource> resources = config.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).collect(toList());
-        List<Resource> embedded = config.getStringList("embedded").stream().map(EmbeddedResource::new).collect(toList());
-        
-        resources.addAll(embedded);
-        return new Translations(bundle, new Control(resources.toArray(new Resource[] {})));
+    public Enumeration<String> getKeys() {
+        return enumeration(messages.keySet());
+    }
+    
+    @Override
+    protected @Nullable Object handleGetObject(String key) {
+        return messages.get(key);
     }
     
 }

@@ -23,34 +23,38 @@
  */
 package com.karuslabs.commons.display;
 
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.function.BiFunction;
+import com.karuslabs.commons.locale.Translation;
 
-import net.md_5.bungee.api.chat.TextComponent;
+import java.util.*;
+import java.util.function.BiFunction;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import static java.util.Arrays.asList;
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
+import static java.util.Collections.newSetFromMap;
 
 
 public class ActionBar {
     
+    private static final BiFunction<Player, Task, String> TEXT = (player, task) -> "";
+    
     private Plugin plugin;
-    private BiFunction<Player, Long, Object> function;
-    private MessageFormat format;
+    private BiFunction<Player, Task, String> function;
+    private Translation translation;
     private long frames;
     private long delay;
     private long period;
     
     
-    public ActionBar(Plugin plugin, BiFunction<Player, Long, Object> function, MessageFormat format, long frames, long delay, long period) {
+    public ActionBar(Plugin plugin, BiFunction<Player, Task, String> function, Translation translation, long frames) {
+        this(plugin, function, translation, frames, 0, 0);
+    }
+    
+    public ActionBar(Plugin plugin, BiFunction<Player, Task, String> function, Translation translation, long frames, long delay, long period) {
         this.plugin = plugin;
         this.function = function;
-        this.format = format;
+        this.translation = translation;
         this.frames = frames;
         this.delay = delay;
         this.period = period;
@@ -61,10 +65,12 @@ public class ActionBar {
         render(asList(players));
     }
     
-    public void render(List<Player> players) {
-        new Task(players, function, format, frames).runTaskTimerAsynchronously(plugin, delay, period);
+    public void render(Collection<Player> players) {
+        Set<Player> targets = newSetFromMap(new WeakHashMap<>());
+        targets.addAll(players);
+        new Task(targets, function, translation.copy(), frames).runTaskTimerAsynchronously(plugin, delay, period);
     }
-
+    
     
     public Plugin getPlugin() {
         return plugin;
@@ -83,30 +89,48 @@ public class ActionBar {
     }
     
     
-    public static class Task extends BukkitRunnable {
+    public static Builder builder(Plugin plugin) {
+        return new Builder(plugin);
+    }
+    
+    
+    public static class Builder {
         
-        private List<Player> players;
-        private BiFunction<Player, Long, Object> function;
-        private MessageFormat format;
-        private long frames;
+        private ActionBar bar;
         
         
-        public Task(List<Player> players, BiFunction<Player, Long, Object> function, MessageFormat format, long frames) {
-            this.players = players;
-            this.function = function;
-            this.format = format;
-            this.frames = frames;
+        protected Builder(Plugin plugin) {
+            bar = new ActionBar(plugin, TEXT, Translation.NONE, 0);
         }
         
         
-        @Override
-        public void run() {
-            if (0 < frames--) {
-                players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, new TextComponent(format.format(function.apply(player, frames)))));
-                
-            } else {
-                cancel();
-            }
+        public Builder function(BiFunction<Player, Task, String> function) {
+            bar.function = function;
+            return this;
+        }
+        
+        public Builder translation(Translation translation) {
+            bar.translation = translation;
+            return this;
+        }
+        
+        public Builder frames(long frames) {
+            bar.frames = frames;
+            return this;
+        }
+        
+        public Builder delay(long delay) {
+            bar.delay = delay;
+            return this;
+        }
+        
+        public Builder period(long period) {
+            bar.period = period;
+            return this;
+        }
+        
+        public ActionBar build() {
+            return bar;
         }
         
     }

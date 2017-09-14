@@ -23,44 +23,47 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.karuslabs.commons.util.Prototype;
+
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Locale;
+import javax.annotation.Nullable;
 
 
-public class Translation {
+public abstract class Translation implements Prototype<Translation> {
     
     public static final Translation NONE = new Translation() {
         
         @Override
-        public String get(String key, Object... arguments) {
+        public String format(String key, Object... arguments) {
             return key;
+        }
+
+        @Override
+        public Translation copy() {
+            return Translation.NONE;
         }
         
     };
     
     
-    private ResourceBundle bundle;
-    private MessageFormat format;
-
+    protected MessageFormat format;
     
-    public Translation(ResourceBundle bundle) {
-        this.bundle = bundle;
-        this.format = new MessageFormat("", bundle.getLocale());
+    
+    public Translation() {
+        this(Locale.getDefault());
     }
     
-    private Translation() {}
-    
-
-    
-    public String get(String key, Object... arguments) {
-        String message = bundle.getString(key);
-        
-        if (arguments.length != 0) {
-            format.applyPattern(message);
-            message = format.format(arguments);
-        }
-        
-        return message;
+    public Translation(Locale locale) {
+        format = new MessageFormat("");
     }
-
+    
+    
+    public abstract @Nullable String format(String key, Object... arguments);
+    
+    public Translation locale(Locale locale) {
+        format.setLocale(locale);
+        return this;
+    }
+    
 }

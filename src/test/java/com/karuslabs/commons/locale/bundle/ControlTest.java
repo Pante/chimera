@@ -21,30 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.bundle;
 
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
-import java.util.Locale;
+import java.util.*;
+
+import junitparams.*;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.*;
 
 
-public class TranslationsTest {
+@RunWith(JUnitParamsRunner.class)
+public class ControlTest {
     
-    private Translations translations;
+    private Control control;
     
     
-    public TranslationsTest() {
-        translations = new Translations("Translation", new EmbeddedResource("locale"));
+    public ControlTest() {
+        control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
     }
     
     
     @Test
-    public void get() {
-        assertEquals("default", translations.get(Locale.ITALY).get("test"));
+    @Parameters
+    public void newBundle(Locale locale, String expected) {
+        ResourceBundle bundle = ResourceBundle.getBundle("Resource", locale, control);
+        assertEquals(expected, bundle.getString("test"));
+    }
+    
+    protected Object[] parametersForNewBundle() {
+        return new Object[] {
+            new Object[] {new Locale("en", "GB"), "English"},
+            new Object[] {new Locale("zh", "CN"), "Chinese"},
+        };
+    }
+    
+    
+    @Test
+    public void getFormats() {
+        assertThat(control.getFormats(null), equalTo(asList("properties", "yml", "yaml")));
     }
     
 }

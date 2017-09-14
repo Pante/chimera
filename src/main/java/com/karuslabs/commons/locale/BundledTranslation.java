@@ -23,49 +23,58 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.resources.EmbeddedResource;
+import com.karuslabs.commons.locale.bundle.Control;
+import com.karuslabs.commons.locale.resources.Resource;
 
 import java.util.*;
-
-import junitparams.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import javax.annotation.Nullable;
 
 
-@RunWith(JUnitParamsRunner.class)
-public class ControlTest {
+public class BundledTranslation extends Translation {
     
+    private String name;
     private Control control;
+    private ResourceBundle bundle;
     
     
-    public ControlTest() {
-        control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
+    public BundledTranslation(String name, Resource... resources) {
+        this(name, new Control(resources));
+    }
+    
+    public BundledTranslation(String name, Control control) {
+        this.name = name;
+        this.control = control;
+        bundle = ResourceBundle.getBundle(name, format.getLocale(), control);
     }
     
     
-    @Test
-    @Parameters
-    public void newBundle(Locale locale, String expected) {
-        ResourceBundle bundle = ResourceBundle.getBundle("Resource", locale, control);
-        assertEquals(expected, bundle.getString("test"));
+    @Override
+    public @Nullable String format(String key, Object... arguments) {
+        String message = bundle.getString(key);
+        if (arguments.length != 0) {
+            format.applyPattern(message);
+            message = format.format(arguments);
+        }
+        
+        return message;
     }
     
-    protected Object[] parametersForNewBundle() {
-        return new Object[] {
-            new Object[] {new Locale("en", "GB"), "English"},
-            new Object[] {new Locale("zh", "CN"), "Chinese"},
-        };
+    @Override
+    public Translation locale(Locale locale) {
+        format.setLocale(locale);
+        bundle = ResourceBundle.getBundle(name, locale, control);
+        return this;
     }
     
     
-    @Test
-    public void getFormats() {
-        assertThat(control.getFormats(null), equalTo(asList("properties", "yml", "yaml")));
+    public String getBundleName() {
+        return name;
+    }
+
+    
+    @Override
+    public BundledTranslation copy() {
+        return new BundledTranslation(name, control);
     }
     
 }

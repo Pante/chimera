@@ -21,37 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
-
-import java.util.ResourceBundle;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+package com.karuslabs.commons.util;
 
 
-public class TranslationTest {
+public interface Prototype<T> {
     
-    private Translation translation;
-    
-    
-    public TranslationTest() {
-        ResourceBundle bundle = when(mock(ResourceBundle.class).getString("key")).thenReturn("message {0}").getMock();
-        translation = new Translation(bundle);
-    }
-    
-    
-    @Test
-    public void none() {
-        assertEquals("key", Translation.NONE.get("key"));
-    }
-    
-    
-    @Test
-    public void get() {
-        assertEquals("message {0}", translation.get("key"));
-        assertEquals("message format", translation.get("key", "format"));
-    }
+    public T copy();
     
 }

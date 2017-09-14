@@ -48,7 +48,7 @@ public class Commands {
     
     public void load(String path) {
         CompletionElement completion = new CompletionElement();
-        TranslationsElement translations = new TranslationsElement(plugin.getDataFolder());
+        TranslationElement translations = new TranslationElement(plugin.getDataFolder());
         
         load(path, new Parser(new CommandElement(plugin, completion, translations), completion, translations));
     }
