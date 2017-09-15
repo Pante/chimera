@@ -23,22 +23,28 @@
  */
 package com.karuslabs.commons.locale;
 
+import java.util.Locale;
+
 
 public class KeyTranslation extends Translation {
-
+    
+    public KeyTranslation() {
+        this(Locale.getDefault(Locale.Category.FORMAT), "");
+    }
+    
+    public KeyTranslation(Locale locale, String key) {
+        super(locale, key);
+    }
+    
+    
     @Override
-    public String format(String key, Object... arguments) {
-        format.applyPattern(key);
-        if (arguments.length != 0) {
-            key = format.format(arguments);
-        }
-        
-        return key;
+    public String formatMessage(String key, Object... arguments) {
+        return arguments.length == 0 ? key : apply(key, arguments);
     }
 
     @Override
     public Translation copy() {
-        return new KeyTranslation();
+        return new KeyTranslation(format.getLocale(), key);
     }
     
 }

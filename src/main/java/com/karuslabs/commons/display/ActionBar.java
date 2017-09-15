@@ -26,111 +26,68 @@ package com.karuslabs.commons.display;
 import com.karuslabs.commons.locale.Translation;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.Arrays.asList;
+import static com.karuslabs.commons.display.ActionBarTask.NONE;
 import static java.util.Collections.newSetFromMap;
 
 
-public class ActionBar {
+public class ActionBar extends Bar<ActionBarTask> {
     
-    private static final BiFunction<Player, Task, String> TEXT = (player, task) -> "";
+    private static final BiFunction<Player, ActionBarTask, String> FUNCTION = (player, task) -> "";
+    
     
     private Plugin plugin;
-    private BiFunction<Player, Task, String> function;
-    private Translation translation;
-    private long frames;
-    private long delay;
-    private long period;
+    private BiFunction<Player, ActionBarTask, String> function;
     
     
-    public ActionBar(Plugin plugin, BiFunction<Player, Task, String> function, Translation translation, long frames) {
-        this(plugin, function, translation, frames, 0, 0);
+    public ActionBar(Plugin plugin, BiFunction<Player, ActionBarTask, String> function, Translation translation, long frames, long delay, long period) {
+        this(plugin, function, translation, NONE, NONE, frames, delay, period);
     }
     
-    public ActionBar(Plugin plugin, BiFunction<Player, Task, String> function, Translation translation, long frames, long delay, long period) {
+    public ActionBar(Plugin plugin, BiFunction<Player, ActionBarTask, String> function, Translation translation, Consumer<ActionBarTask> prerender, Consumer<ActionBarTask> cancellation, long frames, long delay, long period) {
+        super(translation, prerender, cancellation, frames, delay, period);
         this.plugin = plugin;
         this.function = function;
-        this.translation = translation;
-        this.frames = frames;
-        this.delay = delay;
-        this.period = period;
     }
+
     
-    
-    public void render(Player... players) {
-        render(asList(players));
-    }
-    
-    public void render(Collection<Player> players) {
+    @Override
+    protected void render(Collection<Player> players) {
         Set<Player> targets = newSetFromMap(new WeakHashMap<>());
         targets.addAll(players);
-        new Task(targets, function, translation.copy(), frames).runTaskTimerAsynchronously(plugin, delay, period);
-    }
-    
-    
-    public Plugin getPlugin() {
-        return plugin;
-    }
-
-    public long getFrames() {
-        return frames;
-    }
-
-    public long getDelay() {
-        return delay;
-    }
-
-    public long getPeriod() {
-        return period;
-    }
-    
-    
-    public static Builder builder(Plugin plugin) {
-        return new Builder(plugin);
-    }
-    
-    
-    public static class Builder {
         
-        private ActionBar bar;
+        ActionBarTask task = new ActionBarTask(targets, function, translation, prerender, cancellation, frames);
+        targets.forEach(player -> tasks.put(player, task));
         
-        
-        protected Builder(Plugin plugin) {
-            bar = new ActionBar(plugin, TEXT, Translation.NONE, 0);
+        task.runTaskTimerAsynchronously(plugin, delay, period);
+    }
+    
+    
+    public static ActionBarBuilder builder(Plugin plugin) {
+        return new ActionBarBuilder(new ActionBar(plugin, FUNCTION, Translation.NONE, 0, 0, 0));
+    }
+    
+    
+    public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
+
+        public ActionBarBuilder(ActionBar bar) {
+            super(bar);
         }
+
         
-        
-        public Builder function(BiFunction<Player, Task, String> function) {
+        public ActionBarBuilder function(BiFunction<Player, ActionBarTask, String> function) {
             bar.function = function;
             return this;
         }
         
-        public Builder translation(Translation translation) {
-            bar.translation = translation;
-            return this;
-        }
         
-        public Builder frames(long frames) {
-            bar.frames = frames;
+        @Override
+        protected ActionBarBuilder getThis() {
             return this;
-        }
-        
-        public Builder delay(long delay) {
-            bar.delay = delay;
-            return this;
-        }
-        
-        public Builder period(long period) {
-            bar.period = period;
-            return this;
-        }
-        
-        public ActionBar build() {
-            return bar;
         }
         
     }

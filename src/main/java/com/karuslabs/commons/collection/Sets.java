@@ -21,49 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.collection;
 
-import java.util.Locale;
-import java.util.concurrent.ConcurrentMap;
-import javax.annotation.Nullable;
+import java.util.*;
+
+import static java.util.Collections.newSetFromMap;
 
 
-public class SingleTranslation extends Translation {
+public class Sets {
     
-    private ConcurrentMap<String, String> messages;
-
-    
-    public SingleTranslation(ConcurrentMap<String, String> cache) {
-        this(Locale.getDefault(Locale.Category.FORMAT), "", cache);
-    }
-    
-    public SingleTranslation(Locale locale, String key, ConcurrentMap<String, String> cache) {
-        super(locale, key);
-        this.messages = cache;
-    }
-    
-    
-    @Override
-    public @Nullable String formatMessage(String key, Object... arguments) {
-        String message = messages.get(key);
-        
-        if (message != null && arguments.length != 0) {
-            return apply(message, arguments);
-            
-        } else {
-            return message;
-        }
-    }
-    
-    
-    public ConcurrentMap<String, String> getMessages() {
-        return messages;
-    }
-
-    
-    @Override
-    public SingleTranslation copy() {
-        return new SingleTranslation(format.getLocale(), key, messages);
+    public static <T> Set<T> weakSet(Collection<T> collection) {
+        Set<T> set = newSetFromMap(new WeakHashMap<>());
+        set.addAll(collection);
+        return set;
     }
     
 }

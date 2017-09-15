@@ -35,35 +35,51 @@ public abstract class Translation implements Prototype<Translation> {
     public static final Translation NONE = new Translation() {
         
         @Override
-        public String format(String key, Object... arguments) {
+        public String formatMessage(String key, Object... arguments) {
             return key;
         }
 
         @Override
         public Translation copy() {
-            return Translation.NONE;
+            return this;
         }
         
     };
     
     
     protected MessageFormat format;
+    protected String key;
     
     
     public Translation() {
-        this(Locale.getDefault());
+        this(Locale.getDefault(), "");
     }
     
-    public Translation(Locale locale) {
-        format = new MessageFormat("");
+    public Translation(Locale locale, String key) {
+        format = new MessageFormat("", locale);
+        key = "";
     }
     
-    
-    public abstract @Nullable String format(String key, Object... arguments);
     
     public Translation locale(Locale locale) {
         format.setLocale(locale);
         return this;
+    }
+    
+    public Translation key(String key) {
+        this.key = key;
+        return this;
+    }
+    
+    public @Nullable String format(Object... arguments) {
+        return formatMessage(key, arguments);
+    }
+    
+    public abstract @Nullable String formatMessage(String key, Object... arguments);
+    
+    protected String apply(String message, Object... arguments) {
+        format.applyPattern(message);
+        return format.format(arguments);
     }
     
 }

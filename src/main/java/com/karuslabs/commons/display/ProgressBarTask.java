@@ -23,63 +23,45 @@
  */
 package com.karuslabs.commons.display;
 
-
 import com.karuslabs.commons.locale.Translation;
 
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
-public abstract class Task<GenericTask extends Task> extends BukkitRunnable {
+public class ProgressBarTask extends Task<ProgressBarTask> {
     
-    private Translation translation;
-    private Consumer<GenericTask> prerender;
-    private Consumer<GenericTask> cancellation;
-    private long total;
-    private long current;
-
+    private WeakHashMap<Player, BossBar> bars;
+    private BiConsumer<ProgressBarTask, BossBar> consumer;
     
-    public Task(Translation translation, Consumer<GenericTask> prerender, Consumer<GenericTask> cancellation, long frames) {
-        this.translation = translation;
-        this.prerender = prerender;
-        this.cancellation = cancellation;
-        total = frames;
-        current = 0;
+    
+    public ProgressBarTask(WeakHashMap<Player, BossBar> bars, BiConsumer<ProgressBarTask, BossBar> consumer, Translation translation, Consumer<ProgressBarTask> prerender, Consumer<ProgressBarTask> cancellation, long frames) {
+        super(translation, prerender, cancellation, frames);
+        this.bars = bars;
+        this.consumer = consumer;
     }
-    
+
     
     @Override
-    public void run() {
-        if (current < total) {
-            prerender.accept(getThis());
-            render();
-            current++;
-            
-        } else {
-            cancel();
-            cancellation.accept(getThis());
-        }
-    }
-    
-    protected abstract void render();
-    
-    protected abstract GenericTask getThis();
-    
-    protected abstract void cancel(Player player);
-    
-    
-    public Translation getTranslation() {
-        return translation;
-    }
-    
-    public long getTotalFrames() {
-        return total;
+    protected void render() {
+        bars.values().forEach(player -> consumer.accept(this, player));
     }
 
-    public long getCurrentFrame() {
-        return current;
+    @Override
+    protected ProgressBarTask getThis() {
+        return this;
+    }
+
+    @Override
+    protected void cancel(Player player) {
+        BossBar bar = bars.remove(player);
+        if (bar != null) {
+            bar.removePlayer(player);
+        }
     }
     
 }

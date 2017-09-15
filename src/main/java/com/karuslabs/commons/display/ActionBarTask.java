@@ -23,63 +23,51 @@
  */
 package com.karuslabs.commons.display;
 
-
 import com.karuslabs.commons.locale.Translation;
 
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.function.*;
 
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+
+import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
+import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
 
-public abstract class Task<GenericTask extends Task> extends BukkitRunnable {
+public class ActionBarTask extends Task<ActionBarTask> {
     
-    private Translation translation;
-    private Consumer<GenericTask> prerender;
-    private Consumer<GenericTask> cancellation;
-    private long total;
-    private long current;
+    public static final Consumer<ActionBarTask> NONE = task -> {};
+    
+    
+    private Set<Player> players;
+    private BiFunction<Player, ActionBarTask, String> function;
 
     
-    public Task(Translation translation, Consumer<GenericTask> prerender, Consumer<GenericTask> cancellation, long frames) {
-        this.translation = translation;
-        this.prerender = prerender;
-        this.cancellation = cancellation;
-        total = frames;
-        current = 0;
+    public ActionBarTask(Set<Player> players, BiFunction<Player, ActionBarTask, String> function, Translation translation, Consumer<ActionBarTask> prerender, Consumer<ActionBarTask> cancellation, long frames) {
+        super(translation, prerender, cancellation, frames);
+        this.players = players;
+        this.function = function;
     }
-    
+
     
     @Override
-    public void run() {
-        if (current < total) {
-            prerender.accept(getThis());
-            render();
-            current++;
-            
-        } else {
-            cancel();
-            cancellation.accept(getThis());
-        }
-    }
-    
-    protected abstract void render();
-    
-    protected abstract GenericTask getThis();
-    
-    protected abstract void cancel(Player player);
-    
-    
-    public Translation getTranslation() {
-        return translation;
-    }
-    
-    public long getTotalFrames() {
-        return total;
+    protected void render() {
+        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
     }
 
-    public long getCurrentFrame() {
-        return current;
+    @Override
+    protected ActionBarTask getThis() {
+        return this;
+    }
+    
+    @Override
+    protected void cancel(Player player) {
+        players.remove(player);
+    }
+    
+    
+    public Set<Player> getPlayers() {
+        return players;
     }
     
 }

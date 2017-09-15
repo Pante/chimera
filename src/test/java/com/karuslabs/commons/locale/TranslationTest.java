@@ -24,46 +24,46 @@
 package com.karuslabs.commons.locale;
 
 import java.util.Locale;
-import java.util.concurrent.ConcurrentMap;
-import javax.annotation.Nullable;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class SingleTranslation extends Translation {
+public class TranslationTest {
     
-    private ConcurrentMap<String, String> messages;
-
+    private Translation translation;
     
-    public SingleTranslation(ConcurrentMap<String, String> cache) {
-        this(Locale.getDefault(Locale.Category.FORMAT), "", cache);
-    }
     
-    public SingleTranslation(Locale locale, String key, ConcurrentMap<String, String> cache) {
-        super(locale, key);
-        this.messages = cache;
+    public TranslationTest() {
+        translation = Translation.NONE;
     }
     
     
-    @Override
-    public @Nullable String formatMessage(String key, Object... arguments) {
-        String message = messages.get(key);
+    @Test
+    public void format() {
+        assertEquals("key", translation.key("key").format());
+    }
+    
+    
+    @Test
+    public void apply() {
+        assertEquals("key", translation.apply("{0}", "key"));
+    }
+    
+    
+    @Test
+    public void locale() {
+        translation.format.setLocale(Locale.ENGLISH);
+        translation.locale(Locale.ITALY);
         
-        if (message != null && arguments.length != 0) {
-            return apply(message, arguments);
-            
-        } else {
-            return message;
-        }
+        assertEquals(Locale.ITALY, translation.format.getLocale());
     }
     
     
-    public ConcurrentMap<String, String> getMessages() {
-        return messages;
-    }
-
-    
-    @Override
-    public SingleTranslation copy() {
-        return new SingleTranslation(format.getLocale(), key, messages);
+    @Test
+    public void copy() {
+        assertEquals(Translation.NONE, translation.copy());
     }
     
 }

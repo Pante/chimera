@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.Translation;
@@ -127,7 +128,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         this.executor = executor;
     }
     
-    public Translation getTranslation() {
+    public @Immutable Translation getTranslation() {
         return translation.copy();
     }
     
