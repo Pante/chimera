@@ -21,44 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
-
-import com.karuslabs.commons.locale.Translation;
-
-import java.util.Set;
-import java.util.function.*;
-
-import org.bukkit.entity.Player;
-
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
-import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
+package com.karuslabs.commons.util.concurrent.locks;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
-    
-    protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
-    
-    
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
-        super(iterations, translation);
-        this.players = players;
-        this.function = function;
-    }
-    
+@FunctionalInterface
+public interface Janitor extends AutoCloseable {
     
     @Override
-    protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
-    }
-    
-    @Override
-    protected Set<Player> value() {
-        return players;
-    }
-    
-    public Set<Player> getPlayers() {
-        return players;
-    }
+    public void close();
     
 }

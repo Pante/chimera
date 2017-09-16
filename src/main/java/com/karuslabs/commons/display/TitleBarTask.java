@@ -23,63 +23,53 @@
  */
 package com.karuslabs.commons.display;
 
-
 import com.karuslabs.commons.locale.Translation;
 
-import java.util.function.Consumer;
+import java.util.Set;
+import java.util.function.*;
 
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
-public abstract class Task<GenericTask extends Task> extends BukkitRunnable {
+public class TitleBarTask extends TranslatableTask<Set<Player>> {
     
-    private Translation translation;
-    private Consumer<GenericTask> prerender;
-    private Consumer<GenericTask> cancellation;
-    private long total;
-    private long current;
-
+    private Set<Player> players;
+    private BiConsumer<Player, TitleBarTask> consumer;
+    private int fadeIn;
+    private int stay;
+    private int fadeOut;
     
-    public Task(Translation translation, Consumer<GenericTask> prerender, Consumer<GenericTask> cancellation, long frames) {
-        this.translation = translation;
-        this.prerender = prerender;
-        this.cancellation = cancellation;
-        total = frames;
-        current = 0;
+    
+    public TitleBarTask(long iterations, Translation translation, BiConsumer<Player, TitleBarTask> consumer, int fadeIn, int stay, int fadeOut) {
+        super(iterations, translation);
+        this.consumer = consumer;
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
     }
-    
-    
+
+
     @Override
-    public void run() {
-        if (current < total) {
-            prerender.accept(getThis());
-            render();
-            current++;
-            
-        } else {
-            cancel();
-            cancellation.accept(getThis());
-        }
-    }
-    
-    protected abstract void render();
-    
-    protected abstract GenericTask getThis();
-    
-    protected abstract void cancel(Player player);
-    
-    
-    public Translation getTranslation() {
-        return translation;
-    }
-    
-    public long getTotalFrames() {
-        return total;
+    protected void process() {
+        players.forEach(player -> consumer.accept(player, this));
     }
 
-    public long getCurrentFrame() {
-        return current;
+    @Override
+    protected Set<Player> value() {
+        return players;
+    }
+
+
+    public int getFadeIn() {
+        return fadeIn;
+    }
+
+    public int getStay() {
+        return stay;
+    }
+
+    public int getFadeOut() {
+        return fadeOut;
     }
     
 }

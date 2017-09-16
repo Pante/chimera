@@ -25,43 +25,38 @@ package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.function.*;
 
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Player;
 
 
-public class ProgressBarTask extends Task<ProgressBarTask> {
+public class ProgressBarTask extends TranslatableTask<List<BossBar>> {
     
-    private WeakHashMap<Player, BossBar> bars;
-    private BiConsumer<ProgressBarTask, BossBar> consumer;
+    private List<BossBar> bars;
+    private BiConsumer<BossBar, ProgressBarTask> consumer;
+
     
-    
-    public ProgressBarTask(WeakHashMap<Player, BossBar> bars, BiConsumer<ProgressBarTask, BossBar> consumer, Translation translation, Consumer<ProgressBarTask> prerender, Consumer<ProgressBarTask> cancellation, long frames) {
-        super(translation, prerender, cancellation, frames);
+    public ProgressBarTask(long iterations, Translation translation, List<BossBar> bars, BiConsumer<BossBar, ProgressBarTask> consumer) {
+        super(iterations, translation);
         this.bars = bars;
         this.consumer = consumer;
     }
 
     
     @Override
-    protected void render() {
-        bars.values().forEach(player -> consumer.accept(this, player));
+    protected void process() {
+        bars.forEach(bar -> consumer.accept(bar, this));
     }
 
     @Override
-    protected ProgressBarTask getThis() {
-        return this;
+    protected List<BossBar> value() {
+        return bars;
     }
-
-    @Override
-    protected void cancel(Player player) {
-        BossBar bar = bars.remove(player);
-        if (bar != null) {
-            bar.removePlayer(player);
-        }
+    
+    
+    public List<BossBar> getBars() {
+        return bars;
     }
     
 }

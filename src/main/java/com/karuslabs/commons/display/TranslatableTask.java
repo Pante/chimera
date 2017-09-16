@@ -24,41 +24,22 @@
 package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
-
-import java.util.Set;
-import java.util.function.*;
-
-import org.bukkit.entity.Player;
-
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
-import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
+import com.karuslabs.commons.util.concurrent.CallbackTask;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
+public abstract class TranslatableTask<T> extends CallbackTask<T> {
     
-    protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
+    private Translation translation;
     
     
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
-        super(iterations, translation);
-        this.players = players;
-        this.function = function;
+    public TranslatableTask(long iterations, Translation translation) {
+        super(iterations);
+        this.translation = translation.copy();
     }
     
     
-    @Override
-    protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
-    }
-    
-    @Override
-    protected Set<Player> value() {
-        return players;
-    }
-    
-    public Set<Player> getPlayers() {
-        return players;
+    public Translation getTranslation() {
+        return translation;
     }
     
 }

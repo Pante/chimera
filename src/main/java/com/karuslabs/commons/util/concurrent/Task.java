@@ -21,44 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.locale.Translation;
-
-import java.util.Set;
-import java.util.function.*;
-
-import org.bukkit.entity.Player;
-
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
-import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
-    
-    protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
+public abstract class Task extends BukkitRunnable {
+
+    private long total;
+    private long current;
     
     
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
-        super(iterations, translation);
-        this.players = players;
-        this.function = function;
+    public Task(long iterations) {
+        this.total = iterations;
+        this.current = 0;
     }
     
     
     @Override
-    protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
+    public void run() {
+        if (current < total) {
+            process();
+            current++;
+            
+        } else {
+            end();
+        }
     }
     
-    @Override
-    protected Set<Player> value() {
-        return players;
-    }
+    protected abstract void process();
     
-    public Set<Player> getPlayers() {
-        return players;
+    protected abstract void end();
+    
+
+    public long getTotal() {
+        return total;
+    }
+
+    public long getCurrent() {
+        return current;
     }
     
 }

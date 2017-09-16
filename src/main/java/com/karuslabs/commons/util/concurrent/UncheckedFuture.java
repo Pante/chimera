@@ -23,11 +23,36 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import java.util.concurrent.*;
 
-@FunctionalInterface
-public interface Janitor extends AutoCloseable {
+
+public interface UncheckedFuture<T> extends Future<T> {
     
-    @Override
-    public void close();
+    public default T getUnchecked() {
+        try {
+            return get();
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
+        }
+    }
+    
+    public default T getUnchecked(long timeout, TimeUnit unit) {
+        try {
+            return get(timeout, unit);
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
+            
+        } catch (TimeoutException e) {
+            throw new UncheckedTimeoutException(e);
+        }
+    }
     
 }

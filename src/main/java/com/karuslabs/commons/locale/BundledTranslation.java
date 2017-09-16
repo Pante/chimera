@@ -42,11 +42,11 @@ public class BundledTranslation extends Translation {
     }
     
     public BundledTranslation(String name, Control control) {
-        this(Locale.getDefault(Locale.Category.FORMAT), "", name, control, ResourceBundle.getBundle(name, Locale.getDefault(Locale.Category.FORMAT), control));
+        this(Locale.getDefault(Locale.Category.FORMAT), name, control, ResourceBundle.getBundle(name, Locale.getDefault(Locale.Category.FORMAT), control));
     }
     
-    public BundledTranslation(Locale locale, String key, String name, Control control, ResourceBundle bundle) {
-        super(locale, key);
+    public BundledTranslation(Locale locale,  String name, Control control, ResourceBundle bundle) {
+        super(locale);
         this.name = name;
         this.control = control;
         this.bundle = bundle;
@@ -54,7 +54,7 @@ public class BundledTranslation extends Translation {
     
     
     @Override
-    public @Nullable String formatMessage(String key, Object... arguments) {
+    public @Nullable String format(String key, Object... arguments) {
         String message = bundle.getString(key);
         return arguments.length == 0 ? message : apply(message, arguments);
     }
@@ -74,7 +74,7 @@ public class BundledTranslation extends Translation {
     
     @Override
     public BundledTranslation copy() {
-        return new BundledTranslation(format.getLocale(), key, name, control, bundle);
+        return new BundledTranslation(format.getLocale(), name, control, bundle);
     }
     
 }

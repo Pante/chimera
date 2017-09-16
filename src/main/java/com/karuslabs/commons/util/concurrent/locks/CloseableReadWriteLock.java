@@ -21,44 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.locale.Translation;
-
-import java.util.Set;
-import java.util.function.*;
-
-import org.bukkit.entity.Player;
-
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
-import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
+public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
-    protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
+    private final Janitor readJanitor;
+    private final Janitor writeJanitor;
     
     
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
-        super(iterations, translation);
-        this.players = players;
-        this.function = function;
+    public CloseableReadWriteLock() {
+        this(false);
+    }
+    
+    public CloseableReadWriteLock(boolean fair) {
+        super(fair);
+        readJanitor = () -> readLock().unlock();
+        writeJanitor = () -> writeLock().unlock();
     }
     
     
-    @Override
-    protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
+    public Janitor acquireReadLock() {
+        readLock().lock();
+        return readJanitor;
     }
     
-    @Override
-    protected Set<Player> value() {
-        return players;
+    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
+        readLock().lockInterruptibly();
+        return readJanitor;
     }
     
-    public Set<Player> getPlayers() {
-        return players;
+    
+    public Janitor acquireWriteLock() {
+        writeLock().lock();
+        return writeJanitor;
+    }
+    
+    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
+        writeLock().lockInterruptibly();
+        return writeJanitor;
     }
     
 }

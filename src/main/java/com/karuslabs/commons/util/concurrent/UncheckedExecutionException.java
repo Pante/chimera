@@ -23,45 +23,27 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ExecutionException;
 
 
-public class CloseableReadWriteLock extends ReentrantReadWriteLock {
+public class UncheckedExecutionException extends RuntimeException {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    private ExecutionException exception;
     
     
-    public CloseableReadWriteLock() {
-        this(false);
+    public UncheckedExecutionException(ExecutionException exception) {
+        this.exception = exception;
     }
     
-    public CloseableReadWriteLock(boolean fair) {
-        super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
-    }
-    
-    
-    public Janitor acquireReadLock() {
-        readLock().lock();
-        return readJanitor;
-    }
-    
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
-        readLock().lockInterruptibly();
-        return readJanitor;
+    public UncheckedExecutionException(String message, ExecutionException exception) {
+        super(message);
+        this.exception = exception;
     }
     
     
-    public Janitor acquireWriteLock() {
-        writeLock().lock();
-        return writeJanitor;
-    }
-    
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
-        writeLock().lockInterruptibly();
-        return writeJanitor;
+    @Override
+    public ExecutionException getCause() {
+        return exception;
     }
     
 }

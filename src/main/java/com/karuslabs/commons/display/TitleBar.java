@@ -32,52 +32,84 @@ import java.util.function.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import static com.karuslabs.commons.collection.Sets.weakSet;
 
-
-public class ActionBar extends Bar<Set<Player>> {
+public class TitleBar extends Bar<Set<Player>> {
     
-    private static final BiFunction<Player, ActionBarTask, String> FUNCTION = (player, task) -> "";
+    private static final Consumer<TitleBarTask> PRERENDER = task -> {};
+    private static final BiConsumer<Player, TitleBarTask> CONSUMER = (player, task) -> {};
+    
+    private BiConsumer<Player, TitleBarTask> consumer;
+    private int fadeIn;
+    private int stay;
+    private int fadeOut;
     
     
-    private BiFunction<Player, ActionBarTask, String> function;
-    
-    
-    public ActionBar(Plugin plugin, Translation translation, BiFunction<Player, ActionBarTask, String> function, long frames, long delay, long period) {
+    public TitleBar(Plugin plugin, Translation translation, BiConsumer<Player, TitleBarTask> consumer, long frames, long delay, long period, int fadeIn, int stay, int fadeOut) {
         super(plugin, translation, frames, delay, period);
-        this.function = function;
+        this.consumer = consumer;
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
     }
 
     
     @Override
     public UncheckedFuture<Set<Player>> render(Collection<Player> players) {
-        ActionBarTask task = new ActionBarTask(frames, translation, weakSet(players), function);
+        TitleBarTask task = new TitleBarTask(frames, translation, consumer, fadeIn, stay, fadeOut);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         
         return task;
     }
+
     
-    
-    public static ActionBarBuilder builder(Plugin plugin) {
-        return new ActionBarBuilder(new ActionBar(plugin, Translation.NONE, FUNCTION, 0, 0, 0));
+    public int getFadeIn() {
+        return fadeIn;
+    }
+
+    public int getStay() {
+        return stay;
+    }
+
+    public int getFadeOut() {
+        return fadeOut;
     }
     
     
-    public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
+    public static TitleBarBuilder builder(Plugin plugin) {
+        return new TitleBarBuilder(new TitleBar(plugin, Translation.NONE, CONSUMER, 0, 0, 0, 0, 0, 0));
+    }
+    
+    
+    public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {
 
-        public ActionBarBuilder(ActionBar bar) {
+        protected TitleBarBuilder(TitleBar bar) {
             super(bar);
         }
         
         
-        public ActionBarBuilder function(BiFunction<Player, ActionBarTask, String> function) {
-            bar.function = function;
+        public TitleBarBuilder consumer(BiConsumer<Player, TitleBarTask> consumer) {
+            bar.consumer = consumer;
+            return this;
+        }
+        
+        public TitleBarBuilder fadeIn(int fadeIn) {
+            bar.fadeIn = fadeIn;
+            return this;
+        }
+        
+        public TitleBarBuilder stay(int stay) {
+            bar.stay = stay;
+            return this;
+        }
+        
+        public TitleBarBuilder fadeOut(int fadeOut) {
+            bar.fadeOut = fadeOut;
             return this;
         }
         
         
         @Override
-        protected ActionBarBuilder getThis() {
+        protected TitleBarBuilder getThis() {
             return this;
         }
         

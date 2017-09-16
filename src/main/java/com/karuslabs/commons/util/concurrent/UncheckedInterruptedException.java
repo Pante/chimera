@@ -21,17 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
-
-import java.lang.annotation.*
-        ;
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package com.karuslabs.commons.util.concurrent;
 
 
-@Documented
-@Target({TYPE, PARAMETER, TYPE_USE})
-@Retention(RUNTIME)
-public @interface Unused {
+public class UncheckedInterruptedException extends RuntimeException {
+    
+    private InterruptedException exception;
+    
+    
+    public UncheckedInterruptedException(InterruptedException  exception) {
+        this.exception = exception;
+    }
+    
+    public UncheckedInterruptedException(String message, InterruptedException exception) {
+        super(message);
+        this.exception = exception;
+    }
+    
+    
+    @Override
+    public InterruptedException getCause() {
+        return exception;
+    }
     
 }

@@ -35,7 +35,7 @@ public abstract class Translation implements Prototype<Translation> {
     public static final Translation NONE = new Translation() {
         
         @Override
-        public String formatMessage(String key, Object... arguments) {
+        public String format(String key, Object... arguments) {
             return key;
         }
 
@@ -48,16 +48,14 @@ public abstract class Translation implements Prototype<Translation> {
     
     
     protected MessageFormat format;
-    protected String key;
     
     
     public Translation() {
-        this(Locale.getDefault(), "");
+        this(Locale.getDefault());
     }
     
-    public Translation(Locale locale, String key) {
+    public Translation(Locale locale) {
         format = new MessageFormat("", locale);
-        key = "";
     }
     
     
@@ -66,16 +64,7 @@ public abstract class Translation implements Prototype<Translation> {
         return this;
     }
     
-    public Translation key(String key) {
-        this.key = key;
-        return this;
-    }
-    
-    public @Nullable String format(Object... arguments) {
-        return formatMessage(key, arguments);
-    }
-    
-    public abstract @Nullable String formatMessage(String key, Object... arguments);
+    public abstract @Nullable String format(String key, Object... arguments);
     
     protected String apply(String message, Object... arguments) {
         format.applyPattern(message);

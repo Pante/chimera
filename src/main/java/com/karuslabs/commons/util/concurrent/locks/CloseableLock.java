@@ -21,44 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.locale.Translation;
-
-import java.util.Set;
-import java.util.function.*;
-
-import org.bukkit.entity.Player;
-
-import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
-import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
+import java.util.concurrent.locks.*;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
+public class CloseableLock extends ReentrantLock {
     
-    protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
+    private final Janitor janitor;
+
     
+    public CloseableLock() {
+        this(false);
+    }
     
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
-        super(iterations, translation);
-        this.players = players;
-        this.function = function;
+    public CloseableLock(boolean fair) {
+        super(fair);
+        janitor = this::unlock;
     }
     
     
-    @Override
-    protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
+    
+    public Janitor acquire() {
+        lock();
+        return janitor;
     }
     
-    @Override
-    protected Set<Player> value() {
-        return players;
-    }
-    
-    public Set<Player> getPlayers() {
-        return players;
+    public Janitor acquireInterruptibly() throws InterruptedException {
+        lockInterruptibly();
+        return janitor;
     }
     
 }

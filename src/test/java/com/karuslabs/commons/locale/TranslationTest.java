@@ -42,13 +42,7 @@ public class TranslationTest {
     
     @Test
     public void format() {
-        assertEquals("key", translation.key("key").format());
-    }
-    
-    
-    @Test
-    public void apply() {
-        assertEquals("key", translation.apply("{0}", "key"));
+        assertEquals("key", translation.format("key"));
     }
     
     

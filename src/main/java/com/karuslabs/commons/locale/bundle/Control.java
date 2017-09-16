@@ -49,7 +49,7 @@ public class Control extends ResourceBundle.Control {
     
     
     @Override
-    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, @Unused ClassLoader loader, @Unused boolean reload) {
+    public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, @Ignored ClassLoader loader, @Ignored boolean reload) {
         if (getFormats(baseName).contains(format)) {
             String bundle = toResourceName(toBundleName(baseName, locale), format);
             for (Resource resource : resources) {
@@ -83,7 +83,7 @@ public class Control extends ResourceBundle.Control {
     
     
     @Override
-    public @Immutable List<String> getFormats(@Unused String bundleName) {
+    public @Immutable List<String> getFormats(@Ignored String bundleName) {
         return FORMATS;
     }
     

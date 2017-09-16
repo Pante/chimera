@@ -34,17 +34,17 @@ public class SingleTranslation extends Translation {
 
     
     public SingleTranslation(ConcurrentMap<String, String> cache) {
-        this(Locale.getDefault(Locale.Category.FORMAT), "", cache);
+        this(Locale.getDefault(Locale.Category.FORMAT), cache);
     }
     
-    public SingleTranslation(Locale locale, String key, ConcurrentMap<String, String> cache) {
-        super(locale, key);
+    public SingleTranslation(Locale locale, ConcurrentMap<String, String> cache) {
+        super(locale);
         this.messages = cache;
     }
     
     
     @Override
-    public @Nullable String formatMessage(String key, Object... arguments) {
+    public @Nullable String format(String key, Object... arguments) {
         String message = messages.get(key);
         
         if (message != null && arguments.length != 0) {
@@ -63,7 +63,7 @@ public class SingleTranslation extends Translation {
     
     @Override
     public SingleTranslation copy() {
-        return new SingleTranslation(format.getLocale(), key, messages);
+        return new SingleTranslation(format.getLocale(), messages);
     }
     
 }

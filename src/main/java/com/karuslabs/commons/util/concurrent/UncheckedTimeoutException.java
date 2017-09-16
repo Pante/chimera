@@ -23,33 +23,27 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.locks.*;
+import java.util.concurrent.TimeoutException;
 
 
-public class CloseableLock extends ReentrantLock {
+public class UncheckedTimeoutException extends RuntimeException {
     
-    private final Janitor janitor;
-
+    private TimeoutException exception;
     
-    public CloseableLock() {
-        this(false);
+    
+    public UncheckedTimeoutException(TimeoutException exception) {
+        this.exception = exception;
     }
     
-    public CloseableLock(boolean fair) {
-        super(fair);
-        janitor = this::unlock;
+    public UncheckedTimeoutException(String message, TimeoutException exception) {
+        super(message);
+        this.exception = exception;
     }
     
     
-    
-    public Janitor acquire() {
-        lock();
-        return janitor;
-    }
-    
-    public Janitor acquireInterruptibly() throws InterruptedException {
-        lockInterruptibly();
-        return janitor;
+    @Override
+    public TimeoutException getCause() {
+        return exception;
     }
     
 }

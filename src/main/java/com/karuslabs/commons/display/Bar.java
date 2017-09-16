@@ -23,68 +23,41 @@
  */
 package com.karuslabs.commons.display;
 
-import com.google.common.cache.*;
-
 import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.UncheckedFuture;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Collection;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 
 
-public abstract class Bar<GenericTask extends Task> {
+public abstract class Bar<T> {
     
-    protected Cache<Player, GenericTask> tasks;
+    protected Plugin plugin;
     protected Translation translation;
-    protected Consumer<GenericTask> prerender;
-    protected Consumer<GenericTask> cancellation;
     protected long frames;
     protected long delay;
     protected long period;
     
     
-    public Bar(Translation translation, Consumer<GenericTask> prerender, Consumer<GenericTask> cancellation, long frames, long delay, long period) {
-        this.tasks = CacheBuilder.newBuilder().weakKeys().weakValues().build();
+    public Bar(Plugin plugin, Translation translation, long frames, long delay, long period) {
+        this.plugin = plugin;
         this.translation = translation;
-        this.prerender = prerender;
-        this.cancellation = cancellation;
         this.frames = frames;
         this.delay = delay;
         this.period = period;
     }
     
     
-    public void render(Player player, boolean override) {
-        render(asList(player), override);
-    }
+    public UncheckedFuture<T> render(Player... players) {
+        return render(asList(players));
+    } 
     
-    public void render(Collection<Player> players, boolean override) {
-        if (override) {
-            players.forEach(this::cancel);
-            
-        } else {
-            players = players.stream().filter(player -> tasks.getIfPresent(player) == null).collect(toList());
-        }
-        
-        if (!players.isEmpty()) {
-            render(players);
-        }
-    }
-    
-    protected abstract void render(Collection<Player> player);
-    
-    
-    public void cancel(Player player) {
-        GenericTask task = tasks.getIfPresent(player);
-        if (task != null) {
-            task.cancel(player);
-        }
-    }
-    
+    public abstract UncheckedFuture<T> render(Collection<Player> players);
+
     
     public Translation getTranslation() {
         return translation;
@@ -104,43 +77,41 @@ public abstract class Bar<GenericTask extends Task> {
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {
-        
+
         protected GenericBar bar;
-        
+
         
         public Builder(GenericBar bar) {
             this.bar = bar;
         }
-        
+
         
         public GenericBuilder translation(Translation translation) {
             bar.translation = translation;
             return getThis();
         }
-        
+
         public GenericBuilder frames(long frames) {
             bar.frames = frames;
             return getThis();
         }
-        
+
         public GenericBuilder delay(long delay) {
             bar.delay = delay;
             return getThis();
         }
-        
+
         public GenericBuilder period(long period) {
             bar.period = period;
             return getThis();
         }
-        
-        
+
         public GenericBar build() {
             return bar;
         }
-        
+
         
         protected abstract GenericBuilder getThis();
         
     }
-    
 }

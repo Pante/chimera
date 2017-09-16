@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.commons.util.concurrent.locks.Janitor;
+import com.karuslabs.commons.util.concurrent.locks.CloseableLock;
 import java.util.function.Supplier;
 
 import junitparams.*;
