@@ -31,16 +31,16 @@ import java.util.function.*;
 import org.bukkit.entity.Player;
 
 
-public class TitleBarTask extends TranslatableTask<Set<Player>> {
+public class TitleBarTask extends BarTask<Set<Player>> {
     
     private Set<Player> players;
-    private BiConsumer<Player, TitleBarTask> consumer;
+    private BiConsumer<TitleBarTask, Player> consumer;
     private int fadeIn;
     private int stay;
     private int fadeOut;
     
     
-    public TitleBarTask(long iterations, Translation translation, BiConsumer<Player, TitleBarTask> consumer, int fadeIn, int stay, int fadeOut) {
+    public TitleBarTask(long iterations, Translation translation, BiConsumer<TitleBarTask, Player> consumer, int fadeIn, int stay, int fadeOut) {
         super(iterations, translation);
         this.consumer = consumer;
         this.fadeIn = fadeIn;
@@ -51,7 +51,7 @@ public class TitleBarTask extends TranslatableTask<Set<Player>> {
 
     @Override
     protected void process() {
-        players.forEach(player -> consumer.accept(player, this));
+        players.forEach(player -> consumer.accept(this, player));
     }
 
     @Override

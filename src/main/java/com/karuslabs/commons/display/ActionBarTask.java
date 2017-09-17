@@ -34,13 +34,13 @@ import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
 
-public class ActionBarTask extends TranslatableTask<Set<Player>> {
+public class ActionBarTask extends BarTask<Set<Player>> {
     
     protected Set<Player> players;
-    protected BiFunction<Player, ActionBarTask, String> function;
+    protected BiFunction<ActionBarTask, Player, String> function;
     
     
-    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<Player, ActionBarTask, String> function) {
+    public ActionBarTask(long iterations, Translation translation,Set<Player> players, BiFunction<ActionBarTask, Player, String> function) {
         super(iterations, translation);
         this.players = players;
         this.function = function;
@@ -49,13 +49,14 @@ public class ActionBarTask extends TranslatableTask<Set<Player>> {
     
     @Override
     protected void process() {
-        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
+        players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(this, player))));
     }
     
     @Override
     protected Set<Player> value() {
         return players;
     }
+    
     
     public Set<Player> getPlayers() {
         return players;

@@ -21,38 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.display;
 
-import java.util.concurrent.*;
+import com.karuslabs.commons.locale.Translation;
+
+import java.util.function.BiConsumer;
+
+import org.bukkit.boss.BossBar;
 
 
-public interface UncheckedFuture<T> extends Future<T> {
+public class SharedProgressBarTask extends BarTask<BossBar> {
     
-    public default T getUnchecked() {
-        try {
-            return get();
-            
-        } catch (InterruptedException e) {
-            throw new UncheckedInterruptedException(e);
-            
-        } catch (ExecutionException e) {
-            throw new UncheckedExecutionException(e);
-        }
+    private BossBar bar;
+    private BiConsumer<SharedProgressBarTask, BossBar> consumer;
+    
+    
+    public SharedProgressBarTask(long iterations, Translation translation, BossBar bar, BiConsumer<SharedProgressBarTask, BossBar> consumer) {
+        super(iterations, translation);
+        this.bar = bar;
+        this.consumer = consumer;
+    }
+
+    
+    @Override
+    protected void process() {
+        consumer.accept(this, bar);
+    }
+
+    @Override
+    protected BossBar value() {
+        return bar;
     }
     
-    public default T getUnchecked(long timeout, TimeUnit unit) {
-        try {
-            return get(timeout, unit);
-            
-        } catch (InterruptedException e) {
-            throw new UncheckedInterruptedException(e);
-            
-        } catch (ExecutionException e) {
-            throw new UncheckedExecutionException(e);
-            
-        } catch (TimeoutException e) {
-            throw new UncheckedTimeoutException(e);
-        }
+    
+    public BossBar getBar() {
+        return bar;
     }
     
 }

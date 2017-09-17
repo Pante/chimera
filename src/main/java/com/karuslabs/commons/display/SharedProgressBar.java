@@ -24,55 +24,55 @@
 package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
-
 import com.karuslabs.commons.util.concurrent.Promise;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.function.BiConsumer;
 
 import org.bukkit.boss.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.stream.Collectors.toList;
 
-
-public class ProgressBar extends AbstractBar<List<BossBar>, ProgressBarTask> {
+public class SharedProgressBar extends AbstractBar<BossBar, SharedProgressBarTask> {
     
-    private static final BiConsumer<ProgressBarTask, BossBar> CONSUMER = (task, bar) -> {};
+    private static final BiConsumer<SharedProgressBarTask, BossBar> CONSUMER = (task, bar) -> {};
+    
+    
+    private BiConsumer<SharedProgressBarTask, BossBar> consumer;
 
     
-    public ProgressBar(Plugin plugin, Translation translation, BiConsumer<ProgressBarTask, BossBar> consumer, BarColor color, BarStyle style, BarFlag[] flags, double progress, long frames, long delay, long period) {
+    public SharedProgressBar(Plugin plugin, Translation translation, BiConsumer<SharedProgressBarTask, BossBar> consumer, BarColor color, BarStyle style, BarFlag[] flags, double progress, long frames, long delay, long period) {
         super(plugin, translation, consumer, color, style, flags, progress, frames, delay, period);
     }
 
-    
+
     
     @Override
-    public Promise<List<BossBar>> render(Collection<Player> players) {
-        List<BossBar> bars = players.stream().map(this::create).collect(toList());
-                
-        ProgressBarTask task = new ProgressBarTask(frames, translation, bars, consumer);
+    public Promise<BossBar> render(Collection<Player> players) {
+        BossBar bar = create();
+        players.forEach(bar::addPlayer);
+        
+        SharedProgressBarTask task = new SharedProgressBarTask(frames, translation, bar, consumer);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         
         return task;
     }
     
     
-    public static ProgressBarBuilder builder(Plugin plugin) {
-        return new ProgressBarBuilder(new ProgressBar(plugin, Translation.NONE, CONSUMER, BarColor.BLUE, BarStyle.SEGMENTED_10, FLAGS, 0, 0, 0, 0));
+    public static SharedProgressBarBuilder builder(Plugin plugin) {
+        return new SharedProgressBarBuilder(new SharedProgressBar(plugin, Translation.NONE, CONSUMER, BarColor.BLUE, BarStyle.SEGMENTED_10, FLAGS, 0, 0, 0, 0));
     }
     
+    
+    public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar, SharedProgressBarTask> {
 
-    public static class ProgressBarBuilder extends AbstractBuilder<ProgressBarBuilder, ProgressBar, ProgressBarTask> {
-
-        public ProgressBarBuilder(ProgressBar bar) {
+        public SharedProgressBarBuilder(SharedProgressBar bar) {
             super(bar);
         }
-        
-        
+
         @Override
-        protected ProgressBarBuilder getThis() {
+        protected SharedProgressBarBuilder getThis() {
             return this;
         }
         

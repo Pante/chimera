@@ -24,7 +24,7 @@
 package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.UncheckedFuture;
+import com.karuslabs.commons.util.concurrent.Promise;
 
 import java.util.Collection;
 
@@ -52,11 +52,11 @@ public abstract class Bar<T> {
     }
     
     
-    public UncheckedFuture<T> render(Player... players) {
+    public Promise<T> render(Player... players) {
         return render(asList(players));
     } 
     
-    public abstract UncheckedFuture<T> render(Collection<Player> players);
+    public abstract Promise<T> render(Collection<Player> players);
 
     
     public Translation getTranslation() {

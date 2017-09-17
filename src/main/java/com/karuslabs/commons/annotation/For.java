@@ -21,9 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.annotation;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class TaskTest {
+@Documented
+@Target({FIELD, LOCAL_VARIABLE, PARAMETER, METHOD, TYPE_USE})
+@Retention(RUNTIME)
+public @interface For {
+    
+    Reason value();
+    
+    public enum Reason {
+        Testing
+    }
     
 }

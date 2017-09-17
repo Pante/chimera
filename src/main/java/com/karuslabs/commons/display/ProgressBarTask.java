@@ -31,13 +31,13 @@ import java.util.function.*;
 import org.bukkit.boss.BossBar;
 
 
-public class ProgressBarTask extends TranslatableTask<List<BossBar>> {
+public class ProgressBarTask extends BarTask<List<BossBar>> {
     
     private List<BossBar> bars;
-    private BiConsumer<BossBar, ProgressBarTask> consumer;
+    private BiConsumer<ProgressBarTask, BossBar> consumer;
 
     
-    public ProgressBarTask(long iterations, Translation translation, List<BossBar> bars, BiConsumer<BossBar, ProgressBarTask> consumer) {
+    public ProgressBarTask(long iterations, Translation translation, List<BossBar> bars, BiConsumer<ProgressBarTask, BossBar> consumer) {
         super(iterations, translation);
         this.bars = bars;
         this.consumer = consumer;
@@ -46,7 +46,7 @@ public class ProgressBarTask extends TranslatableTask<List<BossBar>> {
     
     @Override
     protected void process() {
-        bars.forEach(bar -> consumer.accept(bar, this));
+        bars.forEach(bar -> consumer.accept(this, bar));
     }
 
     @Override

@@ -21,45 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.display;
 
-import org.bukkit.scheduler.BukkitRunnable;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.PromiseTask;
 
 
-public abstract class Task extends BukkitRunnable {
-
-    private long total;
-    private long current;
+public abstract class BarTask<T> extends PromiseTask<T> {
+    
+    private Translation translation;
     
     
-    public Task(long iterations) {
-        this.total = iterations;
-        this.current = 0;
+    public BarTask(long iterations, Translation translation) {
+        super(iterations);
+        this.translation = translation.copy();
     }
     
     
-    @Override
-    public void run() {
-        if (current < total) {
-            process();
-            current++;
-            
-        } else {
-            end();
-        }
-    }
-    
-    protected abstract void process();
-    
-    protected abstract void end();
-    
-
-    public long getTotal() {
-        return total;
-    }
-
-    public long getCurrent() {
-        return current;
+    public Translation getTranslation() {
+        return translation;
     }
     
 }

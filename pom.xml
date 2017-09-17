@@ -88,13 +88,6 @@
         </dependency>
         
         <dependency>
-            <groupId>com.karuslabs</groupId>
-            <artifactId>mockkit</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-junit</artifactId>
             <version>2.0.0.0</version>
@@ -107,7 +100,7 @@
             <version>2.0.0.0</version>
             <scope>test</scope>
         </dependency>
-         
+        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

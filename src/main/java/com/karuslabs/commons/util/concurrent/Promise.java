@@ -21,25 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.CallbackTask;
+import java.util.concurrent.*;
 
 
-public abstract class TranslatableTask<T> extends CallbackTask<T> {
+public interface Promise<T> extends Future<T> {
     
-    private Translation translation;
-    
-    
-    public TranslatableTask(long iterations, Translation translation) {
-        super(iterations);
-        this.translation = translation.copy();
+    public default T obtain() {
+        try {
+            return get();
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
+        }
     }
     
-    
-    public Translation getTranslation() {
-        return translation;
+    public default T obtain(long timeout, TimeUnit unit) {
+        try {
+            return get(timeout, unit);
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
+            
+        } catch (TimeoutException e) {
+            throw new UncheckedTimeoutException(e);
+        }
     }
     
 }

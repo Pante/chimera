@@ -24,7 +24,7 @@
 package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.UncheckedFuture;
+import com.karuslabs.commons.util.concurrent.Promise;
 
 import java.util.*;
 import java.util.function.*;
@@ -35,16 +35,15 @@ import org.bukkit.plugin.Plugin;
 
 public class TitleBar extends Bar<Set<Player>> {
     
-    private static final Consumer<TitleBarTask> PRERENDER = task -> {};
-    private static final BiConsumer<Player, TitleBarTask> CONSUMER = (player, task) -> {};
+    private static final BiConsumer<TitleBarTask, Player> CONSUMER = (task, player) -> {};
     
-    private BiConsumer<Player, TitleBarTask> consumer;
+    private BiConsumer<TitleBarTask, Player> consumer;
     private int fadeIn;
     private int stay;
     private int fadeOut;
     
     
-    public TitleBar(Plugin plugin, Translation translation, BiConsumer<Player, TitleBarTask> consumer, long frames, long delay, long period, int fadeIn, int stay, int fadeOut) {
+    public TitleBar(Plugin plugin, Translation translation, BiConsumer<TitleBarTask, Player> consumer, long frames, long delay, long period, int fadeIn, int stay, int fadeOut) {
         super(plugin, translation, frames, delay, period);
         this.consumer = consumer;
         this.fadeIn = fadeIn;
@@ -54,7 +53,7 @@ public class TitleBar extends Bar<Set<Player>> {
 
     
     @Override
-    public UncheckedFuture<Set<Player>> render(Collection<Player> players) {
+    public Promise<Set<Player>> render(Collection<Player> players) {
         TitleBarTask task = new TitleBarTask(frames, translation, consumer, fadeIn, stay, fadeOut);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         
@@ -87,7 +86,7 @@ public class TitleBar extends Bar<Set<Player>> {
         }
         
         
-        public TitleBarBuilder consumer(BiConsumer<Player, TitleBarTask> consumer) {
+        public TitleBarBuilder consumer(BiConsumer<TitleBarTask, Player> consumer) {
             bar.consumer = consumer;
             return this;
         }

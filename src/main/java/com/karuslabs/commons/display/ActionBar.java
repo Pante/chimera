@@ -24,7 +24,7 @@
 package com.karuslabs.commons.display;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.UncheckedFuture;
+import com.karuslabs.commons.util.concurrent.Promise;
 
 import java.util.*;
 import java.util.function.*;
@@ -37,20 +37,20 @@ import static com.karuslabs.commons.collection.Sets.weakSet;
 
 public class ActionBar extends Bar<Set<Player>> {
     
-    private static final BiFunction<Player, ActionBarTask, String> FUNCTION = (player, task) -> "";
+    private static final BiFunction<ActionBarTask, Player, String> FUNCTION = (task, player) -> "";
     
     
-    private BiFunction<Player, ActionBarTask, String> function;
+    private BiFunction<ActionBarTask, Player, String> function;
     
     
-    public ActionBar(Plugin plugin, Translation translation, BiFunction<Player, ActionBarTask, String> function, long frames, long delay, long period) {
+    public ActionBar(Plugin plugin, Translation translation, BiFunction<ActionBarTask, Player, String> function, long frames, long delay, long period) {
         super(plugin, translation, frames, delay, period);
         this.function = function;
     }
 
     
     @Override
-    public UncheckedFuture<Set<Player>> render(Collection<Player> players) {
+    public Promise<Set<Player>> render(Collection<Player> players) {
         ActionBarTask task = new ActionBarTask(frames, translation, weakSet(players), function);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         
@@ -70,7 +70,7 @@ public class ActionBar extends Bar<Set<Player>> {
         }
         
         
-        public ActionBarBuilder function(BiFunction<Player, ActionBarTask, String> function) {
+        public ActionBarBuilder function(BiFunction<ActionBarTask, Player, String> function) {
             bar.function = function;
             return this;
         }
