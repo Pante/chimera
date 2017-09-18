@@ -59,7 +59,7 @@ public class CommandElement extends Element<Command> {
 
     
     @Override
-    protected @Nullable Command parse(ConfigurationSection config) {
+    protected Command parse(ConfigurationSection config) {
         Command command = new Command(
             config.getName(),
             Get.orDefault(config.getString("description"), ""),

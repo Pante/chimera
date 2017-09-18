@@ -61,4 +61,9 @@ public class FileResource implements Resource {
         return file.isFile() && file.canRead();
     }
     
+    
+    public String getPath() {
+        return folder.getPath();
+    }
+    
 }

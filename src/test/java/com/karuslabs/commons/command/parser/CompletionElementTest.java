@@ -23,74 +23,45 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.*;
+import com.karuslabs.commons.command.completion.CachedCompletion;
+
+import java.util.List;
 
 import junitparams.*;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import org.junit.*;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
 @RunWith(JUnitParamsRunner.class)
-public class ElementTest {
+public class CompletionElementTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    private Element<String> element;
-    private Map<String, String> definitions;
+    private CompletionElement element;
     
     
-    public ElementTest() {
-        element = spy(new Element<String>(definitions = spy(new HashMap<>())) {});
-    }
-    
-    
-    @Before
-    public void setup() {
-        definitions.clear();
-    }
-    
-    
-    @Test
-    public void define() {
-        doReturn("value").when(element).parse("value");
-        
-        element.define("key", "value");
-        
-        assertFalse(element.getDefinitions().isEmpty());
-        verify(element).parse("value");
+    public CompletionElementTest() {
+        element = spy(new CompletionElement());
     }
     
     
     @Test
     public void parse() {
-        element.getDefinitions().put("key", "value");
-        
-        assertEquals("value", element.parse("key"));
+        List<String> completions = singletonList("a");
+        assertThat(((CachedCompletion) element.parse(completions)).getCompletions(), equalTo(completions));
     }
     
     
     @Test
-    @Parameters
-    public void parse_ThrowsException(Object value) {
-        exception.expect(IllegalArgumentException.class);
+    public void parse_Null() {
+        doReturn(null).when((Element) element).parse(null);
         
-        element.parse(value);
-    }
-    
-    protected Object[] parametersForParse_ThrowsException() {
-        ConfigurationSection config = mock(ConfigurationSection.class);
-        
-        return new Object[] {
-            new Object(), config
-        };
+        assertNull(element.parse(null));
+        verify((Element) element).parse(null);
     }
     
 }

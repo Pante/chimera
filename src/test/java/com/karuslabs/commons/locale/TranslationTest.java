@@ -36,13 +36,23 @@ public class TranslationTest {
     
     
     public TranslationTest() {
-        translation = Translation.NONE;
+        translation = new Translation() {
+            @Override
+            protected String value(String key) {
+                return key;
+            }
+
+            @Override
+            public Translation copy() {
+                return null;
+            }
+        };
     }
     
     
     @Test
     public void format() {
-        assertEquals("key", translation.format("key"));
+        assertEquals("applied key", translation.format("applied {0}", "key"));
     }
     
     
@@ -56,8 +66,16 @@ public class TranslationTest {
     
     
     @Test
-    public void copy() {
-        assertEquals(Translation.NONE, translation.copy());
+    public void none_Locale() {
+        Locale before = Translation.NONE.format.getLocale();
+        Translation.NONE.locale(Locale.ROOT);
+        assertEquals(before, Translation.NONE.format.getLocale());
+    }
+    
+    
+    @Test
+    public void none_copy() {
+        assertEquals(Translation.NONE, Translation.NONE.copy());
     }
     
 }

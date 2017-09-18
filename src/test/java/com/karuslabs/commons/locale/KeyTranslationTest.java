@@ -21,38 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
+package com.karuslabs.commons.locale;
 
-import java.util.List;
+import java.util.Locale;
 
-import org.bukkit.command.CommandSender;
+import org.junit.Test;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-public class CachedCompletion implements Completion {
+public class KeyTranslationTest {
     
-    private List<String> completions;
+    private KeyTranslation translation;
     
     
-    public CachedCompletion(String... completions) {
-        this(asList(completions));
-    }
-    
-    public CachedCompletion(List<String> completions) {
-        this.completions = completions;
+    public KeyTranslationTest() {
+        translation = spy(new KeyTranslation());
     }
     
     
-    @Override
-    public List<String> complete(CommandSender sender, String argument) {
-        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
+    @Test
+    public void format() {
+        assertEquals("key", translation.format("key"));
     }
     
     
-    public List<String> getCompletions() {
-        return completions;
+    @Test
+    public void copy() {
+        translation.format.setLocale(Locale.PRC);
+        assertEquals(translation.format.getLocale(), translation.copy().format.getLocale());
     }
     
 }

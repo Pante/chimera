@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.util.Prototype;
 
 import java.text.MessageFormat;
@@ -35,13 +36,18 @@ public abstract class Translation implements Prototype<Translation> {
     public static final Translation NONE = new Translation() {
         
         @Override
-        public String format(String key, Object... arguments) {
-            return key;
+        public Translation copy() {
+            return this;
+        }
+        
+        @Override
+        public Translation locale(@Ignored Locale locale) {
+            return this;
         }
 
         @Override
-        public Translation copy() {
-            return this;
+        protected String value(String key) {
+            return key;
         }
         
     };
@@ -64,11 +70,17 @@ public abstract class Translation implements Prototype<Translation> {
         return this;
     }
     
-    public abstract @Nullable String format(String key, Object... arguments);
-    
-    protected String apply(String message, Object... arguments) {
-        format.applyPattern(message);
-        return format.format(arguments);
+    public @Nullable String format(String key, Object... arguments) {
+        String message = value(key);
+        if (message != null && arguments.length != 0) {
+            format.applyPattern(message);
+            return format.format(arguments);
+            
+        } else {
+            return message;
+        }   
     }
+    
+    protected abstract @Nullable String value(String key);
     
 }

@@ -50,4 +50,9 @@ public class EmbeddedResource implements Resource {
         return getClass().getClassLoader().getResource(path + name) != null;
     }
     
+    
+    public String getPath() {
+        return path;
+    }
+    
 }

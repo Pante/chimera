@@ -21,38 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
-
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
+package com.karuslabs.commons.command.parser;
 
 
-public class CachedCompletion implements Completion {
-    
-    private List<String> completions;
+public class CommandElementTest {
     
     
-    public CachedCompletion(String... completions) {
-        this(asList(completions));
-    }
-    
-    public CachedCompletion(List<String> completions) {
-        this.completions = completions;
-    }
-    
-    
-    @Override
-    public List<String> complete(CommandSender sender, String argument) {
-        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
-    }
-    
-    
-    public List<String> getCompletions() {
-        return completions;
-    }
     
 }

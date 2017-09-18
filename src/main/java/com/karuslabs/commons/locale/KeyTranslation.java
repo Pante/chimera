@@ -38,12 +38,13 @@ public class KeyTranslation extends Translation {
     
     
     @Override
-    public String format(String key, Object... arguments) {
-        return arguments.length == 0 ? key : apply(key, arguments);
+    protected String value(String key) {
+        return key;
     }
-
+    
+    
     @Override
-    public Translation copy() {
+    public KeyTranslation copy() {
         return new KeyTranslation(format.getLocale());
     }
     

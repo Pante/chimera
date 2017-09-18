@@ -13,8 +13,8 @@ define:
     translations:
         translation:
             bundle: Resource
-            embedded: [path]
-            folder: [path]
+            embedded: [path1]
+            folder: [path2]
 
 command:
     subcommands:

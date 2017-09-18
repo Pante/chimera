@@ -31,7 +31,7 @@ import java.util.*;
 import javax.annotation.Nullable;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 import static java.util.Collections.unmodifiableList;
 
 
@@ -85,6 +85,11 @@ public class Control extends ResourceBundle.Control {
     @Override
     public @Immutable List<String> getFormats(@Ignored String bundleName) {
         return FORMATS;
+    }
+    
+    
+    public @Immutable Resource[] getResources() {
+        return copyOf(resources, resources.length);
     }
     
 }

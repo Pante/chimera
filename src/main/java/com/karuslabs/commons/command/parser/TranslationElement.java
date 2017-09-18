@@ -52,14 +52,14 @@ public class TranslationElement extends Element<Translation> {
 
     
     @Override
-    protected @Nullable Translation parse(ConfigurationSection config) {
+    protected BundledTranslation parse(ConfigurationSection config) {
         String bundle = config.getString("bundle");
         if (bundle == null) {
-            return null;
+            throw new IllegalArgumentException("Failed to parse translation");
         }
         
-        List<Resource> resources = config.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).collect(toList());
         List<Resource> embedded = config.getStringList("embedded").stream().map(EmbeddedResource::new).collect(toList());
+        List<Resource> resources = config.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).collect(toList());
         
         resources.addAll(embedded);
         return new BundledTranslation(bundle, new Control(resources.toArray(new Resource[] {})));

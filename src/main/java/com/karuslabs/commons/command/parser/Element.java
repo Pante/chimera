@@ -40,26 +40,23 @@ public abstract class Element<T> {
     
     
     public void define(String key, Object value) {
-        T object = parse(value);
-        if (object != null) {
-            definitions.put(key, object);
-        }
+        definitions.put(key, parse(value));
     }
     
-    public @Nullable T parse(Object value) {
-        if (value instanceof String) {
+    public T parse(Object value) {
+        if (value instanceof String && definitions.containsKey(value)) {
             return definitions.get(value);
             
         } else if (value instanceof ConfigurationSection) {
             return parse((ConfigurationSection) value);
             
         } else {
-            return null;
+            throw new IllegalArgumentException("Failed to parse: " + value);
         }
     }
     
-    protected @Nullable T parse(ConfigurationSection config) {
-        return null;
+    protected T parse(ConfigurationSection config) {
+        throw new IllegalArgumentException("Failed to parse: " + config.getName());
     }
     
     

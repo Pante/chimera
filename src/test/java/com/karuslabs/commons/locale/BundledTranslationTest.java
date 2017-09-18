@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,35 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.meta;
+package com.karuslabs.commons.locale;
 
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import com.karuslabs.commons.locale.resources.EmbeddedResource;
+
+import java.util.Locale;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class SkullBuilderTest {
+public class BundledTranslationTest {
     
-    private SkullBuilder builder;
-    private SkullMeta meta;
+    private BundledTranslation translation;
     
     
-    public SkullBuilderTest() {
-        meta = mock(SkullMeta.class);
-        builder = new SkullBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+    public BundledTranslationTest() {
+        translation = spy(new BundledTranslation("Translation", new EmbeddedResource("locale")));
     }
     
     
     @Test
-    public void build() {
-        builder.owner(SkullBuilder.Name.ZOMBIE);
-        builder.owner("name");
+    public void format() {
+        assertEquals("value", translation.format("key"));
+    }
+    
+    
+    @Test
+    public void locale() {
+        Locale locale = new Locale("zh", "CN");
+        translation.locale(locale);
+        assertEquals(locale, translation.format.getLocale());
+        assertEquals(locale, translation.getBundle().getLocale());
+    }
+    
+    
+    @Test
+    public void copy() {
+        Locale locale = new Locale("zh", "CN");
+        BundledTranslation other = translation.locale(locale).copy();
         
-        verify(meta).setOwner(SkullBuilder.Name.ZOMBIE.getName());
-        verify(meta).setOwner("name");
+        assertEquals(other.format.getLocale(), translation.format.getLocale());
+        assertEquals(other.getBundleName(), translation.getBundleName());
+        assertEquals(other.getControl(), translation.getControl());
+        assertEquals(other.getBundle(), translation.getBundle());
     }
     
 }

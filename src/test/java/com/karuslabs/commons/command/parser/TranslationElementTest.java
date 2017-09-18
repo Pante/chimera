@@ -21,38 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
+package com.karuslabs.commons.command.parser;
 
-import java.util.List;
+import com.karuslabs.commons.locale.BundledTranslation;
+import com.karuslabs.commons.locale.resources.*;
 
-import org.bukkit.command.CommandSender;
+import java.io.File;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
+import org.bukkit.configuration.ConfigurationSection;
+
+import org.junit.Test;
+
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static org.junit.Assert.assertEquals;
 
 
-public class CachedCompletion implements Completion {
+public class TranslationElementTest {
     
-    private List<String> completions;
+    private static final ConfigurationSection TRANSLATION = COMMANDS.getConfigurationSection("define.translations.translation");
     
     
-    public CachedCompletion(String... completions) {
-        this(asList(completions));
+    private TranslationElement element;
+    private File folder;
+    
+    
+    public TranslationElementTest() {
+        element = new TranslationElement(folder = new File(""));
     }
     
-    public CachedCompletion(List<String> completions) {
-        this.completions = completions;
-    }
     
-    
-    @Override
-    public List<String> complete(CommandSender sender, String argument) {
-        return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
-    }
-    
-    
-    public List<String> getCompletions() {
-        return completions;
+    @Test
+    public void parse() {
+        BundledTranslation translation = element.parse(TRANSLATION);
+
+        Resource[] resources = translation.getControl().getResources();
+                
+        assertEquals("Resource", translation.getBundleName());
+        assertEquals(new File(folder, "path2").getPath(), ((FileResource) resources[0]).getPath());
+        assertEquals("path1/", ((EmbeddedResource) resources[1]).getPath());
     }
     
 }

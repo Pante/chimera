@@ -24,38 +24,50 @@
 package com.karuslabs.commons.locale;
 
 import java.util.Locale;
-import java.util.concurrent.ConcurrentMap;
-import javax.annotation.Nullable;
+import java.util.concurrent.ConcurrentHashMap;
+
+import junitparams.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class SingleTranslation extends Translation {
+@RunWith(JUnitParamsRunner.class)
+public class SingleTranslationTest {
     
-    private ConcurrentMap<String, String> messages;
-
+    private SingleTranslation translation;
     
-    public SingleTranslation(ConcurrentMap<String, String> cache) {
-        this(Locale.getDefault(Locale.Category.FORMAT), cache);
-    }
     
-    public SingleTranslation(Locale locale, ConcurrentMap<String, String> cache) {
-        super(locale);
-        this.messages = cache;
+    public SingleTranslationTest() {
+        translation = new SingleTranslation(new ConcurrentHashMap<>());
+        translation.getMessages().put("key", "value {0}");
     }
     
     
-    @Override
-    protected @Nullable String value(String key) {
-        return messages.get(key);
+    @Test
+    @Parameters
+    public void format(String key, Object[] arguments, String expected) {
+        assertEquals(expected, translation.format(key, arguments));
+    }
+    
+    protected Object[] parametersForFormat() {
+        return new Object[] {
+            new Object[] {"key", new Object[] {1}, "value 1"},
+            new Object[] {"null", new Object[] {1}, null},
+            new Object[] {"key", new Object[] {}, "value {0}"}
+        };
     }
     
     
-    public ConcurrentMap<String, String> getMessages() {
-        return messages;
-    }
-    
-    @Override
-    public SingleTranslation copy() {
-        return new SingleTranslation(format.getLocale(), messages);
+    @Test
+    public void copy() {
+        translation.format.setLocale(Locale.PRC);
+        SingleTranslation other = translation.copy();
+        
+        assertEquals(translation.format.getLocale(), other.format.getLocale());
+        assertEquals(translation.getMessages(), other.getMessages());
     }
     
 }

@@ -44,7 +44,7 @@ public class CompletionElement extends Element<Completion> {
 
     
     @Override
-    public @Nullable Completion parse(Object value) {
+    public Completion parse(Object value) {
         if (value instanceof List) {
             return new CachedCompletion((List<String>) value);
             
