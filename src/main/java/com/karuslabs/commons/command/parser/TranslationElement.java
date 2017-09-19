@@ -29,7 +29,6 @@ import com.karuslabs.commons.locale.resources.*;
 
 import java.io.File;
 import java.util.*;
-import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -52,7 +51,7 @@ public class TranslationElement extends Element<Translation> {
 
     
     @Override
-    protected BundledTranslation parse(ConfigurationSection config) {
+    protected BundledTranslation parseConfigurationSection(ConfigurationSection config) {
         String bundle = config.getString("bundle");
         if (bundle == null) {
             throw new IllegalArgumentException("Failed to parse translation");

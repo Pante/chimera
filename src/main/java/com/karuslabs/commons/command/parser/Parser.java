@@ -28,6 +28,7 @@ import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.Translation;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -36,48 +37,50 @@ import static java.util.stream.Collectors.toList;
 
 public class Parser {
     
-    private Element<Command> commands;
-    private Element<Completion> completions;
-    private Element<Translation> translations;
+    private Element<Command> command;
+    private Element<Completion> completion;
+    private Element<Translation> translation;
     
     
-    public Parser(Element<Command> commands, Element<Completion> completions, Element<Translation> translations) {
-        this.commands = commands;
-        this.completions = completions;
-        this.translations = translations;
+    public Parser(Element<Command> command, Element<Completion> completion, Element<Translation> translation) {
+        this.command = command;
+        this.completion = completion;
+        this.translation = translation;
     }
     
     
     public List<Command> parse(ConfigurationSection config) {
         parseDefinitions(config.getConfigurationSection("define"));
-        return config.getKeys(false).stream().filter(key -> !key.equals("define")).map(key -> commands.parse(config.get(key))).collect(toList());
+        
+        ConfigurationSection aConfig = config.getConfigurationSection("commands");
+        return aConfig.getKeys(false).stream().map(key -> command.parse(aConfig.get(key))).collect(toList());
     }
     
-    protected void parseDefinitions(ConfigurationSection config) {
+    protected void parseDefinitions(@Nullable ConfigurationSection config) {
         if (config != null) {
-            parseDefinitions(config.getConfigurationSection("completions"), completions);
-            parseDefinitions(config.getConfigurationSection("translations"), translations);
-            parseDefinitions(config.getConfigurationSection("commands"), commands);
+            parseDefinition(config.getConfigurationSection("completions"), completion);
+            parseDefinition(config.getConfigurationSection("translations"), translation);
+            parseDefinition(config.getConfigurationSection("commands"), command);
         }
     }
     
-    protected void parseDefinitions(ConfigurationSection config, Element<?> element) {
+    protected void parseDefinition(@Nullable ConfigurationSection config, Element<?> element) {
         if (config != null) {
             config.getKeys(false).forEach(key -> element.define(key, config.get(key)));
         }
     }
 
     
-    public Element<Command> getCommands() {
-        return commands;
+    public Element<Command> getCommand() {
+        return command;
     }
 
-    public Element<Completion> getCompletions() {
-        return completions;
+    public Element<Completion> getCompletion() {
+        return completion;
     }
 
-    public Element<Translation> getTranslations() {
-        return translations;
+    public Element<Translation> getTranslation() {
+        return translation;
     }
     
 }

@@ -51,8 +51,8 @@ public class TranslationElementTest {
     
     
     @Test
-    public void parse() {
-        BundledTranslation translation = element.parse(TRANSLATION);
+    public void parseConfigurationSection() {
+        BundledTranslation translation = element.parseConfigurationSection(TRANSLATION);
 
         Resource[] resources = translation.getControl().getResources();
                 

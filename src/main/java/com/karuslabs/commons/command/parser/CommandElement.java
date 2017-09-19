@@ -35,7 +35,6 @@ import javax.annotation.Nullable;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 
@@ -59,15 +58,15 @@ public class CommandElement extends Element<Command> {
 
     
     @Override
-    protected Command parse(ConfigurationSection config) {
+    protected Command parseConfigurationSection(ConfigurationSection config) {        
         Command command = new Command(
             config.getName(),
-            Get.orDefault(config.getString("description"), ""),
-            Get.orDefault(config.getString("usage"), ""),
+            config.getString("description", ""),
+            config.getString("usage", ""),
             config.getStringList("aliases"),
             plugin,
             CommandExecutor.NONE,
-            Get.orDefault(translation.parse(config.getConfigurationSection("translation")), Translation.NONE),
+            parseTranslation(config.getConfigurationSection("translation")),
             parseCommands(config.getConfigurationSection("subcommands")),
             parseCompletions(config.getConfigurationSection("completions"))
         );
@@ -78,21 +77,39 @@ public class CommandElement extends Element<Command> {
         return command;
     }
     
-    protected Map<String, Command> parseCommands(ConfigurationSection config) {
+    protected Map<String, Command> parseCommands(@Nullable ConfigurationSection config) {
+        Map<String, Command> commands = new HashMap<>();
         if (config != null) {
-            return config.getKeys(false).stream().collect(toMap(identity(), key -> parse(config.get(key))));
-            
-        } else {
-            return new HashMap<>();
+            config.getKeys(false).forEach(key -> {
+                Object value = config.get(key);
+                if (value instanceof String && !key.equals(value)) {
+                    throw new IllegalArgumentException("non-matching command names: " + key + " and " + value);
+                }
+                
+                Command command = parse(value);
+                commands.put(key, command);
+                command.getAliases().forEach(alias -> commands.put(alias, command));
+            });
         }
+        
+        return commands;
     }
     
-    protected Map<Integer, Completion> parseCompletions(ConfigurationSection config) {
+    protected Map<Integer, Completion> parseCompletions(@Nullable ConfigurationSection config) {
         if (config != null) {
             return config.getKeys(false).stream().collect(toMap(Integer::parseInt, key -> completion.parse(config.get(key))));
             
         } else {
            return new HashMap<>(); 
+        }
+    }
+    
+    protected Translation parseTranslation(@Nullable Object value) {
+        if (value != null) {
+            return translation.parse(value);
+            
+        } else {
+            return Translation.NONE;
         }
     }
     

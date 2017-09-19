@@ -23,44 +23,30 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.*;
+import java.io.File;
 
-import org.bukkit.configuration.ConfigurationSection;
+import org.junit.Test;
+
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 
 
-public abstract class Element<T> {    
+public class ParserIT {
     
-    protected Map<String, T> definitions;
+    private Parser parser;
     
     
-    public Element(Map<String, T> definitions) {
-        this.definitions = definitions;
+    public ParserIT() {
+        CompletionElement completion = new CompletionElement();
+        TranslationElement translations = new TranslationElement(new File(""));
+        
+        parser = new Parser(new CommandElement(null, completion, translations), completion, translations);
     }
     
     
-    public void define(String key, Object value) {
-        definitions.put(key, parse(value));
-    }
-    
-    public T parse(Object value) {
-        if (value instanceof String && definitions.containsKey(value)) {
-            return definitions.get(value);
-            
-        } else if (value instanceof ConfigurationSection) {
-            return parseConfigurationSection((ConfigurationSection) value);
-            
-        } else {
-            throw new IllegalArgumentException("Failed to parse token: " + value);
-        }
-    }
-    
-    protected T parseConfigurationSection(ConfigurationSection config) {
-        throw new IllegalArgumentException("Failed to parse: " + config.getName());
-    }
-    
-    
-    public Map<String, T> getDefinitions() {
-        return definitions;
+    @Test
+    public void parse() {
+        parser.parse(COMMANDS);
+        // TODO
     }
     
 }

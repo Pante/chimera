@@ -21,46 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.collection;
 
-import java.util.*;
+import org.junit.Test;
 
-import org.bukkit.configuration.ConfigurationSection;
+import java.util.Set;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
-public abstract class Element<T> {    
+public class SetsTest {
     
-    protected Map<String, T> definitions;
-    
-    
-    public Element(Map<String, T> definitions) {
-        this.definitions = definitions;
-    }
-    
-    
-    public void define(String key, Object value) {
-        definitions.put(key, parse(value));
-    }
-    
-    public T parse(Object value) {
-        if (value instanceof String && definitions.containsKey(value)) {
-            return definitions.get(value);
-            
-        } else if (value instanceof ConfigurationSection) {
-            return parseConfigurationSection((ConfigurationSection) value);
-            
-        } else {
-            throw new IllegalArgumentException("Failed to parse token: " + value);
-        }
-    }
-    
-    protected T parseConfigurationSection(ConfigurationSection config) {
-        throw new IllegalArgumentException("Failed to parse: " + config.getName());
-    }
-    
-    
-    public Map<String, T> getDefinitions() {
-        return definitions;
+    @Test
+    public void weakSet() {
+        Set<String> set = Sets.weakSet(asList("a"));
+        assertThat(set, equalTo(singleton("a")));
     }
     
 }

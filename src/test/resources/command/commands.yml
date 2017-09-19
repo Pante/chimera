@@ -1,6 +1,6 @@
 define:
     commands:
-        command:
+        help:
             aliases: [a, b, c]
             description: description
             permission: command.permission
@@ -16,18 +16,25 @@ define:
             embedded: [path1]
             folder: [path2]
 
-command:
-    subcommands:
-        a: command
-        b:
-            translation:
-                bundle: Resource
-                embedded: [path]
-        
-    completions:
-        0: completion
-        1: [a, b, c]
-        
-    translation: translation
+commands:
+    command:
+        aliases: [a, b, c]
+        description: description
+        permission: command.permission
+        permission-message: message
+        usage: usage
+        subcommands:
+            help: help
+            b:
+                aliases: [b-alias]
+                translation:
+                    bundle: Resource
+                    embedded: [path]
+
+        completions:
+            0: completion
+            2: [a, b, c]
+
+        translation: translation
     
             

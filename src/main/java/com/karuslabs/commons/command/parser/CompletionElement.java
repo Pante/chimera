@@ -23,11 +23,9 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.command.completion.CachedCompletion;
+import com.karuslabs.commons.command.completion.*;
 
 import java.util.*;
-import javax.annotation.Nullable;
-import com.karuslabs.commons.command.completion.Completion;
 
 
 public class CompletionElement extends Element<Completion> {    
