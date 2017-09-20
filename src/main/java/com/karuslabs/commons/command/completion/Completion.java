@@ -39,9 +39,9 @@ public interface Completion {
     
     
     public static final Completion PLAYER_NAMES = (sender, argument) -> 
-            Bukkit.getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
+            sender.getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
     public static final Completion WORLD_NAMES = (sender, argument) -> 
-            Bukkit.getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+            sender.getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
 }

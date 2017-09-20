@@ -26,8 +26,6 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Get;
-
 
 import java.util.*;
 import javax.annotation.Nullable;
@@ -66,13 +64,13 @@ public class CommandElement extends Element<Command> {
             config.getStringList("aliases"),
             plugin,
             CommandExecutor.NONE,
-            parseTranslation(config.getConfigurationSection("translation")),
+            parseTranslation(config.get("translation")),
             parseCommands(config.getConfigurationSection("subcommands")),
             parseCompletions(config.getConfigurationSection("completions"))
         );
         
-        command.setPermission(Get.orDefault("permission", ""));
-        command.setPermissionMessage(Get.orDefault("permission-message", ""));
+        command.setPermission(config.getString("permission", ""));
+        command.setPermissionMessage(config.getString("permission-message", ""));
         
         return command;
     }

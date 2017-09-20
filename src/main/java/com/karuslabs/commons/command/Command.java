@@ -30,7 +30,6 @@ import com.karuslabs.commons.locale.Translation;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import javax.annotation.Nullable;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
@@ -41,7 +40,11 @@ import static java.util.stream.Collectors.toList;
 
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
     
-    private static final Pattern PATTERN = Pattern.compile(" (?=(([^'\"]*['\"]){2})*[^'\"]*$)");
+    private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
+    
+    public static String[] split(String[] arguments) {
+        return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
+    }
     
     
     private Plugin plugin;
@@ -51,7 +54,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     private Map<Integer, Completion> completions;
     
     
-    public Command(String name, Plugin plugin, @Nullable Translation translation) {
+    public Command(String name, Plugin plugin, Translation translation) {
         this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE, translation);
     }
     
@@ -71,7 +74,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(sender, label, null, this), new Arguments(PATTERN.split(String.join(" ", args))));
+        return execute(new Context(sender, label, null, this), new Arguments(split(args)));
     }
     
     public boolean execute(Context context, Arguments arguments) {
@@ -79,8 +82,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         Command subcommand = subcommands.get(argument);
         
         if (subcommand != null) {
-            context.update(argument, subcommand);
             arguments.trim();
+            context.update(argument, subcommand);
             return subcommand.execute(context, arguments);
             
         } else {
@@ -91,7 +94,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return complete(sender, new Arguments(args));
+        return complete(sender, new Arguments(split(args)));
     }
     
     public List<String> complete(CommandSender sender, Arguments arguments) {

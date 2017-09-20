@@ -3,7 +3,7 @@ define:
         help:
             aliases: [a, b, c]
             description: description
-            permission: command.permission
+            permission: help.permission
             permission-message: message
             usage: usage
         

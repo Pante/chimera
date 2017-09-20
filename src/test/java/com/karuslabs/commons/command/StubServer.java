@@ -46,11 +46,19 @@ import org.bukkit.util.CachedServerIcon;
 
 public class StubServer implements Server {
     
-    private final SimpleCommandMap commandMap;
+    private SimpleCommandMap commandMap;
+    private List<Player> players;
+    private List<World> worlds;
     
     
     public StubServer(SimpleCommandMap commandMap) {
         this.commandMap = commandMap;
+    }
+    
+    
+    public StubServer(List<Player> players, List<World> worlds) {
+        this.players = players;
+        this.worlds = worlds;
     }
     
     
@@ -70,8 +78,8 @@ public class StubServer implements Server {
     }
 
     @Override
-    public Collection<? extends Player> getOnlinePlayers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Player> getOnlinePlayers() {
+        return players;
     }
 
     @Override
@@ -211,7 +219,7 @@ public class StubServer implements Server {
 
     @Override
     public List<World> getWorlds() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return worlds;
     }
 
     @Override

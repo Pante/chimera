@@ -25,7 +25,7 @@ package com.karuslabs.commons.collection;
 
 import org.junit.Test;
 
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
@@ -34,6 +34,12 @@ import static org.junit.Assert.assertThat;
 
 
 public class SetsTest {
+    
+    @Test
+    public void asSet() {
+        assertThat(Sets.asSet(1, 2, 3), equalTo(new HashSet<>(asList(1, 2, 3))));
+    }
+    
     
     @Test
     public void weakSet() {

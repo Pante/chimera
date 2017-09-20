@@ -30,13 +30,18 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static org.junit.Assert.assertEquals;
 
 
 public class TranslationElementTest {
+    
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+    
     
     private static final ConfigurationSection TRANSLATION = COMMANDS.getConfigurationSection("define.translations.translation");
     
@@ -59,6 +64,15 @@ public class TranslationElementTest {
         assertEquals("Resource", translation.getBundleName());
         assertEquals(new File(folder, "path2").getPath(), ((FileResource) resources[0]).getPath());
         assertEquals("path1/", ((EmbeddedResource) resources[1]).getPath());
+    }
+    
+    
+    @Test
+    public void parseConfigurationSection_ThrowsException() {
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage("Failed to parse translation: bundle name undefined");
+        
+        element.parseConfigurationSection(COMMANDS);
     }
     
 }

@@ -23,11 +23,19 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.command.Command;
+import com.karuslabs.commons.locale.BundledTranslation;
+
+import java.util.*;
 import java.io.File;
 
 import org.junit.Test;
 
+import static com.karuslabs.commons.collection.Sets.asSet;
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.*;
 
 
 public class ParserIT {
@@ -45,8 +53,29 @@ public class ParserIT {
     
     @Test
     public void parse() {
-        parser.parse(COMMANDS);
-        // TODO
+        List<Command> commands = parser.parse(COMMANDS);
+        Command command = commands.get(0);
+        
+        Map<String, Command> subcommands = command.getSubcommands();
+        Command help = subcommands.get("help");
+        Command subcommand = subcommands.get("b");
+        
+        assertEquals(1, commands.size());
+        assertEquals("command", command.getName());
+        assertEquals("description", command.getDescription());
+        assertEquals("command.permission", command.getPermission());
+        assertEquals("message", command.getPermissionMessage());
+        assertEquals("usage", command.getUsage());
+        assertEquals(2, command.getCompletions().size());
+        assertEquals("Resource", ((BundledTranslation) command.getTranslation()).getBundleName());
+        
+        assertThat(subcommands.keySet(), equalTo(asSet("help", "a", "b", "c", "b", "b-alias")));
+        
+        assertThat(help.getAliases(), equalTo(asList("a", "b", "c")));
+        assertEquals("help.permission", help.getPermission());
+        
+        assertThat(subcommand.getAliases(), equalTo(asList("b-alias")));
+        assertEquals("Resource", ((BundledTranslation) subcommand.getTranslation()).getBundleName());
     }
     
 }

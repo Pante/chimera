@@ -25,10 +25,15 @@ package com.karuslabs.commons.collection;
 
 import java.util.*;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.newSetFromMap;
 
 
 public class Sets {
+    
+    public static <T> Set<T> asSet(T... t) {
+        return new HashSet<>(asList(t));
+    }
     
     public static <T> Set<T> weakSet(Collection<T> collection) {
         Set<T> set = newSetFromMap(new WeakHashMap<>());

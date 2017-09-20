@@ -39,11 +39,6 @@
         </repository>
         
         <repository>
-            <id>craftbukkit-repo</id>
-            <url>http://repo.karuslabs.com/repository/craftbukkit/snapshots</url>
-        </repository>
-        
-        <repository>
             <id>mockkit-repo</id>
             <url>http://repo.karuslabs.com/repository/mockkit/snapshots</url>
         </repository>

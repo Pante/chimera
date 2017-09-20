@@ -87,6 +87,8 @@ public class CommandElementTest {
         assertTrue(Translation.NONE == command.getTranslation());
         assertTrue(subcommands == command.getSubcommands());
         assertTrue(completions == command.getCompletions());
+        assertEquals("command.permission", command.getPermission());
+        assertEquals("message", command.getPermissionMessage());
     }
     
     
