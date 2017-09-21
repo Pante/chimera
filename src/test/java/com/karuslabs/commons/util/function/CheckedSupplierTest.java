@@ -23,24 +23,14 @@
  */
 package com.karuslabs.commons.util.function;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
 public class CheckedSupplierTest {
-    
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CheckedSupplier<Object, Exception> supplier;
-    
-    
-    public CheckedSupplierTest() {
-        supplier = mock(CheckedSupplier.class);
-    }
+
+    private CheckedSupplier<Object, Exception> supplier = mock(CheckedSupplier.class);
     
     
     @Test
@@ -52,11 +42,9 @@ public class CheckedSupplierTest {
     
     @Test
     public void uncheck_ThrowsException() throws Exception {
-        exception.expect(UncheckedFunctionException.class);
-        
         doThrow(Exception.class).when(supplier).get();
         
-        CheckedSupplier.uncheck(supplier).get();
+        assertThrows(UncheckedFunctionException.class, () -> CheckedSupplier.uncheck(supplier).get());
     }
     
 }

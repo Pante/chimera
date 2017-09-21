@@ -27,21 +27,15 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.KnowledgeBookMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 
 public class KnowledgeBookBuilderTest {
     
-    private KnowledgeBookBuilder builder;
-    private KnowledgeBookMeta meta;
-    
-    
-    public KnowledgeBookBuilderTest() {
-        meta = mock(KnowledgeBookMeta.class);
-        builder = new KnowledgeBookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private KnowledgeBookMeta meta = mock(KnowledgeBookMeta.class);
+    private KnowledgeBookBuilder builder = new KnowledgeBookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test

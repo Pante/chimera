@@ -23,48 +23,40 @@
  */
 package com.karuslabs.commons.command;
 
-import junitparams.*;
+import java.util.stream.Stream;
 
 import org.bukkit.Server;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class ProxiedCommandMapTest {
-    
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
     
     private static final Plugin PLUGIN = mock(Plugin.class);
     private static final Command COMMAND = when(mock(Command.class).getPlugin()).thenReturn(PLUGIN).getMock();
-    private ProxiedCommandMap proxy;
-    private SimpleCommandMap map;
-    
-    
-    public ProxiedCommandMapTest() {
-        map = mock(SimpleCommandMap.class);
-        proxy = new ProxiedCommandMap(new StubServer(map));
-    }
+    private SimpleCommandMap map = mock(SimpleCommandMap.class);
+    private ProxiedCommandMap proxy = new ProxiedCommandMap(new StubServer(map));
     
     
     @Test
-    public void proxiedCommandMap_ThrowsException() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("If you are reading this message, you're screwed.");
-        
+    public void proxiedCommandMap() {
         Server server = mock(Server.class);
-        ProxiedCommandMap proxy = new ProxiedCommandMap(server);
+        assertEquals(
+            "If you are reading this message, you're screwed.",
+            assertThrows(IllegalArgumentException.class, () -> new ProxiedCommandMap(server)).getMessage()
+        );
     }
     
     
@@ -75,19 +67,16 @@ public class ProxiedCommandMapTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("getCommand_parameters")
     public void getCommand(org.bukkit.command.Command command, Command expected) {
         when(map.getCommand("")).thenReturn(command);
         assertEquals(expected, proxy.getCommand(""));
     }
     
-    protected Object[] parametersForGetCommand() {
+    static Stream<Arguments> getCommand_parameters() {
         org.bukkit.command.Command command = mock(org.bukkit.command.Command.class);
-        return new Object[] {
-            new Object[] {COMMAND, COMMAND},
-            new Object[] {command, null}
-        };
+        return Stream.of(of(COMMAND, COMMAND), of(command, null));
     }
     
     
@@ -97,7 +86,7 @@ public class ProxiedCommandMapTest {
         Command command = mock(Command.class);
         when(map.getCommands()).thenReturn(asList(COMMAND, bukkit, command));
         
-        assertThat(proxy.getCommands(PLUGIN), equalTo(singletonMap(null, COMMAND)));
+        assertEquals(singletonMap(null, COMMAND), proxy.getCommands(PLUGIN));
     }
     
 }

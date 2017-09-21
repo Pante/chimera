@@ -23,43 +23,38 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.arguments.*;
+import com.karuslabs.commons.command.arguments.Argument;
+import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.locale.Translation;
 
-import junitparams.*;
+import java.util.stream.Stream;
 
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static java.util.Collections.EMPTY_LIST;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class CommandTest {
     
-    private Command command;
+    private Command command = spy(new Command("", null, Translation.NONE));
     
     
-    public CommandTest() {
-        command = spy(new Command("", null, Translation.NONE));
-    }
-    
-    
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("split_parameters")
     public void split(String[] arguments, String[] expected) {
         assertThat(Command.split(arguments), equalTo(expected));
     }
     
-    protected Object[] parametersForSplit() {
+    static Stream<org.junit.jupiter.params.provider.Arguments> split_parameters() {
         String[] arguments = new String[] {"1", "2", "3"};
-        return new Object[] {
-            new Object[] {arguments, arguments},
-            new Object[] {new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}}
-        };
+        return Stream.of(of(arguments, arguments), of(new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}));
     }
     
     
@@ -73,8 +68,8 @@ public class CommandTest {
     }
     
     
-    @Test
-    @Parameters({"a, 1, 0", "b, 0, 1"})
+    @ParameterizedTest
+    @CsvSource({"a, 1, 0", "b, 0, 1"})
     public void execute(String argument, int delegated, int executor) {
         Context context = mock(Context.class);
         Arguments arguments = when(mock(Arguments.class).getLast()).thenReturn(new Argument(argument)).getMock();

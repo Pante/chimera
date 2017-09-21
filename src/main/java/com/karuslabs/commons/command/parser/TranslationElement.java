@@ -54,7 +54,7 @@ public class TranslationElement extends Element<Translation> {
     protected BundledTranslation parseConfigurationSection(ConfigurationSection config) {
         String bundle = config.getString("bundle");
         if (bundle == null) {
-            throw new IllegalArgumentException("Failed to parse translation: bundle name undefined");
+            throw new IllegalArgumentException("Bundle name undefined for: " + config.getName());
         }
         
         List<Resource> embedded = config.getStringList("embedded").stream().map(EmbeddedResource::new).collect(toList());

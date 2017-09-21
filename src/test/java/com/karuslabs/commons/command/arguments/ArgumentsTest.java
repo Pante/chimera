@@ -24,30 +24,26 @@
 package com.karuslabs.commons.command.arguments;
 
 import java.util.function.*;
+import java.util.stream.Stream;
 
-import junitparams.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import org.junit.*;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class ArgumentsTest {
     
-    private Arguments arguments;
+    private Arguments arguments = spy(new Arguments(new String[] {"0", "1"}));
     
     
-    public ArgumentsTest() {
-        arguments = spy(new Arguments(new String[] {"0", "1"}));
-    }
-    
-    
-    @Test
-    @Parameters({"1, true", "-1, false", "2, false"})
+    @ParameterizedTest
+    @CsvSource({"1, true", "-1, false", "2, false"})
     public void contains(int index, boolean expected) {
         assertEquals(expected, arguments.contains(index));
     }
@@ -55,17 +51,15 @@ public class ArgumentsTest {
     
     @Test
     public void match() {
-        Arguments arguments = new Arguments(new String[] {"1"});
-        
-        assertEquals(1, arguments.match().length());
+        assertEquals(2, arguments.match().length());
         
         arguments.trim();
-        assertEquals(0, arguments.match().length());
+        assertEquals(1, arguments.match().length());
     }
     
     
-    @Test
-    @Parameters({"0, 0", "-1, "})
+    @ParameterizedTest
+    @CsvSource({"0, 0", "-1, ''"})
     public void get(int index, String expected) {
         assertEquals(expected, arguments.get(index).text());
     }
@@ -90,8 +84,8 @@ public class ArgumentsTest {
     }
     
     
-    @Test
-    @Parameters({"true, 1, 0", "false, 0, 1"})
+    @ParameterizedTest
+    @CsvSource({"true, 1, 0", "false, 0, 1"})
     public void getOr(boolean contains, int functionTimes, int supplierTimes) {
         doReturn(contains).when(arguments).contains(anyInt());
         
@@ -105,8 +99,8 @@ public class ArgumentsTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("trim_parameters")
     public void trim(String[] args, String[] expected) {
         Arguments arguments = new Arguments(args);
         arguments.trim();
@@ -114,11 +108,8 @@ public class ArgumentsTest {
         assertThat(arguments.get(), equalTo(expected));
     }
     
-    protected Object[] parametersForTrim() {
-        return new Object[] {
-            new Object[] {new String[] {"1"}, new String[] {}},
-            new Object[] {new String[] {"1", "2"}, new String[] {"2"}}
-        };
+    static Stream<org.junit.jupiter.params.provider.Arguments> trim_parameters() {
+        return Stream.of(of(new String[] {"1"}, new String[] {}), of(new String[] {"1", "2"}, new String[] {"2"}));
     }
     
 }

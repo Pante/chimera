@@ -23,95 +23,56 @@
  */
 package com.karuslabs.commons.item;
 
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
+@TestInstance(PER_CLASS)
 public class ItemBuilderTest {
     
-    private ItemStack item;
+    private static ItemStack item = mock(ItemStack.class);
+    private static ItemBuilder builder = new ItemBuilder(item);
     
     
-    public ItemBuilderTest() {
-        item = mock(ItemStack.class);
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void as(ItemMeta meta, Supplier<Builder> supplier) {
+        when(item.getItemMeta()).thenReturn(meta);
+        
+        assertNotNull(supplier.get());
     }
     
-    
-    @Test
-    public void asBanner() {
-        when(item.getItemMeta()).thenReturn(mock(BannerMeta.class));
-        assertNotNull(new ItemBuilder(item).asBanner());
+    static Stream<Arguments> parameters() {
+        return Stream.of(
+            of(mock(BannerMeta.class), wrap(builder::asBanner)),
+            of(mock(BlockStateMeta.class), wrap(builder::asBlockState)),
+            of(mock(BookMeta.class), wrap(builder::asBook)),
+            of(mock(EnchantmentStorageMeta.class), wrap(builder::asEnchantmentStorage)),
+            of(mock(FireworkMeta.class), wrap(builder::asFirework)),
+            of(mock(FireworkEffectMeta.class), wrap(builder::asFireworkEffect)),
+            of(mock(KnowledgeBookMeta.class), wrap(builder::asKnowledgeBook)),
+            of(mock(LeatherArmorMeta.class), wrap(builder::asLeatherArmor)),
+            of(mock(MapMeta.class), wrap(builder::asMap)),
+            of(mock(PotionMeta.class), wrap(builder::asPotion)),
+            of(mock(SkullMeta.class), wrap(builder::asSkull)),
+            of(mock(SpawnEggMeta.class), wrap(builder::asSpawnEgg))
+        );
     }
     
-    @Test
-    public void asBlockState() {
-        when(item.getItemMeta()).thenReturn(mock(BlockStateMeta.class));
-        assertNotNull(new ItemBuilder(item).asBlockState());
-    }
-    
-    @Test
-    public void asBook() {
-        when(item.getItemMeta()).thenReturn(mock(BookMeta.class));
-        assertNotNull(new ItemBuilder(item).asBook());
-    }
-    
-    @Test
-    public void asEnchantmentStorage() {
-        when(item.getItemMeta()).thenReturn(mock(EnchantmentStorageMeta.class));
-        assertNotNull(new ItemBuilder(item).asEnchantmentStorage());
-    }
-    
-    @Test
-    public void asFirework() {
-        when(item.getItemMeta()).thenReturn(mock(FireworkMeta.class));
-        assertNotNull(new ItemBuilder(item).asFirework());
-    }
-    
-    @Test
-    public void asFireworkEffect() {
-        when(item.getItemMeta()).thenReturn(mock(FireworkEffectMeta.class));
-        assertNotNull(new ItemBuilder(item).asFireworkEffect());
-    }
-    
-    @Test
-    public void asKnowledgeBook() {
-        when(item.getItemMeta()).thenReturn(mock(KnowledgeBookMeta.class));
-        assertNotNull(new ItemBuilder(item).asKnowledgeBook());
-    }
-    
-    @Test
-    public void asLeatherArmor() {
-        when(item.getItemMeta()).thenReturn(mock(LeatherArmorMeta.class));
-        assertNotNull(new ItemBuilder(item).asLeatherArmor());
-    }
-    
-    @Test
-    public void asMap() {
-        when(item.getItemMeta()).thenReturn(mock(MapMeta.class));
-        assertNotNull(new ItemBuilder(item).asMap());
-    }
-    
-    @Test
-    public void asPotion() {
-        when(item.getItemMeta()).thenReturn(mock(PotionMeta.class));
-        assertNotNull(new ItemBuilder(item).asPotion());
-    }
-    
-    @Test
-    public void asSkull() {
-        when(item.getItemMeta()).thenReturn(mock(SkullMeta.class));
-        assertNotNull(new ItemBuilder(item).asSkull());
-    }
-    
-    @Test
-    public void asSpawnEgg() {
-        when(item.getItemMeta()).thenReturn(mock(SpawnEggMeta.class));
-        assertNotNull(new ItemBuilder(item).asSpawnEgg());
+    static Object wrap(Supplier<Builder> supplier) {
+        return supplier;
     }
     
 }

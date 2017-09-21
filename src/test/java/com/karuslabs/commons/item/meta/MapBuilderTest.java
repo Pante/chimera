@@ -23,32 +23,26 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
 public class MapBuilderTest {
         
-    private MapBuilder builder;
-    private MapMeta meta;
-    
-    
-    public MapBuilderTest() {
-        meta = mock(MapMeta.class);
-        builder = new MapBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private MapMeta meta = mock(MapMeta.class);
+    private MapBuilder builder = new MapBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        builder.color(Color.SILVER).locationName("name").scaling(true);
+        builder.color(SILVER).locationName("name").scaling(true);
         
-        verify(meta).setColor(Color.SILVER);
+        verify(meta).setColor(SILVER);
         verify(meta).setLocationName("name");
         verify(meta).setScaling(true);
     }

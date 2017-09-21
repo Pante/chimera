@@ -23,15 +23,15 @@
  */
 package com.karuslabs.commons.locale.resources;
 
-import junitparams.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class EmbeddedResourceTest {
     
     private EmbeddedResource resource;
@@ -48,8 +48,8 @@ public class EmbeddedResourceTest {
     }
     
     
-    @Test
-    @Parameters({"Resource.yml, true", "Failure.yml, false"})
+    @ParameterizedTest
+    @CsvSource({"Resource.yml, true", "Failure.yml, false"})
     public void exists(String path, boolean exists) {
         assertEquals(exists, resource.exists(path));
     }

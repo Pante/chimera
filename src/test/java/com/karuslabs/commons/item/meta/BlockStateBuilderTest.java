@@ -27,22 +27,16 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 
 public class BlockStateBuilderTest {
     
-    private BlockStateBuilder builder;
-    private BlockStateMeta meta;
-    
-    
-    public BlockStateBuilderTest() {
-        meta = mock(BlockStateMeta.class);
-        builder = new BlockStateBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
-    
+    private BlockStateMeta meta = mock(BlockStateMeta.class);
+    private BlockStateBuilder builder = new BlockStateBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+        
     
     @Test
     public void build() {

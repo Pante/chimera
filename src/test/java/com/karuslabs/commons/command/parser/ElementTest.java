@@ -24,38 +24,21 @@
 package com.karuslabs.commons.command.parser;
 
 import java.util.*;
-
-import junitparams.*;
+import java.util.stream.Stream;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class ElementTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    private Element<String> element;
-    private Map<String, String> definitions;
-    
-    
-    public ElementTest() {
-        element = spy(new Element<String>(definitions = spy(new HashMap<>())) {});
-    }
-    
-    
-    @Before
-    public void setup() {
-        definitions.clear();
-    }
+    private Element<String> element = spy(new Element<String>(new HashMap<>()) {});
     
     
     @Test
@@ -77,20 +60,15 @@ public class ElementTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("parse_ThrowsException_parameters")
     public void parse_ThrowsException(Object value) {
-        exception.expect(IllegalArgumentException.class);
-        
-        element.parse(value);
+        assertThrows(IllegalArgumentException.class, () -> element.parse(value));
     }
     
-    protected Object[] parametersForParse_ThrowsException() {
+    static Stream<Object> parse_ThrowsException_parameters() {
         ConfigurationSection config = mock(ConfigurationSection.class);
-        
-        return new Object[] {
-            new Object(), config
-        };
+        return Stream.of(new Object(), config);
     }
     
 }

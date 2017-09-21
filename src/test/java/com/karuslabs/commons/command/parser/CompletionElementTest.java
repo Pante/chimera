@@ -27,32 +27,22 @@ import com.karuslabs.commons.command.completion.CachedCompletion;
 
 import java.util.List;
 
-import junitparams.*;
-
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class CompletionElementTest {
     
-    private CompletionElement element;
-    
-    
-    public CompletionElementTest() {
-        element = spy(new CompletionElement());
-    }
+    private CompletionElement element = spy(new CompletionElement());
     
     
     @Test
     public void parse() {
         List<String> completions = singletonList("a");
-        assertThat(((CachedCompletion) element.parse(completions)).getCompletions(), equalTo(completions));
+        assertEquals(completions, ((CachedCompletion) element.parse(completions)).getCompletions());
     }
     
     

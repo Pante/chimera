@@ -29,6 +29,9 @@ import com.karuslabs.commons.locale.resources.Resource;
 import java.util.*;
 import javax.annotation.Nullable;
 
+import static java.util.Locale.Category.FORMAT;
+import static java.util.Locale.getDefault;
+
 
 public class BundledTranslation extends Translation {
     
@@ -42,7 +45,7 @@ public class BundledTranslation extends Translation {
     }
     
     public BundledTranslation(String name, Control control) {
-        this(Locale.getDefault(Locale.Category.FORMAT), name, control, null);
+        this(getDefault(FORMAT), name, control, null);
     }
     
     public BundledTranslation(Locale locale,  String name, Control control, ResourceBundle bundle) {
@@ -77,7 +80,7 @@ public class BundledTranslation extends Translation {
 
     public ResourceBundle getBundle() {
         if (bundle == null) {
-            bundle = ResourceBundle.getBundle(name, Locale.getDefault(Locale.Category.FORMAT), control);
+            bundle = ResourceBundle.getBundle(name, getDefault(FORMAT), control);
         }
         
         return bundle;

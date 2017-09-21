@@ -23,29 +23,19 @@
  */
 package com.karuslabs.commons.locale.resources;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import org.junit.*;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
+@TestInstance(PER_CLASS)
 public class FileResourceTest {
     
-    @Rule
-    public TemporaryFolder temporary = new TemporaryFolder();
-    
-    private FileResource resource;
-    private File file;
-
-    
-    @Before
-    public void before() throws IOException {
-        file = temporary.newFile("Resource.yml");
-        resource = new FileResource(file.getParentFile());
-    }
+    private File file = new File(getClass().getClassLoader().getResource("locale/resources/Resource.yml").getPath()).getParentFile();
+    private FileResource resource = new FileResource(file);
     
     
     @Test

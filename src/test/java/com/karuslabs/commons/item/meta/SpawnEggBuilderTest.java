@@ -23,32 +23,26 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.entity.EntityType.MULE;
 import static org.mockito.Mockito.*;
 
 
 public class SpawnEggBuilderTest {
 
-    private SpawnEggBuilder builder;
-    private SpawnEggMeta meta;
-    
-    
-    public SpawnEggBuilderTest() {
-        meta = mock(SpawnEggMeta.class);
-        builder = new SpawnEggBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private SpawnEggMeta meta = mock(SpawnEggMeta.class);
+    private SpawnEggBuilder builder = new SpawnEggBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());    
     
     
     @Test
     public void build() {
-        builder.spawned(EntityType.MULE);
+        builder.spawned(MULE);
         
-        verify(meta).setSpawnedType(EntityType.MULE);
+        verify(meta).setSpawnedType(MULE);
     }
     
 }

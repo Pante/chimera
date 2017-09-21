@@ -23,36 +23,30 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import java.util.Collections;
-
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static java.util.Collections.singletonList;
+import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
 public class FireworkBuilderTest {
         
-    private FireworkBuilder builder;
-    private FireworkMeta meta;
-    
-    
-    public FireworkBuilderTest() {
-        meta = mock(FireworkMeta.class);
-        builder = new FireworkBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private FireworkMeta meta = mock(FireworkMeta.class);
+    private FireworkBuilder builder = new FireworkBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        FireworkEffect effect = FireworkEffect.builder().withColor(Color.SILVER).build();
-        builder.effects(effect).effects(Collections.singletonList(effect)).power(3);
+        FireworkEffect effect = FireworkEffect.builder().withColor(SILVER).build();
+        builder.effects(effect).effects(singletonList(effect)).power(3);
         
         verify(meta).addEffects(effect);
-        verify(meta).addEffects(eq(Collections.singletonList(effect)));
+        verify(meta).addEffects(eq(singletonList(effect)));
         verify(meta).setPower(3);
     }
     

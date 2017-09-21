@@ -23,36 +23,40 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import junitparams.*;
+import java.util.stream.Stream;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class MatchTest {
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("test_parameters")
     public void test(Match match, String text, boolean expected) {
         assertEquals(expected, match.test(text));
     }
     
-    protected Object[] parametersForTest() {
-        return new Object[] {
-            new Object[] {Match.EMPTY, "", true},
-            new Object[] {Match.EMPTY, "full", false},
-            new Object[] {Match.BOOLEAN, "FALSE", true},
-            new Object[] {Match.BOOLEAN, "yes", false},
-            new Object[] {Match.INT, "-100", true},
-            new Object[] {Match.INT, "meh", false},
-            new Object[] {Match.DOUBLE, "-3.142", true},
-            new Object[] {Match.DOUBLE, "type", false},
-            new Object[] {Match.FLOAT, "-3.142", true},
-            new Object[] {Match.FLOAT, "type", false}
-        };
+    static Stream<Arguments> test_parameters() {
+        return Stream.of(
+            of(Match.EMPTY, "", true),
+            of(Match.EMPTY, "full", false),
+            of(Match.BOOLEAN, "FALSE", true),
+            of(Match.BOOLEAN, "yes", false),
+            of(Match.INT, "-100", true),
+            of(Match.INT, "meh", false),
+            of(Match.DOUBLE, "-3.142", true),
+            of(Match.DOUBLE, "type", false),
+            of(Match.FLOAT, "-3.142", true),
+            of(Match.FLOAT, "type", false)
+        );
     }
     
 }

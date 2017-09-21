@@ -25,22 +25,18 @@ package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
-import java.util.Locale;
+import org.junit.jupiter.api.*;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static java.util.Locale.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
 
 
+@TestInstance(PER_CLASS)
 public class BundledTranslationTest {
     
-    private BundledTranslation translation;
-    
-    
-    public BundledTranslationTest() {
-        translation = spy(new BundledTranslation("Translation", new EmbeddedResource("locale")));
-    }
+    private BundledTranslation translation = spy(new BundledTranslation("Translation", new EmbeddedResource("locale")));
     
     
     @Test
@@ -51,17 +47,16 @@ public class BundledTranslationTest {
     
     @Test
     public void locale() {
-        Locale locale = new Locale("zh", "CN");
-        translation.locale(locale);
-        assertEquals(locale, translation.format.getLocale());
-        assertEquals(locale, translation.getBundle().getLocale());
+        translation.locale(JAPAN);
+        
+        assertEquals(JAPAN, translation.format.getLocale());
+        assertEquals(JAPAN, translation.getBundle().getLocale());
     }
     
     
     @Test
     public void copy() {
-        Locale locale = new Locale("zh", "CN");
-        BundledTranslation other = translation.locale(locale).copy();
+        BundledTranslation other = translation.locale(PRC).copy();
         
         assertEquals(other.format.getLocale(), translation.format.getLocale());
         assertEquals(other.getBundleName(), translation.getBundleName());

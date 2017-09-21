@@ -29,12 +29,11 @@ import com.karuslabs.commons.locale.Translation;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -60,7 +59,7 @@ public class ParserTest {
         Command aCommand = mock(Command.class);
         doReturn(aCommand).when(command).parse(any(ConfigurationSection.class));
         
-        assertThat(parser.parse(COMMANDS), equalTo(singletonList(aCommand)));
+        assertEquals(singletonList(aCommand), parser.parse(COMMANDS));
         verify(parser).parseDefinitions(COMMANDS.getConfigurationSection("define"));
     }
     

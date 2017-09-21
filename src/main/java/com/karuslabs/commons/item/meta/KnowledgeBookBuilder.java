@@ -29,11 +29,13 @@ import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.KnowledgeBookMeta;
 
+import static org.bukkit.Material.KNOWLEDGE_BOOK;
+
 
 public class KnowledgeBookBuilder extends Builder<KnowledgeBookBuilder, KnowledgeBookMeta> {
     
     public KnowledgeBookBuilder() {
-        this(new ItemStack(Material.KNOWLEDGE_BOOK));
+        this(new ItemStack(KNOWLEDGE_BOOK));
     }
     
     public KnowledgeBookBuilder(ItemStack item) {

@@ -30,6 +30,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import javax.annotation.Nullable;
 
+import static java.util.Locale.getDefault;
+
 
 public abstract class Translation implements Prototype<Translation> {
     
@@ -57,7 +59,7 @@ public abstract class Translation implements Prototype<Translation> {
     
     
     public Translation() {
-        this(Locale.getDefault());
+        this(getDefault());
     }
     
     public Translation(Locale locale) {

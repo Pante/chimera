@@ -25,30 +25,26 @@ package com.karuslabs.commons.item.meta;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.junit.Test;
 
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.inventory.meta.BookMeta.Generation.COPY_OF_COPY;
 import static org.mockito.Mockito.*;
 
 
 public class BookBuilderTest {
     
-    private BookBuilder builder;
-    private BookMeta meta;
-    
-    
-    public BookBuilderTest() {
-        meta = mock(BookMeta.class);
-        builder = new BookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private BookMeta meta = mock(BookMeta.class);
+    private BookBuilder builder = new BookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        builder.title("title").author("Pante").generation(BookMeta.Generation.COPY_OF_COPY).pages("pg 1", "pg 2");
+        builder.title("title").author("Pante").generation(COPY_OF_COPY).pages("pg 1", "pg 2");
         
         verify(meta).setTitle("title");
         verify(meta).setAuthor("Pante");
-        verify(meta).setGeneration(BookMeta.Generation.COPY_OF_COPY);
+        verify(meta).setGeneration(COPY_OF_COPY);
         verify(meta).addPage("pg 1", "pg 2");
     }
     

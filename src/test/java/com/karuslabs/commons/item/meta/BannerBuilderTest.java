@@ -25,39 +25,34 @@ package com.karuslabs.commons.item.meta;
 
 import java.util.*;
 
-import org.bukkit.DyeColor;
 import org.bukkit.block.banner.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static java.util.Collections.singletonList;
+import static org.bukkit.DyeColor.*;
+import static org.bukkit.block.banner.PatternType.BASE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 public class BannerBuilderTest {
     
-    private BannerBuilder builder;
-    private BannerMeta meta;
-    
-    
-    public BannerBuilderTest() {
-        meta = mock(BannerMeta.class);
-        builder = new BannerBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private BannerMeta meta = mock(BannerMeta.class);
+    private BannerBuilder builder = new BannerBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        List<Pattern> patterns = Collections.singletonList(new Pattern(DyeColor.BLUE, PatternType.BASE));                
+        List<Pattern> patterns = singletonList(new Pattern(BLUE, BASE));                
         when(meta.getPatterns()).thenReturn(new ArrayList<>());
         
-        builder.pattern(new Pattern(DyeColor.BLACK, PatternType.BASE)).patterns(patterns);
+        builder.pattern(new Pattern(BLACK, BASE)).patterns(patterns);
         
-        verify(meta).addPattern(new Pattern(DyeColor.BLACK, PatternType.BASE));
-        assertThat(meta.getPatterns(), equalTo(patterns));
+        verify(meta).addPattern(new Pattern(BLACK, BASE));
+        assertEquals(patterns, meta.getPatterns());
     }
     
 }

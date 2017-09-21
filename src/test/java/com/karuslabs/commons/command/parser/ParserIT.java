@@ -29,13 +29,12 @@ import com.karuslabs.commons.locale.BundledTranslation;
 import java.util.*;
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.collection.Sets.asSet;
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ParserIT {
@@ -69,12 +68,12 @@ public class ParserIT {
         assertEquals(2, command.getCompletions().size());
         assertEquals("Resource", ((BundledTranslation) command.getTranslation()).getBundleName());
         
-        assertThat(subcommands.keySet(), equalTo(asSet("help", "a", "b", "c", "b", "b-alias")));
+        assertEquals(asSet("help", "a", "b", "c", "b", "b-alias"), subcommands.keySet());
         
-        assertThat(help.getAliases(), equalTo(asList("a", "b", "c")));
+        assertEquals(asList("a", "b", "c"), help.getAliases());
         assertEquals("help.permission", help.getPermission());
         
-        assertThat(subcommand.getAliases(), equalTo(asList("b-alias")));
+        assertEquals(asList("b-alias"), subcommand.getAliases());
         assertEquals("Resource", ((BundledTranslation) subcommand.getTranslation()).getBundleName());
     }
     

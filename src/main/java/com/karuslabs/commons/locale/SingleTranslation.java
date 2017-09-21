@@ -27,6 +27,9 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentMap;
 import javax.annotation.Nullable;
 
+import static java.util.Locale.Category.FORMAT;
+import static java.util.Locale.getDefault;
+
 
 public class SingleTranslation extends Translation {
     
@@ -34,12 +37,18 @@ public class SingleTranslation extends Translation {
 
     
     public SingleTranslation(ConcurrentMap<String, String> cache) {
-        this(Locale.getDefault(Locale.Category.FORMAT), cache);
+        this(getDefault(FORMAT), cache);
     }
     
     public SingleTranslation(Locale locale, ConcurrentMap<String, String> cache) {
         super(locale);
         this.messages = cache;
+    }
+    
+        
+    @Override
+    public SingleTranslation copy() {
+        return new SingleTranslation(format.getLocale(), messages);
     }
     
     
@@ -51,11 +60,6 @@ public class SingleTranslation extends Translation {
     
     public ConcurrentMap<String, String> getMessages() {
         return messages;
-    }
-    
-    @Override
-    public SingleTranslation copy() {
-        return new SingleTranslation(format.getLocale(), messages);
     }
     
 }

@@ -23,24 +23,14 @@
  */
 package com.karuslabs.commons.util.function;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
-public class CheckedBiPredicateTest {
+public class CheckedBiPredicateTest {    
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CheckedBiPredicate<Object, Object, Exception> predicate;
-    
-    
-    public CheckedBiPredicateTest() {
-        predicate = mock(CheckedBiPredicate.class);
-    }
+    private CheckedBiPredicate<Object, Object, Exception> predicate = mock(CheckedBiPredicate.class);
     
     
     @Test
@@ -52,11 +42,9 @@ public class CheckedBiPredicateTest {
     
     @Test
     public void uncheck_ThrowsException() throws Exception {
-        exception.expect(UncheckedFunctionException.class);
-        
         doThrow(Exception.class).when(predicate).test(null, null);
         
-        CheckedBiPredicate.uncheck(predicate).test(null, null);
+        assertThrows(UncheckedFunctionException.class, () -> CheckedBiPredicate.uncheck(predicate).test(null, null));
     }
     
 }

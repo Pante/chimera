@@ -23,28 +23,28 @@
  */
 package com.karuslabs.commons.collection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
+@TestInstance(PER_CLASS)
 public class SetsTest {
     
     @Test
     public void asSet() {
-        assertThat(Sets.asSet(1, 2, 3), equalTo(new HashSet<>(asList(1, 2, 3))));
+        assertEquals(new HashSet<>(asList(1, 2, 3)), Sets.asSet(1, 2, 3));
     }
     
     
     @Test
     public void weakSet() {
-        Set<String> set = Sets.weakSet(asList("a"));
-        assertThat(set, equalTo(singleton("a")));
+        assertEquals(singleton("a"), Sets.weakSet(asList("a")));
     }
     
 }

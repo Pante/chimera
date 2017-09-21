@@ -23,61 +23,38 @@
  */
 package com.karuslabs.commons.collection;
 
-import junitparams.*;
+import java.util.stream.Stream;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class ClassMapTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    private ClassMap<Object> map;
-    
-    
-    public ClassMapTest() {
-        map = new ClassMap<>();
-    }
-    
-    
-    @Before
-    public void setup() {
-        map.map.clear();
-    }
-    
+    private ClassMap<Object> map = new ClassMap<>();
+
     
     @Test
     public void getInstance_ThrowsException() {
-        exception.expect(ClassCastException.class);
-        
-        map.map.put(int.class, "");
-        
-        map.getInstance(int.class);
+        map.put(int.class, "");
+        assertThrows(ClassCastException.class, () -> map.getInstance(int.class));
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("getInstanceOrDefault_parameters")
     public void getInstanceOrDefault(Object object, int expected) {
         map.map.put(Integer.class, object);
-        
-        int returned = map.getInstanceOrDefault(Integer.class, 0);
-        
-        assertEquals(expected, returned);
+
+        assertEquals(expected, (int) map.getInstanceOrDefault(Integer.class, 0));
     }
     
-    protected Object[] parametersForGetInstanceOrDefault() {
-        return new Object[] {
-            new Object[] {5, 5},
-            new Object[] {null, 0},
-            new Object[] {"", 0}
-        };
+    static Stream<Arguments> getInstanceOrDefault_parameters() {
+        return Stream.of(of(5, 5), of(null, 0), of("", 0));
     }
     
     

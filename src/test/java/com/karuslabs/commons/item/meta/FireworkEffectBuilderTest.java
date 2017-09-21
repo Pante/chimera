@@ -27,26 +27,21 @@ import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
 public class FireworkEffectBuilderTest {
-        
-    private FireworkEffectBuilder builder;
-    private FireworkEffectMeta meta;
     
-    
-    public FireworkEffectBuilderTest() {
-        meta = mock(FireworkEffectMeta.class);
-        builder = new FireworkEffectBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
-    
+    private FireworkEffectMeta meta = mock(FireworkEffectMeta.class);
+    private FireworkEffectBuilder builder = new FireworkEffectBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+
     
     @Test
     public void build() {
-        FireworkEffect effect = FireworkEffect.builder().withColor(Color.SILVER).build();
+        FireworkEffect effect = FireworkEffect.builder().withColor(SILVER).build();
         
         builder.effect(effect);
         

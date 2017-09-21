@@ -23,34 +23,29 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.util.concurrent.locks.Janitor;
-import com.karuslabs.commons.util.concurrent.locks.CloseableReadWriteLock;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import junitparams.*;
-
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class CloseableReadWriteLockTest {    
     
     private static CloseableReadWriteLock lock = new CloseableReadWriteLock();
-    private CloseableReadWriteLock interrupted;
-            
+    private CloseableReadWriteLock interrupted = spy(new CloseableReadWriteLock());
+
     
-    public CloseableReadWriteLockTest() {
-        interrupted = spy(new CloseableReadWriteLock());
-    }
-    
-    
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("acquire_parameters")
     public void acquire(Supplier<Janitor> closeableLock, Supplier<Integer> count) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, (int) count.get());
@@ -59,22 +54,26 @@ public class CloseableReadWriteLockTest {
         assertEquals(0, (int) count.get());
     }
     
-    protected Object[] parametersForAcquire() {
-        return new Object[] {
-            new Supplier[] {lock::acquireReadLock, lock::getReadHoldCount},
-            new Supplier[] {uncheck(lock::acquireReadLockInterruptibly), lock::getReadHoldCount},
-            new Supplier[] {lock::acquireWriteLock, lock::getWriteHoldCount},
-            new Supplier[] {uncheck(lock::acquireWriteLockInterruptibly), lock::getWriteHoldCount}
-        };
+    static Stream<Arguments> acquire_parameters() {
+        return Stream.of(
+            of(wrap(lock::acquireReadLock), wrap(lock::getReadHoldCount)),
+            of(wrap(uncheck(lock::acquireReadLockInterruptibly)), wrap(lock::getReadHoldCount)),
+            of(wrap(lock::acquireWriteLock), wrap(lock::getWriteHoldCount)),
+            of(wrap(uncheck(lock::acquireWriteLockInterruptibly)), wrap(lock::getWriteHoldCount))
+        );
+    }
+    
+    static Object wrap(Supplier<?> supplier) {
+        return supplier;
     }
 
    
     @Test
-    public void acquireReadLockInterruptibly_ThrowsException() throws InterruptedException {
+    public void acquireReadLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireReadLockInterruptibly();
         
         try (Janitor janitor = interrupted.acquireReadLockInterruptibly()) {
-            fail();
+            fail("Still acquired readlock");
             
         } catch (InterruptedException e) {
             
@@ -83,12 +82,13 @@ public class CloseableReadWriteLockTest {
         assertEquals(0, interrupted.getReadLockCount());
     }
     
+    
     @Test
-    public void acquireWriteLockInterruptibly_ThrowsException() throws InterruptedException {
+    public void acquireWriteLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireWriteLockInterruptibly();
         
         try (Janitor janitor = interrupted.acquireWriteLockInterruptibly()) {
-            fail();
+            fail("still acquired writelock");
             
         } catch (InterruptedException e) {
             

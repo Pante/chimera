@@ -23,11 +23,13 @@
  */
 package com.karuslabs.commons.collection;
 
+import com.karuslabs.commons.collection.TokenMap.Key;
+
 import java.util.*;
 import javax.annotation.Nullable;
 
 
-public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
+public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
     
     public TokenMap() {
         this(new HashMap<>());
@@ -37,7 +39,7 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
         this(new HashMap<>(capacity));
     }
     
-    public TokenMap(Map<TokenMap.Key<? extends V>, V> map) {
+    public TokenMap(Map<Key<? extends V>, V> map) {
         super(map);
     }
     
@@ -69,13 +71,22 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
     
     public static class Key<T> {
         
-        private String name;
-        private Class<T> type;
+        private final String name;
+        private final Class<T> type;
+        private final int hash;
         
         
         public Key(String name, Class<T> type) {
             this.name = name;
             this.type = type;
+            this.hash = hash();
+        }
+        
+        private int hash() {
+            int hash = 5;
+            hash = 53 * hash + Objects.hashCode(name);
+            hash = 53 * hash + Objects.hashCode(type);
+            return hash;
         }
         
         
@@ -83,7 +94,7 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
         public boolean equals(Object object) {
             if (object instanceof Key) {
                 Key key = (Key) object;
-                return name.equals(key.name) && type.equals(key.type);
+                return name.equals(key.name) && type == key.type;
             }
             
             return false;
@@ -91,11 +102,9 @@ public class TokenMap<V> extends ProxiedMap<TokenMap.Key<? extends V>, V> {
 
         @Override
         public int hashCode() {
-            int hash = 5;
-            hash = 53 * hash + Objects.hashCode(name);
-            hash = 53 * hash + Objects.hashCode(type);
             return hash;
         }
         
     }
+    
 }

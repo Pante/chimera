@@ -27,6 +27,7 @@ import com.karuslabs.commons.item.Builder;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.BookMeta.Generation;
 
 
 public class BookBuilder extends Builder<BookBuilder, BookMeta> {
@@ -55,7 +56,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
         return this;
     }
     
-    public BookBuilder generation(BookMeta.Generation generation) {
+    public BookBuilder generation(Generation generation) {
         meta.setGeneration(generation);
         return this;
     }

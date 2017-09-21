@@ -23,23 +23,19 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.karuslabs.commons.annotation.For;
-import static com.karuslabs.commons.annotation.For.Reason.Testing;
-
 
 public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T> {
     
-    protected final CountDownLatch latch;
-    protected final AtomicBoolean cancelled;
-    protected final AtomicBoolean done;
-    protected long total;
-    protected long current;
+    final CountDownLatch latch;
+    final AtomicBoolean cancelled;
+    final AtomicBoolean done;
+    long total;
+    long current;
     
     
     public PromiseTask(long iterations) {
@@ -70,18 +66,19 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
     protected abstract void process();
     
     protected void end() {
-        try {
-            cancelThis();
-        } catch (IllegalStateException e) {}
+        cancelThis();
         done.set(true);
         latch.countDown();
-    }
+    } 
         
-    protected void callback() {}
-    
-    protected final @For(Testing) void cancelThis() {
-        super.cancel();
+    void cancelThis() {
+        try {
+            super.cancel();
+        } catch (IllegalStateException e) {
+        }
     }
+    
+    protected void callback() {}
     
     
     @Override

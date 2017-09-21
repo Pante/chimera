@@ -23,28 +23,27 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.util.concurrent.locks.Janitor;
-import com.karuslabs.commons.util.concurrent.locks.CloseableLock;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import junitparams.*;
-
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static com.karuslabs.commons.util.function.CheckedSupplier.uncheck;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class CloseableLockTest {    
     
     private static CloseableLock lock = new CloseableLock();
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("acquire_parameters")
     public void acquire(Supplier<Janitor> closeableLock) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, lock.getHoldCount());
@@ -53,22 +52,18 @@ public class CloseableLockTest {
         assertEquals(0, lock.getHoldCount());
     }
     
-    protected Object[] parametersForAcquire() {
-        return new Supplier[] {
-            lock::acquire,
-            uncheck(lock::acquireInterruptibly)
-        };
+    static Stream<Supplier> acquire_parameters() {
+        return Stream.of(lock::acquire, uncheck(lock::acquireInterruptibly));
     }
-
     
     
     @Test
-    public void acquireInterruptibly_ThrowsException() throws InterruptedException {
+    public void acquireInterruptibly() throws InterruptedException {
         CloseableLock aLock = spy(new CloseableLock());
         doThrow(InterruptedException.class).when(aLock).acquireInterruptibly();
         
         try (Janitor janitor = aLock.acquireInterruptibly()) {
-            fail();
+            fail("lock was still acquired");
             
         } catch (InterruptedException e) {
             

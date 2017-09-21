@@ -23,43 +23,34 @@
  */
 package com.karuslabs.commons.command.completion;
 
-import com.karuslabs.commons.command.completion.CachedCompletion;
 import java.util.List;
 
-import junitparams.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.EMPTY_LIST;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class CachedCompletionTest {
     
-    private CachedCompletion completer;
+    private CachedCompletion completer = new CachedCompletion("arg", "argument", "another argument");
     
     
-    public CachedCompletionTest() {
-        completer = new CachedCompletion("arg", "argument", "another argument");
-    }
-    
-    
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("complete_parameters")
     public void complete(String argument, List<String> expected) {
-        assertThat(completer.complete(null, argument), equalTo(expected));
+        assertEquals(expected, completer.complete(null, argument));
     }
     
-    protected Object[] parametersForComplete() {
-        return new Object[] {
-            new Object[] {"argu", asList("argument")},
-            new Object[] {"a", asList("arg", "argument", "another argument")},
-            new Object[] {"non-existent", EMPTY_LIST}
-        };
+    static Stream<Arguments> complete_parameters() {
+        return Stream.of(of("argu", asList("argument")), of("a", asList("arg", "argument", "another argument")), of("non-existent", EMPTY_LIST));
     }
     
 }

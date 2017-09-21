@@ -26,19 +26,20 @@ package com.karuslabs.commons.locale;
 import com.google.common.cache.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import static java.util.Arrays.asList;
+import static java.util.Locale.*;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
 
 public class Locales {
     
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, TimeUnit.MINUTES).build();
+    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, MINUTES).build();
     
-    private static final Set<String> COUNTRIES = new HashSet<>(asList(Locale.getISOCountries()));
-    private static final Set<String> LANGUAGES = new HashSet<>(asList(Locale.getISOLanguages()));
+    private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
+    private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
     
     
     public static @Nullable Locale get(String locale) {
@@ -69,13 +70,11 @@ public class Locales {
     
     
     public static boolean isValidCountry(String country) {
-        country = country.toUpperCase();
-        return country.length() == 2 && COUNTRIES.contains(country);
+        return country.length() == 2 && COUNTRIES.contains(country.toUpperCase());
     }
     
     public static boolean isValidLanguage(String language) {
-        language = language.toLowerCase();
-        return language.length() == 2 && LANGUAGES.contains(language);
+        return language.length() == 2 && LANGUAGES.contains(language.toLowerCase());
     }
     
 }

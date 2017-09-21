@@ -25,64 +25,41 @@ package com.karuslabs.commons.collection;
 
 import com.karuslabs.commons.collection.TokenMap.Key;
 
-import junitparams.*;
+import java.util.stream.Stream;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.collection.TokenMap.key;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class TokenMapTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    private TokenMap<Object> map;
-    private Key<Integer> key;
-    
-    
-    public TokenMapTest() {
-        map = new TokenMap<>();
-        key = new TokenMap.Key<>("", Integer.class);
-    }
-    
-    
-    @Before
-    public void setup() {
-        map.map.clear();
-    }
+    private TokenMap<Object> map = new TokenMap<>();
+    private Key<Integer> key = new Key<>("name", Integer.class);
     
     
     @Test
     public void getInstance_ThrowsException() {
-        exception.expect(ClassCastException.class);
+        map.put(key, "");
         
-        map.map.put(key, "");
-        
-        map.getInstance(key);
+        assertThrows(ClassCastException.class, () -> map.getInstance(key));
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("getInstanceOrDefault_parameters")
     public void getInstanceOrDefault(Object object, int expected) {
-        map.map.put(key, object);
+        map.put(key, object);
         
-        int returned = map.getInstanceOrDefault(key, 0);
-        
-        assertEquals(expected, returned);
+        assertEquals(expected, (int) map.getInstanceOrDefault(key, 0));
     }
     
-    protected Object[] parametersForGetInstanceOrDefault() {
-        return new Object[] {
-            new Object[] {5, 5},
-            new Object[] {null, 0},
-            new Object[] {"", 0}
-        };
+    static Stream<Arguments> getInstanceOrDefault_parameters() {
+        return Stream.of(of(5, 5), of(null, 0), of("", 0));
     }
     
     
@@ -90,29 +67,29 @@ public class TokenMapTest {
     public void putInstance() {
         map.putInstance(key, 1);
         
-        assertTrue(map.map.containsKey(key));
+        assertTrue(map.containsKey(key));
     }
     
     
-    @Test
-    @Parameters(method = "keys")
-    public void equals(Key<?> aKey, boolean isEqual) {
-        assertEquals(isEqual, key.equals(aKey));
+    @ParameterizedTest
+    @MethodSource("keys")
+    public void equals(boolean expected, Key<?> other) {
+        assertEquals(expected, key.equals(other));
     }
     
-    @Test
-    @Parameters(method= "keys")
-    public void hashCode(Key<?> aKey, boolean isEqual) {
-        assertEquals(isEqual, key.hashCode() == aKey.hashCode());
+    @ParameterizedTest
+    @MethodSource("keys")
+    public void hashCode(boolean expected, Key<?> other) {
+        assertEquals(expected, key.hashCode() == other.hashCode());
     }
     
-    protected Object[] keys() {
-        return new Object[] {
-            new Object[] {key("", Integer.class), true},
-            new Object[] {key("", String.class), false},
-            new Object[] {key("wrong", Integer.class), false},
-            new Object[] {key("wrong", String.class), false}
-        };
-}
+    static Stream<Arguments> keys() {
+        return Stream.of(
+            of(true, key("name", Integer.class)), 
+            of(false, key("name", String.class)),
+            of(false, key("wrong", Integer.class)),
+            of(false, key("wrong", String.class))
+        );
+    }
     
 }

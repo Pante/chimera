@@ -23,24 +23,14 @@
  */
 package com.karuslabs.commons.util.function;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
 public class CheckedFunctionTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CheckedFunction<Object, Object, Exception> function;
-    
-    
-    public CheckedFunctionTest() {
-        function = mock(CheckedFunction.class);
-    }
+    private CheckedFunction<Object, Object, Exception> function = mock(CheckedFunction.class);
     
     
     @Test
@@ -52,11 +42,9 @@ public class CheckedFunctionTest {
     
     @Test
     public void uncheck_ThrowsException() throws Exception {
-        exception.expect(UncheckedFunctionException.class);
-        
         doThrow(Exception.class).when(function).apply(null);
         
-        CheckedFunction.uncheck(function).apply(null);
+        assertThrows(UncheckedFunctionException.class, () -> CheckedFunction.uncheck(function).apply(null));
     }
     
 }

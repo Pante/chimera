@@ -25,29 +25,27 @@ package com.karuslabs.commons.locale;
 
 import java.util.Locale;
 
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertEquals;
+import static java.util.Locale.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
+@TestInstance(PER_CLASS)
 public class TranslationTest {
     
-    private Translation translation;
-    
-    
-    public TranslationTest() {
-        translation = new Translation() {
-            @Override
-            protected String value(String key) {
-                return key;
-            }
+    private Translation translation = new Translation() {
+        @Override
+        protected String value(String key) {
+            return key;
+        }
 
-            @Override
-            public Translation copy() {
-                return null;
-            }
-        };
-    }
+        @Override
+        public Translation copy() {
+            return null;
+        }
+    };
     
     
     @Test
@@ -58,17 +56,17 @@ public class TranslationTest {
     
     @Test
     public void locale() {
-        translation.format.setLocale(Locale.ENGLISH);
-        translation.locale(Locale.ITALY);
+        translation.format.setLocale(ENGLISH);
+        translation.locale(ITALY);
         
-        assertEquals(Locale.ITALY, translation.format.getLocale());
+        assertEquals(ITALY, translation.format.getLocale());
     }
     
     
     @Test
     public void none_Locale() {
         Locale before = Translation.NONE.format.getLocale();
-        Translation.NONE.locale(Locale.ROOT);
+        Translation.NONE.locale(ROOT);
         assertEquals(before, Translation.NONE.format.getLocale());
     }
     

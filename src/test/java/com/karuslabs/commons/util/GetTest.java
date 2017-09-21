@@ -24,77 +24,62 @@
 package com.karuslabs.commons.util;
 
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import junitparams.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class GetTest {    
     
-    private static final Object A = new Object();
-    private static final Object B = new Object();
-    private static final Supplier<Object> SUPPLIER = () -> B;
-    private static final Supplier<IllegalArgumentException> EXCEPTION = IllegalArgumentException::new;
+    private static Object a = new Object();
+    private static Object b = new Object();
+    private static Supplier<Object> supplier = () -> b;
+    private static Supplier<IllegalArgumentException> exception = IllegalArgumentException::new;
     
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("orDefault_parameters")
     public void orDefault(Object object, Object value, Object expected) {
         assertEquals(expected, Get.orDefault(object, value));
     }
     
-    protected Object[] parametersForOrDefault() {
-        return new Object[] {
-            new Object[] {A, B, A},
-            new Object[] {A, null, A},
-            new Object[] {null, B, B}
-        };
+    static Stream<Arguments> orDefault_parameters() {
+        return Stream.of(of(a, b, a), of(a, null, a), of(null, b, b));
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("orDefault_Supplier_parameters")
     public void orDefault_Supplier(Object object, Supplier<Object> value, Object expected) {
         assertEquals(expected, Get.orDefault(object, value));
     }
     
-    protected Object[] parametersForOrDefault_Supplier() {
-        return new Object[] {
-            new Object[] {A, SUPPLIER, A},
-            new Object[] {A, null, A},
-            new Object[] {null, SUPPLIER, B}
-        };
+    static Stream<Arguments> orDefault_Supplier_parameters() {
+        return Stream.of(of(a, supplier, a), of(a, null, a), of(null, supplier, b));
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("orThrow_parameters")
     public void orThrow(Object object, Supplier<IllegalArgumentException> value, Object expected) {
-        assertEquals(expected, Get.orThrow(object, EXCEPTION));
+        assertEquals(expected, Get.orThrow(object, exception));
     }
     
-    protected Object[] parametersForOrThrow() {
-        return new Object[] {
-            new Object[] {A, EXCEPTION, A},
-            new Object[] {A, null, A},
-        };
+    static Stream<Arguments> orThrow_parameters() {
+        return Stream.of(of(a, exception, a), of(a, null, a));
     }
     
     
     @Test
     public void orThrow_ThrowsException() {
-        exception.expect(IllegalArgumentException.class);
-        Get.orThrow(null, EXCEPTION);
+        assertThrows(IllegalArgumentException.class, () -> Get.orThrow(null, exception));
     }
     
 }

@@ -55,7 +55,7 @@ public abstract class Element<T> {
     }
     
     protected T parseConfigurationSection(ConfigurationSection config) {
-        throw new IllegalArgumentException("Failed to parse: " + config.getName());
+        throw new IllegalArgumentException("Failed to parse token: " + config.getName());
     }
     
     

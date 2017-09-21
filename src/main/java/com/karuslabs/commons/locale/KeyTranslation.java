@@ -25,11 +25,14 @@ package com.karuslabs.commons.locale;
 
 import java.util.Locale;
 
+import static java.util.Locale.Category.FORMAT;
+import static java.util.Locale.getDefault;
+
 
 public class KeyTranslation extends Translation {
     
     public KeyTranslation() {
-        this(Locale.getDefault(Locale.Category.FORMAT));
+        this(getDefault(FORMAT));
     }
     
     public KeyTranslation(Locale locale) {

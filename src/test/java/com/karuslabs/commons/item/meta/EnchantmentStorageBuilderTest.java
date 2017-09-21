@@ -23,32 +23,26 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.enchantments.Enchantment.OXYGEN;
 import static org.mockito.Mockito.*;
 
 
 public class EnchantmentStorageBuilderTest {
         
-    private EnchantmentStorageBuilder builder;
-    private EnchantmentStorageMeta meta;
-    
-    
-    public EnchantmentStorageBuilderTest() {
-        meta = mock(EnchantmentStorageMeta.class);
-        builder = new EnchantmentStorageBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private EnchantmentStorageMeta meta = mock(EnchantmentStorageMeta.class);
+    private EnchantmentStorageBuilder builder = new EnchantmentStorageBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        builder.stored(Enchantment.OXYGEN, 2, false);
+        builder.stored(OXYGEN, 2, false);
         
-        verify(meta).addStoredEnchant(Enchantment.OXYGEN, 2, false);
+        verify(meta).addStoredEnchant(OXYGEN, 2, false);
     }
     
     

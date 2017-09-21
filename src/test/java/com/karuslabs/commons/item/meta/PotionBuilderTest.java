@@ -23,26 +23,20 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
 public class PotionBuilderTest {
         
-    private PotionBuilder builder;
-    private PotionMeta meta;
-    
-    
-    public PotionBuilderTest() {
-        meta = mock(PotionMeta.class);
-        builder = new PotionBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private PotionMeta meta = mock(PotionMeta.class);
+    private PotionBuilder builder = new PotionBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
@@ -50,9 +44,9 @@ public class PotionBuilderTest {
         PotionData data = mock(PotionData.class);
         PotionEffect effect = mock(PotionEffect.class);
         
-        builder.color(Color.SILVER).data(data).effect(effect, true);
+        builder.color(SILVER).data(data).effect(effect, true);
         
-        verify(meta).setColor(Color.SILVER);
+        verify(meta).setColor(SILVER);
         verify(meta).setBasePotionData(data);
         verify(meta).addCustomEffect(effect, true);
     }

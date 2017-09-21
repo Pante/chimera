@@ -26,20 +26,21 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.locale.*;
 
 import java.util.Locale;
-
-import junitparams.*;
+import java.util.stream.Stream;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.junit.Assert.assertEquals;
+import static java.util.Locale.getDefault;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class ContextTest {
     
     private static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
@@ -61,32 +62,26 @@ public class ContextTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("getPlayer_parameters")
     public void getPlayer(CommandSender sender, Player expected) {
         assertEquals(expected, new Context(sender, null, null, null).getPlayer());
     }
     
-    protected Object[] parametersForGetPlayer() {
-        return new Object[] {
-            new Object[] {SENDER, null},
-            new Object[] {PLAYER, PLAYER}
-        };
+    static Stream<Arguments> getPlayer_parameters() {
+        return Stream.of(of(SENDER, null), of(PLAYER, PLAYER));
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("getLocale_parameters")
     public void getLocale(CommandSender sender, Locale expected) {
         Context context = new Context(sender, null, null, null);
         assertEquals(expected, context.getLocale());
     }
     
-    protected Object[] parametersForGetLocale() {
-        return new Object[] {
-            new Object[] {PLAYER, new Locale("en", "GB")},
-            new Object[] {SENDER, Locale.getDefault()}
-        };
+    static Stream<Arguments> getLocale_parameters() {
+        return Stream.of(of(PLAYER, new Locale("en", "GB")), of(SENDER, getDefault()));
     }
     
     

@@ -24,23 +24,21 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
+import java.util.stream.Stream;
 
-import junitparams.*;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
-import static org.hamcrest.Matchers.equalTo;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class PromiseTest {
-    
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
     
     private Promise<String> promise;
     
@@ -52,42 +50,36 @@ public class PromiseTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("obtain_parameters")
     public void obtain(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException {
-        exception.expect(type);
-        exception.expectCause(equalTo(thrown));
+        doThrow(thrown).when(promise).get();
         
-        when(promise.get()).thenThrow(thrown);
-        
-        promise.obtain();
+        assertEquals(thrown, assertThrows(type, () -> promise.obtain()).getCause());
     }
     
-    protected Object[] parametersForObtain() {
-        return new Object[] {
-            new Object[] {UncheckedExecutionException.class, new ExecutionException(null)},
-            new Object[] {UncheckedInterruptedException.class, new InterruptedException()}
-        };
+    static Stream<Arguments> obtain_parameters() {
+        return Stream.of(
+            of(UncheckedExecutionException.class, new ExecutionException(null)), 
+            of(UncheckedInterruptedException.class, new InterruptedException())
+        );
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("obtain_Time_parameters")
     public void obtain_Time(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException, TimeoutException {
-        exception.expect(type);
-        exception.expectCause(equalTo(thrown));
+        doThrow(thrown).when(promise).get(anyLong(), any());
         
-        when(promise.get(anyLong(), any())).thenThrow(thrown);
-        
-        promise.obtain(0, TimeUnit.DAYS);
+        assertEquals(thrown, assertThrows(type, () -> promise.obtain(0, DAYS)).getCause());
     }
     
-    protected Object[] parametersForObtain_Time() {
-        return new Object[] {
-            new Object[] {UncheckedExecutionException.class, new ExecutionException(null)},
-            new Object[] {UncheckedInterruptedException.class, new InterruptedException()},
-            new Object[] {UncheckedTimeoutException.class, new TimeoutException()}
-        };
+    static Stream<Arguments> obtain_Time_parameters() {
+        return Stream.of(
+            of(UncheckedExecutionException.class, new ExecutionException(null)), 
+            of(UncheckedInterruptedException.class, new InterruptedException()),
+            of(UncheckedTimeoutException.class, new TimeoutException())
+        );
     }
     
 }

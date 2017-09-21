@@ -23,22 +23,18 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.Locale;
+import org.junit.jupiter.api.*;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static java.util.Locale.PRC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
 
 
+@TestInstance(PER_CLASS)
 public class KeyTranslationTest {
     
-    private KeyTranslation translation;
-    
-    
-    public KeyTranslationTest() {
-        translation = spy(new KeyTranslation());
-    }
+    private KeyTranslation translation = spy(new KeyTranslation());
     
     
     @Test
@@ -49,7 +45,7 @@ public class KeyTranslationTest {
     
     @Test
     public void copy() {
-        translation.format.setLocale(Locale.PRC);
+        translation.format.setLocale(PRC);
         assertEquals(translation.format.getLocale(), translation.copy().format.getLocale());
     }
     

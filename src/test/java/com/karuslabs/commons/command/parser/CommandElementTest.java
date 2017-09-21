@@ -32,13 +32,12 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -50,7 +49,6 @@ public class CommandElementTest {
     private CommandElement element;
     private Completion completion;
     private Translation translation;
-    private Command subcommand;
     
     
     public CommandElementTest() {
@@ -67,7 +65,8 @@ public class CommandElementTest {
     @Test
     public void parseConfigurationSection() {
         Map<String, Command> subcommands = new HashMap<>();
-        subcommands.put("subcommand", subcommand = mock(Command.class));
+        Command subcommand = mock(Command.class);
+        subcommands.put("subcommand", subcommand);
         doReturn(subcommands).when(element).parseCommands(COMMAND.getConfigurationSection("subcommands"));
         
         Map<Integer, Completion> completions = new HashMap<>();
@@ -81,7 +80,7 @@ public class CommandElementTest {
         assertEquals("command", command.getName());
         assertEquals("description", command.getDescription());
         assertEquals("usage", command.getUsage());
-        assertThat(command.getAliases(), equalTo(asList("a", "b", "c")));
+        assertEquals(asList("a", "b", "c"), command.getAliases());
         assertNull(command.getPlugin());
         assertTrue(CommandExecutor.NONE == command.getExecutor());
         assertTrue(Translation.NONE == command.getTranslation());
@@ -120,7 +119,7 @@ public class CommandElementTest {
         
         assertEquals(2, completions.size());
         assertTrue(completion == completions.get(0));
-        assertThat(((CachedCompletion) completions.get(2)).getCompletions(), equalTo(asList("a", "b", "c")));
+        assertEquals(asList("a", "b", "c"), ((CachedCompletion) completions.get(2)).getCompletions());
     }
     
     

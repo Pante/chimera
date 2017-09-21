@@ -31,25 +31,18 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 public class CompletionTest {
     
-    private StubServer server;
-    private CommandSender sender;
-    
-    
-    public CompletionTest() {
-        server = new StubServer(new ArrayList<>(), new ArrayList<>());
-        sender = when(mock(CommandSender.class).getServer()).thenReturn(server).getMock();
-    }
-    
+    private StubServer server = new StubServer(new ArrayList<>(), new ArrayList<>());
+    private CommandSender sender = when(mock(CommandSender.class).getServer()).thenReturn(server).getMock();
+
     
     @Test
     public void player_names() {
@@ -59,7 +52,7 @@ public class CompletionTest {
         Player bobby = when(mock(Player.class).getName()).thenReturn("bobby").getMock();
         server.getOnlinePlayers().add(bobby);
                 
-        assertThat(Completion.PLAYER_NAMES.complete(sender, "bobb"), equalTo(asList("bobby")));
+        assertEquals(asList("bobby"), Completion.PLAYER_NAMES.complete(sender, "bobb"));
     }
     
     
@@ -71,7 +64,7 @@ public class CompletionTest {
         World bobby = when(mock(World.class).getName()).thenReturn("bobby").getMock();
         server.getWorlds().add(bobby);
         
-        assertThat(Completion.WORLD_NAMES.complete(sender, "bobb"), equalTo(asList("bobby")));
+        assertEquals(asList("bobby"), Completion.WORLD_NAMES.complete(sender, "bobb"));
     }
     
 }

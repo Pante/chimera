@@ -27,16 +27,17 @@ import com.karuslabs.commons.item.Builder;
 
 import java.util.*;
 
-import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+
+import static org.bukkit.Material.BANNER;
 
 
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     public BannerBuilder() {
-        this(new ItemStack(Material.BANNER));
+        this(new ItemStack(BANNER));
     }
     
     public BannerBuilder(ItemStack item) {

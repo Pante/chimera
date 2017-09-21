@@ -25,8 +25,13 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import java.util.UUID;
+
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import static org.bukkit.Bukkit.getOfflinePlayer;
 
 
 public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
@@ -37,6 +42,16 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
     public SkullBuilder(Builder builder) {
         super(builder);
+    }
+    
+    
+    public SkullBuilder owner(UUID id) {
+        return owner(getOfflinePlayer(id));
+    }
+    
+    public SkullBuilder owner(OfflinePlayer player) {
+        meta.setOwningPlayer(player);
+        return this;
     }
     
     

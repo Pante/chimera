@@ -26,34 +26,34 @@ package com.karuslabs.commons.locale;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import junitparams.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class LocalesTest {    
     
-    @Test
-    @Parameters({"en_US, true", "US_en, false", "US, false"})
+    @ParameterizedTest
+    @CsvSource({"en_US, true", "US_en, false", "US, false"})
     public void get(String locale, boolean expected) {
         assertEquals(expected, Locales.get(locale) != null);
     }
     
     
-    @Test
-    @Parameters({"en_US, true", "US_en, false", "US, false"})
+    @ParameterizedTest
+    @CsvSource({"en_US, true", "US_en, false", "US, false"})
     public void getOrDefault(String locale, boolean expected) {
         assertEquals(expected, Locales.getOrDefault(locale, Locale.getDefault()) != Locale.getDefault());
     }
     
     
-    @Test
-    @Parameters({"en_US, true, 0", "US_en, false, 1", "US, false, 1"})
+    @ParameterizedTest
+    @CsvSource({"en_US, true, 0", "US_en, false, 1", "US, false, 1"})
     public void getOrDefault_Supplier(String locale, boolean expected, int times) {
         Supplier<Locale> supplier = mock(Supplier.class);
         
@@ -62,15 +62,15 @@ public class LocalesTest {
     }
     
     
-    @Test
-    @Parameters({"Ss, true", "ZP, false", "ZPZ, false"})
+    @ParameterizedTest
+    @CsvSource({"Ss, true", "ZP, false", "ZPZ, false"})
     public void isValidCountry(String country, boolean expected) {
         assertEquals(expected, Locales.isValidCountry(country));
     } 
     
     
-    @Test
-    @Parameters({"eN, true", "ZZ, false", "LSA, false"})
+    @ParameterizedTest
+    @CsvSource({"eN, true", "ZZ, false", "LSA, false"})
     public void isValidLanguage(String language, boolean expected) {
         assertEquals(expected, Locales.isValidLanguage(language));
     }

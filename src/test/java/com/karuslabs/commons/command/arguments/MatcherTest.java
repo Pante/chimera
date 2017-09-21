@@ -24,46 +24,35 @@
 package com.karuslabs.commons.command.arguments;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import junitparams.*;
-
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
 public class MatcherTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private Matcher matcher;
-    
-    
-    public MatcherTest() {
-        matcher = spy(new Matcher(new String[] {"0", "1", "2", "3"}));
-    }
+    private Matcher matcher = spy(new Matcher(new String[] {"0", "1", "2", "3"}));
     
     
     @Test
-    public void matcher() {
-        Matcher matcher = new Matcher(new String[] {""});
-        
+    public void matcher() {        
         assertEquals(0, matcher.getFirst());
-        assertEquals(1, matcher.getLast());
+        assertEquals(4, matcher.getLast());
     }
     
     
     @Test
     public void all() {
+        matcher.between(2, 3);
         matcher.all();
         
         assertEquals(0, matcher.getFirst());
@@ -79,8 +68,8 @@ public class MatcherTest {
     }
     
     
-    @Test
-    @Parameters({"0, 4", "1, 3"})
+    @ParameterizedTest
+    @CsvSource({"0, 4", "1, 3"})
     public void between(int first, int last) {
         matcher.between(first, last);
         
@@ -98,71 +87,63 @@ public class MatcherTest {
     }
     
     
-    @Test
-    @Parameters({"-1, 3", "1, 5"})
+    @ParameterizedTest
+    @CsvSource({"-1, 3", "1, 5"})
     public void between_ThrowsException(int first, int last) {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Invalid bounds specified: " + first + ", " + last);
-        
-        matcher.between(first, last);
+        assertEquals(
+            "Invalid bounds specified: " + first + ", " + last,
+            assertThrows(IllegalArgumentException.class, () -> matcher.between(first, last)).getMessage()
+        );
     }
     
     
     @Test
     public void stream() {
-        Matcher matcher = new Matcher(new String[] {"1", "2", "3"}).starting(1);
-        
-        assertThat(matcher.stream().collect(toList()), equalTo(asList("2", "3")));
+        assertEquals(asList("2", "3"), matcher.starting(2).stream().collect(toList()));
     }
     
     
-    @Test
-    @Parameters({"true, true, true", "true, false, false", "false, true, false"})
+    @ParameterizedTest
+    @CsvSource({"true, true, true", "true, false, false", "false, true, false"})
     public void exact(boolean match1, boolean match2, boolean expected) {
-        Matcher matcher = new Matcher(new String[] {"1", "2"});
-        
         Predicate<String> predicate1 = when(mock(Predicate.class).test("1")).thenReturn(match1).getMock();
         Predicate<String> predicate2 = when(mock(Predicate.class).test("2")).thenReturn(match2).getMock();
         
-        assertEquals(expected, matcher.exact(predicate1, predicate2));
+        assertEquals(expected, matcher.exact(arg -> true, predicate1, predicate2, arg -> true));
     }
     
     
     @Test
     public void exact_ThrowsException() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Invalid number of matches specified.");
-        
-        Matcher matcher = new Matcher(new String[] {"1"});
-        
-        matcher.exact(arg -> true, arg -> true);
+        assertEquals(
+            "Invalid number of matches specified.",
+            assertThrows(IllegalArgumentException.class, () -> matcher.exact(arg -> true, arg -> true)).getMessage()
+        );
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("anySequence_parameters")
     public void anySequence(Predicate[] matches, boolean expected) {
         Matcher matcher = new Matcher(new String[] {"1", "2", "3", "4", "5"});
         
         assertEquals(expected, matcher.anySequence(matches));
     }
     
-    protected Object[] parametersForAnySequence() {
-        return new Object[] {
-            new Object[] {new Predicate[] {arg -> arg.equals("2"), arg -> arg.equals("3")}, true},
-            new Object[] {new Predicate[] {arg -> arg.equals("3"), arg -> arg.equals("2")}, false}
-        };
+    static Stream<Arguments> anySequence_parameters() {
+        return Stream.of(
+            of(new Predicate[] {arg -> arg.equals("2"), arg -> arg.equals("3")}, true),
+            of(new Predicate[] {arg -> arg.equals("3"), arg -> arg.equals("2")}, false)
+        );
     }
     
     
     @Test
     public void anySequence_ThrowsException() {
-       exception.expect(IllegalArgumentException.class);
-       exception.expectMessage("Invalid number of matches specified.");
-       
-       Matcher matcher = new Matcher(new String[] {"1"});
-       
-       matcher.anySequence(arg -> true, arg -> true);
+       assertEquals(
+            "Invalid number of matches specified.",
+            assertThrows(IllegalArgumentException.class, () -> matcher.anySequence(arg -> true, arg -> true, arg -> true, arg -> true, arg -> true)).getMessage()
+       );
     }
     
     

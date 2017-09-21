@@ -30,29 +30,19 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class TranslationElementTest {
     
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
     private static final ConfigurationSection TRANSLATION = COMMANDS.getConfigurationSection("define.translations.translation");
     
     
-    private TranslationElement element;
-    private File folder;
-    
-    
-    public TranslationElementTest() {
-        element = new TranslationElement(folder = new File(""));
-    }
+    private File folder = new File("");
+    private TranslationElement element = new TranslationElement(folder);
     
     
     @Test
@@ -69,10 +59,10 @@ public class TranslationElementTest {
     
     @Test
     public void parseConfigurationSection_ThrowsException() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Failed to parse translation: bundle name undefined");
-        
-        element.parseConfigurationSection(COMMANDS);
+        assertEquals(
+            "Bundle name undefined for: ", 
+            assertThrows(IllegalArgumentException.class, () -> element.parseConfigurationSection(COMMANDS)).getMessage()
+        );
     }
     
 }

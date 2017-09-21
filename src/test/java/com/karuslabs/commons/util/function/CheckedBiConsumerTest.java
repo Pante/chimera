@@ -23,24 +23,14 @@
  */
 package com.karuslabs.commons.util.function;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
 public class CheckedBiConsumerTest {
-    
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
-    private CheckedBiConsumer<Object, Object, Exception> consumer;
-    
-    
-    public CheckedBiConsumerTest() {
-        consumer = mock(CheckedBiConsumer.class);
-    }
+        
+    private CheckedBiConsumer<Object, Object, Exception> consumer = mock(CheckedBiConsumer.class);;
     
     
     @Test
@@ -52,11 +42,9 @@ public class CheckedBiConsumerTest {
     
     @Test
     public void uncheck_ThrowsException() throws Exception {
-        exception.expect(UncheckedFunctionException.class);
-        
         doThrow(Exception.class).when(consumer).accept(null, null);
         
-        CheckedBiConsumer.uncheck(consumer).accept(null, null);
+        assertThrows(UncheckedFunctionException.class, () -> CheckedBiConsumer.uncheck(consumer).accept(null, null));
     }
     
 }

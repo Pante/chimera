@@ -23,20 +23,15 @@
  */
 package com.karuslabs.commons.locale.bundle;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class YamlResourceBundleTest {
     
-    private YamlResourceBundle bundle;
-    
-    
-    public YamlResourceBundleTest() {
-        bundle = new YamlResourceBundle(from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")));
-    }
+    private YamlResourceBundle bundle = new YamlResourceBundle(from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")));
     
     
     @Test

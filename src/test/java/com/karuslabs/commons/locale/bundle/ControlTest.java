@@ -26,46 +26,38 @@ package com.karuslabs.commons.locale.bundle;
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
 import java.util.*;
+import java.util.stream.Stream;
 
-import junitparams.*;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class ControlTest {
     
-    private Control control;
+    private Control control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
     
     
-    public ControlTest() {
-        control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
-    }
-    
-    
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("newBundle_parameters")
     public void newBundle(Locale locale, String expected) {
-        ResourceBundle bundle = ResourceBundle.getBundle("Resource", locale, control);
-        assertEquals(expected, bundle.getString("test"));
+        assertEquals(expected, ResourceBundle.getBundle("Resource", locale, control).getString("test"));
     }
     
-    protected Object[] parametersForNewBundle() {
-        return new Object[] {
-            new Object[] {new Locale("en", "GB"), "English"},
-            new Object[] {new Locale("zh", "CN"), "Chinese"},
-        };
-    }
+    static Stream<Arguments> newBundle_parameters() {
+        return Stream.of(of(new Locale("en", "GB"), "English"), of(new Locale("zh", "CN"), "Chinese"));
+    }    
     
     
     @Test
     public void getFormats() {
-        assertThat(control.getFormats(null), equalTo(asList("properties", "yml", "yaml")));
+        assertEquals(asList("properties", "yml", "yaml"), control.getFormats(null));
     }
     
 }

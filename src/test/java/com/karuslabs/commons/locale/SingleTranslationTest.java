@@ -23,18 +23,20 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
-import junitparams.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static java.util.Locale.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
-import static org.junit.Assert.assertEquals;
 
-
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class SingleTranslationTest {
     
     private SingleTranslation translation;
@@ -46,24 +48,20 @@ public class SingleTranslationTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("format_parameters")
     public void format(String key, Object[] arguments, String expected) {
         assertEquals(expected, translation.format(key, arguments));
     }
     
-    protected Object[] parametersForFormat() {
-        return new Object[] {
-            new Object[] {"key", new Object[] {1}, "value 1"},
-            new Object[] {"null", new Object[] {1}, null},
-            new Object[] {"key", new Object[] {}, "value {0}"}
-        };
+    static Stream<Arguments> format_parameters() {
+        return Stream.of(of("key", new Object[] {1}, "value 1"), of("null", new Object[] {1}, null), of("key", new Object[] {}, "value {0}"));
     }
     
     
     @Test
     public void copy() {
-        translation.format.setLocale(Locale.PRC);
+        translation.format.setLocale(PRC);
         SingleTranslation other = translation.copy();
         
         assertEquals(translation.format.getLocale(), other.format.getLocale());

@@ -24,24 +24,24 @@
 package com.karuslabs.commons.command.arguments;
 
 import java.util.function.*;
+import java.util.stream.Stream;
 
-import junitparams.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
-import static org.junit.Assert.*;
+
 import static org.mockito.Mockito.*;
 
 
-@RunWith(JUnitParamsRunner.class)
+@TestInstance(PER_CLASS)
 public class ArgumentTest {
-    
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    
+
     private static Argument argument = new Argument("text");
     
     
@@ -63,8 +63,8 @@ public class ArgumentTest {
     }
     
     
-    @Test
-    @Parameters
+    @ParameterizedTest
+    @MethodSource("asOrDefault_parameters")
     public void asOrDefault(String returned, String expected) {
         Function<String, Object> function = when(mock(Function.class).apply("text")).thenReturn(returned).getMock();
         
@@ -72,11 +72,8 @@ public class ArgumentTest {
         verify(function).apply("text");
     }
     
-    protected Object[] parametersForAsOrDefault() {
-        return new Object[] {
-            new Object[] {"returned", "returned"},
-            new Object[] {null, "value"}
-        };
+    static Stream<Arguments> asOrDefault_parameters() {
+        return Stream.of(of("returned", "returned"), of(null, "value"));
     }
     
     
@@ -94,9 +91,7 @@ public class ArgumentTest {
         Function<String, Boolean> function = when(mock(Function.class).apply("text")).thenReturn(null).getMock();
         Supplier<IllegalArgumentException> supplier = IllegalArgumentException::new;
         
-        exception.expect(IllegalArgumentException.class);
-        
-        argument.asOrThrow(function, supplier);
+        assertThrows(IllegalArgumentException.class, () -> argument.asOrThrow(function, supplier));
     }
     
 }

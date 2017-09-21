@@ -29,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 @Documented
-@Target({TYPE, PARAMETER, TYPE_USE})
+@Target({PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 public @interface Ignored {
     
