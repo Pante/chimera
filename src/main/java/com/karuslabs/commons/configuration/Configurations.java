@@ -41,7 +41,7 @@ public class Configurations {
         return stream(config).collect(toMap(identity(), config::get));
     }
     
-    public static ConcurrentMap<String, Object> flattenConcurrent(ConfigurationSection config) {
+    public static ConcurrentMap<String, Object> concurrentFlatten(ConfigurationSection config) {
         return stream(config).collect(toConcurrentMap(identity(), config::get));
     }
     

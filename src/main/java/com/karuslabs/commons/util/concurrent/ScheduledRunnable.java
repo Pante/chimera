@@ -21,59 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.util.concurrent;
 
-import java.util.Locale;
-
-import org.junit.jupiter.api.*;
-
-import static java.util.Locale.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import java.util.concurrent.ScheduledFuture;
+import java.util.function.BiConsumer;
 
 
-@TestInstance(PER_CLASS)
-public class TranslationTest {
+public class ScheduledRunnable implements Runnable {
     
-    private Translation translation = new Translation() {
-        @Override
-        protected String value(String key) {
-            return key;
+    protected ScheduledFuture<?> future;
+    private final BiConsumer<Long, Long> consumer;
+    private long total;
+    private long current;
+    
+    
+    public ScheduledRunnable(Runnable runnable, long iterations) {
+        this((current, total) -> runnable.run(), iterations);
+    }
+    
+    public ScheduledRunnable(BiConsumer<Long, Long> consumer, long iterations) {
+        this.consumer = consumer;
+        total = iterations;
+        current = 0;
+    }
+    
+    
+    @Override
+    public void run() {
+        if (!Thread.interrupted() && current < total) {
+            consumer.accept(current, total);
+            current++;
+            
+        } else {
+            future.cancel(true);
+            Thread.interrupted();
         }
-
-        @Override
-        public Translation copy() {
-            return null;
-        }
-    };
-    
-    
-    @Test
-    public void format() {
-        assertEquals("applied key", translation.format("applied {0}", "key"));
     }
     
     
-    @Test
-    public void locale() {
-        translation.format.setLocale(ENGLISH);
-        translation.locale(ITALY);
-        
-        assertEquals(ITALY, translation.format.getLocale());
+    public long getIterations() {
+        return total;
     }
     
-    
-    @Test
-    public void none_Locale() {
-        Locale before = Translation.NONE.format.getLocale();
-        Translation.NONE.locale(ROOT);
-        assertEquals(before, Translation.NONE.format.getLocale());
-    }
-    
-    
-    @Test
-    public void none_copy() {
-        assertEquals(Translation.NONE, Translation.NONE.copy());
+    public long getCurrent() {
+        return current;
     }
     
 }

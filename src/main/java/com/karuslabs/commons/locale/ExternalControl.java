@@ -21,21 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.bundle;
+package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.locale.resources.Resource;
     
 import java.io.*;
 import java.util.*;
+import java.util.ResourceBundle.Control;
 import javax.annotation.Nullable;
 
-import static com.karuslabs.commons.configuration.Configurations.from;
+import static com.karuslabs.commons.configuration.Configurations.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.unmodifiableList;
 
 
-public class Control extends ResourceBundle.Control {    
+public class ExternalControl extends Control {
     
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
     
@@ -43,7 +44,7 @@ public class Control extends ResourceBundle.Control {
     private Resource[] resources;
     
     
-    public Control(Resource... resources) {
+    public ExternalControl(Resource... resources) {
         this.resources = resources;
     }
     
@@ -74,7 +75,7 @@ public class Control extends ResourceBundle.Control {
                 
             case "yml":
             case "yaml":
-                return new YamlResourceBundle(from(stream));
+                return new CachedResourceBundle(concurrentFlatten(from(stream)));
                 
             default:
                 return null;

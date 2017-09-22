@@ -43,7 +43,7 @@ import static org.mockito.Mockito.*;
 
 public class CommandTest {
     
-    private Command command = spy(new Command("", null, Translation.NONE));
+    private Command command = spy(new Command("", null));
     
     
     @ParameterizedTest

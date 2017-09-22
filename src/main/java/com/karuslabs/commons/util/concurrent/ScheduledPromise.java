@@ -26,16 +26,18 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 
 
-public interface Promise<T> extends Future<T> {
+public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
     
-    public static <T> Promise<T> of(Future<T> future) {
+    public static <T> ScheduledPromise<T> of(ScheduledFuture<T> future) {
         return new ProxiedPromise<>(future);
     }
     
     
-    public default T obtain() {
+    public default T await() {
         try {
             return get();
+        } catch (CancellationException e) {
+            return null;
             
         } catch (InterruptedException e) {
             throw new UncheckedInterruptedException(e);
@@ -45,9 +47,12 @@ public interface Promise<T> extends Future<T> {
         }
     }
     
-    public default T obtain(long timeout, TimeUnit unit) {
+    public default T await(long timeout, TimeUnit unit) {
         try {
             return get(timeout, unit);
+            
+        } catch (CancellationException e) {
+            return null;
             
         } catch (InterruptedException e) {
             throw new UncheckedInterruptedException(e);
@@ -61,11 +66,11 @@ public interface Promise<T> extends Future<T> {
     }
     
     
-    static class ProxiedPromise<T> implements Promise<T> {
+    static class ProxiedPromise<T> implements ScheduledPromise<T> {
 
-        private final Future<T> future;
+        private final ScheduledFuture<T> future;
 
-        ProxiedPromise(Future<T> future) {
+        ProxiedPromise(ScheduledFuture<T> future) {
             this.future = future;
         }
 
@@ -92,6 +97,16 @@ public interface Promise<T> extends Future<T> {
         @Override
         public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             return future.get(timeout, unit);
+        }
+
+        @Override
+        public long getDelay(TimeUnit unit) {
+            return future.getDelay(unit);
+        }
+
+        @Override
+        public int compareTo(Delayed o) {
+            return future.compareTo(o);
         }
 
     }

@@ -21,46 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.locale;
 
 import java.util.*;
+import java.util.concurrent.*;
+import javax.annotation.Nullable;
 
-import org.bukkit.configuration.ConfigurationSection;
+import static java.util.Collections.enumeration;
 
 
-public abstract class Element<T> {    
+public class CachedResourceBundle extends ResourceBundle {
     
-    protected Map<String, T> definitions;
+    private final ConcurrentMap<String, Object> messages;
     
     
-    public Element(Map<String, T> definitions) {
-        this.definitions = definitions;
+    public CachedResourceBundle() {
+        this(new ConcurrentHashMap<>());
+    }
+    
+    public CachedResourceBundle(ConcurrentMap<String, Object> messages) {
+        this.messages = messages;
     }
     
     
-    public void define(String key, Object value) {
-        definitions.put(key, parse(value));
+    @Override
+    public Enumeration<String> getKeys() {
+        return enumeration(messages.keySet());
     }
     
-    public T parse(Object value) {
-        if (value instanceof String && definitions.containsKey(value)) {
-            return definitions.get(value);
-            
-        } else if (value instanceof ConfigurationSection) {
-            return parseConfigurationSection((ConfigurationSection) value);
-            
-        } else {
-            throw new IllegalArgumentException("Failed to parse token: " + value);
-        }
-    }
-    
-    protected T parseConfigurationSection(ConfigurationSection config) {
-        throw new IllegalArgumentException("Failed to parse token: " + config.getName());
+    @Override
+    protected @Nullable Object handleGetObject(String key) {
+        return messages.get(key);
     }
     
     
-    public Map<String, T> getDefinitions() {
-        return definitions;
+    public ConcurrentMap<String, Object> getMessages() {
+        return messages;
     }
     
 }

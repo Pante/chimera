@@ -21,25 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.PromiseTask;
+import java.text.MessageFormat;
+import java.util.*;
 
 
-public abstract class BarTask<T> extends PromiseTask<T> {
+public class FormatTranslation extends Translation {
     
-    private Translation translation;
+    protected MessageFormat format;
     
     
-    public BarTask(long iterations, Translation translation) {
-        super(iterations);
-        this.translation = translation.copy();
+    public FormatTranslation(String bundle, ResourceBundle.Control control) {
+        super(bundle, control);
+        format = new MessageFormat("");
     }
     
     
-    public Translation getTranslation() {
-        return translation;
+    public String format(String key, Object... arguments) {
+        format.applyPattern(get(format.getLocale()).getString(key));
+        return format.format(arguments);
+    }
+    
+    public FormatTranslation locale(Locale locale) {
+        format.setLocale(locale);
+        return this;
     }
     
 }

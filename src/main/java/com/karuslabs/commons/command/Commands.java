@@ -23,11 +23,9 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.parser.*;
 
 import org.bukkit.plugin.Plugin;
 
-import static com.karuslabs.commons.configuration.Configurations.from;
 
 
 public class Commands {
@@ -43,18 +41,6 @@ public class Commands {
     public Commands(Plugin plugin, ProxiedCommandMap map) {
         this.plugin = plugin;
         this.map = map;
-    }
-    
-    
-    public void load(String path) {
-        CompletionElement completion = new CompletionElement();
-        TranslationElement translations = new TranslationElement(plugin.getDataFolder());
-        
-        load(path, new Parser(new CommandElement(plugin, completion, translations), completion, translations));
-    }
-    
-    public void load(String path, Parser parser) {
-        map.registerAll(plugin.getName(), parser.parse(from(getClass().getClassLoader().getResourceAsStream(path))));
     }
     
     

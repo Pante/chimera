@@ -98,12 +98,4 @@ public class Context {
         return command;
     }
     
-    public Translation getTranslation() {
-        if (translation == null) {
-            translation = command.getTranslation().locale(locale);
-        }
-        
-        return translation;
-    }
-    
 }

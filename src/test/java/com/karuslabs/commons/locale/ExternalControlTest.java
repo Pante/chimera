@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.bundle;
+package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
@@ -39,9 +39,9 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class ControlTest {
+public class ExternalControlTest {
     
-    private Control control = new Control(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
+    private ExternalControl control = new ExternalControl(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
     
     
     @ParameterizedTest

@@ -23,66 +23,32 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Ignored;
-import com.karuslabs.commons.util.Prototype;
-
-import java.text.MessageFormat;
-import java.util.Locale;
-import javax.annotation.Nullable;
-
-import static java.util.Locale.getDefault;
+import java.util.*;
+import java.util.ResourceBundle.Control;
 
 
-public abstract class Translation implements Prototype<Translation> {
+public class Translation {
     
-    public static final Translation NONE = new Translation() {
-        
-        @Override
-        public Translation copy() {
-            return this;
-        }
-        
-        @Override
-        public Translation locale(@Ignored Locale locale) {
-            return this;
-        }
-
-        @Override
-        protected String value(String key) {
-            return key;
-        }
-        
-    };
+    private String bundle;
+    private Control control;
     
     
-    protected MessageFormat format;
-    
-    
-    public Translation() {
-        this(getDefault());
-    }
-    
-    public Translation(Locale locale) {
-        format = new MessageFormat("", locale);
+    public Translation(String bundle, Control control) {
+        this.bundle = bundle;
+        this.control = control;
     }
     
     
-    public Translation locale(Locale locale) {
-        format.setLocale(locale);
-        return this;
+    public ResourceBundle get(Locale locale) {
+        return ResourceBundle.getBundle(bundle, locale, control);
     }
     
-    public @Nullable String format(String key, Object... arguments) {
-        String message = value(key);
-        if (message != null && arguments.length != 0) {
-            format.applyPattern(message);
-            return format.format(arguments);
-            
-        } else {
-            return message;
-        }   
+    public String getBundleName() {
+        return bundle;
     }
     
-    protected abstract @Nullable String value(String key);
+    public Control getControl() {
+        return control;
+    }
     
 }

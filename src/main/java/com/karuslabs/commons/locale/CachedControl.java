@@ -21,41 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.annotation.*;
 
-import java.util.function.BiConsumer;
+import java.util.*;
+import java.util.ResourceBundle.Control;
+import java.util.concurrent.*;
+import javax.annotation.Nullable;
 
-import org.bukkit.boss.BossBar;
+import static java.util.Collections.EMPTY_LIST;
 
 
-public class SharedProgressBarTask extends BarTask<BossBar> {
+public class CachedControl extends Control {
     
-    private BossBar bar;
-    private BiConsumer<SharedProgressBarTask, BossBar> consumer;
+    private final ConcurrentMap<Locale, ResourceBundle> bundles;
     
     
-    public SharedProgressBarTask(long iterations, Translation translation, BossBar bar, BiConsumer<SharedProgressBarTask, BossBar> consumer) {
-        super(iterations, translation);
-        this.bar = bar;
-        this.consumer = consumer;
+    public CachedControl() {
+        this(new ConcurrentHashMap<>());
     }
-
+    
+    public CachedControl(ConcurrentMap<Locale, ResourceBundle> bundles) {
+        this.bundles = bundles;
+    }
+    
     
     @Override
-    protected void process() {
-        consumer.accept(this, bar);
+    public @Nullable ResourceBundle newBundle(@Ignored String baseName, Locale locale, @Ignored String format, @Ignored ClassLoader loader, @Ignored boolean reload) {
+        return bundles.get(locale);
     }
-
+    
     @Override
-    protected BossBar value() {
-        return bar;
+    public @Immutable List<String> getFormats(@Ignored String bundleName) {
+        return EMPTY_LIST;
     }
     
     
-    public BossBar getBar() {
-        return bar;
+    public ConcurrentMap<Locale, ResourceBundle> getBundles() {
+        return bundles;
     }
     
 }

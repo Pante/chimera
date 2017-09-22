@@ -45,7 +45,7 @@ public class ContextTest {
     
     private static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
     private static final CommandSender SENDER = mock(CommandSender.class);
-    private static final Command COMMAND = when(mock(Command.class).getTranslation()).thenReturn(Translation.NONE).getMock();
+    private static final Command COMMAND = mock(Command.class);
   
     
     @Test
@@ -82,12 +82,6 @@ public class ContextTest {
     
     static Stream<Arguments> getLocale_parameters() {
         return Stream.of(of(PLAYER, new Locale("en", "GB")), of(SENDER, getDefault()));
-    }
-    
-    
-    @Test
-    public void getTranslation() {
-        assertEquals(Translation.NONE, new Context(SENDER, null, null, COMMAND).getTranslation());
     }
     
 }

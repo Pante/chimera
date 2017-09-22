@@ -23,10 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.Translation;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -49,24 +47,22 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     private Plugin plugin;
     private CommandExecutor executor;
-    private Translation translation;
     private Map<String, Command> subcommands;
     private Map<Integer, Completion> completions;
     
     
-    public Command(String name, Plugin plugin, Translation translation) {
-        this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE, translation);
+    public Command(String name, Plugin plugin) {
+        this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE);
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Translation translation) {
-        this(name, description, usage, aliases, plugin, executor, translation, new HashMap<>(), new HashMap<>());
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor) {
+        this(name, description, usage, aliases, plugin, executor, new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Translation translation, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
         this.executor = executor;
-        this.translation = translation;
         this.subcommands = subcommands;
         this.completions = completions;
     }
@@ -129,10 +125,6 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
-    }
-    
-    public @Immutable Translation getTranslation() {
-        return translation.copy();
     }
     
     public Map<String, Command> getSubcommands() {
