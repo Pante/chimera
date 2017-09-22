@@ -27,20 +27,23 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.function.BiConsumer;
 
 
-public class ScheduledRunnable implements Runnable {
+public abstract class ScheduledRunnable implements Runnable {
+    
+    public static ScheduledRunnable of(Runnable runnable, long iterations) {
+        return new ScheduledDelegateRunnable(runnable, iterations);
+    }
+    
+    public static ScheduledRunnable of(BiConsumer<Long, Long> consumer, long iterations) {
+        return new ScheduledContextRunnable(consumer, iterations);
+    }
+    
     
     protected ScheduledFuture<?> future;
-    private final BiConsumer<Long, Long> consumer;
     private long total;
     private long current;
     
     
-    public ScheduledRunnable(Runnable runnable, long iterations) {
-        this((current, total) -> runnable.run(), iterations);
-    }
-    
-    public ScheduledRunnable(BiConsumer<Long, Long> consumer, long iterations) {
-        this.consumer = consumer;
+    public ScheduledRunnable(long iterations) {
         total = iterations;
         current = 0;
     }
@@ -49,7 +52,7 @@ public class ScheduledRunnable implements Runnable {
     @Override
     public void run() {
         if (!Thread.interrupted() && current < total) {
-            consumer.accept(current, total);
+            process();
             current++;
             
         } else {
@@ -58,6 +61,8 @@ public class ScheduledRunnable implements Runnable {
         }
     }
     
+    protected abstract void process();
+    
     
     public long getIterations() {
         return total;
@@ -65,6 +70,41 @@ public class ScheduledRunnable implements Runnable {
     
     public long getCurrent() {
         return current;
+    }
+    
+    
+    static class ScheduledDelegateRunnable extends ScheduledRunnable {
+        
+        private final Runnable runnable;
+        
+        
+        ScheduledDelegateRunnable(Runnable runnable, long iterations) {
+            super(iterations);
+            this.runnable = runnable;
+        }
+
+        @Override
+        protected void process() {
+            runnable.run();
+        }
+        
+    }
+    
+    static class ScheduledContextRunnable extends ScheduledRunnable {
+        
+        private final BiConsumer<Long, Long> consumer;
+        
+        
+        ScheduledContextRunnable(BiConsumer<Long, Long> consumer, long iterations) {
+            super(iterations);
+            this.consumer = consumer;
+        }
+
+        @Override
+        protected void process() {
+            consumer.accept(getCurrent(), getIterations());
+        }
+        
     }
     
 }

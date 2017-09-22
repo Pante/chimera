@@ -44,15 +44,7 @@ public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
     public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, threadFactory, handler);
     }
-
     
-    public ScheduledFuture<?> schedule(Runnable runnable, long iterations, long initialDelay, long delay, TimeUnit unit) {
-        return schedule(new ScheduledRunnable(runnable, iterations), initialDelay, delay, unit);
-    }
-    
-    public ScheduledFuture<?> schedule(BiConsumer<Long, Long> consumer, long iterations, long initialDelay, long delay, TimeUnit unit) {
-        return schedule(new ScheduledRunnable(consumer, iterations), initialDelay, delay, unit);
-    }
     
     public ScheduledFuture<?> schedule(ScheduledRunnable runnable, long initialDelay, long delay, TimeUnit unit) {
         return scheduleWithFixedDelay(runnable, initialDelay, delay, unit);
