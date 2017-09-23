@@ -21,11 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.animation.screen;
+
+import com.karuslabs.commons.locale.Translation;
+import java.text.MessageFormat;
 
 
-public interface Prototype<T> {
+public interface Context {
     
-    public T copy();
+    public Translation getTranslation();
+    
+    public MessageFormat getFormat();
+    
+    public long getIterations();
+    
+    public long getCurrent();
     
 }

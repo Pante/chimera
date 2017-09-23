@@ -21,43 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.animation.screen;
 
-import java.util.concurrent.*;
-import java.util.function.BiConsumer;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
+
+import java.text.MessageFormat;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
+abstract class Task extends ScheduledRunnable implements Context {
+    
+    private Translation translation;
+    private MessageFormat format;
+    
+    
+    Task(Translation translation, long iterations) {
+        super(iterations);
+        this.translation = translation;
+        format = new MessageFormat("");
+    }
 
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
-    
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
 
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
-    
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
-    
-    
-    public ScheduledFuture<?> schedule(ScheduledRunnable runnable, long initialDelay, long period, TimeUnit unit) {
-        return scheduleWithFixedDelay(runnable, initialDelay, period, unit);
-    }
-    
-    
     @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
+    public Translation getTranslation() {
+        return translation;
+    }
+
+    @Override
+    public MessageFormat getFormat() {
+        return format;
     }
     
 }
