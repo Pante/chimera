@@ -65,7 +65,7 @@ public class ContextTest {
     @ParameterizedTest
     @MethodSource("getPlayer_parameters")
     public void getPlayer(CommandSender sender, Player expected) {
-        assertEquals(expected, new Context(sender, null, null, null).getPlayer());
+        assertEquals(expected, new Context(sender, null, null, COMMAND).getPlayer());
     }
     
     static Stream<Arguments> getPlayer_parameters() {
@@ -76,7 +76,7 @@ public class ContextTest {
     @ParameterizedTest
     @MethodSource("getLocale_parameters")
     public void getLocale(CommandSender sender, Locale expected) {
-        Context context = new Context(sender, null, null, null);
+        Context context = new Context(sender, null, null, COMMAND);
         assertEquals(expected, context.getLocale());
     }
     
