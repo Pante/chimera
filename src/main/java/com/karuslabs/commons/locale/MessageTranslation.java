@@ -23,60 +23,51 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.karuslabs.commons.annotation.Ignored;
+
+import java.text.MessageFormat;
 import java.util.*;
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.Collections.enumeration;
-import java.util.concurrent.*;
-import javax.annotation.Nullable;
 
 
-
-public class CachedResourceBundle extends ResourceBundle {
+public class MessageTranslation extends Translation {
     
-    public static final CachedResourceBundle NONE = new CachedResourceBundle() {
-
-        private Enumeration<String> keys = enumeration(EMPTY_LIST);
-
+    public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE) {
         
         @Override
-        protected Object handleGetObject(String key) {
+        public ResourceBundle get(@Ignored Locale locale) {
+            return CachedResourceBundle.NONE;
+        }
+        
+        @Override
+        public String format(String key, @Ignored Object... arguments) {
             return key;
         }
-
+        
         @Override
-        public Enumeration<String> getKeys() {
-            return keys;
+        public MessageTranslation locale(@Ignored Locale locale) {
+            return this;
         }
         
     };
-
     
     
-    private final ConcurrentMap<String, Object> messages;
+    protected MessageFormat format;
     
     
-    public CachedResourceBundle() {
-        this(new ConcurrentHashMap<>());
-    }
-    
-    public CachedResourceBundle(ConcurrentMap<String, Object> messages) {
-        this.messages = messages;
+    public MessageTranslation(String bundle, ResourceBundle.Control control) {
+        super(bundle, control);
+        format = new MessageFormat("");
     }
     
     
-    @Override
-    public Enumeration<String> getKeys() {
-        return enumeration(messages.keySet());
+    public String format(String key, Object... arguments) {
+        format.applyPattern(get(format.getLocale()).getString(key));
+        return format.format(arguments);
     }
     
-    @Override
-    protected @Nullable Object handleGetObject(String key) {
-        return messages.get(key);
-    }
-    
-    
-    public ConcurrentMap<String, Object> getMessages() {
-        return messages;
+    public MessageTranslation locale(Locale locale) {
+        format.setLocale(locale);
+        return this;
     }
     
 }

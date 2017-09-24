@@ -21,31 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
-
-import java.text.MessageFormat;
-import java.util.*;
+package com.karuslabs.commons.command.parser;
 
 
-public class FormatTranslation extends Translation {
+public class ParserException extends RuntimeException {
     
-    protected MessageFormat format;
-    
-    
-    public FormatTranslation(String bundle, ResourceBundle.Control control) {
-        super(bundle, control);
-        format = new MessageFormat("");
-    }
-    
-    
-    public String format(String key, Object... arguments) {
-        format.applyPattern(get(format.getLocale()).getString(key));
-        return format.format(arguments);
-    }
-    
-    public FormatTranslation locale(Locale locale) {
-        format.setLocale(locale);
-        return this;
+    public ParserException(String message) {
+        super(message);
     }
     
 }

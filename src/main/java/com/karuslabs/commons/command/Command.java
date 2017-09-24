@@ -25,27 +25,22 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
+import static com.karuslabs.commons.command.Patterns.preserveQuotes;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
 
-public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {
-    
-    private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
-    
-    public static String[] split(String[] arguments) {
-        return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
-    }
-    
+public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {    
     
     private Plugin plugin;
+    private MessageTranslation translation;
     private CommandExecutor executor;
     private Map<String, Command> subcommands;
     private Map<Integer, Completion> completions;
@@ -56,12 +51,13 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor) {
-        this(name, description, usage, aliases, plugin, executor, new HashMap<>(), new HashMap<>());
+        this(name, description, usage, aliases, plugin, MessageTranslation.NONE, executor, new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, MessageTranslation translation, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
+        this.translation = translation;
         this.executor = executor;
         this.subcommands = subcommands;
         this.completions = completions;
@@ -70,7 +66,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(sender, label, null, this), new Arguments(split(args)));
+        return execute(new Context(sender, label, null, this), new Arguments(preserveQuotes(args)));
     }
     
     public boolean execute(Context context, Arguments arguments) {
@@ -90,7 +86,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return complete(sender, new Arguments(split(args)));
+        return complete(sender, new Arguments(preserveQuotes(args)));
     }
     
     public List<String> complete(CommandSender sender, Arguments arguments) {
@@ -117,6 +113,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     @Override
     public Plugin getPlugin() {
         return plugin;
+    }
+    
+    public MessageTranslation getTranslation() {
+        return translation;
+    }
+    
+    public void setTranslation(MessageTranslation translation) {
+        this.translation = translation;
     }
     
     public CommandExecutor getExecutor() {

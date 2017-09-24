@@ -24,6 +24,7 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
+import javax.annotation.Nullable;
 
 
 public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
@@ -33,7 +34,7 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
     }
     
     
-    public default T await() {
+    public default @Nullable T await() {
         try {
             return get();
         } catch (CancellationException e) {
@@ -47,7 +48,7 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
         }
     }
     
-    public default T await(long timeout, TimeUnit unit) {
+    public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
             return get(timeout, unit);
             

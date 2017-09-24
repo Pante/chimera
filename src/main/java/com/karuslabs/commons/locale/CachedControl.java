@@ -35,6 +35,16 @@ import static java.util.Collections.EMPTY_LIST;
 
 public class CachedControl extends Control {
     
+    public static final CachedControl NONE = new CachedControl() {
+        
+        @Override
+        public ResourceBundle newBundle(@Ignored String name, @Ignored Locale locale, @Ignored String format, @Ignored ClassLoader loader, @Ignored boolean reload) {
+            return CachedResourceBundle.NONE;
+        }
+        
+    };
+    
+    
     private final ConcurrentMap<Locale, ResourceBundle> bundles;
     
     

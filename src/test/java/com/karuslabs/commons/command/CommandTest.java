@@ -46,18 +46,6 @@ public class CommandTest {
     private Command command = spy(new Command("", null));
     
     
-    @ParameterizedTest
-    @MethodSource("split_parameters")
-    public void split(String[] arguments, String[] expected) {
-        assertThat(Command.split(arguments), equalTo(expected));
-    }
-    
-    static Stream<org.junit.jupiter.params.provider.Arguments> split_parameters() {
-        String[] arguments = new String[] {"1", "2", "3"};
-        return Stream.of(of(arguments, arguments), of(new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}));
-    }
-    
-    
     @Test
     public void execute_unwrapped() {
         doReturn(true).when(command).execute(any(Context.class), any(Arguments.class));

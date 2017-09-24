@@ -40,7 +40,7 @@ public class Context {
     private String label;
     private Command parent;
     private Command command;
-    private Translation translation;
+    private MessageTranslation translation;
     
     
     public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
@@ -53,7 +53,7 @@ public class Context {
         this.label = label;
         this.parent = parent;
         this.command = command;
-        this.translation = null;
+        this.translation = command.getTranslation();
     }
     
     
@@ -96,6 +96,10 @@ public class Context {
     
     public Command getCommand() {
         return command;
+    }
+
+    public MessageTranslation getTranslation() {
+        return translation;
     }
     
 }
