@@ -23,53 +23,54 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.Map;
+import com.karuslabs.commons.annotation.Ignored;
+import com.karuslabs.commons.command.Command;
+
+import java.util.*;
 import javax.annotation.Nullable;
 
+import org.bukkit.configuration.ConfigurationSection;
 
-public abstract class Element<T> {
+
+public class CommandsElement extends Element<Map<String, Command>> {
     
-    private Map<String, T> declarations;
+    private Element<Command> command;
     
     
-    public Element(Map<String, T> declarations) {
-        this.declarations = declarations;
+    public CommandsElement(Element<Command> command) {
+        this(command, new HashMap<>());
     }
     
-    
-    public void declare(String key, Object value) {
-        declarations.put(key, Element.this.parse(key, value));
+    public CommandsElement(Element<Command> command, Map<String, Map<String, Command>> declarations) {
+        super(declarations);
+        this.command = command;
     }
+
     
-    
-    public T parse(String key, Object value) {
-        T parsed;
-        if (value instanceof String) {
-            return getDeclaration((String) value);
+    @Override
+    public Map<String, Command> parse(String key, @Nullable Object value) {
+        if (value instanceof ConfigurationSection) {
+            Map<String, Command> commands = new HashMap<>();
+            ConfigurationSection config = (ConfigurationSection) value;
             
-        } else if ((parsed = parse(value)) != null) {
-            return parsed;
+            config.getKeys(false).forEach(aKey -> {
+                Command aCommand = command.parse(aKey, config.get(aKey));
+                commands.put(aCommand.getName(), aCommand);
+                aCommand.getAliases().forEach(alias -> commands.put(alias, aCommand));
+            });
+            
+            return commands;
             
         } else {
-            throw new ParserException("Failed to parse key:" + key);
+            throw new ParserException("Key: subcommands is missing or contains an invalid value");
         }
     }
     
-    protected T getDeclaration(String key) {
-        T value = declarations.get(key);
-        if (value != null) {
-            return value;
-            
-        } else {
-            throw new ParserException("Failed to find declaration for: " + key);
-        }
-    }
     
-    protected abstract @Nullable T parse(Object value);
-    
-    
-    public Map<String, T> getDeclarations() {
-        return declarations;
+
+    @Override
+    protected @Nullable Map<String, Command> parse(@Ignored Object value) {
+        return null;
     }
     
 }

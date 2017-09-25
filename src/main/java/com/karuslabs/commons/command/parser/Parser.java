@@ -23,53 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.Map;
-import javax.annotation.Nullable;
 
-
-public abstract class Element<T> {
-    
-    private Map<String, T> declarations;
-    
-    
-    public Element(Map<String, T> declarations) {
-        this.declarations = declarations;
-    }
-    
-    
-    public void declare(String key, Object value) {
-        declarations.put(key, Element.this.parse(key, value));
-    }
-    
-    
-    public T parse(String key, Object value) {
-        T parsed;
-        if (value instanceof String) {
-            return getDeclaration((String) value);
-            
-        } else if ((parsed = parse(value)) != null) {
-            return parsed;
-            
-        } else {
-            throw new ParserException("Failed to parse key:" + key);
-        }
-    }
-    
-    protected T getDeclaration(String key) {
-        T value = declarations.get(key);
-        if (value != null) {
-            return value;
-            
-        } else {
-            throw new ParserException("Failed to find declaration for: " + key);
-        }
-    }
-    
-    protected abstract @Nullable T parse(Object value);
-    
-    
-    public Map<String, T> getDeclarations() {
-        return declarations;
-    }
+public class Parser {
     
 }

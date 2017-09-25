@@ -23,53 +23,33 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import java.util.Map;
+import com.karuslabs.commons.command.completion.*;
+
+import java.util.*;
 import javax.annotation.Nullable;
 
 
-public abstract class Element<T> {
+public class CompletionElement extends Element<Completion> {
     
-    private Map<String, T> declarations;
-    
-    
-    public Element(Map<String, T> declarations) {
-        this.declarations = declarations;
+    public CompletionElement() {
+        this(new HashMap<>());
     }
     
-    
-    public void declare(String key, Object value) {
-        declarations.put(key, Element.this.parse(key, value));
+    public CompletionElement(Map<String, Completion> declarations) {
+        super(declarations);
+        getDeclarations().put("PLAYER_NAMES", Completion.PLAYER_NAMES);
+        getDeclarations().put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
+
     
-    
-    public T parse(String key, Object value) {
-        T parsed;
-        if (value instanceof String) {
-            return getDeclaration((String) value);
-            
-        } else if ((parsed = parse(value)) != null) {
-            return parsed;
-            
-        } else {
-            throw new ParserException("Failed to parse key:" + key);
+    @Override
+    protected @Nullable Completion parse(Object value) {
+        Completion completion = null;
+        if (value instanceof List) {
+            completion = new CachedCompletion((List<String>) value);
         }
-    }
-    
-    protected T getDeclaration(String key) {
-        T value = declarations.get(key);
-        if (value != null) {
-            return value;
-            
-        } else {
-            throw new ParserException("Failed to find declaration for: " + key);
-        }
-    }
-    
-    protected abstract @Nullable T parse(Object value);
-    
-    
-    public Map<String, T> getDeclarations() {
-        return declarations;
+        
+        return completion;
     }
     
 }
