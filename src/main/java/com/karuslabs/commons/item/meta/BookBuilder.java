@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.BookMeta.Generation;
@@ -63,7 +65,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
 
     
     @Override
-    protected BookBuilder getThis() {
+    protected @Nonnull BookBuilder getThis() {
         return this;
     }
     

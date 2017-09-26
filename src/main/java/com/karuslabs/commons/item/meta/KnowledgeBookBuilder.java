@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.KnowledgeBookMeta;
@@ -54,7 +56,7 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookBuilder, Knowledg
     
 
     @Override
-    protected KnowledgeBookBuilder getThis() {
+    protected @Nonnull KnowledgeBookBuilder getThis() {
         return this;
     }
     

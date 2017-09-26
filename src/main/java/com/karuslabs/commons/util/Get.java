@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.util;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
+import java.util.function.*;
+import javax.annotation.*;
 
 
 public class Get {
@@ -38,7 +37,7 @@ public class Get {
         return object != null ? object : value.get();
     }
     
-    public static <T, E extends RuntimeException> T orThrow(@Nullable T object, Supplier<E> exception) {
+    public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
         if (object != null) {
             return object;
             

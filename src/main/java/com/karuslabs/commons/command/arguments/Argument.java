@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.arguments;
 
 import java.util.function.*;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 
 public class Argument {
@@ -64,7 +64,7 @@ public class Argument {
         }
     }
     
-    public <T, E extends RuntimeException> T asOrThrow(Function<String, T> type, Supplier<E> exception) {
+    public <T, E extends RuntimeException> @Nonnull T asOrThrow(Function<String, T> type, Supplier<E> exception) {
         T parsed = type.apply(argument);
         if (parsed != null) {
             return parsed;

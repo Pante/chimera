@@ -24,6 +24,7 @@
 package com.karuslabs.commons.item;
 
 import java.util.*;
+import javax.annotation.Nonnull;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -55,7 +56,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }   
     
     
-    protected abstract GenericBuilder getThis();
+    protected @Nonnull abstract GenericBuilder getThis();
     
     
     public GenericBuilder amount(int amount) {

@@ -30,6 +30,7 @@ import com.karuslabs.commons.util.concurrent.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import javax.annotation.Nonnull;
 
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class ProgressBar extends AbstractBar {
 
     
     @Override
-    protected ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
         List<BossBar> bars = players.stream().map(player -> {
             BossBar bar = template.create();
             bar.addPlayer(player);
@@ -98,7 +99,7 @@ public class ProgressBar extends AbstractBar {
         
         
         @Override
-        protected ProgressBarBuilder getThis() {
+        protected @Nonnull ProgressBarBuilder getThis() {
             return this;
         }
     

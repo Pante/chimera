@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -59,7 +61,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
 
     @Override
-    protected PotionBuilder getThis() {
+    protected @Nonnull PotionBuilder getThis() {
         return this;
     }
     

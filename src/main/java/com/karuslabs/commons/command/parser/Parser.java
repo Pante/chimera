@@ -23,7 +23,74 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.command.Command;
+import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.MessageTranslation;
+
+import java.util.List;
+
+import org.bukkit.configuration.ConfigurationSection;
+
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.stream.Collectors.toList;
+
 
 public class Parser {
+    
+    private Element<Command> command;
+    private Element<MessageTranslation> translation;
+    private Element<Completion> completion;
+    
+    
+    public Parser(Element<Command> command, Element<MessageTranslation> translation, Element<Completion> completion) {
+        this.command = command;
+        this.translation = translation;
+        this.completion = completion;
+    }
+    
+    
+    public List<Command> parse(ConfigurationSection config) {
+        ConfigurationSection declarations = config.getConfigurationSection("declarations");
+        if (declarations != null) {
+            parseDeclarations(declarations);
+        }
+        
+        config = config.getConfigurationSection("commands");
+        if (config != null) {
+            return parseCommands(config);
+            
+        } else {
+            return EMPTY_LIST;
+        }
+    }
+    
+    protected void parseDeclarations(ConfigurationSection config) {
+        parseDeclaration(completion, config.getConfigurationSection("completions"));
+        parseDeclaration(translation, config.getConfigurationSection("translations"));
+        parseDeclaration(command, config.getConfigurationSection("commands"));
+    }
+    
+    protected void parseDeclaration(Element<?> element, ConfigurationSection config) {
+        if (config != null) {
+            config.getKeys(false).forEach(key -> element.declare(config, key));
+        }
+    }
+    
+    protected List<Command> parseCommands(ConfigurationSection config) {
+        return config.getKeys(false).stream().map(key -> command.parse(config, key)).collect(toList());
+    }
+
+    
+    public Element<Command> getCommand() {
+        return command;
+    }
+
+    public Element<Completion> getCompletion() {
+        return completion;
+    }
+
+    public Element<MessageTranslation> getTranslation() {
+        return translation;
+}
     
 }

@@ -36,33 +36,18 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
     
     public default @Nullable T await() {
         try {
-            return get();
+            return obtain();
         } catch (CancellationException e) {
             return null;
-            
-        } catch (InterruptedException e) {
-            throw new UncheckedInterruptedException(e);
-            
-        } catch (ExecutionException e) {
-            throw new UncheckedExecutionException(e);
         }
     }
     
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
-            return get(timeout, unit);
+            return obtain(timeout, unit);
             
         } catch (CancellationException e) {
-            return null;
-            
-        } catch (InterruptedException e) {
-            throw new UncheckedInterruptedException(e);
-            
-        } catch (ExecutionException e) {
-            throw new UncheckedExecutionException(e);
-            
-        } catch (TimeoutException e) {
-            throw new UncheckedTimeoutException(e);
+            return null;   
         }
     }
     
@@ -91,12 +76,12 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
         }
 
         @Override
-        public T get() throws InterruptedException, ExecutionException {
+        public @Nullable T get() throws InterruptedException, ExecutionException {
             return future.get();
         }
 
         @Override
-        public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             return future.get(timeout, unit);
         }
 

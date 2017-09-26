@@ -26,7 +26,9 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.command.completion.*;
 
 import java.util.*;
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 
 public class CompletionElement extends Element<Completion> {
@@ -37,19 +39,19 @@ public class CompletionElement extends Element<Completion> {
     
     public CompletionElement(Map<String, Completion> declarations) {
         super(declarations);
-        getDeclarations().put("PLAYER_NAMES", Completion.PLAYER_NAMES);
-        getDeclarations().put("WORLD_NAMES", Completion.WORLD_NAMES);
+        declarations.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
+        declarations.put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
 
     
     @Override
-    protected @Nullable Completion parse(Object value) {
-        Completion completion = null;
-        if (value instanceof List) {
-            completion = new CachedCompletion((List<String>) value);
-        }
-        
-        return completion;
+    protected boolean check(ConfigurationSection config, String key) {
+        return config.isList(key);
+    }
+
+    @Override
+    protected @Nonnull Completion handle(ConfigurationSection config, String key) {
+        return new CachedCompletion(config.getStringList(key));
     }
     
 }

@@ -26,6 +26,7 @@ package com.karuslabs.commons.item.meta;
 import com.karuslabs.commons.item.Builder;
 
 import java.util.*;
+import javax.annotation.Nonnull;
 
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.ItemStack;
@@ -61,7 +62,7 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
 
     @Override
-    protected BannerBuilder getThis() {
+    protected @Nonnull BannerBuilder getThis() {
         return this;
     }
     

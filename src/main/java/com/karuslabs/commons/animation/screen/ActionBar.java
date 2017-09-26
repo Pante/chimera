@@ -29,6 +29,7 @@ import com.karuslabs.commons.util.concurrent.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public class ActionBar extends Bar {
 
     
     @Override
-    protected ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), function, translation, iterations);
     }
     
@@ -89,7 +90,7 @@ public class ActionBar extends Bar {
         }
         
         @Override
-        protected ActionBarBuilder getThis() {
+        protected @Nonnull ActionBarBuilder getThis() {
             return this;
         }
         

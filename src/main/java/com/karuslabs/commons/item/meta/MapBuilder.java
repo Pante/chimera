@@ -24,6 +24,9 @@
 package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
+
+import javax.annotation.Nonnull;
+
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
@@ -57,7 +60,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
     
     @Override
-    protected MapBuilder getThis() {
+    protected @Nonnull MapBuilder getThis() {
         return this;
     }
     

@@ -21,54 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.annotation.Ignored;
+import com.karuslabs.commons.command.completion.Completion;
 
-import java.text.MessageFormat;
 import java.util.*;
-import javax.annotation.Nonnull;
+
+import org.bukkit.configuration.ConfigurationSection;
+
+import static java.util.stream.Collectors.toMap;
 
 
-public class MessageTranslation extends Translation {
+public class CompletionsElement extends Element<Map<Integer, Completion>> {
     
-    public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE) {
-        
-        @Override
-        public @Nonnull ResourceBundle get(@Ignored Locale locale) {
-            return CachedResourceBundle.NONE;
-        }
-        
-        @Override
-        public String format(String key, @Ignored Object... arguments) {
-            return key;
-        }
-        
-        @Override
-        public MessageTranslation locale(@Ignored Locale locale) {
-            return this;
-        }
-        
-    };
+    private Element<Completion> completion;
     
     
-    protected MessageFormat format;
+    public CompletionsElement(Element<Completion> completion) {
+        this(completion, new HashMap<>());
+    }
     
+    public CompletionsElement(Element<Completion> completion, Map<String, Map<Integer, Completion>> declarations) {
+        super(declarations);
+        this.completion = completion;
+    }
+
     
-    public MessageTranslation(String bundle, ResourceBundle.Control control) {
-        super(bundle, control);
-        format = new MessageFormat("");
+    @Override
+    protected boolean check(ConfigurationSection config, String key) {
+        return config.isConfigurationSection(key);
+    }
+
+    @Override
+    protected Map<Integer, Completion> handle(ConfigurationSection config, String key) {
+        ConfigurationSection completions = config.getConfigurationSection(key);
+        return completions.getKeys(false).stream().collect(toMap(Integer::parseInt, each -> completion.parse(completions, key)));
     }
     
     
-    public String format(String key, Object... arguments) {
-        format.applyPattern(get(format.getLocale()).getString(key));
-        return format.format(arguments);
-    }
-    
-    public MessageTranslation locale(Locale locale) {
-        format.setLocale(locale);
-        return this;
+    public Element<Completion> getCompletion() {
+        return completion;
     }
     
 }

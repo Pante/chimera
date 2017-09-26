@@ -23,12 +23,14 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import java.util.*;
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.Collections.enumeration;
 import java.util.concurrent.*;
 import javax.annotation.Nullable;
 
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.enumeration;
 
 
 public class CachedResourceBundle extends ResourceBundle {
@@ -44,7 +46,7 @@ public class CachedResourceBundle extends ResourceBundle {
         }
 
         @Override
-        public Enumeration<String> getKeys() {
+        public @Immutable Enumeration<String> getKeys() {
             return keys;
         }
         
@@ -65,7 +67,7 @@ public class CachedResourceBundle extends ResourceBundle {
     
     
     @Override
-    public Enumeration<String> getKeys() {
+    public @Immutable Enumeration<String> getKeys() {
         return enumeration(messages.keySet());
     }
     

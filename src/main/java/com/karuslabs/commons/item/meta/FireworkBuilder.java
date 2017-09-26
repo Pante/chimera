@@ -26,6 +26,7 @@ package com.karuslabs.commons.item.meta;
 import com.karuslabs.commons.item.Builder;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.ItemStack;
@@ -60,7 +61,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     
     
     @Override
-    protected FireworkBuilder getThis() {
+    protected @Nonnull FireworkBuilder getThis() {
         return this;
     }
     

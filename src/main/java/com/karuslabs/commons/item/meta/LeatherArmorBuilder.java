@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -48,7 +50,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
     
     
     @Override
-    protected LeatherArmorBuilder getThis() {
+    protected @Nonnull LeatherArmorBuilder getThis() {
         return this;
     }
     

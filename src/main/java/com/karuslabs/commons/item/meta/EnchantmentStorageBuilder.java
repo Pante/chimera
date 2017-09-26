@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -48,7 +50,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder
     
     
     @Override
-    protected EnchantmentStorageBuilder getThis() {
+    protected @Nonnull EnchantmentStorageBuilder getThis() {
         return this;
     }
     

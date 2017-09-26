@@ -23,9 +23,11 @@
  */
 package com.karuslabs.commons.util;
 
+import javax.annotation.Nonnull;
+
 
 public interface Prototype<T extends Prototype> {
     
-    public T copy();
+    public @Nonnull T copy();
     
 }

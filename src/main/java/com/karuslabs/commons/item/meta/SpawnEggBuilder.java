@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
@@ -48,7 +50,7 @@ public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
     
     
     @Override
-    protected SpawnEggBuilder getThis() {
+    protected @Nonnull SpawnEggBuilder getThis() {
         return this;
     }
     

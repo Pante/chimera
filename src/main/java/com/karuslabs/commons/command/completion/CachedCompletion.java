@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.completion;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
@@ -46,7 +47,7 @@ public class CachedCompletion implements Completion {
     
     
     @Override
-    public List<String> complete(CommandSender sender, String argument) {
+    public @Nonnull List<String> complete(CommandSender sender, String argument) {
         return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
     }
     

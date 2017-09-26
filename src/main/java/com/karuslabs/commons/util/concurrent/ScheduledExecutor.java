@@ -24,7 +24,6 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
-import java.util.function.BiConsumer;
 
 
 public class ScheduledExecutor extends ScheduledThreadPoolExecutor {

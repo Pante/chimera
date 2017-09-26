@@ -26,6 +26,7 @@ package com.karuslabs.commons.item.meta;
 import com.karuslabs.commons.item.Builder;
 
 import java.util.UUID;
+import javax.annotation.Nonnull;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +68,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
     
     @Override
-    protected SkullBuilder getThis() {
+    protected @Nonnull SkullBuilder getThis() {
         return this;
     }
     

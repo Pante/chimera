@@ -38,6 +38,7 @@ import static java.util.Collections.unmodifiableList;
 
 public class ExternalControl extends Control {
     
+    //TODO: UPDATE TO List.of(...) when updating to Java 9
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
     
     

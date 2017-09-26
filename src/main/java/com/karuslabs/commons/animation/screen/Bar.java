@@ -28,10 +28,12 @@ import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
 
 import static java.util.Collections.singletonList;
+
 
 public abstract class Bar {
     
@@ -61,7 +63,7 @@ public abstract class Bar {
         return ScheduledPromise.of(executor.schedule(runnable(players), delay, period, unit));
     }
     
-    protected abstract ScheduledRunnable runnable(Collection<Player> players);
+    protected abstract @Nonnull ScheduledRunnable runnable(Collection<Player> players);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {
@@ -100,7 +102,7 @@ public abstract class Bar {
         }
         
                 
-        protected abstract GenericBuilder getThis();
+        protected abstract @Nonnull GenericBuilder getThis();
         
         
         public GenericBar build() {

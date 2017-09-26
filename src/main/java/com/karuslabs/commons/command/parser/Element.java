@@ -24,7 +24,9 @@
 package com.karuslabs.commons.command.parser;
 
 import java.util.Map;
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 
 public abstract class Element<T> {
@@ -37,35 +39,43 @@ public abstract class Element<T> {
     }
     
     
-    public void declare(String key, Object value) {
-        declarations.put(key, Element.this.parse(key, value));
+    public void declare(ConfigurationSection config, String key) {
+        declarations.put(key, parse(config, key));
     }
+
     
-    
-    public T parse(String key, Object value) {
-        T parsed;
-        if (value instanceof String) {
-            return getDeclaration((String) value);
+    public @Nonnull T parse(ConfigurationSection config, String key) {
+        if (config.get(key) == null) {
+            return handleNull(config, key);
             
-        } else if ((parsed = parse(value)) != null) {
-            return parsed;
+        } else if (config.isString(key)) {
+            return getDeclaration(key, config.getCurrentPath());
+            
+        } else if (check(config, key)) {
+            return handle(config, key);
             
         } else {
-            throw new ParserException("Failed to parse key:" + key);
+            throw new ParserException("Invalid value for: " + config.getCurrentPath() + "." + key);
         }
     }
     
-    protected T getDeclaration(String key) {
-        T value = declarations.get(key);
-        if (value != null) {
-            return value;
+    protected @Nonnull T handleNull(ConfigurationSection config, String key) {
+        throw new ParserException("Missing key:" + config.getCurrentPath() + "." + key);
+    }
+    
+    public T getDeclaration(String key, String path) {
+        T declared = declarations.get(key);
+        if (declared != null) {
+            return declared;
             
         } else {
-            throw new ParserException("Failed to find declaration for: " + key);
+            throw new ParserException("Missing declaration for: " + path + "." + key);
         }
     }
     
-    protected abstract @Nullable T parse(Object value);
+    protected abstract boolean check(ConfigurationSection config, String key);
+    
+    protected abstract @Nonnull T handle(ConfigurationSection config, String key);
     
     
     public Map<String, T> getDeclarations() {

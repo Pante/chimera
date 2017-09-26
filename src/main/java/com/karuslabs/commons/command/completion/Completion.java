@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.completion;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -35,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 @FunctionalInterface
 public interface Completion {
     
-    public List<String> complete(CommandSender sender, String argument);
+    public @Nonnull List<String> complete(CommandSender sender, String argument);
     
     
     public static final Completion PLAYER_NAMES = (sender, argument) -> 

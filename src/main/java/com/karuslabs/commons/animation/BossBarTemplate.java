@@ -23,10 +23,12 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.util.Template;
+
+import javax.annotation.Nonnull;
 
 import org.bukkit.Server;
 import org.bukkit.boss.*;
-import com.karuslabs.commons.util.Template;
 
 
 public class BossBarTemplate implements Template<BossBar> {
@@ -56,7 +58,7 @@ public class BossBarTemplate implements Template<BossBar> {
     
     
     @Override
-    public BossBar create() {
+    public @Nonnull BossBar create() {
         BossBar bar = server.createBossBar(message, color, style, flags);
         bar.setProgress(progress);
         return bar;

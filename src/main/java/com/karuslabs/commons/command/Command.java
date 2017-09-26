@@ -28,6 +28,7 @@ import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.*;
+import javax.annotation.Nonnull;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
@@ -51,14 +52,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor) {
-        this(name, description, usage, aliases, plugin, MessageTranslation.NONE, executor, new HashMap<>(), new HashMap<>());
+        this(name, description, usage, aliases, plugin, executor, MessageTranslation.NONE, new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, MessageTranslation translation, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
+    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, MessageTranslation translation, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
-        this.translation = translation;
         this.executor = executor;
+        this.translation = translation;
         this.subcommands = subcommands;
         this.completions = completions;
     }
@@ -85,11 +86,11 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+    public @Nonnull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return complete(sender, new Arguments(preserveQuotes(args)));
     }
     
-    public List<String> complete(CommandSender sender, Arguments arguments) {
+    public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
         if (arguments.length() == 0) {
             return EMPTY_LIST;
         } 
@@ -115,20 +116,16 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return plugin;
     }
     
-    public MessageTranslation getTranslation() {
-        return translation;
-    }
-    
-    public void setTranslation(MessageTranslation translation) {
-        this.translation = translation;
-    }
-    
     public CommandExecutor getExecutor() {
         return executor;
     }
     
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
+    }
+        
+    public MessageTranslation getTranslation() {
+        return translation;
     }
     
     public Map<String, Command> getSubcommands() {

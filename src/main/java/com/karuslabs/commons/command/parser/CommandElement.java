@@ -28,96 +28,68 @@ import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.*;
-import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.stream.Collectors.toMap;
-
 
 public class CommandElement extends Element<Command> {
-
+    
     private Plugin plugin;
-    private Element<Map<String, Command>> commands;
-    private Element<Completion> completion;
+    private Element<Map<String, Command>> subcommands;
     private Element<MessageTranslation> translation;
+    private Element<Map<Integer, Completion>> completions;
     
     
-    public CommandElement(Plugin plugin, Element<Map<String, Command>> commands, Element<Completion> completion, Element<MessageTranslation> translation, Map<String, Command> declarations) {
+    public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions) {
+        this(plugin, subcommands, translation, completions, new HashMap<>());
+    }
+    
+    public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions, Map<String, Command> declarations) {
         super(declarations);
         this.plugin = plugin;
-        this.commands = commands;
-        this.completion = completion;
+        this.subcommands = subcommands;
         this.translation = translation;
+        this.completions = completions;
     }
 
     
     @Override
-    protected @Nullable Command parse(Object value) {
-        Command command = null;
-        if (value instanceof ConfigurationSection) {
-            ConfigurationSection config = (ConfigurationSection) value;
-            command = new Command(
-                config.getName(),
-                config.getString("description", ""),
-                config.getString("usage", ""),
-                config.getStringList("aliases"),
-                plugin,
-                parseTranslation(config.get("translation")),
-                CommandExecutor.NONE,
-                parseCommands(config.getConfigurationSection("subcommands")),
-                parseCompletions(config.getConfigurationSection("completions"))
-            );
-            command.setPermission(config.getString("permission", ""));
-            command.setPermissionMessage(config.getString("permission-message", ""));
-        }
-        
-        return command;
+    protected boolean check(ConfigurationSection config, String key) {
+        return config.isConfigurationSection(key);
     }
-        
-    protected MessageTranslation parseTranslation(@Nullable Object value) {
-        if (value != null) {
-            return translation.parse("translation", value);
-            
-        } else {
-            return MessageTranslation.NONE;
-        }
-    }
-    
-    protected Map<String, Command> parseCommands(@Nullable ConfigurationSection config) {
-        if (config != null) {
-            return commands.parse("subcommands", config);
-            
-        } else {
-            return new HashMap<>();
-        }
-    }
-    
-    protected Map<Integer, Completion> parseCompletions(@Nullable ConfigurationSection config) {
-        if (config != null) {
-            return config.getKeys(false).stream().collect(toMap(Integer::parseInt, key -> completion.parse(key, config.get(key))));
-            
-        } else {
-           return new HashMap<>(); 
-        }
+
+    @Override
+    protected Command handle(ConfigurationSection config, String key) {
+        ConfigurationSection command = config.getConfigurationSection(key);
+        return new Command(
+            command.getName(),
+            command.getString("description", ""),
+            command.getString("usage", ""),
+            command.getStringList("aliases"),
+            plugin,
+            CommandExecutor.NONE, 
+            translation.parse(command, "translation"),
+            subcommands.parse(command, "subcommands"),
+            completions.parse(command, "completions")
+        );
     }
 
     
-    public Element<Map<String, Command>> getCommands() {
-        return commands;
+    public Plugin getPlugin() {
+        return plugin;
     }
-
-    public void setCommands(Element<Map<String, Command>> commands) {
-        this.commands = commands;
-    }
-
-    public Element<Completion> getCompletion() {
-        return completion;
+    
+    public Element<Map<String, Command>> getSubcommands() {
+        return subcommands;
     }
 
     public Element<MessageTranslation> getTranslation() {
         return translation;
+    }
+
+    public Element<Map<Integer, Completion>> getCompletions() {
+        return completions;
     }
     
 }

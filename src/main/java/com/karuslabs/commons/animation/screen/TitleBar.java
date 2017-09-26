@@ -29,6 +29,7 @@ import com.karuslabs.commons.util.concurrent.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public class TitleBar extends Bar {
 
     
     @Override
-    protected ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer, translation, fadeIn, stay, fadeOut, iterations);
     }
     
@@ -127,7 +128,7 @@ public class TitleBar extends Bar {
         }
         
         @Override
-        protected TitleBarBuilder getThis() {
+        protected @Nonnull TitleBarBuilder getThis() {
             return this;
         }
     

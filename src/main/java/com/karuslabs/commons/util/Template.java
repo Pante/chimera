@@ -23,9 +23,11 @@
  */
 package com.karuslabs.commons.util;
 
+import javax.annotation.Nonnull;
+
 
 public interface Template<T> {
     
-    public T create();
+    public @Nonnull T create();
     
 }

@@ -38,6 +38,7 @@ public class Locales {
     
     private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, MINUTES).build();
     
+    //TODO: UPDATE TO Set.of(...) when updating to Java 9
     private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
     private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
     

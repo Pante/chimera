@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.command.Command;
 
 import java.util.*;
@@ -31,46 +30,55 @@ import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+
 
 public class CommandsElement extends Element<Map<String, Command>> {
-    
+
     private Element<Command> command;
     
     
-    public CommandsElement(Element<Command> command) {
+    public CommandsElement(@Nullable Element<Command> command) {
         this(command, new HashMap<>());
     }
     
-    public CommandsElement(Element<Command> command, Map<String, Map<String, Command>> declarations) {
+    public CommandsElement(@Nullable Element<Command> command, Map<String, Map<String, Command>> declarations) {
         super(declarations);
         this.command = command;
     }
-
+    
     
     @Override
-    public Map<String, Command> parse(String key, @Nullable Object value) {
-        if (value instanceof ConfigurationSection) {
-            Map<String, Command> commands = new HashMap<>();
-            ConfigurationSection config = (ConfigurationSection) value;
-            
-            config.getKeys(false).forEach(aKey -> {
-                Command aCommand = command.parse(aKey, config.get(aKey));
-                commands.put(aCommand.getName(), aCommand);
-                aCommand.getAliases().forEach(alias -> commands.put(alias, aCommand));
-            });
-            
-            return commands;
-            
-        } else {
-            throw new ParserException("Key: subcommands is missing or contains an invalid value");
-        }
+    protected Map<String, Command> handleNull(ConfigurationSection config, String key) {
+        return new HashMap<>();
     }
     
-    
+    @Override
+    protected boolean check(ConfigurationSection config, String key) {
+        return config.isConfigurationSection(key);
+    }
 
     @Override
-    protected @Nullable Map<String, Command> parse(@Ignored Object value) {
-        return null;
+    protected Map<String, Command> handle(ConfigurationSection config, String key) {
+        ConfigurationSection subcommands = config.getConfigurationSection(key);
+        return subcommands.getKeys(false).stream().collect(toMap(identity(), aKey -> {
+            if ("declared".equals(subcommands.getString(aKey))) {
+                return command.getDeclaration(aKey, subcommands.getCurrentPath());
+                
+            } else {
+                return command.parse(subcommands, aKey);
+            }
+        }));
+    }
+
+    
+    public Element<Command> getCommand() {
+        return command;
+    }
+
+    public void setCommand(Element<Command> command) {
+        this.command = command;
     }
     
 }

@@ -25,6 +25,8 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -48,7 +50,7 @@ public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta
     
     
     @Override
-    protected BlockStateBuilder getThis() {
+    protected @Nonnull BlockStateBuilder getThis() {
         return this;
     }
     
