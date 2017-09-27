@@ -1,5 +1,5 @@
 <p align = "center">
-  <img src = "https://i.imgur.com/9oWWOVY.png>
+  <img src = "https://i.imgur.com/9oWWOVY.png">
 </p>
 <a href = "https://travis-ci.org/Pante/Karus-Commons"><img src = "https://travis-ci.org/Pante/Karus-Commons.svg?branch=master"/></a><a href="https://codecov.io/gh/Pante/Karus-Commons"> <img src="https://codecov.io/gh/Pante/Karus-Commons/branch/master/graph/badge.svg" alt="Codecov" /></a>
 
