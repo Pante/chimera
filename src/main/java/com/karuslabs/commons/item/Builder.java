@@ -38,15 +38,15 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     protected GenericMeta meta;
 
     
-    public Builder(Material material) {
+    public Builder(@Nonnull Material material) {
         this(new ItemStack(material));
     }
     
-    public Builder(ItemStack item) {
+    public Builder(@Nonnull ItemStack item) {
         this(item, (GenericMeta) item.getItemMeta());
     }
     
-    public Builder(Builder<GenericBuilder, GenericMeta> builder) {
+    public Builder(@Nonnull Builder<GenericBuilder, GenericMeta> builder) {
         this(builder.item, builder.meta);
     }
 
@@ -112,7 +112,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
 
     
-    public ItemStack build() {
+    public @Nonnull ItemStack build() {
         item.setItemMeta(meta);
         return item;
     }

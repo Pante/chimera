@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.commons.annotation.Blocking;
+
 import java.util.concurrent.*;
 import javax.annotation.Nullable;
 
@@ -34,6 +36,7 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
     }
     
     
+    @Blocking
     public default @Nullable T await() {
         try {
             return obtain();
@@ -42,6 +45,7 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
         }
     }
     
+    @Blocking
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
             return obtain(timeout, unit);
@@ -76,11 +80,13 @@ public interface ScheduledPromise<T> extends Promise<T>, ScheduledFuture<T> {
         }
 
         @Override
+        @Blocking
         public @Nullable T get() throws InterruptedException, ExecutionException {
             return future.get();
         }
 
         @Override
+        @Blocking
         public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             return future.get(timeout, unit);
         }

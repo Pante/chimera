@@ -25,6 +25,7 @@ package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.BiConsumer;
+import javax.annotation.Nullable;
 
 
 public abstract class ScheduledRunnable implements Runnable {
@@ -38,7 +39,7 @@ public abstract class ScheduledRunnable implements Runnable {
     }
     
     
-    protected ScheduledFuture<?> future;
+    protected @Nullable ScheduledFuture<?> future;
     private long total;
     private long current;
     
@@ -51,7 +52,7 @@ public abstract class ScheduledRunnable implements Runnable {
     
     @Override
     public void run() {
-        if (!Thread.interrupted() && current < total) {
+        if (!Thread.interrupted() && current < total && validate()) {
             process();
             current++;
             
@@ -59,6 +60,10 @@ public abstract class ScheduledRunnable implements Runnable {
             future.cancel(true);
             Thread.interrupted();
         }
+    }
+    
+    protected boolean validate() {
+        return true;
     }
     
     protected abstract void process();

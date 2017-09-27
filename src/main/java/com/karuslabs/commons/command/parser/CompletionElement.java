@@ -45,12 +45,12 @@ public class CompletionElement extends Element<Completion> {
 
     
     @Override
-    protected boolean check(ConfigurationSection config, String key) {
+    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isList(key);
     }
 
     @Override
-    protected @Nonnull Completion handle(ConfigurationSection config, String key) {
+    protected @Nonnull Completion handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return new CachedCompletion(config.getStringList(key));
     }
     

@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.function;
 
+import com.karuslabs.commons.annotation.Throws;
+
 import java.util.function.BiPredicate;
 
 
@@ -32,7 +34,7 @@ public interface CheckedBiPredicate<T, U, E extends Exception> {
     public boolean test(T t, U u) throws E;
     
     
-    public static<T, U, E extends Exception> BiPredicate<T, U> uncheck(CheckedBiPredicate<T, U, E> predicate) {
+    public static<T, U, E extends Exception> @Throws(UncheckedFunctionException.class) BiPredicate<T, U> uncheck(CheckedBiPredicate<T, U, E> predicate) {
         return (t, u) -> {
             try {
                return predicate.test(t, u);

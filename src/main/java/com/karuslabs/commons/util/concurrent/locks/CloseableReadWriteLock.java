@@ -24,6 +24,7 @@
 package com.karuslabs.commons.util.concurrent.locks;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.annotation.Nonnull;
 
 
 public class CloseableReadWriteLock extends ReentrantReadWriteLock {
@@ -38,28 +39,28 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
     public CloseableReadWriteLock(boolean fair) {
         super(fair);
-        readJanitor = () -> readLock().unlock();
-        writeJanitor = () -> writeLock().unlock();
+        readJanitor = readLock()::unlock;
+        writeJanitor = writeLock()::unlock;
     }
     
     
-    public Janitor acquireReadLock() {
+    public @Nonnull Janitor acquireReadLock() {
         readLock().lock();
         return readJanitor;
     }
     
-    public Janitor acquireReadLockInterruptibly() throws InterruptedException {
+    public @Nonnull Janitor acquireReadLockInterruptibly() throws InterruptedException {
         readLock().lockInterruptibly();
         return readJanitor;
     }
     
     
-    public Janitor acquireWriteLock() {
+    public @Nonnull Janitor acquireWriteLock() {
         writeLock().lock();
         return writeJanitor;
     }
     
-    public Janitor acquireWriteLockInterruptibly() throws InterruptedException {
+    public @Nonnull Janitor acquireWriteLockInterruptibly() throws InterruptedException {
         writeLock().lockInterruptibly();
         return writeJanitor;
     }

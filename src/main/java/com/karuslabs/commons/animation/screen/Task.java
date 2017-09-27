@@ -27,6 +27,7 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
 
 import java.text.MessageFormat;
+import javax.annotation.Nonnull;
 
 
 abstract class Task extends ScheduledRunnable implements Context {
@@ -43,12 +44,12 @@ abstract class Task extends ScheduledRunnable implements Context {
 
 
     @Override
-    public Translation getTranslation() {
+    public @Nonnull Translation getTranslation() {
         return translation;
     }
 
     @Override
-    public MessageFormat getFormat() {
+    public @Nonnull MessageFormat getFormat() {
         return format;
     }
     

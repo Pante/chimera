@@ -47,7 +47,7 @@ public class CachedCompletion implements Completion {
     
     
     @Override
-    public @Nonnull List<String> complete(CommandSender sender, String argument) {
+    public @Nonnull List<String> complete(@Nonnull CommandSender sender, @Nonnull String argument) {
         return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
     }
     

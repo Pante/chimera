@@ -34,7 +34,7 @@ public abstract class Element<T> {
     private Map<String, T> declarations;
     
     
-    public Element(Map<String, T> declarations) {
+    public Element(@Nonnull Map<String, T> declarations) {
         this.declarations = declarations;
     }
     
@@ -59,7 +59,7 @@ public abstract class Element<T> {
         }
     }
     
-    protected @Nonnull T handleNull(ConfigurationSection config, String key) {
+    protected @Nonnull T handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
         throw new ParserException("Missing key:" + config.getCurrentPath() + "." + key);
     }
     
@@ -73,9 +73,9 @@ public abstract class Element<T> {
         }
     }
     
-    protected abstract boolean check(ConfigurationSection config, String key);
+    protected abstract boolean check(@Nonnull ConfigurationSection config, @Nonnull String key);
     
-    protected abstract @Nonnull T handle(ConfigurationSection config, String key);
+    protected abstract @Nonnull T handle(@Nonnull ConfigurationSection config, @Nonnull String key);
     
     
     public Map<String, T> getDeclarations() {

@@ -24,7 +24,7 @@
 package com.karuslabs.commons.locale.resources;
 
 import java.io.InputStream;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 
 public class EmbeddedResource implements Resource {
@@ -41,12 +41,12 @@ public class EmbeddedResource implements Resource {
     
     
     @Override
-    public @Nullable InputStream load(String name) {
+    public @Nullable InputStream load(@Nonnull String name) {
         return getClass().getClassLoader().getResourceAsStream(path + name);
     }
 
     @Override
-    public boolean exists(String name) {
+    public boolean exists(@Nonnull String name) {
         return getClass().getClassLoader().getResource(path + name) != null;
     }
     

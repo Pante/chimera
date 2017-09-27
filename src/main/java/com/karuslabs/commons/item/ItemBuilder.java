@@ -93,7 +93,7 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     
 
     @Override
-    protected @Nonnull ItemBuilder getThis() {
+    protected ItemBuilder getThis() {
         return this;
     }
     

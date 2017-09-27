@@ -26,7 +26,7 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.command.Command;
 
 import java.util.*;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -50,17 +50,17 @@ public class CommandsElement extends Element<Map<String, Command>> {
     
     
     @Override
-    protected Map<String, Command> handleNull(ConfigurationSection config, String key) {
+    protected @Nonnull Map<String, Command> handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return new HashMap<>();
     }
     
     @Override
-    protected boolean check(ConfigurationSection config, String key) {
+    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isConfigurationSection(key);
     }
 
     @Override
-    protected Map<String, Command> handle(ConfigurationSection config, String key) {
+    protected @Nonnull Map<String, Command> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection subcommands = config.getConfigurationSection(key);
         return subcommands.getKeys(false).stream().collect(toMap(identity(), aKey -> {
             if ("declared".equals(subcommands.getString(aKey))) {

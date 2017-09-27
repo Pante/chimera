@@ -38,7 +38,7 @@ public class Context {
     private Locale locale;
     
     private String label;
-    private Command parent;
+    private @Nullable Command parent;
     private Command command;
     private MessageTranslation translation;
     
@@ -61,7 +61,7 @@ public class Context {
         this.label = label;
         this.parent = this.command;
         this.command = command;
-        this.translation = null;
+        this.translation = command.getTranslation();
     }
     
     

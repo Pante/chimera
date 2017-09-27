@@ -24,14 +24,16 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
+
 import java.text.MessageFormat;
+import javax.annotation.Nonnull;
 
 
 public interface Context {
     
-    public Translation getTranslation();
+    public @Nonnull Translation getTranslation();
     
-    public MessageFormat getFormat();
+    public @Nonnull MessageFormat getFormat();
     
     public long getIterations();
     

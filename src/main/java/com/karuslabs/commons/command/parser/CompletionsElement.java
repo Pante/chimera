@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.command.completion.Completion;
 
 import java.util.*;
+import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -48,12 +49,12 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
 
     
     @Override
-    protected boolean check(ConfigurationSection config, String key) {
+    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isConfigurationSection(key);
     }
 
     @Override
-    protected Map<Integer, Completion> handle(ConfigurationSection config, String key) {
+    protected @Nonnull Map<Integer, Completion> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection completions = config.getConfigurationSection(key);
         return completions.getKeys(false).stream().collect(toMap(Integer::parseInt, each -> completion.parse(completions, key)));
     }

@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 @FunctionalInterface
 public interface Completion {
     
-    public @Nonnull List<String> complete(CommandSender sender, String argument);
+    public @Nonnull List<String> complete(@Nonnull CommandSender sender, @Nonnull String argument);
     
     
     public static final Completion PLAYER_NAMES = (sender, argument) -> 

@@ -37,7 +37,7 @@ public class CachedResourceBundle extends ResourceBundle {
     
     public static final CachedResourceBundle NONE = new CachedResourceBundle() {
 
-        private Enumeration<String> keys = enumeration(EMPTY_LIST);
+        private final Enumeration<String> keys = enumeration(EMPTY_LIST);
 
         
         @Override

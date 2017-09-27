@@ -24,7 +24,7 @@
 package com.karuslabs.commons.locale.resources;
 
 import java.io.*;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 
 public class FileResource implements Resource {
@@ -38,7 +38,7 @@ public class FileResource implements Resource {
     
     
     @Override
-    public @Nullable InputStream load(String name) {
+    public @Nullable InputStream load(@Nonnull String name) {
         File file = new File(folder, name);
         if (!exists(file)) {
             return null;
@@ -53,7 +53,7 @@ public class FileResource implements Resource {
     }
 
     @Override
-    public boolean exists(String name) {
+    public boolean exists(@Nonnull String name) {
         return exists(new File(folder, name));
     }
     

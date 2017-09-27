@@ -27,6 +27,7 @@ import com.karuslabs.commons.command.arguments.Arguments;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
@@ -37,7 +38,7 @@ import static org.bukkit.ChatColor.*;
 @FunctionalInterface
 public interface CommandExecutor {
 
-    public boolean execute(Context context, Arguments arguments);
+    public boolean execute(@Nonnull Context context, @Nonnull Arguments arguments);
     
     
     public static boolean wrap(Context context, Arguments arguments, BiConsumer<Command, CommandSender> executor) {

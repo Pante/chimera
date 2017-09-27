@@ -52,12 +52,12 @@ public class TranslationElement extends Element<MessageTranslation> {
 
     
     @Override
-    protected MessageTranslation handleNull(ConfigurationSection config, String key) {
+    protected @Nonnull MessageTranslation handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return MessageTranslation.NONE;
     }
     
     @Override
-    protected boolean check(ConfigurationSection config, String key) {
+    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         config = config.getConfigurationSection(key);
         if (!config.isString("bundle")) {
             throw new ParserException("Missing or invalid value for: " + config.getCurrentPath() + "." + key + ".bundle");
@@ -72,16 +72,14 @@ public class TranslationElement extends Element<MessageTranslation> {
     }
 
     @Override
-    protected @Nonnull MessageTranslation handle(ConfigurationSection config, String key) {
+    protected @Nonnull MessageTranslation handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection translation = config.getConfigurationSection(key);
-        List<String> embeddedResources = translation.getStringList("embedded");
-        List<String> fileResources = translation.getStringList("folder");
         
-        Resource[] embedded = embeddedResources.stream().map(EmbeddedResource::new).toArray(Resource[]::new);
-        Resource[] files = fileResources.stream().map(path -> new FileResource(new File(folder, path))).toArray(Resource[]::new);
+        Resource[] embedded = translation.getStringList("embedded").stream().map(EmbeddedResource::new).toArray(Resource[]::new);
+        Resource[] folders = translation.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).toArray(Resource[]::new);
         
-        Resource[] resources = copyOf(embedded, embedded.length + files.length);
-        arraycopy(files, 0, resources, embedded.length, files.length);
+        Resource[] resources = copyOf(embedded, embedded.length + folders.length);
+        arraycopy(folders, 0, resources, embedded.length, folders.length);
         
         return new MessageTranslation(translation.getString("bundle"), new ExternalControl(resources));
     }

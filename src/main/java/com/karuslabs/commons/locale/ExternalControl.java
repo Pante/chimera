@@ -29,7 +29,7 @@ import com.karuslabs.commons.locale.resources.Resource;
 import java.io.*;
 import java.util.*;
 import java.util.ResourceBundle.Control;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 import static com.karuslabs.commons.configuration.Configurations.*;
 import static java.util.Arrays.*;
@@ -64,7 +64,7 @@ public class ExternalControl extends Control {
         return null;
     }
     
-    protected @Nullable ResourceBundle load(String format, InputStream stream) {
+    protected @Nullable ResourceBundle load(@Nonnull String format, @Nullable InputStream stream) {
         switch (format) {
             case "properties":
                 try (InputStream aStream = stream) {

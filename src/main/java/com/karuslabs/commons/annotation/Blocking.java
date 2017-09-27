@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
+package com.karuslabs.commons.annotation;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class UncheckedFunctionException extends RuntimeException {
-
-    public UncheckedFunctionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UncheckedFunctionException(Throwable cause) {
-        super(cause);
-    }
+@Documented
+@Target({CONSTRUCTOR, METHOD})
+@Retention(RUNTIME)
+public @interface Blocking {
     
 }

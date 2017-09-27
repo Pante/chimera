@@ -23,7 +23,10 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.commons.annotation.Blocking;
+
 import java.util.concurrent.*;
+import javax.annotation.*;
 
 
 public interface Promise<T> extends Future<T> {
@@ -33,7 +36,8 @@ public interface Promise<T> extends Future<T> {
     }
     
     
-    public default T obtain() {
+    @Blocking
+    public default @Nullable T obtain() {
         try {
             return get();
             
@@ -45,7 +49,8 @@ public interface Promise<T> extends Future<T> {
         }
     }
     
-    public default T obtain(long timeout, TimeUnit unit) {
+    @Blocking
+    public default @Nullable T obtain(long timeout, TimeUnit unit) {
         try {
             return get(timeout, unit);
             
@@ -85,12 +90,14 @@ public interface Promise<T> extends Future<T> {
         }
 
         @Override
-        public T get() throws InterruptedException, ExecutionException {
+        @Blocking
+        public @Nullable T get() throws InterruptedException, ExecutionException {
             return future.get();
         }
 
         @Override
-        public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        @Blocking
+        public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
             return future.get(timeout, unit);
         }
 
