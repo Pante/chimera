@@ -21,22 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.animation.particles;
 
-import com.karuslabs.commons.locale.Translation;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
-import java.text.MessageFormat;
-import javax.annotation.Nonnull;
 
+public class MaterialParticles extends StandardParticles {
+    
+    private MaterialData data;
+    
+    
+    public MaterialParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, MaterialData data) {
+        super(type, amount, offsetX, offsetY, offsetZ, speed);
+        this.data = data;
+    }
+    
+    
+    @Override
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, data);
+    }
 
-public interface Context {
+    @Override
+    public void render(Location location) {
+        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, data);
+    }
     
-    public @Nonnull Translation getTranslation();
     
-    public @Nonnull MessageFormat getFormat();
-    
-    public long getIterations();
-    
-    public long getCurrent();
+    public MaterialData getData() {
+        return data;
+    }
     
 }

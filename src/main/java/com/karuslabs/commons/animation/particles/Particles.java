@@ -21,37 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.animation.particles;
 
-import java.util.concurrent.*;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public abstract class Particles {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
+    protected Particle particle;
+    protected int amount;
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
+    
+    public Particles(Particle particle, int amount) {
+        this.particle = particle;
+        this.amount = amount;
     }
     
     
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
+    public void render(Player player) {
+        render(player, player.getLocation());
+    }
+    
+    public abstract void render(Player player, Location location);
+    
+    public abstract void render(Location location);
+
+    
+    public Particle getParticle() {
+        return particle;
+    }
+
+    public int getAmount() {
+        return amount;
     }
     
 }

@@ -21,37 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
-
-import java.util.concurrent.*;
+package com.karuslabs.commons.world;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public class Direction {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
-    
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
+    private float yaw;
+    private float pitch;
+    private boolean relative;
     
     
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
+    public Direction() {
+        this(0, 0, false);
+    }
+    
+    public Direction(float yaw, float pitch, boolean relative) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.relative = relative;
+    }
+  
+    
+    public float yaw() {
+        return yaw;
+    }
+    
+    public void yaw(float yaw) {
+        this.yaw = yaw;
+    }
+    
+    
+    public float pitch() {
+        return pitch;
+    }
+    
+    public void pitch(float pitch) {
+        this.pitch = pitch;
+    }
+    
+    
+    public boolean isRelative() {
+        return relative;
+    }
+    
+    public void setRelative(boolean relative) {
+        this.relative = relative;
     }
     
 }

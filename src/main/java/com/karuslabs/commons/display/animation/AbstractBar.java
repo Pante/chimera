@@ -21,37 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.display.animation;
 
-import java.util.concurrent.*;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.Template;
+import com.karuslabs.commons.util.concurrent.*;
+
+import java.util.concurrent.TimeUnit;
+
+import org.bukkit.boss.BossBar;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
+public abstract class AbstractBar extends Bar {
 
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+    protected Template<BossBar> template;
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
+    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
+        super(executor, translation, iterations, delay, period, unit);
+        this.template = template;
     }
     
     
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
+        
+        public AbstractBuilder(GenericBar bar) {
+            super(bar);
         }
         
-        return task;
+        
+        public GenericBuilder template(Template<BossBar> template) {
+            bar.template = template;
+            return getThis();
+        }
+        
     }
     
 }

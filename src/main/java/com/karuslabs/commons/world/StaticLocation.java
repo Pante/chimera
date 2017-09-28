@@ -21,37 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.world;
 
-import java.util.concurrent.*;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import static com.karuslabs.commons.world.Vectors.rotateVector;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
+public class StaticLocation extends BoundLocation {
 
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
+    public StaticLocation(Location location) {
+        this(location, new Vector(), new Direction());
     }
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
+    public StaticLocation(Location location, Vector offset, Direction direction) {
+        this(location, offset, true, direction);
+    }
+    
+    public StaticLocation(Location location, Vector offset, boolean offsetRelative, Direction direction) {
+        super(location, offset, offsetRelative, direction);
     }
 
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
-    
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
-    
     
     @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
+    public void update() {}
+
+    @Override
+    public void updateOffset() {
+        if (offsetRelative) {
+            location.add(rotateVector(offset, location));
+            
+        } else {
+            location.add(offset);
         }
-        
-        return task;
     }
     
 }

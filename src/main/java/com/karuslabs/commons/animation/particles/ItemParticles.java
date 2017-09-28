@@ -21,36 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.animation.particles;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
-
-import java.text.MessageFormat;
-import javax.annotation.Nonnull;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 
-abstract class Task extends ScheduledRunnable implements Context {
+public class ItemParticles extends StandardParticles {
     
-    private Translation translation;
-    private MessageFormat format;
+    private ItemStack item;
+
     
-    
-    Task(Translation translation, long iterations) {
-        super(iterations);
-        this.translation = translation;
-        format = new MessageFormat("");
+    public ItemParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, ItemStack item) {
+        super(type, amount, offsetX, offsetY, offsetZ, speed);
+        this.item = item;
     }
-
-
+    
+    
     @Override
-    public @Nonnull Translation getTranslation() {
-        return translation;
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
     }
 
     @Override
-    public @Nonnull MessageFormat getFormat() {
-        return format;
+    public void render(Location location) {
+        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
+    }
+    
+    
+    public ItemStack getItem() {
+        return item;
     }
     
 }

@@ -52,7 +52,7 @@ public abstract class ScheduledRunnable implements Runnable {
     
     @Override
     public void run() {
-        if (!Thread.interrupted() && current < total && validate()) {
+        if (!Thread.interrupted() && current < total) {
             process();
             current++;
             
@@ -60,10 +60,6 @@ public abstract class ScheduledRunnable implements Runnable {
             future.cancel(true);
             Thread.interrupted();
         }
-    }
-    
-    protected boolean validate() {
-        return true;
     }
     
     protected abstract void process();

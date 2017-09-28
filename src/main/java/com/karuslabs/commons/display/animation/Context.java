@@ -21,37 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.display.animation;
 
-import java.util.concurrent.*;
+import com.karuslabs.commons.locale.Translation;
+
+import java.text.MessageFormat;
+import javax.annotation.Nonnull;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public interface Context {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
+    public @Nonnull Translation getTranslation();
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
+    public @Nonnull MessageFormat getFormat();
     
+    public long getIterations();
     
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
-    }
+    public long getCurrent();
     
 }

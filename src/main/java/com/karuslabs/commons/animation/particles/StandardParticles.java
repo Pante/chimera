@@ -21,37 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.animation.particles;
 
-import java.util.concurrent.*;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public class StandardParticles extends Particles {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
-    
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
+    protected double offsetX;
+    protected double offsetY;
+    protected double offsetZ;
+    protected double speed;
     
     
+    public StandardParticles(Particle particle, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
+        super(particle, amount);
+    }
+
     @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed);
+    }
+
+    @Override
+    public void render(Location location) {
+        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed);
+    }
+
+    
+    public double getOffsetX() {
+        return offsetX;
+    }
+
+    public double getOffsetY() {
+        return offsetY;
+    }
+
+    public double getOffsetZ() {
+        return offsetZ;
+    }
+
+    public double getSpeed() {
+        return speed;
     }
     
 }

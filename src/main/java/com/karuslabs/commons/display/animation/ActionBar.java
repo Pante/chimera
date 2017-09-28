@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.display.animation;
 
+import com.karuslabs.commons.display.animation.Task;
+import com.karuslabs.commons.display.animation.Context;
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 

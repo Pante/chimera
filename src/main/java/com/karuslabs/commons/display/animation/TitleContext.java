@@ -21,37 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
-
-import java.util.concurrent.*;
+package com.karuslabs.commons.display.animation;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public interface TitleContext extends Context {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
+    public int getFadeIn();
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
+    public int getStay();
     
-    
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
-        
-        return task;
-    }
+    public int getFadeOut();
     
 }

@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.annotation;
 
+import java.lang.annotation.*;
 
-public interface TitleContext extends Context {
-    
-    public int getFadeIn();
-    
-    public int getStay();
-    
-    public int getFadeOut();
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Documented
+@Target({TYPE, TYPE_PARAMETER, TYPE_USE})
+@Retention(RUNTIME)
+public @interface ValueBased {
     
 }

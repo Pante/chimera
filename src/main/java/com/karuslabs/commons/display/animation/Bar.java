@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.display.animation;
 
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
@@ -60,7 +60,7 @@ public abstract class Bar {
     }
     
     public ScheduledPromise<?> render(Collection<Player> players) {
-        return ScheduledPromise.of(executor.schedule(runnable(players), delay, period, unit));
+        return ScheduledPromise.of(executor.scheduleWithFixedDelay(runnable(players), delay, period, unit));
     }
     
     protected abstract @Nonnull ScheduledRunnable runnable(Collection<Player> players);

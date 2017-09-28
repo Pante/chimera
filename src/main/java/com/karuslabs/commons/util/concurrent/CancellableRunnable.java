@@ -23,35 +23,18 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ScheduledFuture;
+import javax.annotation.Nullable;
 
 
-public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
-
-    public ScheduledExecutor(int corePoolSize) {
-        super(corePoolSize);
-    }
+public abstract class CancellableRunnable implements Runnable {
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory) {
-        super(corePoolSize, threadFactory);
-    }
-
-    public ScheduledExecutor(int corePoolSize, RejectedExecutionHandler handler) {
-        super(corePoolSize, handler);
-    }
+    protected @Nullable ScheduledFuture<?> future;
     
-    public ScheduledExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
-        super(corePoolSize, threadFactory, handler);
-    }
-    
-    
-    @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
-        }
         
-        return task;
+    protected void cancel() {
+        future.cancel(true);
+        Thread.interrupted();
     }
     
 }

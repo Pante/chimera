@@ -21,40 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.animation.particles;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Template;
-import com.karuslabs.commons.util.concurrent.*;
-
-import java.util.concurrent.TimeUnit;
-
-import org.bukkit.boss.BossBar;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
 
-public abstract class AbstractBar extends Bar {
-
-    protected Template<BossBar> template;
+public class ColouredParticles extends Particles {
+    
+    private Color colour;
+    private double r, g, b;
     
     
-    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
-        this.template = template;
+    public ColouredParticles(Particle type, int amount, Color colour) {
+        super(type, amount);
+        this.colour = colour;
+        r = colour.getRed() / 255.0;
+        g = colour.getGreen() / 255.0;
+        b = colour.getBlue() / 255.0;
     }
+
     
+    @Override
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, r, g, b, 1);
+    }
+
+    @Override
+    public void render(Location location) {
+        location.getWorld().spawnParticle(particle, location, amount, r, g, b, 1);
+    }
+
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
-        
-        public AbstractBuilder(GenericBar bar) {
-            super(bar);
-        }
-        
-        
-        public GenericBuilder template(Template<BossBar> template) {
-            bar.template = template;
-            return getThis();
-        }
-        
+    public Color getColour() {
+        return colour;
     }
     
 }
