@@ -49,8 +49,11 @@ public abstract class ScheduledRunnable extends CancellableRunnable implements S
     
     @Override
     public void run() {
-        if (!Thread.interrupted() && current < total) {
+        if (!Thread.interrupted() && (total == -1 || current < total)) {
             process();
+            if (total != -1) {
+                current++;
+            }
             
         } else {
             cancel();

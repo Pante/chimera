@@ -21,18 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
+package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
-import java.text.MessageFormat;
 
-
-public interface Context extends ScheduledCancellable {
+public class LivingEntityLocation<GenericEntity extends LivingEntity> extends EntityLocation<GenericEntity> {
     
-    public Translation getTranslation();
+    public LivingEntityLocation(GenericEntity entity, LivingEntityLocation<GenericEntity> location) {
+        super(entity, location);
+    }
     
-    public MessageFormat getFormat();
+    public LivingEntityLocation(GenericEntity entity, Location location, Vector entityOffset, boolean nullable, Vector offset, float yaw, float pitch, boolean relative, boolean updateLocation, boolean updateDirection) {
+        super(entity, location, entityOffset, nullable, offset, yaw, pitch, relative, updateLocation, updateDirection);
+    }
+    
+    
+    @Override
+    public void update() {
+        getEntity().ifPreset(entity -> update(entity.getEyeLocation()));
+    }
     
 }

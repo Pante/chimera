@@ -21,18 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
+package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
-import java.text.MessageFormat;
+import static com.karuslabs.commons.world.Vectors.rotateVector;
 
 
-public interface Context extends ScheduledCancellable {
+public class StaticLocation extends BoundLocation {
     
-    public Translation getTranslation();
+    public StaticLocation(StaticLocation location) {
+        super(location);
+    }
     
-    public MessageFormat getFormat();
+    public StaticLocation(Location location, Vector offset, float yaw, float pitch, boolean relative) {
+        super(location, offset, 0, 0, relative);
+    }
+    
+    
+    @Override
+    public boolean validate() {
+        return true;
+    }
+    
+    @Override
+    public void update() {}
+
+    @Override
+    public void updateOffset() {
+        if (relative) {
+            location.add(rotateVector(offset, location));
+            
+        } else {
+            location.add(offset);
+        }
+    }
     
 }

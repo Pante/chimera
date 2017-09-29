@@ -23,16 +23,13 @@
  */
 package com.karuslabs.commons.display.animation;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
 
-import java.text.MessageFormat;
-
-
-public interface Context extends ScheduledCancellable {
+public interface TitleContext extends Context {
     
-    public Translation getTranslation();
+    public int getFadeIn();
     
-    public MessageFormat getFormat();
+    public int getStay();
+    
+    public int getFadeOut();
     
 }

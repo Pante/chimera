@@ -24,15 +24,37 @@
 package com.karuslabs.commons.display.animation;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
+import com.karuslabs.commons.util.Template;
+import com.karuslabs.commons.util.concurrent.*;
 
-import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
+
+import org.bukkit.boss.BossBar;
 
 
-public interface Context extends ScheduledCancellable {
+public abstract class AbstractBar extends Bar {
+
+    protected Template<BossBar> template;
     
-    public Translation getTranslation();
     
-    public MessageFormat getFormat();
+    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
+        super(executor, translation, iterations, delay, period, unit);
+        this.template = template;
+    }
+    
+    
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
+        
+        public AbstractBuilder(GenericBar bar) {
+            super(bar);
+        }
+        
+        
+        public GenericBuilder template(Template<BossBar> template) {
+            bar.template = template;
+            return getThis();
+        }
+        
+    }
     
 }
