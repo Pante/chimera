@@ -21,40 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
-
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Template;
-import com.karuslabs.commons.util.concurrent.*;
-
-import java.util.concurrent.TimeUnit;
-
-import org.bukkit.boss.BossBar;
+package com.karuslabs.commons.util.function;
 
 
-public abstract class AbstractBar extends Bar {
-
-    protected Template<BossBar> template;
+@FunctionalInterface
+public interface TriConsumer<T, U, V> {
     
-    
-    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
-        this.template = template;
-    }
-    
-    
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
-        
-        public AbstractBuilder(GenericBar bar) {
-            super(bar);
-        }
-        
-        
-        public GenericBuilder template(Template<BossBar> template) {
-            bar.template = template;
-            return getThis();
-        }
-        
-    }
+    public void accept(T t, U u, V v);
     
 }

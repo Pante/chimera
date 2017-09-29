@@ -30,4 +30,7 @@ public class Effect {
     
     private ScheduledExecutor executor;
     
+    
+    
+    
 }

@@ -23,18 +23,76 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 
-public abstract class CancellableRunnable implements Runnable {
+public abstract class CancellableRunnable implements Runnable, Cancellable {
     
-    protected @Nullable ScheduledFuture<?> future;
+    public static CancellableRunnable of(Consumer<Cancellable> consumer) {
+        return new CancellableConsumer(consumer);
+    }
     
+    public static CancellableRunnable of(Runnable runnable) {
+        return new DelegateRunnable(runnable);
+    }
+    
+    
+    private @Nullable AtomicReference<Future<?>> reference;
+    
+    
+    public CancellableRunnable() {
+        reference = new AtomicReference<>();
+    }
+    
+    
+    protected @Nullable Future<?> get() {
+        return reference.get();
+    }
+    
+    protected void set(Future<?> future) {
+        if (!reference.compareAndSet(null, future)) {
+            throw new IllegalStateException("Future has already been set");
+        }
+    }
+    
+    
+    @Override
+    public void cancel() {
+        reference.getAndSet(null).cancel(true);
+    }
+    
+    
+    static class CancellableConsumer extends CancellableRunnable {
+
+        private final Consumer<Cancellable> consumer;
         
-    protected void cancel() {
-        future.cancel(true);
-        Thread.interrupted();
+        CancellableConsumer(Consumer<Cancellable> consumer) {
+            this.consumer = consumer;
+        }
+        
+        @Override
+        public void run() {
+            consumer.accept(this);
+        }
+        
+    }
+    
+    static class DelegateRunnable extends CancellableRunnable {
+        
+        private final Runnable runnable;
+        
+        DelegateRunnable(Runnable runnable) {
+            this.runnable = runnable;
+        }
+        
+        @Override
+        public void run() {
+            runnable.run();
+        }
+        
     }
     
 }

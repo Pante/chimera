@@ -31,15 +31,17 @@ public abstract class BoundLocation {
     
     protected Location location;
     protected Vector offset;
+    protected float yaw;
+    protected float pitch;
     protected boolean offsetRelative;
-    protected Direction direction;
     
     
-    public BoundLocation(Location location, Vector offset, boolean offsetRelative, Direction direction) {
+    public BoundLocation(Location location, Vector offset, float offsetYaw, float offsetPitch, boolean offsetRelative) {
         this.location = location;
         this.offset = offset;
+        this.yaw = offsetYaw;
+        this.pitch = offsetPitch;
         this.offsetRelative = offsetRelative;
-        this.direction = direction;
     }
     
     
@@ -48,6 +50,8 @@ public abstract class BoundLocation {
         updateOffset();
     }
     
+    
+    public abstract boolean validate();
     
     public abstract void update();
     
@@ -60,13 +64,13 @@ public abstract class BoundLocation {
     }
 
     public void updateDirection() {
-        if (direction.isRelative()) {
-            location.setYaw(location.getYaw() + direction.yaw());
-            location.setPitch(location.getPitch() + direction.pitch());
+        if (offsetRelative) {
+            location.setYaw(location.getYaw() + yaw);
+            location.setPitch(location.getPitch() + pitch);
             
         } else {
-            location.setYaw(direction.yaw());
-            location.setPitch(direction.pitch());
+            location.setYaw(yaw);
+            location.setPitch(pitch);
         }
     }
 
@@ -85,10 +89,6 @@ public abstract class BoundLocation {
     
     public void setOffsetRelative(boolean offsetRelative) {
         this.offsetRelative = offsetRelative;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
     
 }

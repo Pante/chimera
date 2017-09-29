@@ -21,51 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
+package com.karuslabs.commons.util.concurrent;
 
 
-public class Direction {
+public interface ScheduledCancellable extends Cancellable {
     
-    private float yaw;
-    private float pitch;
-    private boolean relative;
+    public long getCurrent();
     
-    
-    public Direction() {
-        this(0, 0, false);
-    }
-    
-    public Direction(float yaw, float pitch, boolean relative) {
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.relative = relative;
-    }
-  
-    
-    public float yaw() {
-        return yaw;
-    }
-    
-    public void yaw(float yaw) {
-        this.yaw = yaw;
-    }
-    
-    
-    public float pitch() {
-        return pitch;
-    }
-    
-    public void pitch(float pitch) {
-        this.pitch = pitch;
-    }
-    
-    
-    public boolean isRelative() {
-        return relative;
-    }
-    
-    public void setRelative(boolean relative) {
-        this.relative = relative;
-    }
+    public long getIterations();
     
 }

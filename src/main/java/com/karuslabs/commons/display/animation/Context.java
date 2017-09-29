@@ -24,19 +24,30 @@
 package com.karuslabs.commons.display.animation;
 
 import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.Cancellable;
 
 import java.text.MessageFormat;
-import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 
-public interface Context {
+public abstract class Context<GenericCancellable extends Cancellable> implements Consumer<GenericCancellable> {
     
-    public @Nonnull Translation getTranslation();
+    private Translation translation;
+    private MessageFormat format;
     
-    public @Nonnull MessageFormat getFormat();
     
-    public long getIterations();
-    
-    public long getCurrent();
+    public Context(Translation translation) {
+        this.translation = translation;
+        format = new MessageFormat("");
+    }
+
+
+    public Translation getTranslation() {
+        return translation;
+    }
+
+    public MessageFormat getFormat() {
+        return format;
+    }
     
 }

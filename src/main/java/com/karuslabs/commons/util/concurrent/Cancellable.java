@@ -21,40 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
-
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
-import static com.karuslabs.commons.world.Vectors.rotateVector;
+package com.karuslabs.commons.util.concurrent;
 
 
-public class StaticLocation extends BoundLocation {
-
-    public StaticLocation(Location location) {
-        this(location, new Vector(), new Direction());
-    }
+public interface Cancellable {
     
-    public StaticLocation(Location location, Vector offset, Direction direction) {
-        this(location, offset, true, direction);
-    }
-    
-    public StaticLocation(Location location, Vector offset, boolean offsetRelative, Direction direction) {
-        super(location, offset, offsetRelative, direction);
-    }
-
-    
-    @Override
-    public void update() {}
-
-    @Override
-    public void updateOffset() {
-        if (offsetRelative) {
-            location.add(rotateVector(offset, location));
-            
-        } else {
-            location.add(offset);
-        }
-    }
+    public void cancel();
     
 }

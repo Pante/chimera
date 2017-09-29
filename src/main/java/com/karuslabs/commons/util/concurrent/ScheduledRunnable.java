@@ -23,23 +23,20 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.function.BiConsumer;
-import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 
-public abstract class ScheduledRunnable implements Runnable {
+public abstract class ScheduledRunnable extends CancellableRunnable implements ScheduledCancellable {
+        
+    public static ScheduledRunnable of(Consumer<ScheduledCancellable> consumer, long iterations) {
+        return new ScheduledConsumer(consumer, iterations);
+    }
     
     public static ScheduledRunnable of(Runnable runnable, long iterations) {
-        return new ScheduledDelegateRunnable(runnable, iterations);
-    }
-    
-    public static ScheduledRunnable of(BiConsumer<Long, Long> consumer, long iterations) {
-        return new ScheduledContextRunnable(consumer, iterations);
+        return new DelegateRunnable(runnable, iterations);
     }
     
     
-    protected @Nullable ScheduledFuture<?> future;
     private long total;
     private long current;
     
@@ -54,32 +51,49 @@ public abstract class ScheduledRunnable implements Runnable {
     public void run() {
         if (!Thread.interrupted() && current < total) {
             process();
-            current++;
             
         } else {
-            future.cancel(true);
-            Thread.interrupted();
+            cancel();
         }
     }
     
     protected abstract void process();
     
     
+    @Override
     public long getIterations() {
         return total;
     }
     
+    @Override
     public long getCurrent() {
         return current;
     }
+
     
+    static class ScheduledConsumer extends ScheduledRunnable {
+        
+        private final Consumer<ScheduledCancellable> consumer;
+        
+        
+        ScheduledConsumer(Consumer<ScheduledCancellable> consumer, long iterations) {
+            super(iterations);
+            this.consumer = consumer;
+        }
+
+        @Override
+        protected void process() {
+            consumer.accept(this);
+        }
+        
+    }  
     
-    static class ScheduledDelegateRunnable extends ScheduledRunnable {
+    static class DelegateRunnable extends ScheduledRunnable {
         
         private final Runnable runnable;
         
         
-        ScheduledDelegateRunnable(Runnable runnable, long iterations) {
+        DelegateRunnable(Runnable runnable, long iterations) {
             super(iterations);
             this.runnable = runnable;
         }
@@ -87,23 +101,6 @@ public abstract class ScheduledRunnable implements Runnable {
         @Override
         protected void process() {
             runnable.run();
-        }
-        
-    }
-    
-    static class ScheduledContextRunnable extends ScheduledRunnable {
-        
-        private final BiConsumer<Long, Long> consumer;
-        
-        
-        ScheduledContextRunnable(BiConsumer<Long, Long> consumer, long iterations) {
-            super(iterations);
-            this.consumer = consumer;
-        }
-
-        @Override
-        protected void process() {
-            consumer.accept(getCurrent(), getIterations());
         }
         
     }

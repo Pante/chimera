@@ -47,8 +47,8 @@ public class ScheduledExecutor extends ScheduledThreadPoolExecutor {
     
     @Override
     protected <V> RunnableScheduledFuture<V> decorateTask​(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof ScheduledRunnable) {
-            ((ScheduledRunnable) runnable).future = task;
+        if (runnable instanceof CancellableRunnable) {
+            ((CancellableRunnable) runnable).set(task);
         }
         
         return task;

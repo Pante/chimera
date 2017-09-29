@@ -21,36 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
-
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
-
-import java.text.MessageFormat;
-import javax.annotation.Nonnull;
+package com.karuslabs.commons.util.function;
 
 
-abstract class Task extends ScheduledRunnable implements Context {
-    
-    private Translation translation;
-    private MessageFormat format;
-    
-    
-    Task(Translation translation, long iterations) {
-        super(iterations);
-        this.translation = translation;
-        format = new MessageFormat("");
-    }
-
-
-    @Override
-    public @Nonnull Translation getTranslation() {
-        return translation;
-    }
-
-    @Override
-    public @Nonnull MessageFormat getFormat() {
-        return format;
-    }
+@FunctionalInterface
+public interface TriFunction<T, U, V, R> {
+        
+    public R apply(T t, U u, V v);
     
 }
