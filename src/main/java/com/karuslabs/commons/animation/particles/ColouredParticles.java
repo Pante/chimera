@@ -45,7 +45,7 @@ public class ColouredParticles extends Particles {
     @Override
     public void render(Player player, Location location) {
         player.spawnParticle(particle, location, amount, r, g, b, 1);
-    }
+    }    
 
     @Override
     public void render(Location location) {

@@ -21,35 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
-
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
-
-import java.text.MessageFormat;
+package com.karuslabs.commons.animation.screen;
 
 
-abstract class Task extends ScheduledRunnable implements Context {
+public interface TitleContext extends Context {
     
-    private Translation translation;
-    private MessageFormat format;
+    public int getFadeIn();
     
+    public int getStay();
     
-    Task(Translation translation, long iterations) {
-        super(iterations);
-        this.translation = translation;
-        format = new MessageFormat("");
-    }
-
-
-    @Override
-    public Translation getTranslation() {
-        return translation;
-    }
-
-    @Override
-    public MessageFormat getFormat() {
-        return format;
-    }
+    public int getFadeOut();
     
 }

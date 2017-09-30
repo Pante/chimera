@@ -21,16 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.util.concurrent.ScheduledExecutor;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
+
+import java.text.MessageFormat;
 
 
-public class Effect {
+public interface Context extends ScheduledCancellable {
     
-    private ScheduledExecutor executor;
+    public Translation getTranslation();
     
-    
-    
+    public MessageFormat getFormat();
     
 }

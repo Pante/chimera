@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import java.util.Collection;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -41,6 +43,13 @@ public abstract class Particles {
     
     public void render(Player player) {
         render(player, player.getLocation());
+    }
+
+    
+    public void render(Collection<Player> players, Location location) {
+        for (Player player : players) {
+            render(player, location);
+        }
     }
     
     public abstract void render(Player player, Location location);

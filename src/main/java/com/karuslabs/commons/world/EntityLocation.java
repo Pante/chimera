@@ -109,5 +109,5 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     public boolean isUpdateDirection() {
         return updateDirection;
     }
-    
+
 }

@@ -21,27 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
 import com.karuslabs.commons.world.BoundLocation;
 
+import java.util.function.BiConsumer;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public abstract class Task<GenericParticles extends Particles, GenericOrigin extends BoundLocation, GenericTarget extends BoundLocation> extends ScheduledRunnable {
+public abstract class Task<GenericParticles extends Particles, Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledRunnable {
     
     protected GenericParticles particles;
-    protected GenericOrigin origin;
-    protected GenericTarget target;
+    protected BiConsumer<Particles, Location> render;
+    protected Origin origin;
+    protected Target target;
     protected boolean orientate;
     
     
-    public Task(GenericParticles particles,GenericOrigin origin, GenericTarget target, boolean orientate, long iterations) {
+    public Task(GenericParticles particles, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
         super(iterations);
         this.particles = particles;
+        this.render = render;
         this.origin = origin;
         this.target = target;
         this.orientate = orientate;
@@ -65,26 +69,8 @@ public abstract class Task<GenericParticles extends Particles, GenericOrigin ext
         } else {
             cancel();
         }
-        
     }
     
     protected abstract void render();
-    
-    
-    public GenericParticles getParticles() {
-        return particles;
-    }
-    
-    public GenericOrigin getOrigin() {
-        return origin;
-    }
-
-    public GenericTarget getTarget() {
-        return target;
-    }
-
-    public boolean isOrientate() {
-        return orientate;
-    }
     
 }

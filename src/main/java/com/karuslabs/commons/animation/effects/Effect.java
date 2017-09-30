@@ -21,40 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
+package com.karuslabs.commons.animation.effects;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Template;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.util.concurrent.*;
+import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import org.bukkit.entity.Player;
 
-import org.bukkit.boss.BossBar;
 
-
-public abstract class AbstractBar extends Bar {
-
-    protected Template<BossBar> template;
+public abstract class Effect<GenericParticles extends Particles, Origin extends BoundLocation, Target extends BoundLocation> {
+    
+    protected GenericParticles particles;
+    protected boolean orientate;
+    protected long iterations;
+    protected long delay;
+    protected long period;
+    protected TimeUnit unit;
     
     
-    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
-        this.template = template;
+    public Effect(GenericParticles particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
+        this.particles = particles;
+        this.orientate = orientate;
+        this.iterations = iterations;
+        this.delay = delay;
+        this.period = period;
+        this.unit = unit;
     }
     
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
-        
-        public AbstractBuilder(GenericBar bar) {
-            super(bar);
-        }
-        
-        
-        public GenericBuilder template(Template<BossBar> template) {
-            bar.template = template;
-            return getThis();
-        }
-        
-    }
+    public abstract ScheduledPromise<?> render(Player player, Origin origin, Target target);
+    
+    public abstract ScheduledPromise<?> render(Collection<Player> players, Origin origin, Target target);
+    
+    public abstract ScheduledPromise<?> render(Origin origin, Target target);
     
 }

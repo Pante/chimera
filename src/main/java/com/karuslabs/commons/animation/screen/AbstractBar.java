@@ -21,15 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.display.animation;
+package com.karuslabs.commons.animation.screen;
+
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.Template;
+import com.karuslabs.commons.util.concurrent.*;
+
+import java.util.concurrent.TimeUnit;
+
+import org.bukkit.boss.BossBar;
 
 
-public interface TitleContext extends Context {
+public abstract class AbstractBar extends Bar {
+
+    protected Template<BossBar> template;
     
-    public int getFadeIn();
     
-    public int getStay();
+    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
+        super(executor, translation, iterations, delay, period, unit);
+        this.template = template;
+    }
     
-    public int getFadeOut();
+    
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
+        
+        public AbstractBuilder(GenericBar bar) {
+            super(bar);
+        }
+        
+        
+        public GenericBuilder template(Template<BossBar> template) {
+            bar.template = template;
+            return getThis();
+        }
+        
+    }
     
 }
