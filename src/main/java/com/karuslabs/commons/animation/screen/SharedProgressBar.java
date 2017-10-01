@@ -28,12 +28,12 @@ import com.karuslabs.commons.util.Template;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 public class SharedProgressBar extends AbstractBar {
@@ -41,14 +41,14 @@ public class SharedProgressBar extends AbstractBar {
     private BiConsumer<BossBar, Context> consumer;
     
     
-    public SharedProgressBar(ScheduledExecutor executor, Template<BossBar> template, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, template, translation, iterations, delay, period, unit);
+    public SharedProgressBar(Plugin plugin, Template<BossBar> template, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
+        super(plugin, template, translation, iterations, delay, period);
         this.consumer = consumer;
     }
     
 
     @Override
-    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
         BossBar bar = template.create();
         players.forEach(bar::addPlayer);
         
@@ -76,8 +76,8 @@ public class SharedProgressBar extends AbstractBar {
     }
     
     
-    public static SharedProgressBarBuilder builder(ScheduledExecutor executor) {
-        return new SharedProgressBarBuilder(new SharedProgressBar(executor, null, null, null, 0, 0, 0, TimeUnit.SECONDS));
+    public static SharedProgressBarBuilder builder(Plugin plugin) {
+        return new SharedProgressBarBuilder(new SharedProgressBar(plugin, null, null, null, 0, 0, 0));
     }
     
     public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar> {

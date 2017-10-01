@@ -24,8 +24,10 @@
 package com.karuslabs.commons.util.concurrent;
 
 
-public interface Cancellable {
+public interface Repeatable {
     
-    public void cancel();
+    public long getCurrent();
+    
+    public long getIterations();
     
 }

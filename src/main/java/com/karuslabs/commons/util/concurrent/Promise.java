@@ -37,6 +37,26 @@ public interface Promise<T> extends Future<T> {
     
     
     @Blocking
+    public default @Nullable T await() {
+        try {
+            return obtain();
+        } catch (CancellationException e) {
+            return null;
+        }
+    }
+    
+    @Blocking
+    public default @Nullable T await(long timeout, TimeUnit unit) {
+        try {
+            return obtain(timeout, unit);
+            
+        } catch (CancellationException e) {
+            return null;   
+        }
+    }
+    
+    
+    @Blocking
     public default @Nullable T obtain() {
         try {
             return get();

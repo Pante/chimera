@@ -24,7 +24,7 @@
 package com.karuslabs.commons.animation.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
+import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.function.BiConsumer;
@@ -33,16 +33,16 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public abstract class Task<GenericParticles extends Particles, Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledRunnable {
+public abstract class Task<Particle extends Particles, Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledPromiseTask<Void> {
     
-    protected GenericParticles particles;
+    protected Particle particles;
     protected BiConsumer<Particles, Location> render;
     protected Origin origin;
     protected Target target;
     protected boolean orientate;
     
     
-    public Task(GenericParticles particles, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
+    public Task(Particle particles, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
         super(iterations);
         this.particles = particles;
         this.render = render;
@@ -67,10 +67,15 @@ public abstract class Task<GenericParticles extends Particles, Origin extends Bo
             render();
             
         } else {
-            cancel();
+            done();
         }
     }
     
     protected abstract void render();
+    
+    @Override
+    protected Void value() {
+        return null;
+    }
     
 }

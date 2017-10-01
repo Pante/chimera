@@ -27,11 +27,11 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
-import javax.annotation.Nonnull;
+import javax.annotation.*;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
 import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
@@ -43,14 +43,14 @@ public class ActionBar extends Bar {
     private BiFunction<Player, Context, String> function;
 
     
-    public ActionBar(ScheduledExecutor executor, Translation translation, BiFunction<Player, Context, String> function, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
+    public ActionBar(Plugin plugin, Translation translation, BiFunction<Player, Context, String> function, long iterations, long delay, long period) {
+        super(plugin, translation, iterations, delay, period);
         this.function = function;
     }
 
     
     @Override
-    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), function, translation, iterations);
     }
     
@@ -60,11 +60,9 @@ public class ActionBar extends Bar {
         private Set<Player> players;
         private BiFunction<Player, Context, String> function;
         
-        
         public ScheduledTask(Set<Player> players, BiFunction<Player, Context, String> function, Translation translation, long iterations) {
             super(translation, iterations);
         }
-
         
         @Override
         protected void process() {
@@ -74,8 +72,8 @@ public class ActionBar extends Bar {
     }
     
     
-    public static ActionBarBuilder builder(ScheduledExecutor executor) {
-        return new ActionBarBuilder(new ActionBar(executor, null, null, 0, 0, 0, TimeUnit.SECONDS));
+    public static ActionBarBuilder builder(Plugin plugin) {
+        return new ActionBarBuilder(new ActionBar(plugin, null, null, 0, 0, 0));
     }
     
     public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {

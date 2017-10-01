@@ -24,17 +24,26 @@
 package com.karuslabs.commons.animation.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.concurrent.*;
+import com.karuslabs.commons.util.concurrent.Promise;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.BiConsumer;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import static com.karuslabs.commons.collection.Sets.weakSet;
 
 
-public abstract class Effect<GenericParticles extends Particles, Origin extends BoundLocation, Target extends BoundLocation> {
+public abstract class Effect<Particle extends Particles, Origin extends BoundLocation, Target extends BoundLocation> {
     
-    protected GenericParticles particles;
+    private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
+    
+    protected Plugin plugin;
+    protected Particle particles;
     protected boolean orientate;
     protected long iterations;
     protected long delay;
@@ -42,7 +51,8 @@ public abstract class Effect<GenericParticles extends Particles, Origin extends 
     protected TimeUnit unit;
     
     
-    public Effect(GenericParticles particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
+    public Effect(Plugin plugin, Particle particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
+        this.plugin = plugin;
         this.particles = particles;
         this.orientate = orientate;
         this.iterations = iterations;
@@ -52,10 +62,22 @@ public abstract class Effect<GenericParticles extends Particles, Origin extends 
     }
     
     
-    public abstract ScheduledPromise<?> render(Player player, Origin origin, Target target);
+    public Promise<?> render(Player player, Origin origin, Target target) {
+        return schedule(task((particles, location) -> particles.render(player, location), origin, target));
+    }
     
-    public abstract ScheduledPromise<?> render(Collection<Player> players, Origin origin, Target target);
+    public Promise<?> render(Collection<Player> players, Origin origin, Target target) {
+        Set<Player> targets = weakSet(players);
+        return schedule(task((particles, location) -> particles.render(targets, location), origin, target));
+    }
     
-    public abstract ScheduledPromise<?> render(Origin origin, Target target);
+    public Promise<?> render(Origin origin, Target target) {
+        return schedule(task(GLOBAL, origin, target));
+    }
+    
+    
+    protected abstract Task task(BiConsumer<Particles, Location> render, Origin origin, Target target);
+    
+    protected abstract Promise<?> schedule(Task task);
     
 }

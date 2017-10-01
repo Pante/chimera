@@ -25,11 +25,9 @@ package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.Template;
-import com.karuslabs.commons.util.concurrent.*;
-
-import java.util.concurrent.TimeUnit;
 
 import org.bukkit.boss.BossBar;
+import org.bukkit.plugin.Plugin;
 
 
 public abstract class AbstractBar extends Bar {
@@ -37,15 +35,15 @@ public abstract class AbstractBar extends Bar {
     protected Template<BossBar> template;
     
     
-    public AbstractBar(ScheduledExecutor executor, Template<BossBar> template, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
+    public AbstractBar(Plugin plugin, Template<BossBar> template, Translation translation, long iterations, long delay, long period) {
+        super(plugin, translation, iterations, delay, period);
         this.template = template;
     }
     
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, Bar extends AbstractBar> extends Builder<GenericBuilder, Bar> {
         
-        public AbstractBuilder(GenericBar bar) {
+        public AbstractBuilder(Bar bar) {
             super(bar);
         }
         

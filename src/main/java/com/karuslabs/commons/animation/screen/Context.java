@@ -24,12 +24,12 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledCancellable;
+import com.karuslabs.commons.util.concurrent.Repeatable;
 
 import java.text.MessageFormat;
 
 
-public interface Context extends ScheduledCancellable {
+public interface Context extends Repeatable {
     
     public Translation getTranslation();
     

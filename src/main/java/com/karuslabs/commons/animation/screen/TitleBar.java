@@ -27,11 +27,11 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
 
@@ -44,13 +44,13 @@ public class TitleBar extends Bar {
     private int fadeOut;
     
     
-    public TitleBar(ScheduledExecutor executor, BiConsumer<Player, TitleContext> consumer, Translation translation, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, translation, iterations, delay, period, unit);
+    public TitleBar(Plugin plugin, BiConsumer<Player, TitleContext> consumer, Translation translation, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
+        super(plugin, translation, iterations, delay, period);
     }
 
     
     @Override
-    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer, translation, fadeIn, stay, fadeOut, iterations);
     }
     
@@ -97,8 +97,8 @@ public class TitleBar extends Bar {
     }
     
     
-    public static TitleBarBuilder builder(ScheduledExecutor executor) {
-        return new TitleBarBuilder(new TitleBar(executor, null, null, 0, 0, 0, 0, 0, 0, TimeUnit.SECONDS));
+    public static TitleBarBuilder builder(Plugin plugin) {
+        return new TitleBarBuilder(new TitleBar(plugin, null, null, 0, 0, 0, 0, 0, 0));
     }
     
     public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {

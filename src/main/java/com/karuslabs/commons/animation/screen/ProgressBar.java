@@ -25,15 +25,15 @@ package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.Template;
-import com.karuslabs.commons.util.concurrent.*;
+import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import static java.util.stream.Collectors.toList;
 
@@ -43,14 +43,14 @@ public class ProgressBar extends AbstractBar {
     private BiConsumer<BossBar, Context> consumer;
 
     
-    public ProgressBar(ScheduledExecutor executor, Template<BossBar> template, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, template, translation, iterations, delay, period, unit);
+    public ProgressBar(Plugin plugin, Template<BossBar> template, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
+        super(plugin, template, translation, iterations, delay, period);
         this.consumer = consumer;
     }
 
     
     @Override
-    protected @Nonnull ScheduledRunnable runnable(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
         List<BossBar> bars = players.stream().map(player -> {
             BossBar bar = template.create();
             bar.addPlayer(player);
@@ -81,8 +81,8 @@ public class ProgressBar extends AbstractBar {
     }
     
     
-    public static ProgressBarBuilder builder(ScheduledExecutor executor) {
-        return new ProgressBarBuilder(new ProgressBar(executor, null, null, null, 0, 0, 0, TimeUnit.SECONDS));
+    public static ProgressBarBuilder builder(Plugin plugin) {
+        return new ProgressBarBuilder(new ProgressBar(plugin, null, null, null, 0, 0, 0));
     }
     
     public static class ProgressBarBuilder extends AbstractBuilder<ProgressBarBuilder, ProgressBar>  {

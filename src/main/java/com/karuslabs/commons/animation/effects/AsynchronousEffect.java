@@ -24,56 +24,30 @@
 package com.karuslabs.commons.animation.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
-import static com.karuslabs.commons.collection.Sets.weakSet;
-import com.karuslabs.commons.util.concurrent.ScheduledExecutor;
-import com.karuslabs.commons.util.concurrent.ScheduledPromise;
+import com.karuslabs.commons.util.concurrent.Promise;
 import com.karuslabs.commons.world.BoundLocation;
-import java.util.Collection;
-import java.util.Set;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
 public abstract class AsynchronousEffect<P extends Particles, O extends BoundLocation, T extends BoundLocation> extends Effect<P, O, T> {
     
     private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
-    
-    
-    protected ScheduledExecutor executor;
 
     
-    public AsynchronousEffect(ScheduledExecutor executor, P particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
-        super(particles, orientate, iterations, delay, period, unit);
-        this.executor = executor;
+    public AsynchronousEffect(Plugin plugin, P particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
+        super(plugin, particles, orientate, iterations, delay, period, unit);
     }
     
     
-    public ScheduledPromise<?> render(Player player, O origin, T target) {
-        return ScheduledPromise.of(executor.scheduleAtFixedRate(
-            task((particles, location) -> particles.render(player, location), origin, target), 
-            delay, 
-            period, 
-            unit
-        ));
+    @Override
+    public Promise<?> schedule(Task task) {
+        task.runTaskTimerAsynchronously(plugin, delay, period);
+        return task;
     }
-    
-    public ScheduledPromise<?> render(Collection<Player> players, O origin, T target) {
-        Set<Player> targets = weakSet(players);
-        return ScheduledPromise.of(executor.scheduleAtFixedRate(
-            task((particles, location) -> particles.render(targets, location), origin, target), 
-            delay,
-            period, 
-            unit
-        ));
-    }
-    
-    public ScheduledPromise<?> render(O origin, T target) {
-        return ScheduledPromise.of(executor.scheduleAtFixedRate(task(GLOBAL, origin, target), delay, period, unit));
-    }
-    
-    protected abstract Task task(BiConsumer<Particles, Location> render, O origin, T target);
     
 }

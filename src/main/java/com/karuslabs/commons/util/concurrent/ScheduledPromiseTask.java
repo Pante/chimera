@@ -23,74 +23,77 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-import javax.annotation.Nullable;
 
-
-public abstract class CancellableRunnable implements Runnable, Cancellable {
+public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements Repeatable {
     
-    public static CancellableRunnable of(Consumer<Cancellable> consumer) {
-        return new CancellableConsumer(consumer);
-    }
-    
-    public static CancellableRunnable of(Runnable runnable) {
-        return new DelegateRunnable(runnable);
+    public static <T> ScheduledPromiseTask<T> of(Runnable runnable, T value, long iterations) {
+        return new AwaitablePromiseRunnable<>(runnable, value, iterations);
     }
     
     
-    private @Nullable AtomicReference<Future<?>> reference;
+    public static final int INFINITE = -1;
+    
+    private long current;
+    private long total;
     
     
-    public CancellableRunnable() {
-        reference = new AtomicReference<>();
-    }
-    
-    
-    protected @Nullable Future<?> get() {
-        return reference.get();
-    }
-    
-    protected void set(Future<?> future) {
-        if (!reference.compareAndSet(null, future)) {
-            throw new IllegalStateException("Future has already been set");
-        }
+    public ScheduledPromiseTask(long iterations) {
+        current = 0;
+        total = iterations;
     }
     
     
     @Override
-    public void cancel() {
-        reference.getAndSet(null).cancel(true);
+    public void run() {
+        if (total == -1 || current < total) {
+            try {
+                process();
+                if (total != -1) {
+                    current++;
+                }
+            } catch (Exception e) {
+                thrown = e;
+                
+            } finally {
+                done();
+            }
+            
+        } else {
+            done();
+        }
     }
     
-    
-    static class CancellableConsumer extends CancellableRunnable {
 
-        private final Consumer<Cancellable> consumer;
-        
-        CancellableConsumer(Consumer<Cancellable> consumer) {
-            this.consumer = consumer;
-        }
-        
-        @Override
-        public void run() {
-            consumer.accept(this);
-        }
-        
+    @Override
+    public long getCurrent() {
+        return current;
+    }
+
+    @Override
+    public long getIterations() {
+        return total;
     }
     
-    static class DelegateRunnable extends CancellableRunnable {
+    
+    static class AwaitablePromiseRunnable<T> extends ScheduledPromiseTask<T> {
         
         private final Runnable runnable;
+        private final T value;
         
-        DelegateRunnable(Runnable runnable) {
+        AwaitablePromiseRunnable(Runnable runnable, T value, long iterations) {
+            super(iterations);
             this.runnable = runnable;
+            this.value = value;
         }
         
         @Override
-        public void run() {
+        protected void process() throws Exception {
             runnable.run();
+        }
+
+        @Override
+        protected T value() {
+            return value;
         }
         
     }

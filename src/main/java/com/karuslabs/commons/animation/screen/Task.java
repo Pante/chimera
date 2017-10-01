@@ -24,12 +24,13 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledRunnable;
+import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 
 import java.text.MessageFormat;
+import javax.annotation.Nullable;
 
 
-abstract class Task extends ScheduledRunnable implements Context {
+abstract class Task extends ScheduledPromiseTask<Void> implements Context {
     
     private Translation translation;
     private MessageFormat format;
@@ -50,6 +51,11 @@ abstract class Task extends ScheduledRunnable implements Context {
     @Override
     public MessageFormat getFormat() {
         return format;
+    }
+    
+    @Override
+    protected @Nullable Void value() {
+        return null;
     }
     
 }

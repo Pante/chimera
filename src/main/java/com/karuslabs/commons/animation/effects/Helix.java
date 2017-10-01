@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2017 .
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,15 @@
 package com.karuslabs.commons.animation.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.concurrent.ScheduledExecutor;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+
 import org.bukkit.Location;
+import org.bukkit.plugin.Plugin;
+
+import static java.lang.Math.*;
 
 
 public class Helix extends AsynchronousEffect<Particles, BoundLocation, BoundLocation> {
@@ -40,8 +43,8 @@ public class Helix extends AsynchronousEffect<Particles, BoundLocation, BoundLoc
     private double rotation;
     
     
-    public Helix(ScheduledExecutor executor, Particles particles, boolean orientate, int strands, float radius, float curve, double rotation, long iterations, long delay, long period, TimeUnit unit) {
-        super(executor, particles, orientate, iterations, delay, period, unit);
+    public Helix(Plugin plugin, Particles particles, boolean orientate, int strands, float radius, float curve, double rotation, long iterations, long delay, long period, TimeUnit unit) {
+        super(plugin, particles, orientate, iterations, delay, period, unit);
         this.strands = strands;
         this.radius = radius;
         this.curve = curve;
@@ -77,9 +80,9 @@ public class Helix extends AsynchronousEffect<Particles, BoundLocation, BoundLoc
             for (int i = 1; i <= strands; i++) {
                 for (int j = 1; j <= amount; j++) {
                     float ratio = (float) j / amount;
-                    double angle = curve * ratio * 2 * Math.PI / strands + (2 * Math.PI * i / strands) + rotation;
-                    double x = Math.cos(angle) * ratio * radius;
-                    double z = Math.sin(angle) * ratio * radius;
+                    double angle = curve * ratio * 2 * PI / strands + (2 * PI * i / strands) + rotation;
+                    double x = cos(angle) * ratio * radius;
+                    double z = sin(angle) * ratio * radius;
                     location.add(x, 0, z);
                     render.accept(particles, location);
                     location.subtract(x, 0, z);

@@ -28,10 +28,10 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import static java.util.Collections.singletonList;
 
@@ -41,33 +41,33 @@ public abstract class Bar {
     public static final long INFINITE = -1;
     
     
-    private ScheduledExecutor executor;
+    protected Plugin plugin;
     protected Translation translation;
     protected long iterations;
     protected long delay;
     protected long period;
-    protected TimeUnit unit;
     
     
-    public Bar(ScheduledExecutor executor, Translation translation, long iterations, long delay, long period, TimeUnit unit) {
-        this.executor = executor;
+    public Bar(Plugin plugin, Translation translation, long iterations, long delay, long period) {
+        this.plugin = plugin;
         this.translation = translation;
         this.iterations = iterations;
         this.delay = delay;
         this.period = period;
-        this.unit = unit;
     }
     
     
-    public ScheduledPromise<?> render(Player player) {
+    public Promise<?> render(Player player) {
         return render(singletonList(player));
     }
     
-    public ScheduledPromise<?> render(Collection<Player> players) {
-        return ScheduledPromise.of(executor.scheduleWithFixedDelay(runnable(players), delay, period, unit));
+    public Promise<?> render(Collection<Player> players) {
+        ScheduledPromiseTask<?> task = task(players);
+        task.runTaskTimerAsynchronously(plugin, delay, period);
+        return task;
     }
     
-    protected abstract @Nonnull ScheduledRunnable runnable(Collection<Player> players);
+    protected abstract @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {
@@ -97,11 +97,6 @@ public abstract class Bar {
         
         public GenericBuilder period(long period) {
             bar.period = period;
-            return getThis();
-        }
-        
-        public GenericBuilder unit(TimeUnit unit) {
-            bar.unit = unit;
             return getThis();
         }
         
