@@ -50,7 +50,7 @@ public class CompletionElement extends Element<Completion> {
     }
 
     @Override
-    protected @Nonnull Completion handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected @Nonnull CachedCompletion handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return new CachedCompletion(config.getStringList(key));
     }
     

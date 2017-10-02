@@ -6,6 +6,9 @@ declare:
             permission: help.permission
             permission-message: message
             usage: usage
+            completions:
+                0: [a]
+                2: [b]
             
     completions:
         completion: [void]

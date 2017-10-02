@@ -21,12 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
+package com.karuslabs.commons.annotation;
 
-
-@FunctionalInterface
-public interface TriConsumer<T, U, V> {
+/**
+ * Temporary interface marking areas which may be enhanced when migrating to Java 9.
+ * Will be removed after migration.
+ */
+public @interface JDK9 {
     
-    public void accept(T t, U u, V v);
+    String value() default "";
     
 }

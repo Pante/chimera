@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.collection;
 
+import com.karuslabs.commons.annotation.JDK9;
+
 import java.util.*;
 
 import static java.util.Arrays.asList;
@@ -31,6 +33,8 @@ import static java.util.Collections.newSetFromMap;
 
 public class Sets {
     
+    @Deprecated 
+    @JDK9("Redundant in Java 9, Set.of(...)")
     public static <T> Set<T> asSet(T... t) {
         return new HashSet<>(asList(t));
     }

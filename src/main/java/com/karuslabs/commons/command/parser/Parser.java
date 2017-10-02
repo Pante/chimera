@@ -28,6 +28,7 @@ import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -50,24 +51,16 @@ public class Parser {
     
     
     public List<Command> parse(ConfigurationSection config) {
-        ConfigurationSection declarations = config.getConfigurationSection("declarations");
-        if (declarations != null) {
-            parseDeclarations(declarations);
-        }
-        
-        config = config.getConfigurationSection("commands");
-        if (config != null) {
-            return parseCommands(config);
-            
-        } else {
-            return EMPTY_LIST;
-        }
+        parseDeclarations(config.getConfigurationSection("declarations"));
+        return parseCommands(config.getConfigurationSection("commands"));
     }
     
-    protected void parseDeclarations(ConfigurationSection config) {
-        parseDeclaration(completion, config.getConfigurationSection("completions"));
-        parseDeclaration(translation, config.getConfigurationSection("translations"));
-        parseDeclaration(command, config.getConfigurationSection("commands"));
+    protected void parseDeclarations(@Nullable ConfigurationSection config) {
+        if (config != null) {
+            parseDeclaration(completion, config.getConfigurationSection("completions"));
+            parseDeclaration(translation, config.getConfigurationSection("translations"));
+            parseDeclaration(command, config.getConfigurationSection("commands"));
+        }
     }
     
     protected void parseDeclaration(Element<?> element, ConfigurationSection config) {
@@ -76,21 +69,13 @@ public class Parser {
         }
     }
     
-    protected List<Command> parseCommands(ConfigurationSection config) {
-        return config.getKeys(false).stream().map(key -> command.parse(config, key)).collect(toList());
-    }
-
-    
-    public Element<Command> getCommand() {
-        return command;
-    }
-
-    public Element<Completion> getCompletion() {
-        return completion;
-    }
-
-    public Element<MessageTranslation> getTranslation() {
-        return translation;
-}
+    protected List<Command> parseCommands(@Nullable ConfigurationSection config) {
+        if (config != null) {
+            return config.getKeys(false).stream().map(key -> command.parse(config, key)).collect(toList());
+            
+        } else {
+            return EMPTY_LIST;
+        }
+    }  
     
 }

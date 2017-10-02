@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.command.Command;
 
 import java.util.*;
@@ -50,8 +51,8 @@ public class CommandsElement extends Element<Map<String, Command>> {
     
     
     @Override
-    protected @Nonnull Map<String, Command> handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
-        return new HashMap<>();
+    protected @Nonnull Map<String, Command> handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
+        return new HashMap<>(0);
     }
     
     @Override
@@ -63,7 +64,8 @@ public class CommandsElement extends Element<Map<String, Command>> {
     protected @Nonnull Map<String, Command> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection subcommands = config.getConfigurationSection(key);
         return subcommands.getKeys(false).stream().collect(toMap(identity(), aKey -> {
-            if ("declared".equals(subcommands.getString(aKey))) {
+            String declared = subcommands.getString(aKey);
+            if (declared != null && declared.equals("declared")) {
                 return command.getDeclaration(aKey, subcommands.getCurrentPath());
                 
             } else {
@@ -73,11 +75,11 @@ public class CommandsElement extends Element<Map<String, Command>> {
     }
 
     
-    public Element<Command> getCommand() {
+    public @Nullable Element<Command> getCommandElement() {
         return command;
     }
 
-    public void setCommand(Element<Command> command) {
+    public void setCommandElement(Element<Command> command) {
         this.command = command;
     }
     

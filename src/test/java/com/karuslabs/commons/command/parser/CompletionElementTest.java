@@ -21,32 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.parser;
 
-import java.util.stream.Stream;
+import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.commons.command.completion.Completion;
 
-import org.junit.jupiter.api.TestInstance;
+import java.util.*;;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class PatternsTest {
+public class CompletionElementTest {
     
-    @ParameterizedTest
-    @MethodSource("preserveQuotes_parameters")
-    public void preserveQuotes(String[] arguments, String[] expected) {
-        assertThat(Patterns.preserveQuotes(arguments), equalTo(expected));
+    private CompletionElement element = new CompletionElement();
+    
+    
+    @Test
+    public void getDeclarations() {
+        @JDK9("Replace with Map.of(...)")
+        Map<String, Completion> completions = new HashMap<>();
+        completions.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
+        completions.put("WORLD_NAMES", Completion.WORLD_NAMES);
+        
+        assertEquals(completions, element.getDeclarations());
     }
     
-    static Stream<org.junit.jupiter.params.provider.Arguments> preserveQuotes_parameters() {
-        String[] arguments = new String[] {"1", "2", "3"};
-        return Stream.of(of(arguments, arguments), of(new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}));
+    
+    @ParameterizedTest
+    @CsvSource({"true, declare.translations.translation.embedded", "false, declare"})
+    public void check(boolean expected, String key) {
+        assertEquals(expected, element.check(COMMANDS, key));
+    }
+    
+    
+    @Test
+    public void handle() {
+        assertEquals(singletonList("path1"), element.handle(COMMANDS, "declare.translations.translation.embedded").getCompletions());
     }
     
 }

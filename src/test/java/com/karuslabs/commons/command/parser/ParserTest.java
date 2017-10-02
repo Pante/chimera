@@ -21,17 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
+package com.karuslabs.commons.command.parser;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.command.Command;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.junit.jupiter.api.*;
+
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Collections.EMPTY_LIST;
+import static org.mockito.Mockito.*;
 
 
-@Documented
-@Target({METHOD})
-@Retention(RUNTIME)
-public @interface Blocking {
+public class ParserTest {
+    
+    private CommandElement command = when(mock(CommandElement.class).parse(any(), any())).thenReturn(mock(Command.class)).getMock();
+    private TranslationElement translation = mock(TranslationElement.class);
+    private CompletionElement completion = mock(CompletionElement.class);
+    private Parser parser = spy(new Parser(command, translation, completion));
+    
+    
+    @Test
+    public void parse() {
+        doNothing().when(parser).parseDeclarations(any());
+        doReturn(EMPTY_LIST).when(parser).parseCommands(any());
+        
+        parser.parse(COMMANDS);
+        
+        verify(parser).parseDeclarations(COMMANDS.getConfigurationSection("declarations"));
+        verify(parser).parseCommands(COMMANDS.getConfigurationSection("commands"));
+    }
     
 }

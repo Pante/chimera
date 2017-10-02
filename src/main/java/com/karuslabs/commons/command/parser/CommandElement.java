@@ -62,35 +62,22 @@ public class CommandElement extends Element<Command> {
 
     @Override
     protected @Nonnull Command handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
-        ConfigurationSection command = config.getConfigurationSection(key);
-        return new Command(
-            command.getName(),
-            command.getString("description", ""),
-            command.getString("usage", ""),
-            command.getStringList("aliases"),
+        config = config.getConfigurationSection(key);
+        Command command = new Command(
+            config.getName(),
+            config.getString("description", ""),
+            config.getString("usage", ""),
+            config.getStringList("aliases"),
             plugin,
             CommandExecutor.NONE, 
-            translation.parse(command, "translation"),
-            subcommands.parse(command, "subcommands"),
-            completions.parse(command, "completions")
+            translation.parse(config, "translation"),
+            subcommands.parse(config, "subcommands"),
+            completions.parse(config, "completions")
         );
-    }
-
-    
-    public Plugin getPlugin() {
-        return plugin;
-    }
-    
-    public Element<Map<String, Command>> getSubcommands() {
-        return subcommands;
-    }
-
-    public Element<MessageTranslation> getTranslation() {
-        return translation;
-    }
-
-    public Element<Map<Integer, Completion>> getCompletions() {
-        return completions;
+        command.setPermission(config.getString("permission", ""));
+        command.setPermissionMessage(config.getString("permission-message", ""));
+        
+        return command;
     }
     
 }

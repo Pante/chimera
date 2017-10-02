@@ -26,7 +26,6 @@ package com.karuslabs.commons.animation.effects;
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Location;
@@ -43,8 +42,8 @@ public class Helix extends AsynchronousEffect<Particles, BoundLocation, BoundLoc
     private double rotation;
     
     
-    public Helix(Plugin plugin, Particles particles, boolean orientate, int strands, float radius, float curve, double rotation, long iterations, long delay, long period, TimeUnit unit) {
-        super(plugin, particles, orientate, iterations, delay, period, unit);
+    public Helix(Plugin plugin, Particles particles, boolean orientate, int strands, float radius, float curve, double rotation, long iterations, long delay, long period) {
+        super(plugin, particles, orientate, iterations, delay, period);
         this.strands = strands;
         this.radius = radius;
         this.curve = curve;

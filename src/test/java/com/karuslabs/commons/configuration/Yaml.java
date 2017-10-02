@@ -32,4 +32,6 @@ public class Yaml {
     
     public static final ConfigurationSection COMMANDS = from(Yaml.class.getClassLoader().getResourceAsStream("command/commands.yml"));
     
+    public static final ConfigurationSection INVALID = from(Yaml.class.getClassLoader().getResourceAsStream("command/invalid.yml"));
+    
 }

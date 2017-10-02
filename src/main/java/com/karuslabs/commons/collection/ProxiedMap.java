@@ -24,21 +24,13 @@
 package com.karuslabs.commons.collection;
 
 import java.util.*;
-import javax.annotation.Nullable;
+import javax.annotation.*;
 
 
 public abstract class ProxiedMap<K, V> implements Map<K, V> {
     
     protected Map<K, V> map;
-    
-    
-    public ProxiedMap() {
-        this(new HashMap<>());
-    }
-    
-    public ProxiedMap(int capacity) {
-        this(new HashMap<>(capacity));
-    }
+
     
     public ProxiedMap(Map<K, V> map) {
         this.map = map;
@@ -91,17 +83,17 @@ public abstract class ProxiedMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Set<K> keySet() {
+    public @Nonnull Set<K> keySet() {
         return map.keySet();
     }
 
     @Override
-    public Collection<V> values() {
+    public @Nonnull Collection<V> values() {
         return map.values();
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @Nonnull Set<Entry<K, V>> entrySet() {
         return map.entrySet();
     }
     

@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.collection;
 
+import com.karuslabs.commons.annotation.JDK9;
+
 import org.junit.jupiter.api.*;
 
 import java.util.*;
@@ -37,6 +39,8 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 public class SetsTest {
     
     @Test
+    @Deprecated
+    @JDK9("Coreesponding method will be removed")
     public void asSet() {
         assertEquals(new HashSet<>(asList(1, 2, 3)), Sets.asSet(1, 2, 3));
     }

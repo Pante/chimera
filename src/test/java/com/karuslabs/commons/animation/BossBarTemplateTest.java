@@ -21,12 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
+package com.karuslabs.commons.animation;
+
+import org.bukkit.Server;
+import org.bukkit.boss.*;
+
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.boss.BarColor.BLUE;
+import static org.bukkit.boss.BarStyle.SEGMENTED_10;
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface TriFunction<T, U, V, R> {
+public class BossBarTemplateTest {
+    
+    @Test
+    public void create() {
+        Server server = when(mock(Server.class).createBossBar(any(), any(), any(), any())).thenReturn(mock(BossBar.class)).getMock();
+        BossBar bar = new BossBarTemplate(server, "message", BLUE, SEGMENTED_10).create();
         
-    public R apply(T t, U u, V v);
+        verify(server).createBossBar("message", BLUE, SEGMENTED_10, BossBarTemplate.FLAGS);
+        verify(bar).setProgress(1);
+    }
     
 }

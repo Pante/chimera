@@ -47,14 +47,14 @@ public class ClassMapTest {
     
     @ParameterizedTest
     @MethodSource("getInstanceOrDefault_parameters")
-    public void getInstanceOrDefault(Object object, int expected) {
-        map.map.put(Integer.class, object);
+    public <T> void getInstanceOrDefault(Class<T> key, T value, T defaultValue, T expected) {
+        map.put(key, value);
 
-        assertEquals(expected, (int) map.getInstanceOrDefault(Integer.class, 0));
+        assertEquals(expected, map.getInstanceOrDefault(key, defaultValue));
     }
     
     static Stream<Arguments> getInstanceOrDefault_parameters() {
-        return Stream.of(of(5, 5), of(null, 0), of("", 0));
+        return Stream.of(of(Integer.class, 5, 0, 5), of(Integer.class, null, 0, 0), of(Object.class, "value", "", "value"), of(int.class, "", 0, 0));
     }
     
     

@@ -38,57 +38,65 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 public class TokenMapTest {
     
+    private static final Key<Integer> KEY = new Key<>("name", Integer.class);
+    
     private TokenMap<Object> map = new TokenMap<>();
-    private Key<Integer> key = new Key<>("name", Integer.class);
     
     
     @Test
     public void getInstance_ThrowsException() {
-        map.put(key, "");
+        map.put(KEY, "");
         
-        assertThrows(ClassCastException.class, () -> map.getInstance(key));
+        assertThrows(ClassCastException.class, () -> map.getInstance(KEY));
     }
     
     
     @ParameterizedTest
     @MethodSource("getInstanceOrDefault_parameters")
-    public void getInstanceOrDefault(Object object, int expected) {
-        map.put(key, object);
+    public <T> void getInstanceOrDefault(Key<T> key, T value, T defaultValue, T expected) {
+        map.put(key, value);
         
-        assertEquals(expected, (int) map.getInstanceOrDefault(key, 0));
+        assertEquals(expected, map.getInstanceOrDefault(key, defaultValue));
     }
     
     static Stream<Arguments> getInstanceOrDefault_parameters() {
-        return Stream.of(of(5, 5), of(null, 0), of("", 0));
+        return Stream.of(
+            of(KEY, 5, 0, 5), 
+            of(KEY, null, 0, 0), 
+            of(key("name", Object.class), "value", "", "value"), 
+            of(key("n", int.class), "", 0, 0)
+        );
     }
     
     
     @Test
     public void putInstance() {
-        map.putInstance(key, 1);
+        map.putInstance(KEY, 1);
         
-        assertTrue(map.containsKey(key));
+        assertTrue(map.containsKey(KEY));
     }
     
     
     @ParameterizedTest
     @MethodSource("keys")
-    public void equals(boolean expected, Key<?> other) {
-        assertEquals(expected, key.equals(other));
+    public void equals(boolean expected, Object other) {
+        assertEquals(expected, KEY.equals(other));
     }
     
     @ParameterizedTest
     @MethodSource("keys")
-    public void hashCode(boolean expected, Key<?> other) {
-        assertEquals(expected, key.hashCode() == other.hashCode());
+    public void hashCode(boolean expected, Object other) {
+        assertEquals(expected, KEY.hashCode() == other.hashCode());
     }
     
     static Stream<Arguments> keys() {
         return Stream.of(
+            of(true, KEY),
             of(true, key("name", Integer.class)), 
             of(false, key("name", String.class)),
             of(false, key("wrong", Integer.class)),
-            of(false, key("wrong", String.class))
+            of(false, key("wrong", String.class)),
+            of(false, new Object())
         );
     }
     

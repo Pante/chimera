@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.collection;
 
+import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.collection.TokenMap.Key;
 
 import java.util.*;
@@ -45,13 +46,13 @@ public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
     
     
     public <U extends V> @Nullable U getInstance(Key<U> key) {
-        return key.type.cast(map.get(key));
+        return (U) map.get(key);
     }
 
     public <U extends V> @Nullable U getInstanceOrDefault(Key<U> key, U value) {
         V uncasted = map.get(key);
-        if (uncasted != null && uncasted.getClass().equals(key.type)) {
-            return key.type.cast(uncasted);
+        if (uncasted != null && key.type.isAssignableFrom(uncasted.getClass())) {
+            return (U) uncasted;
 
         } else {
             return value;
@@ -60,15 +61,17 @@ public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
 
     
     public <U extends V> @Nullable U putInstance(Key<U> key, U value) {
-        return key.type.cast(map.put(key, value));
+        return (U) map.put(key, value);
     }
     
     
-    public static <T> Key<T> key(String name, Class<T> type) {
-        return new Key(name, type);
+    public static <T> @Immutable Key<T> key(String name, Class<T> type) {
+        return new Key<>(name, type);
     }
     
     
+    @Immutable
+    @ValueBased
     public static class Key<T> {
         
         private final String name;
@@ -92,12 +95,16 @@ public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
         
         @Override
         public boolean equals(Object object) {
-            if (object instanceof Key) {
+            if (this == object) {
+                return true;
+                
+            } else if (object instanceof Key<?>) {
                 Key key = (Key) object;
-                return name.equals(key.name) && type == key.type;
+                return hash == key.hash && type == key.type && name.equals(key.name);
+                
+            } else {        
+                return false;   
             }
-            
-            return false;
         }
 
         @Override

@@ -23,20 +23,21 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.arguments.Argument;
 import com.karuslabs.commons.command.arguments.Arguments;
-import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.command.completion.Completion;
 
+import java.util.List;
 import java.util.stream.Stream;
+
+import org.bukkit.command.CommandSender;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.EMPTY_LIST;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
@@ -44,13 +45,14 @@ import static org.mockito.Mockito.*;
 public class CommandTest {
     
     private Command command = spy(new Command("", null));
+    private CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();
     
     
     @Test
     public void execute_unwrapped() {
         doReturn(true).when(command).execute(any(Context.class), any(Arguments.class));
         
-        command.execute(null, "", new String[] {});
+        command.execute(sender, "", new String[] {});
         
         verify(command).execute(any(Context.class), any(Arguments.class));
     }
@@ -60,7 +62,7 @@ public class CommandTest {
     @CsvSource({"a, 1, 0", "b, 0, 1"})
     public void execute(String argument, int delegated, int executor) {
         Context context = mock(Context.class);
-        Arguments arguments = when(mock(Arguments.class).getLast()).thenReturn(new Argument(argument)).getMock();
+        Arguments arguments = spy(new Arguments(argument));
         
         Command subcommand = mock(Command.class);
         command.getSubcommands().put("a", subcommand);
@@ -82,21 +84,59 @@ public class CommandTest {
     public void tabComplete() {
         doReturn(EMPTY_LIST).when(command).complete(any(), any(Arguments.class));
         
-        command.tabComplete(null, "", new String[] {});
+        command.tabComplete(sender, "", new String[] {});
         
-        verify(command).complete(any(), any(Arguments.class));
+        verify(command).complete(any(CommandSender.class), any(Arguments.class));
     }
     
     
     @Test
     public void complete_empty() {
-        assertTrue(EMPTY_LIST == command.complete(null, new Arguments(new String[] {})));
+        assertTrue(EMPTY_LIST == command.complete(sender, new Arguments()));
     }
     
     
     @Test
-    public void complete() {
+    public void complete_delegate() {
+        Arguments arguments = spy(new Arguments("subcommand"));
+        Command subcommand = when(mock(Command.class).complete(sender, arguments)).thenReturn(singletonList("a")).getMock();
         
+        command.getSubcommands().put("subcommand", subcommand);
+        assertEquals(singletonList("a"), command.complete(sender, arguments));
+        verify(arguments).trim();
+        verify(subcommand).complete(sender, arguments);
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("complete_parameters")
+    public void complete_subcommands(String name, String permission, List<String> expected) {
+        Arguments arguments = new Arguments("subcommand");
+        
+        Command subcommand = new Command(name, null);
+        subcommand.setPermission(permission);
+        command.getSubcommands().put(name, subcommand);
+        
+        assertEquals(expected, command.complete(sender, arguments));
+    }
+    
+    static Stream<org.junit.jupiter.params.provider.Arguments> complete_parameters() {
+        return Stream.of(
+            of("subcommand1", "permission", asList("subcommand1")),
+            of("subcommand", "", EMPTY_LIST),
+            of("sub", "permission", EMPTY_LIST)
+        );
+    }
+    
+    
+    @Test
+    public void complete_completions() {
+        Arguments arguments = new Arguments("argument");
+        Completion completion = when(mock(Completion.class).complete(sender, "argument")).thenReturn(singletonList("a")).getMock();
+        command.getCompletions().put(0, completion);
+        
+        assertEquals(singletonList("a"), command.complete(sender, arguments));
+        verify(completion).complete(sender, "argument");
     }
     
 }

@@ -29,11 +29,12 @@ import javax.annotation.*;
 
 public class Argument {
     
-    public static final Argument NONE = new Argument("");
-    
-    
     private String argument;
     
+    
+    public Argument() {
+        this("");
+    }
     
     public Argument(String argument) {
         this.argument = argument;
@@ -48,7 +49,6 @@ public class Argument {
     public String text() {
         return argument;
     }
-    
     
     public @Nullable <T> T as(Function<String, T> type) {
         return type.apply(argument);

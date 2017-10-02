@@ -23,40 +23,42 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.command.completion.Completion;
+import static com.karuslabs.commons.configuration.Yaml.*;
+import com.karuslabs.commons.locale.MessageTranslation;
 
-import java.util.*;
-import javax.annotation.Nonnull;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import org.bukkit.configuration.ConfigurationSection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import static java.util.stream.Collectors.toMap;
 
-
-public class CompletionsElement extends Element<Map<Integer, Completion>> {
+@TestInstance(PER_CLASS)
+public class TranslationElementTest {
     
-    private Element<Completion> completion;
+    private TranslationElement element = new TranslationElement(null);
     
     
-    public CompletionsElement(Element<Completion> completion) {
-        this(completion, new HashMap<>());
+    @Test
+    public void handleNull() {
+        assertSame(MessageTranslation.NONE, element.handleNull(null, null));
     }
     
-    public CompletionsElement(Element<Completion> completion, Map<String, Map<Integer, Completion>> declarations) {
-        super(declarations);
-        this.completion = completion;
-    }
-
     
-    @Override
-    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
-        return config.isConfigurationSection(key);
+    @Test
+    public void check() {
+       assertTrue(element.check(COMMANDS, "declare.translations.translation"));
     }
-
-    @Override
-    protected @Nonnull Map<Integer, Completion> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
-        ConfigurationSection completions = config.getConfigurationSection(key);
-        return completions.getKeys(false).stream().collect(toMap(Integer::parseInt, each -> completion.parse(completions, key)));
+    
+    
+    @ParameterizedTest
+    @CsvSource({"empty, Missing/invalid value: empty.bundle", "translation, Missing keys/invalid values: translation.embedded and/or translation.folder"})
+    public void check_ThrowsException(String key, String message) {
+        assertEquals(
+            message,
+            assertThrows(ParserException.class, () -> element.check(INVALID, key)).getMessage()
+        );
     }
     
 }

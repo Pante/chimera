@@ -60,7 +60,7 @@ public abstract class Element<T> {
     }
     
     protected @Nonnull T handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
-        throw new ParserException("Missing key:" + config.getCurrentPath() + "." + key);
+        throw new ParserException("Missing key: " + config.getCurrentPath() + "." + key);
     }
     
     public T getDeclaration(String key, String path) {
@@ -69,7 +69,7 @@ public abstract class Element<T> {
             return declared;
             
         } else {
-            throw new ParserException("Missing declaration for: " + path + "." + key);
+            throw new ParserException("Missing declaration: " + path + "." + key);
         }
     }
     

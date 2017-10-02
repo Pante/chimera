@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.locale.*;
-
 import java.util.Locale;
 import java.util.stream.Stream;
 

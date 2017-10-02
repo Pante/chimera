@@ -53,7 +53,7 @@ public class Commands {
         CommandsElement commands = new CommandsElement(null);
         
         CommandElement command = new CommandElement(plugin, commands, translation, completions);
-        commands.setCommand(command);
+        commands.setCommandElement(command);
         
         load(new Parser(command, translation, completion), path);
     }

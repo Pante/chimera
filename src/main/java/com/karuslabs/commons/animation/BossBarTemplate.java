@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.util.Template;
 
 import javax.annotation.Nonnull;
@@ -31,6 +32,7 @@ import org.bukkit.Server;
 import org.bukkit.boss.*;
 
 
+@Immutable
 public class BossBarTemplate implements Template<BossBar> {
 
     public static final BarFlag[] FLAGS = new BarFlag[] {};
@@ -62,32 +64,6 @@ public class BossBarTemplate implements Template<BossBar> {
         BossBar bar = server.createBossBar(message, color, style, flags);
         bar.setProgress(progress);
         return bar;
-    }
-    
-
-    public Server getServer() {
-        return server;
-    }
-
-    
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setColor(BarColor color) {
-        this.color = color;
-    }
-
-    public void setStyle(BarStyle style) {
-        this.style = style;
-    }
-
-    public void setFlags(BarFlag[] flags) {
-        this.flags = flags;
-    }
-
-    public void setProgress(double progress) {
-        this.progress = progress;
     }
 
 }

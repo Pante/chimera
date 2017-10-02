@@ -40,7 +40,7 @@ public class Arguments {
     private Argument mutable;
     
     
-    public Arguments(String[] arguments) {
+    public Arguments(String... arguments) {
         this.arguments = arguments;
         mutable = new Argument("");
     }
@@ -64,7 +64,8 @@ public class Arguments {
     
     
     public Argument get(int index) {
-        return getOr(index, argument -> { mutable.set(argument); return mutable; }, () -> Argument.NONE);
+        mutable.set(contains(index) ? arguments[index] : "");
+        return mutable;
     }
     
     public Argument getLast() {
@@ -73,11 +74,11 @@ public class Arguments {
     
     
     public @Immutable Argument getImmutable(int index) {
-        return getOr(index, Argument::new, () -> Argument.NONE);
+        return getOr(index, Argument::new, Argument::new);
     }
     
     public @Immutable Argument getLastImmutable() {
-        return getOr(arguments.length - 1, Argument::new, () -> Argument.NONE);
+        return getOr(arguments.length - 1, Argument::new, Argument::new);
     }
     
     

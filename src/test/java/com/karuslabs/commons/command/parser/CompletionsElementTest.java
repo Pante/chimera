@@ -21,32 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.parser;
 
-import java.util.stream.Stream;
+import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.commons.command.completion.Completion;
 
-import org.junit.jupiter.api.TestInstance;
+import java.util.*;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class PatternsTest {
+public class CompletionsElementTest {
+    
+    private CompletionElement completion = when(mock(CompletionElement.class).parse(any(), any())).thenReturn(PLAYER_NAMES).getMock();
+    private CompletionsElement element = new CompletionsElement(completion);
+    
     
     @ParameterizedTest
-    @MethodSource("preserveQuotes_parameters")
-    public void preserveQuotes(String[] arguments, String[] expected) {
-        assertThat(Patterns.preserveQuotes(arguments), equalTo(expected));
+    @CsvSource({"true, declare", "false, declare.commands.help.aliases"})
+    public void check(boolean expected, String key) {
+        assertEquals(expected, element.check(COMMANDS, key));
     }
     
-    static Stream<org.junit.jupiter.params.provider.Arguments> preserveQuotes_parameters() {
-        String[] arguments = new String[] {"1", "2", "3"};
-        return Stream.of(of(arguments, arguments), of(new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}));
+    
+    @Test
+    public void handle() {
+        @JDK9("Replace with Map.of(...)")
+        Map<Integer, Completion> completions = new HashMap<>();
+        completions.put(0, PLAYER_NAMES);
+        completions.put(2, PLAYER_NAMES);
+        
+        assertEquals(completions, element.handle(COMMANDS, "declare.commands.help.completions"));
+        
     }
     
 }

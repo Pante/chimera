@@ -115,6 +115,7 @@ public final class Weak<T> {
     
     @Override
     public boolean equals(Object object) {
+        // Should value based objects behave like this?
         if (this == object) {
             return true;
         }

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.resources.*;
 
@@ -52,7 +53,7 @@ public class TranslationElement extends Element<MessageTranslation> {
 
     
     @Override
-    protected @Nonnull MessageTranslation handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected @Nonnull MessageTranslation handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
         return MessageTranslation.NONE;
     }
     
@@ -60,11 +61,11 @@ public class TranslationElement extends Element<MessageTranslation> {
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         config = config.getConfigurationSection(key);
         if (!config.isString("bundle")) {
-            throw new ParserException("Missing or invalid value for: " + config.getCurrentPath() + "." + key + ".bundle");
+            throw new ParserException("Missing/invalid value: " + config.getCurrentPath() + ".bundle");
             
         } else if (!config.isList("embedded") && !config.isList("folder")) {
-            String path = config.getCurrentPath() + "." + key;
-            throw new ParserException("Missing keys or invalid values for : " + path + ".embedded and/or " + path + ".folder");
+            String path = config.getCurrentPath();
+            throw new ParserException("Missing keys/invalid values: " + path + ".embedded and/or " + path + ".folder");
             
         } else {
             return true;

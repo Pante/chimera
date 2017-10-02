@@ -28,7 +28,6 @@ import com.karuslabs.commons.util.concurrent.Promise;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Location;
@@ -48,17 +47,15 @@ public abstract class Effect<Particle extends Particles, Origin extends BoundLoc
     protected long iterations;
     protected long delay;
     protected long period;
-    protected TimeUnit unit;
     
     
-    public Effect(Plugin plugin, Particle particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
+    public Effect(Plugin plugin, Particle particles, boolean orientate, long iterations, long delay, long period) {
         this.plugin = plugin;
         this.particles = particles;
         this.orientate = orientate;
         this.iterations = iterations;
         this.delay = delay;
         this.period = period;
-        this.unit = unit;
     }
     
     
@@ -75,9 +72,9 @@ public abstract class Effect<Particle extends Particles, Origin extends BoundLoc
         return schedule(task(GLOBAL, origin, target));
     }
     
+        
+    protected abstract Promise<?> schedule(Task task);
     
     protected abstract Task task(BiConsumer<Particles, Location> render, Origin origin, Target target);
-    
-    protected abstract Promise<?> schedule(Task task);
     
 }

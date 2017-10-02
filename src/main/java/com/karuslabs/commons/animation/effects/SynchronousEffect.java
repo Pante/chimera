@@ -27,15 +27,13 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.util.concurrent.Promise;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.TimeUnit;
-
 import org.bukkit.plugin.Plugin;
 
 
 public abstract class SynchronousEffect<P extends Particles, O extends BoundLocation, T extends BoundLocation> extends Effect<P, O, T> {
     
-    public SynchronousEffect(Plugin plugin, P particles, boolean orientate, long iterations, long delay, long period, TimeUnit unit) {
-        super(plugin, particles, orientate, iterations, delay, period, unit);
+    public SynchronousEffect(Plugin plugin, P particles, boolean orientate, long iterations, long delay, long period) {
+        super(plugin, particles, orientate, iterations, delay, period);
     }
     
     
