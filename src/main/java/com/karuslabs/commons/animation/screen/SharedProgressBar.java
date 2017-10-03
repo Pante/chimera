@@ -24,11 +24,10 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Template;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
+import java.util.function.*;
 import javax.annotation.Nonnull;
 
 import org.bukkit.boss.BossBar;
@@ -41,15 +40,15 @@ public class SharedProgressBar extends AbstractBar {
     private BiConsumer<BossBar, Context> consumer;
     
     
-    public SharedProgressBar(Plugin plugin, Template<BossBar> template, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
-        super(plugin, template, translation, iterations, delay, period);
+    public SharedProgressBar(Plugin plugin, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
+        super(plugin, supplier, translation, iterations, delay, period);
         this.consumer = consumer;
     }
     
 
     @Override
     protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
-        BossBar bar = template.create();
+        BossBar bar = supplier.get();
         players.forEach(bar::addPlayer);
         
         return new ScheduledTask(bar, consumer, translation, iterations);

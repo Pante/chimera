@@ -21,49 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.animation.screen.ActionBar.ScheduledTask;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
+import java.util.function.BiFunction;
 
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import org.bukkit.entity.Player;
+
+import org.junit.jupiter.api.Test;
+
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+public class ActionBarTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
+    private ActionBar bar;
+    private BiFunction<Player, Context, String> function;
+    private Player player;
+    private StubSpigot spigot;
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
+    public ActionBarTest() {
+        function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
+        bar = ActionBar.builder(null).function(function).build();
+        player = when(mock(Player.class).spigot()).thenReturn(spigot = new StubSpigot()).getMock();
     }
     
     
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
-    }
+    @Test
+    public void process() {
+        ScheduledTask task = (ScheduledTask) bar.task(singletonList(player));
+        
+        task.process();
 
+        assertEquals("value", spigot.values[0].toPlainText());
+        verify(function).apply(player, task);
+    }
+    
 }

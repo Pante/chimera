@@ -38,7 +38,7 @@ import static java.util.Collections.unmodifiableList;
 
 public class ExternalControl extends Control {
     
-    //TODO: UPDATE TO List.of(...) when updating to Java 9
+    @JDK9("UPDATE TO List.of(...) when updating to Java 9")
     public static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
     
     
@@ -64,6 +64,7 @@ public class ExternalControl extends Control {
         return null;
     }
     
+    @JDK9
     protected @Nullable ResourceBundle load(@Nonnull String format, @Nullable InputStream stream) {
         switch (format) {
             case "properties":

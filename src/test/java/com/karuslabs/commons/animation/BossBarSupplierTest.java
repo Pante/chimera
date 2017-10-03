@@ -23,47 +23,25 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.annotation.Immutable;
-
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
-
 import org.bukkit.Server;
 import org.bukkit.boss.*;
 
+import org.junit.jupiter.api.Test;
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
+import static org.bukkit.boss.BarColor.BLUE;
+import static org.bukkit.boss.BarStyle.SEGMENTED_10;
+import static org.mockito.Mockito.*;
 
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+
+public class BossBarSupplierTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
-    
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
+    @Test
+    public void get() {
+        Server server = when(mock(Server.class).createBossBar(any(), any(), any(), any())).thenReturn(mock(BossBar.class)).getMock();
+        BossBar bar = new BossBarTemplate(server, "message", BLUE, SEGMENTED_10).get();
+        
+        verify(server).createBossBar("message", BLUE, SEGMENTED_10, BossBarTemplate.FLAGS);
+        verify(bar).setProgress(1);
     }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
-    }
-    
-    
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
-    }
-
 }

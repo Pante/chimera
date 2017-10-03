@@ -82,6 +82,17 @@ public class ElementTest {
     
     
     @Test
+    public void parse_ThrowsException() {
+        doReturn(false).when(element).check(any(), any());
+        
+        assertEquals(
+            "Invalid value for: " + COMMANDS.getCurrentPath() + ".",
+            assertThrows(ParserException.class, () -> element.parse(COMMANDS, "")).getMessage()
+        );
+    }
+    
+    
+    @Test
     public void handleNull() {
         assertEquals(
             "Missing key: .key",

@@ -33,7 +33,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
@@ -53,6 +53,12 @@ public class ExternalControlTest {
     static Stream<Arguments> newBundle_parameters() {
         return Stream.of(of(new Locale("en", "GB"), "English"), of(new Locale("zh", "CN"), "Chinese"));
     }    
+    
+    
+    @Test
+    public void load() {
+        assertNull(control.load("", null));
+    }
     
     
     @Test

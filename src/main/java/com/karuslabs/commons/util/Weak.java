@@ -23,21 +23,21 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.annotation.ValueBased;
+import com.karuslabs.commons.annotation.*;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
-import javax.annotation.Nullable;
 
 import static java.util.stream.Stream.*;
 
 
+@Immutable
 @ValueBased
 public final class Weak<T> {
     
-    private WeakReference<T> reference;
+    private final WeakReference<T> reference;
     
     
     public Weak(T value) {
@@ -53,10 +53,6 @@ public final class Weak<T> {
         } else {
             throw new NoSuchElementException();
         }
-    }
-    
-    public @Nullable T obtain() {
-        return reference.get();
     }
     
     
@@ -115,17 +111,16 @@ public final class Weak<T> {
     
     @Override
     public boolean equals(Object object) {
-        // Should value based objects behave like this?
         if (this == object) {
             return true;
-        }
-
-        if (!(object instanceof Weak)) {
+            
+        } else if (object instanceof Weak) {
+            Weak<?> other = (Weak<?>) object;
+            return Objects.equals(reference.get(), other.reference.get());
+            
+        } else {
             return false;
-        }
-
-        Weak<?> other = (Weak<?>) object;
-        return Objects.equals(reference.get(), other.reference.get());
+        }        
     }
     
     @Override

@@ -21,49 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
+import java.util.Collection;
 
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
+class StubBar extends Bar {
 
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+    ScheduledPromiseTask<?> task;
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
+    StubBar(Plugin plugin, ScheduledPromiseTask<?> task, Translation translation, long iterations, long delay, long period) {
+        super(plugin, translation, iterations, delay, period);
+        this.task = task;
     }
-    
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
-    }
-    
-    
+
     @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    protected ScheduledPromiseTask<?> task(Collection<Player> players) {
+        return task;
     }
+    
+    
+    static StubBuilder builder(Plugin plugin, ScheduledPromiseTask<?> task) {
+        return new StubBuilder(new StubBar(plugin, task, null, 0, 0, 0));
+    }
+    
+    
+    static class StubBuilder extends Builder<StubBuilder, StubBar> {
 
+        StubBuilder(StubBar bar) {
+            super(bar);
+        }
+
+        @Override
+        protected StubBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
 }

@@ -35,11 +35,6 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         
-        <repository>
-            <id>mockkit-repo</id>
-            <url>http://repo.karuslabs.com/repository/mockkit/snapshots</url>
-        </repository>
-        
     </repositories>
      
     <dependencies>

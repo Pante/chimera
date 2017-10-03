@@ -62,6 +62,8 @@ public class ActionBar extends Bar {
         
         public ScheduledTask(Set<Player> players, BiFunction<Player, Context, String> function, Translation translation, long iterations) {
             super(translation, iterations);
+            this.players = players;
+            this.function = function;
         }
         
         @Override

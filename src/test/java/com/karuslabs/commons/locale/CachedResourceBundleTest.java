@@ -21,49 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Immutable;
+import org.junit.jupiter.api.*;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
-
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import static com.karuslabs.commons.locale.CachedResourceBundle.NONE;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+@TestInstance(PER_CLASS)
+public class CachedResourceBundleTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
+    private CachedResourceBundle bundle;
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
+    public CachedResourceBundleTest() {
+        bundle = new CachedResourceBundle();
+        bundle.getMessages().put("key", "message");
     }
     
     
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    @Test
+    public void none_handleGetObject() {
+        assertEquals("key", NONE.handleGetObject("key"));
     }
-
+    
+    
+    @Test
+    public void none_getKeys() {
+        assertSame(NONE.getKeys(), NONE.getKeys());
+    }
+    
+    
+    @Test
+    public void getKeys() {
+        assertEquals("key", bundle.getKeys().nextElement());
+    }
+    
 }

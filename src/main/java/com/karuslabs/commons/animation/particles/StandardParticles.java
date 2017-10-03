@@ -37,8 +37,13 @@ public class StandardParticles extends Particles {
     
     public StandardParticles(Particle particle, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
         super(particle, amount);
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.offsetZ = offsetZ;
+        this.speed = speed;
     }
 
+    
     @Override
     public void render(Player player, Location location) {
         player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed);
@@ -64,6 +69,48 @@ public class StandardParticles extends Particles {
 
     public double getSpeed() {
         return speed;
+    }
+    
+    
+    public static class StandardBuilder extends AbstractBuilder<StandardBuilder, StandardParticles> {
+
+        public StandardBuilder(StandardParticles particles) {
+            super(particles);
+        }
+
+        @Override
+        protected StandardBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
+    public static abstract class AbstractBuilder<B extends AbstractBuilder, Particles extends StandardParticles> extends Builder<B, Particles> {
+
+        public AbstractBuilder(Particles particles) {
+            super(particles);
+        }
+        
+        public B offsetX(double x) {
+            particles.offsetX = x;
+            return getThis();
+        }
+        
+        public B offsetY(double y) {
+            particles.offsetY = y;
+            return getThis();
+        }
+        
+        public B offsetZ(double z) {
+            particles.offsetZ = z;
+            return getThis();
+        }
+        
+        public B speed(double speed) {
+            particles.speed = speed;
+            return getThis();
+        }
+        
     }
     
 }

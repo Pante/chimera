@@ -21,49 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
+import org.junit.jupiter.api.*;
 
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static java.util.Locale.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+@TestInstance(PER_CLASS)
+public class MessageTranslationTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
+    private MessageTranslation translation  = new MessageTranslation("Translation", new ExternalControl(new EmbeddedResource("locale")));
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
+    @Test
+    public void none_get() {
+        assertSame(CachedResourceBundle.NONE, NONE.get(ITALY));
     }
     
     
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    @Test
+    public void none_format() {
+        assertEquals("key", NONE.format("key"));
     }
-
+    
+    
+    @Test
+    public void none_locale() {
+        NONE.format.setLocale(ENGLISH);
+        NONE.locale(ITALY);
+        
+        assertEquals(ENGLISH, NONE.format.getLocale());
+    }
+    
+    
+    @Test
+    public void format() {
+        assertEquals("Japanese key", translation.locale(JAPAN).format("locale", "key"));
+    }
+    
 }

@@ -21,32 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.annotation;
 
-import java.util.function.*;
-import javax.annotation.*;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class Get {
+@Documented
+@Target({METHOD})
+@Retention(RUNTIME)
+public @interface Contract {
     
-    private Get() {}
-    
-    
-    public static <T> T orDefault(@Nullable T object, T value) {
-        return object != null ? object : value;
-    }
-    
-    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
-        return object != null ? object : value.get();
-    }
-    
-    public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
-        if (object != null) {
-            return object;
-            
-        } else {
-            throw exception.get();
-        }
-    }
+    String value();
     
 }

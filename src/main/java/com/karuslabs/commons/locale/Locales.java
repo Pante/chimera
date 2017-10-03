@@ -24,6 +24,7 @@
 package com.karuslabs.commons.locale;
 
 import com.google.common.cache.*;
+import com.karuslabs.commons.annotation.JDK9;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -38,9 +39,12 @@ public class Locales {
     
     private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, MINUTES).build();
     
-    //TODO: UPDATE TO Set.of(...) when updating to Java 9
+    @JDK9("Replace with Set.of(...)")
     private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
     private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
+    
+    
+    private Locales() {}
     
     
     public static @Nullable Locale get(String locale) {

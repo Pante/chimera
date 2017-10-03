@@ -23,18 +23,20 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.commons.annotation.Contract;
+
 
 public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements Repeatable {
     
     public static <T> ScheduledPromiseTask<T> of(Runnable runnable, T value, long iterations) {
-        return new AwaitablePromiseRunnable<>(runnable, value, iterations);
+        return new ScheduledPromiseRunnable<>(runnable, value, iterations);
     }
     
     
     public static final int INFINITE = -1;
     
-    private long current;
-    private long total;
+    long current;
+    long total;
     
     
     public ScheduledPromiseTask(long iterations) {
@@ -53,8 +55,6 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
                 }
             } catch (Exception e) {
                 thrown = e;
-                
-            } finally {
                 done();
             }
             
@@ -70,17 +70,18 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
     }
 
     @Override
+    @Contract("Return -1 if infinite")
     public long getIterations() {
         return total;
     }
     
     
-    static class AwaitablePromiseRunnable<T> extends ScheduledPromiseTask<T> {
+    static class ScheduledPromiseRunnable<T> extends ScheduledPromiseTask<T> {
         
         private final Runnable runnable;
         private final T value;
         
-        AwaitablePromiseRunnable(Runnable runnable, T value, long iterations) {
+        ScheduledPromiseRunnable(Runnable runnable, T value, long iterations) {
             super(iterations);
             this.runnable = runnable;
             this.value = value;

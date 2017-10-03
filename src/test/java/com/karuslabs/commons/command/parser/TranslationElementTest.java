@@ -23,13 +23,14 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import static com.karuslabs.commons.configuration.Yaml.*;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.resources.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static com.karuslabs.commons.configuration.Yaml.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -59,6 +60,20 @@ public class TranslationElementTest {
             message,
             assertThrows(ParserException.class, () -> element.check(INVALID, key)).getMessage()
         );
+    }
+    
+    
+    @Test
+    public void handle() {
+        MessageTranslation translation = element.handle(COMMANDS.getConfigurationSection("declare.translations"), "translation");
+        Resource[] resources = ((ExternalControl) translation.getControl()).getResources();
+        EmbeddedResource embedded = (EmbeddedResource) resources[0];
+        FileResource file = (FileResource) resources[1];
+        
+        assertEquals("Resource", translation.getBundleName());
+        assertEquals(2, resources.length);
+        assertEquals("path1/", embedded.getPath());
+        assertEquals("path2", file.getPath());
     }
     
 }

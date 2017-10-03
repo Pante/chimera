@@ -54,4 +54,18 @@ public class ItemParticles extends StandardParticles {
         return item;
     }
     
+    
+    public static class ItemBuilder extends Builder<ItemBuilder, ItemParticles> {
+
+        public ItemBuilder(ItemParticles particles) {
+            super(particles);
+        }
+
+        @Override
+        protected ItemBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
 }

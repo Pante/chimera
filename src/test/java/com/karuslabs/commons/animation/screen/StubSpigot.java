@@ -21,49 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.annotation.Immutable;
+import net.md_5.bungee.api.chat.BaseComponent;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
-
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import org.bukkit.entity.Player;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+public class StubSpigot extends Player.Spigot {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
-    
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
-    
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
-    }
+    BaseComponent value;
+    BaseComponent[] values;
     
     
     @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent component) {
+        value = component;
+    }
+
+    @Override
+    public void sendMessage(net.md_5.bungee.api.ChatMessageType position, net.md_5.bungee.api.chat.BaseComponent... components) {
+        values = components;
     }
 
 }

@@ -21,27 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
-
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+package com.karuslabs.commons.util.concurrent;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.bukkit.boss.BarColor.BLUE;
-import static org.bukkit.boss.BarStyle.SEGMENTED_10;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class BossBarTemplateTest {
+public class ScheduledPromiseTaskTest {
+    
+    private Runnable runnable = mock(Runnable.class);
+    private ScheduledPromiseTask<String> task = spy(ScheduledPromiseTask.of(runnable, "result", 1));
+    
+    
+    @ParameterizedTest
+    @CsvSource({"0, -1, 0, false", "0, 1, 1, false", "1, 1, 1, true"})
+    public void run(int current, int total, int expected, boolean done) {
+        task.current = current;
+        task.total = total;
+        
+        task.run();
+        
+        assertEquals(expected, task.getCurrent());
+        assertEquals(done, task.isDone());
+    }
+    
     
     @Test
-    public void create() {
-        Server server = when(mock(Server.class).createBossBar(any(), any(), any(), any())).thenReturn(mock(BossBar.class)).getMock();
-        BossBar bar = new BossBarTemplate(server, "message", BLUE, SEGMENTED_10).create();
+    public void run_ThrowsException() {
+        doThrow(Exception.class).when(runnable).run();
         
-        verify(server).createBossBar("message", BLUE, SEGMENTED_10, BossBarTemplate.FLAGS);
-        verify(bar).setProgress(1);
+        task.run();
+        
+        assertEquals(Exception.class, task.thrown.getClass());
+        assertTrue(task.isDone());
     }
     
 }

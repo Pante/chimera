@@ -1,12 +1,13 @@
 language: java
 jdk:
   - oraclejdk8
+  
 branches:
   only:
   - master
-  - debug
+  - documentation
   
-script: mvn --settings travis-settings.xml clean test verify deploy
+script: mvn --settings travis-settings.xml deploy
 
 notifications:
   webhooks: $DISCORD_WEBHOOK

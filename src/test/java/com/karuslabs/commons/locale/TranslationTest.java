@@ -21,13 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.locale;
 
-import javax.annotation.Nonnull;
+import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
 
-public interface Template<T> {
+import org.junit.jupiter.api.Test;
+
+import static java.util.Locale.JAPAN;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+public class TranslationTest {
     
-    public @Nonnull T create();
+    private Translation translation = new Translation("Translation", new ExternalControl(new EmbeddedResource("locale")));
+    
+    
+    @Test
+    public void get() {
+        assertEquals("Japanese {0}", translation.get(JAPAN).getString("locale"));
+    }
     
 }

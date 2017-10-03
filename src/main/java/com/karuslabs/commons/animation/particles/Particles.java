@@ -23,6 +23,11 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.particles.ColouredParticles.ColouredBuilder;
+import com.karuslabs.commons.animation.particles.ItemParticles.ItemBuilder;
+import com.karuslabs.commons.animation.particles.MaterialParticles.MaterialBuilder;
+import com.karuslabs.commons.animation.particles.StandardParticles.StandardBuilder;
+
 import java.util.Collection;
 
 import org.bukkit.*;
@@ -30,6 +35,23 @@ import org.bukkit.entity.Player;
 
 
 public abstract class Particles {
+    
+    public static ColouredBuilder coloured() {
+        return new ColouredBuilder(new ColouredParticles(null, 0, null));
+    }
+    
+    public static ItemBuilder item() {
+        return new ItemBuilder(new ItemParticles(null, 0, 0, 0, 0, 0, null));
+    }
+    
+    public static MaterialBuilder material() {
+        return new MaterialBuilder(new MaterialParticles(null, 0, 0, 0, 0, 0, null));
+    }
+    
+    public static StandardBuilder standard() {
+        return new StandardBuilder(new StandardParticles(null, 0, 0, 0, 0, 0));
+    }
+    
     
     protected Particle particle;
     protected int amount;
@@ -47,9 +69,7 @@ public abstract class Particles {
 
     
     public void render(Collection<Player> players, Location location) {
-        for (Player player : players) {
-            render(player, location);
-        }
+        players.forEach(player -> render(player, location));
     }
     
     public abstract void render(Player player, Location location);
@@ -63,6 +83,32 @@ public abstract class Particles {
 
     public int getAmount() {
         return amount;
+    }
+    
+    
+    public static abstract class Builder<GenericBuilder extends Builder, GenericParticles extends Particles> {
+        
+        protected GenericParticles particles;
+        
+        
+        public Builder(GenericParticles particles) {
+            this.particles = particles;
+        }
+        
+        
+        public GenericBuilder particle(Particle particle) {
+            particles.particle = particle;
+            return getThis();
+        }
+        
+        public GenericBuilder amount(int amount) {
+            particles.amount = amount;
+            return getThis();
+        }
+        
+        
+        protected abstract GenericBuilder getThis();
+        
     }
     
 }

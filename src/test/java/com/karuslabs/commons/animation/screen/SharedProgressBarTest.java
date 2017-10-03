@@ -21,32 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.animation.screen;
 
-import java.util.function.*;
-import javax.annotation.*;
+import com.karuslabs.commons.animation.screen.SharedProgressBar.ScheduledTask;
+
+import java.util.function.BiConsumer;
+
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
+
+import org.junit.jupiter.api.Test;
+
+import static java.util.Collections.singleton;
+import static org.mockito.Mockito.*;
 
 
-public class Get {
+public class SharedProgressBarTest {
     
-    private Get() {}
+    private Player player = mock(Player.class);
+    private BossBar boss = mock(BossBar.class);
+    private BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
+    private SharedProgressBar bar = SharedProgressBar.builder(null).supplier(() -> boss).consumer(consumer).build();
     
     
-    public static <T> T orDefault(@Nullable T object, T value) {
-        return object != null ? object : value;
-    }
-    
-    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
-        return object != null ? object : value.get();
-    }
-    
-    public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
-        if (object != null) {
-            return object;
-            
-        } else {
-            throw exception.get();
-        }
+    @Test
+    public void process() {
+        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        
+        task.process();
+        
+        verify(boss).addPlayer(player);
+        verify(consumer).accept(boss, task);
+        
     }
     
 }

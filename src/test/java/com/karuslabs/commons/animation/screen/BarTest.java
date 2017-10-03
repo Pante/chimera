@@ -21,49 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import org.junit.jupiter.api.Test;
+
+import static java.util.Collections.EMPTY_LIST;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+public class BarTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
+    private Plugin plugin = mock(Plugin.class);
+    private ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
+    private Bar bar = spy(StubBar.builder(plugin, task).translation(MessageTranslation.NONE).iterations(1).delay(2).period(3).build());
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
+    @Test
+    public void render_Player() {
+        assertEquals(task, bar.render(mock(Player.class)));
     }
     
     
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    @Test
+    public void render_Players() {
+        assertEquals(task, bar.render(EMPTY_LIST));
+        verify(task).runTaskTimerAsynchronously(plugin, 2, 3);
     }
-
+    
 }

@@ -57,4 +57,23 @@ public class ColouredParticles extends Particles {
         return colour;
     }
     
+    
+    public static class ColouredBuilder extends Builder<ColouredBuilder, ColouredParticles> {
+
+        public ColouredBuilder(ColouredParticles particles) {
+            super(particles);
+        }
+        
+        public ColouredBuilder colour(Color color) {
+            particles.colour = color;
+            return this;
+        }
+
+        @Override
+        protected ColouredBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
 }

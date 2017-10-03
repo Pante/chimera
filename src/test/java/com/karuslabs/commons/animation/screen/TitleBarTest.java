@@ -21,32 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.animation.screen;
 
-import java.util.function.*;
-import javax.annotation.*;
+import com.karuslabs.commons.animation.screen.TitleBar.ScheduledTask;
+
+import java.util.function.BiConsumer;
+
+import org.bukkit.entity.Player;
+
+import org.junit.jupiter.api.*;
+
+import static java.util.Collections.singleton;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.mockito.Mockito.*;
 
 
-public class Get {
+@TestInstance(PER_CLASS)
+public class TitleBarTest {
     
-    private Get() {}
+    private BiConsumer<Player, TitleContext> consumer = mock(BiConsumer.class);
+    private TitleBar bar = TitleBar.builder(null).consumer(consumer).fadeIn(1).stay(2).fadeOut(3).build();
+    private Player player = mock(Player.class);
     
     
-    public static <T> T orDefault(@Nullable T object, T value) {
-        return object != null ? object : value;
+    @Test
+    public void task() {
+        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        
+        assertEquals(1, task.getFadeIn());
+        assertEquals(2, task.getStay());
+        assertEquals(3, task.getFadeOut());
     }
     
-    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
-        return object != null ? object : value.get();
-    }
     
-    public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
-        if (object != null) {
-            return object;
-            
-        } else {
-            throw exception.get();
-        }
+    @Test
+    public void process() {
+        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        
+        task.process();
+        
+        verify(consumer).accept(player, task);
     }
     
 }

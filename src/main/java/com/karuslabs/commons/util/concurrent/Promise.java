@@ -40,6 +40,7 @@ public interface Promise<T> extends Future<T> {
     public default @Nullable T await() {
         try {
             return obtain();
+            
         } catch (CancellationException e) {
             return null;
         }

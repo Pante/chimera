@@ -25,14 +25,25 @@ package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.Command;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.bukkit.configuration.ConfigurationSection;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
-import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 public class ParserTest {
+    
+    private static Command stub = mock(Command.class);
     
     private CommandElement command = when(mock(CommandElement.class).parse(any(), any())).thenReturn(mock(Command.class)).getMock();
     private TranslationElement translation = mock(TranslationElement.class);
@@ -49,6 +60,44 @@ public class ParserTest {
         
         verify(parser).parseDeclarations(COMMANDS.getConfigurationSection("declarations"));
         verify(parser).parseCommands(COMMANDS.getConfigurationSection("commands"));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"declare, 1", "declare.commands.help.aliases, 0"})
+    public void parseDeclarations(String path, int times) {
+        doNothing().when(parser).parseDeclaration(any(), any());
+        ConfigurationSection declarations = COMMANDS.getConfigurationSection("declare");
+        
+        parser.parseDeclarations(COMMANDS.getConfigurationSection(path));
+        
+        verify(parser, times(times)).parseDeclaration(command, declarations.getConfigurationSection("commands"));
+        verify(parser, times(times)).parseDeclaration(translation, declarations.getConfigurationSection("translations"));
+        verify(parser, times(times)).parseDeclaration(completion, declarations.getConfigurationSection("completions"));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"declare.commands, 1", "declare.commands.help.aliases, 0"})
+    public void parseDeclaration(String path, int times) {
+        parser.parseDeclaration(command, COMMANDS.getConfigurationSection(path));
+        
+        verify(command, times(times)).declare(COMMANDS.getConfigurationSection("declare.commands"), "help");
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("parseCommands_parameters")
+    public void parseCommands(String path, int times, List<Command> expected) {
+        ConfigurationSection config = COMMANDS.getConfigurationSection(path);
+        when(command.parse(any(), any())).thenReturn(stub);
+        
+        assertEquals(expected, parser.parseCommands(config));
+        verify(command, times(times)).parse(config, "brush");
+    }
+    
+    static Stream<Arguments> parseCommands_parameters() {
+        return Stream.of(of("commands", 1, singletonList(stub)), of("declare.commands.help.aliases", 0 , EMPTY_LIST));
     }
     
 }

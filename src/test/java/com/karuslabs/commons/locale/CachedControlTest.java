@@ -21,49 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Immutable;
+import java.util.*;
 
-import java.util.function.Supplier;
-import javax.annotation.Nonnull;
+import org.junit.jupiter.api.*;
 
-import org.bukkit.Server;
-import org.bukkit.boss.*;
+import static java.util.Collections.EMPTY_LIST;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.mockito.Mockito.*;
 
 
-@Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+@TestInstance(PER_CLASS)
+public class CachedControlTest {
     
-    private Server server;
-    private String message;
-    private BarColor color;
-    private BarStyle style;
-    private BarFlag[] flags;
-    private double progress;
-
+    private CachedControl control;
+    private ResourceBundle bundle;
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
-        this.server = server;
-        this.message = message;
-        this.color = color;
-        this.style = style;
-        this.flags = flags;
-        this.progress = progress;
+    public CachedControlTest() {
+        control = new CachedControl();
+        control.getBundles().put(Locale.KOREA, bundle = mock(ResourceBundle.class));
     }
     
     
-    @Override
-    public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
-        bar.setProgress(progress);
-        return bar;
+    @Test
+    public void none() {
+        assertSame(CachedResourceBundle.NONE, CachedControl.NONE.newBundle(null, Locale.KOREA, null, null, true));
     }
-
+    
+    
+    @Test
+    public void newBundle() {
+        assertSame(bundle, control.newBundle(null, Locale.KOREA, null, null, true));
+    } 
+    
+    
+    @Test
+    public void getFormats() {
+        assertSame(EMPTY_LIST, control.getFormats(null));
+    }
+    
 }

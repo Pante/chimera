@@ -23,11 +23,14 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.commons.annotation.Contract;
+
 
 public interface Repeatable {
     
     public long getCurrent();
     
+    @Contract("Return -1 if infinite")
     public long getIterations();
     
 }

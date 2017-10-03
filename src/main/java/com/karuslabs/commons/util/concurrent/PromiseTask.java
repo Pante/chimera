@@ -24,7 +24,6 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -45,17 +44,17 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
     static final int COMPLETED = 2;
     static final int CANCELLED = 3;
     
-    AtomicInteger state;
-    AtomicBoolean interrupted;
+    volatile int state;
+    volatile boolean interrupted;
+    volatile Throwable thrown;
     CountDownLatch latch;
-    Throwable thrown;
     
     
     public PromiseTask() {
-        state = new AtomicInteger(NEW);
-        interrupted = new AtomicBoolean(false);
-        latch = new CountDownLatch(1);
+        state = NEW;
+        interrupted = false;
         thrown = null;
+        latch = new CountDownLatch(1);
     }
 
     
@@ -85,8 +84,8 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
-        if (state.get() < COMPLETED && mayInterruptIfRunning) {
-            interrupted.set(true);
+        if (state < COMPLETED && mayInterruptIfRunning) {
+            interrupted = true;
             finish(CANCELLED);
             return true;
             
@@ -95,12 +94,19 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
         }
     }
     
-    private void finish(int updated) {
+    void finish(int updated) {
+        cancelThis();
+        latch.countDown();
+        state = updated;
+    }
+    
+    void cancelThis() {
         try {
             super.cancel();
-        } catch (IllegalStateException e) {}
-        latch.countDown();
-        state.set(updated);
+        } catch (NullPointerException | IllegalStateException e) {
+            // Honestly doesn't really matter if the NPE is ignored as it means Bukkit.getScheduler() returned null
+            // in which case the task wouldn't have been scheduled to begin with...
+        }
     }
 
     
@@ -120,7 +126,7 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
         if (thrown != null) {
             throw new ExecutionException(thrown);
             
-        } else if (state.get() == 3) {
+        } else if (state == CANCELLED) {
             throw new CancellationException();
             
         } else {
@@ -133,12 +139,12 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
         
     @Override
     public boolean isCancelled() {
-        return state.get() == 3;
+        return state == CANCELLED;
     }
     
     @Override
     public boolean isDone() {
-        return state.get() > 1;
+        return RUNNING < state;
     }
     
     

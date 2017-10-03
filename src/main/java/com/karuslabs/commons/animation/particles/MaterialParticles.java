@@ -54,4 +54,23 @@ public class MaterialParticles extends StandardParticles {
         return data;
     }
     
+    
+    public static class MaterialBuilder extends AbstractBuilder<MaterialBuilder, MaterialParticles> {
+
+        public MaterialBuilder(MaterialParticles particles) {
+            super(particles);
+        }
+        
+        public MaterialBuilder data(MaterialData data) {
+            particles.data = data;
+            return this;
+        }
+        
+        @Override
+        protected MaterialBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
 }

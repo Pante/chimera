@@ -24,7 +24,8 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.Template;
+
+import java.util.function.Supplier;
 
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.Plugin;
@@ -32,12 +33,12 @@ import org.bukkit.plugin.Plugin;
 
 public abstract class AbstractBar extends Bar {
 
-    protected Template<BossBar> template;
+    protected Supplier<BossBar> supplier;
     
     
-    public AbstractBar(Plugin plugin, Template<BossBar> template, Translation translation, long iterations, long delay, long period) {
+    public AbstractBar(Plugin plugin, Supplier<BossBar> supplier, Translation translation, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
-        this.template = template;
+        this.supplier = supplier;
     }
     
     
@@ -48,8 +49,8 @@ public abstract class AbstractBar extends Bar {
         }
         
         
-        public GenericBuilder template(Template<BossBar> template) {
-            bar.template = template;
+        public GenericBuilder supplier(Supplier<BossBar> supplier) {
+            bar.supplier = supplier;
             return getThis();
         }
         

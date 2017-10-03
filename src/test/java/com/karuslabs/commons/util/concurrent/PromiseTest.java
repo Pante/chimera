@@ -26,27 +26,33 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@TestInstance(PER_CLASS)
 public class PromiseTest {
     
-    private Promise<String> promise;
+    private Future<String> future = mock(Future.class);
+    private Promise<String> promise = spy(Promise.of(future));
     
     
-    public PromiseTest() {
-        promise = mock(Promise.class);
-        when(promise.obtain()).thenCallRealMethod();
-        when(promise.obtain(anyLong(), any())).thenCallRealMethod();
+    @Test
+    public void await() {
+        doThrow(CancellationException.class).when(promise).obtain();
+        assertNull(promise.await());
+    }
+    
+    
+    @Test
+    public void await_Time() {
+        doThrow(CancellationException.class).when(promise).obtain(anyLong(), any());
+        assertNull(promise.await(0, null));
     }
     
     
