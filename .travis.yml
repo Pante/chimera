@@ -8,6 +8,9 @@ branches:
   
 script: mvn --settings travis-settings.xml clean test verify deploy
 
+notifications:
+  webhooks: $DISCORD_WEBHOOK
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   
