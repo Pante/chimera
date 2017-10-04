@@ -5,7 +5,7 @@ jdk:
 branches:
   only:
   - master
-  - documentation
+  - Documentation
   
 script: mvn --settings travis-settings.xml deploy
 
