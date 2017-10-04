@@ -7,10 +7,7 @@ branches:
   - master
   - Documentation
   
-script: mvn --settings travis-settings.xml deploy
-
-notifications:
-  webhooks: $DISCORD_WEBHOOK
+script: mvn --settings travis-settings.xml deploy site site-deploy
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
