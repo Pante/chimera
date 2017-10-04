@@ -21,57 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.configuration.ProxiedConfiguration;
 
 import java.util.*;
-import java.util.ResourceBundle.Control;
 
 import org.bukkit.entity.Player;
 
+import org.junit.jupiter.api.Test;
 
-public class Translation {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+
+public class ConfigurationProviderTest {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    private ProxiedConfiguration config = mock(ProxiedConfiguration.class);
+    private ConfigurationProvider provider = new ConfigurationProvider(config);
+    private Player player = when(mock(Player.class).getUniqueId()).thenReturn(UUID.randomUUID()).getMock();
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
-    }
-    
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
+    @Test
+    public void get() {
+        when(config.getString(player.getUniqueId().toString())).thenReturn("ja_JP");
         
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
+        assertEquals(Locale.JAPAN, provider.get(player));
     }
     
     
-    public String getBundleName() {
-        return bundle;
+    @Test
+    public void set() {
+        provider.set(player, Locale.JAPAN);
+        
+        verify(config).set(player.getUniqueId().toString(), "ja_JP");
     }
     
-    public Control getControl() {
-        return control;
-    }
     
-    public Provider getProvider() {
-        return provider;
+    @Test
+    public void save() {
+        provider.save();
+        
+        verify(config).save();
     }
     
 }

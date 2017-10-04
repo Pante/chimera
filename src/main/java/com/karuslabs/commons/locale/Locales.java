@@ -37,14 +37,11 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class Locales {
     
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(10, MINUTES).build();
+    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
     
     @JDK9("Replace with Set.of(...)")
     private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
     private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
-    
-    
-    private Locales() {}
     
     
     public static @Nullable Locale get(String locale) {

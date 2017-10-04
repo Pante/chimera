@@ -50,7 +50,7 @@ public class CommandsElementTest {
     
     public CommandsElementTest() {
         element = new CommandsElement(null);
-        command = when(mock(CommandElement.class).getDeclaration(any(), any())).thenReturn(mock(Command.class)).getMock();
+        command = when(mock(CommandElement.class).getDeclared(any(), any())).thenReturn(mock(Command.class)).getMock();
         when(command.parse(any(), any())).thenReturn(mock(Command.class));
         element.setCommandElement(command);
     }
@@ -76,7 +76,7 @@ public class CommandsElementTest {
                 
         String path = "commands.brush.subcommands";
         assertEquals(names, element.handle(COMMANDS, path).keySet());
-        verify(command).getDeclaration("help", path);
+        verify(command).getDeclared(COMMANDS.getConfigurationSection(path), "help");
         verify(command).parse(COMMANDS.getConfigurationSection(path), "fill");
     }
     

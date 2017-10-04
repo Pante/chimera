@@ -21,57 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
-
-import com.karuslabs.commons.locale.providers.Provider;
+package com.karuslabs.commons.command;
 
 import java.util.*;
-import java.util.ResourceBundle.Control;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.SimpleCommandMap;
+
+import static org.mockito.Mockito.mock;
 
 
-public class Translation {
+public class StubCommandMap extends ProxiedCommandMap {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    List<Command> commands;
     
-    
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
-    }
-    
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
-        
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
+    public StubCommandMap() {
+        super(new StubServer(mock(SimpleCommandMap.class)));
     }
     
     
-    public String getBundleName() {
-        return bundle;
-    }
-    
-    public Control getControl() {
-        return control;
-    }
-    
-    public Provider getProvider() {
-        return provider;
+    @Override
+    public void registerAll(String name, List<Command> commands) {
+        this.commands = commands;
     }
     
 }

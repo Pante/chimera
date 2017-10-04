@@ -21,31 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.completion;
-
-import java.util.List;
-import javax.annotation.Nonnull;
+package com.karuslabs.commons.animation.particles;
 
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Completion {
+public class StandardParticlesTest {
     
-    public @Nonnull List<String> complete(@Nonnull CommandSender sender, @Nonnull String argument);
+    private StandardParticles particles = spy(Particles.standard().particle(Particle.CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).build());
+    private World world = mock(World.class);
+    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
+    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
     
-    public static final Completion NONE = (sender, argument) -> EMPTY_LIST;
+    @Test
+    public void render_Player() {
+        particles.render(player, location);
+        
+        verify(player).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4);
+    }
     
-    public static final Completion PLAYER_NAMES = (sender, argument) -> 
-            sender.getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
-    public static final Completion WORLD_NAMES = (sender, argument) -> 
-            sender.getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    @Test
+    public void render() {
+        particles.render(location);
+        
+        verify(world).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4);
+    }
+    
+    
+    @Test
+    public void get() {
+        assertEquals(1, particles.getOffsetX());
+        assertEquals(2, particles.getOffsetY());
+        assertEquals(3, particles.getOffsetZ());
+        assertEquals(4, particles.getSpeed());
+    }
     
 }

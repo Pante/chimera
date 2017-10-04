@@ -33,8 +33,8 @@ import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -45,6 +45,12 @@ public class CompletionTest {
 
     
     @Test
+    public void none() {
+        assertSame(EMPTY_LIST, Completion.NONE.complete(null, null));
+    }
+    
+    
+    @Test
     public void player_names() {
         Player bob = when(mock(Player.class).getName()).thenReturn("bob").getMock();
         server.getOnlinePlayers().add(bob);
@@ -52,7 +58,7 @@ public class CompletionTest {
         Player bobby = when(mock(Player.class).getName()).thenReturn("bobby").getMock();
         server.getOnlinePlayers().add(bobby);
                 
-        assertEquals(asList("bobby"), Completion.PLAYER_NAMES.complete(sender, "bobb"));
+        assertEquals(singletonList("bobby"), Completion.PLAYER_NAMES.complete(sender, "bobb"));
     }
     
     
@@ -64,7 +70,7 @@ public class CompletionTest {
         World bobby = when(mock(World.class).getName()).thenReturn("bobby").getMock();
         server.getWorlds().add(bobby);
         
-        assertEquals(asList("bobby"), Completion.WORLD_NAMES.complete(sender, "bobb"));
+        assertEquals(singletonList("bobby"), Completion.WORLD_NAMES.complete(sender, "bobb"));
     }
     
 }

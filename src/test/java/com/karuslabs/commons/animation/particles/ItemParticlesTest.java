@@ -23,54 +23,49 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import org.junit.jupiter.api.Test;
 
-public class ItemParticles extends StandardParticles {
-    
-    private ItemStack item;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-    
-    public ItemParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, ItemStack item) {
-        super(type, amount, offsetX, offsetY, offsetZ, speed);
-        this.item = item;
-    }
-    
-    
-    @Override
-    public void render(Player player, Location location) {
-        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
-    }
 
-    @Override
-    public void render(Location location) {
-        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
-    }
+public class ItemParticlesTest {
+    
+    private ItemStack item = mock(ItemStack.class);
+    private ItemParticles particles = spy(Particles.item().particle(Particle.CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).item(item).build());
+    private World world = mock(World.class);
+    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
+    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
     
-    public ItemStack getItem() {
-        return item;
-    }
-    
-    
-    public static class ItemBuilder extends AbstractBuilder<ItemBuilder, ItemParticles> {
-
-        public ItemBuilder(ItemParticles particles) {
-            super(particles);
-        }
+    @Test
+    public void render_Player() {
+        particles.render(player, location);
         
-        public ItemBuilder item(ItemStack item) {
-            particles.item = item;
-            return this;
-        }
-
-        @Override
-        protected ItemBuilder getThis() {
-            return this;
-        }
+        verify(player).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, item);
+    }
+    
+    
+    @Test
+    public void render() {
+        particles.render(location);
         
+        verify(world).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, item);
+    }
+    
+    
+    @Test
+    public void get() {
+        assertEquals(1, particles.getOffsetX());
+        assertEquals(2, particles.getOffsetY());
+        assertEquals(3, particles.getOffsetZ());
+        assertEquals(4, particles.getSpeed());
+        assertEquals(item, particles.getItem());
     }
     
 }

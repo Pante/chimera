@@ -21,57 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.locale.providers.Provider;
-
-import java.util.*;
-import java.util.ResourceBundle.Control;
+import java.util.Locale;
 
 import org.bukkit.entity.Player;
 
+import org.junit.jupiter.api.*;
 
-public class Translation {
+import static java.util.Locale.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.mockito.Mockito.*;
+
+
+@TestInstance(PER_CLASS)
+public class ProviderTest {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    private Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
-    }
-    
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
-        
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
+    @Test
+    public void none() {
+        assertSame(Locale.getDefault(), Provider.NONE.get(player));
     }
     
     
-    public String getBundleName() {
-        return bundle;
-    }
-    
-    public Control getControl() {
-        return control;
-    }
-    
-    public Provider getProvider() {
-        return provider;
+    @Test
+    public void detected() {
+        assertEquals(SIMPLIFIED_CHINESE, Provider.DETECTED.get(player));
     }
     
 }

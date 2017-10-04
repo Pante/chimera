@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.command.completion.Completion;
 
 import java.util.*;
@@ -46,7 +47,12 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
         super(declarations);
         this.completion = completion;
     }
-
+    
+    
+    @Override
+    protected @Nonnull Map<Integer, Completion> handleNull(@Ignored ConfigurationSection config, @Nonnull String key) {
+        return new HashMap<>();
+    }
     
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
@@ -56,7 +62,7 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
     @Override
     protected @Nonnull Map<Integer, Completion> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection completions = config.getConfigurationSection(key);
-        return completions.getKeys(false).stream().collect(toMap(Integer::parseInt, each -> completion.parse(completions, key)));
+        return completions.getKeys(false).stream().collect(toMap(Integer::parseInt, each -> completion.parse(completions, each)));
     }
     
 }

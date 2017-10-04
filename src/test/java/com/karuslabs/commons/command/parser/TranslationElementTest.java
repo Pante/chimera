@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
 import com.karuslabs.commons.locale.resources.*;
 
 import org.junit.jupiter.api.*;
@@ -38,7 +39,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @TestInstance(PER_CLASS)
 public class TranslationElementTest {
     
-    private TranslationElement element = new TranslationElement(null);
+    private TranslationElement element = new TranslationElement(null, Provider.DETECTED);
     
     
     @Test
@@ -70,6 +71,7 @@ public class TranslationElementTest {
         EmbeddedResource embedded = (EmbeddedResource) resources[0];
         FileResource file = (FileResource) resources[1];
         
+        assertSame(Provider.DETECTED, translation.getProvider());
         assertEquals("Resource", translation.getBundleName());
         assertEquals(2, resources.length);
         assertEquals("path1/", embedded.getPath());

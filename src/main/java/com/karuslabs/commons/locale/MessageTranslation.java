@@ -24,15 +24,18 @@
 package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.annotation.Ignored;
+import com.karuslabs.commons.locale.providers.Provider;
 
 import java.text.MessageFormat;
 import java.util.*;
 import javax.annotation.Nonnull;
 
+import org.bukkit.entity.Player;
+
 
 public class MessageTranslation extends Translation {
     
-    public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE) {
+    public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE, Provider.NONE) {
         
         @Override
         public @Nonnull ResourceBundle get(@Ignored Locale locale) {
@@ -55,8 +58,8 @@ public class MessageTranslation extends Translation {
     protected MessageFormat format;
     
     
-    public MessageTranslation(String bundle, ResourceBundle.Control control) {
-        super(bundle, control);
+    public MessageTranslation(String bundle, ResourceBundle.Control control, Provider provider) {
+        super(bundle, control, provider);
         format = new MessageFormat("");
     }
     
@@ -64,6 +67,18 @@ public class MessageTranslation extends Translation {
     public String format(String key, Object... arguments) {
         format.applyPattern(get(format.getLocale()).getString(key));
         return format.format(arguments);
+    }
+    
+    public MessageTranslation locale(Player player) {
+        return locale(provider.get(player));
+    }
+    
+    public MessageTranslation localeOrDefault(Player player, Locale locale) {
+        return locale(provider.getOrDefault(player, locale));
+    }
+    
+    public MessageTranslation localeOrDetected(Player player) {
+        return locale(provider.getOrDetected(player));
     }
     
     public MessageTranslation locale(Locale locale) {

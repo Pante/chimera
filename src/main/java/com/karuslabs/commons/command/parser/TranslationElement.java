@@ -25,6 +25,7 @@ package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.annotation.Ignored;
 import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
 import com.karuslabs.commons.locale.resources.*;
 
 import java.io.File;
@@ -40,15 +41,17 @@ import static java.lang.System.arraycopy;
 public class TranslationElement extends Element<MessageTranslation> {
     
     private File folder;
+    private Provider provider;
     
     
-    public TranslationElement(File folder) {
-        this(folder, new HashMap<>());
+    public TranslationElement(File folder, Provider provider) {
+        this(folder, new HashMap<>(), provider);
     }
     
-    public TranslationElement(File folder, Map<String, MessageTranslation> declarations) {
+    public TranslationElement(File folder, Map<String, MessageTranslation> declarations, Provider provider) {
         super(declarations);
         this.folder = folder;
+        this.provider = provider;
     }
 
     
@@ -82,7 +85,7 @@ public class TranslationElement extends Element<MessageTranslation> {
         Resource[] resources = copyOf(embedded, embedded.length + folders.length);
         arraycopy(folders, 0, resources, embedded.length, folders.length);
         
-        return new MessageTranslation(translation.getString("bundle"), new ExternalControl(resources));
+        return new MessageTranslation(translation.getString("bundle"), new ExternalControl(resources), provider);
     }
     
 }

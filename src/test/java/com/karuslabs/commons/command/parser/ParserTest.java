@@ -35,6 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
@@ -58,7 +59,7 @@ public class ParserTest {
         
         parser.parse(COMMANDS);
         
-        verify(parser).parseDeclarations(COMMANDS.getConfigurationSection("declarations"));
+        verify(parser).parseDeclarations(COMMANDS.getConfigurationSection("declare"));
         verify(parser).parseCommands(COMMANDS.getConfigurationSection("commands"));
     }
     
@@ -97,7 +98,7 @@ public class ParserTest {
     }
     
     static Stream<Arguments> parseCommands_parameters() {
-        return Stream.of(of("commands", 1, singletonList(stub)), of("declare.commands.help.aliases", 0 , EMPTY_LIST));
+        return Stream.of(of("commands", 1, asList(stub, stub)), of("declare.commands.help.aliases", 0 , EMPTY_LIST));
     }
     
 }

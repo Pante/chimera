@@ -35,10 +35,7 @@ public class ColouredParticles extends Particles {
     
     public ColouredParticles(Particle type, int amount, Color colour) {
         super(type, amount);
-        this.colour = colour;
-        r = colour.getRed() / 255.0;
-        g = colour.getGreen() / 255.0;
-        b = colour.getBlue() / 255.0;
+        setColour(colour);
     }
 
     
@@ -57,6 +54,13 @@ public class ColouredParticles extends Particles {
         return colour;
     }
     
+    private void setColour(Color colour) {
+        this.colour = colour;
+        r = colour.getRed() / 255.0;
+        g = colour.getGreen() / 255.0;
+        b = colour.getBlue() / 255.0;
+    }
+    
     
     public static class ColouredBuilder extends Builder<ColouredBuilder, ColouredParticles> {
 
@@ -64,8 +68,8 @@ public class ColouredParticles extends Particles {
             super(particles);
         }
         
-        public ColouredBuilder colour(Color color) {
-            particles.colour = color;
+        public ColouredBuilder colour(Color colour) {
+            particles.setColour(colour);
             return this;
         }
 

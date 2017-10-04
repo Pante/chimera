@@ -21,57 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.configuration.ProxiedConfiguration;
+import com.karuslabs.commons.locale.Locales;
 
-import java.util.*;
-import java.util.ResourceBundle.Control;
+import java.util.Locale;
+import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
 
-public class Translation {
+public class ConfigurationProvider implements Provider {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    private ProxiedConfiguration config;
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
+    public ConfigurationProvider(ProxiedConfiguration config) {
+        this.config = config;
     }
     
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
+    
+    @Override
+    public @Nullable Locale get(Player player) {
+        String id = player.getUniqueId().toString();
+        String locale = config.getString(id);
+        return Locales.get(locale);
+    }
+    
+    public void set(Player player, Locale locale) {
+        String id = player.getUniqueId().toString();
+        config.set(id, locale.getLanguage() + "_" + locale.getCountry());
     }
         
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
     
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
-    }
-    
-    
-    public String getBundleName() {
-        return bundle;
-    }
-    
-    public Control getControl() {
-        return control;
-    }
-    
-    public Provider getProvider() {
-        return provider;
+    public void save() {
+        config.save();
     }
     
 }

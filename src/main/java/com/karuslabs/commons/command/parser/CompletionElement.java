@@ -39,10 +39,16 @@ public class CompletionElement extends Element<Completion> {
     
     public CompletionElement(Map<String, Completion> declarations) {
         super(declarations);
+        declarations.put("NONE", Completion.NONE);
         declarations.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
         declarations.put("WORLD_NAMES", Completion.WORLD_NAMES);
     }
 
+    
+    @Override
+    protected String getDeclaredKey(ConfigurationSection config, String key) {
+        return config.getString(key);
+    }
     
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {

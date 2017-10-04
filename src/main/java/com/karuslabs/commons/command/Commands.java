@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.parser.*;
+import com.karuslabs.commons.locale.providers.Provider;
 
 import org.bukkit.plugin.Plugin;
 
@@ -32,24 +33,26 @@ import static com.karuslabs.commons.configuration.Configurations.from;
 
 public class Commands {
     
-    private Plugin plugin;
-    private ProxiedCommandMap map;
+    Plugin plugin;
+    ProxiedCommandMap map;
+    Provider provider;
     
     
-    public Commands(Plugin plugin) {
-        this(plugin, new ProxiedCommandMap(plugin.getServer()));
+    public Commands(Plugin plugin, Provider provider) {
+        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider);
     }
     
-    public Commands(Plugin plugin, ProxiedCommandMap map) {
+    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider) {
         this.plugin = plugin;
         this.map = map;
+        this.provider = provider;
     }
     
     
     public void load(String path) {
         CompletionElement completion = new CompletionElement();
         CompletionsElement completions = new CompletionsElement(completion);
-        TranslationElement translation = new TranslationElement(plugin.getDataFolder());
+        TranslationElement translation = new TranslationElement(plugin.getDataFolder(), provider);
         CommandsElement commands = new CommandsElement(null);
         
         CommandElement command = new CommandElement(plugin, commands, translation, completions);

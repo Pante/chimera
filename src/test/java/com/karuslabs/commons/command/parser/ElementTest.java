@@ -70,13 +70,13 @@ public class ElementTest {
     @CsvSource({"key, 1, 0, 0", "commands.brush.translation, 0, 1, 0", "declare, 0, 0, 1"})
     public void parse(String key, int nullValue, int declaration, int handle) {
         doReturn("").when(element).handleNull(COMMANDS, key);
-        doReturn("").when(element).getDeclaration(key, COMMANDS.getCurrentPath());
+        doReturn("").when(element).getDeclared(COMMANDS, key);
         doReturn(true).when(element).check(COMMANDS, key);
         doReturn("").when(element).handle(COMMANDS, key);
         
         assertEquals("", element.parse(COMMANDS, key));
         verify(element, times(nullValue)).handleNull(COMMANDS, key);
-        verify(element, times(declaration)).getDeclaration(key, COMMANDS.getCurrentPath());
+        verify(element, times(declaration)).getDeclared(COMMANDS, key);
         verify(element, times(handle)).handle(COMMANDS, key);
     }
     
@@ -102,17 +102,17 @@ public class ElementTest {
     
     
     @Test
-    public void getDeclaration() {
+    public void getDeclared() {
         element.getDeclarations().put("key", "value");
-        assertEquals("value", element.getDeclaration("key", ""));
+        assertEquals("value", element.getDeclared(COMMANDS, "key"));
     }
     
     
     @Test
     public void getDeclaration_ThrowsException() {
         assertEquals(
-            "Missing declaration: path.key",
-            assertThrows(ParserException.class, () -> element.getDeclaration("key", "path")).getMessage()
+            "Missing declaration: declare.key",
+            assertThrows(ParserException.class, () -> element.getDeclared(COMMANDS.getConfigurationSection("declare"), "key")).getMessage()
         );
         
     }

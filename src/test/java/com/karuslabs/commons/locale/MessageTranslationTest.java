@@ -25,18 +25,29 @@ package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
+import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import org.bukkit.entity.Player;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Locale.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
 public class MessageTranslationTest {
     
-    private MessageTranslation translation  = new MessageTranslation("Translation", new ExternalControl(new EmbeddedResource("locale")));
+    private MessageTranslation translation  = spy(new MessageTranslation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
+    private static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
     
     
     @Test
@@ -63,6 +74,29 @@ public class MessageTranslationTest {
     @Test
     public void format() {
         assertEquals("Japanese key", translation.locale(JAPAN).format("locale", "key"));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void locale_player(Consumer<MessageTranslation> consumer, Locale expected) {
+        doReturn(null).when(translation).locale((Locale) any());
+        
+        consumer.accept(translation);
+        
+        verify(translation).locale(expected);
+    }
+    
+    static Stream<Arguments> parameters() {
+        return Stream.of(
+            of(wrap(translation -> translation.locale(player)), null),
+            of(wrap(translation -> translation.localeOrDefault(player, ITALY)), ITALY),
+            of(wrap(translation -> translation.localeOrDetected(player)), SIMPLIFIED_CHINESE)
+        );
+    }
+    
+    static Object wrap(Consumer<MessageTranslation> consumer) {
+        return consumer;
     }
     
 }

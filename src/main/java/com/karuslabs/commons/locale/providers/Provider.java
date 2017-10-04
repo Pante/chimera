@@ -21,57 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.locale.Locales;
+import com.karuslabs.commons.util.Get;
 
-import java.util.*;
-import java.util.ResourceBundle.Control;
+import java.util.Locale;
+import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 
 
-public class Translation {
+@FunctionalInterface
+public interface Provider {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    public static final Provider NONE = player -> Locale.getDefault();
+    
+    public static final Provider DETECTED = player -> Locales.get(player.getLocale());
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
+    public @Nullable Locale get(Player player);
     
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
+    public default Locale getOrDefault(Player player, Locale locale) {
+       return Get.orDefault(get(player), locale);
     }
     
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
-        
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
-    }
-    
-    
-    public String getBundleName() {
-        return bundle;
-    }
-    
-    public Control getControl() {
-        return control;
-    }
-    
-    public Provider getProvider() {
-        return provider;
+    public default Locale getOrDetected(Player player) {
+        Locale locale = get(player);
+        if (locale != null) {
+            return locale;
+            
+        } else {
+            return Locales.getOrDefault(player.getLocale(), Locale.getDefault());
+        }
     }
     
 }

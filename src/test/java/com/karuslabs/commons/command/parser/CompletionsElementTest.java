@@ -34,6 +34,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Collections.EMPTY_MAP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
@@ -44,6 +45,12 @@ public class CompletionsElementTest {
     
     private CompletionElement completion = when(mock(CompletionElement.class).parse(any(), any())).thenReturn(PLAYER_NAMES).getMock();
     private CompletionsElement element = new CompletionsElement(completion);
+    
+    
+    @Test
+    public void handleNull() {
+        assertEquals(EMPTY_MAP, element.handleNull(COMMANDS, "path"));
+    }
     
     
     @ParameterizedTest

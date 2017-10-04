@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.annotation.ValueBased;
+
 import java.util.Map;
 
 import org.bukkit.*;
@@ -30,6 +32,7 @@ import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
 
+@ValueBased
 public abstract class ProxiedLocation extends Location {
     
     protected Location location;

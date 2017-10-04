@@ -48,10 +48,17 @@ public class CompletionElementTest {
     public void getDeclarations() {
         @JDK9("Replace with Map.of(...)")
         Map<String, Completion> completions = new HashMap<>();
+        completions.put("NONE", Completion.NONE);
         completions.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
         completions.put("WORLD_NAMES", Completion.WORLD_NAMES);
         
         assertEquals(completions, element.getDeclarations());
+    }
+    
+    
+    @Test
+    public void getDeclaredKey() {
+        assertEquals("translation", element.getDeclaredKey(COMMANDS, "commands.brush.translation"));
     }
     
     

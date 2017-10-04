@@ -21,57 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import java.io.*;
 
-import java.util.*;
-import java.util.ResourceBundle.Control;
+import org.bukkit.configuration.file.FileConfiguration;
 
-import org.bukkit.entity.Player;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class Translation {
+public class ProxiedConfigurationTest {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    private ProxiedConfiguration config = new ProxiedConfiguration("configuration/config.yml");
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
+    @Test
+    public void getString() {
+        assertEquals("name", config.getString("location.world"));
     }
     
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
+    
+    @Test
+    public void save() throws IOException {
+        config.config = mock(FileConfiguration.class);
         
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
+        config.save();
+        
+        verify(config.config).save(config.file);
     }
     
     
-    public String getBundleName() {
-        return bundle;
-    }
-    
-    public Control getControl() {
-        return control;
-    }
-    
-    public Provider getProvider() {
-        return provider;
+    @Test
+    public void save_ThrowsException() throws IOException {
+        config.config = mock(FileConfiguration.class);
+        doThrow(IOException.class).when(config.config).save(config.file);
+        
+        assertThrows(UncheckedIOException.class, config::save);
     }
     
 }

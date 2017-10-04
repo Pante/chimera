@@ -25,20 +25,53 @@ package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
+import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static java.util.Locale.JAPAN;
+import static java.util.Locale.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 public class TranslationTest {
     
-    private Translation translation = new Translation("Translation", new ExternalControl(new EmbeddedResource("locale")));
+    private Translation translation = spy(new Translation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
+    private static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    
+    
+    @ParameterizedTest
+    @MethodSource("parameters")
+    public void get(Consumer<Translation> consumer, Locale expected) {
+        doReturn(null).when(translation).get((Locale) any());
+        
+        consumer.accept(translation);
+        
+        verify(translation).get(expected);
+    }
+    
+    static Stream<Arguments> parameters() {
+        return Stream.of(
+            of(wrap(translation -> translation.get(player)), null),
+            of(wrap(translation -> translation.getOrDefault(player, ITALY)), ITALY),
+            of(wrap(translation -> translation.getOrDetected(player)), SIMPLIFIED_CHINESE)
+        );
+    }
+    
+    static Object wrap(Consumer<Translation> consumer) {
+        return consumer;
+    }
     
     
     @Test
-    public void get() {
+    public void get_Locale() {
         assertEquals("Japanese {0}", translation.get(JAPAN).getString("locale"));
     }
     

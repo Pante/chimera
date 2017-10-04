@@ -51,7 +51,7 @@ public class Parser {
     
     
     public List<Command> parse(ConfigurationSection config) {
-        parseDeclarations(config.getConfigurationSection("declarations"));
+        parseDeclarations(config.getConfigurationSection("declare"));
         return parseCommands(config.getConfigurationSection("commands"));
     }
     

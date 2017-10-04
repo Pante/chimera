@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 public abstract class Particles {
     
     public static ColouredBuilder coloured() {
-        return new ColouredBuilder(new ColouredParticles(null, 0, null));
+        return new ColouredBuilder(new ColouredParticles(null, 0, Color.WHITE));
     }
     
     public static ItemBuilder item() {
@@ -106,8 +106,11 @@ public abstract class Particles {
             return getThis();
         }
         
-        
         protected abstract GenericBuilder getThis();
+                
+        public GenericParticles build() {
+            return particles;
+        }
         
     }
     

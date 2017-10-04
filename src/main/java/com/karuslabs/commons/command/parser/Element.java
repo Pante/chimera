@@ -49,7 +49,7 @@ public abstract class Element<T> {
             return handleNull(config, key);
             
         } else if (config.isString(key)) {
-            return getDeclaration(key, config.getCurrentPath());
+            return getDeclared(config, key);
             
         } else if (check(config, key)) {
             return handle(config, key);
@@ -63,15 +63,20 @@ public abstract class Element<T> {
         throw new ParserException("Missing key: " + config.getCurrentPath() + "." + key);
     }
     
-    public T getDeclaration(String key, String path) {
-        T declared = declarations.get(key);
+    protected T getDeclared(ConfigurationSection config, String key) {
+        T declared = declarations.get(getDeclaredKey(config, key));
         if (declared != null) {
             return declared;
             
         } else {
-            throw new ParserException("Missing declaration: " + path + "." + key);
+            throw new ParserException("Missing declaration: " + config.getCurrentPath() + "." + key);
         }
     }
+    
+    protected String getDeclaredKey(ConfigurationSection config, String key) {
+        return key;
+    }
+    
     
     protected abstract boolean check(@Nonnull ConfigurationSection config, @Nonnull String key);
     

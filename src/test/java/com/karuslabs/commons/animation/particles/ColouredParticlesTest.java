@@ -21,57 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.animation.particles;
 
-import com.karuslabs.commons.locale.providers.Provider;
-
-import java.util.*;
-import java.util.ResourceBundle.Control;
-
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
+import org.junit.jupiter.api.Test;
 
-public class Translation {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+
+public class ColouredParticlesTest {
     
-    private String bundle;
-    private Control control;
-    protected Provider provider;
+    private ColouredParticles particles = spy(Particles.coloured().particle(Particle.BARRIER).colour(Color.YELLOW)).build();
+    private World world = mock(World.class);
+    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
+    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
     
-    public Translation(String bundle, Control control, Provider provider) {
-        this.bundle = bundle;
-        this.control = control;
-        this.provider = provider;
-    }
-         
-    
-    public ResourceBundle get(Player player) {
-        return get(provider.get(player));
-    }
-    
-    public ResourceBundle getOrDefault(Player player, Locale locale) {
-        return get(provider.getOrDefault(player, locale));
-    }
+    @Test
+    public void render_Player() {
+        particles.render(player, location);
         
-    public ResourceBundle getOrDetected(Player player) {
-        return get(provider.getOrDetected(player));
-    }
-    
-    public ResourceBundle get(Locale locale) {
-        return ResourceBundle.getBundle(bundle, locale, control);
+        verify(player).spawnParticle(Particle.BARRIER, location, 0, 1, 1, 0, 1);
     }
     
     
-    public String getBundleName() {
-        return bundle;
+    @Test
+    public void render() {
+        particles.render(location);
+        
+        verify(world).spawnParticle(Particle.BARRIER, location, 0, 1, 1, 0, 1);
     }
     
-    public Control getControl() {
-        return control;
-    }
     
-    public Provider getProvider() {
-        return provider;
+    @Test
+    public void getColor() {
+        assertEquals(Color.YELLOW, particles.getColour());
     }
     
 }
