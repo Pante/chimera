@@ -21,20 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
-
-import java.lang.annotation.*;
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 
 /**
- * Signifies that the annotated parameter is ignored.
- * Usage of this annotation should be limited to overriding constructors and methods.
+ * Contains commonly used annotations.
  */
-@Documented
-@Target({PARAMETER, TYPE_USE})
-@Retention(RUNTIME)
-public @interface Ignored {
-    
-}
+package com.karuslabs.commons.annotation;

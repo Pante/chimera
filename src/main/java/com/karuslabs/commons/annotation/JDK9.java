@@ -24,8 +24,8 @@
 package com.karuslabs.commons.annotation;
 
 /**
- * Temporary interface marking areas which may be enhanced when migrating to Java 9.
- * Will be removed after migration.
+ * Internally used to signify that the target may be rewritten during migration to Java 9.
+ * This annotation will be removed after migration.
  */
 public @interface JDK9 {
     

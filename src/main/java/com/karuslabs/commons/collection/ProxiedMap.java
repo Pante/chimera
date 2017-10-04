@@ -27,71 +27,123 @@ import java.util.*;
 import javax.annotation.*;
 
 
+/**
+ * A map that delegates all operations another map.
+ * Extending classes should override operations to modify the behaviour of the internal map
+ * in support of the <a href = "https://en.wikipedia.org/wiki/Decorator_pattern">Decorator pattern</a>.
+ * 
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of mapped values
+ */
 public abstract class ProxiedMap<K, V> implements Map<K, V> {
     
+    /**
+     * Internal map all operations are delegated to.
+     */
     protected Map<K, V> map;
 
     
+    /**
+     * Creates this with the specified internal map.
+     * 
+     * @param map the map all operations are delegated to.
+     */
     public ProxiedMap(Map<K, V> map) {
         this.map = map;
     }
     
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public int size() {
         return map.size();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable V get(Object key) {
         return map.get(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable V put(K key, V value) {
         return map.put(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable V remove(Object key) {
         return map.remove(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         map.putAll(m);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         map.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nonnull Set<K> keySet() {
         return map.keySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nonnull Collection<V> values() {
         return map.values();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nonnull Set<Entry<K, V>> entrySet() {
         return map.entrySet();

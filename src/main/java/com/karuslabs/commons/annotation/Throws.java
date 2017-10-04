@@ -28,7 +28,7 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
+@Deprecated
 @Documented
 @Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
 @Retention(RUNTIME)

@@ -29,6 +29,9 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies that the annotated method is a blocking operation.
+ */
 @Documented
 @Target({METHOD})
 @Retention(RUNTIME)

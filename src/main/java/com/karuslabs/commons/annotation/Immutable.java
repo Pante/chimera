@@ -29,6 +29,9 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies that the annotated target is immutable.
+ */
 @Documented
 @Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
 @Retention(RUNTIME)
