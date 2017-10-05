@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.world.BoundLocation.Builder;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -38,7 +40,7 @@ public class BoundLocationTest {
     
     private BoundLocation bound;
     private Location location;
-    private Vector offset;
+    private DirectionalVector offset;
     
     
     public BoundLocationTest() {
@@ -46,31 +48,16 @@ public class BoundLocationTest {
         when(location.getYaw()).thenReturn(1F);
         when(location.getPitch()).thenReturn(2F);
         
-        offset = new Vector(1, 2, 3);
-        bound = spy(new BoundLocation(location, offset, 4, 5, true) {
-            @Override
-            public boolean validate() {
-                return true;
-            }
-
-            @Override
-            public void update() {
-                
-            }
-
-            @Override
-            public void updateOffset() {
-                
-            }
-        });
+        offset = new DirectionalVector(1, 2, 3, 4, 5);
+        bound = spy(new StubBuilder(new StubLocation(location, null, false)).offset(offset).relative(true).build());
     }
     
     
     @Test
     public void addOffset() {
-        bound.addOffset(new Vector(1, 1, 1));
+        bound.addOffset(new Vector(1, 1, 1), 1, 1);
         
-        assertEquals(new Vector(2, 3, 4), bound.getOffset());
+        assertEquals(new DirectionalVector(2, 3, 4, 5, 6), bound.getOffset());
         verify(bound).updateOffset();
     }
     
@@ -98,4 +85,40 @@ public class BoundLocationTest {
         verify(location).setPitch(pitch);
     }
     
+    
+    private static class StubBuilder extends Builder<StubBuilder, BoundLocation> {
+
+        public StubBuilder(BoundLocation location) {
+            super(location);
+        }
+
+        @Override
+        protected StubBuilder getThis() {
+            return this;
+        }
+        
+    }
+    
+    private static class StubLocation extends BoundLocation {
+
+        public StubLocation(Location location, DirectionalVector offset, boolean relative) {
+            super(location, offset, relative);
+        }
+
+        @Override
+        public boolean validate() {
+            return true;
+        }
+
+        @Override
+        public void update() {
+
+        }
+
+        @Override
+        public void updateOffset() {
+
+        }
+    };
+
 }

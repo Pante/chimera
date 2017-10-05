@@ -26,40 +26,47 @@ package com.karuslabs.commons.world;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import static com.karuslabs.commons.world.Vectors.rotateVector;
+
 
 public abstract class BoundLocation {
     
     protected Location location;
-    protected Vector offset;
-    protected float yaw;
-    protected float pitch;
+    protected DirectionalVector offset;
     protected boolean relative;
     
     
     public BoundLocation(BoundLocation location) {
-        this(location.location.clone(), location.offset.clone(), location.yaw, location.pitch, location.relative);
+        this(location.location.clone(), location.offset.clone(), location.relative);
     }
     
-    public BoundLocation(Location location, Vector offset, float yaw, float pitch, boolean relative) {
+    public BoundLocation(Location location, DirectionalVector offset, boolean relative) {
         this.location = location;
         this.offset = offset;
-        this.yaw = yaw;
-        this.pitch = pitch;
         this.relative = relative;
     }
     
     
-    public void addOffset(Vector offset) {
+    public void addOffset(Vector offset, float yaw, float pitch) {
         this.offset.add(offset);
+        this.offset.yaw(yaw);
+        this.offset.pitch(pitch);
         updateOffset();
+    }
+        
+    public void updateOffset() {
+        if (relative) {
+            location.add(rotateVector(offset, location));
+            
+        } else {
+            location.add(offset);
+        }
     }
     
     
     public abstract boolean validate();
     
     public abstract void update();
-    
-    public abstract void updateOffset();
     
     
     public void setDirection(Vector direction) {
@@ -69,12 +76,12 @@ public abstract class BoundLocation {
 
     public void updateDirection() {
         if (relative) {
-            location.setYaw(location.getYaw() + yaw);
-            location.setPitch(location.getPitch() + pitch);
+            location.setYaw(location.getYaw() + offset.yaw());
+            location.setPitch(location.getPitch() + offset.pitch());
             
         } else {
-            location.setYaw(yaw);
-            location.setPitch(pitch);
+            location.setYaw(offset.yaw());
+            location.setPitch(offset.pitch());
         }
     }
 
@@ -83,7 +90,7 @@ public abstract class BoundLocation {
         return location;
     }
     
-    public Vector getOffset() {
+    public DirectionalVector getOffset() {
         return offset;
     }
     
@@ -93,6 +100,36 @@ public abstract class BoundLocation {
     
     public void setRelative(boolean relative) {
         this.relative = relative;
+    }
+    
+    
+    public static abstract class Builder<GenericBuilder extends Builder, GenericLocation extends BoundLocation> {
+        
+        protected GenericLocation location;
+        
+        
+        public Builder(GenericLocation location) {
+            this.location = location;
+        }
+ 
+        
+        public GenericBuilder offset(DirectionalVector offset) {
+            location.offset = offset;
+            return getThis();
+        }
+        
+        public GenericBuilder relative(boolean relative) {
+            location.relative = relative;
+            return getThis();
+        }
+        
+        protected abstract GenericBuilder getThis();
+        
+        
+        public GenericLocation build() {
+            return location;
+        }
+        
     }
     
 }

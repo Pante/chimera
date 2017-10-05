@@ -21,19 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
+package com.karuslabs.commons.world;
 
-import java.lang.annotation.*;
+import org.bukkit.util.Vector;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Deprecated
-@Documented
-@Target({METHOD})
-@Retention(RUNTIME)
-public @interface Contract {
+public class DirectionalVector extends Vector {
     
-    String value();
+    private float yaw;
+    private float pitch;
+    
+    
+    public DirectionalVector() {
+        this(0, 0, 0, 0, 0);
+    }
+    
+    public DirectionalVector(double x, double y, double z, float yaw, float pitch) {
+        super(x, y, z);
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+    
+    
+    @Override
+    public DirectionalVector add(Vector vector) {
+        super.add(vector);
+        return this;
+    }
+    
+    
+    public float yaw() {
+        return yaw;
+    }
+
+    public void yaw(float yaw) {
+        this.yaw = yaw;
+    }
+
+    public float pitch() {
+        return pitch;
+    }
+
+    public void pitch(float pitch) {
+        this.pitch = pitch;
+    }
+    
+    
+    @Override
+    public DirectionalVector clone() {
+        return (DirectionalVector) super.clone();
+    }
     
 }

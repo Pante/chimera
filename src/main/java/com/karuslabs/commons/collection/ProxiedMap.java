@@ -149,4 +149,9 @@ public abstract class ProxiedMap<K, V> implements Map<K, V> {
         return map.entrySet();
     }
     
+    @Override
+    public String toString() {
+        return map.toString();
+    }
+    
 }

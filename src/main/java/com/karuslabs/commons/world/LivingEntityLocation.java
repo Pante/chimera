@@ -25,7 +25,6 @@ package com.karuslabs.commons.world;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.util.Vector;
 
 
 public class LivingEntityLocation<GenericEntity extends LivingEntity> extends EntityLocation<GenericEntity> {
@@ -34,14 +33,45 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
         super(entity, location);
     }
     
-    public LivingEntityLocation(GenericEntity entity, Location location, Vector entityOffset, boolean nullable, Vector offset, float yaw, float pitch, boolean relative, boolean updateLocation, boolean updateDirection) {
-        super(entity, location, entityOffset, nullable, offset, yaw, pitch, relative, updateLocation, updateDirection);
+    public LivingEntityLocation(GenericEntity entity, DirectionalVector offset, boolean nullable, boolean relative, boolean update) {
+        super(entity, entity.getEyeLocation(), offset, nullable, relative, update);
+    }
+    
+    public LivingEntityLocation(GenericEntity entity, Location location, DirectionalVector offset, boolean nullable, boolean relative, boolean update) {
+        super(entity, location, offset, location.toVector().subtract(entity.getEyeLocation().toVector()), nullable, relative, update);
     }
     
     
     @Override
     public void update() {
-        getEntity().ifPreset(entity -> update(entity.getEyeLocation()));
+        entity.ifPreset(entity -> update(entity.getEyeLocation()));
+    }
+    
+    
+    public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity) {
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new DirectionalVector(), false, false, false));
+    }
+    
+    public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new DirectionalVector(), false, false, false));
+    }
+    
+    public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder, LivingEntityLocation<?>> {
+
+        public LivingEntityBuilder(LivingEntityLocation location) {
+            super(location);
+        }
+        
+        @Override
+        protected LivingEntityBuilder getThis() {
+            return this;
+        }
+        
+        @Override
+        public LivingEntityLocation<GenericEntity> build() {
+            return (LivingEntityLocation<GenericEntity>) location;
+        }
+        
     }
     
 }

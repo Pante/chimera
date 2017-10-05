@@ -33,7 +33,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Usage of this annotation should be limited to overriding constructors and methods.
  */
 @Documented
-@Target({PARAMETER, TYPE_USE})
+@Target({PARAMETER})
 @Retention(RUNTIME)
 public @interface Ignored {
     

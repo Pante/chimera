@@ -29,34 +29,34 @@ import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.rotateVector;
-
 
 public class EntityLocation<GenericEntity extends Entity> extends BoundLocation {
     
-    private Weak<GenericEntity> entity;
-    private Vector entityOffset;
-    private boolean nullable;
-    private boolean updateLocation;
-    private boolean updateDirection;
+    Weak<GenericEntity> entity;
+    boolean nullable;
+    boolean update;
 
     
     public EntityLocation(GenericEntity entity, EntityLocation<GenericEntity> location) {
         super(location);
         this.entity = new Weak<>(entity);
-        entityOffset = location.entityOffset.clone();
         nullable = location.nullable;
-        updateDirection = location.updateDirection;
-        updateLocation = location.updateLocation;
+        update = location.update;
     }
     
-    public EntityLocation(GenericEntity entity, Location location, Vector entityOffset, boolean nullable, Vector offset, float yaw, float pitch, boolean relative, boolean updateLocation, boolean updateDirection) {
-        super(location, offset, yaw, pitch, relative);
+    public EntityLocation(GenericEntity entity, DirectionalVector offset, boolean relative, boolean nullable, boolean update) {
+        this(entity, entity.getLocation(), offset, relative, nullable, update);
+    }
+    
+    public EntityLocation(GenericEntity entity, Location location, DirectionalVector offset, boolean relative, boolean nullable, boolean update) {
+        this(entity, location, offset, location.toVector().subtract(entity.getLocation().toVector()), relative, nullable, update);
+    }
+    
+    protected EntityLocation(GenericEntity entity, Location location, DirectionalVector offset, Vector entityOffset, boolean relative, boolean nullable, boolean update) {
+        super(location, offset.add(entityOffset), relative);
         this.entity = new Weak<>(entity);
-        this.entityOffset = entityOffset;
         this.nullable = nullable;
-        this.updateLocation = updateLocation;
-        this.updateDirection = updateDirection;
+        this.update = update;
     }
 
     
@@ -71,25 +71,13 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     protected void update(Location current) {
-        if (updateDirection) {
+        if (update) {
             setDirection(current.getDirection());
-        }
-        if (updateLocation) {
+            location.setWorld(current.getWorld());
             location.setX(current.getX());
             location.setY(current.getY());
             location.setZ(current.getZ());
             updateOffset();
-        }
-    }
-    
-    @Override
-    public void updateOffset() {
-        location.add(entityOffset);
-        if (relative) {
-            location.add(rotateVector(offset, location));
-            
-        } else {
-            location.add(offset);
         }
     }
 
@@ -98,16 +86,53 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         return entity;
     }
 
-    public Vector getEntityOffset() {
-        return entityOffset;
+    public boolean canUpdate() {
+        return update;
     }
-
-    public boolean isUpdateLocation() {
-        return updateLocation;
+    
+    
+    public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity) {
+        return new EntityBuilder<>(new EntityLocation<>(entity, new DirectionalVector(), false, false, false));
     }
+    
+    public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
+        return new EntityBuilder<>(new EntityLocation<>(entity, location, new DirectionalVector(), false, false, false));
+    }
+    
+    public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder, EntityLocation<?>> {
 
-    public boolean isUpdateDirection() {
-        return updateDirection;
+        public EntityBuilder(EntityLocation<GenericEntity> location) {
+            super(location);
+        }
+
+        @Override
+        protected EntityBuilder getThis() {
+            return this;
+        }
+        
+        @Override
+        public EntityLocation<GenericEntity> build() {
+            return (EntityLocation<GenericEntity>) location;
+        }
+        
+    }
+    
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation> extends Builder<GenericBuilder, GenericLocation> {
+        
+        public AbstractBuilder(GenericLocation location) {
+            super(location);
+        }
+        
+        public GenericBuilder nullable(boolean nullable) {
+            location.nullable = nullable;
+            return getThis();
+        }
+        
+        public GenericBuilder update(boolean update) {
+            location.update = update;
+            return getThis();
+        }
+        
     }
 
 }

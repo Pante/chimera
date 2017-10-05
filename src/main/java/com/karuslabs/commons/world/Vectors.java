@@ -26,75 +26,76 @@ package com.karuslabs.commons.world;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import static java.lang.Math.*;
 
 /**
- * @author Slikey - Adapted from EffectLib
+ * @author Slikey
  */
 public final class Vectors {
 
-    public static Vector rotateAroundXAxis(Vector v, double angle) {
+    public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        y = v.getY() * cos - v.getZ() * sin;
-        z = v.getY() * sin + v.getZ() * cos;
-        return v.setY(y).setZ(z);
+        cos = cos(angle);
+        sin = sin(angle);
+        y = vector.getY() * cos - vector.getZ() * sin;
+        z = vector.getY() * sin + vector.getZ() * cos;
+        return vector.setY(y).setZ(z);
     }
 
     
-    public static Vector rotateAroundYAxis(Vector v, double angle) {
+    public static Vector rotateAroundYAxis(Vector vector, double angle) {
         double x, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = v.getX() * cos + v.getZ() * sin;
-        z = v.getX() * -sin + v.getZ() * cos;
-        return v.setX(x).setZ(z);
+        cos = cos(angle);
+        sin = sin(angle);
+        x = vector.getX() * cos + vector.getZ() * sin;
+        z = vector.getX() * -sin + vector.getZ() * cos;
+        return vector.setX(x).setZ(z);
     }
 
     
-    public static Vector rotateAroundZAxis(Vector v, double angle) {
+    public static Vector rotateAroundZAxis(Vector vector, double angle) {
         double x, y, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = v.getX() * cos - v.getY() * sin;
-        y = v.getX() * sin + v.getY() * cos;
-        return v.setX(x).setY(y);
+        cos = cos(angle);
+        sin = sin(angle);
+        x = vector.getX() * cos - vector.getY() * sin;
+        y = vector.getX() * sin + vector.getY() * cos;
+        return vector.setX(x).setY(y);
     }
 
     
-    public static Vector rotateVector(Vector v, double angleX, double angleY, double angleZ) {
-        rotateAroundXAxis(v, angleX);
-        rotateAroundYAxis(v, angleY);
-        rotateAroundZAxis(v, angleZ);
-        return v;
+    public static Vector rotateVector(Vector vector, double angleX, double angleY, double angleZ) {
+        rotateAroundXAxis(vector, angleX);
+        rotateAroundYAxis(vector, angleY);
+        rotateAroundZAxis(vector, angleZ);
+        return vector;
     }
 
     
-    public static Vector rotateVector(Vector v, Location location) {
-        return rotateVector(v, location.getYaw(), location.getPitch());
+    public static Vector rotateVector(Vector vector, Location location) {
+        return rotateVector(vector, location.getYaw(), location.getPitch());
     }
 
     
-    public static Vector rotateVector(Vector v, float yawDegrees, float pitchDegrees) {
-        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
-        double pitch = Math.toRadians(-pitchDegrees);
+    public static Vector rotateVector(Vector vector, float yawDegrees, float pitchDegrees) {
+        double yaw = toRadians(-1 * (yawDegrees + 90));
+        double pitch = toRadians(-pitchDegrees);
 
-        double cosYaw = Math.cos(yaw);
-        double cosPitch = Math.cos(pitch);
-        double sinYaw = Math.sin(yaw);
-        double sinPitch = Math.sin(pitch);
+        double cosYaw = cos(yaw);
+        double cosPitch = cos(pitch);
+        double sinYaw = sin(yaw);
+        double sinPitch = sin(pitch);
 
         double initialX, initialY, initialZ;
         double x, y, z;
 
-        // Z_Axis rotation (Pitch)
-        initialX = v.getX();
-        initialY = v.getY();
+        // Z Axis rotation (Pitch)
+        initialX = vector.getX();
+        initialY = vector.getY();
         x = initialX * cosPitch - initialY * sinPitch;
         y = initialX * sinPitch + initialY * cosPitch;
 
-        // Y_Axis rotation (Yaw)
-        initialZ = v.getZ();
+        // Y Axis rotation (Yaw)
+        initialZ = vector.getZ();
         initialX = x;
         z = initialZ * cosYaw - initialX * sinYaw;
         x = initialZ * sinYaw + initialX * cosYaw;
@@ -104,7 +105,7 @@ public final class Vectors {
 
     
     public static final double angleToXAxis(Vector vector) {
-        return Math.atan2(vector.getX(), vector.getY());
+        return atan2(vector.getX(), vector.getY());
     }
     
 }

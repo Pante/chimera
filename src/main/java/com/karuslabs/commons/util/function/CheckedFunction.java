@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.annotation.Throws;
-
 import java.util.function.Function;
 
 
@@ -34,7 +32,7 @@ public interface CheckedFunction<T, R, E extends Exception> {
     public R apply(T t) throws Exception;
     
     
-    public static <T, R, E extends Exception> @Throws(UncheckedFunctionException.class) Function<T, R> uncheck(CheckedFunction<T, R, E> function) {
+    public static <T, R, E extends Exception> Function<T, R> uncheck(CheckedFunction<T, R, E> function) {
         return t -> {
             try {
                 return function.apply(t);

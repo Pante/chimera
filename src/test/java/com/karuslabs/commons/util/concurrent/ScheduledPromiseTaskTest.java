@@ -38,13 +38,14 @@ public class ScheduledPromiseTaskTest {
     
     
     @ParameterizedTest
-    @CsvSource({"0, -1, 0, false", "0, 1, 1, false", "1, 1, 1, true"})
-    public void run(int current, int total, int expected, boolean done) {
+    @CsvSource({"0, -1, 0, 0, false", "0, 1, 1, 0, false", "1, 1, 1, 1, true"})
+    public void run(int current, int total, int expected, int callback, boolean done) {
         task.current = current;
         task.total = total;
         
         task.run();
         
+        verify(task, times(callback)).callback();
         assertEquals(expected, task.getCurrent());
         assertEquals(done, task.isDone());
     }
@@ -56,6 +57,7 @@ public class ScheduledPromiseTaskTest {
         
         task.run();
         
+        verify(task).callback();
         assertEquals(Exception.class, task.thrown.getClass());
         assertTrue(task.isDone());
     }

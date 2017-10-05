@@ -21,19 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
+package com.karuslabs.commons.animation;
 
-import java.lang.annotation.*;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Deprecated
-@Documented
-@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
-@Retention(RUNTIME)
-public @interface Throws {
+public class Music {
     
-    public Class<? extends RuntimeException>[] value() default {};
+    private Sound sound;
+    private SoundCategory category;
+    private float volume;
+    private float pitch;
+    
+    
+    public Music(Sound sound) {
+        this.sound = sound;
+    }
+    
+    
+    public void play(Player player) {
+        play(player, player.getLocation());
+    }
+    
+    public void play(Player player, Location location) {
+        player.playSound(location, sound, category, volume, pitch);
+    }
+    
+    public void play(Location location) {
+        location.getWorld().playSound(location, sound, category, volume, pitch);
+    }
     
 }

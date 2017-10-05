@@ -24,43 +24,48 @@
 package com.karuslabs.commons.world;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class StaticLocation extends BoundLocation {
+public class StaticLocationTest {
     
-    public StaticLocation(StaticLocation location) {
-        super(location);
+    private Location internal;
+    private DirectionalVector offset;
+    private StaticLocation location;
+        
+            
+    public StaticLocationTest() {
+        internal = mock(Location.class);
+        when(internal.getYaw()).thenReturn(1F);
+        when(internal.getPitch()).thenReturn(2F);
+        
+        offset = new DirectionalVector(1, 2, 3, 4, 5);
+        
+        location = StaticLocation.builder(internal).offset(offset).build();
     }
     
-    public StaticLocation(Location location, DirectionalVector offset, boolean relative) {
-        super(location, offset, relative);
+    
+    @Test
+    public void validate() {
+        assertTrue(location.validate());
     }
     
     
-    @Override
-    public boolean validate() {
-        return true;
-    }
-    
-    @Override
-    public void update() {}
-    
-    
-    public static StaticBuilder builder(Location location) {
-        return new StaticBuilder(new StaticLocation(location, new DirectionalVector(), false));
-    }
-    
-    public static class StaticBuilder extends Builder<StaticBuilder, StaticLocation> {
-
-        public StaticBuilder(StaticLocation location) {
-            super(location);
-        }
-
-        @Override
-        protected StaticBuilder getThis() {
-            return this;
-        }
-    
+    @ParameterizedTest
+    @CsvSource({"true", "false"})
+    public void updateOffset(boolean relative) {
+        location.setRelative(relative);
+        
+        location.updateOffset();
+        
+        verify(internal).add(relative ? Vectors.rotateVector(offset, internal) : offset);
     }
     
 }

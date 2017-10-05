@@ -46,6 +46,9 @@ import static java.util.stream.Stream.*;
 @ValueBased
 public final class Weak<T> {
     
+    public static final Weak<?> EMPTY = new Weak<>(null);
+    
+    
     private final WeakReference<T> reference;
     
     
@@ -62,7 +65,7 @@ public final class Weak<T> {
         } else {
             throw new NoSuchElementException();
         }
-    }
+    }    
     
     
     public void ifPreset(Consumer<? super T> consumer) {

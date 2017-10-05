@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.annotation.Throws;
-
 import java.util.function.Consumer;
 
 
@@ -34,7 +32,7 @@ public interface CheckedConsumer<T, E extends Exception> {
     public void accept(T t) throws E;
     
     
-    public static <T, E extends Exception> @Throws(UncheckedFunctionException.class) Consumer<T> uncheck(CheckedConsumer<T, E> consumer) {
+    public static <T, E extends Exception> Consumer<T> uncheck(CheckedConsumer<T, E> consumer) {
         return t -> {
             try {
                 consumer.accept(t);
