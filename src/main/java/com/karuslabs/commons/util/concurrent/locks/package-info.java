@@ -21,17 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent.locks;
-
 
 /**
- * Represents an object with may hold resources until it is closed.
- * The {@link #close()} method is called automatically when exiting a {@code try}-with-resources block.
+ * Contains locking associated interfaces and implementations.
  */
-@FunctionalInterface
-public interface Janitor extends AutoCloseable {
-    
-    @Override
-    public void close();
-    
-}
+package com.karuslabs.commons.util.concurrent.locks;
