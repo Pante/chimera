@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.annotation.Contract;
-
 
 public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements Repeatable {
     
@@ -56,12 +54,16 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
             } catch (Exception e) {
                 thrown = e;
                 done();
+                callback();
             }
             
         } else {
             done();
+            callback();
         }
     }
+    
+    protected void callback() {};
     
 
     @Override
@@ -70,7 +72,6 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
     }
 
     @Override
-    @Contract("Return -1 if infinite")
     public long getIterations() {
         return total;
     }

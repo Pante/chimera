@@ -72,6 +72,11 @@ public class SharedProgressBar extends AbstractBar {
             consumer.accept(bar, this);
         }
         
+        @Override
+        protected void callback() {
+            bar.removeAll();
+        }
+        
     }
     
     

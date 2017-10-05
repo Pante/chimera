@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.annotation.Throws;
-
 import java.util.function.Supplier;
 
 
@@ -34,7 +32,7 @@ public interface CheckedSupplier<R, E extends Exception> {
     public R get() throws E;
     
     
-    public static <T, E extends Exception> @Throws(UncheckedFunctionException.class) Supplier<T> uncheck(CheckedSupplier<T, E> supplier) {
+    public static <T, E extends Exception> Supplier<T> uncheck(CheckedSupplier<T, E> supplier) {
         return () -> {
             try {
                 return supplier.get();

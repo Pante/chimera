@@ -27,6 +27,7 @@ package com.karuslabs.commons.annotation;
  * Temporary interface marking areas which may be enhanced when migrating to Java 9.
  * Will be removed after migration.
  */
+@Deprecated
 public @interface JDK9 {
     
     String value() default "";

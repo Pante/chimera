@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.annotation.Throws;
-
 import java.util.function.BiConsumer;
 
 
@@ -34,7 +32,7 @@ public interface CheckedBiConsumer<T, U, E extends Exception> {
     public void accept(T t, U u) throws E;
     
         
-    public static<T, U, E extends Exception> @Throws(UncheckedFunctionException.class) BiConsumer<T, U> uncheck(CheckedBiConsumer<T, U, E> consumer) {
+    public static<T, U, E extends Exception> BiConsumer<T, U> uncheck(CheckedBiConsumer<T, U, E> consumer) {
         return (t, u) -> {
             try {
                 consumer.accept(t, u);

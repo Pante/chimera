@@ -77,6 +77,11 @@ public class ProgressBar extends AbstractBar {
             bars.forEach(bar -> consumer.accept(bar, this));
         }
         
+        @Override
+        protected void callback() {
+            bars.forEach(BossBar::removeAll);
+        }
+        
     }
     
     

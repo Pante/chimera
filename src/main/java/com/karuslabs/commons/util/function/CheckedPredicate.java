@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util.function;
 
-import com.karuslabs.commons.annotation.Throws;
-
 import java.util.function.Predicate;
 
 
@@ -34,7 +32,7 @@ public interface CheckedPredicate<T, E extends Exception> {
     public boolean test(T t) throws E;
     
     
-    public static <T, E extends Exception> @Throws(UncheckedFunctionException.class) Predicate<T> uncheck(CheckedPredicate<T, E> predicate) {
+    public static <T, E extends Exception> Predicate<T> uncheck(CheckedPredicate<T, E> predicate) {
         return t -> {
             try {
                 return predicate.test(t);

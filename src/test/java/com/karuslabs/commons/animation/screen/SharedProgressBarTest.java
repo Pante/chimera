@@ -52,7 +52,15 @@ public class SharedProgressBarTest {
         
         verify(boss).addPlayer(player);
         verify(consumer).accept(boss, task);
+    }
+    
+    @Test
+    public void callback() {
+        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
         
+        task.callback();
+        
+        verify(boss).removeAll();
     }
     
 }

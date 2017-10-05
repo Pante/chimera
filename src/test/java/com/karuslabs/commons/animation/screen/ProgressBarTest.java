@@ -55,4 +55,14 @@ public class ProgressBarTest {
         
     }
     
+    
+    @Test
+    public void callback() {
+        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        
+        task.callback();
+        
+        verify(boss).removeAll();
+    }
+    
 }
