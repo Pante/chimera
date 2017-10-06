@@ -32,7 +32,7 @@ public class StaticLocation extends BoundLocation {
         super(location);
     }
     
-    public StaticLocation(Location location, DirectionalVector offset, boolean relative) {
+    public StaticLocation(Location location, PathVector offset, boolean relative) {
         super(location, offset, relative);
     }
     
@@ -47,7 +47,7 @@ public class StaticLocation extends BoundLocation {
     
     
     public static StaticBuilder builder(Location location) {
-        return new StaticBuilder(new StaticLocation(location, new DirectionalVector(), false));
+        return new StaticBuilder(new StaticLocation(location, new PathVector(), false));
     }
     
     public static class StaticBuilder extends Builder<StaticBuilder, StaticLocation> {

@@ -33,12 +33,12 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
         super(entity, location);
     }
     
-    public LivingEntityLocation(GenericEntity entity, DirectionalVector offset, boolean nullable, boolean relative, boolean update) {
-        super(entity, entity.getEyeLocation(), offset, nullable, relative, update);
+    public LivingEntityLocation(GenericEntity entity, PathVector offset, boolean nullable, boolean relative, boolean update) {
+        super(entity, offset, nullable, relative, update);
     }
     
-    public LivingEntityLocation(GenericEntity entity, Location location, DirectionalVector offset, boolean nullable, boolean relative, boolean update) {
-        super(entity, location, offset, location.toVector().subtract(entity.getEyeLocation().toVector()), nullable, relative, update);
+    public LivingEntityLocation(GenericEntity entity, Location location, PathVector offset, boolean nullable, boolean relative, boolean update) {
+        super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
     }
     
     
@@ -49,21 +49,21 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     
     
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity) {
-        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new DirectionalVector(), false, false, false));
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new PathVector(), false, false, false));
     }
     
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
-        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new DirectionalVector(), false, false, false));
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new PathVector(), false, false, false));
     }
     
-    public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder, LivingEntityLocation<?>> {
+    public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder<GenericEntity>, LivingEntityLocation<?>> {
 
         public LivingEntityBuilder(LivingEntityLocation location) {
             super(location);
         }
         
         @Override
-        protected LivingEntityBuilder getThis() {
+        protected LivingEntityBuilder<GenericEntity> getThis() {
             return this;
         }
         

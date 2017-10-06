@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import com.karuslabs.commons.util.Get;
+
 import java.util.function.*;
 import javax.annotation.*;
 
@@ -55,23 +57,11 @@ public class Argument {
     }
     
     public <T> T asOrDefault(Function<String, T> type, T value) {
-        T parsed = type.apply(argument);
-        if (parsed != null) {
-            return parsed;
-            
-        } else {
-            return value;
-        }
+        return Get.orDefault(type.apply(argument), value);
     }
     
     public <T, E extends RuntimeException> @Nonnull T asOrThrow(Function<String, T> type, Supplier<E> exception) {
-        T parsed = type.apply(argument);
-        if (parsed != null) {
-            return parsed;
-            
-        } else {
-            throw exception.get();
-        }
+        return Get.orThrow(type.apply(argument), exception);
     }
     
     

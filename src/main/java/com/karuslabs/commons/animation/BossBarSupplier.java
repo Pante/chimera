@@ -31,28 +31,25 @@ import javax.annotation.Nonnull;
 import org.bukkit.Server;
 import org.bukkit.boss.*;
 
+import static org.bukkit.boss.BarColor.BLUE;
+import static org.bukkit.boss.BarStyle.SEGMENTED_10;
+
 
 @Immutable
-public class BossBarTemplate implements Supplier<BossBar> {
-
-    public static final BarFlag[] FLAGS = new BarFlag[] {};
+public class BossBarSupplier implements Supplier<BossBar> {
     
     private Server server;
     private String message;
-    private BarColor color;
+    private BarColor colour;
     private BarStyle style;
     private BarFlag[] flags;
     private double progress;
 
     
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style) {
-        this(server, message, color, style, FLAGS, 1.0);
-    }
-    
-    public BossBarTemplate(Server server, String message, BarColor color, BarStyle style, BarFlag[] flags, double progress) {
+    public BossBarSupplier(Server server, String message, BarColor colour, BarStyle style, double progress, BarFlag... flags) {
         this.server = server;
         this.message = message;
-        this.color = color;
+        this.colour = colour;
         this.style = style;
         this.flags = flags;
         this.progress = progress;
@@ -61,9 +58,57 @@ public class BossBarTemplate implements Supplier<BossBar> {
     
     @Override
     public @Nonnull BossBar get() {
-        BossBar bar = server.createBossBar(message, color, style, flags);
+        BossBar bar = server.createBossBar(message, colour, style, flags);
         bar.setProgress(progress);
         return bar;
+    }
+    
+    
+    public static Builder builder(Server server) {
+        return new Builder(new BossBarSupplier(server, "", BLUE, SEGMENTED_10, 1));
+    }
+    
+    
+    public static class Builder {
+        
+        private BossBarSupplier supplier;
+        
+        
+        private Builder(BossBarSupplier supplier) {
+            this.supplier = supplier;
+        }
+        
+        
+        public Builder message(String message) {
+            supplier.message = message;
+            return this;
+        }
+        
+        public Builder colour(BarColor colour) {
+            supplier.colour = colour;
+            return this;
+        }
+        
+        public Builder style(BarStyle style) {
+            supplier.style = style;
+            return this;
+        }
+        
+        public Builder flags(BarFlag... flags) {
+            supplier.flags = flags;
+            return this;
+        }
+        
+        public Builder progress(double progress) {
+            supplier.progress = progress;
+            return this;
+        }
+        
+        
+        public BossBarSupplier build() {
+            return supplier;
+        }
+        
     }
 
 }

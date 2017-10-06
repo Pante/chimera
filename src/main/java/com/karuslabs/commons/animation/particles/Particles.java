@@ -66,7 +66,6 @@ public abstract class Particles {
     public void render(Player player) {
         render(player, player.getLocation());
     }
-
     
     public void render(Collection<Player> players, Location location) {
         players.forEach(player -> render(player, location));

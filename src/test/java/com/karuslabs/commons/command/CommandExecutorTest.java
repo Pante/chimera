@@ -23,14 +23,11 @@
  */
 package com.karuslabs.commons.command;
 
-import java.util.function.BiConsumer;
-
 import org.bukkit.command.CommandSender;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
+import static com.karuslabs.commons.command.CommandExecutor.*;
 import static org.bukkit.ChatColor.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -51,31 +48,16 @@ public class CommandExecutorTest {
     }
     
     
-    @ParameterizedTest
-    @CsvSource({"false, '', 1", "true, '', 0", "false, p, 0"})
-    public void wrap(boolean isNull, String permission, int times) {
-        Command command = when(mock(Command.class).getPermission()).thenReturn(permission).getMock();
-        
-        Context context = when(mock(Context.class).getParentCommand()).thenReturn(isNull ? null : command).getMock();
-        when(context.getSender()).thenReturn(sender);
-        
-        BiConsumer<Command, CommandSender> consumer = mock(BiConsumer.class);
-        
-        assertTrue(CommandExecutor.wrap(context, null, consumer));
-        verify(consumer, times(times)).accept(command, sender);
-    }
-    
-    
     @Test
     public void aliases() {
-        CommandExecutor.ALIASES.execute(context, null);
+        ALIASES.execute(context, null);
         verify(sender).sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
     }
     
     
     @Test
     public void description() {
-        CommandExecutor.DESCRIPTION.execute(context, null);
+        DESCRIPTION.execute(context, null);
         verify(sender).sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage());
     }
     
@@ -86,7 +68,7 @@ public class CommandExecutorTest {
         when(subcommand.getPermission()).thenReturn("");
         command.getSubcommands().put("subcommand", subcommand);
         
-        CommandExecutor.HELP.execute(context, null);
+        HELP.execute(context, null);
         
         verify(sender).sendMessage(any(String[].class));
     }
@@ -94,7 +76,7 @@ public class CommandExecutorTest {
     
     @Test
     public void none() {
-        assertTrue(CommandExecutor.NONE.execute(null, null));
+        assertTrue(NONE.execute(null, null));
     }
     
 }

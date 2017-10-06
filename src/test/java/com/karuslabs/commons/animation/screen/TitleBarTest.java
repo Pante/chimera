@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.animation.screen.TitleBar.ScheduledTask;
+import com.karuslabs.commons.annotation.JDK9;
 
 import java.util.function.BiConsumer;
 
@@ -46,8 +47,9 @@ public class TitleBarTest {
     
     
     @Test
+    @JDK9
     public void task() {
-        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         assertEquals(1, task.getFadeIn());
         assertEquals(2, task.getStay());
@@ -56,8 +58,9 @@ public class TitleBarTest {
     
     
     @Test
+    @JDK9
     public void process() {
-        ScheduledTask task = (ScheduledTask) bar.task(singleton(player));
+        ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         task.process();
         

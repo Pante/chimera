@@ -40,7 +40,7 @@ public class BoundLocationTest {
     
     private BoundLocation bound;
     private Location location;
-    private DirectionalVector offset;
+    private PathVector offset;
     
     
     public BoundLocationTest() {
@@ -48,7 +48,7 @@ public class BoundLocationTest {
         when(location.getYaw()).thenReturn(1F);
         when(location.getPitch()).thenReturn(2F);
         
-        offset = new DirectionalVector(1, 2, 3, 4, 5);
+        offset = new PathVector(1, 2, 3, 4, 5);
         bound = spy(new StubBuilder(new StubLocation(location, null, false)).offset(offset).relative(true).build());
     }
     
@@ -57,7 +57,7 @@ public class BoundLocationTest {
     public void addOffset() {
         bound.addOffset(new Vector(1, 1, 1), 1, 1);
         
-        assertEquals(new DirectionalVector(2, 3, 4, 5, 6), bound.getOffset());
+        assertEquals(new PathVector(2, 3, 4, 5, 6), bound.getOffset());
         verify(bound).updateOffset();
     }
     
@@ -101,7 +101,7 @@ public class BoundLocationTest {
     
     private static class StubLocation extends BoundLocation {
 
-        public StubLocation(Location location, DirectionalVector offset, boolean relative) {
+        public StubLocation(Location location, PathVector offset, boolean relative) {
             super(location, offset, relative);
         }
 

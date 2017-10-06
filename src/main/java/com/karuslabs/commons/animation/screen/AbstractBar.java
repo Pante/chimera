@@ -36,15 +36,15 @@ public abstract class AbstractBar extends Bar {
     protected Supplier<BossBar> supplier;
     
     
-    public AbstractBar(Plugin plugin, Supplier<BossBar> supplier, Translation translation, long iterations, long delay, long period) {
+    public AbstractBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.supplier = supplier;
     }
     
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, Bar extends AbstractBar> extends Builder<GenericBuilder, Bar> {
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
         
-        public AbstractBuilder(Bar bar) {
+        public AbstractBuilder(GenericBar bar) {
             super(bar);
         }
         

@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 
 public class TitleBar extends Bar {
@@ -44,13 +45,13 @@ public class TitleBar extends Bar {
     private int fadeOut;
     
     
-    public TitleBar(Plugin plugin, BiConsumer<Player, TitleContext> consumer, Translation translation, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
+    public TitleBar(Plugin plugin, Translation translation, BiConsumer<Player, TitleContext> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
     }
 
     
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer, translation, fadeIn, stay, fadeOut, iterations);
     }
     
@@ -98,7 +99,7 @@ public class TitleBar extends Bar {
     
     
     public static TitleBarBuilder builder(Plugin plugin) {
-        return new TitleBarBuilder(new TitleBar(plugin, null, null, 0, 0, 0, 0, 0, 0));
+        return new TitleBarBuilder(new TitleBar(plugin, NONE, null, 0, 0, 0, 0, 0, 0));
     }
     
     public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {

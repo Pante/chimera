@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.animation.screen.ActionBar.ScheduledTask;
+import com.karuslabs.commons.annotation.JDK9;
 
 import java.util.function.BiFunction;
 
@@ -38,22 +39,16 @@ import static org.mockito.Mockito.*;
 
 public class ActionBarTest {
     
-    private ActionBar bar;
-    private BiFunction<Player, Context, String> function;
-    private Player player;
-    private StubSpigot spigot;
-    
-    
-    public ActionBarTest() {
-        function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
-        bar = ActionBar.builder(null).function(function).build();
-        player = when(mock(Player.class).spigot()).thenReturn(spigot = new StubSpigot()).getMock();
-    }
+    private BiFunction<Player, Context, String> function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
+    private ActionBar bar = ActionBar.builder(null).function(function).build();
+    private StubSpigot spigot = new StubSpigot();
+    private Player player = when(mock(Player.class).spigot()).thenReturn(spigot).getMock();
     
     
     @Test
+    @JDK9
     public void process() {
-        ScheduledTask task = (ScheduledTask) bar.task(singletonList(player));
+        ScheduledTask task = (ScheduledTask) bar.newTask(singletonList(player));
         
         task.process();
 

@@ -24,11 +24,9 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.annotation.JDK9;
-import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.io.File;
-import java.util.*;
 
 import org.bukkit.plugin.Plugin;
 
@@ -55,6 +53,7 @@ public class CommandsIT {
     
     
     @Test
+    @JDK9
     public void load() {
         commands.load("command/commands.yml");
         

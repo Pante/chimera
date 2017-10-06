@@ -34,6 +34,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.stream.Collectors.toList;
 
 
@@ -42,14 +43,14 @@ public class ProgressBar extends AbstractBar {
     private BiConsumer<BossBar, Context> consumer;
 
     
-    public ProgressBar(Plugin plugin, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
-        super(plugin, supplier, translation, iterations, delay, period);
+    public ProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, long iterations, long delay, long period) {
+        super(plugin, translation, supplier, iterations, delay, period);
         this.consumer = consumer;
     }
 
     
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
         List<BossBar> bars = players.stream().map(player -> {
             BossBar bar = supplier.get();
             bar.addPlayer(player);
@@ -86,7 +87,7 @@ public class ProgressBar extends AbstractBar {
     
     
     public static ProgressBarBuilder builder(Plugin plugin) {
-        return new ProgressBarBuilder(new ProgressBar(plugin, null, null, null, 0, 0, 0));
+        return new ProgressBarBuilder(new ProgressBar(plugin, NONE, null, null, 0, 0, 0));
     }
     
     public static class ProgressBarBuilder extends AbstractBuilder<ProgressBarBuilder, ProgressBar>  {

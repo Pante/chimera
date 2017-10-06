@@ -21,39 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
+import com.karuslabs.commons.annotation.Blocking;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
-import org.junit.jupiter.api.Test;
-
-import static com.karuslabs.commons.animation.screen.StubBar.builder;
-import static com.karuslabs.commons.locale.MessageTranslation.NONE;
-import static java.util.Collections.EMPTY_LIST;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import java.util.concurrent.*;
+import javax.annotation.Nullable;
 
 
-public class BarTest {
-    
-    private Plugin plugin = mock(Plugin.class);
-    private ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
-    private Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
-    
-    
-    @Test
-    public void render_Player() {
-        assertEquals(task, bar.render(mock(Player.class)));
+class ProxiedPromise<T> implements Promise<T> {
+
+    private final Future<T> future;
+
+    ProxiedPromise(Future<T> future) {
+        this.future = future;
     }
-    
-    
-    @Test
-    public void render_Players() {
-        assertEquals(task, bar.render(EMPTY_LIST));
-        verify(task).runTaskTimerAsynchronously(plugin, 2, 3);
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return future.cancel(mayInterruptIfRunning);
     }
-    
+
+    @Override
+    public boolean isCancelled() {
+        return future.isCancelled();
+    }
+
+    @Override
+    public boolean isDone() {
+        return future.isDone();
+    }
+
+    @Override
+    @Blocking
+    public @Nullable
+    T get() throws InterruptedException, ExecutionException {
+        return future.get();
+    }
+
+    @Override
+    @Blocking
+    public @Nullable
+    T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return future.get(timeout, unit);
+    }
+
 }

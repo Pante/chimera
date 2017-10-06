@@ -33,11 +33,6 @@ public class UncheckedInterruptedException extends RuntimeException {
         this.exception = exception;
     }
     
-    public UncheckedInterruptedException(String message, InterruptedException exception) {
-        super(message);
-        this.exception = exception;
-    }
-    
     
     @Override
     public InterruptedException getCause() {

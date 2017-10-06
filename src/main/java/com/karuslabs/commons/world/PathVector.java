@@ -26,17 +26,17 @@ package com.karuslabs.commons.world;
 import org.bukkit.util.Vector;
 
 
-public class DirectionalVector extends Vector {
+public class PathVector extends Vector {
     
     private float yaw;
     private float pitch;
     
     
-    public DirectionalVector() {
+    public PathVector() {
         this(0, 0, 0, 0, 0);
     }
     
-    public DirectionalVector(double x, double y, double z, float yaw, float pitch) {
+    public PathVector(double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -44,8 +44,26 @@ public class DirectionalVector extends Vector {
     
     
     @Override
-    public DirectionalVector add(Vector vector) {
+    public PathVector add(Vector vector) {
         super.add(vector);
+        return this;
+    }
+    
+    @Override
+    public PathVector subtract(Vector vector) {
+        super.subtract(vector);
+        return this;
+    }
+    
+    @Override
+    public PathVector multiply(Vector vector) {
+        super.multiply(vector);
+        return this;
+    }
+
+    @Override
+    public Vector divide(Vector vector) {
+        super.divide(vector);
         return this;
     }
 
@@ -68,8 +86,8 @@ public class DirectionalVector extends Vector {
     
     
     @Override
-    public DirectionalVector clone() {
-        return (DirectionalVector) super.clone();
+    public PathVector clone() {
+        return (PathVector) super.clone();
     }
     
 }

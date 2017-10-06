@@ -28,10 +28,7 @@ import javax.annotation.*;
 
 
 public class Get {
-    
-    private Get() {}
-    
-    
+
     public static <T> T orDefault(@Nullable T object, T value) {
         return object != null ? object : value;
     }

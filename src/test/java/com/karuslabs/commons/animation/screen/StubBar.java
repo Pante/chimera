@@ -43,7 +43,7 @@ class StubBar extends Bar {
     }
 
     @Override
-    protected ScheduledPromiseTask<?> task(Collection<Player> players) {
+    protected ScheduledPromiseTask<?> newTask(Collection<Player> players) {
         return task;
     }
     

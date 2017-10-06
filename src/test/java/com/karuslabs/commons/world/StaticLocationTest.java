@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 public class StaticLocationTest {
     
     private Location internal;
-    private DirectionalVector offset;
+    private PathVector offset;
     private StaticLocation location;
         
             
@@ -46,7 +46,7 @@ public class StaticLocationTest {
         when(internal.getYaw()).thenReturn(1F);
         when(internal.getPitch()).thenReturn(2F);
         
-        offset = new DirectionalVector(1, 2, 3, 4, 5);
+        offset = new PathVector(1, 2, 3, 4, 5);
         
         location = StaticLocation.builder(internal).offset(offset).build();
     }

@@ -34,20 +34,22 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+
 
 public class SharedProgressBar extends AbstractBar {
     
     private BiConsumer<BossBar, Context> consumer;
     
     
-    public SharedProgressBar(Plugin plugin, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations, long delay, long period) {
-        super(plugin, supplier, translation, iterations, delay, period);
+    public SharedProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, long iterations, long delay, long period) {
+        super(plugin, translation, supplier, iterations, delay, period);
         this.consumer = consumer;
     }
     
 
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
         BossBar bar = supplier.get();
         players.forEach(bar::addPlayer);
         
@@ -81,7 +83,7 @@ public class SharedProgressBar extends AbstractBar {
     
     
     public static SharedProgressBarBuilder builder(Plugin plugin) {
-        return new SharedProgressBarBuilder(new SharedProgressBar(plugin, null, null, null, 0, 0, 0));
+        return new SharedProgressBarBuilder(new SharedProgressBar(plugin, NONE, null, null, 0, 0, 0));
     }
     
     public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar> {
