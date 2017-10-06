@@ -27,27 +27,51 @@ import java.util.concurrent.locks.*;
 import javax.annotation.Nonnull;
 
 
+/**
+ * A subclass of {@link java.util.concurrent.locks.ReentrantLock} that contains additional methods which automatically
+ * unlock when exiting a {@code try}-with-resources block.
+ */
 public class CloseableLock extends ReentrantLock {
     
     private final Janitor janitor;
 
     
+    /**
+     * Constructs a non-fair {@code CloseableLock}.
+     */
     public CloseableLock() {
         this(false);
     }
     
+    /**
+     * Constructs a {@code CloseableLock} with the specified fairness policy.
+     * 
+     * @param fair true if this lock should use a fair ordering policy
+     */
     public CloseableLock(boolean fair) {
         super(fair);
         janitor = this::unlock;
     }
     
     
-    
+    /**
+     * Acquires the lock.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     */
     public @Nonnull Janitor acquire() {
         lock();
         return janitor;
     }
     
+    /**
+     * Acquires the lock unless the current thread is interrupted.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     * @throws InterruptedException if the current thread is interrupted
+     */
     public @Nonnull Janitor acquireInterruptibly() throws InterruptedException {
         lockInterruptibly();
         return janitor;

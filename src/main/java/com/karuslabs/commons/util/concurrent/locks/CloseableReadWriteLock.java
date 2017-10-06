@@ -27,16 +27,28 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 
 
+/**
+ * A subclass of {@link java.util.concurrent.locks.ReentrantReadWriteLock} that contains additional methods which automatically
+ * unlock when exiting a {@code try}-with-resources block.
+ */
 public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
     private final Janitor readJanitor;
     private final Janitor writeJanitor;
     
     
+    /**
+     * Constructs a non-fair {@code CloseableReadWriteLock}.
+     */
     public CloseableReadWriteLock() {
         this(false);
     }
     
+    /**
+     * Constructs a {@code CloseableReadWriteLock} with the specified fairness policy.
+     * 
+     * @param fair true if this lock should use a fair ordering policy
+     */
     public CloseableReadWriteLock(boolean fair) {
         super(fair);
         readJanitor = readLock()::unlock;
@@ -44,22 +56,48 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     }
     
     
+    /**
+     * Acquires the {@link java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock}.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     */
     public @Nonnull Janitor acquireReadLock() {
         readLock().lock();
         return readJanitor;
     }
     
+    /**
+     * Acquires the {@link java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock} unless the current thread is interrupted.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     * @throws InterruptedException if the current thread is interrupted
+     */
     public @Nonnull Janitor acquireReadLockInterruptibly() throws InterruptedException {
         readLock().lockInterruptibly();
         return readJanitor;
     }
     
     
+    /**
+     * Acquires the {@link java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock}.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     */
     public @Nonnull Janitor acquireWriteLock() {
         writeLock().lock();
         return writeJanitor;
     }
     
+    /**
+     * Acquires the {@link java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock} unless the current thread is interrupted.
+     * This method automatically unlocks when exiting a {@code try}-with-resources block.
+     * 
+     * @return the Janitor used by the try-with-resources block to unlock this lock
+     * @throws InterruptedException if the current thread is interrupted
+     */
     public @Nonnull Janitor acquireWriteLockInterruptibly() throws InterruptedException {
         writeLock().lockInterruptibly();
         return writeJanitor;

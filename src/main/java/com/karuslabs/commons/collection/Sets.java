@@ -31,6 +31,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.newSetFromMap;
 
 
+/**
+ * This class consists exclusively of static methods which operation on or return sets.
+ */
 public class Sets {
     
     @Deprecated 
@@ -39,6 +42,13 @@ public class Sets {
         return new HashSet<>(asList(t));
     }
     
+    /**
+     * Returns a {@code Set} from the specified collection which holds a weak reference to its elements.
+     * 
+     * @param <T> The type of elements in the set
+     * @param collection collection providing elements for the returned set
+     * @return a weak Set containing the elements returned by the specified collection
+     */
     public static <T> Set<T> weakSet(Collection<T> collection) {
         Set<T> set = newSetFromMap(new WeakHashMap<>());
         set.addAll(collection);
