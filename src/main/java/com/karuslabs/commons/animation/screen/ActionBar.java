@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
@@ -50,7 +51,7 @@ public class ActionBar extends Bar {
 
     
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players) {
+    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), function, translation, iterations);
     }
     
@@ -75,12 +76,12 @@ public class ActionBar extends Bar {
     
     
     public static ActionBarBuilder builder(Plugin plugin) {
-        return new ActionBarBuilder(new ActionBar(plugin, null, null, 0, 0, 0));
+        return new ActionBarBuilder(new ActionBar(plugin, NONE, null, 0, 0, 0));
     }
     
     public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
 
-        public ActionBarBuilder(ActionBar bar) {
+        protected ActionBarBuilder(ActionBar bar) {
             super(bar);
         }
         

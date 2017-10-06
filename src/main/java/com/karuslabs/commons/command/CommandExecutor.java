@@ -25,14 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 
-import java.util.List;
-import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
-
-import org.bukkit.command.CommandSender;
-
-import static java.util.stream.Collectors.toList;
-import static org.bukkit.ChatColor.*;
 
 
 @FunctionalInterface
@@ -41,41 +34,11 @@ public interface CommandExecutor {
     public boolean execute(@Nonnull Context context, @Nonnull Arguments arguments);
     
     
-    public static boolean wrap(Context context, Arguments arguments, BiConsumer<Command, CommandSender> executor) {
-        Command command = context.getParentCommand();
-        CommandSender sender = context.getSender();
-        
-        if (command != null && sender.hasPermission(command.getPermission())) {
-            executor.accept(command, sender);
-        }
-        
-        return true;
-    }
+    public static final CommandExecutor ALIASES = ParentExecutor.ALIASES;
     
+    public static final CommandExecutor DESCRIPTION = ParentExecutor.DESCRIPTION;
     
-    public static final CommandExecutor ALIASES = (context, arguments) -> wrap(context, arguments, 
-        (command, sender) -> sender.sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString())
-    );
-    
-    public static final CommandExecutor DESCRIPTION = (context, arguments) -> wrap(context, arguments, 
-        (command, sender) -> sender.sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage())
-    );
-    
-    public static final CommandExecutor HELP = (context, arguments) -> wrap(context, arguments, 
-        (command, sender) -> {
-            List<String> names = command.getSubcommands().values().stream()
-                    .filter(subcommand -> sender.hasPermission(subcommand.getPermission()))
-                    .map(Command::getName)
-                    .collect(toList());
-
-            sender.sendMessage(new String[] {
-                GOLD + "==== Help for: " + command.getName() + " ====",
-                GOLD + "Description: " + RED + command.getDescription(),
-                GOLD + "Usage: " + RED + command.getUsage(),
-                GOLD + "\n==== Subcommands: ====" + "\n" + RED + names
-            });
-        }
-    );
+    public static final CommandExecutor HELP = ParentExecutor.HELP;
     
     public static final CommandExecutor NONE = (context, arguments) -> true;
 

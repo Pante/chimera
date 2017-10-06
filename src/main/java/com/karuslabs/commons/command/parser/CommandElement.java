@@ -64,13 +64,11 @@ public class CommandElement extends Element<Command> {
     protected @Nonnull Command handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         config = config.getConfigurationSection(key);
         Command command = new Command(
-            config.getName(),
+            config.getName(), plugin, translation.parse(config, "translation"),
             config.getString("description", ""),
             config.getString("usage", ""),
             config.getStringList("aliases"),
-            plugin,
-            CommandExecutor.NONE, 
-            translation.parse(config, "translation"),
+            CommandExecutor.NONE,
             subcommands.parse(config, "subcommands"),
             completions.parse(config, "completions")
         );

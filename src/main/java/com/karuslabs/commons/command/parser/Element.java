@@ -77,7 +77,6 @@ public abstract class Element<T> {
         return key;
     }
     
-    
     protected abstract boolean check(@Nonnull ConfigurationSection config, @Nonnull String key);
     
     protected abstract @Nonnull T handle(@Nonnull ConfigurationSection config, @Nonnull String key);

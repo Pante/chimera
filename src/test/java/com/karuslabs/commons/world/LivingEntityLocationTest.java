@@ -21,39 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
-
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import com.karuslabs.commons.util.Weak;
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.screen.StubBar.builder;
-import static com.karuslabs.commons.locale.MessageTranslation.NONE;
-import static java.util.Collections.EMPTY_LIST;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-public class BarTest {
+public class LivingEntityLocationTest {
     
-    private Plugin plugin = mock(Plugin.class);
-    private ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
-    private Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
+    private Location raw = new Location(null, 2, 3, 4);
+    private Location entityLocation = new Location(null, 1, 2, 3);
+    private LivingEntity entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
+    private LivingEntityLocation<LivingEntity> location = spy(LivingEntityLocation.builder(entity, raw).nullable(true).update(true).build());
     
     
     @Test
-    public void render_Player() {
-        assertEquals(task, bar.render(mock(Player.class)));
+    public void builder() {
+        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
     }
     
-    
-    @Test
-    public void render_Players() {
-        assertEquals(task, bar.render(EMPTY_LIST));
-        verify(task).runTaskTimerAsynchronously(plugin, 2, 3);
+    @ParameterizedTest
+    @CsvSource({"true, 1", "false, 0"})
+    public void update(boolean present, int times) {
+        location.entity = present ? location.entity : new Weak<>(null);
+        doNothing().when(location).update(any(Location.class));
+        
+        location.update();
+        
+        verify(location, times(times)).update(any(Location.class));
     }
     
 }

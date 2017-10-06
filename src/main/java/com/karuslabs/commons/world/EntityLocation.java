@@ -27,7 +27,6 @@ import com.karuslabs.commons.util.Weak;
 
 import org.bukkit.Location;
 import org.bukkit.entity.*;
-import org.bukkit.util.Vector;
 
 
 public class EntityLocation<GenericEntity extends Entity> extends BoundLocation {
@@ -44,16 +43,16 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         update = location.update;
     }
     
-    public EntityLocation(GenericEntity entity, DirectionalVector offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, entity.getLocation(), offset, relative, nullable, update);
+    public EntityLocation(GenericEntity entity, PathVector offset, boolean relative, boolean nullable, boolean update) {
+        this(entity, entity.getLocation(), relative, nullable, update, offset);
     }
     
-    public EntityLocation(GenericEntity entity, Location location, DirectionalVector offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, location, offset, location.toVector().subtract(entity.getLocation().toVector()), relative, nullable, update);
+    public EntityLocation(GenericEntity entity, Location location, PathVector offset, boolean relative, boolean nullable, boolean update) {
+        this(entity, location, relative, nullable, update, offset.add(location.toVector().subtract(entity.getLocation().toVector())));
     }
     
-    protected EntityLocation(GenericEntity entity, Location location, DirectionalVector offset, Vector entityOffset, boolean relative, boolean nullable, boolean update) {
-        super(location, offset.add(entityOffset), relative);
+    protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, PathVector offset) {
+        super(location, offset, relative);
         this.entity = new Weak<>(entity);
         this.nullable = nullable;
         this.update = update;
@@ -92,21 +91,21 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity) {
-        return new EntityBuilder<>(new EntityLocation<>(entity, new DirectionalVector(), false, false, false));
+        return new EntityBuilder<>(new EntityLocation<>(entity, new PathVector(), false, false, false));
     }
     
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
-        return new EntityBuilder<>(new EntityLocation<>(entity, location, new DirectionalVector(), false, false, false));
+        return new EntityBuilder<>(new EntityLocation<>(entity, location, new PathVector(), false, false, false));
     }
     
-    public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder, EntityLocation<?>> {
+    public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder<GenericEntity>, EntityLocation<?>> {
 
         public EntityBuilder(EntityLocation<GenericEntity> location) {
             super(location);
         }
 
         @Override
-        protected EntityBuilder getThis() {
+        protected EntityBuilder<GenericEntity> getThis() {
             return this;
         }
         
@@ -117,7 +116,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         
     }
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation> extends Builder<GenericBuilder, GenericLocation> {
+    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation<?>> extends Builder<GenericBuilder, GenericLocation> {
         
         public AbstractBuilder(GenericLocation location) {
             super(location);

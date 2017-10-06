@@ -23,10 +23,15 @@
  */
 package com.karuslabs.commons.animation;
 
+import com.karuslabs.commons.annotation.*;
+
+import java.util.Collection;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
+@Immutable
 public class Music {
     
     private Sound sound;
@@ -35,13 +40,20 @@ public class Music {
     private float pitch;
     
     
-    public Music(Sound sound) {
+    public Music(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
+        this.category = category;
+        this.volume = volume;
+        this.pitch = pitch;
     }
-    
+
     
     public void play(Player player) {
         play(player, player.getLocation());
+    }
+    
+    public void play(Collection<Player> players, Location location) {
+        players.forEach(player -> play(player, location));
     }
     
     public void play(Player player, Location location) {

@@ -21,39 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
-
+import com.karuslabs.commons.annotation.JDK9;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.screen.StubBar.builder;
-import static com.karuslabs.commons.locale.MessageTranslation.NONE;
-import static java.util.Collections.EMPTY_LIST;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.singletonList;
+import static org.bukkit.Sound.WEATHER_RAIN;
+import static org.bukkit.SoundCategory.MASTER;
 import static org.mockito.Mockito.*;
 
 
-public class BarTest {
+public class MusicTest {
     
-    private Plugin plugin = mock(Plugin.class);
-    private ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
-    private Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
+    private Music music = spy(new Music(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
+    private World world = mock(World.class);
+    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
+    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
     
     @Test
-    public void render_Player() {
-        assertEquals(task, bar.render(mock(Player.class)));
+    public void play() {
+        music.play(player);
+        
+        verify(music).play(player, location);
     }
     
     
     @Test
-    public void render_Players() {
-        assertEquals(task, bar.render(EMPTY_LIST));
-        verify(task).runTaskTimerAsynchronously(plugin, 2, 3);
+    @JDK9("List.of(...)")
+    public void play_Collection_Location() {
+        music.play(singletonList(player), location);
+        
+        verify(music).play(player, location);
+    }
+    
+    
+    @Test
+    public void play_Player_Location() {
+        music.play(player, location);
+        
+        verify(player).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
+    }
+    
+    
+    @Test
+    public void play_Location() {
+        music.play(location);
+        
+        verify(world).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
     }
     
 }

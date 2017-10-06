@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.screen;
 
 
+import com.karuslabs.commons.annotation.JDK9;
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
@@ -33,7 +34,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import static java.util.Collections.singletonList;
+import static java.util.Arrays.asList;
 
 
 public abstract class Bar {
@@ -57,17 +58,18 @@ public abstract class Bar {
     }
     
     
-    public Promise<?> render(Player player) {
-        return render(singletonList(player));
+    @JDK9("List.of(...)")
+    public @Nonnull Promise<?> render(Player... player) {
+        return render(asList(player));
     }
     
-    public Promise<?> render(Collection<Player> players) {
-        ScheduledPromiseTask<?> task = task(players);
+    public @Nonnull Promise<?> render(Collection<Player> players) {
+        ScheduledPromiseTask<?> task = newTask(players);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         return task;
     }
     
-    protected abstract @Nonnull ScheduledPromiseTask<?> task(Collection<Player> players);
+    protected abstract @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {
@@ -82,6 +84,11 @@ public abstract class Bar {
         
         public GenericBuilder translation(Translation translation) {
             bar.translation = translation;
+            return getThis();
+        }
+        
+        public GenericBuilder infinite() {
+            bar.iterations = INFINITE;
             return getThis();
         }
         

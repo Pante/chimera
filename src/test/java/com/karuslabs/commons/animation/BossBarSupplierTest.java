@@ -38,10 +38,10 @@ public class BossBarSupplierTest {
     @Test
     public void get() {
         Server server = when(mock(Server.class).createBossBar(any(), any(), any(), any())).thenReturn(mock(BossBar.class)).getMock();
-        BossBar bar = new BossBarTemplate(server, "message", BLUE, SEGMENTED_10).get();
+        BossBar bar = BossBarSupplier.builder(server).message("message").colour(BLUE).style(SEGMENTED_10).progress(0.5).flags().build().get();
         
-        verify(server).createBossBar("message", BLUE, SEGMENTED_10, BossBarTemplate.FLAGS);
-        verify(bar).setProgress(1);
+        verify(server).createBossBar("message", BLUE, SEGMENTED_10);
+        verify(bar).setProgress(0.5);
     }
     
 }

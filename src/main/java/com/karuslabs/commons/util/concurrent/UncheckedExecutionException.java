@@ -35,11 +35,6 @@ public class UncheckedExecutionException extends RuntimeException {
         this.exception = exception;
     }
     
-    public UncheckedExecutionException(String message, ExecutionException exception) {
-        super(message);
-        this.exception = exception;
-    }
-    
     
     @Override
     public ExecutionException getCause() {

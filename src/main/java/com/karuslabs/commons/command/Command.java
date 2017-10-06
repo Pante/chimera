@@ -34,6 +34,7 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.command.Patterns.preserveQuotes;
+import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
@@ -48,18 +49,18 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     public Command(String name, Plugin plugin) {
-        this(name, "", "", new ArrayList<>(), plugin, CommandExecutor.NONE);
+        this(name, plugin, "", "", new ArrayList<>(), CommandExecutor.NONE);
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor) {
-        this(name, description, usage, aliases, plugin, executor, MessageTranslation.NONE, new HashMap<>(), new HashMap<>());
+    public Command(String name, Plugin plugin, String description, String usage, List<String> aliases, CommandExecutor executor) {
+        this(name, plugin, MessageTranslation.NONE, description, usage, aliases, executor, new HashMap<>(), new HashMap<>());
     }
     
-    public Command(String name, String description, String usage, List<String> aliases, Plugin plugin, CommandExecutor executor, MessageTranslation translation, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
+    public Command(String name, Plugin plugin, MessageTranslation translation, String description, String usage, List<String> aliases, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
-        this.executor = executor;
         this.translation = translation;
+        this.executor = executor;
         this.subcommands = subcommands;
         this.completions = completions;
     }
@@ -96,24 +97,31 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         } 
         
         String argument = arguments.get()[0];
-        if (subcommands.containsKey(argument)) {
-            arguments.trim();
-            return subcommands.get(argument).complete(sender, arguments);
-            
-        } else if (arguments.length() == 1 && !subcommands.isEmpty()) {
-            return subcommands.values().stream()
+        if (!subcommands.isEmpty()) {
+            Command subcommand = subcommands.get(argument);
+            if (subcommand != null) {
+                arguments.trim();
+                return subcommand.complete(sender, arguments);
+                 
+            } else if (arguments.length() == 1) {
+                return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)
                     .collect(toList());
-        } else {
-            return completions.getOrDefault(arguments.length() - 1, Completion.PLAYER_NAMES).complete(sender, arguments.getLast().text());
+            }
         }
+        
+        return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
     }
        
 
     @Override
     public Plugin getPlugin() {
         return plugin;
+    }
+            
+    public MessageTranslation getTranslation() {
+        return translation;
     }
     
     public CommandExecutor getExecutor() {
@@ -123,11 +131,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
     }
-        
-    public MessageTranslation getTranslation() {
-        return translation;
-    }
-    
+
     public Map<String, Command> getSubcommands() {
         return subcommands;
     }

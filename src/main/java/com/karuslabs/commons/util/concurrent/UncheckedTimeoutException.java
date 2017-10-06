@@ -35,11 +35,6 @@ public class UncheckedTimeoutException extends RuntimeException {
         this.exception = exception;
     }
     
-    public UncheckedTimeoutException(String message, TimeoutException exception) {
-        super(message);
-        this.exception = exception;
-    }
-    
     
     @Override
     public TimeoutException getCause() {
