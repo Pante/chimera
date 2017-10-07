@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.effects;
+package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
@@ -33,24 +33,24 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public abstract class Task<Particle extends Particles, Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledPromiseTask<Void> {
-    
-    protected Particle particles;
+class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledPromiseTask<Void> implements Context<Origin, Target> {
+
+    protected Task<Origin, Target> task;
     protected BiConsumer<Particles, Location> render;
     protected Origin origin;
     protected Target target;
     protected boolean orientate;
+
     
-    
-    public Task(Particle particles, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
+    EffectTask(Task<Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
         super(iterations);
-        this.particles = particles;
+        this.task = task;
         this.render = render;
         this.origin = origin;
         this.target = target;
         this.orientate = orientate;
     }
-    
+
     @Override
     protected void process() {
         if (origin.validate() && target.validate()) {
@@ -64,18 +64,33 @@ public abstract class Task<Particle extends Particles, Origin extends BoundLocat
                 origin.setDirection(direction);
                 target.setDirection(direction.multiply(-1));
             }
-            render();
+            task.render(this);
             
         } else {
             done();
         }
     }
+
     
-    protected abstract void render();
+    @Override
+    public void render(Particles particles, Location location) {
+        render.accept(particles, location);
+    }
+
+    @Override
+    public Origin getOrigin() {
+        return origin;
+    }
+
+    @Override
+    public Target getTarget() {
+        return target;
+    }
+    
     
     @Override
     protected Void value() {
         return null;
     }
-    
+
 }

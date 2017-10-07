@@ -70,16 +70,16 @@ public abstract class Particles {
     public void render(Collection<Player> players, Location location) {
         players.forEach(player -> render(player, location));
     }
-    
+
     public abstract void render(Player player, Location location);
     
     public abstract void render(Location location);
-
     
+
     public Particle getParticle() {
         return particle;
     }
-
+    
     public int getAmount() {
         return amount;
     }

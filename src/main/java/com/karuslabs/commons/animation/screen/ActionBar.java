@@ -27,7 +27,7 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.*;
 import javax.annotation.*;
 
 import org.bukkit.entity.Player;
