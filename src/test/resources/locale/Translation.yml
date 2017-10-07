@@ -1,0 +1,4 @@
+test: default
+key: value
+
+locale: default {0}

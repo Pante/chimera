@@ -1,18 +1,25 @@
-/*
- * Copyright (C) 2017 Karus Labs
+/* 
+ * The MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright 2017 Karus Labs.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.item.meta;
 
@@ -20,26 +27,21 @@ import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
 public class FireworkEffectBuilderTest {
-        
-    private FireworkEffectBuilder builder;
-    private FireworkEffectMeta meta;
     
-    
-    public FireworkEffectBuilderTest() {
-        meta = mock(FireworkEffectMeta.class);
-        builder = new FireworkEffectBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
-    
+    private FireworkEffectMeta meta = mock(FireworkEffectMeta.class);
+    private FireworkEffectBuilder builder = new FireworkEffectBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+
     
     @Test
     public void build() {
-        FireworkEffect effect = FireworkEffect.builder().withColor(Color.SILVER).build();
+        FireworkEffect effect = FireworkEffect.builder().withColor(SILVER).build();
         
         builder.effect(effect);
         

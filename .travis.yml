@@ -1,11 +1,16 @@
 language: java
 jdk:
   - oraclejdk8
+  
 branches:
   only:
   - master
+  - documentation
   
-script: mvn --settings travis-settings.xml clean test verify deploy
+script: mvn --settings travis-settings.xml deploy
+
+notifications:
+  webhooks: $DISCORD_WEBHOOK
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

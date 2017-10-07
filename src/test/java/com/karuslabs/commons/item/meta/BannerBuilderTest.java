@@ -1,57 +1,58 @@
-/*
- * Copyright (C) 2017 Karus Labs
+/* 
+ * The MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright 2017 Karus Labs.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.item.meta;
 
 import java.util.*;
 
-import org.bukkit.DyeColor;
 import org.bukkit.block.banner.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static java.util.Collections.singletonList;
+import static org.bukkit.DyeColor.*;
+import static org.bukkit.block.banner.PatternType.BASE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 public class BannerBuilderTest {
     
-    private BannerBuilder builder;
-    private BannerMeta meta;
-    
-    
-    public BannerBuilderTest() {
-        meta = mock(BannerMeta.class);
-        builder = new BannerBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
-    }
+    private BannerMeta meta = mock(BannerMeta.class);
+    private BannerBuilder builder = new BannerBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
     public void build() {
-        List<Pattern> patterns = Collections.singletonList(new Pattern(DyeColor.BLUE, PatternType.BASE));                
+        List<Pattern> patterns = singletonList(new Pattern(BLUE, BASE));                
         when(meta.getPatterns()).thenReturn(new ArrayList<>());
         
-        builder.color(DyeColor.YELLOW).pattern(new Pattern(DyeColor.BLACK, PatternType.BASE)).patterns(patterns);
+        builder.pattern(new Pattern(BLACK, BASE)).patterns(patterns);
         
-        verify(meta).setBaseColor(DyeColor.YELLOW);
-        verify(meta).addPattern(new Pattern(DyeColor.BLACK, PatternType.BASE));
-        assertThat(meta.getPatterns(), equalTo(patterns));
+        verify(meta).addPattern(new Pattern(BLACK, BASE));
+        assertEquals(patterns, meta.getPatterns());
     }
     
 }

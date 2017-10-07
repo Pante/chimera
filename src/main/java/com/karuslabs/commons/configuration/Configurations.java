@@ -1,44 +1,61 @@
 /*
- * Copyright (C) 2017 Karus Labs
+ * The MIT License
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Copyright 2017 Karus Labs.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.configuration;
 
-import org.bukkit.configuration.*;
+import java.io.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.*;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
 
 
 public class Configurations {
         
-    public static final ImmutableConfigurationSection BLANK = new ImmutableConfigurationSection(new MemoryConfiguration());
-    
-    
-    public static ConfigurationSection getOrDefault(ConfigurationSection config, ConfigurationSection defaultConfig) {
-        if (config != null) {
-            return config;
-            
-        } else {
-            return defaultConfig;
-        }
+    public static Map<String, Object> flatten(ConfigurationSection config) {
+        return stream(config).collect(toMap(identity(), config::get));
     }
     
-    public static ConfigurationSection getOrBlank(ConfigurationSection config) {
-        if (config != null) {
-            return config;
+    public static ConcurrentMap<String, Object> concurrentFlatten(ConfigurationSection config) {
+        return stream(config).collect(toConcurrentMap(identity(), config::get));
+    }
+    
+    private static Stream<String> stream(ConfigurationSection config) {
+        return config.getKeys(true).stream().filter(key -> !config.isConfigurationSection(key));
+    }
+    
+    
+    public static YamlConfiguration from(InputStream stream) {
+        try {
+            return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, "UTF-8"));
             
-        } else {
-            return BLANK;
+        } catch (UnsupportedEncodingException e) {
+            throw new UncheckedIOException(e);
         }
     }
     
