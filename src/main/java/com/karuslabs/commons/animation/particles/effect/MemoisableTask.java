@@ -21,26 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.effects;
+package com.karuslabs.commons.animation.particles.effect;
 
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.concurrent.Promise;
+import com.karuslabs.commons.util.function.Memoisable;
 import com.karuslabs.commons.world.BoundLocation;
 
-import org.bukkit.plugin.Plugin;
 
-
-public abstract class SynchronousEffect<P extends Particles, O extends BoundLocation, T extends BoundLocation> extends Effect<P, O, T> {
-    
-    public SynchronousEffect(Plugin plugin, P particles, boolean orientate, long iterations, long delay, long period) {
-        super(plugin, particles, orientate, iterations, delay, period);
-    }
-    
-    
-    @Override
-    public Promise<?> schedule(Task task) {
-        task.runTaskTimer(plugin, delay, period);
-        return task;
-    }
+@FunctionalInterface
+public interface MemoisableTask<Origin extends BoundLocation, Target extends BoundLocation> extends Task<Origin, Target>, Memoisable {
     
 }
