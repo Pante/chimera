@@ -73,7 +73,7 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
     
     protected abstract void process() throws Exception;        
     
-    protected void done() {
+    public void done() {
         finish(COMPLETED);
     }
      

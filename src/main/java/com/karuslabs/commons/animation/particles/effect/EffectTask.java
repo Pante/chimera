@@ -66,22 +66,14 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
         }
     }
     
-    protected Vector orientate() {
+    protected void orientate() {
         Location origin = this.origin.getLocation();
         Location target = this.target.getLocation();
-        
-        System.out.println(origin);
-        System.out.println(target);
-        
-        System.out.println(origin.toVector());
-        System.out.println(target.toVector());
         
         Vector direction = target.toVector().subtract(origin.toVector());
         
         origin.setDirection(direction);
         target.setDirection(direction.multiply(-1));
-        
-        return direction;
     }
 
     

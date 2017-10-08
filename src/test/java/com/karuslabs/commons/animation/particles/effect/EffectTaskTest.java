@@ -29,10 +29,12 @@ import com.karuslabs.commons.world.StaticLocation;
 import java.util.function.BiConsumer;
 
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
@@ -48,9 +50,29 @@ public class EffectTaskTest {
     public EffectTaskTest() {
         task = mock(Task.class);
         consumer = mock(BiConsumer.class);
-        origin = when(mock(StaticLocation.class).getLocation()).thenReturn(spy(new Location(null, 1, 2, 3))).getMock();
-        target = when(mock(StaticLocation.class).getLocation()).thenReturn(spy(new Location(null, 2, 3, 4))).getMock();
-        effect = new EffectTask<>(task, consumer, origin, target, true, 0);
+        origin = when(mock(StaticLocation.class).getLocation()).thenReturn(new Location(null, 1, 2, 3)).getMock();
+        target = when(mock(StaticLocation.class).getLocation()).thenReturn(new Location(null, 2, 3, 4)).getMock();
+        effect = spy(new EffectTask<>(task, consumer, origin, target, true, 0));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"true, true, true, 1, 1, 0", "true, true, false, 1, 0, 0", "true, false, true, 0, 0, 1", "false, true, true, 0, 0, 1"})
+    public void process(boolean origin, boolean target, boolean orientate, int times, int orientateTimes, int done) {
+        doNothing().when(effect).orientate();
+        doNothing().when(effect).done();
+        
+        when(this.origin.validate()).thenReturn(origin);
+        when(this.target.validate()).thenReturn(target);
+        effect.orientate = orientate;
+        
+        effect.process();
+        
+        verify(this.origin, times(times)).update();
+        verify(this.target, times(times)).update();
+        verify(effect, times(orientateTimes)).orientate();
+        verify(task, times(times)).render(effect);
+        verify(effect, times(done)).done();
     }
     
     
@@ -58,8 +80,14 @@ public class EffectTaskTest {
     public void orientate() {
         effect.orientate();
         
-        verify(effect.getOrigin().getLocation()).setDirection(new Vector(1, 1, 1));
-        verify(effect.getTarget().getLocation()).setDirection(new Vector(-1, -1, -1));
+        Location origin = effect.getOrigin().getLocation();
+        Location target = effect.getTarget().getLocation();
+        
+        assertEquals(-35.26439, origin.getPitch(), 0.00001);
+        assertEquals(315.0, origin.getYaw(), 0.00001);
+        
+        assertEquals(35.26439, target.getPitch(), 0.00001);
+        assertEquals(135.0, target.getYaw(), 0.00001);
     }
     
     
