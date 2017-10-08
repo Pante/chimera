@@ -21,39 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.animation.screen.ActionBar.ScheduledTask;
-import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.commons.util.function.Memoisable;
 
-import java.util.function.BiFunction;
+import org.junit.jupiter.api.*;
 
-import org.bukkit.entity.Player;
-
-import org.junit.jupiter.api.Test;
-
-import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-public class ActionBarTest {
-    
-    private BiFunction<Player, Context, String> function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
-    private ActionBar bar = ActionBar.builder(null).function(() -> function).build();
-    private StubSpigot spigot = new StubSpigot();
-    private Player player = when(mock(Player.class).spigot()).thenReturn(spigot).getMock();
-    
+@TestInstance(PER_CLASS)
+public class MemoisableTest {
     
     @Test
-    @JDK9
-    public void process() {
-        ScheduledTask task = (ScheduledTask) bar.newTask(singletonList(player));
-        
-        task.process();
-
-        assertEquals("value", spigot.values[0].toPlainText());
-        verify(function).apply(player, task);
+    public void memoise() {
+        Memoisable object = new Memoisable() {};
+        assertSame(object, Memoisable.memoise(object).get());
+    }
+    
+    @Test
+    public void memoiseUnchecked() {
+        Object object = new Object();
+        assertSame(object, Memoisable.memoiseUnchecked(object).get());
     }
     
 }

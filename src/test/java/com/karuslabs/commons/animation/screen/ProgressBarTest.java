@@ -42,7 +42,7 @@ public class ProgressBarTest {
     private Player player = mock(Player.class);
     private BossBar boss = mock(BossBar.class);
     private BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
-    private ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).consumer(consumer).build();
+    private ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).consumer(() -> consumer).build();
     
     
     @Test

@@ -32,4 +32,8 @@ public interface Memoisable {
         return () -> value;
     }
     
+    public static<T> Supplier<T> memoiseUnchecked(T value) {
+        return () -> value;
+    }
+    
 }

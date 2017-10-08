@@ -41,11 +41,11 @@ public class Helix implements MemoisableTask<BoundLocation, BoundLocation> {
     private double rotation;
     
     
-    public Helix() {
-        this(8, 10, 10, PI / 4);
+    public Helix(Particles particles) {
+        this(particles, 8, 10, 10, PI / 4);
     }
     
-    public Helix(int strands, float radius, float curve, double rotation) {
+    public Helix(Particles particles, int strands, float radius, float curve, double rotation) {
         this.strands = strands;
         this.radius = radius;
         this.curve = curve;

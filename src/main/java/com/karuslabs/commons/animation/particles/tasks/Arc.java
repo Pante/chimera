@@ -57,6 +57,7 @@ public class Arc implements MemoisableTask<BoundLocation, BoundLocation> {
         Location target = context.getTarget().getLocation();
 
         Vector link = target.toVector().subtract(location.toVector());
+        
         float length = (float) link.length();
         float pitch = (float) (4 * height / pow(length, 2));
         

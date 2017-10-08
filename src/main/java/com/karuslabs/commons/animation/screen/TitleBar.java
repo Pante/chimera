@@ -27,7 +27,7 @@ import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
 import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.function.*;
 import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
@@ -39,20 +39,20 @@ import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 public class TitleBar extends Bar {
     
-    private BiConsumer<Player, TitleContext> consumer;
+    private Supplier<BiConsumer<Player, TitleContext>> consumer;
     private int fadeIn;
     private int stay;
     private int fadeOut;
     
     
-    public TitleBar(Plugin plugin, Translation translation, BiConsumer<Player, TitleContext> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
+    public TitleBar(Plugin plugin, Translation translation, Supplier<BiConsumer<Player, TitleContext>> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
     }
 
     
     @Override
     protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
-        return new ScheduledTask(weakSet(players), consumer, translation, fadeIn, stay, fadeOut, iterations);
+        return new ScheduledTask(weakSet(players), consumer.get(), translation, fadeIn, stay, fadeOut, iterations);
     }
     
     
@@ -108,7 +108,7 @@ public class TitleBar extends Bar {
             super(bar);
         }
 
-        public TitleBarBuilder consumer(BiConsumer<Player, TitleContext> consumer) {
+        public TitleBarBuilder consumer(Supplier<BiConsumer<Player, TitleContext>> consumer) {
             bar.consumer = consumer;
             return this;
         }

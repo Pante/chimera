@@ -42,7 +42,7 @@ public class SharedProgressBarTest {
     private Player player = mock(Player.class);
     private BossBar boss = mock(BossBar.class);
     private BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
-    private SharedProgressBar bar = SharedProgressBar.builder(null).supplier(() -> boss).consumer(consumer).build();
+    private SharedProgressBar bar = SharedProgressBar.builder(null).supplier(() -> boss).consumer(() -> consumer).build();
     
     
     @Test
