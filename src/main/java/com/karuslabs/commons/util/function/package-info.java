@@ -21,19 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+/**
+ * Contains variants of the functional interfaces defined in {@link java.util.function} which throws exceptions.
+ */
 package com.karuslabs.commons.util.function;
-
-import java.util.function.Supplier;
-
-
-public interface Memoisable {
-    
-    public static<T extends Memoisable> Supplier<T> memoise(T value) {
-        return () -> value;
-    }
-    
-    public static<T> Supplier<T> memoiseUnchecked(T value) {
-        return () -> value;
-    }
-    
-}

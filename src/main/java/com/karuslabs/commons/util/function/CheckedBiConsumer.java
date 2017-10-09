@@ -26,12 +26,37 @@ package com.karuslabs.commons.util.function;
 import java.util.function.BiConsumer;
 
 
+/**
+ * Represents a {@link java.util.function.BiConsumer} which throws an exception.
+ * 
+ * @param <T> the type of the first argument
+ * @param <U> the type of the second argument
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedBiConsumer<T, U, E extends Exception> {
     
+    /**
+     * Performs this operation on the given arguments.
+     * 
+     * @param t the first argument
+     * @param u the second argument
+     * @throws E if the operation fails
+     */
     public void accept(T t, U u) throws E;
     
-        
+    
+    /**
+     * Returns a {@code CheckedBiConsumer} wrapped with a {@code BiConsumer} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedBiConsumer} threw an
+     * exception.
+     * 
+     * @param <T> the type of the first argument
+     * @param <U> the type of the second argument
+     * @param <E> the type of the exception thrown
+     * @param consumer the CheckedBiConsumer to be wrapped
+     * @return a BiConsumer which wraps the specified CheckedBiConsumer
+     */
     public static<T, U, E extends Exception> BiConsumer<T, U> uncheck(CheckedBiConsumer<T, U, E> consumer) {
         return (t, u) -> {
             try {

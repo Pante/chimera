@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.util.function.Memoisable;
 
 import org.junit.jupiter.api.*;
 

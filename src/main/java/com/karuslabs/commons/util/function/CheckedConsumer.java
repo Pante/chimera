@@ -26,12 +26,34 @@ package com.karuslabs.commons.util.function;
 import java.util.function.Consumer;
 
 
+/**
+ * Represents a {@link java.util.function.Consumer} which throws an exception.
+ * 
+ * @param <T> the type of the argument
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedConsumer<T, E extends Exception> {
     
+    /**
+     * Performs this operation on the given argument.
+     * 
+     * @param t the argument
+     * @throws E if the operation fails
+     */
     public void accept(T t) throws E;
     
     
+    /**
+     * Returns a {@code CheckedConsumer} wrapped with a {@code Consumer} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedConsumer} threw an
+     * exception.
+     * 
+     * @param <T> the type of the argument
+     * @param <E> the type of the exception thrown
+     * @param consumer the CheckedConsumer to be wrapped
+     * @return a Consumer which wraps the specified CheckedConsumer
+     */
     public static <T, E extends Exception> Consumer<T> uncheck(CheckedConsumer<T, E> consumer) {
         return t -> {
             try {

@@ -21,20 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.function;
+package com.karuslabs.commons.util;
+
+import java.util.function.Supplier;
 
 
 /**
- * Wraps the exception thrown by a wrapped checked function with a {@code UncheckedFunctionException}.
+ * Signifies that the implementing type is memoisable.
+ * Implementations are encouraged to be either stateless, immutable or effectively immutable to prevent
+ * undesirable side effects.
  */
-public class UncheckedFunctionException extends RuntimeException {
-
-    public UncheckedFunctionException(String message, Throwable cause) {
-        super(message, cause);
+public interface Memoisable {
+    
+    /**
+     * Returns a {@code Supplier} which will always return the specified value.
+     * 
+     * @param <T> the type of the value
+     * @param value the value to be memoised
+     * @return a supplier which will always return the specified value
+     */
+    public static<T extends Memoisable> Supplier<T> memoise(T value) {
+        return () -> value;
     }
-
-    public UncheckedFunctionException(Throwable cause) {
-        super(cause);
+    
+    /**
+     * Returns a {@code Supplier} which will always return the specified value.
+     * 
+     * @param <T> the type of the value
+     * @param value the value to be memoised
+     * @return a supplier which will always return the specified value
+     */
+    public static<T> Supplier<T> memoiseUnchecked(T value) {
+        return () -> value;
     }
     
 }

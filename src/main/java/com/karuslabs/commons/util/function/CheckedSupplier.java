@@ -26,12 +26,34 @@ package com.karuslabs.commons.util.function;
 import java.util.function.Supplier;
 
 
+/**
+ * Represents a {@link java.util.function.Supplier} which throws an exception.
+ * 
+ * @param <R> the type of the results supplied by this supplier
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedSupplier<R, E extends Exception> {
     
+    /**
+     * Gets a result.
+     * 
+     * @return the type of the result
+     * @throws E if the operation fails
+     */
     public R get() throws E;
     
     
+    /**
+     * Returns a {@code CheckedSupplier} wrapped with a {@code Supplier} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedSupplier} threw an
+     * exception.
+     * 
+     * @param <T> the type of the result
+     * @param <E> the type of the exception thrown
+     * @param supplier the CheckedSupplier to be wrapped
+     * @return a Supplier which wraps the specified CheckedSupplier
+     */
     public static <T, E extends Exception> Supplier<T> uncheck(CheckedSupplier<T, E> supplier) {
         return () -> {
             try {

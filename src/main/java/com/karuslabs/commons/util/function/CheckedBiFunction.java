@@ -26,12 +26,40 @@ package com.karuslabs.commons.util.function;
 import java.util.function.BiFunction;
 
 
+/**
+ * Represents a {@link java.util.function.BiFunction} which throws an exception.
+ * 
+ * @param <T> the type of the first argument
+ * @param <U> the type of the second argument
+ * @param <R> the type of the result of the function
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedBiFunction<T, U, R, E extends Exception> {
     
+    /**
+     * Applies this function to the given arguments.
+     * 
+     * @param t the first argument
+     * @param u the second argument
+     * @return the function result
+     * @throws E if the operation fails
+     */
     public R apply(T t, U u) throws E;
     
     
+    /**
+     * Returns a {@code CheckedBiFunction} wrapped with a {@code BiFunction} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedBiFunction} threw an
+     * exception.
+     * 
+     * @param <T> the type of the first argument
+     * @param <U> the type of the second argument
+     * @param <R> the type of the result of the function
+     * @param <E> the type of the exception thrown
+     * @param function the CheckedBiFunction to be wrapped
+     * @return a BiFunction which wraps the specified CheckedBiFunction
+     */
     public static<T, U, R, E extends Exception> BiFunction<T, U, R> uncheck(CheckedBiFunction<T, U, R, E> function) {
         return (t, u) -> {
             try {

@@ -26,12 +26,38 @@ package com.karuslabs.commons.util.function;
 import java.util.function.BiPredicate;
 
 
+/**
+ * Represents a {@link java.util.function.BiPredicate} which throws an exception.
+ * 
+ * @param <T> the type of the first argument
+ * @param <U> the type of the second argument
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedBiPredicate<T, U, E extends Exception> {
     
+     /**
+     * Evaluates this predicate on the given arguments.
+     * 
+     * @param t the first argument
+     * @param u the second argument
+     * @return true if the input arguments match the predicate, otherwise false
+     * @throws E if the operation fails
+     */
     public boolean test(T t, U u) throws E;
     
     
+    /**
+     * Returns a {@code CheckedBiPredicate} wrapped with a {@code BiPredicate} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedBiPredicate} threw an
+     * exception.
+     * 
+     * @param <T> the type of the first argument
+     * @param <U> the type of the second argument
+     * @param <E> the type of the exception thrown
+     * @param predicate the CheckedBiPredicate to be wrapped
+     * @return a BiPredicate which wraps the specified CheckedBiPredicate
+     */
     public static<T, U, E extends Exception> BiPredicate<T, U> uncheck(CheckedBiPredicate<T, U, E> predicate) {
         return (t, u) -> {
             try {

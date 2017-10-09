@@ -26,12 +26,37 @@ package com.karuslabs.commons.util.function;
 import java.util.function.Function;
 
 
+/**
+ * Represents a {@link java.util.function.Function} which throws an exception.
+ * 
+ * @param <T> the type of the argument
+ * @param <R> the type of the result of the function
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedFunction<T, R, E extends Exception> {
     
-    public R apply(T t) throws Exception;
+    /**
+     * Applies this function to the given argument.
+     * 
+     * @param t the argument
+     * @return the function result
+     * @throws E if the operation fails
+     */
+    public R apply(T t) throws E;
     
     
+    /**
+     * Returns a {@code CheckedFunction} wrapped with a {@code Function} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedFunction} threw an
+     * exception.
+     * 
+     * @param <T> the type of the argument
+     * @param <R> the type of the result of the function
+     * @param <E> the type of the exception thrown
+     * @param function the CheckedFunction to be wrapped
+     * @return a Function which wraps the specified CheckedFunction
+     */
     public static <T, R, E extends Exception> Function<T, R> uncheck(CheckedFunction<T, R, E> function) {
         return t -> {
             try {

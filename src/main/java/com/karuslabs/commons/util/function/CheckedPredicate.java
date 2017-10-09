@@ -26,12 +26,35 @@ package com.karuslabs.commons.util.function;
 import java.util.function.Predicate;
 
 
+/**
+ * Represents a {@link java.util.function.Predicate} which throws an exception.
+ * 
+ * @param <T> the type of the argument
+ * @param <E> the type of the exception thrown
+ */
 @FunctionalInterface
 public interface CheckedPredicate<T, E extends Exception> {
     
+    /**
+     * Evaluates this predicate on the given argument.
+     * 
+     * @param t the argument
+     * @return true if the input argument match the predicate, otherwise false
+     * @throws E if the operation fails
+     */
     public boolean test(T t) throws E;
     
     
+    /**
+     * Returns a {@code CheckedPredicate} wrapped with a {@code Predicate} which throws an
+     * {@code UncheckedFunctionException} if the specified {@code CheckedPredicate} threw an
+     * exception.
+     * 
+     * @param <T> the type of the argument
+     * @param <E> the type of the exception thrown
+     * @param predicate the CheckedPredicate to be wrapped
+     * @return a Predicate which wraps the specified CheckedPredicate
+     */
     public static <T, E extends Exception> Predicate<T> uncheck(CheckedPredicate<T, E> predicate) {
         return t -> {
             try {
