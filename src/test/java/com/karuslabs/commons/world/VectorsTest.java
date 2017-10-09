@@ -30,12 +30,38 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
 public class VectorsTest {
     
     private static final double ROUNDING_ERROR = 0.0000000000000001;
+    
+    
+    @Test
+    public void random() {
+        Vector vector = mock(Vector.class);
+        
+        Vectors.random(vector);
+        
+        verify(vector).setX(anyDouble());
+        verify(vector).setY(anyDouble());
+        verify(vector).setZ(anyDouble());
+        verify(vector).normalize();
+    }
+    
+    
+    @Test
+    public void randomCircle() {
+        Vector vector = mock(Vector.class);
+        
+        Vectors.randomCircle(vector);
+        
+        verify(vector).setX(anyDouble());
+        verify(vector).setY(0);
+        verify(vector).setZ(anyDouble());
+    }
     
             
     @Test

@@ -21,56 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.tasks;
+package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
-import static java.lang.Math.pow;
+import static java.lang.Math.*;
 
 
-public class Arc implements MemoisableTask<BoundLocation, BoundLocation> {
-    
+public class Warp implements Task<BoundLocation, BoundLocation> {
+
     private Particles particles;
-    private int total = 100;
-    private float height = 2;
+    private float radius;
+    private int total;
+    private float grow;
+    private int rings;
+    private int step;
     
     
-    public Arc(Particles particles) {
-        this(particles, 100, 2);
+    public Warp(Particles particles) {
+        this(particles, 1, 20, 0.2f, 12);
     }
-    
-    public Arc(Particles particles, int total, float height) {
+
+    public Warp(Particles particles, float radius, int total, float grow, int rings) {
         this.particles = particles;
+        this.radius = radius;
         this.total = total;
-        this.height = height;
+        this.grow = grow;
+        this.rings = rings;
+        this.step = 0;
     }
-    
+
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        Location target = context.getTarget().getLocation();
-
-        Vector link = target.toVector().subtract(location.toVector());
+        double x, y, z;
         
-        float length = (float) link.length();
-        float pitch = (float) (4 * height / pow(length, 2));
-        
-        for (int i = 0; i < total; i++) {
-            Vector vector = link.clone().normalize().multiply((float) length * i / total);
-            float x = ((float) i / total) * length - length / 2;
-            float y = (float) (-pitch * pow(x, 2) + height);
-            location.add(vector).add(0, y, 0);
-            
-            context.render(particles, location);
-            
-            location.subtract(0, y, 0).subtract(vector);
+        if (step > rings) {
+            step = 0;
         }
+        
+        y = step * grow;
+        location.add(0, y, 0);
+
+        for (int i = 0; i < total; i += particles.getAmount()) {
+            double angle = (double) 2 * PI * i / total;
+
+            x = cos(angle) * radius;
+            z = sin(angle) * radius;
+            
+            context.render(particles, location.add(x, 0, z));
+            location.subtract(x, 0, z);
+        }
+
+        location.subtract(0, y, 0);
     }
-    
 }

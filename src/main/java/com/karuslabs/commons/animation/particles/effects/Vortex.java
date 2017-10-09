@@ -21,55 +21,62 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.tasks;
+package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
+import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Helix implements MemoisableTask<BoundLocation, BoundLocation> {
-    
+public class Vortex implements Task<BoundLocation, BoundLocation> {
+
     private Particles particles;
-    private int strands;
     private float radius;
-    private float curve;
-    private double rotation;
+    private float grow;
+    private double radials;
+    private int circles;
+    private int helixes;
+    private Vector vector;
     
     
-    public Helix(Particles particles) {
-        this(particles, 8, 10, 10, PI / 4);
+    public Vortex(Particles particles) {
+        this(particles, 2, 0.5f, PI / 16, 3, 4);
     }
-    
-    public Helix(Particles particles, int strands, float radius, float curve, double rotation) {
-        this.strands = strands;
+
+    public Vortex(Particles particles, float radius, float grow, double radials, int circles, int helixes) {
+        this.particles = particles;
         this.radius = radius;
-        this.curve = curve;
-        this.rotation = rotation;
+        this.grow = grow;
+        this.radials = radials;
+        this.circles = circles;
+        this.helixes = helixes;
+        this.vector = new Vector();
     }
-    
+
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        int amount = particles.getAmount();
 
-        for (int i = 1; i <= strands; i++) {
-            for (int j = 1; j <= amount; j++) {
-                float ratio = (float) j / amount;
-                double angle = curve * ratio * 2 * PI / strands + (2 * PI * i / strands) + rotation;
-                double x = cos(angle) * ratio * radius;
-                double z = sin(angle) * ratio * radius;
-                
-                location.add(x, 0, z);
-                context.render(particles, location);
-                location.subtract(x, 0, z);
+        for (int x = 0; x < circles; x++) {
+            for (int i = 0; i < helixes; i++) {
+                double angle = context.getCurrent() * radials + (2 * PI * i / helixes);
+                vector.setX(cos(angle) * radius);
+                vector.setY(context.getCurrent() * grow);
+                vector.setZ(sin(angle) * radius);
+
+                rotateAroundXAxis(vector, (location.getPitch() + 90) * (PI / 180));
+                rotateAroundYAxis(vector, -location.getYaw() * (PI / 180));
+
+                context.render(particles, location.add(vector));
+                location.subtract(vector);
             }
         }
     }
-    
 }

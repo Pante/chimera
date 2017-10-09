@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.tasks;
+package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
@@ -30,57 +30,60 @@ import com.karuslabs.commons.world.BoundLocation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.rotateVector;
+import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-/**
- * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
- */
-public class AnimatedBall implements Task<BoundLocation, BoundLocation> {
+public class Cone implements Task<BoundLocation, BoundLocation> {
     
     private Particles particles;
-    private int total = 150;
+    private float lengthGrowth;
+    private float radiusGrowth;
+    private double angularVelocity;
+    private int size;
     private int perIteration;
-    private float size = 1F;
-    private Vector factor;
-    private Vector offset;
-    private Vector rotation;
-    
+    private double rotation;
+    private boolean randomize;
     private int step;
     private Vector vector;
     
     
-    public AnimatedBall(Particles particles) {
-        this(particles, 150, 10, 1F, new Vector(1, 2, 1), new Vector(0, 0.8, 0), new Vector(0, 0, 0));
+    public Cone(Particles particles) {
+        this(particles, 0.5F, 0.006F, PI / 16, 180, 10, 0, false);
     }
     
-    public AnimatedBall(Particles particles, int total, int perIteration, float size, Vector factor, Vector offset, Vector rotation) {
+    public Cone(Particles particles, float lengthGrowth, float radiusGrowth, double angularVelocity, int size, int perIteration, double rotation, boolean randomize) {
         this.particles = particles;
-        this.total = total;
+        this.lengthGrowth = lengthGrowth;
+        this.radiusGrowth = radiusGrowth;
+        this.angularVelocity = angularVelocity;
         this.size = size;
-        this.factor = factor;
-        this.offset = offset;
+        this.perIteration = perIteration;
         this.rotation = rotation;
-        this.step = 0;
-        this.vector = new Vector();
+        this.randomize = randomize;
+        step = 0;
+        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        
-        for (int i = 0; i < perIteration; i += particles.getAmount(), step++) {
-            float t = (float) (PI / total) * step;
-            float r = (float) sin(t) * size;
-            float s = (float) (2 * PI * t);
-
-            vector.setX(factor.getX() * r * cos(s) + offset.getX());
-            vector.setZ(factor.getY() * r * sin(s) + offset.getY());
-            vector.setY(factor.getZ() * size * cos(t) + offset.getZ());
-
-            rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+        for (int x = 0; x < perIteration; x += particles.getAmount(), step++) {
+            if (step > size) {
+                step = 0;
+            }
+            if (step == 0 && randomize) {
+                rotation = randomAngle();
+            }
+            
+            double angle = step * angularVelocity + rotation;
+            float length = step * lengthGrowth;
+            float radius = step * radiusGrowth;
+            
+            vector.setX(cos(angle) * radius).setY(length).setZ(sin(angle) * radius);
+            rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
+            rotateAroundYAxis(vector, toRadians(-location.getYaw()));
 
             context.render(particles, location.add(vector));
             location.subtract(vector);
