@@ -23,16 +23,40 @@
  */
 package com.karuslabs.commons.world;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import static java.lang.Math.*;
 
-/**
- * @author Slikey
- */
-public final class Vectors {
 
+public final class Vectors {
+    
+    private static final Random RANDOM = new Random();
+    
+    
+    public static void random(Vector vector) {
+        vector.setX(RANDOM.nextDouble() * 2 - 1);
+        vector.setY(RANDOM.nextDouble() * 2 - 1);
+        vector.setZ(RANDOM.nextDouble() * 2 - 1);
+        vector.normalize();
+    }
+
+    
+    public static void randomCircle(Vector vector) {
+        double random = RANDOM.nextDouble() * 2 * PI;
+        vector.setX(cos(random));
+        vector.setY(0);
+        vector.setZ(sin(random));
+    }
+    
+    
+    public static double randomAngle() {
+        return RANDOM.nextDouble() * 2 * PI;
+    }
+    
+    
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
         cos = cos(angle);

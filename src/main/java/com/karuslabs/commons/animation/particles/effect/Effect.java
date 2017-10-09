@@ -39,27 +39,33 @@ import static com.karuslabs.commons.collection.Sets.weakSet;
 
 public class Effect<Origin extends BoundLocation, Target extends BoundLocation> {    
     
+    public static final int INFINITE = -1;
+    
     private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
     
     private Plugin plugin;
     private Supplier<Task<Origin, Target>> supplier;
     private boolean orientate;
-    private boolean async;
     private long iterations;
     private long delay;
     private long period;
+    boolean async;
     
     
-    public Effect(Plugin plugin, Supplier<Task<Origin, Target>> supplier, boolean orientate, boolean async, long iterations, long delay, long period) {
+    public Effect(Plugin plugin, Supplier<Task<Origin, Target>> supplier, boolean orientate, long iterations, long delay, long period, boolean async) {
         this.plugin = plugin;
         this.supplier = supplier;
         this.orientate = orientate;
-        this.async = async;
         this.iterations = iterations;
         this.delay = delay;
         this.period = period;
+        this.async = async;
     }
     
+        
+    public Promise<?> render(Origin origin, Target target) {
+        return schedule(new EffectTask<>(supplier.get(), GLOBAL, origin, target, orientate, iterations));
+    }
     
     public Promise<?> render(Player player, Origin origin, Target target) {
         return schedule(new EffectTask<>(supplier.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
@@ -68,10 +74,6 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     public Promise<?> render(Collection<Player> players, Origin origin, Target target) {
         Set<Player> targets = weakSet(players);
         return schedule(new EffectTask<>(supplier.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
-    }
-    
-    public Promise<?> render(Origin origin, Target target) {
-        return schedule(new EffectTask<>(supplier.get(), GLOBAL, origin, target, orientate, iterations));
     }
     
     Promise<?> schedule(EffectTask<Origin, Target> task) {
@@ -87,7 +89,7 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     
     
     public static<O extends BoundLocation, T extends BoundLocation> Builder<O, T> builder(Plugin plugin) {
-        return new Builder<>(new Effect<O, T>(plugin, null, false, true, 0, 0, 0));
+        return new Builder<>(new Effect<>(plugin, null, false, 0, 0, 0, true));
     }
     
     public static class Builder<O extends BoundLocation, T extends BoundLocation> {

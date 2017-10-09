@@ -75,7 +75,11 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
         origin.setDirection(direction);
         target.setDirection(direction.multiply(-1));
     }
-
+    
+    
+    public Task<Origin, Target> getTask() {
+        return task;
+    }
     
     @Override
     public void render(Particles particles, Location location) {

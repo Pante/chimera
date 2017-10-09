@@ -50,8 +50,8 @@ public class EffectTaskTest {
     public EffectTaskTest() {
         task = mock(Task.class);
         consumer = mock(BiConsumer.class);
-        origin = when(mock(StaticLocation.class).getLocation()).thenReturn(new Location(null, 1, 2, 3)).getMock();
-        target = when(mock(StaticLocation.class).getLocation()).thenReturn(new Location(null, 2, 3, 4)).getMock();
+        origin = spy(new StaticLocation(new Location(null, 1, 2, 3), null, false));
+        target = spy(new StaticLocation(new Location(null, 2, 3, 4), null, false));
         effect = spy(new EffectTask<>(task, consumer, origin, target, true, 0));
     }
     
@@ -62,8 +62,8 @@ public class EffectTaskTest {
         doNothing().when(effect).orientate();
         doNothing().when(effect).done();
         
-        when(this.origin.validate()).thenReturn(origin);
-        when(this.target.validate()).thenReturn(target);
+        doReturn(origin).when(this.origin).validate();
+        doReturn(target).when(this.target).validate();
         effect.orientate = orientate;
         
         effect.process();
