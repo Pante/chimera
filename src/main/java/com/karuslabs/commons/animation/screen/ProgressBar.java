@@ -40,10 +40,10 @@ import static java.util.stream.Collectors.toList;
 
 public class ProgressBar extends AbstractBar {
     
-    private BiConsumer<BossBar, Context> consumer;
+    private Supplier<BiConsumer<BossBar, Context>> consumer;
 
     
-    public ProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, BiConsumer<BossBar, Context> consumer, long iterations, long delay, long period) {
+    public ProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> consumer, long iterations, long delay, long period) {
         super(plugin, translation, supplier, iterations, delay, period);
         this.consumer = consumer;
     }
@@ -57,7 +57,7 @@ public class ProgressBar extends AbstractBar {
             return bar;
         }).collect(toList());
         
-        return new ScheduledTask(bars, consumer, translation, iterations);
+        return new ScheduledTask(bars, consumer.get(), translation, iterations);
     }
     
     
@@ -97,7 +97,7 @@ public class ProgressBar extends AbstractBar {
         }
 
         
-        public ProgressBarBuilder consumer(BiConsumer<BossBar, Context> consumer) {
+        public ProgressBarBuilder consumer(Supplier<BiConsumer<BossBar, Context>> consumer) {
             bar.consumer = consumer;
             return this;
         }

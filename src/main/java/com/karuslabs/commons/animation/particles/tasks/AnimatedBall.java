@@ -37,7 +37,7 @@ import static java.lang.Math.*;
 /**
  * @author <a href="http://forums.bukkit.org/members/qukie.90952701/">Qukie</a>
  */
-public class AnimatedBall implements MemoisableTask<BoundLocation, BoundLocation> {
+public class AnimatedBall implements Task<BoundLocation, BoundLocation> {
     
     private Particles particles;
     private int total = 150;
@@ -46,6 +46,9 @@ public class AnimatedBall implements MemoisableTask<BoundLocation, BoundLocation
     private Vector factor;
     private Vector offset;
     private Vector rotation;
+    
+    private int step;
+    private Vector vector;
     
     
     public AnimatedBall(Particles particles) {
@@ -59,15 +62,17 @@ public class AnimatedBall implements MemoisableTask<BoundLocation, BoundLocation
         this.factor = factor;
         this.offset = offset;
         this.rotation = rotation;
+        this.step = 0;
+        this.vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
-        Vector vector = new Vector();
         Location location = context.getOrigin().getLocation();
-        for (int i = 0; i < perIteration; i += particles.getAmount()) {
-            float t = (float) (PI / total) * context.getCurrent();
+        
+        for (int i = 0; i < perIteration; i += particles.getAmount(), step++) {
+            float t = (float) (PI / total) * step;
             float r = (float) sin(t) * size;
             float s = (float) (2 * PI * t);
 

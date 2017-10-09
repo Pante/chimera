@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
 public class TitleBarTest {
     
     private BiConsumer<Player, TitleContext> consumer = mock(BiConsumer.class);
-    private TitleBar bar = TitleBar.builder(null).consumer(consumer).fadeIn(1).stay(2).fadeOut(3).build();
+    private TitleBar bar = TitleBar.builder(null).consumer(() -> consumer).fadeIn(1).stay(2).fadeOut(3).build();
     private Player player = mock(Player.class);
     
     

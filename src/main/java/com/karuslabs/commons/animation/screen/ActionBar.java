@@ -41,18 +41,18 @@ import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
 public class ActionBar extends Bar {
     
-    private BiFunction<Player, Context, String> function;
+    private Supplier<BiFunction<Player, Context, String>> supplier;
 
     
-    public ActionBar(Plugin plugin, Translation translation, BiFunction<Player, Context, String> function, long iterations, long delay, long period) {
+    public ActionBar(Plugin plugin, Translation translation, Supplier<BiFunction<Player, Context, String>> supplier, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
-        this.function = function;
+        this.supplier = supplier;
     }
 
     
     @Override
     protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
-        return new ScheduledTask(weakSet(players), function, translation, iterations);
+        return new ScheduledTask(weakSet(players), supplier.get(), translation, iterations);
     }
     
     
@@ -85,8 +85,8 @@ public class ActionBar extends Bar {
             super(bar);
         }
         
-        public ActionBarBuilder function(BiFunction<Player, Context, String> function) {
-            bar.function = function;
+        public ActionBarBuilder function(Supplier<BiFunction<Player, Context, String>> supplier) {
+            bar.supplier = supplier;
             return this;
         }
         
