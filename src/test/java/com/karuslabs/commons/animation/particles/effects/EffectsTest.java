@@ -67,6 +67,8 @@ public class EffectsTest {
         return Stream.of(
             of(new AnimatedBall(STANDARD), 1.0, 2.0, 1.8),
             of(new Arc(STANDARD, 2, 1), 1.0, 1.0000000121882824, 1.0),
+            of(new Circle(STANDARD), 1.4000000059604645, 1.0, 1.0),
+            of(new Cone(STANDARD, 0.5F, 0.006F, PI / 16, 180, 1, 0, false), 1.0, 1.0, 1.0),
             of(new Helix(new StandardParticles(null, 1, 0, 0, 0, 0), 1, 1, 10, 10, PI / 4), 8.071067811865564, 1.0, 8.071067811865387),
             of(new Vortex(STANDARD, 2, 0.5f, PI / 16, 1, 1), 3.0, 1.0, 1.0),
             of(new Warp(STANDARD, 1, 1, 0.2f, 12), 2.0, 1.0, 1.0)

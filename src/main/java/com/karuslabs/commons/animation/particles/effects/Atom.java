@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.ColouredParticles;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -36,8 +37,8 @@ import static java.lang.Math.*;
 
 public class Atom implements Task<BoundLocation, BoundLocation> {
 
-    private ColouredParticles nucleus;
-    private ColouredParticles orbital;
+    private Particles nucleus;
+    private Particles orbital;
     private int nucleusTotal;
     private int orbitialTotal;
     private double radius;
@@ -49,11 +50,11 @@ public class Atom implements Task<BoundLocation, BoundLocation> {
     private Vector vector;
     
     
-    public Atom(ColouredParticles nucleus, ColouredParticles orbital) {
+    public Atom(Particles nucleus, Particles orbital) {
         this(nucleus, orbital, 10, 10, 3, 0.2F, 3, 0, PI / 80);
     }
     
-    public Atom(ColouredParticles nucleus, ColouredParticles orbital, int nucleusTotal, int orbitialTotal, double radius, float nucleusRadius, int orbitals, double rotation, double angularVelocity) {
+    public Atom(Particles nucleus, Particles orbital, int nucleusTotal, int orbitialTotal, double radius, float nucleusRadius, int orbitals, double rotation, double angularVelocity) {
         this.nucleus = nucleus;
         this.orbital = orbital;
         this.nucleusTotal = nucleusTotal;

@@ -29,7 +29,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface CheckedFunction<T, R, E extends Exception> {
     
-    public R apply(T t) throws Exception;
+    public R apply(T t) throws E;
     
     
     public static <T, R, E extends Exception> Function<T, R> uncheck(CheckedFunction<T, R, E> function) {

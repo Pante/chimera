@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effect;
 
-import com.karuslabs.commons.util.function.Memoisable;
+import com.karuslabs.commons.util.Memoisable;
 import com.karuslabs.commons.world.BoundLocation;
 
 

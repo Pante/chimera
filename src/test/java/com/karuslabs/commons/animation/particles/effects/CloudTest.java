@@ -26,56 +26,57 @@ package com.karuslabs.commons.animation.particles.effects;
 import com.karuslabs.commons.animation.particles.ColouredParticles;
 import com.karuslabs.commons.world.*;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static java.lang.Math.PI;
 import static org.bukkit.Color.WHITE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class AtomTest {
+public class CloudTest {
     
-    private static final double ROUNDING_ERROR = 0.000000000000001;
-    
-    private ColouredParticles nucleus = new ColouredParticles(null, 1, WHITE);
-    private ColouredParticles orbital = new ColouredParticles(null, 1, WHITE);
-    private Atom atom = new Atom(nucleus, orbital, 1, 1, 3, 0.2F, 1, 0, PI / 80);
-    private StaticLocation origin = new StaticLocation(new Location(null, 1, 1, 1), null, false);
+    private ColouredParticles particles = new ColouredParticles(null, 1, WHITE);
+    private ColouredParticles droplets = new ColouredParticles(null, 1, WHITE);
+    private Cloud cloud = spy(new Cloud(particles, droplets));
+    private Location location = new Location(null, 1, 1, 1);
+    private StaticLocation origin = new StaticLocation(location, null, false);
     private StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, null, 0, 0));
     
     
     @Test
     public void render() {
-        Atom atom = spy(new Atom(nucleus, orbital));
-        doNothing().when(atom).renderNucleus(context, origin.getLocation());
-        doNothing().when(atom).renderOrbitals(context, origin.getLocation());
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        doNothing().when(cloud).renderCloud(context, location, random, 50);
+        doNothing().when(cloud).renderDroplets(context, location, random, 15);
         
-        atom.render(context);
+        cloud.render(context);
         
-        verify(atom).renderNucleus(context, origin.getLocation());
-        verify(atom).renderOrbitals(context, origin.getLocation());
+        verify(cloud).renderCloud(context, location, random, 50);
+        verify(cloud).renderDroplets(context, location, random, 15);
     }
     
     
     @Test
-    public void renderNucleus() {
-        atom.renderNucleus(context, origin.getLocation());
+    public void renderCloud() {
+        cloud.renderCloud(context, location, ThreadLocalRandom.current(), 1);
         
-        verify(context).render(nucleus, origin.getLocation());
+        verify(context).render(particles, location);
     }
     
     
-    @Test
-    public void renderOrbitals() {
-        atom.renderOrbitals(context, origin.getLocation());
+    @ParameterizedTest
+    @CsvSource({"0, 2", "1, 0"})
+    public void renderDroplets(int number, int expected) {
+        ThreadLocalRandom random = when(mock(ThreadLocalRandom.class).nextInt(2)).thenReturn(number).getMock();
         
-        verify(context).render(orbital, origin.getLocation());
-        assertEquals(4, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(1, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(1, context.location.getZ(), ROUNDING_ERROR);
+        cloud.renderDroplets(context, location, random, 1);
+        
+        verify(context, times(expected)).render(droplets, location);
     }
     
 }
