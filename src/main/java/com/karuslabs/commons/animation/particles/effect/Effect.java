@@ -44,7 +44,7 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
     
     private Plugin plugin;
-    private Supplier<Task<Origin, Target>> supplier;
+    private Task<Task, Origin, Target> task;
     private boolean orientate;
     private long iterations;
     private long delay;
@@ -52,9 +52,9 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     boolean async;
     
     
-    public Effect(Plugin plugin, Supplier<Task<Origin, Target>> supplier, boolean orientate, long iterations, long delay, long period, boolean async) {
+    public Effect(Plugin plugin, Task<Task, Origin, Target> task, boolean orientate, long iterations, long delay, long period, boolean async) {
         this.plugin = plugin;
-        this.supplier = supplier;
+        this.task = task;
         this.orientate = orientate;
         this.iterations = iterations;
         this.delay = delay;
@@ -64,16 +64,16 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     
         
     public Promise<?> render(Origin origin, Target target) {
-        return schedule(new EffectTask<>(supplier.get(), GLOBAL, origin, target, orientate, iterations));
+        return schedule(new EffectTask<>(task.get(), GLOBAL, origin, target, orientate, iterations));
     }
     
     public Promise<?> render(Player player, Origin origin, Target target) {
-        return schedule(new EffectTask<>(supplier.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
+        return schedule(new EffectTask<>(task.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
     }
     
     public Promise<?> render(Collection<Player> players, Origin origin, Target target) {
         Set<Player> targets = weakSet(players);
-        return schedule(new EffectTask<>(supplier.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
+        return schedule(new EffectTask<>(task.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
     }
     
     Promise<?> schedule(EffectTask<Origin, Target> task) {
@@ -100,8 +100,8 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
             this.effect = effect;
         }
         
-        public Builder<O, T> supplier(Supplier<Task<O, T>> supplier) {
-            effect.supplier = supplier;
+        public Builder<O, T> task(Task<Task, O, T> task) {
+            effect.task = task;
             return this;
         }
         public Builder<O, T> orientate(boolean orientate) {

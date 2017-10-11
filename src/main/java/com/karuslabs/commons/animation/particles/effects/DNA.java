@@ -27,7 +27,6 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -35,7 +34,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class DNA implements Task<BoundLocation, BoundLocation> {
+public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
     
     private Particles helix;
     private Particles base1;
@@ -109,8 +108,12 @@ public class DNA implements Task<BoundLocation, BoundLocation> {
         rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
         rotateAroundYAxis(vector, toRadians(-location.getYaw()));
 
-        context.render(particles, location.add(vector));
-        location.subtract(vector);
+        context.render(particles, location, vector);
+    }
+
+    @Override
+    public DNA get() {
+        return new DNA(helix, base1, base2, radials, radius, perHelix, perBase, length, growth, interval);
     }
     
 }

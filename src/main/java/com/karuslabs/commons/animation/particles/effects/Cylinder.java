@@ -36,7 +36,7 @@ import static com.karuslabs.commons.animation.particles.effects.Constants.*;
 import static com.karuslabs.commons.world.Vectors.*;
 
 
-public class Cylinder implements Task<BoundLocation, BoundLocation> {
+public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
   
     private Particles particles;
     private float radius;
@@ -87,16 +87,14 @@ public class Cylinder implements Task<BoundLocation, BoundLocation> {
     
     protected void renderSurface(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, double x, double y, double z) {
         for (int i = 0; i < perRow; i += particles.getAmount(), step++) {
-            randomCircle(vector);
-            vector.multiply(radius);
+            randomCircle(vector).multiply(radius);
             calculate(random, solid ? random.nextFloat() : 1);
             
             if (rotate) {
-                rotateVector(vector, x, y, z);
+                rotate(vector, x, y, z);
             }
 
-            context.render(particles, location.add(vector));
-            location.subtract(vector);
+            context.render(particles, location, vector);
         }
     }
     
@@ -115,6 +113,11 @@ public class Cylinder implements Task<BoundLocation, BoundLocation> {
                 vector.setY(-multiple * (height / 2));
             }
         }
+    }
+
+    @Override
+    public Cylinder get() {
+        return new Cylinder(particles, radius, height, ratio, angularVelocity, rotation, perRow, rotate, solid);
     }
     
 }

@@ -34,7 +34,7 @@ import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
-public class Cloud implements Task<BoundLocation, BoundLocation> {
+public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
     
     private Particles cloud;
     private Particles droplets;
@@ -69,11 +69,8 @@ public class Cloud implements Task<BoundLocation, BoundLocation> {
     
     protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
         for (int i = 0; i < amount; i++) {
-            randomCircle(vector);
-            vector.multiply(random.nextDouble() * size);
-            
-            context.render(cloud, location.add(vector));
-            location.subtract(vector);
+            randomCircle(vector).multiply(random.nextDouble() * size);
+            context.render(cloud, location, vector);
         }
     }
     
@@ -88,6 +85,11 @@ public class Cloud implements Task<BoundLocation, BoundLocation> {
                 location.add(x, 0, z);
             }
         }
+    }
+
+    @Override
+    public Cloud get() {
+        return new Cloud(cloud, droplets, size, radius, offsetY);
     }
     
 }

@@ -27,36 +27,28 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
-import static com.karuslabs.commons.world.Vectors.rotate;
-import static java.lang.Math.*;
+import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
+public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
     
-    private Particles particles;
-    private int perCircle = 10;
-    private int circles = 36;
-    private float donutRadius = 2;
-    private float tubeRadius = .5f;
-    private Vector rotation;
+    private Particles flame;
+    private int total;
     private Vector vector;
     
     
-    public Donut(Particles particles) {
-        this(particles, 10, 36, 2, 0.5F, NONE);
+    public Flame(Particles flame) {
+        this(flame, 10);
     }
     
-    public Donut(Particles particles, int perCircle, int circles, float donutRadius, float tubeRadius, Vector rotation) {
-        this.particles = particles;
-        this.perCircle = perCircle;
-        this.circles = circles;
-        this.donutRadius = donutRadius;
-        this.tubeRadius = tubeRadius;
-        this.rotation = rotation;
+    public Flame(Particles flame, int total) {
+        this.flame = flame;
+        this.total = total;
         vector = new Vector();
     }
     
@@ -64,27 +56,22 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        for (int i = 0; i < circles; i++) {
-            double theta = 2 * PI * i / circles;
-            
-            for (int j = 0; j < perCircle; j += particles.getAmount()) {
-                double phi = 2 * PI * j / perCircle;
-                double cosPhi = cos(phi);
-                
-                vector.setX((donutRadius + tubeRadius * cosPhi) * cos(theta));
-                vector.setY((donutRadius + tubeRadius * cosPhi) * sin(theta));
-                vector.setZ(tubeRadius * sin(phi));
-
-                rotate(vector, rotation);
-                
-                context.render(particles, location, vector);
-            }
+        for (int i = 0; i< total; i++) {
+            render(context, location, ThreadLocalRandom.current());
         }
     }
 
+    protected void render(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+        randomCircle(vector).multiply(random.nextDouble(0, 0.6));
+        vector.setY(random.nextFloat() * 1.8);
+
+        context.render(flame, location, vector);
+    }
+
+
     @Override
-    public Donut get() {
-        return new Donut(particles, perCircle, circles, donutRadius, tubeRadius, rotation);
+    public Flame get() {
+        return new Flame(flame, total);
     }
     
 }

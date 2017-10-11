@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 public class EffectTaskTest {
     
     private EffectTask<StaticLocation, StaticLocation> effect;
-    private Task<StaticLocation, StaticLocation> task;
+    private Task<Task, StaticLocation, StaticLocation> task;
     private BiConsumer<Particles, Location> consumer;
     private StaticLocation origin;
     private StaticLocation target;

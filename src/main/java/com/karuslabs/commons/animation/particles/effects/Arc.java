@@ -30,14 +30,16 @@ import com.karuslabs.commons.world.BoundLocation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import static com.karuslabs.commons.world.Vectors.copy;
 import static java.lang.Math.pow;
 
 
-public class Arc implements MemoisableTask<BoundLocation, BoundLocation> {
+public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private float height;
     private int total;
+    private Vector vector;
     
     
     public Arc(Particles particles) {
@@ -48,6 +50,7 @@ public class Arc implements MemoisableTask<BoundLocation, BoundLocation> {
         this.particles = particles;
         this.height = height;
         this.total = total;
+        vector = new Vector();
     }
     
     
@@ -64,13 +67,18 @@ public class Arc implements MemoisableTask<BoundLocation, BoundLocation> {
         link.normalize();
         
         for (int i = 0; i < total; i += particles.getAmount()) {
-            Vector vector = link.clone().multiply((float) length * i / total);
+            copy(link, vector).multiply((float) length * i / total);
             float x = ((float) i / total) * length - length / 2;
             float y = (float) (-pitch * pow(x, 2) + height);
 
             context.render(particles, location.add(vector).add(0, y, 0));
-            location.subtract(0, y, 0).subtract(vector);
+            location.subtract(vector).subtract(0, y, 0);
         }
+    }
+
+    @Override
+    public Arc get() {
+        return new Arc(particles, height, total);
     }
     
 }

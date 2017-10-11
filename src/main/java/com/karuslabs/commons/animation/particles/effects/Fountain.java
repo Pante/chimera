@@ -27,55 +27,82 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import org.bukkit.Location;
+import java.util.concurrent.ThreadLocalRandom;
 
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import static com.karuslabs.commons.world.Vectors.randomCircle;
 import static java.lang.Math.*;
 
 
-public class Helix implements Task<Helix, BoundLocation, BoundLocation> {
+public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private int strands;
     private int perStrand;
+    private int perSpout;
     private float radius;
-    private float curve;
+    private float radiusSpout;
+    private float height;
+    private float heightSpout;
     private double rotation;
+    private Vector vector;
     
     
-    public Helix(Particles particles) {
-        this(particles, 8, 80, 10, 10, PI / 4);
+    public Fountain(Particles particles) {
+        this(particles, 10, 150, 200, 5, 0.1F, 3, 7, PI / 4);
     }
     
-    public Helix(Particles particles, int strands, int perStrand, float radius, float curve, double rotation) {
+    public Fountain(Particles particles, int strands, int perStrand, int perSpout, float radius, float radiusSpout, float height, float heightSpout, double rotation) {
         this.particles = particles;
         this.strands = strands;
         this.perStrand = perStrand;
+        this.perSpout = perSpout;
         this.radius = radius;
-        this.curve = curve;
+        this.radiusSpout = radiusSpout;
+        this.height = height;
+        this.heightSpout = heightSpout;
         this.rotation = rotation;
+        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-
+        renderStrands(context, location);
+        renderSpout(context, location, ThreadLocalRandom.current());
+    }
+    
+    protected void renderStrands(Context<BoundLocation, BoundLocation> context, Location location) {
         for (int i = 1; i <= strands; i++) {
+            double angle = 2 * i * PI / strands + rotation;
             for (int j = 1; j <= perStrand; j += particles.getAmount()) {
                 float ratio = (float) j / perStrand;
-                double angle = curve * ratio * 2 * PI / strands + (2 * PI * i / strands) + rotation;
-                double x = cos(angle) * ratio * radius;
-                double z = sin(angle) * ratio * radius;
+
+                vector.setX(cos(angle) * radius * ratio);
+                vector.setY(sin(PI * j / perStrand) * height);
+                vector.setZ(sin(angle) * radius * ratio);
                 
-                context.render(particles, location.add(x, 0, z));
-                location.subtract(x, 0, z);
+                context.render(particles, location, vector);
             }
         }
     }
+    
+    protected void renderSpout(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+        for (int i = 0; i < perSpout; i += particles.getAmount()) {
+            randomCircle(vector).multiply(random.nextDouble(0, radius * radiusSpout));
+            vector.setY(random.nextDouble(0, heightSpout));
+            
+            context.render(particles, location, vector);
+        }
+    }
+    
 
     @Override
-    public Helix get() {
-        return this;
+    public Fountain get() {
+        return new Fountain(particles, strands, perStrand, perSpout, radius, radiusSpout, height, heightSpout, rotation);
     }
     
 }

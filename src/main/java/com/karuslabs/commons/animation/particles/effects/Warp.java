@@ -32,7 +32,7 @@ import org.bukkit.Location;
 import static java.lang.Math.*;
 
 
-public class Warp implements Task<BoundLocation, BoundLocation> {
+public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
 
     private Particles particles;
     private float radius;
@@ -79,5 +79,10 @@ public class Warp implements Task<BoundLocation, BoundLocation> {
         }
 
         location.subtract(0, y, 0);
+    }
+
+    @Override
+    public Warp get() {
+        return new Warp(particles, radius, total, grow, rings);
     }
 }

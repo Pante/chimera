@@ -63,6 +63,26 @@ public class VectorsTest {
         verify(vector).setZ(anyDouble());
     }
     
+        
+    @Test
+    public void rotateVector_radians() {
+        Vector vector = Vectors.rotate(new Vector(10, 10, 10), 1, 2, 3);
+        
+        assertEquals(-7.893858690333731, vector.getX(), ROUNDING_ERROR);
+        assertEquals(4.167373192795026, vector.getY(), ROUNDING_ERROR);
+        assertEquals(-14.843180105658494, vector.getZ(), ROUNDING_ERROR);
+    }
+    
+    
+    @Test
+    public void rotateVector_Location() {
+        Vector vector = Vectors.rotate(new Vector(10, 10, 10), new Location(null, 0, 0, 0, 10, 20));
+        
+        assertEquals(-12.073748387926274, vector.getX(), ROUNDING_ERROR);
+        assertEquals(5.976724774602398, vector.getY(), ROUNDING_ERROR);
+        assertEquals(10.885924895648582, vector.getZ(), ROUNDING_ERROR);
+    }
+    
             
     @Test
     public void rotateAroundXAxis() {
@@ -91,26 +111,6 @@ public class VectorsTest {
         assertEquals(-2.9505041818708264, vector.getX(), ROUNDING_ERROR);
         assertEquals(-13.830926399658221, vector.getY(), ROUNDING_ERROR);
         assertEquals(10.0, vector.getZ(), ROUNDING_ERROR);
-    }
-    
-    
-    @Test
-    public void rotateVector_radians() {
-        Vector vector = Vectors.rotateVector(new Vector(10, 10, 10), 1, 2, 3);
-        
-        assertEquals(-7.893858690333731, vector.getX(), ROUNDING_ERROR);
-        assertEquals(4.167373192795026, vector.getY(), ROUNDING_ERROR);
-        assertEquals(-14.843180105658494, vector.getZ(), ROUNDING_ERROR);
-    }
-    
-    
-    @Test
-    public void rotateVector_Location() {
-        Vector vector = Vectors.rotateVector(new Vector(10, 10, 10), new Location(null, 0, 0, 0, 10, 20));
-        
-        assertEquals(-12.073748387926274, vector.getX(), ROUNDING_ERROR);
-        assertEquals(5.976724774602398, vector.getY(), ROUNDING_ERROR);
-        assertEquals(10.885924895648582, vector.getZ(), ROUNDING_ERROR);
     }
     
     

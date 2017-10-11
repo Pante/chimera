@@ -36,7 +36,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Dragon implements Task<BoundLocation, BoundLocation> {
+public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private float pitch;
@@ -87,8 +87,7 @@ public class Dragon implements Task<BoundLocation, BoundLocation> {
                 rotateAroundYAxis(vector, toRadians(-(location.getYaw() + 90)));
                 rotateAroundZAxis(vector, toRadians(-location.getPitch()));
                 
-                context.render(particles, location.add(vector));
-                location.subtract(vector);
+                context.render(particles, location, vector);
             }
         }
     }
@@ -98,6 +97,11 @@ public class Dragon implements Task<BoundLocation, BoundLocation> {
             floats[i] = random.nextFloat();
             angles[i] = randomAngle();
         }
+    }
+
+    @Override
+    public Dragon get() {
+        return new Dragon(particles, pitch, arcs, perArc, length, stepsPerIteration);
     }
     
 }

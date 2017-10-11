@@ -25,9 +25,10 @@ package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.world.BoundLocation;
 
+import java.util.function.Supplier;
 
-@FunctionalInterface
-public interface Task<Origin extends BoundLocation, Target extends BoundLocation> {
+
+public interface Task<T extends Task, Origin extends BoundLocation, Target extends BoundLocation> extends Supplier<T> {
     
     public void render(Context<Origin, Target> context);
     

@@ -34,7 +34,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Vortex implements Task<BoundLocation, BoundLocation> {
+public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
 
     private Particles particles;
     private float radius;
@@ -74,9 +74,14 @@ public class Vortex implements Task<BoundLocation, BoundLocation> {
                 rotateAroundXAxis(vector, (location.getPitch() + 90) * (PI / 180));
                 rotateAroundYAxis(vector, -location.getYaw() * (PI / 180));
 
-                context.render(particles, location.add(vector));
-                location.subtract(vector);
+                context.render(particles, location, vector);
             }
         }
     }
+
+    @Override
+    public Vortex get() {
+        return new Vortex(particles, radius, grow, radials, circles, helixes);
+    }
+    
 }

@@ -35,7 +35,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.PI;
 
 
-public class Cube implements Task<BoundLocation, BoundLocation> {
+public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private float edge;
@@ -95,11 +95,10 @@ public class Cube implements Task<BoundLocation, BoundLocation> {
                     rotateAroundYAxis(vector, angleY);
 
                     if (rotate) {
-                        rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+                        rotate(vector, rotation);
                     }
                     
-                    context.render(particles, location.add(vector));
-                    location.subtract(vector);
+                    context.render(particles, location, vector);
                 }
             }
             renderPillarOutlines(context, location, angleY);
@@ -112,11 +111,10 @@ public class Cube implements Task<BoundLocation, BoundLocation> {
             rotateAroundYAxis(vector, angle);
 
             if (rotate) {
-                rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+                rotate(vector, rotation);
             }
 
-            context.render(particles, location.add(vector));
-            location.subtract(vector);
+            context.render(particles, location, vector);
         }
     }
 
@@ -135,14 +133,18 @@ public class Cube implements Task<BoundLocation, BoundLocation> {
                     float posZ = edge * ((float) z / perRow) - half;
                     vector.setX(posX).setY(posY).setZ(posZ);
                     if (rotate) {
-                        rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+                        rotate(vector, rotation);
                     }
                     
-                    context.render(particles, location.add(vector));
-                    location.subtract(vector);
+                    context.render(particles, location, vector);
                 }
             }
         }
+    }
+
+    @Override
+    public Cube get() {
+        return new Cube(particles, edge, angularVelocity, perRow, rotate, solid);
     }
     
 }

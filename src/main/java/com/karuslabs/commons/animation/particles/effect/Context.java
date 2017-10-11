@@ -28,11 +28,17 @@ import com.karuslabs.commons.util.concurrent.Repeatable;
 import com.karuslabs.commons.world.BoundLocation;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 
 public interface Context<Origin extends BoundLocation, Target extends BoundLocation> extends Repeatable {
     
     public void render(Particles particles, Location location);
+    
+    public default void render(Particles particles, Location location, Vector offset) {
+        render(particles, location.add(offset));
+        location.subtract(offset);
+    }
     
     public Origin getOrigin();
     

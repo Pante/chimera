@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -35,14 +35,14 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.random;
 
 
-public class DiscoBall implements Task<BoundLocation, BoundLocation> {
+public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> {
     
     public enum Direction {
         UP, DOWN, BOTH;
     }
     
-    private ColouredParticles sphere;
-    private ColouredParticles line;
+    private Particles sphere;
+    private Particles line;
     private int sphereTotal;
     private int lineTotal;
     private float radius;
@@ -53,11 +53,11 @@ public class DiscoBall implements Task<BoundLocation, BoundLocation> {
     private Vector distance;
     
     
-    public DiscoBall(ColouredParticles sphere, ColouredParticles line) {
+    public DiscoBall(Particles sphere, Particles line) {
         this(sphere, line, 50, 100, 0.6F, 7, 15, Direction.DOWN);
     }
     
-    public DiscoBall(ColouredParticles sphere, ColouredParticles line, int sphereTotal, int lineTotal, float radius, int lines, int lineLength, Direction direction) {
+    public DiscoBall(Particles sphere, Particles line, int sphereTotal, int lineTotal, float radius, int lines, int lineLength, Direction direction) {
         this.sphere = sphere;
         this.line = line;
         this.sphereTotal = sphereTotal;
@@ -109,12 +109,13 @@ public class DiscoBall implements Task<BoundLocation, BoundLocation> {
     
     protected void renderSphere(Context<BoundLocation, BoundLocation> context, Location location) {
         for (int i = 0; i < sphereTotal; i += sphere.getAmount()) {
-            random(vector);
-            vector.multiply(radius);
-
-            context.render(sphere, location.add(vector));
-            location.subtract(vector);
+            random(vector).multiply(radius);
+            context.render(sphere, location, vector);
         }
     }
     
+    @Override
+    public DiscoBall get() {
+        return new DiscoBall(sphere, line, sphereTotal, lineTotal, radius, lines, lineLength, direction);
+    }
 }
