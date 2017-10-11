@@ -65,7 +65,7 @@ public class StaticLocationTest {
         
         location.updateOffset();
         
-        verify(internal).add(relative ? Vectors.rotateVector(offset, internal) : offset);
+        verify(internal).add(relative ? Vectors.rotate(offset, internal) : offset);
     }
     
 }

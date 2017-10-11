@@ -21,13 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effect;
+package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.util.Memoisable;
+import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
+import org.bukkit.Location;
 
-@FunctionalInterface
-public interface MemoisableTask<Origin extends BoundLocation, Target extends BoundLocation> extends Task<Origin, Target>, Memoisable {
+
+public class Composite implements Task<Composite, BoundLocation, BoundLocation> {
+    
+    private Particles[] particles;
+    
+    
+    public Composite(Particles... particles) {
+        this.particles = particles;
+    }
+    
+    
+    @Override
+    public void render(Context<BoundLocation, BoundLocation> context) {
+        Location location = context.getOrigin().getLocation();
+        for (Particles particle : particles) {
+           context.render(particle, location);
+        }
+    }
+
+    @Override
+    public Composite get() {
+        return this;
+    }
     
 }

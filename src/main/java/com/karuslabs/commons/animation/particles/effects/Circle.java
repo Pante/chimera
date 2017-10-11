@@ -31,11 +31,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.animation.particles.effects.Constants.*;
-import static com.karuslabs.commons.world.Vectors.rotateVector;
+import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class Circle implements Task<BoundLocation, BoundLocation> {
+public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private int total;
@@ -72,12 +72,17 @@ public class Circle implements Task<BoundLocation, BoundLocation> {
         double angle = current * increment;
         vector.setX(cos(angle) * radius).setY(0).setZ(sin(angle) * radius);
         
-        rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+        rotate(vector, rotation);
         if (rotate) {
-            rotateVector(vector, angularVelocity.getX() * current, angularVelocity.getY() * current, angularVelocity.getZ() * current);
+            rotate(vector, angularVelocity.getX() * current, angularVelocity.getY() * current, angularVelocity.getZ() * current);
         }
         
-        context.render(particles, location.add(vector));
+        context.render(particles, location, vector);
+    }
+
+    @Override
+    public Circle get() {
+        return new Circle(particles, total, radius, rotation, angularVelocity, subtract, rotate);
     }
 
     

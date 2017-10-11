@@ -35,14 +35,14 @@ import org.bukkit.util.Vector;
 
 class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledPromiseTask<Void> implements Context<Origin, Target> {
 
-    protected Task<Origin, Target> task;
+    protected Task<Task, Origin, Target> task;
     protected BiConsumer<Particles, Location> render;
     protected Origin origin;
     protected Target target;
     protected boolean orientate;
 
     
-    EffectTask(Task<Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
+    EffectTask(Task<Task, Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
         super(iterations);
         this.task = task;
         this.render = render;
@@ -77,7 +77,7 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     }
     
     
-    public Task<Origin, Target> getTask() {
+    public Task<Task, Origin, Target> getTask() {
         return task;
     }
     

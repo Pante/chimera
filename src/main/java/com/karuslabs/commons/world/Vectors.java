@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.world;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -33,29 +33,80 @@ import static java.lang.Math.*;
 
 public final class Vectors {
     
-    private static final Random RANDOM = new Random();
+    public static Vector copy(Vector source, Vector destination) {
+        destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
+        return destination;
+    }
     
     
-    public static void random(Vector vector) {
-        vector.setX(RANDOM.nextDouble() * 2 - 1);
-        vector.setY(RANDOM.nextDouble() * 2 - 1);
-        vector.setZ(RANDOM.nextDouble() * 2 - 1);
+    public static Vector random(Vector vector) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        vector.setX(random.nextDouble(-1, 1));
+        vector.setY(random.nextDouble(-1, 1));
+        vector.setZ(random.nextDouble(-1, 1));
         vector.normalize();
+        return vector;
     }
 
     
-    public static void randomCircle(Vector vector) {
-        double random = RANDOM.nextDouble() * 2 * PI;
+    public static Vector randomCircle(Vector vector) {
+        double random = ThreadLocalRandom.current().nextDouble(0, 2 * PI);
         vector.setX(cos(random));
         vector.setY(0);
         vector.setZ(sin(random));
+        return vector;
     }
     
     
     public static double randomAngle() {
-        return RANDOM.nextDouble() * 2 * PI;
+        return ThreadLocalRandom.current().nextDouble() * 2 * PI;
     }
     
+    
+    public static Vector rotate(Vector vector, Vector rotation) {
+        return rotate(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+    }
+    
+    public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
+        rotateAroundXAxis(vector, angleX);
+        rotateAroundYAxis(vector, angleY);
+        rotateAroundZAxis(vector, angleZ);
+        return vector;
+    }
+
+    
+    public static Vector rotate(Vector vector, Location location) {
+        return rotate(vector, location.getYaw(), location.getPitch());
+    }
+
+    
+    public static Vector rotate(Vector vector, float yawDegrees, float pitchDegrees) {
+        double yaw = toRadians(-1 * (yawDegrees + 90));
+        double pitch = toRadians(-pitchDegrees);
+
+        double cosYaw = cos(yaw);
+        double cosPitch = cos(pitch);
+        double sinYaw = sin(yaw);
+        double sinPitch = sin(pitch);
+
+        double initialX, initialY, initialZ;
+        double x, y, z;
+
+        // Z Axis rotation (Pitch)
+        initialX = vector.getX();
+        initialY = vector.getY();
+        x = initialX * cosPitch - initialY * sinPitch;
+        y = initialX * sinPitch + initialY * cosPitch;
+
+        // Y Axis rotation (Yaw)
+        initialZ = vector.getZ();
+        initialX = x;
+        z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
+
+        return new Vector(x, y, z);
+    }
+
     
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
@@ -84,47 +135,6 @@ public final class Vectors {
         x = vector.getX() * cos - vector.getY() * sin;
         y = vector.getX() * sin + vector.getY() * cos;
         return vector.setX(x).setY(y);
-    }
-
-    
-    public static Vector rotateVector(Vector vector, double angleX, double angleY, double angleZ) {
-        rotateAroundXAxis(vector, angleX);
-        rotateAroundYAxis(vector, angleY);
-        rotateAroundZAxis(vector, angleZ);
-        return vector;
-    }
-
-    
-    public static Vector rotateVector(Vector vector, Location location) {
-        return rotateVector(vector, location.getYaw(), location.getPitch());
-    }
-
-    
-    public static Vector rotateVector(Vector vector, float yawDegrees, float pitchDegrees) {
-        double yaw = toRadians(-1 * (yawDegrees + 90));
-        double pitch = toRadians(-pitchDegrees);
-
-        double cosYaw = cos(yaw);
-        double cosPitch = cos(pitch);
-        double sinYaw = sin(yaw);
-        double sinPitch = sin(pitch);
-
-        double initialX, initialY, initialZ;
-        double x, y, z;
-
-        // Z Axis rotation (Pitch)
-        initialX = vector.getX();
-        initialY = vector.getY();
-        x = initialX * cosPitch - initialY * sinPitch;
-        y = initialX * sinPitch + initialY * cosPitch;
-
-        // Y Axis rotation (Yaw)
-        initialZ = vector.getZ();
-        initialX = x;
-        z = initialZ * cosYaw - initialX * sinYaw;
-        x = initialZ * sinYaw + initialX * cosYaw;
-
-        return new Vector(x, y, z);
     }
 
     

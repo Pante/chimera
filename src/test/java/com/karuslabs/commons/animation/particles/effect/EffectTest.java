@@ -47,7 +47,7 @@ import static org.mockito.Mockito.*;
 public class EffectTest {
     
     private Plugin plugin;
-    private Supplier<Task<BoundLocation, BoundLocation>> supplier;
+    private Task<Task, BoundLocation, BoundLocation> task;
     private Effect<BoundLocation, BoundLocation> effect;
     private Player player;
     private ArgumentCaptor<EffectTask<BoundLocation, BoundLocation>> captor;
@@ -57,8 +57,8 @@ public class EffectTest {
     
     public EffectTest() {
         plugin = mock(Plugin.class);
-        supplier = mock(Supplier.class);
-        effect = spy(Effect.builder(plugin).supplier(supplier).orientate(true).iterations(1).delay(2).period(3).async(true).build());
+        task = mock(Task.class);
+        effect = spy(Effect.builder(plugin).task(task).orientate(true).iterations(1).delay(2).period(3).async(true).build());
         player = mock(Player.class);
         captor = forClass(EffectTask.class);
         particles = mock(Particles.class);
@@ -73,7 +73,7 @@ public class EffectTest {
         effect.render(null, null);
         
         verify(effect).schedule(captor.capture());
-        verify(supplier).get();
+        verify(task).get();
         
         captor.getValue().render.accept(particles, location);
         verify(particles).render(location);
@@ -87,7 +87,7 @@ public class EffectTest {
         effect.render(player, null, null);
         
         verify(effect).schedule(captor.capture());
-        verify(supplier).get();
+        verify(task).get();
         
         captor.getValue().render.accept(particles, location);
         verify(particles).render(player, location);
@@ -102,7 +102,7 @@ public class EffectTest {
         effect.render(singleton(player), null, null);
         
         verify(effect).schedule(captor.capture());
-        verify(supplier).get();
+        verify(task).get();
         
         captor.getValue().render.accept(particles, location);
         verify(particles).render(players.capture(), eq(location));

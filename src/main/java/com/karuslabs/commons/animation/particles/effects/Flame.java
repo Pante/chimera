@@ -27,61 +27,51 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.*;
-import static java.lang.Math.*;
+import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
-
-    private Particles particles;
-    private float radius;
-    private float grow;
-    private double radials;
-    private int circles;
-    private int helixes;
+public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+    
+    private Particles flame;
+    private int total;
     private Vector vector;
     
     
-    public Vortex(Particles particles) {
-        this(particles, 2, 0.5f, PI / 16, 3, 4);
+    public Flame(Particles flame) {
+        this(flame, 10);
     }
-
-    public Vortex(Particles particles, float radius, float grow, double radials, int circles, int helixes) {
-        this.particles = particles;
-        this.radius = radius;
-        this.grow = grow;
-        this.radials = radials;
-        this.circles = circles;
-        this.helixes = helixes;
-        this.vector = new Vector();
+    
+    public Flame(Particles flame, int total) {
+        this.flame = flame;
+        this.total = total;
+        vector = new Vector();
     }
-
+    
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-
-        for (int x = 0; x < circles; x++) {
-            for (int i = 0; i < helixes; i++) {
-                double angle = context.getCurrent() * radials + (2 * PI * i / helixes);
-                vector.setX(cos(angle) * radius);
-                vector.setY(context.getCurrent() * grow);
-                vector.setZ(sin(angle) * radius);
-
-                rotateAroundXAxis(vector, (location.getPitch() + 90) * (PI / 180));
-                rotateAroundYAxis(vector, -location.getYaw() * (PI / 180));
-
-                context.render(particles, location, vector);
-            }
+        for (int i = 0; i< total; i++) {
+            render(context, location, ThreadLocalRandom.current());
         }
     }
 
+    protected void render(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+        randomCircle(vector).multiply(random.nextDouble(0, 0.6));
+        vector.setY(random.nextFloat() * 1.8);
+
+        context.render(flame, location, vector);
+    }
+
+
     @Override
-    public Vortex get() {
-        return new Vortex(particles, radius, grow, radials, circles, helixes);
+    public Flame get() {
+        return new Flame(flame, total);
     }
     
 }

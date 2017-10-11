@@ -30,58 +30,61 @@ import com.karuslabs.commons.world.BoundLocation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.*;
+import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
+import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
-
+public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
+    
     private Particles particles;
-    private float radius;
-    private float grow;
-    private double radials;
-    private int circles;
-    private int helixes;
+    private int perCircle = 10;
+    private int circles = 36;
+    private float donutRadius = 2;
+    private float tubeRadius = .5f;
+    private Vector rotation;
     private Vector vector;
     
     
-    public Vortex(Particles particles) {
-        this(particles, 2, 0.5f, PI / 16, 3, 4);
+    public Donut(Particles particles) {
+        this(particles, 10, 36, 2, 0.5F, NONE);
     }
-
-    public Vortex(Particles particles, float radius, float grow, double radials, int circles, int helixes) {
+    
+    public Donut(Particles particles, int perCircle, int circles, float donutRadius, float tubeRadius, Vector rotation) {
         this.particles = particles;
-        this.radius = radius;
-        this.grow = grow;
-        this.radials = radials;
+        this.perCircle = perCircle;
         this.circles = circles;
-        this.helixes = helixes;
-        this.vector = new Vector();
+        this.donutRadius = donutRadius;
+        this.tubeRadius = tubeRadius;
+        this.rotation = rotation;
+        vector = new Vector();
     }
-
+    
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
+        for (int i = 0; i < circles; i++) {
+            double theta = 2 * PI * i / circles;
+            
+            for (int j = 0; j < perCircle; j += particles.getAmount()) {
+                double phi = 2 * PI * j / perCircle;
+                double cosPhi = cos(phi);
+                
+                vector.setX((donutRadius + tubeRadius * cosPhi) * cos(theta));
+                vector.setY((donutRadius + tubeRadius * cosPhi) * sin(theta));
+                vector.setZ(tubeRadius * sin(phi));
 
-        for (int x = 0; x < circles; x++) {
-            for (int i = 0; i < helixes; i++) {
-                double angle = context.getCurrent() * radials + (2 * PI * i / helixes);
-                vector.setX(cos(angle) * radius);
-                vector.setY(context.getCurrent() * grow);
-                vector.setZ(sin(angle) * radius);
-
-                rotateAroundXAxis(vector, (location.getPitch() + 90) * (PI / 180));
-                rotateAroundYAxis(vector, -location.getYaw() * (PI / 180));
-
+                rotate(vector, rotation);
+                
                 context.render(particles, location, vector);
             }
         }
     }
 
     @Override
-    public Vortex get() {
-        return new Vortex(particles, radius, grow, radials, circles, helixes);
+    public Donut get() {
+        return new Donut(particles, perCircle, circles, donutRadius, tubeRadius, rotation);
     }
     
 }

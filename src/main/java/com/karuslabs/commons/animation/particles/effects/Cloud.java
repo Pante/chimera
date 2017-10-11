@@ -27,70 +27,69 @@ import com.karuslabs.commons.animation.particles.*;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
-
-public class Cloud implements Task<BoundLocation, BoundLocation> {
+public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
     
-    private ColouredParticles cloud;
+    private Particles cloud;
     private Particles droplets;
     private float size;
     private float radius;
     private double offsetY;
     private Vector vector;
-    private Random random;
     
     
-    public Cloud(ColouredParticles cloud, Particles droplets) {
+    public Cloud(Particles cloud, Particles droplets) {
         this(cloud, droplets, 0.7F, 0.7F - 0.1F, 0.8);
     }
     
-    public Cloud(ColouredParticles cloud, Particles droplets, float size, float radius, double offsetY) {
+    public Cloud(Particles cloud, Particles droplets, float size, float radius, double offsetY) {
         this.cloud = cloud;
         this.droplets = droplets;
         this.size = size;
         this.radius = radius;
         this.offsetY = offsetY;
         vector = new Vector();
-        random = new Random();
     }
 
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        renderCloud(context, location.add(0, offsetY, 0));
-        renderDroplets(context, location.add(0, 0.2, 0));
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        
+        renderCloud(context, location.add(0, offsetY, 0), random, 50);
+        renderDroplets(context, location.add(0, 0.2, 0), random, 15);
     }
     
-    protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location) {
-        for (int i = 0; i < 50; i++) {
-            randomCircle(vector);
-            vector.multiply(random.nextDouble() * size);
-            
-            context.render(cloud, location.add(vector));
-            location.subtract(vector);
+    protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
+        for (int i = 0; i < amount; i++) {
+            randomCircle(vector).multiply(random.nextDouble() * size);
+            context.render(cloud, location, vector);
         }
     }
     
-    protected void renderDroplets(Context<BoundLocation, BoundLocation> context, Location location) {
-        for (int i = 0; i < 15; i++) {
-            if (random.nextInt(2) == 1) {
-                continue;
+    protected void renderDroplets(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
+        for (int i = 0; i < amount; i++) {
+            if (random.nextInt(2) != 1) {
+                double x = random.nextDouble() * radius;
+                double z = random.nextDouble() * radius;
+
+                context.render(droplets, location.add(x, 0, z));
+                context.render(droplets, location.subtract(x * 2, 0, z * 2));
+                location.add(x, 0, z);
             }
-            
-            double x = random.nextDouble() * radius;
-            double z = random.nextDouble() * radius;
-            
-            context.render(droplets, location.add(x, 0, z));
-            context.render(droplets, location.subtract(x * 2, 0, z * 2));
-            location.add(x, 0, z);
         }
+    }
+
+    @Override
+    public Cloud get() {
+        return new Cloud(cloud, droplets, size, radius, offsetY);
     }
     
 }

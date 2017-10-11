@@ -31,11 +31,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
-import static com.karuslabs.commons.world.Vectors.rotateVector;
+import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class AnimatedBall implements Task<BoundLocation, BoundLocation> {
+public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLocation> {
     
     private static final Vector FACTOR = new Vector(1, 2, 1);
     private static final Vector OFFSET = new Vector(0, 0.8, 0);
@@ -81,11 +81,15 @@ public class AnimatedBall implements Task<BoundLocation, BoundLocation> {
                     .setZ(factor.getY() * r * sin(s) + offset.getY())
                     .setY(factor.getZ() * size * cos(t) + offset.getZ());
 
-            rotateVector(vector, rotation.getX(), rotation.getY(), rotation.getZ());
+            rotate(vector, rotation);
             
-            context.render(particles, location.add(vector));
-            location.subtract(vector);
+            context.render(particles, location, vector);
         }
+    }
+
+    @Override
+    public AnimatedBall get() {
+        return new AnimatedBall(particles, total, perIteration, size, factor, offset, rotation);
     }
     
 }

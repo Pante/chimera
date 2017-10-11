@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -34,12 +34,12 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Atom implements Task<BoundLocation, BoundLocation> {
+public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
 
-    private ColouredParticles nucleus;
-    private ColouredParticles orbital;
+    private Particles nucleus;
+    private Particles orbital;
     private int nucleusTotal;
-    private int orbitialTotal;
+    private int orbitalTotal;
     private double radius;
     private float nucleusRadius;
     private int orbitals;
@@ -49,15 +49,15 @@ public class Atom implements Task<BoundLocation, BoundLocation> {
     private Vector vector;
     
     
-    public Atom(ColouredParticles nucleus, ColouredParticles orbital) {
+    public Atom(Particles nucleus, Particles orbital) {
         this(nucleus, orbital, 10, 10, 3, 0.2F, 3, 0, PI / 80);
     }
     
-    public Atom(ColouredParticles nucleus, ColouredParticles orbital, int nucleusTotal, int orbitialTotal, double radius, float nucleusRadius, int orbitals, double rotation, double angularVelocity) {
+    public Atom(Particles nucleus, Particles orbital, int nucleusTotal, int orbitalTotal, double radius, float nucleusRadius, int orbitals, double rotation, double angularVelocity) {
         this.nucleus = nucleus;
         this.orbital = orbital;
         this.nucleusTotal = nucleusTotal;
-        this.orbitialTotal = orbitialTotal;
+        this.orbitalTotal = orbitalTotal;
         this.radius = radius;
         this.nucleusRadius = nucleusRadius;
         this.orbitals = orbitals;
@@ -78,8 +78,7 @@ public class Atom implements Task<BoundLocation, BoundLocation> {
     
     protected void renderNucleus(Context<BoundLocation, BoundLocation> context, Location location) {
         for (int i = 0; i < nucleusTotal; i += nucleus.getAmount()) {
-            random(vector);
-            vector.multiply(radius * nucleusRadius);
+            random(vector).multiply(radius * nucleusRadius);
 
             context.render(nucleus, location.add(vector));
             location.subtract(vector);
@@ -87,7 +86,7 @@ public class Atom implements Task<BoundLocation, BoundLocation> {
     }
     
     protected void renderOrbitals(Context<BoundLocation, BoundLocation> context, Location location) {
-        for (int i = 0; i < orbitialTotal; i += orbital.getAmount()) {
+        for (int i = 0; i < orbitalTotal; i += orbital.getAmount()) {
             double angle = step * angularVelocity;
             
             for (int j = 0; j < orbitals; j++) {        
@@ -98,11 +97,15 @@ public class Atom implements Task<BoundLocation, BoundLocation> {
                 rotateAroundXAxis(vector, xRotation);
                 rotateAroundYAxis(vector, rotation);
                 
-                context.render(orbital, location.add(vector));
-                location.subtract(vector);
+                context.render(orbital, location, vector);
             }
             step++;
         }
+    }
+
+    @Override
+    public Atom get() {
+        return new Atom(nucleus, orbital, nucleusTotal, orbitalTotal, radius, nucleusRadius, orbitals, rotation, angularVelocity);
     }
     
 }

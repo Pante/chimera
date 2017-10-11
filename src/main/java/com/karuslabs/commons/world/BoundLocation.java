@@ -26,7 +26,7 @@ package com.karuslabs.commons.world;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.rotateVector;
+import static com.karuslabs.commons.world.Vectors.rotate;
 
 
 public abstract class BoundLocation {
@@ -56,7 +56,7 @@ public abstract class BoundLocation {
         
     public void updateOffset() {
         if (relative) {
-            location.add(rotateVector(offset, location));
+            location.add(rotate(offset, location));
             
         } else {
             location.add(offset);

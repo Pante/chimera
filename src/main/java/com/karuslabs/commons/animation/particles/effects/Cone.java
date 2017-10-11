@@ -34,7 +34,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Cone implements Task<BoundLocation, BoundLocation> {
+public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private float lengthGrowth;
@@ -85,9 +85,13 @@ public class Cone implements Task<BoundLocation, BoundLocation> {
             rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
             rotateAroundYAxis(vector, toRadians(-location.getYaw()));
 
-            context.render(particles, location.add(vector));
-            location.subtract(vector);
+            context.render(particles, location, vector);
         }
+    }
+
+    @Override
+    public Cone get() {
+        return new Cone(particles, lengthGrowth, radiusGrowth, angularVelocity, size, perIteration, rotation, randomize);
     }
     
 }
