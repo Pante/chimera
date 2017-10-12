@@ -85,5 +85,10 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     public long getIterations() {
         return iterations;
     }
+
+    @Override
+    public void cancel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
