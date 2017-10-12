@@ -27,47 +27,40 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static java.lang.Math.*;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+public class Music implements Task<Music, BoundLocation, BoundLocation> {
     
-    private Particles flame;
-    private int total;
+    private Particles particles;
+    private double radials;
+    private float radius;
     
     
-    public Flame(Particles flame) {
-        this(flame, 10);
+    public Music(Particles particles) {
+        this(particles, PI / 8, 0.4F);
     }
     
-    public Flame(Particles flame, int total) {
-        this.flame = flame;
-        this.total = total;
+    public Music(Particles particles, double radials, float radius) {
+        this.particles = particles;
+        this.radials = radials;
+        this.radius = radius;
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        Vector vector = context.getVector();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        long current = context.getCurrent();
         
-        for (int i = 0; i < total; i++) {
-            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-            vector.setY(random.nextFloat() * 1.8);
-
-            context.render(flame, location, vector);
-        }
+        location.add(cos(radials * current) * radius, 1.9f, sin(radials* current) * radius);
+        context.render(particles, location);
     }
 
-
     @Override
-    public Flame get() {
+    public Music get() {
         return this;
     }
     

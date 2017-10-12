@@ -77,9 +77,9 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
             float r = (float) sin(t) * size;
             float s = (float) (2 * PI * t);
 
-            vector.setX(factor.getX() * r * cos(s) + offset.getX())
-                    .setZ(factor.getY() * r * sin(s) + offset.getY())
-                    .setY(factor.getZ() * size * cos(t) + offset.getZ());
+            vector.setX(factor.getX() * r * cos(s) + offset.getX());
+            vector.setZ(factor.getY() * r * sin(s) + offset.getY());
+            vector.setY(factor.getZ() * size * cos(t) + offset.getZ());
 
             rotate(vector, rotation);
             

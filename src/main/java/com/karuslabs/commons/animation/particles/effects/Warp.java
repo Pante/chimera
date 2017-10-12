@@ -69,7 +69,7 @@ public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
         location.add(0, y, 0);
 
         for (int i = 0; i < total; i += particles.getAmount()) {
-            double angle = (double) 2 * PI * i / total;
+            double angle = 2 * PI * i / total;
 
             x = cos(angle) * radius;
             z = sin(angle) * radius;
@@ -85,4 +85,5 @@ public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
     public Warp get() {
         return new Warp(particles, radius, total, grow, rings);
     }
+    
 }

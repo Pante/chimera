@@ -40,6 +40,10 @@ public interface Context<Origin extends BoundLocation, Target extends BoundLocat
         location.subtract(offset);
     }
     
+    public void cancel();
+    
+    public Vector getVector();
+    
     public Origin getOrigin();
     
     public Target getTarget();

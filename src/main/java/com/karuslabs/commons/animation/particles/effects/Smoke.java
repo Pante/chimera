@@ -23,72 +23,51 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.*;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
+public class Smoke implements Task<Smoke, BoundLocation, BoundLocation> {
     
-    private Particles cloud;
-    private Particles droplets;
-    private float size;
-    private float radius;
-    private double offsetY;
+    private Particles particles;
+    private int perIteration;
+    private double width;
+    private double height;
     
     
-    public Cloud(Particles cloud, Particles droplets) {
-        this(cloud, droplets, 0.7F, 0.7F - 0.1F, 0.8);
+    public Smoke(Particles particles) {
+        this(particles, 20, 0.6, 2);
     }
     
-    public Cloud(Particles cloud, Particles droplets, float size, float radius, double offsetY) {
-        this.cloud = cloud;
-        this.droplets = droplets;
-        this.size = size;
-        this.radius = radius;
-        this.offsetY = offsetY;
+    public Smoke(Particles particles, int perIteration, double width, double height) {
+        this.particles = particles;
+        this.perIteration = perIteration;
+        this.width = width;
+        this.height = height;
     }
-
+    
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        renderCloud(context, location.add(0, offsetY, 0), random, 50);
-        renderDroplets(context, location.add(0, 0.2, 0), random, 15);
-    }
-    
-    protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
-        Vector vector = context.getVector();
-        for (int i = 0; i < amount; i++) {
-            randomCircle(vector).multiply(random.nextDouble() * size);
-            context.render(cloud, location, vector);
-        }
-    }
-    
-    protected void renderDroplets(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
-        for (int i = 0; i < amount; i++) {
-            if (random.nextInt(2) != 1) {
-                double x = random.nextDouble() * radius;
-                double z = random.nextDouble() * radius;
-
-                context.render(droplets, location.add(x, 0, z));
-                context.render(droplets, location.subtract(x * 2, 0, z * 2));
-                location.add(x, 0, z);
-            }
+        for (int i = 0; i < perIteration; i += particles.getAmount()) {
+            location.add(randomCircle(context.getVector()).multiply(random.nextDouble(0, 0.6)));
+            location.add(0, random.nextDouble(0, 2), 0);
+            context.render(particles, location);
         }
     }
 
     @Override
-    public Cloud get() {
+    public Smoke get() {
         return this;
     }
     

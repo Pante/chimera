@@ -27,57 +27,79 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import org.bukkit.Location;
+import java.util.*;
+
+import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.world.Vectors.copy;
-import static java.lang.Math.pow;
 
 
-public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
+public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
     
     private Particles particles;
-    private float height;
-    private int total;
+    private int refresh;
+    private int max;
+    List<Vector> waypoints;
+    World world;
     
     
-    public Arc(Particles particles) {
-        this(particles, 2, 100);
+    public Trace(Particles particles) {
+        this(particles, 5, 30);
     }
     
-    public Arc(Particles particles, float height, int total) {
+    public Trace(Particles particles, int refresh, int max) {
         this.particles = particles;
-        this.height = height;
-        this.total = total;
+        this.refresh = refresh;
+        this.max = max;
+        waypoints = new ArrayList<>(max);
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-        Location target = context.getTarget().getLocation();
-
-        Vector vector = context.getVector();
-        Vector link = target.toVector().subtract(location.toVector());
-        
-        float length = (float) link.length();
-        float pitch = (float) (4 * height / pow(length, 2));
-        
-        link.normalize();
-        
-        for (int i = 0; i < total; i += particles.getAmount()) {
-            copy(link, vector).multiply((float) length * i / total);
-            float x = ((float) i / total) * length - length / 2;
-            float y = (float) (-pitch * pow(x, 2) + height);
-
-            context.render(particles, location.add(vector).add(0, y, 0));
-            location.subtract(vector).subtract(0, y, 0);
+        if (world == null) {
+            world = location.getWorld();
+            
+        } else if (world.equals(location.getWorld())) {
+            render(context, location);
+            
+        } else {
+            context.cancel();
         }
     }
+    
+    protected void render(Context<BoundLocation, BoundLocation> context, Location location) {
+        waypoints.add(process(location));
+        
+        if ((context.getCurrent() + 1) % refresh == 0) {
+            location = new Location(world, 0, 0, 0);
+            
+            for (Vector position : waypoints) {
+                location.setX(position.getX());
+                location.setY(position.getY());
+                location.setZ(position.getZ());
+                
+                context.render(particles, location);
+            }
+        }
+    }
+    
+    protected Vector process(Location location) {
+        if (waypoints.size() >= max) {
+            Vector vector = waypoints.remove(0);
+            return copy(location, vector);
+            
+        } else {
+            return location.toVector();
+        }
+    }
+    
 
     @Override
-    public Arc get() {
-        return this;
+    public Trace get() {
+        return new Trace(particles, refresh, max);
     }
     
 }

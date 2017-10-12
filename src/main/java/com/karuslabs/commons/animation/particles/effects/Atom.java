@@ -86,7 +86,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
     }
     
     protected void renderOrbitals(Context<BoundLocation, BoundLocation> context, Location location) {
-        for (int i = 0; i < orbitalTotal; i += orbital.getAmount()) {
+        for (int i = 0; i < orbitalTotal; i += orbital.getAmount(), step++) {
             double angle = step * angularVelocity;
             
             for (int j = 0; j < orbitals; j++) {        
@@ -99,7 +99,6 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
                 
                 context.render(orbital, location, vector);
             }
-            step++;
         }
     }
 

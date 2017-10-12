@@ -42,7 +42,6 @@ public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
     private double radials;
     private int circles;
     private int helixes;
-    private Vector vector;
     
     
     public Vortex(Particles particles) {
@@ -56,14 +55,14 @@ public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
         this.radials = radials;
         this.circles = circles;
         this.helixes = helixes;
-        this.vector = new Vector();
     }
 
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
-
+        Vector vector = context.getVector();
+        
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
                 double angle = context.getCurrent() * radials + (2 * PI * i / helixes);
@@ -81,7 +80,7 @@ public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
 
     @Override
     public Vortex get() {
-        return new Vortex(particles, radius, grow, radials, circles, helixes);
+        return this;
     }
     
 }

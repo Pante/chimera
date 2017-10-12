@@ -43,7 +43,6 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
     private float donutRadius = 2;
     private float tubeRadius = .5f;
     private Vector rotation;
-    private Vector vector;
     
     
     public Donut(Particles particles) {
@@ -57,13 +56,14 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
         this.donutRadius = donutRadius;
         this.tubeRadius = tubeRadius;
         this.rotation = rotation;
-        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
+        
         for (int i = 0; i < circles; i++) {
             double theta = 2 * PI * i / circles;
             
@@ -84,7 +84,7 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
 
     @Override
     public Donut get() {
-        return new Donut(particles, perCircle, circles, donutRadius, tubeRadius, rotation);
+        return this;
     }
     
 }

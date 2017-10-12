@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.*;
+import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -32,64 +32,65 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static com.karuslabs.commons.world.Vectors.*;
+import static java.lang.Math.*;
 
 
-public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
+public class Star implements Task<Star, BoundLocation, BoundLocation> {
     
-    private Particles cloud;
-    private Particles droplets;
-    private float size;
-    private float radius;
-    private double offsetY;
+    private Particles particles;
+    private int perIteration = 50;
+    private float spikeHeight = 3.5f;
+    private int spikeHalf = 3;
+    private float radius = 0.5f;
     
     
-    public Cloud(Particles cloud, Particles droplets) {
-        this(cloud, droplets, 0.7F, 0.7F - 0.1F, 0.8);
+    public Star(Particles particles) {
+        this(particles, 50, 3.5F, 3, 0.5F);
     }
     
-    public Cloud(Particles cloud, Particles droplets, float size, float radius, double offsetY) {
-        this.cloud = cloud;
-        this.droplets = droplets;
-        this.size = size;
+    public Star(Particles particles, int perIteration, float spikeHeight, int spikeHalf, float radius) {
+        this.particles = particles;
+        this.perIteration = perIteration;
+        this.spikeHeight = spikeHeight;
+        this.spikeHalf = spikeHalf;
         this.radius = radius;
-        this.offsetY = offsetY;
     }
-
+    
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
+        double radius = 3 * this.radius / sqrt(3);
         
-        renderCloud(context, location.add(0, offsetY, 0), random, 50);
-        renderDroplets(context, location.add(0, 0.2, 0), random, 15);
-    }
-    
-    protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
-        Vector vector = context.getVector();
-        for (int i = 0; i < amount; i++) {
-            randomCircle(vector).multiply(random.nextDouble() * size);
-            context.render(cloud, location, vector);
+        for (int i = 0; i < spikeHalf * 2; i++) {
+            render(context, random, location, i * PI / spikeHalf);
         }
     }
     
-    protected void renderDroplets(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
-        for (int i = 0; i < amount; i++) {
-            if (random.nextInt(2) != 1) {
-                double x = random.nextDouble() * radius;
-                double z = random.nextDouble() * radius;
-
-                context.render(droplets, location.add(x, 0, z));
-                context.render(droplets, location.subtract(x * 2, 0, z * 2));
-                location.add(x, 0, z);
-            }
+    protected void render(Context<BoundLocation, BoundLocation> context, ThreadLocalRandom random, Location location, double rotation) {
+        Vector vector = context.getVector();
+        for (int x = 0; x < perIteration; x += particles.getAmount()) {
+            double angle = 2 * PI * x / perIteration;
+            float height = random.nextFloat() * spikeHeight;
+            
+            vector.setX(cos(angle)).setY(0).setZ(sin(angle));
+            vector.multiply((spikeHeight - height) * radius / spikeHeight);
+            vector.setY(radius + height);
+            
+            rotateAroundXAxis(vector, rotation);
+            context.render(particles, location, vector);
+            
+            rotateAroundXAxis(vector, PI);
+            rotateAroundYAxis(vector, PI / 2);
+            context.render(particles, location, vector);
         }
     }
 
     @Override
-    public Cloud get() {
+    public Star get() {
         return this;
     }
-    
+
 }

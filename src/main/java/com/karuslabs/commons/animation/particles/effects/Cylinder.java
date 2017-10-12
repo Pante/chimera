@@ -75,6 +75,7 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double x = rotation.getX(), y = rotation.getY(), z = rotation.getZ();
+        
         if (rotate) {
             x += step * angularVelocity.getX();
             y += step * angularVelocity.getY();

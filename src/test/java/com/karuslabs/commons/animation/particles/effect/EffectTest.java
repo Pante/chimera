@@ -27,7 +27,6 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

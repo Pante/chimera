@@ -27,7 +27,10 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.Context;
 import com.karuslabs.commons.world.BoundLocation;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 
 public class StubContext<Origin extends BoundLocation, Target extends BoundLocation> implements Context<Origin, Target> {
@@ -37,6 +40,8 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     long current;
     long iterations;
     Location location;
+    ThreadLocalRandom random;
+    Vector vector;
     
     
     public StubContext(Origin origin, Target target, long current, long iterations) {
@@ -44,6 +49,7 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
         this.target = target;
         this.current = current;
         this.iterations = iterations;
+        this.random = ThreadLocalRandom.current();
     }
     
     
@@ -51,7 +57,7 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     public void render(Particles particles, Location location) {
         this.location = location.clone();
     }
-
+    
     @Override
     public Origin getOrigin() {
         return origin;
@@ -60,6 +66,14 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     @Override
     public Target getTarget() {
         return target;
+    }
+    
+    @Override
+    public Vector getVector() {
+        if (vector == null) {
+            vector = new Vector();
+        }
+        return vector;
     }
 
     @Override

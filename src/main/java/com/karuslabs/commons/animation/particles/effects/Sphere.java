@@ -27,47 +27,50 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static com.karuslabs.commons.world.Vectors.random;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+public class Sphere implements Task<Sphere, BoundLocation, BoundLocation> {
     
-    private Particles flame;
-    private int total;
+    private Particles particles;
+    private int perIteration = 50;
+    private double radius = 0.6;
+    private double yOffset = 0;
+    private double increment = 0;
     
     
-    public Flame(Particles flame) {
-        this(flame, 10);
+    public Sphere(Particles particles) {
+        this(particles, 50, 0.6, 0, 0);
     }
     
-    public Flame(Particles flame, int total) {
-        this.flame = flame;
-        this.total = total;
+    public Sphere(Particles particles, int perIteration, double radius, double yOffset, double increment) {
+        this.particles = particles;
+        this.perIteration = perIteration;
+        this.radius = radius;
+        this.yOffset = yOffset;
+        this.increment = increment;
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
-        Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        Location location = context.getOrigin().getLocation();
+        location.add(0, yOffset, 0);
         
-        for (int i = 0; i < total; i++) {
-            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-            vector.setY(random.nextFloat() * 1.8);
+        double radius = this.radius + context.getCurrent() * increment;
 
-            context.render(flame, location, vector);
+        for (int i = 0; i < perIteration; i += particles.getAmount()) {
+            random(vector).multiply(radius);
+            context.render(particles, location, vector);
         }
     }
 
-
     @Override
-    public Flame get() {
+    public Sphere get() {
         return this;
     }
     

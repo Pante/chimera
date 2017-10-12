@@ -27,27 +27,30 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static com.karuslabs.commons.world.Vectors.random;
+import static java.lang.Math.abs;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+public class Shield implements Task<Shield, BoundLocation, BoundLocation> {
     
-    private Particles flame;
-    private int total;
+    private Particles particles;
+    public int perIteration;
+    public int radius;
+    public boolean sphere;
     
     
-    public Flame(Particles flame) {
-        this(flame, 10);
+    public Shield(Particles particles) {
+        this(particles, 50, 3, false);
     }
     
-    public Flame(Particles flame, int total) {
-        this.flame = flame;
-        this.total = total;
+    public Shield(Particles particles, int perIteration, int radius, boolean sphere) {
+        this.particles = particles;
+        this.perIteration = perIteration;
+        this.radius = radius;
+        this.sphere = sphere;
     }
     
     
@@ -55,19 +58,19 @@ public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        for (int i = 0; i < total; i++) {
-            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-            vector.setY(random.nextFloat() * 1.8);
-
-            context.render(flame, location, vector);
+        for (int i = 0; i < perIteration; i += particles.getAmount()) {
+            random(vector).multiply(radius);
+            if (!sphere) {
+                vector.setY(abs(vector.getY()));
+            }
+            
+            context.render(particles, location, vector);
         }
     }
 
-
     @Override
-    public Flame get() {
+    public Shield get() {
         return this;
     }
     

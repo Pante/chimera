@@ -38,6 +38,11 @@ public final class Vectors {
         return destination;
     }
     
+    public static Vector copy(Location source, Vector destination) {
+        destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
+        return destination;
+    }
+    
     
     public static Vector random(Vector vector) {
         ThreadLocalRandom random = ThreadLocalRandom.current();

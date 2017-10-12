@@ -27,27 +27,32 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
+import static java.lang.Math.*;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+public class Hill implements Task<Hill, BoundLocation, BoundLocation> {
     
-    private Particles flame;
-    private int total;
+    private Particles particles;
+    private float perRow;
+    private float length;
+    private float height;
+    private double yRotation;
     
     
-    public Flame(Particles flame) {
-        this(flame, 10);
+    public Hill(Particles particles) {
+        this(particles, 30, 6.5F, 2.5F, PI / 7);
     }
     
-    public Flame(Particles flame, int total) {
-        this.flame = flame;
-        this.total = total;
+    public Hill(Particles particles, float perRow, float length, float height, double yRotation) {
+        this.particles = particles;
+        this.perRow = perRow;
+        this.length = length;
+        this.height = height;
+        this.yRotation = yRotation;
     }
     
     
@@ -55,19 +60,24 @@ public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        for (int i = 0; i < total; i++) {
-            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-            vector.setY(random.nextFloat() * 1.8);
-
-            context.render(flame, location, vector);
+        for (int x = 0; x <= perRow; x += particles.getAmount()) {
+            double y1 = sin(PI * x / perRow);
+            
+            for (int z = 0; z <= perRow; z += particles.getAmount()) {
+                double y2 = sin(PI * z / perRow);
+                vector.setX(length * x / perRow).setZ(length * z / perRow);
+                vector.setY(height * y1 * y2);
+                
+                rotateAroundYAxis(vector, yRotation);
+                
+                context.render(particles, location, vector);
+            }
         }
     }
 
-
     @Override
-    public Flame get() {
+    public Hill get() {
         return this;
     }
     

@@ -27,27 +27,39 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Vectors.randomCircle;
+import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
+import static com.karuslabs.commons.world.Vectors.rotate;
+import static java.lang.Math.*;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+public class Heart implements Task<Heart, BoundLocation, BoundLocation> {
     
-    private Particles flame;
-    private int total;
+    private Particles particles;
+    private int perIteration;
+    private Vector rotation;
+    private double xFactor;
+    private double yFactor;
+    private double spike;
+    private double yFactorCompression;
+    private float compilation;
     
     
-    public Flame(Particles flame) {
-        this(flame, 10);
+    public Heart(Particles particles) {
+        this(particles, 50, NONE, 1, 1, 0.8, 2, 2F);
     }
     
-    public Flame(Particles flame, int total) {
-        this.flame = flame;
-        this.total = total;
+    public Heart(Particles particles, int perIteration, Vector rotation, double xFactor, double yFactor, double spike, double yFactorCompression, float compilation) {
+        this.particles = particles;
+        this.perIteration = perIteration;
+        this.rotation = rotation;
+        this.xFactor = xFactor;
+        this.yFactor = yFactor;
+        this.spike = spike;
+        this.yFactorCompression = yFactorCompression;
+        this.compilation = compilation;
     }
     
     
@@ -55,19 +67,22 @@ public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        for (int i = 0; i < total; i++) {
-            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-            vector.setY(random.nextFloat() * 1.8);
+        for (int i = 0; i < perIteration; i += particles.getAmount()) {
+            double alpha = PI / compilation / perIteration * i;
+            double phi = pow(abs(sin(2 * compilation * alpha)) + spike * abs(sin(compilation * alpha)), 1 / yFactorCompression);
 
-            context.render(flame, location, vector);
+            vector.setY(phi * (sin(alpha) + cos(alpha)) * yFactor);
+            vector.setZ(phi * (cos(alpha) - sin(alpha)) * xFactor);
+
+            rotate(vector, rotation);
+
+            context.render(particles, location, vector);
         }
     }
 
-
     @Override
-    public Flame get() {
+    public Heart get() {
         return this;
     }
     

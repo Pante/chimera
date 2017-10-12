@@ -47,7 +47,6 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     private float height;
     private float heightSpout;
     private double rotation;
-    private Vector vector;
     
     
     public Fountain(Particles particles) {
@@ -64,7 +63,6 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
         this.height = height;
         this.heightSpout = heightSpout;
         this.rotation = rotation;
-        vector = new Vector();
     }
     
     
@@ -76,6 +74,7 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     }
     
     protected void renderStrands(Context<BoundLocation, BoundLocation> context, Location location) {
+        Vector vector = context.getVector();
         for (int i = 1; i <= strands; i++) {
             double angle = 2 * i * PI / strands + rotation;
             for (int j = 1; j <= perStrand; j += particles.getAmount()) {
@@ -91,6 +90,7 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     }
     
     protected void renderSpout(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+        Vector vector = context.getVector();
         for (int i = 0; i < perSpout; i += particles.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble(0, radius * radiusSpout));
             vector.setY(random.nextDouble(0, heightSpout));
@@ -102,7 +102,7 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
 
     @Override
     public Fountain get() {
-        return new Fountain(particles, strands, perStrand, perSpout, radius, radiusSpout, height, heightSpout, rotation);
+        return this;
     }
     
 }

@@ -40,7 +40,8 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     protected Origin origin;
     protected Target target;
     protected boolean orientate;
-
+    protected Vector vector;
+    
     
     EffectTask(Task<Task, Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
         super(iterations);
@@ -84,6 +85,15 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     @Override
     public void render(Particles particles, Location location) {
         render.accept(particles, location);
+    }
+    
+    @Override
+    public Vector getVector() {
+        if (vector == null) {
+            vector = new Vector();
+        }
+        
+        return vector;
     }
 
     @Override

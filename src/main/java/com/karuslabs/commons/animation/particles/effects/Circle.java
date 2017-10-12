@@ -44,7 +44,6 @@ public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
     private Vector angularVelocity;
     private Vector subtract;
     private boolean rotate;
-    private Vector vector;
     
     
     public Circle(Particles particles) {
@@ -59,13 +58,13 @@ public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
         this.angularVelocity = angularVelocity;
         this.subtract = subtract;
         this.rotate = rotate;
-        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation().subtract(subtract);
+        Vector vector = context.getVector();
         long current = context.getCurrent();
         
         double increment = (2 * PI) / total;
@@ -82,8 +81,7 @@ public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
 
     @Override
     public Circle get() {
-        return new Circle(particles, total, radius, rotation, angularVelocity, subtract, rotate);
+        return this;
     }
-
     
 }
