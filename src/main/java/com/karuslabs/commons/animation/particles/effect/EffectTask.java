@@ -41,6 +41,7 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     protected Target target;
     protected boolean orientate;
     protected Vector vector;
+    protected int count;
     
     
     EffectTask(Task<Task, Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
@@ -50,8 +51,10 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
         this.origin = origin;
         this.target = target;
         this.orientate = orientate;
+        count = 0;
     }
 
+    
     @Override
     protected void process() {
         if (origin.validate() && target.validate()) {
@@ -86,15 +89,7 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     public void render(Particles particles, Location location) {
         render.accept(particles, location);
     }
-    
-    @Override
-    public Vector getVector() {
-        if (vector == null) {
-            vector = new Vector();
-        }
-        
-        return vector;
-    }
+
 
     @Override
     public Origin getOrigin() {
@@ -105,6 +100,27 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     public Target getTarget() {
         return target;
     }
+    
+        
+    @Override
+    public Vector getVector() {
+        if (vector == null) {
+            vector = new Vector();
+        }
+        
+        return vector;
+    }
+    
+    @Override
+    public int count() {
+        return count;
+    }
+    
+    @Override
+    public void count(int count) {
+        this.count = count;
+    }
+    
     
     
     @Override

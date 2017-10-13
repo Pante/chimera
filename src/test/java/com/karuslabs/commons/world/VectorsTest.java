@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.*;
 
+import static java.lang.Math.PI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
@@ -40,6 +41,26 @@ public class VectorsTest {
     
     
     @Test
+    public void copy_Vector() {
+        Vector source = new Vector(0.1, 0.2, 0.3);
+        Vector destination = new Vector();
+        
+        Vectors.copy(source, destination);
+        assertEquals(source, destination);
+    }
+    
+    
+    @Test
+    public void copy_Location() {
+        Location source = new Location(null, 0.1, 0.2, 0.3);
+        Vector destination = new Vector();
+        
+        Vectors.copy(source, destination);
+        assertEquals(source.toVector(), destination);
+    }
+    
+    
+    @Test
     public void random() {
         Vector vector = mock(Vector.class);
         
@@ -49,6 +70,12 @@ public class VectorsTest {
         verify(vector).setY(anyDouble());
         verify(vector).setZ(anyDouble());
         verify(vector).normalize();
+    }
+    
+    
+    @Test
+    public void randomAngle() {
+        assertEquals(0, Vectors.randomAngle(), 2 * PI);
     }
     
     

@@ -76,19 +76,7 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
                 populate(ThreadLocalRandom.current());
             }
             
-            for (int i = 0; i < arcs; i++) {
-                float pitch = floats[i] * 2 * this.pitch - this.pitch;
-                float x = (step % perArc) * length / perArc;
-                float y = (float) (pitch * pow(x, 2));
-                
-                vector.setX(x).setY(y).setZ(0);
-
-                rotateAroundXAxis(vector, angles[i]);
-                rotateAroundYAxis(vector, toRadians(-(location.getYaw() + 90)));
-                rotateAroundZAxis(vector, toRadians(-location.getPitch()));
-                
-                context.render(particles, location, vector);
-            }
+            renderArcs(context, location);
         }
     }
     
@@ -98,6 +86,23 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
             angles[i] = randomAngle();
         }
     }
+
+    protected void renderArcs(Context<BoundLocation, BoundLocation> context, Location location) {
+        for (int i = 0; i < arcs; i++) {
+            float pitch = floats[i] * 2 * this.pitch - this.pitch;
+            float x = (step % perArc) * length / perArc;
+            float y = (float) (pitch * pow(x, 2));
+
+            vector.setX(x).setY(y).setZ(0);
+
+            rotateAroundXAxis(vector, angles[i]);
+            rotateAroundYAxis(vector, toRadians(-(location.getYaw() + 90)));
+            rotateAroundZAxis(vector, toRadians(-location.getPitch()));
+                
+            context.render(particles, location, vector);
+        }
+    }
+    
 
     @Override
     public Dragon get() {

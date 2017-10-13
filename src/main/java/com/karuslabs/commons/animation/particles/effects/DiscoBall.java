@@ -32,6 +32,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import static com.karuslabs.commons.animation.particles.effects.DiscoBall.Direction.*;
 import static com.karuslabs.commons.world.Vectors.random;
 
 
@@ -48,13 +49,13 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
     private float radius;
     private int lines;
     private int lineLength;
-    private Direction direction = Direction.DOWN;
-    private Vector vector;
-    private Vector distance;
+    Direction direction;
+    Vector vector;
+    Vector distance;
     
     
     public DiscoBall(Particles sphere, Particles line) {
-        this(sphere, line, 50, 100, 0.6F, 7, 15, Direction.DOWN);
+        this(sphere, line, 50, 100, 0.6F, 7, 15, DOWN);
     }
     
     public DiscoBall(Particles sphere, Particles line, int sphereTotal, int lineTotal, float radius, int lines, int lineLength, Direction direction) {
@@ -84,15 +85,8 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
         int max = random.nextInt(2, lines) * 2;
         for (int i = 0; i < max; i++) {
             double x = random.nextInt(-lineLength, lineLength);
-            double y = random.nextInt(-lineLength, lineLength);
+            double y = calculateY(random);
             double z = random.nextInt(-lineLength, lineLength);
-            
-            if (direction == Direction.DOWN) {
-                y = random.nextInt(lineLength, lineLength * 2);
-                
-            } else if (direction == Direction.UP) {
-                y = random.nextInt(-2 * lineLength, -lineLength);
-            }
             
             vector.setX(-x).setY(-y).setZ(-z);
             double ratio = vector.length() / lineTotal;
@@ -106,6 +100,20 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
             location.subtract(distance);
         }
     }
+    
+    protected int calculateY(ThreadLocalRandom random) {
+        switch (direction) {
+            case DOWN:
+                return random.nextInt(lineLength, lineLength * 2);
+                
+            case UP:
+                return random.nextInt(-2 * lineLength, -lineLength);
+                
+            default:
+                return random.nextInt(-lineLength, lineLength);
+        }
+    }
+
     
     protected void renderSphere(Context<BoundLocation, BoundLocation> context, Location location) {
         for (int i = 0; i < sphereTotal; i += sphere.getAmount()) {

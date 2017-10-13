@@ -21,47 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.annotation.Blocking;
+import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.*;
-import javax.annotation.Nullable;
+import static org.mockito.Mockito.*;
 
 
-class ProxiedPromise<T> implements Promise<T> {
-
-    private final Future<T> future;
-
-    ProxiedPromise(Future<T> future) {
-        this.future = future;
+public class FountainTest extends Effect {
+    
+    private Fountain fountain = spy(new Fountain(SPAM));
+    
+    
+    @Test
+    public void render() {
+        doNothing().when(fountain).renderStrands(context, location);
+        doNothing().when(fountain).renderSpout(context, location, RANDOM);
+        
+        fountain.render(context);
+        
+        verify(fountain).renderStrands(context, location);
+        verify(fountain).renderSpout(context, location, RANDOM);
     }
-
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        return future.cancel(mayInterruptIfRunning);
+    
+    
+    @Test
+    public void renderStrands() {
+        fountain.renderStrands(context, location);
+        
+        verify(context, times(10)).render(SPAM, location);
+        assertVector(from(1.02357022661029, 1.062827259650071, 1.02357022661029), context.location);
     }
-
-    @Override
-    public boolean isCancelled() {
-        return future.isCancelled();
+    
+    
+    @Test
+    public void renderSpout() {
+        fountain.renderSpout(context, location, RANDOM);
+        
+        verify(context).render(SPAM, location);
     }
-
-    @Override
-    public boolean isDone() {
-        return future.isDone();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get() throws InterruptedException, ExecutionException {
-        return future.get();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return future.get(timeout, unit);
-    }
-
+    
 }

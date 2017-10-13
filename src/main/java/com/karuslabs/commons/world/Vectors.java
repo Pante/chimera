@@ -64,7 +64,7 @@ public final class Vectors {
     
     
     public static double randomAngle() {
-        return ThreadLocalRandom.current().nextDouble() * 2 * PI;
+        return ThreadLocalRandom.current().nextDouble(0, 2 * PI); 
     }
     
     

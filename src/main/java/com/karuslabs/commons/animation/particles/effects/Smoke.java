@@ -60,8 +60,8 @@ public class Smoke implements Task<Smoke, BoundLocation, BoundLocation> {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
         for (int i = 0; i < perIteration; i += particles.getAmount()) {
-            location.add(randomCircle(context.getVector()).multiply(random.nextDouble(0, 0.6)));
-            location.add(0, random.nextDouble(0, 2), 0);
+            location.add(randomCircle(context.getVector()).multiply(random.nextDouble(0, width)));
+            location.add(0, random.nextDouble(0, height), 0);
             context.render(particles, location);
         }
     }

@@ -23,46 +23,60 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.bukkit.util.Vector;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class CloudTest extends Effect {
+public class DNATest extends Effect {
 
-    private Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
+    private DNA dna = spy(new DNA(PARTICLES, COLOURED, MATERIAL).get());
     
     
     @Test
     public void render() {
-        doNothing().when(cloud).renderCloud(context, location, RANDOM, 50);
-        doNothing().when(cloud).renderDroplets(context, location, RANDOM, 15);
+        doNothing().when(dna).renderHelix(context, vector, 0);
+        doNothing().when(dna).renderBase(any(), any(), any(), anyInt(), anyInt(), anyInt());
         
-        cloud.render(context);
+        context.count = 76;
         
-        verify(cloud).renderCloud(context, location, RANDOM, 50);
-        verify(cloud).renderDroplets(context, location, RANDOM, 15);
+        dna.render(context);
+        
+        verify(dna).renderHelix(context, vector, 0);
+        verify(dna).renderBase(context, COLOURED, vector, 0, 1, 15);
+        verify(dna).renderBase(context, MATERIAL, vector, 0, -15, -1);
     }
     
     
     @Test
-    public void renderCloud() {
-        cloud.renderCloud(context, location, random, 1);
+    public void renderHelix() {
+        doNothing().when(dna).render(context, PARTICLES, vector);
         
-        verify(context).render(PARTICLES, location);
+        dna.renderHelix(context, vector, 1);
+        
+        verify(dna, times(2)).render(context, PARTICLES, vector);
     }
     
     
-    @ParameterizedTest
-    @CsvSource({"0, 2", "1, 0"})
-    public void renderDroplets(int number, int expected) {
-        when(random.nextInt(2)).thenReturn(number);
+    @Test
+    public void renderBase() {
+         doNothing().when(dna).render(context, SINGLE, vector);
+         
+         dna.renderBase(context, SINGLE, vector, 1, 0, 1);
+         
+         verify(dna, times(2)).render(context, SINGLE, vector);
+    }
+    
+    
+    @Test
+    public void render_Particles() {
+        dna.render(context, COLOURED, vector);
         
-        cloud.renderDroplets(context, location, random, 1);
-        
-        verify(context, times(expected)).render(COLOURED, location);
+        verify(context).render(COLOURED, location, vector);
+        assertEquals(new Vector(), vector);
     }
     
 }

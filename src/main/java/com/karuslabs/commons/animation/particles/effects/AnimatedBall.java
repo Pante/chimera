@@ -47,8 +47,6 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
     private Vector factor;
     private Vector offset;
     private Vector rotation;
-    private int step;
-    private Vector vector;
     
     
     public AnimatedBall(Particles particles) {
@@ -63,17 +61,17 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
         this.factor = factor;
         this.offset = offset;
         this.rotation = rotation;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
+        int count = context.count();
         
-        for (int i = 0; i < perIteration; i += particles.getAmount(), step++) {
-            float t = (float) (PI / total) * step;
+        for (int i = 0; i < perIteration; i += particles.getAmount(), count++) {
+            float t = (float) (PI / total) * count;
             float r = (float) sin(t) * size;
             float s = (float) (2 * PI * t);
 
@@ -85,11 +83,12 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
             
             context.render(particles, location, vector);
         }
+        context.count(count);
     }
 
     @Override
     public AnimatedBall get() {
-        return new AnimatedBall(particles, total, perIteration, size, factor, offset, rotation);
+        return this;
     }
     
 }

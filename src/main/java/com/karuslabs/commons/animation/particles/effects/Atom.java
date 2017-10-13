@@ -45,8 +45,6 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
     private int orbitals;
     private double rotation;
     private double angularVelocity;
-    private int step;
-    private Vector vector;
     
     
     public Atom(Particles nucleus, Particles orbital) {
@@ -63,20 +61,22 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
         this.orbitals = orbitals;
         this.rotation = rotation;
         this.angularVelocity = angularVelocity;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
+        int count = context.count();
         
-        renderNucleus(context, location);
-        renderOrbitals(context, location);
+        renderNucleus(context, location, vector);
+        renderOrbitals(context, location, vector, count);
+        
+        context.count(count);
     }
     
-    protected void renderNucleus(Context<BoundLocation, BoundLocation> context, Location location) {
+    protected void renderNucleus(Context<BoundLocation, BoundLocation> context, Location location, Vector vector) {
         for (int i = 0; i < nucleusTotal; i += nucleus.getAmount()) {
             random(vector).multiply(radius * nucleusRadius);
 
@@ -85,9 +85,9 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderOrbitals(Context<BoundLocation, BoundLocation> context, Location location) {
-        for (int i = 0; i < orbitalTotal; i += orbital.getAmount(), step++) {
-            double angle = step * angularVelocity;
+    protected void renderOrbitals(Context<BoundLocation, BoundLocation> context, Location location, Vector vector, int count) {
+        for (int i = 0; i < orbitalTotal; i += orbital.getAmount(), count++) {
+            double angle = count * angularVelocity;
             
             for (int j = 0; j < orbitals; j++) {        
                 vector.setX(cos(angle)).setY(sin(angle)).setZ(0).multiply(radius);
@@ -104,7 +104,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
 
     @Override
     public Atom get() {
-        return new Atom(nucleus, orbital, nucleusTotal, orbitalTotal, radius, nucleusRadius, orbitals, rotation, angularVelocity);
+        return this;
     }
     
 }

@@ -32,7 +32,7 @@ import org.bukkit.Location;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
@@ -88,6 +88,14 @@ public class EffectTaskTest {
         
         assertEquals(35.26439, target.getPitch(), 0.00001);
         assertEquals(135.0, target.getYaw(), 0.00001);
+    }
+    
+    
+    @Test
+    public void get() {
+        assertEquals(task, effect.getTask());
+        assertNotNull(effect.getVector());
+        assertNull(effect.value());
     }
     
     

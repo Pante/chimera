@@ -47,8 +47,6 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
     private int perRow;
     boolean rotate;
     private boolean solid;
-    int step;
-    Vector vector;
     
     
     public Cylinder(Particles particles) {
@@ -65,31 +63,30 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
         this.perRow = perRow;
         this.rotate = rotate;
         this.solid = solid;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
     public void render(Context<BoundLocation, BoundLocation> context) {
         Location location = context.getOrigin().getLocation();
+        int count = context.count();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double x = rotation.getX(), y = rotation.getY(), z = rotation.getZ();
         
         if (rotate) {
-            x += step * angularVelocity.getX();
-            y += step * angularVelocity.getY();
-            z += step * angularVelocity.getZ();
+            x += count * angularVelocity.getX();
+            y += count * angularVelocity.getY();
+            z += count * angularVelocity.getZ();
         }
         
-        renderSurface(context, location, random, x, y, z);
-        context.render(particles, location);
+        renderSurface(context, location, context.getVector(), count, random, x, y, z);
+        context.count(count);
     }
     
-    protected void renderSurface(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, double x, double y, double z) {
-        for (int i = 0; i < perRow; i += particles.getAmount(), step++) {
+    protected void renderSurface(Context<BoundLocation, BoundLocation> context, Location location, Vector vector, int count, ThreadLocalRandom random, double x, double y, double z) {
+        for (int i = 0; i < perRow; i += particles.getAmount(), count++) {
             randomCircle(vector).multiply(radius);
-            calculate(random, solid ? random.nextFloat() : 1);
+            calculate(vector, random, solid ? random.nextFloat() : 1);
             
             if (rotate) {
                 rotate(vector, x, y, z);
@@ -97,9 +94,10 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
 
             context.render(particles, location, vector);
         }
+        context.render(particles, location);
     }
     
-    protected void calculate(ThreadLocalRandom random, float multiple) {
+    protected void calculate(Vector vector, ThreadLocalRandom random, float multiple) {
         if (random.nextFloat() <= ratio) {
             // SIDE PARTICLE
             vector.multiply(multiple).setY(random.nextDouble(-1, 1) * (height / 2));

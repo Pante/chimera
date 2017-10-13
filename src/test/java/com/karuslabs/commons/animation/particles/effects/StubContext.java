@@ -42,6 +42,7 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     Location location;
     ThreadLocalRandom random;
     Vector vector;
+    int count;
     
     
     public StubContext(Origin origin, Target target, long current, long iterations) {
@@ -50,6 +51,8 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
         this.current = current;
         this.iterations = iterations;
         this.random = ThreadLocalRandom.current();
+        vector = new Vector();
+        count = 0;
     }
     
     
@@ -57,6 +60,13 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     public void render(Particles particles, Location location) {
         this.location = location.clone();
     }
+    
+    
+    @Override
+    public void cancel() {
+        
+    }
+    
     
     @Override
     public Origin getOrigin() {
@@ -68,14 +78,7 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
         return target;
     }
     
-    @Override
-    public Vector getVector() {
-        if (vector == null) {
-            vector = new Vector();
-        }
-        return vector;
-    }
-
+    
     @Override
     public long getCurrent() {
         return current;
@@ -85,10 +88,21 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     public long getIterations() {
         return iterations;
     }
-
+    
+    
     @Override
-    public void cancel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Vector getVector() {
+        return vector;
+    }
+    
+    @Override
+    public int count() {
+        return count;
+    }
+    
+    @Override
+    public void count(int count) {
+        this.count = count;
     }
     
 }

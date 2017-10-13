@@ -23,70 +23,52 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.*;
-import com.karuslabs.commons.world.*;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.WHITE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class CylinderTest {
+public class CylinderTest extends Effect {
     
-    private static final double ROUNDING_ERROR = 0.00001;
+    public static double LOW_PRECISION = 0.00001;
     
-    private Particles particles = new ColouredParticles(null, 100, WHITE);
-    private Cylinder cylinder = spy(new Cylinder(particles));
-    private Location location = new Location(null, 1, 1, 1);
-    private StaticLocation origin = new StaticLocation(location, null, false);
-    private StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, null, 0, 0));
+    private Cylinder cylinder = spy(new Cylinder(PARTICLES));
     
     
     @ParameterizedTest
     @CsvSource({"true, 0.015707963267948967, 0.018479956785822312, 0.02026833970057931", "false, 0.0, 0.0, 0.0"})
     public void render(boolean rotate, double x, double y, double z) {
-        doNothing().when(cylinder).renderSurface(any(), any(), any(), anyDouble(), anyDouble(), anyDouble());
+        doNothing().when(cylinder).renderSurface(any(), any(), any(), anyInt(), any(), anyDouble(), anyDouble(), anyDouble());
         cylinder.rotate = rotate;
-        cylinder.step = 1;
+        context.count = 1;
         
         cylinder.render(context);
         
-        verify(cylinder).renderSurface(context, location, ThreadLocalRandom.current(), x, y, z);
-        verify(context).render(particles, location);
+        verify(cylinder).renderSurface(context, location, vector, 1, RANDOM, x, y, z);
     }
     
     
     @Test
     public void renderSurface() {
-        cylinder.renderSurface(context, location, ThreadLocalRandom.current(), 1, 2, 3);
+        cylinder.renderSurface(context, location, vector, 0, RANDOM, 1, 2, 3);
         
-        verify(context).render(particles, location);
+        verify(context, times(2)).render(PARTICLES, location);
     }
     
     
     @ParameterizedTest
     @CsvSource({"0.1, 2, -1.2, 2", "0.49, 0.49, 3.0, 0.49", "0.5, 0.5, -3, 0.5"})
     public void calculate(float value, double x, double y, double z) {
-        ThreadLocalRandom random = when(mock(ThreadLocalRandom.class).nextFloat()).thenReturn(value).getMock();
+        when(random.nextFloat()).thenReturn(value);
         when(random.nextDouble(-1, 1)).thenReturn(-0.8);
         
-        cylinder.vector.setX(1).setY(1).setZ(1);
+        vector.setX(1).setY(1).setZ(1);
         
-        cylinder.calculate(random, 2);
-        
-        Vector vector = cylinder.vector;
-        assertEquals(x, vector.getX(), ROUNDING_ERROR);
-        assertEquals(y, vector.getY(), ROUNDING_ERROR);
-        assertEquals(z, vector.getZ(), ROUNDING_ERROR);
+        cylinder.calculate(vector, random, 2);
+
+        assertVector(from(x, y, z), vector, LOW_PRECISION);
     }
     
 }

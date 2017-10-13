@@ -42,10 +42,16 @@ public interface Context<Origin extends BoundLocation, Target extends BoundLocat
     
     public void cancel();
     
-    public Vector getVector();
     
     public Origin getOrigin();
     
     public Target getTarget();
+    
+        
+    public Vector getVector();
+    
+    public int count();
+    
+    public void count(int count);
     
 }

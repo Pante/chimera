@@ -83,7 +83,7 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
                 vector.setX(cos(angle) * radius * ratio);
                 vector.setY(sin(PI * j / perStrand) * height);
                 vector.setZ(sin(angle) * radius * ratio);
-                
+
                 context.render(particles, location, vector);
             }
         }

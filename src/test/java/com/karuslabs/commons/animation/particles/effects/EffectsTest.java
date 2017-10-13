@@ -30,48 +30,40 @@ import com.karuslabs.commons.world.*;
 import java.util.stream.Stream;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
 import static java.lang.Math.PI;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class EffectsTest {
-    
-    private static final double ROUNDING_ERROR = 0.000000000000001;
-    private static final StandardParticles STANDARD = new StandardParticles(null, 50, 0, 0, 0, 0);
-    
-    private StaticLocation origin = new StaticLocation(new Location(null, 1, 1, 1), null, false);
-    private StaticLocation target = new StaticLocation(new Location(null, 2, 2, 2), null, false);
-    
+public class EffectsTest extends Effect {
     
     @ParameterizedTest
     @MethodSource("render_parameters")
-    public void render(Task<Task, BoundLocation, BoundLocation> task, double x, double y, double z) {
-        StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, target, 0, 0));
-        
+    public void render(Task<Task, BoundLocation, BoundLocation> task, Vector expected) {
         task.render(context);
         
         verify(context).render(any(Particles.class), any(Location.class));
         
-        assertEquals(x, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(y, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(z, context.location.getZ(), ROUNDING_ERROR);
+        assertVector(expected, context.location);
     }
     
     static Stream<Arguments> render_parameters() {
         return Stream.of(
-            of(new AnimatedBall(STANDARD).get(), 1.0, 2.0, 1.8),
-            of(new Arc(STANDARD, 2, 1).get(), 1.0, 1.0000000121882824, 1.0),
-            of(new Circle(STANDARD).get(), 1.4000000059604645, 1.0, 1.0),
-            of(new Cone(STANDARD, 0.5F, 0.006F, PI / 16, 180, 1, 0, false).get(), 1.0, 1.0, 1.0),
-            of(new Helix(new StandardParticles(null, 1, 0, 0, 0, 0), 1, 1, 10, 10, PI / 4).get(), 8.071067811865564, 1.0, 8.071067811865387),
-            of(new Vortex(STANDARD, 2, 0.5f, PI / 16, 1, 1).get(), 3.0, 1.0, 1.0),
-            of(new Warp(STANDARD, 1, 1, 0.2f, 12).get(), 2.0, 1.0, 1.0)
+            of(new AnimatedBall(PARTICLES).get(), from(1, 2, 1.8)),
+            of(new Arc(PARTICLES, 2, 1).get(), from(1, 1.0000000121882824, 1)),
+            of(new Circle(PARTICLES).get(), from(1.4000000059604645, 1, 1)),            
+            of(new Composite(PARTICLES).get(), from(1, 1, 1)),
+            of(new Cone(PARTICLES, 0.5F, 0.006F, PI / 16, 180, 1, 0, false).get(), from(1, 1, 1)),
+            of(new Donut(PARTICLES, 1, 1, 2, 0.5F, NONE).get(), from(3.5, 1, 1)),
+            of(new Helix(new StandardParticles(null, 1, 0, 0, 0, 0), 1, 1, 10, 10, PI / 4).get(), from(8.071067811865564, 1, 8.071067811865387)),
+            of(new Vortex(PARTICLES, 2, 0.5f, PI / 16, 1, 1).get(), from(2, 1, 2.732050807568877)),
+            of(new Warp(PARTICLES, 1, 1, 0.2f, 12).get(), from(2, 1, 1))
         );
     }
     

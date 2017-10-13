@@ -59,7 +59,7 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
 
         Vector vector = context.getVector();
         Vector link = target.toVector().subtract(location.toVector());
-        
+
         float length = (float) link.length();
         float pitch = (float) (4 * height / pow(length, 2));
         
@@ -69,7 +69,7 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
             copy(link, vector).multiply((float) length * i / total);
             float x = ((float) i / total) * length - length / 2;
             float y = (float) (-pitch * pow(x, 2) + height);
-
+            
             context.render(particles, location.add(vector).add(0, y, 0));
             location.subtract(vector).subtract(0, y, 0);
         }
