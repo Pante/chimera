@@ -70,7 +70,7 @@ public class Hill implements Task<Hill, BoundLocation, BoundLocation> {
                 vector.setY(height * y1 * y2);
                 
                 rotateAroundYAxis(vector, yRotation);
-                
+     
                 context.render(particles, location, vector);
             }
         }

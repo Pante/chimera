@@ -90,13 +90,13 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
     }
     
     protected void renderTornadoPortion(Context<BoundLocation, BoundLocation> context, Location location, double radius, double y) {
-        Vector vector = context.getVector();
+        Vector vector = context.getVector().setY(y);
         double amount = radius * 64;
         double inc = 2 * PI / amount;
         
         for (int i = 0; i < amount; i++) {
             double angle = i * inc;
-            vector.setX(radius * cos(angle)).setY(y).setZ(radius * sin(angle));
+            vector.setX(radius * cos(angle)).setZ(radius * sin(angle));
             context.render(tornado, location, vector);
         }
     }

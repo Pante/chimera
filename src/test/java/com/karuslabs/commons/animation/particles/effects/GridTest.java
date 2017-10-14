@@ -28,37 +28,51 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class FountainTest extends Effect {
+public class GridTest extends Effect {
     
-    private Fountain fountain = spy(new Fountain(SPAM).get());
+    private Grid grid = spy(new Grid(PARTICLES).get());
     
     
     @Test
     public void render() {
-        doNothing().when(fountain).renderStrands(context, location);
-        doNothing().when(fountain).renderSpout(context, location, RANDOM);
+        doNothing().when(grid).renderRows(context, location);
+        doNothing().when(grid).renderColumns(context, location);
         
-        fountain.render(context);
+        grid.render(context);
         
-        verify(fountain).renderStrands(context, location);
-        verify(fountain).renderSpout(context, location, RANDOM);
+        verify(grid).renderRows(context, location);
+        verify(grid).renderColumns(context, location);
     }
     
     
     @Test
-    public void renderStrands() {
-        fountain.renderStrands(context, location);
+    public void renderRows() {
+        doNothing().when(grid).render(context, location);
         
-        verify(context, times(10)).render(SPAM, location);
-        assertVector(from(1.02357022661029, 1.062827259650071, 1.02357022661029), context.location);
+        grid.renderRows(context, location);
+        
+        verify(grid, times(7)).render(context, location);
+        assertVector(from(0, 6, 0), vector);
     }
     
     
     @Test
-    public void renderSpout() {
-        fountain.renderSpout(context, location, RANDOM);
+    public void renderColumns() {
+        doNothing().when(grid).render(context, location);
         
-        verify(context).render(SPAM, location);
+        grid.renderColumns(context, location);
+        
+        verify(grid, times(18)).render(context, location);
+        assertVector(from(0, 5.666666507720947, 0), vector);
+    }
+    
+    
+    @Test
+    public void render_Location() {
+        grid.render(context, location);
+        
+        verify(context).render(PARTICLES, location, vector);
+        assertVector(from(1, 1, 1), location);
     }
     
 }

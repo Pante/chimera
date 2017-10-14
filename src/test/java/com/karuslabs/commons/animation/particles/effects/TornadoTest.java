@@ -28,37 +28,47 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class FountainTest extends Effect {
+public class TornadoTest extends Effect {
     
-    private Fountain fountain = spy(new Fountain(SPAM).get());
+    private Tornado tornado = spy(new Tornado(PARTICLES, COLOURED).get());
     
     
     @Test
     public void render() {
-        doNothing().when(fountain).renderStrands(context, location);
-        doNothing().when(fountain).renderSpout(context, location, RANDOM);
+        doNothing().when(tornado).renderCloud(context, RANDOM, location);
+        doNothing().when(tornado).renderTornado(context, location);
         
-        fountain.render(context);
+        tornado.render(context);
         
-        verify(fountain).renderStrands(context, location);
-        verify(fountain).renderSpout(context, location, RANDOM);
+        verify(tornado).renderCloud(context, RANDOM, location);
+        verify(tornado).renderTornado(context, location);
     }
     
     
     @Test
-    public void renderStrands() {
-        fountain.renderStrands(context, location);
+    public void renderCloud() {
+        tornado.renderCloud(context, RANDOM, location);
         
-        verify(context, times(10)).render(SPAM, location);
-        assertVector(from(1.02357022661029, 1.062827259650071, 1.02357022661029), context.location);
+        verify(context, times(250)).render(COLOURED, location, vector);
     }
     
     
     @Test
-    public void renderSpout() {
-        fountain.renderSpout(context, location, RANDOM);
+    public void renderTornado() {
+        doNothing().when(tornado).renderTornadoPortion(any(), any(), anyDouble(), anyDouble());
         
-        verify(context).render(SPAM, location);
+        tornado.renderTornado(context, location);
+        
+        verify(tornado, times(14)).renderTornadoPortion(any(), any(), anyDouble(), anyDouble());
+    }
+    
+    
+    @Test
+    public void renderTornadoPortion() {
+        tornado.renderTornadoPortion(context, location, 1, 2);
+        
+        verify(context, times(64)).render(PARTICLES, location);
+        assertVector(from(1.9951847266721967, 3.0, 0.901982859670439), context.location);
     }
     
 }

@@ -44,16 +44,16 @@ import static org.mockito.Mockito.*;
 public class EffectsTest extends Effect {
     
     @ParameterizedTest
-    @MethodSource("render_parameters")
+    @MethodSource("parameters")
     public void render(Task<Task, BoundLocation, BoundLocation> task, Vector expected) {
         task.render(context);
         
-        verify(context).render(any(Particles.class), any(Location.class));
+        verify(context, atLeastOnce()).render(any(Particles.class), any(Location.class));
         
         assertVector(expected, context.location);
     }
     
-    static Stream<Arguments> render_parameters() {
+    static Stream<Arguments> parameters() {
         return Stream.of(
             of(new AnimatedBall(PARTICLES).get(), from(1, 2, 1.8)),
             of(new Arc(PARTICLES, 2, 1).get(), from(1, 1.0000000121882824, 1)),
@@ -61,9 +61,29 @@ public class EffectsTest extends Effect {
             of(new Composite(PARTICLES).get(), from(1, 1, 1)),
             of(new Cone(PARTICLES, 0.5F, 0.006F, PI / 16, 180, 1, 0, false).get(), from(1, 1, 1)),
             of(new Donut(PARTICLES, 1, 1, 2, 0.5F, NONE).get(), from(3.5, 1, 1)),
-            of(new Helix(new StandardParticles(null, 1, 0, 0, 0, 0), 1, 1, 10, 10, PI / 4).get(), from(8.071067811865564, 1, 8.071067811865387)),
+            of(new Heart(PARTICLES).get(), from(1, 1, 1)),
+            of(new Helix(SINGLE, 1, 1, 10, 10, PI / 4).get(), from(8.071067811865564, 1, 8.071067811865387)),
+            of(new Hill(PARTICLES).get(), from(1, 1, 1)),
+            of(new Music(PARTICLES).get(), from(1.4000000059604645, 2.899999976158142, 1)),
             of(new Vortex(PARTICLES, 2, 0.5f, PI / 16, 1, 1).get(), from(2, 1, 2.732050807568877)),
             of(new Warp(PARTICLES, 1, 1, 0.2f, 12).get(), from(2, 1, 1))
+        );
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("random_parameters")
+    public void render_Random(Task<Task, BoundLocation, BoundLocation> task, int times) {
+        task.render(context);
+        
+        verify(context, times(times)).render(PARTICLES, location);
+    }
+    
+    static Stream<Arguments> random_parameters() {
+        return Stream.of(
+            of(new Shield(PARTICLES).get(), 1),
+            of(new Smoke(PARTICLES).get(), 1),
+            of(new Sphere(PARTICLES).get(), 1)
         );
     }
     

@@ -39,7 +39,7 @@ public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private int refresh;
-    private int max;
+    int max;
     List<Vector> waypoints;
     World world;
     

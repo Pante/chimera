@@ -24,41 +24,34 @@
 package com.karuslabs.commons.animation.particles.effects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.mockito.Mockito.*;
 
 
-public class FountainTest extends Effect {
+public class LineTest extends Effect {
     
-    private Fountain fountain = spy(new Fountain(SPAM).get());
+    private Line line = spy(new Line(PARTICLES).get());
     
     
     @Test
     public void render() {
-        doNothing().when(fountain).renderStrands(context, location);
-        doNothing().when(fountain).renderSpout(context, location, RANDOM);
+        line.render(context);
         
-        fountain.render(context);
-        
-        verify(fountain).renderStrands(context, location);
-        verify(fountain).renderSpout(context, location, RANDOM);
+        verify(context).render(PARTICLES, location);
+        assertVector(from(1, 1, 1), context.location);
     }
     
     
-    @Test
-    public void renderStrands() {
-        fountain.renderStrands(context, location);
+    @ParameterizedTest
+    @CsvSource({"1, 0.4330127018922192, -0.8660254037844387, -0.25", "0, 1, 1, 1"})
+    public void resolveLink(double length, double x, double y, double z) {
+        line.length = length;
         
-        verify(context, times(10)).render(SPAM, location);
-        assertVector(from(1.02357022661029, 1.062827259650071, 1.02357022661029), context.location);
-    }
-    
-    
-    @Test
-    public void renderSpout() {
-        fountain.renderSpout(context, location, RANDOM);
+        line.resolveLink(context);
         
-        verify(context).render(SPAM, location);
+        assertVector(from(x, y, z), line.link);
     }
     
 }

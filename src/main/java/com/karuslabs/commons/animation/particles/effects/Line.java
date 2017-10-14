@@ -39,15 +39,15 @@ public class Line implements Task<Line, BoundLocation, BoundLocation> {
     
     private Particles particles;
     private int perArc = 100;
-    private double length = 0;
+    double length = 0;
     private boolean zigzag = false;
     private int zigzags = 10;
     private Vector offset;
     private boolean direction;
     private int step = 0;
-    private Vector vector;
-    private Vector link;
-    private Vector distance;
+    Vector vector;
+    Vector link;
+    Vector distance;
     
     
     public Line(Particles particles) {
@@ -103,6 +103,7 @@ public class Line implements Task<Line, BoundLocation, BoundLocation> {
         
         if (length > 0) {
             copy(location, link).add(location.getDirection().normalize().multiply(length));
+            
         } else {
             copy(context.getTarget().getLocation(), link);
         }

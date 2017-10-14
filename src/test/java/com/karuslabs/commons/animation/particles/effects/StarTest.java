@@ -25,40 +25,32 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import org.junit.jupiter.api.Test;
 
+import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-public class FountainTest extends Effect {
+public class StarTest extends Effect {
     
-    private Fountain fountain = spy(new Fountain(SPAM).get());
+    private Star star = spy(new Star(PARTICLES).get());
     
     
     @Test
     public void render() {
-        doNothing().when(fountain).renderStrands(context, location);
-        doNothing().when(fountain).renderSpout(context, location, RANDOM);
+        doNothing().when(star).render(any(), any(), any(), anyDouble());
         
-        fountain.render(context);
+        star.render(context);
         
-        verify(fountain).renderStrands(context, location);
-        verify(fountain).renderSpout(context, location, RANDOM);
+        verify(star, times(6)).render(eq(context), eq(RANDOM), eq(location), anyDouble());
     }
     
     
     @Test
-    public void renderStrands() {
-        fountain.renderStrands(context, location);
+    public void render_rotation() {
+        when(random.nextFloat()).thenReturn(0.5F);
+        star.render(context, random, location, PI / 3);
         
-        verify(context, times(10)).render(SPAM, location);
-        assertVector(from(1.02357022661029, 1.062827259650071, 1.02357022661029), context.location);
-    }
-    
-    
-    @Test
-    public void renderSpout() {
-        fountain.renderSpout(context, location, RANDOM);
-        
-        verify(context).render(SPAM, location);
+        verify(context, times(2)).render(PARTICLES, location, vector);
+        assertVector(from(-0.9485571585149866,-0.12500000000000067, 0.7500000000000001), context.location);
     }
     
 }
