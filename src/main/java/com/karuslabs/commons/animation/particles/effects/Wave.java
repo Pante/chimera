@@ -65,8 +65,8 @@ public class Wave implements Task<Wave, BoundLocation, BoundLocation> {
         this.height = height;
         this.heightBack = heightBack;
         this.width = width;
-        this.waterCache = new HashSet<Vector>();
-        this.cloudCache = new HashSet<Vector>();
+        this.waterCache = new HashSet<>();
+        this.cloudCache = new HashSet<>();
         this.firstStep = true;
     }
 
