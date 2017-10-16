@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public abstract class Effect {
+public abstract class Base {
     
     public static final Particles PARTICLES = new StandardParticles(null, 100, 0, 0, 0, 1);
     public static final Particles COLOURED = new ColouredParticles(null, 100, WHITE);
@@ -47,7 +47,7 @@ public abstract class Effect {
     public static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
     
     public static final double PRECISION = 0.000000000000001;
-
+    public static final double LOW_PRECISION = 0.00001;
     
     public Location location = new Location(null, 1, 1, 1, 60, 120);
     public StaticLocation original = new StaticLocation(location, null, false);
@@ -55,7 +55,7 @@ public abstract class Effect {
     public Location target = new Location(null, 2, 2, 2, 30, 90);
     public StaticLocation targeted = new StaticLocation(target, null, false);
     
-    public StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(original, targeted, 0, 0));
+    public StubContext context = spy(new StubContext(original, targeted, 0, 0));
     
     
     public Vector vector = context.vector;

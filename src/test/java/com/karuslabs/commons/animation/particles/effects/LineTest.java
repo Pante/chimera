@@ -30,13 +30,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-public class LineTest extends Effect {
+class LineTest extends Base {
     
-    private Line line = spy(new Line(PARTICLES).get());
+    Line line = spy(new Line(PARTICLES).get());
     
     
     @Test
-    public void render() {
+    void render() {
         line.render(context);
         
         verify(context).render(PARTICLES, location);
@@ -46,7 +46,7 @@ public class LineTest extends Effect {
     
     @ParameterizedTest
     @CsvSource({"1, 0.4330127018922192, -0.8660254037844387, -0.25", "0, 1, 1, 1"})
-    public void resolveLink(double length, double x, double y, double z) {
+    void resolveLink(double length, double x, double y, double z) {
         line.length = length;
         
         line.resolveLink(context);

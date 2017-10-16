@@ -30,13 +30,13 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-public class CloudTest extends Effect {
+class CloudTest extends Base {
 
-    private Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
+    Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(cloud).renderCloud(context, location, RANDOM, 50);
         doNothing().when(cloud).renderDroplets(context, location, RANDOM, 15);
         
@@ -48,7 +48,7 @@ public class CloudTest extends Effect {
     
     
     @Test
-    public void renderCloud() {
+    void renderCloud() {
         cloud.renderCloud(context, location, random, 1);
         
         verify(context).render(PARTICLES, location);
@@ -57,7 +57,7 @@ public class CloudTest extends Effect {
     
     @ParameterizedTest
     @CsvSource({"0, 2", "1, 0"})
-    public void renderDroplets(int number, int expected) {
+    void renderDroplets(int number, int expected) {
         when(random.nextInt(2)).thenReturn(number);
         
         cloud.renderDroplets(context, location, random, 1);

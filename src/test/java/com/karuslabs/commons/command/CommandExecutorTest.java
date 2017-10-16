@@ -33,37 +33,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
-public class CommandExecutorTest {
+class CommandExecutorTest {
     
-    private CommandSender sender;
-    private Command command;
-    private Context context;
-    
-    
-    public CommandExecutorTest() {
-        sender = when(mock(CommandSender.class).hasPermission("")).thenReturn(true).getMock();
-        command = when(mock(Command.class).getPermission()).thenReturn("").getMock();
-        context = when(mock(Context.class).getSender()).thenReturn(sender).getMock();
-        when(context.getParentCommand()).thenReturn(command);
-    }
+    CommandSender sender = when(mock(CommandSender.class).hasPermission("")).thenReturn(true).getMock();
+    Command command = when(mock(Command.class).getPermission()).thenReturn("").getMock();
+    Context context = new Context(sender, null, null, command, null, null);
     
     
     @Test
-    public void aliases() {
+    void aliases() {
         ALIASES.execute(context, null);
         verify(sender).sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
     }
     
     
     @Test
-    public void description() {
+    void description() {
         DESCRIPTION.execute(context, null);
         verify(sender).sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage());
     }
     
     
     @Test
-    public void help() {
+    void help() {
         Command subcommand = when(mock(Command.class).getName()).thenReturn("subcommand").getMock();
         when(subcommand.getPermission()).thenReturn("");
         command.getSubcommands().put("subcommand", subcommand);
@@ -75,7 +67,7 @@ public class CommandExecutorTest {
     
     
     @Test
-    public void none() {
+    void none() {
         assertTrue(NONE.execute(null, null));
     }
     

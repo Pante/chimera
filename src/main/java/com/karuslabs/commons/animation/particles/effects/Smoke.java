@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +34,8 @@ import org.bukkit.Location;
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Smoke implements Task<Smoke, BoundLocation, BoundLocation> {
+@Immutable
+public class Smoke implements Task<Smoke> {
     
     private Particles particles;
     private int perIteration;
@@ -55,7 +56,7 @@ public class Smoke implements Task<Smoke, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
@@ -67,7 +68,7 @@ public class Smoke implements Task<Smoke, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Smoke get() {
+    public @Immutable Smoke get() {
         return this;
     }
     

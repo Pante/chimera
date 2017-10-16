@@ -28,17 +28,18 @@ import org.bukkit.boss.*;
 
 import org.junit.jupiter.api.Test;
 
+import static com.karuslabs.commons.animation.BossBarSupplier.builder;
 import static org.bukkit.boss.BarColor.BLUE;
 import static org.bukkit.boss.BarStyle.SEGMENTED_10;
 import static org.mockito.Mockito.*;
 
 
-public class BossBarSupplierTest {
+class BossBarSupplierTest {
     
     @Test
-    public void get() {
+    void get() {
         Server server = when(mock(Server.class).createBossBar(any(), any(), any(), any())).thenReturn(mock(BossBar.class)).getMock();
-        BossBar bar = BossBarSupplier.builder(server).message("message").colour(BLUE).style(SEGMENTED_10).progress(0.5).flags().build().get();
+        BossBar bar = builder(server).message("message").colour(BLUE).style(SEGMENTED_10).progress(0.5).flags().build().get();
         
         verify(server).createBossBar("message", BLUE, SEGMENTED_10);
         verify(bar).setProgress(0.5);

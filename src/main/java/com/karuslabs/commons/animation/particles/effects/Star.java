@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,13 +36,14 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Star implements Task<Star, BoundLocation, BoundLocation> {
+@Immutable
+public class Star implements Task<Star> {
     
     private Particles particles;
-    private int perIteration = 50;
-    private float spikeHeight = 3.5f;
-    private int spikeHalf = 3;
-    private float radius = 0.5f;
+    private int perIteration;
+    private float spikeHeight;
+    private int spikeHalf;
+    private float radius;
     
     
     public Star(Particles particles) {
@@ -59,7 +60,7 @@ public class Star implements Task<Star, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double radius = 3 * this.radius / sqrt(3);
@@ -69,7 +70,7 @@ public class Star implements Task<Star, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void render(Context<BoundLocation, BoundLocation> context, ThreadLocalRandom random, Location location, double rotation) {
+    void render(Context context, ThreadLocalRandom random, Location location, double rotation) {
         Vector vector = context.getVector();
         for (int x = 0; x < perIteration; x += particles.getAmount()) {
             double angle = 2 * PI * x / perIteration;
@@ -89,7 +90,7 @@ public class Star implements Task<Star, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Star get() {
+    public @Immutable Star get() {
         return this;
     }
 

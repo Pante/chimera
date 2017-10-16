@@ -23,44 +23,40 @@
  */
 package com.karuslabs.commons.animation.particles;
 
-
-import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.Test;
 
+import static com.karuslabs.commons.animation.particles.ItemParticles.builder;
+import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class ItemParticlesTest {
+class ItemParticlesTest extends Base {
     
-    private ItemStack item = mock(ItemStack.class);
-    private ItemParticles particles = spy(Particles.item().particle(Particle.CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).item(item).build());
-    private World world = mock(World.class);
-    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
-    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    ItemStack item = mock(ItemStack.class);
+    ItemParticles particles = builder().particle(CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).item(item).build();
     
     
     @Test
-    public void render_Player() {
+    void render_Player() {
         particles.render(player, location);
         
-        verify(player).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, item);
+        verify(player).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, item);
     }
     
     
     @Test
-    public void render() {
+    void render_Location() {
         particles.render(location);
         
-        verify(world).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, item);
+        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, item);
     }
     
     
     @Test
-    public void get() {
+    void get() {
         assertEquals(1, particles.getOffsetX());
         assertEquals(2, particles.getOffsetY());
         assertEquals(3, particles.getOffsetZ());

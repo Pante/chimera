@@ -29,13 +29,13 @@ import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-public class StarTest extends Effect {
+class StarTest extends Base {
     
-    private Star star = spy(new Star(PARTICLES).get());
+    Star star = spy(new Star(PARTICLES).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(star).render(any(), any(), any(), anyDouble());
         
         star.render(context);
@@ -45,8 +45,9 @@ public class StarTest extends Effect {
     
     
     @Test
-    public void render_rotation() {
+    void render_rotation() {
         when(random.nextFloat()).thenReturn(0.5F);
+        
         star.render(context, random, location, PI / 3);
         
         verify(context, times(2)).render(PARTICLES, location, vector);

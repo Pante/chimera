@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +35,7 @@ import static com.karuslabs.commons.animation.particles.effects.DiscoBall.Direct
 import static com.karuslabs.commons.world.Vectors.random;
 
 
-public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> {
+public class DiscoBall implements Task<DiscoBall> {
     
     public enum Direction {
         UP, DOWN, BOTH;
@@ -73,7 +72,7 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
@@ -81,7 +80,7 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
         renderSphere(context, location);
     }
     
-    protected void renderLines(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+    void renderLines(Context context, Location location, ThreadLocalRandom random) {
         int max = random.nextInt(2, lines) * 2;
         for (int i = 0; i < max; i++) {
             double x = random.nextInt(-lineLength, lineLength);
@@ -101,7 +100,7 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
         }
     }
     
-    protected int calculateY(ThreadLocalRandom random) {
+    int calculateY(ThreadLocalRandom random) {
         switch (direction) {
             case DOWN:
                 return random.nextInt(lineLength, lineLength * 2);
@@ -113,9 +112,8 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
                 return random.nextInt(-lineLength, lineLength);
         }
     }
-
     
-    protected void renderSphere(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderSphere(Context context, Location location) {
         for (int i = 0; i < sphereTotal; i += sphere.getAmount()) {
             random(vector).multiply(radius);
             context.render(sphere, location, vector);
@@ -126,4 +124,5 @@ public class DiscoBall implements Task<DiscoBall, BoundLocation, BoundLocation> 
     public DiscoBall get() {
         return new DiscoBall(sphere, line, sphereTotal, lineTotal, radius, lines, lineLength, direction);
     }
+    
 }

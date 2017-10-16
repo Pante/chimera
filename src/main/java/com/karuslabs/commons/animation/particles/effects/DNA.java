@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
+@Immutable
+public class DNA implements Task<DNA> {
     
     private Particles helix;
     private Particles base1;
@@ -67,7 +68,7 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Vector vector = context.getVector();
         int count = context.count();
         
@@ -86,7 +87,7 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
         context.count(count);
     }
     
-    protected void renderHelix(Context<BoundLocation, BoundLocation> context, Vector vector, int count) {
+    void renderHelix(Context context, Vector vector, int count) {
         for (int i = 0; i < 2; i++) {
             double angle = count * radials + PI * i;
             vector.setX(cos(angle) * radius).setY(count * growth).setZ(sin(angle) * radius);
@@ -94,7 +95,7 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderBase(Context<BoundLocation, BoundLocation> context, Particles particles, Vector vector, int count, int initial, int total) {
+    void renderBase(Context context, Particles particles, Vector vector, int count, int initial, int total) {
         for (int i = initial; i <= total; i += particles.getAmount()) {
             double angle = count * radials;
             vector.setX(cos(angle)).setY(0).setZ(sin(angle)).multiply(radius * i / perBase).setY(count * growth);
@@ -102,7 +103,7 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void render(Context<BoundLocation, BoundLocation> context, Particles particles, Vector vector) {
+    void render(Context context, Particles particles, Vector vector) {
         Location location = context.getOrigin().getLocation();
 
         rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
@@ -112,7 +113,7 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public DNA get() {
+    public @Immutable DNA get() {
         return this;
     }
     

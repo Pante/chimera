@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
+@Immutable
+public class Atom implements Task<Atom> {
 
     private Particles nucleus;
     private Particles orbital;
@@ -65,7 +66,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         int count = context.count();
@@ -76,7 +77,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
         context.count(count);
     }
     
-    protected void renderNucleus(Context<BoundLocation, BoundLocation> context, Location location, Vector vector) {
+    void renderNucleus(Context context, Location location, Vector vector) {
         for (int i = 0; i < nucleusTotal; i += nucleus.getAmount()) {
             random(vector).multiply(radius * nucleusRadius);
 
@@ -85,7 +86,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderOrbitals(Context<BoundLocation, BoundLocation> context, Location location, Vector vector, int count) {
+    void renderOrbitals(Context context, Location location, Vector vector, int count) {
         for (int i = 0; i < orbitalTotal; i += orbital.getAmount(), count++) {
             double angle = count * angularVelocity;
             
@@ -103,7 +104,7 @@ public class Atom implements Task<Atom, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Atom get() {
+    public @Immutable Atom get() {
         return this;
     }
     

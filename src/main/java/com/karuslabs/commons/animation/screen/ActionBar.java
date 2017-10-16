@@ -61,11 +61,13 @@ public class ActionBar extends Bar {
         private Set<Player> players;
         private BiFunction<Player, Context, String> function;
         
+        
         public ScheduledTask(Set<Player> players, BiFunction<Player, Context, String> function, Translation translation, long iterations) {
             super(translation, iterations);
             this.players = players;
             this.function = function;
         }
+        
         
         @Override
         protected void process() {
@@ -81,9 +83,10 @@ public class ActionBar extends Bar {
     
     public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
 
-        protected ActionBarBuilder(ActionBar bar) {
+        private ActionBarBuilder(ActionBar bar) {
             super(bar);
         }
+        
         
         public ActionBarBuilder function(Supplier<BiFunction<Player, Context, String>> supplier) {
             bar.supplier = supplier;

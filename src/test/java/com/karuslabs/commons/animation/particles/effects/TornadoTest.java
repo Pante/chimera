@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class TornadoTest extends Effect {
+class TornadoTest extends Base {
     
-    private Tornado tornado = spy(new Tornado(PARTICLES, COLOURED).get());
+    Tornado tornado = spy(new Tornado(PARTICLES, COLOURED).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(tornado).renderCloud(context, RANDOM, location);
         doNothing().when(tornado).renderTornado(context, location);
         
@@ -46,7 +46,7 @@ public class TornadoTest extends Effect {
     
     
     @Test
-    public void renderCloud() {
+    void renderCloud() {
         tornado.renderCloud(context, RANDOM, location);
         
         verify(context, times(250)).render(COLOURED, location, vector);
@@ -54,7 +54,7 @@ public class TornadoTest extends Effect {
     
     
     @Test
-    public void renderTornado() {
+    void renderTornado() {
         doNothing().when(tornado).renderTornadoPortion(any(), any(), anyDouble(), anyDouble());
         
         tornado.renderTornado(context, location);
@@ -64,7 +64,7 @@ public class TornadoTest extends Effect {
     
     
     @Test
-    public void renderTornadoPortion() {
+    void renderTornadoPortion() {
         tornado.renderTornadoPortion(context, location, 1, 2);
         
         verify(context, times(64)).render(PARTICLES, location);

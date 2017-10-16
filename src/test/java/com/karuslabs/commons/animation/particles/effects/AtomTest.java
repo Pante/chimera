@@ -29,15 +29,13 @@ import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-public class AtomTest extends Effect {
+class AtomTest extends Base {
 
-    private Atom atom = new Atom(PARTICLES, COLOURED, 1, 1, 3, 0.2F, 1, 0, PI / 80).get();
+    Atom atom = spy(new Atom(PARTICLES, COLOURED, 1, 1, 3, 0.2F, 1, 0, PI / 80).get());
     
     
     @Test
-    public void render() {
-        Atom atom = spy(new Atom(PARTICLES, COLOURED));
-
+    void render() {
         doNothing().when(atom).renderNucleus(context, location, vector);
         doNothing().when(atom).renderOrbitals(context, location, vector, 0);
         
@@ -49,19 +47,19 @@ public class AtomTest extends Effect {
     
     
     @Test
-    public void renderNucleus() {
+    void renderNucleus() {
         atom.renderNucleus(context, location, vector);
         
         verify(context).render(PARTICLES, location);
     }
     
     
-//    @Test
-//    public void renderOrbitals() {
-//        atom.renderOrbitals(context, location, vector, 0);
-//        
-//        verify(context).render(COLOURED, location);
-//        assertVector(from(4, 1, 1), location);
-//    }
+    @Test
+    void renderOrbitals() {
+        atom.renderOrbitals(context, location, vector, 0);
+        
+        verify(context).render(COLOURED, location);
+        assertVector(from(1, 1, 1), location);
+    }
     
 }

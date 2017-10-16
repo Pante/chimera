@@ -23,10 +23,15 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
+import static org.bukkit.Color.WHITE;
 
+
+@Immutable
 public class ColouredParticles extends Particles {
     
     private Color colour;
@@ -36,6 +41,13 @@ public class ColouredParticles extends Particles {
     public ColouredParticles(Particle type, int amount, Color colour) {
         super(type, amount);
         setColour(colour);
+    }
+        
+    private void setColour(Color colour) {
+        this.colour = colour;
+        r = colour.getRed() / 255.0;
+        g = colour.getGreen() / 255.0;
+        b = colour.getBlue() / 255.0;
     }
 
     
@@ -54,19 +66,17 @@ public class ColouredParticles extends Particles {
         return colour;
     }
     
-    private void setColour(Color colour) {
-        this.colour = colour;
-        r = colour.getRed() / 255.0;
-        g = colour.getGreen() / 255.0;
-        b = colour.getBlue() / 255.0;
-    }
     
+    public static ColouredBuilder builder() {
+        return new ColouredBuilder(new ColouredParticles(null, 0, WHITE));
+    }
     
     public static class ColouredBuilder extends Builder<ColouredBuilder, ColouredParticles> {
 
-        public ColouredBuilder(ColouredParticles particles) {
+        private ColouredBuilder(ColouredParticles particles) {
             super(particles);
         }
+        
         
         public ColouredBuilder colour(Color colour) {
             particles.setColour(colour);

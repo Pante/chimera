@@ -23,13 +23,11 @@
  */
 package com.karuslabs.commons.animation.particles.effect;
 
-import com.karuslabs.commons.world.BoundLocation;
-
 import java.util.function.Supplier;
-
-
-public interface Task<T extends Task, Origin extends BoundLocation, Target extends BoundLocation> extends Supplier<T> {
     
-    public void render(Context<Origin, Target> context);
+    
+public interface Task<T extends Task> extends Supplier<T> {
+    
+    public void render(Context context);
     
 }

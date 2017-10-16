@@ -94,24 +94,24 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
         if (arguments.length() == 0) {
             return EMPTY_LIST;
-        } 
-        
+        }
+
         String argument = arguments.get()[0];
-        if (!subcommands.isEmpty()) {
-            Command subcommand = subcommands.get(argument);
-            if (subcommand != null) {
-                arguments.trim();
-                return subcommand.complete(sender, arguments);
-                 
-            } else if (arguments.length() == 1) {
-                return subcommands.values().stream()
+        
+        Command subcommand = subcommands.get(argument);
+        if (subcommand != null) {
+            arguments.trim();
+            return subcommand.complete(sender, arguments);
+
+        } else if (subcommands.isEmpty() && arguments.length() == 1) {
+            return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)
                     .collect(toList());
-            }
+
+        } else {
+            return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
         }
-        
-        return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
     }
        
 

@@ -25,14 +25,15 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 
 import static java.lang.Math.*;
 
 
-public class Music implements Task<Music, BoundLocation, BoundLocation> {
+@Immutable
+public class Music implements Task<Music> {
     
     private Particles particles;
     private double radials;
@@ -51,7 +52,7 @@ public class Music implements Task<Music, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         long current = context.getCurrent();
         
@@ -60,7 +61,7 @@ public class Music implements Task<Music, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Music get() {
+    public @Immutable Music get() {
         return this;
     }
     

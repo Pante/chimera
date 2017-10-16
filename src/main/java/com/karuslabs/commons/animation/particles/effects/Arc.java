@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.copy;
 import static java.lang.Math.pow;
 
 
-public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
+@Immutable
+public class Arc implements Task<Arc> {
     
     private Particles particles;
     private float height;
@@ -53,7 +54,7 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Location target = context.getTarget().getLocation();
 
@@ -76,7 +77,7 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Arc get() {
+    public @Immutable Arc get() {
         return this;
     }
     

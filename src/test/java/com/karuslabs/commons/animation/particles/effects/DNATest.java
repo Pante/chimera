@@ -31,13 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class DNATest extends Effect {
+class DNATest extends Base {
 
-    private DNA dna = spy(new DNA(PARTICLES, COLOURED, MATERIAL).get());
+    DNA dna = spy(new DNA(PARTICLES, COLOURED, MATERIAL).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(dna).renderHelix(context, vector, 0);
         doNothing().when(dna).renderBase(any(), any(), any(), anyInt(), anyInt(), anyInt());
         
@@ -52,7 +52,7 @@ public class DNATest extends Effect {
     
     
     @Test
-    public void renderHelix() {
+    void renderHelix() {
         doNothing().when(dna).render(context, PARTICLES, vector);
         
         dna.renderHelix(context, vector, 1);
@@ -62,7 +62,7 @@ public class DNATest extends Effect {
     
     
     @Test
-    public void renderBase() {
+    void renderBase() {
          doNothing().when(dna).render(context, SINGLE, vector);
          
          dna.renderBase(context, SINGLE, vector, 1, 0, 1);
@@ -72,7 +72,7 @@ public class DNATest extends Effect {
     
     
     @Test
-    public void render_Particles() {
+    void render_Particles() {
         dna.render(context, COLOURED, vector);
         
         verify(context).render(COLOURED, location, vector);

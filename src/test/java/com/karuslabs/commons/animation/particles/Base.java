@@ -21,23 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effects;
+package com.karuslabs.commons.animation.particles;
 
-import org.junit.jupiter.api.Test;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
 import static org.mockito.Mockito.*;
 
 
-public class FlameTest extends Effect {
+abstract class Base {
     
-    private Flame flame = spy(new Flame(PARTICLES).get());
-    
-    
-    @Test
-    public void render() {
-        flame.render(context);
-        
-        verify(context, times(10)).render(PARTICLES, location);
-    }
+    World world = mock(World.class);
+    Location location = new Location(world, 0, 0, 0);
+    Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
 }

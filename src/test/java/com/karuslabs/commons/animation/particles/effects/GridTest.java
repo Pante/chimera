@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class GridTest extends Effect {
+class GridTest extends Base {
     
-    private Grid grid = spy(new Grid(PARTICLES).get());
+    Grid grid = spy(new Grid(PARTICLES).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(grid).renderRows(context, location);
         doNothing().when(grid).renderColumns(context, location);
         
@@ -46,7 +46,7 @@ public class GridTest extends Effect {
     
     
     @Test
-    public void renderRows() {
+    void renderRows() {
         doNothing().when(grid).render(context, location);
         
         grid.renderRows(context, location);
@@ -57,7 +57,7 @@ public class GridTest extends Effect {
     
     
     @Test
-    public void renderColumns() {
+    void renderColumns() {
         doNothing().when(grid).render(context, location);
         
         grid.renderColumns(context, location);
@@ -68,7 +68,7 @@ public class GridTest extends Effect {
     
     
     @Test
-    public void render_Location() {
+    void render_Location() {
         grid.render(context, location);
         
         verify(context).render(PARTICLES, location, vector);

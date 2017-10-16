@@ -31,34 +31,26 @@ import java.util.function.BiConsumer;
 import org.bukkit.Location;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class EffectTaskTest {
+class EffectTaskTest {
     
-    private EffectTask<StaticLocation, StaticLocation> effect;
-    private Task<Task, StaticLocation, StaticLocation> task;
-    private BiConsumer<Particles, Location> consumer;
-    private StaticLocation origin;
-    private StaticLocation target;
-    
-    
-    public EffectTaskTest() {
-        task = mock(Task.class);
-        consumer = mock(BiConsumer.class);
-        origin = spy(new StaticLocation(new Location(null, 1, 2, 3), null, false));
-        target = spy(new StaticLocation(new Location(null, 2, 3, 4), null, false));
-        effect = spy(new EffectTask<>(task, consumer, origin, target, true, 0));
-    }
+    Task<Task> task = mock(Task.class);
+    BiConsumer<Particles, Location> consumer = mock(BiConsumer.class);
+    Location location = new Location(null, 1, 2, 3);
+    StaticLocation origin = spy(new StaticLocation(location, null, false));
+    StaticLocation target = spy(new StaticLocation(new Location(null, 2, 3, 4), null, false));
+    EffectTask effect = spy(new EffectTask(task, consumer, origin, target, true, 0));
     
     
     @ParameterizedTest
     @CsvSource({"true, true, true, 1, 1, 0", "true, true, false, 1, 0, 0", "true, false, true, 0, 0, 1", "false, true, true, 0, 0, 1"})
-    public void process(boolean origin, boolean target, boolean orientate, int times, int orientateTimes, int done) {
+    void process(boolean origin, boolean target, boolean orientate, int times, int orientateTimes, int done) {
         doNothing().when(effect).orientate();
         doNothing().when(effect).done();
         
@@ -77,7 +69,7 @@ public class EffectTaskTest {
     
     
     @Test
-    public void orientate() {
+    void orientate() {
         effect.orientate();
         
         Location origin = effect.getOrigin().getLocation();
@@ -92,7 +84,7 @@ public class EffectTaskTest {
     
     
     @Test
-    public void get() {
+    void get() {
         assertEquals(task, effect.getTask());
         assertNotNull(effect.getVector());
         assertNull(effect.value());
@@ -100,10 +92,9 @@ public class EffectTaskTest {
     
     
     @Test
-    public void render() {
+    void render() {
         Particles particles = mock(Particles.class);
-        Location location = new Location(null, 0, 0, 0);
-        
+
         effect.render(particles, location);
         
         verify(consumer).accept(particles, location);

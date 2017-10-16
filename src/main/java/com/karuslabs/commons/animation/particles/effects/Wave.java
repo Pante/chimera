@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.world.Vectors;
 
 import java.util.*;
@@ -33,7 +33,9 @@ import java.util.*;
 import org.bukkit.*;
 import org.bukkit.util.Vector;
 
-public class Wave implements Task<Wave, BoundLocation, BoundLocation> {
+
+@Immutable
+public class Wave implements Task<Wave> {
 
     private Particles particles;
     private Particles cloudParticle;
@@ -150,7 +152,7 @@ public class Wave implements Task<Wave, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector velocity = context.getVector();
 
@@ -175,7 +177,7 @@ public class Wave implements Task<Wave, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Wave get() {
+    public @Immutable Wave get() {
         return this;
     }
 

@@ -31,7 +31,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public interface Context<Origin extends BoundLocation, Target extends BoundLocation> extends Repeatable {
+public interface Context extends Repeatable {
     
     public void render(Particles particles, Location location);
     
@@ -43,9 +43,9 @@ public interface Context<Origin extends BoundLocation, Target extends BoundLocat
     public void cancel();
     
     
-    public Origin getOrigin();
+    public BoundLocation getOrigin();
     
-    public Target getTarget();
+    public BoundLocation getTarget();
     
         
     public Vector getVector();

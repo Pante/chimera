@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLocation> {
+@Immutable
+public class AnimatedBall implements Task<AnimatedBall> {
     
     private static final Vector FACTOR = new Vector(1, 2, 1);
     private static final Vector OFFSET = new Vector(0, 0.8, 0);
@@ -65,7 +66,7 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         int count = context.count();
@@ -87,7 +88,7 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
     }
 
     @Override
-    public AnimatedBall get() {
+    public @Immutable AnimatedBall get() {
         return this;
     }
     

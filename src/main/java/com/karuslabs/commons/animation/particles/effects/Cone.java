@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
+@Immutable
+public class Cone implements Task<Cone> {
     
     private Particles particles;
     private float lengthGrowth;
@@ -63,7 +64,7 @@ public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         int count = context.count();
@@ -90,7 +91,7 @@ public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Cone get() {
+    public @Immutable Cone get() {
         return this;
     }
     

@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.*;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,7 +35,8 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
+@Immutable
+public class Cloud implements Task<Cloud> {
     
     private Particles cloud;
     private Particles droplets;
@@ -58,7 +59,7 @@ public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
 
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
@@ -66,7 +67,7 @@ public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
         renderDroplets(context, location.add(0, 0.2, 0), random, 15);
     }
     
-    protected void renderCloud(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
+    void renderCloud(Context context, Location location, ThreadLocalRandom random, int amount) {
         Vector vector = context.getVector();
         for (int i = 0; i < amount; i++) {
             randomCircle(vector).multiply(random.nextDouble() * size);
@@ -74,7 +75,7 @@ public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderDroplets(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random, int amount) {
+    void renderDroplets(Context context, Location location, ThreadLocalRandom random, int amount) {
         for (int i = 0; i < amount; i++) {
             if (random.nextInt(2) != 1) {
                 double x = random.nextDouble() * radius;
@@ -88,7 +89,7 @@ public class Cloud implements Task<Cloud, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Cloud get() {
+    public @Immutable Cloud get() {
         return this;
     }
     

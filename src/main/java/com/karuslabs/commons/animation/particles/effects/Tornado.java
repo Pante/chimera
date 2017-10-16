@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -33,11 +33,11 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import static com.karuslabs.commons.world.Vectors.randomCircle;
-
 import static java.lang.Math.*;
 
 
-public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
+@Immutable
+public class Tornado implements Task<Tornado> {
     
     private Particles tornado;
     private Particles cloud;
@@ -64,7 +64,7 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation().add(0, yOffset, 0);
         
         renderCloud(context, ThreadLocalRandom.current(), location);
@@ -73,7 +73,7 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
         location.subtract(0, yOffset + 0.2, 0);
     }
     
-    protected void renderCloud(Context<BoundLocation, BoundLocation> context, ThreadLocalRandom random, Location location) {
+    void renderCloud(Context context, ThreadLocalRandom random, Location location) {
         Vector vector = context.getVector();
         for (int i = 0; i < 100 * cloudSize; i++) {
             randomCircle(vector).multiply(random.nextDouble() * cloudSize);
@@ -81,7 +81,7 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderTornado(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderTornado(Context context, Location location) {
         double r = 0.45 * (radius * (2.35 / height));
         for (double y = 0; y < height; y += distance) {
             double fr = r * y;
@@ -89,7 +89,7 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderTornadoPortion(Context<BoundLocation, BoundLocation> context, Location location, double radius, double y) {
+    void renderTornadoPortion(Context context, Location location, double radius, double y) {
         Vector vector = context.getVector().setY(y);
         double amount = radius * 64;
         double inc = 2 * PI / amount;
@@ -103,7 +103,7 @@ public class Tornado implements Task<Tornado, BoundLocation, BoundLocation> {
 
 
     @Override
-    public Tornado get() {
+    public @Immutable Tornado get() {
         return this;
     }
     

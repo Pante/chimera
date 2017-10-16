@@ -30,14 +30,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-public class CubeTest extends Effect {
+class CubeTest extends Base {
 
-    private Cube cube = spy(new Cube(PARTICLES));
+    Cube cube = spy(new Cube(PARTICLES));
     
     
     @ParameterizedTest
     @CsvSource({"true, 1, 0", "false, 0, 1"})
-    public void render(boolean solid, int walls, int outlines) {
+    void render(boolean solid, int walls, int outlines) {
         doNothing().when(cube).renderWalls(context, location, vector, 0, 0, 0);
         doNothing().when(cube).renderOutline(context, location, 4, 2, vector, 0, 0, 0);
         
@@ -48,10 +48,21 @@ public class CubeTest extends Effect {
         verify(cube, times(walls)).renderWalls(context, location, vector, 0, 0, 0);
         verify(cube, times(outlines)).renderOutline(context, location, 4, 2, vector, 0, 0, 0);
     }
+        
+    
+    @Test
+    void renderWalls() {
+        cube.perRow = 1;
+        
+        cube.renderWalls(context, location, vector, 0, 0, 0);
+        
+        verify(context).render(PARTICLES, location);
+        assertVector(from(-0.5, -0.5, -0.5), context.location);
+    }
     
     
     @Test
-    public void renderOutline() {
+    void renderOutline() {
         doNothing().when(cube).renderPillarOutlines(context, location, 0, vector, 0, 0, 0);
         
         cube.renderOutline(context, location, 1, 1, vector, 0, 0, 0);
@@ -64,7 +75,7 @@ public class CubeTest extends Effect {
     
     @ParameterizedTest
     @CsvSource({"true, 2.317134151772411, 2.905858842747876, -0.17595055072672983", "false, 2.5, -0.5, 2.5"})
-    public void renderPillarOutlines(boolean rotate, double x, double y, double z) {
+    void renderPillarOutlines(boolean rotate, double x, double y, double z) {
         cube.rotate = rotate;
         cube.perRow = 1;
         
@@ -72,17 +83,6 @@ public class CubeTest extends Effect {
         
         verify(context).render(PARTICLES, location);
         assertVector(from(x, y, z), context.location);
-    }
-    
-    
-    @Test
-    public void renderWalls() {
-        cube.perRow = 1;
-        
-        cube.renderWalls(context, location, vector, 0, 0, 0);
-        
-        verify(context).render(PARTICLES, location);
-        assertVector(from(-0.5, -0.5, -0.5), context.location);
     }
     
 }

@@ -39,16 +39,16 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class TraceTest extends Effect {
+class TraceTest extends Base {
     
     private static final World WORLD = mock(World.class);
     
-    private Trace trace = spy(new Trace(PARTICLES).get());
+    Trace trace = spy(new Trace(PARTICLES).get());
     
     
     @ParameterizedTest
     @MethodSource("render_parameters")
-    public void render(World world, int rendered, int cancelled) {
+    void render(World world, int rendered, int cancelled) {
         location = new Location(WORLD, 0, 0, 0);
         context.origin = new StaticLocation(location, null, false);
         
@@ -72,7 +72,7 @@ public class TraceTest extends Effect {
     
     
     @Test
-    public void render_location() {
+    void render_location() {
         doReturn(new Vector(3, 3, 3)).when(trace).process(location);
         context.current = 4;
         
@@ -85,7 +85,7 @@ public class TraceTest extends Effect {
     
     @ParameterizedTest
     @CsvSource({"2, 1, 1, 1, 1", "1, 3, 3, 3, 0"})
-    public void process(int max, int x, int y, int z, int size) {
+    void process(int max, int x, int y, int z, int size) {
         trace.waypoints.add(new Vector(3, 3, 3));
         trace.max = max;
         

@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class DragonTest extends Effect {
+class DragonTest extends Base {
     
-    private Dragon dragon = spy(new Dragon(PARTICLES).get());
+    Dragon dragon = spy(new Dragon(PARTICLES).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(dragon).renderArcs(context, location);
         
         dragon.render(context);
@@ -45,7 +45,7 @@ public class DragonTest extends Effect {
     
     
     @Test
-    public void renderArcs() {
+    void renderArcs() {
         dragon.renderArcs(context, location);
         
         verify(context, times(20)).render(PARTICLES, location);

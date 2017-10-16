@@ -37,13 +37,13 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class DiscoBallTest extends Effect {
+class DiscoBallTest extends Base {
     
-    private DiscoBall ball = spy(new DiscoBall(PARTICLES, COLOURED).get());
+    DiscoBall ball = spy(new DiscoBall(PARTICLES, COLOURED).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(ball).renderSphere(context, location);
         doNothing().when(ball).renderLines(context, location, RANDOM);
         
@@ -55,7 +55,7 @@ public class DiscoBallTest extends Effect {
     
     
     @Test
-    public void renderLine() {
+    void renderLine() {
         ThreadLocalRandom random = spy(RANDOM);
         doReturn(2).when(random).nextInt(anyInt(), anyInt());
         
@@ -68,7 +68,7 @@ public class DiscoBallTest extends Effect {
     
     @ParameterizedTest
     @MethodSource("calculateY_arguments")
-    public void calculateY(Direction direction, int down, int up, int both) {
+    void calculateY(Direction direction, int down, int up, int both) {
         when(random.nextInt(anyInt(), anyInt())).thenReturn(1);
         ball.direction = direction;
         
@@ -89,7 +89,7 @@ public class DiscoBallTest extends Effect {
     
     
     @Test
-    public void renderSphere() {
+    void renderSphere() {
         ball.renderSphere(context, location);
         
         verify(context).render(PARTICLES, location);

@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -33,18 +32,18 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.copy;
 
 
-public class Line implements Task<Line, BoundLocation, BoundLocation> {
+public class Line implements Task<Line> {
     
     private static final Vector OFFSET = new Vector(0,0.1,0);
     
     private Particles particles;
-    private int perArc = 100;
-    double length = 0;
-    private boolean zigzag = false;
-    private int zigzags = 10;
+    private int perArc;
+    double length;
+    private boolean zigzag;
+    private int zigzags;
     private Vector offset;
     private boolean direction;
-    private int step = 0;
+    private int step;
     Vector vector;
     Vector link;
     Vector distance;
@@ -70,7 +69,7 @@ public class Line implements Task<Line, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         resolveLink(context);
 
@@ -97,7 +96,7 @@ public class Line implements Task<Line, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void resolveLink(Context<BoundLocation, BoundLocation> context) {
+    void resolveLink(Context context) {
         Location location = context.getOrigin().getLocation();
         copy(location, vector);
         

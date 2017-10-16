@@ -33,10 +33,10 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public class StubContext<Origin extends BoundLocation, Target extends BoundLocation> implements Context<Origin, Target> {
+public class StubContext implements Context {
     
-    Origin origin;
-    Target target;
+    BoundLocation origin;
+    BoundLocation target;
     long current;
     long iterations;
     Location location;
@@ -45,7 +45,7 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     int count;
     
     
-    public StubContext(Origin origin, Target target, long current, long iterations) {
+    public StubContext(BoundLocation origin, BoundLocation target, long current, long iterations) {
         this.origin = origin;
         this.target = target;
         this.current = current;
@@ -69,12 +69,12 @@ public class StubContext<Origin extends BoundLocation, Target extends BoundLocat
     
     
     @Override
-    public Origin getOrigin() {
+    public BoundLocation getOrigin() {
         return origin;
     }
 
     @Override
-    public Target getTarget() {
+    public BoundLocation getTarget() {
         return target;
     }
     

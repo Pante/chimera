@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.PI;
 
 
-public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
+@Immutable
+public class Cube implements Task<Cube> {
     
     private Particles particles;
     private float edge;
@@ -62,7 +63,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         long current = context.getCurrent();
@@ -82,7 +83,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderWalls(Context<BoundLocation, BoundLocation> context, Location location, Vector vector, double rotationX, double rotationY, double rotationZ) {
+    void renderWalls(Context context, Location location, Vector vector, double rotationX, double rotationY, double rotationZ) {
         for (int x = 0; x <= perRow; x += particles.getAmount()) {
             float posX = edge * ((float) x / perRow) - half;
             
@@ -106,7 +107,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderOutline(Context<BoundLocation, BoundLocation> context, Location location, int sides, int points, Vector vector, double x, double y, double z) {
+    void renderOutline(Context context, Location location, int sides, int points, Vector vector, double x, double y, double z) {
         // top and bottom
         double angleX, angleY;
         for (int i = 0; i < sides; i++) {
@@ -130,7 +131,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderPillarOutlines(Context<BoundLocation, BoundLocation> context, Location location, double angle, Vector vector, double x, double y, double z) {
+    void renderPillarOutlines(Context context, Location location, double angle, Vector vector, double x, double y, double z) {
         for (int p = 0; p <= perRow; p += particles.getAmount()) {
             vector.setX(half).setZ(half).setY(edge * p / perRow - half);
             rotateAroundYAxis(vector, angle);
@@ -144,7 +145,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Cube get() {
+    public @Immutable Cube get() {
         return this;
     }
     

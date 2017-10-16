@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class FountainTest extends Effect {
+class FountainTest extends Base {
     
-    private Fountain fountain = spy(new Fountain(SPAM).get());
+    Fountain fountain = spy(new Fountain(SPAM).get());
     
     
     @Test
-    public void render() {
+    void render() {
         doNothing().when(fountain).renderStrands(context, location);
         doNothing().when(fountain).renderSpout(context, location, RANDOM);
         
@@ -46,7 +46,7 @@ public class FountainTest extends Effect {
     
     
     @Test
-    public void renderStrands() {
+    void renderStrands() {
         fountain.renderStrands(context, location);
         
         verify(context, times(10)).render(SPAM, location);
@@ -55,7 +55,7 @@ public class FountainTest extends Effect {
     
     
     @Test
-    public void renderSpout() {
+    void renderSpout() {
         fountain.renderSpout(context, location, RANDOM);
         
         verify(context).render(SPAM, location);

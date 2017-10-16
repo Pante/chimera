@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.*;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.*;
 
 import java.util.stream.Stream;
 
@@ -41,11 +40,11 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class EffectsTest extends Effect {
+class EffectsTest extends Base {
     
     @ParameterizedTest
     @MethodSource("parameters")
-    public void render(Task<Task, BoundLocation, BoundLocation> task, Vector expected) {
+    void render(Task<Task> task, Vector expected) {
         task.render(context);
         
         verify(context, atLeastOnce()).render(any(Particles.class), any(Location.class));
@@ -73,7 +72,7 @@ public class EffectsTest extends Effect {
     
     @ParameterizedTest
     @MethodSource("random_parameters")
-    public void render_Random(Task<Task, BoundLocation, BoundLocation> task, int times) {
+    void render_Random(Task<Task> task, int times) {
         task.render(context);
         
         verify(context, times(times)).render(PARTICLES, location);
@@ -81,6 +80,7 @@ public class EffectsTest extends Effect {
     
     static Stream<Arguments> random_parameters() {
         return Stream.of(
+            of(new Flame(PARTICLES).get(), 10),
             of(new Shield(PARTICLES).get(), 1),
             of(new Smoke(PARTICLES).get(), 1),
             of(new Sphere(PARTICLES).get(), 1)

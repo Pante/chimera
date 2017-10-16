@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
+@Immutable
+public class Circle implements Task<Circle> {
     
     private Particles particles;
     private int total;
@@ -62,7 +63,7 @@ public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation().subtract(subtract);
         Vector vector = context.getVector();
         long current = context.getCurrent();
@@ -80,7 +81,7 @@ public class Circle implements Task<Circle, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Circle get() {
+    public @Immutable Circle get() {
         return this;
     }
     

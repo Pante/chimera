@@ -68,7 +68,6 @@ public class BossBarSupplier implements Supplier<BossBar> {
         return new Builder(new BossBarSupplier(server, "", BLUE, SEGMENTED_10, 1));
     }
     
-    
     public static class Builder {
         
         private BossBarSupplier supplier;

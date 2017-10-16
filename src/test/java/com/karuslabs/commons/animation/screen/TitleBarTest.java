@@ -39,16 +39,16 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class TitleBarTest {
+class TitleBarTest {
     
-    private BiConsumer<Player, TitleContext> consumer = mock(BiConsumer.class);
-    private TitleBar bar = TitleBar.builder(null).consumer(() -> consumer).fadeIn(1).stay(2).fadeOut(3).build();
-    private Player player = mock(Player.class);
+    BiConsumer<Player, TitleContext> consumer = mock(BiConsumer.class);
+    TitleBar bar = TitleBar.builder(null).consumer(() -> consumer).fadeIn(1).stay(2).fadeOut(3).build();
+    Player player = mock(Player.class);
     
     
     @Test
     @JDK9
-    public void task() {
+    void task() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         assertEquals(1, task.getFadeIn());
@@ -59,7 +59,7 @@ public class TitleBarTest {
     
     @Test
     @JDK9
-    public void process() {
+    void process() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         task.process();

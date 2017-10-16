@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +36,8 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 import static java.lang.Math.*;
 
 
-public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
+@Immutable
+public class Fountain implements Task<Fountain> {
     
     private Particles particles;
     private int strands;
@@ -67,13 +68,13 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         renderStrands(context, location);
         renderSpout(context, location, ThreadLocalRandom.current());
     }
     
-    protected void renderStrands(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderStrands(Context context, Location location) {
         Vector vector = context.getVector();
         for (int i = 1; i <= strands; i++) {
             double angle = 2 * i * PI / strands + rotation;
@@ -89,7 +90,7 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderSpout(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+    void renderSpout(Context context, Location location, ThreadLocalRandom random) {
         Vector vector = context.getVector();
         for (int i = 0; i < perSpout; i += particles.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble(0, radius * radiusSpout));
@@ -98,10 +99,9 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
             context.render(particles, location, vector);
         }
     }
-    
 
     @Override
-    public Fountain get() {
+    public @Immutable Fountain get() {
         return this;
     }
     

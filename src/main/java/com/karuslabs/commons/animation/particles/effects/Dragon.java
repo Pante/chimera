@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +35,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
+public class Dragon implements Task<Dragon> {
     
     private Particles particles;
     private float pitch;
@@ -69,7 +68,7 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         for (int j = 0; j < stepsPerIteration; j++, step++) {
             if (step % perArc == 0) {
@@ -80,14 +79,14 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void populate(ThreadLocalRandom random) {
+    void populate(ThreadLocalRandom random) {
         for (int i = 0; i < arcs; i++) {
             floats[i] = random.nextFloat();
             angles[i] = randomAngle();
         }
     }
 
-    protected void renderArcs(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderArcs(Context context, Location location) {
         for (int i = 0; i < arcs; i++) {
             float pitch = floats[i] * 2 * this.pitch - this.pitch;
             float x = (step % perArc) * length / perArc;
@@ -102,7 +101,6 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
             context.render(particles, location, vector);
         }
     }
-    
 
     @Override
     public Dragon get() {

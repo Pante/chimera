@@ -36,18 +36,18 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class SetsTest {
+class SetsTest {
     
     @Test
     @Deprecated
     @JDK9("Coreesponding method will be removed")
-    public void asSet() {
+    void asSet() {
         assertEquals(new HashSet<>(asList(1, 2, 3)), Sets.asSet(1, 2, 3));
     }
     
     
     @Test
-    public void weakSet() {
+    void weakSet() {
         assertEquals(singleton("a"), Sets.weakSet(asList("a")));
     }
     

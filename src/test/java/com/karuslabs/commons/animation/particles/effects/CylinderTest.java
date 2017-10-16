@@ -30,16 +30,14 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-public class CylinderTest extends Effect {
+class CylinderTest extends Base {
     
-    public static double LOW_PRECISION = 0.00001;
-    
-    private Cylinder cylinder = spy(new Cylinder(PARTICLES));
+    Cylinder cylinder = spy(new Cylinder(PARTICLES));
     
     
     @ParameterizedTest
     @CsvSource({"true, 0.015707963267948967, 0.018479956785822312, 0.02026833970057931", "false, 0.0, 0.0, 0.0"})
-    public void render(boolean rotate, double x, double y, double z) {
+    void render(boolean rotate, double x, double y, double z) {
         doNothing().when(cylinder).renderSurface(any(), any(), any(), anyInt(), any(), anyDouble(), anyDouble(), anyDouble());
         cylinder.rotate = rotate;
         context.count = 1;
@@ -51,7 +49,7 @@ public class CylinderTest extends Effect {
     
     
     @Test
-    public void renderSurface() {
+    void renderSurface() {
         cylinder.renderSurface(context, location, vector, 0, RANDOM, 1, 2, 3);
         
         verify(context, times(2)).render(PARTICLES, location);
@@ -60,7 +58,7 @@ public class CylinderTest extends Effect {
     
     @ParameterizedTest
     @CsvSource({"0.1, 2, -1.2, 2", "0.49, 0.49, 3.0, 0.49", "0.5, 0.5, -3, 0.5"})
-    public void calculate(float value, double x, double y, double z) {
+    void calculate(float value, double x, double y, double z) {
         when(random.nextFloat()).thenReturn(value);
         when(random.nextDouble(-1, 1)).thenReturn(-0.8);
         

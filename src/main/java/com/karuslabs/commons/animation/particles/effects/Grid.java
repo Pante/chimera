@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -33,7 +33,8 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
 
 
-public class Grid implements Task<Grid, BoundLocation, BoundLocation> {
+@Immutable
+public class Grid implements Task<Grid> {
     
     private Particles particles;
     private int rows;
@@ -62,13 +63,13 @@ public class Grid implements Task<Grid, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         renderRows(context, location);
         renderColumns(context, location);
     }
     
-    protected void renderRows(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderRows(Context context, Location location) {
         Vector vector = context.getVector();
         for (int i = 0; i <= (rows + 1); i++) {
             for (int j = 0; j < perWidth * (columns + 1); j += particles.getAmount()) {
@@ -79,7 +80,7 @@ public class Grid implements Task<Grid, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void renderColumns(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderColumns(Context context, Location location) {
         Vector vector = context.getVector();
         for (int i = 0; i <= (columns + 1); i += particles.getAmount()) {
             for (int j = 0; j < perHeight * (rows + 1); j++) {
@@ -90,7 +91,7 @@ public class Grid implements Task<Grid, BoundLocation, BoundLocation> {
         }
     }
 
-    protected void render(Context<BoundLocation, BoundLocation> context, Location location) {
+    void render(Context context, Location location) {
         Vector vector = context.getVector();
         vector.setZ(0);
         rotateAroundYAxis(vector, rotation);
@@ -99,7 +100,7 @@ public class Grid implements Task<Grid, BoundLocation, BoundLocation> {
 
     
     @Override
-    public Grid get() {
+    public @Immutable Grid get() {
         return this;
     }
     

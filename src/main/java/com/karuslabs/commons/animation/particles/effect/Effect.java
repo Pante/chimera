@@ -37,14 +37,14 @@ import org.bukkit.plugin.Plugin;
 import static com.karuslabs.commons.collection.Sets.weakSet;
 
 
-public class Effect<Origin extends BoundLocation, Target extends BoundLocation> {    
+public class Effect {    
     
     public static final int INFINITE = -1;
     
     private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
     
     private Plugin plugin;
-    private Task<Task, Origin, Target> task;
+    private Supplier<Task> supplier;
     private boolean orientate;
     private long iterations;
     private long delay;
@@ -52,9 +52,9 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     boolean async;
     
     
-    public Effect(Plugin plugin, Task<Task, Origin, Target> task, boolean orientate, long iterations, long delay, long period, boolean async) {
+    public Effect(Plugin plugin, Supplier<Task> supplier, boolean orientate, long iterations, long delay, long period, boolean async) {
         this.plugin = plugin;
-        this.task = task;
+        this.supplier = supplier;
         this.orientate = orientate;
         this.iterations = iterations;
         this.delay = delay;
@@ -63,20 +63,20 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     }
     
         
-    public Promise<?> render(Origin origin, Target target) {
-        return schedule(new EffectTask<>(task.get(), GLOBAL, origin, target, orientate, iterations));
+    public Promise<?> render(BoundLocation origin, BoundLocation target) {
+        return schedule(new EffectTask(supplier.get(), GLOBAL, origin, target, orientate, iterations));
     }
     
-    public Promise<?> render(Player player, Origin origin, Target target) {
-        return schedule(new EffectTask<>(task.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
+    public Promise<?> render(Player player, BoundLocation origin, BoundLocation target) {
+        return schedule(new EffectTask(supplier.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
     }
     
-    public Promise<?> render(Collection<Player> players, Origin origin, Target target) {
+    public Promise<?> render(Collection<Player> players, BoundLocation origin, BoundLocation target) {
         Set<Player> targets = weakSet(players);
-        return schedule(new EffectTask<>(task.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
+        return schedule(new EffectTask(supplier.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
     }
     
-    Promise<?> schedule(EffectTask<Origin, Target> task) {
+    Promise<?> schedule(EffectTask task) {
         if (async) {
             task.runTaskTimerAsynchronously(plugin, delay, period);
             
@@ -88,48 +88,49 @@ public class Effect<Origin extends BoundLocation, Target extends BoundLocation> 
     }
     
     
-    public static<O extends BoundLocation, T extends BoundLocation> Builder<O, T> builder(Plugin plugin) {
-        return new Builder<>(new Effect<>(plugin, null, false, 0, 0, 0, true));
+    public static Builder builder(Plugin plugin) {
+        return new Builder(new Effect(plugin, null, false, 0, 0, 0, true));
     }
     
-    public static class Builder<O extends BoundLocation, T extends BoundLocation> {
+    public static class Builder {
 
-        private Effect<O, T> effect;
+        private Effect effect;
 
-        Builder(Effect<O, T> effect) {
+        
+        private Builder(Effect effect) {
             this.effect = effect;
         }
         
-        public Builder<O, T> task(Task<Task, O, T> task) {
-            effect.task = task;
+        public Builder supplier(Supplier<Task> supplier) {
+            effect.supplier = supplier;
             return this;
         }
-        public Builder<O, T> orientate(boolean orientate) {
+        public Builder orientate(boolean orientate) {
             effect.orientate = orientate;
             return this;
         }
         
-        public Builder<O, T> async(boolean async) {
+        public Builder async(boolean async) {
             effect.async = async;
             return this;
         }
         
-        public Builder<O, T> iterations(long iterations) {
+        public Builder iterations(long iterations) {
             effect.iterations = iterations;
             return this;
         }
         
-        public Builder<O, T> delay(long delay) {
+        public Builder delay(long delay) {
             effect.delay = delay;
             return this;
         }
         
-        public Builder<O, T> period(long period) {
+        public Builder period(long period) {
             effect.period = period;
             return this;
         }
         
-        public Effect<O, T> build() {
+        public Effect build() {
             return effect;
         }
 

@@ -23,12 +23,15 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
 
-public class MaterialParticles extends StandardParticles {
+@Immutable
+public class MaterialParticles extends AbstractParticles {    
     
     private MaterialData data;
     
@@ -54,10 +57,14 @@ public class MaterialParticles extends StandardParticles {
         return data;
     }
     
+        
+    public static MaterialBuilder builder() {
+        return new MaterialBuilder(new MaterialParticles(null, 0, 0, 0, 0, 0, null));
+    }
     
     public static class MaterialBuilder extends AbstractBuilder<MaterialBuilder, MaterialParticles> {
 
-        public MaterialBuilder(MaterialParticles particles) {
+        private MaterialBuilder(MaterialParticles particles) {
             super(particles);
         }
         

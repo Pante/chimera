@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +35,7 @@ import static com.karuslabs.commons.animation.particles.effects.Constants.*;
 import static com.karuslabs.commons.world.Vectors.*;
 
 
-public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
+public class Cylinder implements Task<Cylinder> {
   
     private Particles particles;
     private float radius;
@@ -67,7 +66,7 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         int count = context.count();
         ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -83,7 +82,7 @@ public class Cylinder implements Task<Cylinder, BoundLocation, BoundLocation> {
         context.count(count);
     }
     
-    protected void renderSurface(Context<BoundLocation, BoundLocation> context, Location location, Vector vector, int count, ThreadLocalRandom random, double x, double y, double z) {
+    protected void renderSurface(Context context, Location location, Vector vector, int count, ThreadLocalRandom random, double x, double y, double z) {
         for (int i = 0; i < perRow; i += particles.getAmount(), count++) {
             randomCircle(vector).multiply(radius);
             calculate(vector, random, solid ? random.nextFloat() : 1);

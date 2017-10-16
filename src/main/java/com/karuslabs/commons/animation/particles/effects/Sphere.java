@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -33,13 +33,14 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.random;
 
 
-public class Sphere implements Task<Sphere, BoundLocation, BoundLocation> {
+@Immutable
+public class Sphere implements Task<Sphere> {
     
     private Particles particles;
-    private int perIteration = 50;
-    private double radius = 0.6;
-    private double yOffset = 0;
-    private double increment = 0;
+    private int perIteration;
+    private double radius;
+    private double yOffset;
+    private double increment;
     
     
     public Sphere(Particles particles) {
@@ -56,7 +57,7 @@ public class Sphere implements Task<Sphere, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Vector vector = context.getVector();
         Location location = context.getOrigin().getLocation();
         location.add(0, yOffset, 0);
@@ -70,7 +71,7 @@ public class Sphere implements Task<Sphere, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Sphere get() {
+    public @Immutable Sphere get() {
         return this;
     }
     

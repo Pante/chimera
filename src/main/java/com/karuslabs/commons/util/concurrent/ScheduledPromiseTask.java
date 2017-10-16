@@ -54,13 +54,17 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
             } catch (Exception e) {
                 thrown = e;
                 done();
-                callback();
             }
             
         } else {
             done();
-            callback();
         }
+    }
+    
+    @Override
+    void finish(int updated) {
+        super.finish(updated);
+        callback();
     }
     
     protected void callback() {};

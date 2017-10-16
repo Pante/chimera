@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.copy;
 
 
-public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
+public class Trace implements Task<Trace> {
     
     private Particles particles;
     private int refresh;
@@ -57,7 +56,7 @@ public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         if (world == null) {
             world = location.getWorld();
@@ -70,7 +69,7 @@ public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
         }
     }
     
-    protected void render(Context<BoundLocation, BoundLocation> context, Location location) {
+    void render(Context context, Location location) {
         waypoints.add(process(location));
         
         if ((context.getCurrent() + 1) % refresh == 0) {
@@ -86,7 +85,7 @@ public class Trace implements Task<Trace, BoundLocation, BoundLocation> {
         }
     }
     
-    protected Vector process(Location location) {
+    Vector process(Location location) {
         if (waypoints.size() >= max) {
             Vector vector = waypoints.remove(0);
             return copy(location, vector);

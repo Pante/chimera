@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
+@Immutable
+public class Vortex implements Task<Vortex> {
 
     private Particles particles;
     private float radius;
@@ -59,7 +60,7 @@ public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
 
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         
@@ -79,7 +80,7 @@ public class Vortex implements Task<Vortex, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Vortex get() {
+    public @Immutable Vortex get() {
         return this;
     }
     

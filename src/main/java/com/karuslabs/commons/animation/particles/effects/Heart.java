@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class Heart implements Task<Heart, BoundLocation, BoundLocation> {
+@Immutable
+public class Heart implements Task<Heart> {
     
     private Particles particles;
     private int perIteration;
@@ -64,7 +65,7 @@ public class Heart implements Task<Heart, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         
@@ -82,7 +83,7 @@ public class Heart implements Task<Heart, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Heart get() {
+    public @Immutable Heart get() {
         return this;
     }
     

@@ -23,12 +23,15 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.annotation.Immutable;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ItemParticles extends StandardParticles {
+@Immutable
+public class ItemParticles extends AbstractParticles {
     
     private ItemStack item;
 
@@ -55,9 +58,13 @@ public class ItemParticles extends StandardParticles {
     }
     
     
+    public static ItemBuilder builder() {
+        return new ItemBuilder(new ItemParticles(null, 0, 0, 0, 0, 0, null));
+    }   
+    
     public static class ItemBuilder extends AbstractBuilder<ItemBuilder, ItemParticles> {
 
-        public ItemBuilder(ItemParticles particles) {
+        private ItemBuilder(ItemParticles particles) {
             super(particles);
         }
         

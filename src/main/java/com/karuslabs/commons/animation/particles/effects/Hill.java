@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
 import static java.lang.Math.*;
 
 
-public class Hill implements Task<Hill, BoundLocation, BoundLocation> {
+@Immutable
+public class Hill implements Task<Hill> {
     
     private Particles particles;
     private float perRow;
@@ -57,7 +58,7 @@ public class Hill implements Task<Hill, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         
@@ -77,7 +78,7 @@ public class Hill implements Task<Hill, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Hill get() {
+    public @Immutable Hill get() {
         return this;
     }
     

@@ -42,14 +42,14 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class CommandTest {
+class CommandTest {
     
-    private Command command = spy(new Command("", null));
-    private CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();
+    Command command = spy(new Command("", null));
+    CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();
     
     
     @Test
-    public void execute_unwrapped() {
+    void execute_unwrapped() {
         doReturn(true).when(command).execute(any(Context.class), any(Arguments.class));
         
         command.execute(sender, "", new String[] {});
@@ -60,7 +60,7 @@ public class CommandTest {
     
     @ParameterizedTest
     @CsvSource({"a, 1, 0", "b, 0, 1"})
-    public void execute(String argument, int delegated, int executor) {
+    void execute(String argument, int delegated, int executor) {
         Context context = mock(Context.class);
         Arguments arguments = spy(new Arguments(argument));
         
@@ -81,7 +81,7 @@ public class CommandTest {
     
     
     @Test
-    public void tabComplete() {
+    void tabComplete() {
         doReturn(EMPTY_LIST).when(command).complete(any(), any(Arguments.class));
         
         command.tabComplete(sender, "", new String[] {});
@@ -91,13 +91,13 @@ public class CommandTest {
     
     
     @Test
-    public void complete_empty() {
+    void complete_empty() {
         assertTrue(EMPTY_LIST == command.complete(sender, new Arguments()));
     }
     
     
     @Test
-    public void complete_delegate() {
+    void complete_delegate() {
         Arguments arguments = spy(new Arguments("subcommand"));
         Command subcommand = when(mock(Command.class).complete(sender, arguments)).thenReturn(singletonList("a")).getMock();
         
@@ -110,7 +110,7 @@ public class CommandTest {
     
     @ParameterizedTest
     @MethodSource("complete_parameters")
-    public void complete_subcommands(String name, String permission, List<String> expected) {
+    void complete_subcommands(String name, String permission, List<String> expected) {
         Arguments arguments = new Arguments("subcommand");
         
         Command subcommand = new Command(name, null);
@@ -130,7 +130,7 @@ public class CommandTest {
     
     
     @Test
-    public void complete_completions() {
+    void complete_completions() {
         Arguments arguments = new Arguments("argument");
         Completion completion = when(mock(Completion.class).complete(sender, "argument")).thenReturn(singletonList("a")).getMock();
         command.getCompletions().put(0, completion);

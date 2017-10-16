@@ -25,12 +25,13 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 
 
-public class Composite implements Task<Composite, BoundLocation, BoundLocation> {
+@Immutable
+public class Composite implements Task<Composite> {
     
     private Particles[] particles;
     
@@ -41,7 +42,7 @@ public class Composite implements Task<Composite, BoundLocation, BoundLocation> 
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         for (Particles particle : particles) {
            context.render(particle, location);
@@ -49,7 +50,7 @@ public class Composite implements Task<Composite, BoundLocation, BoundLocation> 
     }
 
     @Override
-    public Composite get() {
+    public @Immutable Composite get() {
         return this;
     }
     

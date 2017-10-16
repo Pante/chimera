@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.random;
 import static java.lang.Math.abs;
 
 
-public class Shield implements Task<Shield, BoundLocation, BoundLocation> {
+@Immutable
+public class Shield implements Task<Shield> {
     
     private Particles particles;
     public int perIteration;
@@ -55,7 +56,7 @@ public class Shield implements Task<Shield, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         
@@ -70,7 +71,7 @@ public class Shield implements Task<Shield, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Shield get() {
+    public @Immutable Shield get() {
         return this;
     }
     

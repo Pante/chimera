@@ -23,43 +23,41 @@
  */
 package com.karuslabs.commons.animation.particles;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 
 import org.junit.jupiter.api.Test;
 
+import static com.karuslabs.commons.animation.particles.MaterialParticles.builder;
+import static org.bukkit.Material.ACACIA_DOOR;
+import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class MaterialParticlesTest {
+public class MaterialParticlesTest extends Base {
     
-    private MaterialData data = new MaterialData(Material.ACACIA_DOOR, (byte) 2);
-    private MaterialParticles particles = spy(Particles.material().particle(Particle.CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).data(data).build());
-    private World world = mock(World.class);
-    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
-    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    MaterialData data = new MaterialData(ACACIA_DOOR);
+    MaterialParticles particles = builder().particle(CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).data(data).build();
     
     
     @Test
-    public void render_Player() {
+    void render_Player() {
         particles.render(player, location);
         
-        verify(player).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, data);
+        verify(player).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, data);
     }
     
     
     @Test
-    public void render() {
+    void render_Location() {
         particles.render(location);
         
-        verify(world).spawnParticle(Particle.CLOUD, location, 0, 1, 2, 3, 4, data);
+        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, data);
     }
     
     
     @Test
-    public void get() {
+    void get() {
         assertEquals(1, particles.getOffsetX());
         assertEquals(2, particles.getOffsetY());
         assertEquals(3, particles.getOffsetZ());

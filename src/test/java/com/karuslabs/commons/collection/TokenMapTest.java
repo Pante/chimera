@@ -36,15 +36,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-public class TokenMapTest {
+class TokenMapTest {
     
     private static final Key<Integer> KEY = new Key<>("name", Integer.class);
     
-    private TokenMap<Object> map = new TokenMap<>();
+    TokenMap<Object> map = new TokenMap<>();
     
     
     @Test
-    public void getInstance_ThrowsException() {
+    void getInstance_ThrowsException() {
         map.put(KEY, "");
         
         assertThrows(ClassCastException.class, () -> map.getInstance(KEY));
@@ -53,7 +53,7 @@ public class TokenMapTest {
     
     @ParameterizedTest
     @MethodSource("getInstanceOrDefault_parameters")
-    public <T> void getInstanceOrDefault(Key<T> key, T value, T defaultValue, T expected) {
+    <T> void getInstanceOrDefault(Key<T> key, T value, T defaultValue, T expected) {
         map.put(key, value);
         
         assertEquals(expected, map.getInstanceOrDefault(key, defaultValue));
@@ -70,7 +70,7 @@ public class TokenMapTest {
     
     
     @Test
-    public void putInstance() {
+    void putInstance() {
         map.putInstance(KEY, 1);
         
         assertTrue(map.containsKey(KEY));
@@ -79,13 +79,13 @@ public class TokenMapTest {
     
     @ParameterizedTest
     @MethodSource("keys")
-    public void equals(boolean expected, Object other) {
+    void equals(boolean expected, Object other) {
         assertEquals(expected, KEY.equals(other));
     }
     
     @ParameterizedTest
     @MethodSource("keys")
-    public void hashCode(boolean expected, Object other) {
+    void hashCode(boolean expected, Object other) {
         assertEquals(expected, KEY.hashCode() == other.hashCode());
     }
     
