@@ -103,7 +103,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             arguments.trim();
             return subcommand.complete(sender, arguments);
 
-        } else if (subcommands.isEmpty() && arguments.length() == 1) {
+        } else if (!subcommands.isEmpty() && arguments.length() == 1) {
             return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)
