@@ -26,6 +26,7 @@ package com.karuslabs.commons.util;
 import javax.annotation.Nonnull;
 
 
+@FunctionalInterface
 public interface Prototype<T extends Prototype> {
     
     public @Nonnull T copy();
