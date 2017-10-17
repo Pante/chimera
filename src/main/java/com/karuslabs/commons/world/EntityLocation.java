@@ -100,7 +100,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder<GenericEntity>, EntityLocation<?>> {
 
-        public EntityBuilder(EntityLocation<GenericEntity> location) {
+        private EntityBuilder(EntityLocation<GenericEntity> location) {
             super(location);
         }
 

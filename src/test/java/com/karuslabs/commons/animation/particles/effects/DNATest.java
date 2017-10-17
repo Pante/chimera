@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class DNATest extends Base {
+class DNATest extends EffectBase {
 
     DNA dna = spy(new DNA(PARTICLES, COLOURED, MATERIAL).get());
     

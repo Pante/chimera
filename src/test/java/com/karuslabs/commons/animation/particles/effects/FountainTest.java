@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-class FountainTest extends Base {
+class FountainTest extends EffectBase {
     
     Fountain fountain = spy(new Fountain(SPAM).get());
     

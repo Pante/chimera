@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-class CylinderTest extends Base {
+class CylinderTest extends EffectBase {
     
     Cylinder cylinder = spy(new Cylinder(PARTICLES));
     

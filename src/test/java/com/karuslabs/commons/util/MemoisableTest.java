@@ -31,16 +31,16 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class MemoisableTest {
+class MemoisableTest {
     
     @Test
-    public void memoise() {
+    void memoise() {
         Memoisable object = new Memoisable() {};
         assertSame(object, Memoisable.memoise(object).get());
     }
     
     @Test
-    public void memoiseUnchecked() {
+    void memoiseUnchecked() {
         Object object = new Object();
         assertSame(object, Memoisable.memoiseUnchecked(object).get());
     }

@@ -32,14 +32,14 @@ import static org.bukkit.enchantments.Enchantment.OXYGEN;
 import static org.mockito.Mockito.*;
 
 
-public class EnchantmentStorageBuilderTest {
+class EnchantmentStorageBuilderTest {
         
     private EnchantmentStorageMeta meta = mock(EnchantmentStorageMeta.class);
     private EnchantmentStorageBuilder builder = new EnchantmentStorageBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         builder.stored(OXYGEN, 2, false);
         
         verify(meta).addStoredEnchant(OXYGEN, 2, false);

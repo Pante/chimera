@@ -36,25 +36,25 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class LocalesTest {    
+class LocalesTest {    
     
     @ParameterizedTest
     @CsvSource({"en_US, true", "US_en, false", "US, false"})
-    public void get(String locale, boolean expected) {
+    void get(String locale, boolean expected) {
         assertEquals(expected, Locales.get(locale) != null);
     }
     
     
     @ParameterizedTest
     @CsvSource({"en_US, true", "US_en, false", "US, false"})
-    public void getOrDefault(String locale, boolean expected) {
+    void getOrDefault(String locale, boolean expected) {
         assertEquals(expected, Locales.getOrDefault(locale, Locale.getDefault()) != Locale.getDefault());
     }
     
     
     @ParameterizedTest
     @CsvSource({"en_US, true, 0", "US_en, false, 1", "US, false, 1"})
-    public void getOrDefault_Supplier(String locale, boolean expected, int times) {
+    void getOrDefault_Supplier(String locale, boolean expected, int times) {
         Supplier<Locale> supplier = mock(Supplier.class);
         
         assertEquals(expected, Locales.getOrDefault(locale, supplier) != null);
@@ -64,14 +64,14 @@ public class LocalesTest {
     
     @ParameterizedTest
     @CsvSource({"Ss, true", "ZP, false", "ZPZ, false"})
-    public void isValidCountry(String country, boolean expected) {
+    void isValidCountry(String country, boolean expected) {
         assertEquals(expected, Locales.isValidCountry(country));
     } 
     
     
     @ParameterizedTest
     @CsvSource({"eN, true", "ZZ, false", "LSA, false"})
-    public void isValidLanguage(String language, boolean expected) {
+    void isValidLanguage(String language, boolean expected) {
         assertEquals(expected, Locales.isValidLanguage(language));
     }
     

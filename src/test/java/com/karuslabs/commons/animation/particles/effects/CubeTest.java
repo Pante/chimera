@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-class CubeTest extends Base {
+class CubeTest extends EffectBase {
 
     Cube cube = spy(new Cube(PARTICLES));
     

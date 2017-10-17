@@ -28,17 +28,17 @@ import java.util.concurrent.TimeoutException;
 
 public class UncheckedTimeoutException extends RuntimeException {
     
-    private TimeoutException exception;
+    private TimeoutException cause;
     
     
-    public UncheckedTimeoutException(TimeoutException exception) {
-        this.exception = exception;
+    public UncheckedTimeoutException(TimeoutException cause) {
+        this.cause = cause;
     }
     
     
     @Override
     public TimeoutException getCause() {
-        return exception;
+        return cause;
     }
     
 }

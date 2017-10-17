@@ -33,36 +33,37 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
+import static java.util.Locale.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class ExternalControlTest {
+class ExternalControlTest {
     
-    private ExternalControl control = new ExternalControl(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
+    ExternalControl control = new ExternalControl(new EmbeddedResource("locale/resources/properties"), new EmbeddedResource("locale/resources/yaml"));
     
     
     @ParameterizedTest
     @MethodSource("newBundle_parameters")
-    public void newBundle(Locale locale, String expected) {
+    void newBundle(Locale locale, String expected) {
         assertEquals(expected, ResourceBundle.getBundle("Resource", locale, control).getString("test"));
     }
     
     static Stream<Arguments> newBundle_parameters() {
-        return Stream.of(of(new Locale("en", "GB"), "English"), of(new Locale("zh", "CN"), "Chinese"));
+        return Stream.of(of(UK, "English"), of(CHINA, "Chinese"));
     }    
     
     
     @Test
-    public void load() {
+    void load() {
         assertNull(control.load("", null));
     }
     
     
     @Test
-    public void getFormats() {
+    void getFormats() {
         assertEquals(asList("properties", "yml", "yaml"), control.getFormats(null));
     }
     

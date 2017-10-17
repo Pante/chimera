@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-class LineTest extends Base {
+class LineTest extends EffectBase {
     
     Line line = spy(new Line(PARTICLES).get());
     

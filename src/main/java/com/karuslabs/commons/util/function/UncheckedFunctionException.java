@@ -26,10 +26,6 @@ package com.karuslabs.commons.util.function;
 
 public class UncheckedFunctionException extends RuntimeException {
 
-    public UncheckedFunctionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
     public UncheckedFunctionException(Throwable cause) {
         super(cause);
     }

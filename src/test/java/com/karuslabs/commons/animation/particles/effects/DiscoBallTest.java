@@ -37,7 +37,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class DiscoBallTest extends Base {
+class DiscoBallTest extends EffectBase {
     
     DiscoBall ball = spy(new DiscoBall(PARTICLES, COLOURED).get());
     

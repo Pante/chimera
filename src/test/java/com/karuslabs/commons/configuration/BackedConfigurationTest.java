@@ -33,19 +33,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class ProxiedConfigurationTest {
+class BackedConfigurationTest {
     
-    private ProxiedConfiguration config = new ProxiedConfiguration("configuration/config.yml");
+    private BackedConfiguration config = new BackedConfiguration("configuration/config.yml");
     
     
     @Test
-    public void getString() {
+    void getString() {
         assertEquals("name", config.getString("location.world"));
     }
     
     
     @Test
-    public void save() throws IOException {
+    void save() throws IOException {
         config.config = mock(FileConfiguration.class);
         
         config.save();
@@ -55,7 +55,7 @@ public class ProxiedConfigurationTest {
     
     
     @Test
-    public void save_ThrowsException() throws IOException {
+    void save_ThrowsException() throws IOException {
         config.config = mock(FileConfiguration.class);
         doThrow(IOException.class).when(config.config).save(config.file);
         

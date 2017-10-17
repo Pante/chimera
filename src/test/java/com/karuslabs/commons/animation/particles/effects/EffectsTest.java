@@ -40,7 +40,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class EffectsTest extends Base {
+class EffectsTest extends EffectBase {
     
     @ParameterizedTest
     @MethodSource("parameters")

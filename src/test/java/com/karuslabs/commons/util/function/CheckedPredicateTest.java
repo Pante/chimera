@@ -28,20 +28,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
-public class CheckedPredicateTest {
+class CheckedPredicateTest {
 
-    private CheckedPredicate<Object, Exception> predicate = mock(CheckedPredicate.class);
+    CheckedPredicate<Object, Exception> predicate = mock(CheckedPredicate.class);
     
     
     @Test
-    public void uncheck() throws Exception {
+    void uncheck() throws Exception {
         CheckedPredicate.uncheck(predicate).test(null);
         verify(predicate).test(null);
     }
     
     
     @Test
-    public void uncheck_ThrowsException() throws Exception {
+    void uncheck_ThrowsException() throws Exception {
         doThrow(Exception.class).when(predicate).test(null);
         
         assertThrows(UncheckedFunctionException.class, () -> CheckedPredicate.uncheck(predicate).test(null));

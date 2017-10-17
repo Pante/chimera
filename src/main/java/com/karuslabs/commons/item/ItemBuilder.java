@@ -25,8 +25,6 @@ package com.karuslabs.commons.item;
 
 import com.karuslabs.commons.item.meta.*;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

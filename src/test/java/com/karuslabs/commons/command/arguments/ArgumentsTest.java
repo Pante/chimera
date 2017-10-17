@@ -37,20 +37,20 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class ArgumentsTest {
+class ArgumentsTest {
     
-    private Arguments arguments = spy(new Arguments(new String[] {"0", "1"}));
+    Arguments arguments = spy(new Arguments("0", "1"));
     
     
     @ParameterizedTest
     @CsvSource({"1, true", "-1, false", "2, false"})
-    public void contains(int index, boolean expected) {
+    void contains(int index, boolean expected) {
         assertEquals(expected, arguments.contains(index));
     }
     
     
     @Test
-    public void match() {
+    void match() {
         assertEquals(2, arguments.match().length());
         
         arguments.trim();
@@ -60,13 +60,13 @@ public class ArgumentsTest {
     
     @ParameterizedTest
     @CsvSource({"0, 0", "-1, ''"})
-    public void get(int index, String expected) {
+    void get(int index, String expected) {
         assertEquals(expected, arguments.get(index).text());
     }
     
     
     @Test
-    public void getLast() {
+    void getLast() {
         arguments.getLast();
         
         verify(arguments).get(1);
@@ -74,19 +74,19 @@ public class ArgumentsTest {
     
     
     @Test
-    public void getImmutable() {
+    void getImmutable() {
         assertFalse(arguments.getImmutable(0) == arguments.getImmutable(0));
     }
     
     @Test
-    public void getLastImmutable() {
+    void getLastImmutable() {
         assertFalse(arguments.getLastImmutable() == arguments.getLastImmutable());
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, 1, 0", "false, 0, 1"})
-    public void getOr(boolean contains, int functionTimes, int supplierTimes) {
+    void getOr(boolean contains, int functionTimes, int supplierTimes) {
         doReturn(contains).when(arguments).contains(anyInt());
         
         Function<String, Argument> function = mock(Function.class);
@@ -101,7 +101,7 @@ public class ArgumentsTest {
     
     @ParameterizedTest
     @MethodSource("trim_parameters")
-    public void trim(String[] args, String[] expected) {
+    void trim(String[] args, String[] expected) {
         Arguments arguments = new Arguments(args);
         arguments.trim();
         

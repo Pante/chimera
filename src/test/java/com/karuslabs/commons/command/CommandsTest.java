@@ -38,13 +38,13 @@ import static java.util.Collections.EMPTY_LIST;
 import static org.mockito.Mockito.*;
 
 
-public class CommandsTest {
+class CommandsTest {
     
     private Commands commands;
     private Plugin plugin;
     
     
-    public CommandsTest() {
+    CommandsTest() {
         plugin = when(mock(Plugin.class).getServer()).thenReturn(new StubServer(mock(SimpleCommandMap.class))).getMock();
         when(plugin.getName()).thenReturn("name");
         commands = spy(new Commands(plugin, Provider.NONE));
@@ -53,7 +53,7 @@ public class CommandsTest {
     
     
     @Test
-    public void load() {
+    void load() {
         doNothing().when(commands).load(any(Parser.class), anyString());
         
         commands.load("path.yml");
@@ -63,7 +63,7 @@ public class CommandsTest {
     
     
     @Test
-    public void load_Parser() {
+    void load_Parser() {
         Parser parser = when(mock(Parser.class).parse(any())).thenReturn(new ArrayList<>()).getMock();
         
         commands.load(parser, "command/commands.yml");

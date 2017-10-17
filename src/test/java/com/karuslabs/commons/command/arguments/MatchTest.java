@@ -30,32 +30,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+
+import static com.karuslabs.commons.command.arguments.Match.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class MatchTest {
+class MatchTest {
     
     @ParameterizedTest
     @MethodSource("test_parameters")
-    public void test(Match match, String text, boolean expected) {
+    void test(Match match, String text, boolean expected) {
         assertEquals(expected, match.test(text));
     }
     
     static Stream<Arguments> test_parameters() {
         return Stream.of(
-            of(Match.EMPTY, "", true),
-            of(Match.EMPTY, "full", false),
-            of(Match.BOOLEAN, "FALSE", true),
-            of(Match.BOOLEAN, "yes", false),
-            of(Match.INT, "-100", true),
-            of(Match.INT, "meh", false),
-            of(Match.DOUBLE, "-3.142", true),
-            of(Match.DOUBLE, "type", false),
-            of(Match.FLOAT, "-3.142", true),
-            of(Match.FLOAT, "type", false)
+            of(EMPTY, "", true),
+            of(EMPTY, "full", false),
+            of(BOOLEAN, "FALSE", true),
+            of(BOOLEAN, "yes", false),
+            of(INT, "-100", true),
+            of(INT, "meh", false),
+            of(DOUBLE, "-3.142", true),
+            of(DOUBLE, "type", false),
+            of(FLOAT, "-3.142", true),
+            of(FLOAT, "type", false)
         );
     }
     

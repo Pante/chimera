@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.configuration.ProxiedConfiguration;
+import com.karuslabs.commons.configuration.BackedConfiguration;
 
 import java.util.*;
 
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 
 public class ConfigurationProviderTest {
     
-    private ProxiedConfiguration config = mock(ProxiedConfiguration.class);
+    private BackedConfiguration config = mock(BackedConfiguration.class);
     private ConfigurationProvider provider = new ConfigurationProvider(config);
     private Player player = when(mock(Player.class).getUniqueId()).thenReturn(UUID.randomUUID()).getMock();
     

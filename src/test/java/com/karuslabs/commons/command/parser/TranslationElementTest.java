@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.locale.*;
-import com.karuslabs.commons.locale.providers.Provider;
 import com.karuslabs.commons.locale.resources.*;
 
 import org.junit.jupiter.api.*;
@@ -32,31 +31,33 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.configuration.Yaml.*;
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static com.karuslabs.commons.locale.providers.Provider.DETECTED;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class TranslationElementTest {
+class TranslationElementTest {
     
-    private TranslationElement element = new TranslationElement(null, Provider.DETECTED);
+    TranslationElement element = new TranslationElement(null, DETECTED);
     
     
     @Test
-    public void handleNull() {
-        assertSame(MessageTranslation.NONE, element.handleNull(null, null));
+    void handleNull() {
+        assertSame(NONE, element.handleNull(null, null));
     }
     
     
     @Test
-    public void check() {
+    void check() {
        assertTrue(element.check(COMMANDS, "declare.translations.translation"));
     }
     
     
     @ParameterizedTest
     @CsvSource({"empty, Missing/invalid value: empty.bundle", "translation, Missing keys/invalid values: translation.embedded and/or translation.folder"})
-    public void check_ThrowsException(String key, String message) {
+    void check_ThrowsException(String key, String message) {
         assertEquals(
             message,
             assertThrows(ParserException.class, () -> element.check(INVALID, key)).getMessage()
@@ -65,13 +66,13 @@ public class TranslationElementTest {
     
     
     @Test
-    public void handle() {
+    void handle() {
         MessageTranslation translation = element.handle(COMMANDS.getConfigurationSection("declare.translations"), "translation");
         Resource[] resources = ((ExternalControl) translation.getControl()).getResources();
         EmbeddedResource embedded = (EmbeddedResource) resources[0];
         FileResource file = (FileResource) resources[1];
         
-        assertSame(Provider.DETECTED, translation.getProvider());
+        assertSame(DETECTED, translation.getProvider());
         assertEquals("Resource", translation.getBundleName());
         assertEquals(2, resources.length);
         assertEquals("path1/", embedded.getPath());

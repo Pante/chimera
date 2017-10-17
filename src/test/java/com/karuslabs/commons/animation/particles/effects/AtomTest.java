@@ -29,7 +29,7 @@ import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-class AtomTest extends Base {
+class AtomTest extends EffectBase {
 
     Atom atom = spy(new Atom(PARTICLES, COLOURED, 1, 1, 3, 0.2F, 1, 0, PI / 80).get());
     

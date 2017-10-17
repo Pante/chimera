@@ -32,14 +32,14 @@ import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
-public class LeatherArmorBuilderTest {
+class LeatherArmorBuilderTest {
         
     private LeatherArmorMeta meta = mock(LeatherArmorMeta.class);
     private LeatherArmorBuilder builder = new LeatherArmorBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         builder.color(SILVER);
         
         verify(meta).setColor(SILVER);

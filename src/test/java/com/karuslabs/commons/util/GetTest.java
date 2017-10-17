@@ -36,17 +36,17 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class GetTest {    
+class GetTest {    
     
-    private static Object a = new Object();
-    private static Object b = new Object();
-    private static Supplier<Object> supplier = () -> b;
-    private static Supplier<IllegalArgumentException> exception = IllegalArgumentException::new;
+    static Object a = new Object();
+    static Object b = new Object();
+    static Supplier<Object> supplier = () -> b;
+    static Supplier<IllegalArgumentException> exception = IllegalArgumentException::new;
     
     
     @ParameterizedTest
     @MethodSource("orDefault_parameters")
-    public void orDefault(Object object, Object value, Object expected) {
+    void orDefault(Object object, Object value, Object expected) {
         assertEquals(expected, Get.orDefault(object, value));
     }
     
@@ -57,7 +57,7 @@ public class GetTest {
     
     @ParameterizedTest
     @MethodSource("orDefault_Supplier_parameters")
-    public void orDefault_Supplier(Object object, Supplier<Object> value, Object expected) {
+    void orDefault_Supplier(Object object, Supplier<Object> value, Object expected) {
         assertEquals(expected, Get.orDefault(object, value));
     }
     
@@ -68,7 +68,7 @@ public class GetTest {
     
     @ParameterizedTest
     @MethodSource("orThrow_parameters")
-    public void orThrow(Object object, Supplier<IllegalArgumentException> value, Object expected) {
+    void orThrow(Object object, Supplier<IllegalArgumentException> value, Object expected) {
         assertEquals(expected, Get.orThrow(object, exception));
     }
     
@@ -78,7 +78,7 @@ public class GetTest {
     
     
     @Test
-    public void orThrow_ThrowsException() {
+    void orThrow_ThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> Get.orThrow(null, exception));
     }
     

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-class GridTest extends Base {
+class GridTest extends EffectBase {
     
     Grid grid = spy(new Grid(PARTICLES).get());
     

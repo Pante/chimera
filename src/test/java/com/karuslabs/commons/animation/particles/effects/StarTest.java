@@ -29,7 +29,7 @@ import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-class StarTest extends Base {
+class StarTest extends EffectBase {
     
     Star star = spy(new Star(PARTICLES).get());
     

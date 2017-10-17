@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.commons.annotation.JDK9;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -38,15 +39,17 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CloseableReadWriteLockTest {    
+class CloseableReadWriteLockTest {    
     
-    private static CloseableReadWriteLock lock = new CloseableReadWriteLock();
-    private CloseableReadWriteLock interrupted = spy(new CloseableReadWriteLock());
+    static CloseableReadWriteLock lock = new CloseableReadWriteLock();
+    
+    CloseableReadWriteLock interrupted = spy(new CloseableReadWriteLock());
 
     
     @ParameterizedTest
     @MethodSource("acquire_parameters")
-    public void acquire(Supplier<Janitor> closeableLock, Supplier<Integer> count) {
+    @JDK9
+    void acquire(Supplier<Janitor> closeableLock, Supplier<Integer> count) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, (int) count.get());
         }
@@ -69,7 +72,8 @@ public class CloseableReadWriteLockTest {
 
    
     @Test
-    public void acquireReadLockInterruptibly() throws InterruptedException {
+    @JDK9
+    void acquireReadLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireReadLockInterruptibly();
         
         try (Janitor janitor = interrupted.acquireReadLockInterruptibly()) {
@@ -84,7 +88,8 @@ public class CloseableReadWriteLockTest {
     
     
     @Test
-    public void acquireWriteLockInterruptibly() throws InterruptedException {
+    @JDK9
+    void acquireWriteLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireWriteLockInterruptibly();
         
         try (Janitor janitor = interrupted.acquireWriteLockInterruptibly()) {

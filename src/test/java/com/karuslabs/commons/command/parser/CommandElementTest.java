@@ -43,24 +43,24 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CommandElementTest {
+class CommandElementTest {
     
-    private Plugin plugin = mock(Plugin.class);
-    private CommandsElement commands = when(mock(CommandsElement.class).parse(any(), any())).thenReturn(new HashMap<>()).getMock();
-    private TranslationElement translation = when(mock(TranslationElement.class).parse(any(), any())).thenReturn(MessageTranslation.NONE).getMock();
-    private CompletionsElement completions = when(mock(CompletionsElement.class).parse(any(), any())).thenReturn(new HashMap<>()).getMock();
-    private CommandElement element = new CommandElement(plugin, commands, translation, completions);
+    Plugin plugin = mock(Plugin.class);
+    CommandsElement commands = when(mock(CommandsElement.class).parse(any(), any())).thenReturn(new HashMap<>()).getMock();
+    TranslationElement translation = when(mock(TranslationElement.class).parse(any(), any())).thenReturn(MessageTranslation.NONE).getMock();
+    CompletionsElement completions = when(mock(CompletionsElement.class).parse(any(), any())).thenReturn(new HashMap<>()).getMock();
+    CommandElement element = new CommandElement(plugin, commands, translation, completions);
     
     
     @ParameterizedTest
     @CsvSource({"true, declare", "false, declare.commands.help.aliases"})
-    public void check(boolean expected, String key) {
+    void check(boolean expected, String key) {
         assertEquals(expected, element.check(COMMANDS, key));
     }
     
     
     @Test
-    public void handle() {
+    void handle() {
         ConfigurationSection config = COMMANDS.getConfigurationSection("commands.brush");
         
         Command command = element.handle(COMMANDS, "commands.brush");

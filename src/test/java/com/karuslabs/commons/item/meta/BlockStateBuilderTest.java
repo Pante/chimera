@@ -32,14 +32,14 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class BlockStateBuilderTest {
+class BlockStateBuilderTest {
     
     private BlockStateMeta meta = mock(BlockStateMeta.class);
     private BlockStateBuilder builder = new BlockStateBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
         
     
     @Test
-    public void build() {
+    void build() {
         BlockState state = mock(BlockState.class);
         builder.state(state);
         

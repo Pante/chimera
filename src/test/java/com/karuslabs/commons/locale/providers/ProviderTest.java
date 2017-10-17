@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.*;
 
+import static com.karuslabs.commons.locale.providers.Provider.NONE;
 import static java.util.Locale.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -36,19 +37,19 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class ProviderTest {
+class ProviderTest {
     
-    private Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
     
     
     @Test
-    public void none() {
-        assertSame(Locale.getDefault(), Provider.NONE.get(player));
+    void none() {
+        assertSame(Locale.getDefault(), NONE.get(player));
     }
     
     
     @Test
-    public void detected() {
+    void detected() {
         assertEquals(SIMPLIFIED_CHINESE, Provider.DETECTED.get(player));
     }
     

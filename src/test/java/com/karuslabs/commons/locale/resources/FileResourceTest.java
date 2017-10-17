@@ -32,20 +32,19 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class FileResourceTest {
-    
-    private File file = new File(getClass().getClassLoader().getResource("locale/resources/Resource.yml").getPath()).getParentFile();
-    private FileResource resource = new FileResource(file);
+class FileResourceTest {
+
+    FileResource resource = new FileResource(new File(getClass().getClassLoader().getResource("locale/resources/Resource.yml").getPath()).getParentFile());
     
     
     @Test
-    public void load() {
+    void load() {
         assertNotNull(resource.load("Resource.yml"));
     }
     
     
     @Test
-    public void exists() {
+    void exists() {
         assertTrue(resource.exists("Resource.yml"));
     }
        

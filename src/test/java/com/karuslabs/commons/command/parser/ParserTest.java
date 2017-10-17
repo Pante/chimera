@@ -42,18 +42,18 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class ParserTest {
+class ParserTest {
     
-    private static Command stub = mock(Command.class);
+    static Command stub = mock(Command.class);
     
-    private CommandElement command = when(mock(CommandElement.class).parse(any(), any())).thenReturn(mock(Command.class)).getMock();
-    private TranslationElement translation = mock(TranslationElement.class);
-    private CompletionElement completion = mock(CompletionElement.class);
-    private Parser parser = spy(new Parser(command, translation, completion));
+    CommandElement command = when(mock(CommandElement.class).parse(any(), any())).thenReturn(mock(Command.class)).getMock();
+    TranslationElement translation = mock(TranslationElement.class);
+    CompletionElement completion = mock(CompletionElement.class);
+    Parser parser = spy(new Parser(command, translation, completion));
     
     
     @Test
-    public void parse() {
+    void parse() {
         doNothing().when(parser).parseDeclarations(any());
         doReturn(EMPTY_LIST).when(parser).parseCommands(any());
         
@@ -66,7 +66,7 @@ public class ParserTest {
     
     @ParameterizedTest
     @CsvSource({"declare, 1", "declare.commands.help.aliases, 0"})
-    public void parseDeclarations(String path, int times) {
+    void parseDeclarations(String path, int times) {
         doNothing().when(parser).parseDeclaration(any(), any());
         ConfigurationSection declarations = COMMANDS.getConfigurationSection("declare");
         
@@ -80,7 +80,7 @@ public class ParserTest {
     
     @ParameterizedTest
     @CsvSource({"declare.commands, 1", "declare.commands.help.aliases, 0"})
-    public void parseDeclaration(String path, int times) {
+    void parseDeclaration(String path, int times) {
         parser.parseDeclaration(command, COMMANDS.getConfigurationSection(path));
         
         verify(command, times(times)).declare(COMMANDS.getConfigurationSection("declare.commands"), "help");
@@ -89,7 +89,7 @@ public class ParserTest {
     
     @ParameterizedTest
     @MethodSource("parseCommands_parameters")
-    public void parseCommands(String path, int times, List<Command> expected) {
+    void parseCommands(String path, int times, List<Command> expected) {
         ConfigurationSection config = COMMANDS.getConfigurationSection(path);
         when(command.parse(any(), any())).thenReturn(stub);
         

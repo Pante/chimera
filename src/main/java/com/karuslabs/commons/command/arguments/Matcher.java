@@ -35,7 +35,7 @@ public class Matcher {
     private int first, last;
     
     
-    public Matcher(String[] arguments) {
+    public Matcher(String... arguments) {
         this.arguments = arguments;
         first = 0;
         last = arguments.length;

@@ -26,17 +26,17 @@ package com.karuslabs.commons.util.concurrent;
 
 public class UncheckedInterruptedException extends RuntimeException {
     
-    private InterruptedException exception;
+    private InterruptedException cause;
     
     
-    public UncheckedInterruptedException(InterruptedException  exception) {
-        this.exception = exception;
+    public UncheckedInterruptedException(InterruptedException  cause) {
+        this.cause = cause;
     }
     
     
     @Override
     public InterruptedException getCause() {
-        return exception;
+        return cause;
     }
     
 }

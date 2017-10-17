@@ -35,13 +35,10 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class VectorsTest {
-    
-    private static final double ROUNDING_ERROR = 0.0000000000000001;
-    
+class VectorsTest extends VectorBase {
     
     @Test
-    public void copy_Vector() {
+    void copy_Vector() {
         Vector source = new Vector(0.1, 0.2, 0.3);
         Vector destination = new Vector();
         
@@ -51,7 +48,7 @@ public class VectorsTest {
     
     
     @Test
-    public void copy_Location() {
+    void copy_Location() {
         Location source = new Location(null, 0.1, 0.2, 0.3);
         Vector destination = new Vector();
         
@@ -61,7 +58,7 @@ public class VectorsTest {
     
     
     @Test
-    public void random() {
+    void random() {
         Vector vector = mock(Vector.class);
         
         Vectors.random(vector);
@@ -74,13 +71,13 @@ public class VectorsTest {
     
     
     @Test
-    public void randomAngle() {
+    void randomAngle() {
         assertEquals(0, Vectors.randomAngle(), 2 * PI);
     }
     
     
     @Test
-    public void randomCircle() {
+    void randomCircle() {
         Vector vector = mock(Vector.class);
         
         Vectors.randomCircle(vector);
@@ -92,58 +89,48 @@ public class VectorsTest {
     
         
     @Test
-    public void rotateVector_radians() {
+    void rotate_radians() {
         Vector vector = Vectors.rotate(new Vector(10, 10, 10), 1, 2, 3);
         
-        assertEquals(-7.893858690333731, vector.getX(), ROUNDING_ERROR);
-        assertEquals(4.167373192795026, vector.getY(), ROUNDING_ERROR);
-        assertEquals(-14.843180105658494, vector.getZ(), ROUNDING_ERROR);
+        assertVector(from(-7.893858690333731, 4.167373192795026, -14.843180105658494), vector);
     }
     
     
     @Test
-    public void rotateVector_Location() {
+    void rotate_Location() {
         Vector vector = Vectors.rotate(new Vector(10, 10, 10), new Location(null, 0, 0, 0, 10, 20));
-        
-        assertEquals(-12.073748387926274, vector.getX(), ROUNDING_ERROR);
-        assertEquals(5.976724774602398, vector.getY(), ROUNDING_ERROR);
-        assertEquals(10.885924895648582, vector.getZ(), ROUNDING_ERROR);
+
+        assertVector(from(-12.073748387926274, 5.976724774602398, 10.885924895648582), vector);
     }
     
             
     @Test
-    public void rotateAroundXAxis() {
+    void rotateAroundXAxis() {
         Vector vector = Vectors.rotateAroundXAxis(new Vector(10, 10, 10), 10);
         
-        assertEquals(10.0, vector.getX(), ROUNDING_ERROR);
-        assertEquals(-2.9505041818708264, vector.getY(), ROUNDING_ERROR);
-        assertEquals(-13.830926399658221, vector.getZ(), ROUNDING_ERROR);
+        assertVector(from(10.0, -2.9505041818708264, -13.830926399658221), vector);
     }
     
     
     @Test
-    public void rotateAroundYAxis() {
+    void rotateAroundYAxis() {
         Vector vector = Vectors.rotateAroundYAxis(new Vector(10, 10, 10), 10);
         
-        assertEquals(-13.830926399658221, vector.getX(), ROUNDING_ERROR);
-        assertEquals(10.0, vector.getY(), ROUNDING_ERROR);
-        assertEquals(-2.9505041818708264, vector.getZ(), ROUNDING_ERROR);
+        assertVector(from(-13.830926399658221, 10.0, -2.9505041818708264), vector);
     }
     
     
     @Test
-    public void rotateAroudZAxis() {
+    void rotateAroudZAxis() {
         Vector vector = Vectors.rotateAroundZAxis(new Vector(10, 10, 10), 10);
         
-        assertEquals(-2.9505041818708264, vector.getX(), ROUNDING_ERROR);
-        assertEquals(-13.830926399658221, vector.getY(), ROUNDING_ERROR);
-        assertEquals(10.0, vector.getZ(), ROUNDING_ERROR);
+        assertVector(from(-2.9505041818708264, -13.830926399658221, 10.0), vector);
     }
     
     
     @Test
-    public void angleToXAxis() {
-        assertEquals(0.4636476090008061, Vectors.angleToXAxis(new Vector(1, 2, 3)), ROUNDING_ERROR);
+    void angleToXAxis() {
+        assertEquals(0.4636476090008061, Vectors.angleToXAxis(new Vector(1, 2, 3)), PRECISION);
     }
 
 }

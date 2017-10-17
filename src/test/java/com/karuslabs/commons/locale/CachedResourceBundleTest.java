@@ -31,31 +31,31 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class CachedResourceBundleTest {
+class CachedResourceBundleTest {
     
-    private CachedResourceBundle bundle;
+    CachedResourceBundle bundle;
     
     
-    public CachedResourceBundleTest() {
+    CachedResourceBundleTest() {
         bundle = new CachedResourceBundle();
         bundle.getMessages().put("key", "message");
     }
     
     
     @Test
-    public void none_handleGetObject() {
+    void none_handleGetObject() {
         assertEquals("key", NONE.handleGetObject("key"));
     }
     
     
     @Test
-    public void none_getKeys() {
+    void none_getKeys() {
         assertSame(NONE.getKeys(), NONE.getKeys());
     }
     
     
     @Test
-    public void getKeys() {
+    void getKeys() {
         assertEquals("key", bundle.getKeys().nextElement());
     }
     

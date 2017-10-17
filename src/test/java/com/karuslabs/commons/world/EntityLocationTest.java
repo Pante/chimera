@@ -32,27 +32,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static com.karuslabs.commons.world.EntityLocation.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class EntityLocationTest {
+class EntityLocationTest extends VectorBase {
     
-    private Location raw = new Location(null, 2, 3, 4);
-    private Location entityLocation = new Location(null, 1, 2, 3);
-    private Entity entity = when(mock(Entity.class).getLocation()).thenReturn(entityLocation).getMock();
-    private EntityLocation<Entity> location = spy(EntityLocation.builder(entity, raw).nullable(true).update(true).build());
+    Location raw = new Location(null, 2, 3, 4);
+    Location entityLocation = new Location(null, 1, 2, 3);
+    Entity entity = when(mock(Entity.class).getLocation()).thenReturn(entityLocation).getMock();
+    EntityLocation<Entity> location = spy(builder(entity, raw).nullable(true).update(true).build());
     
     
     @Test
-    public void builder() {
+    void getOffset() {
         assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, true, true", "true, false, true", "false, true, true", "false, false, false"})
-    public void validate(boolean nullable, boolean present, boolean expected) {
+    void validate(boolean nullable, boolean present, boolean expected) {
         location.nullable = nullable;
         location.entity = present ? location.entity : new Weak<>(null);
         
@@ -62,7 +63,7 @@ public class EntityLocationTest {
     
     @ParameterizedTest
     @CsvSource({"true, true, 1, 2, 3", "true, false, 2, 3, 4", "false, true, 2, 3, 4"})
-    public void update(boolean present, boolean update, int x, int y, int z) {
+    void update(boolean present, boolean update, int x, int y, int z) {
         location.entity = present ? location.entity : new Weak<>(null);
         location.update = update;
         
@@ -70,9 +71,7 @@ public class EntityLocationTest {
         
         location.update();
         
-        assertEquals(x, location.location.getX());
-        assertEquals(y, location.location.getY());
-        assertEquals(z, location.location.getZ());
+        assertVector(from(x, y, z), location.location);
     }
     
 }

@@ -28,17 +28,17 @@ import java.util.concurrent.ExecutionException;
 
 public class UncheckedExecutionException extends RuntimeException {
     
-    private ExecutionException exception;
+    private ExecutionException cause;
     
     
-    public UncheckedExecutionException(ExecutionException exception) {
-        this.exception = exception;
+    public UncheckedExecutionException(ExecutionException cause) {
+        this.cause = cause;
     }
     
     
     @Override
     public ExecutionException getCause() {
-        return exception;
+        return cause;
     }
     
 }

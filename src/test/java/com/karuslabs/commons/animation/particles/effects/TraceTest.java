@@ -39,7 +39,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class TraceTest extends Base {
+class TraceTest extends EffectBase {
     
     private static final World WORLD = mock(World.class);
     

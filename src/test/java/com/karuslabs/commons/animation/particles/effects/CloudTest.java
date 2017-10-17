@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import static org.mockito.Mockito.*;
 
 
-class CloudTest extends Base {
+class CloudTest extends EffectBase {
 
     Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
     

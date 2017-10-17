@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Arrays.copyOf;
 import static java.lang.System.arraycopy;
 
@@ -57,7 +58,7 @@ public class TranslationElement extends Element<MessageTranslation> {
     
     @Override
     protected @Nonnull MessageTranslation handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
-        return MessageTranslation.NONE;
+        return NONE;
     }
     
     @Override

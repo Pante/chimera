@@ -33,4 +33,5 @@ public class Patterns {
     public static String[] preserveQuotes(String[] arguments) {
         return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
     }
+    
 }

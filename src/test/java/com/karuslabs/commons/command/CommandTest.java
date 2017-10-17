@@ -26,7 +26,7 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.bukkit.command.CommandSender;
@@ -35,6 +35,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import static com.karuslabs.commons.command.Command.builder;
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +46,9 @@ import static org.mockito.Mockito.*;
 
 class CommandTest {
     
-    Command command = spy(new Command("", null));
+    Command command = spy(
+       builder(null).name("name").description("description").usage("usage").aliases(new ArrayList<>()).translation(NONE).executor(CommandExecutor.NONE).subcommands(new HashMap<>()).completions(new HashMap<>()).build()
+    );
     CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();
     
     

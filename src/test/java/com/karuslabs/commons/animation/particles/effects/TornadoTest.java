@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-class TornadoTest extends Base {
+class TornadoTest extends EffectBase {
     
     Tornado tornado = spy(new Tornado(PARTICLES, COLOURED).get());
     

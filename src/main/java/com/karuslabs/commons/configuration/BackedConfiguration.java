@@ -36,17 +36,17 @@ import org.bukkit.util.Vector;
 
 
 @ValueBased
-public class ProxiedConfiguration implements ConfigurationSection {
+public class BackedConfiguration implements ConfigurationSection {
     
     File file;
     FileConfiguration config;
 
     
-    public ProxiedConfiguration(String embedded) {
-        this(new File(ProxiedConfiguration.class.getClassLoader().getResource(embedded).getPath()));
+    public BackedConfiguration(String embedded) {
+        this(new File(BackedConfiguration.class.getClassLoader().getResource(embedded).getPath()));
     }
     
-    public ProxiedConfiguration(File file) {
+    public BackedConfiguration(File file) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
     }
@@ -356,8 +356,8 @@ public class ProxiedConfiguration implements ConfigurationSection {
     @Override
     public boolean equals(Object o) {
         Object target = o;
-        if (o instanceof ProxiedConfiguration) {
-            target = ((ProxiedConfiguration) o).config;
+        if (o instanceof BackedConfiguration) {
+            target = ((BackedConfiguration) o).config;
         }
         return config.equals(target);
     }

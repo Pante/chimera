@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-class DragonTest extends Base {
+class DragonTest extends EffectBase {
     
     Dragon dragon = spy(new Dragon(PARTICLES).get());
     
