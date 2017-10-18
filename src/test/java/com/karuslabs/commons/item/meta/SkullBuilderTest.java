@@ -29,7 +29,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.item.meta.Head.ZOMBIE;
 import static org.mockito.Mockito.*;
 
 
@@ -44,11 +43,9 @@ class SkullBuilderTest {
         OfflinePlayer player = mock(OfflinePlayer.class);
         
         builder.owner(player);
-        builder.owner(ZOMBIE);
         builder.owner("name");
         
         verify(meta).setOwningPlayer(player);
-        verify(meta).setOwner(ZOMBIE.getName());
         verify(meta).setOwner("name");
     }
     
