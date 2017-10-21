@@ -78,7 +78,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
 
     /**
-     * Constructs a {@code Builder} for the specified {@ItemStack} and {@code ItemMeta}.
+     * Constructs a {@code Builder} for the specified {@code ItemStack} and {@code ItemMeta}.
      * 
      * @param item the ItemStack
      * @param meta the ItemMeta

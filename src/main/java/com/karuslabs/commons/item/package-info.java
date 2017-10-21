@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains builders for {@ItemStack}s.
+ * Contains builders for {@code ItemStack}s.
  */
 package com.karuslabs.commons.item;
