@@ -33,33 +33,67 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
 
+/**
+ * Represents a builder for items with {@code PotionMeta}.
+ */
 public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
+    /**
+     * Constructs a {@code PotionBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public PotionBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code PotionBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public PotionBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Sets the colour.
+     * 
+     * @param color the colour
+     * @return this
+     */
     public PotionBuilder color(Color color) {
         meta.setColor(color);
         return this;
     }
     
+    /**
+     * Adds the specified effect and whether it should override preexisting effects.
+     * 
+     * @param effect the potion effect
+     * @param override whether the effect should override preexisting effects
+     * @return this
+     */
     public PotionBuilder effect(PotionEffect effect, boolean override) {
         meta.addCustomEffect(effect, override);
         return this;
     }
     
+    /**
+     * Sets the data.
+     * 
+     * @param data the potion data
+     * @return this
+     */
     public PotionBuilder data(PotionData data) {
         meta.setBasePotionData(data);
         return this;
     }
     
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull PotionBuilder getThis() {
         return this;

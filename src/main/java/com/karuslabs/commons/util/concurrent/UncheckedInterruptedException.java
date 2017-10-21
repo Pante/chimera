@@ -24,16 +24,29 @@
 package com.karuslabs.commons.util.concurrent;
 
 
+/**
+ * Wraps an {@link java.lang.InterruptedException} with an unchecked exception.
+ */
 public class UncheckedInterruptedException extends RuntimeException {
     
     private InterruptedException cause;
     
     
+    /**
+     * Constructs an {@code UncheckedInterruptedException} which wraps the specified {@code InterruptedException}.
+     * 
+     * @param cause the InterrupedException
+     */
     public UncheckedInterruptedException(InterruptedException  cause) {
         this.cause = cause;
     }
     
     
+    /**
+     * Returns the cause of this exception.
+     * 
+     * @return the InterruptedException which is the cause of this exception.
+     */
     @Override
     public InterruptedException getCause() {
         return cause;

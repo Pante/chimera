@@ -21,37 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
-
-import java.util.concurrent.ExecutionException;
 
 
 /**
- * Wraps an {@link java.util.concurrent.ExecutionException} with an unchecked exception.
+ * Contains {@code Builders}s for {@code ItemStacks} with the various subclasses of {@code ItemMeta}.
  */
-public class UncheckedExecutionException extends RuntimeException {
-    
-    private ExecutionException cause;
-    
-    
-    /**
-     * Constructs an {@code UncheckedExecutionException} which wraps the specified {@code ExecutionException}.
-     * 
-     * @param cause the ExecutionException
-     */
-    public UncheckedExecutionException(ExecutionException cause) {
-        this.cause = cause;
-    }
-    
-    
-    /**
-     * Returns the cause of this exception.
-     * 
-     * @return the ExecutionException which is the cause of this exception.
-     */
-    @Override
-    public ExecutionException getCause() {
-        return cause;
-    }
-    
-}
+package com.karuslabs.commons.item.meta;

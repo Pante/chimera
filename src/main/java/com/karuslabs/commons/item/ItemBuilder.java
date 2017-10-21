@@ -30,66 +30,141 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
+/**
+ * Represents a builder for {@code ItemStack}s.
+ */
 public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
     
+    /**
+     * Constructs a {@code ItemBuilder} for an {@code ItemStack} with the specified material.
+     * 
+     * @param material the material of the ItemStack
+     */
     public ItemBuilder(Material material) {
         super(material);
     }
     
+    /**
+     * Constructs a {@code ItemBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public ItemBuilder(ItemStack item) {
         super(item);
     }
     
     
+    /**
+     * Returns a {@code BannerBuilder} for this {@code ItemStack}.
+     * 
+     * @return a BannerBuilder
+     */
     public BannerBuilder asBanner() {
         return new BannerBuilder(this);
     }
     
+    /**
+     * Returns a {@code BlockStateBuilder} for this {@code ItemStack}.
+     * 
+     * @return a BlockStateBuilder
+     */
     public BlockStateBuilder asBlockState() {
         return new BlockStateBuilder(this);
     }
     
+    /**
+     * Returns a {@code BookBuilder} for this {@code ItemStack}.
+     * 
+     * @return a BookBuilder
+     */
     public BookBuilder asBook() {
         return new BookBuilder(this);
     }
     
+    /**
+     * Returns a {@code EnchantmentStorageBuilder} for this {@code ItemStack}.
+     * 
+     * @return a EnchantmentStorageBuilder
+     */
     public EnchantmentStorageBuilder asEnchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
   
+    /**
+     * Returns a {@code FireworkEffectBuilder} for this {@code ItemStack}.
+     * 
+     * @return a FireworkEffectBuilder
+     */
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
+    /**
+     * Returns a {@code FireworkBuilder} for this {@code ItemStack}.
+     * 
+     * @return a FireworkBuilder
+     */
     public FireworkBuilder asFirework() {
         return new FireworkBuilder(this);
     }
     
+    /**
+     * Returns a {@code KnowledgeBuilder} for this {@code ItemStack}.
+     * 
+     * @return a KnowledgeBuilder
+     */
     public KnowledgeBookBuilder asKnowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
     
+    /**
+     * Returns a {@code LeatherArmourBuilder} for this {@code ItemStack}.
+     * 
+     * @return a LeatherArmourBuilder
+     */
     public LeatherArmorBuilder asLeatherArmor() {
         return new LeatherArmorBuilder(this);
     }
     
+    /**
+     * Returns a {@code MapBuilder} for this {@code ItemStack}.
+     * 
+     * @return a MapBuilder
+     */
     public MapBuilder asMap() {
         return new MapBuilder(this);
     }
     
+    /**
+     * Returns a {@code PotionBuilder} for this {@code ItemStack}.
+     * 
+     * @return a PotionBuilder
+     */
     public PotionBuilder asPotion() {
         return new PotionBuilder(this);
     }
     
+    /**
+     * Returns a {@code SkullBuilder} for this {@code ItemStack}.
+     * 
+     * @return a SkullBuilder
+     */
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
     }
     
+    /**
+     * Returns a {@code SpawnEggBuilder} for this {@code ItemStack}.
+     * 
+     * @return a SpawnEggBuilder
+     */
     public SpawnEggBuilder asSpawnEgg() {
         return new SpawnEggBuilder(this);
     }
     
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ItemBuilder getThis() {
         return this;

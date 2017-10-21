@@ -34,27 +34,51 @@ import org.bukkit.inventory.meta.KnowledgeBookMeta;
 import static org.bukkit.Material.KNOWLEDGE_BOOK;
 
 
+/**
+ * Represents a builder for items with {@code KnowledgeBookMeta}.
+ */
 public class KnowledgeBookBuilder extends Builder<KnowledgeBookBuilder, KnowledgeBookMeta> {
     
+    /**
+     * Constructs a {@code KnowledgeBookBuilder} for a knowledge book.
+     */
     public KnowledgeBookBuilder() {
         this(new ItemStack(KNOWLEDGE_BOOK));
     }
     
+    
+    /**
+     * Constructs a {@code KnowledgeBookBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public KnowledgeBookBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code KnowledgeBookBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public KnowledgeBookBuilder(Builder builder) {
         super(builder);
-    }
+    } 
     
-    
+    /**
+     * Adds the specified recipes.
+     * 
+     * @param recipes the recipes
+     * @return this
+     */
     public KnowledgeBookBuilder recipe(NamespacedKey... recipes) {
         meta.addRecipe(recipes);
         return this;
     }
     
-
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     protected @Nonnull KnowledgeBookBuilder getThis() {
         return this;

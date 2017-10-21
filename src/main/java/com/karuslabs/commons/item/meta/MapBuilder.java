@@ -32,33 +32,66 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 
 
+/**
+ * Represents a builder for items with {@code MapMeta}.
+ */
 public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
+    /**
+     * Constructs a {@code MapBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public MapBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code MapBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public MapBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Sets the colour.
+     * 
+     * @param color the colour
+     * @return this
+     */
     public MapBuilder color(Color color) {
         meta.setColor(color);
         return this;
     }
     
+    /**
+     * Sets the name of the map location.
+     * 
+     * @param name the name
+     * @return this
+     */
     public MapBuilder locationName(String name) {
         meta.setLocationName(name);
         return this;
     }
     
+    /**
+     * Sets whether the map follows scaling.
+     * 
+     * @param value whether the map scales
+     * @return this
+     */
     public MapBuilder scaling(boolean value) {
         meta.setScaling(value);
         return this;
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull MapBuilder getThis() {
         return this;

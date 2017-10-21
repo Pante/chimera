@@ -32,23 +32,44 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
 
 
+/**
+ * Represents a builder for items with {@code FireworkEffectMeta}.
+ */
 public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, FireworkEffectMeta> {
     
+    /**
+     * Constructs a {@code FireworkEffectBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public FireworkEffectBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code FireworkEffectBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public FireworkEffectBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Sets the main {@code FireworkEffect}.
+     * 
+     * @param effect the main effect
+     * @return this
+     */
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);
         return this;
     }
 
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull FireworkEffectBuilder getThis() {
         return this;

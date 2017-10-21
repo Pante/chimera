@@ -32,23 +32,44 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 
+/**
+ * Represents a builder for items with {@code BlockStateMeta}.
+ */
 public class BlockStateBuilder extends Builder<BlockStateBuilder, BlockStateMeta> {
     
+    /**
+     * Constructs a {@code BlockStateBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public BlockStateBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code BlockStateBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public BlockStateBuilder(Builder builder) {
         super(builder);
     }
     
-    
+    /**
+     * Sets the block state.
+     * 
+     * @param state the BlockState
+     * @return this
+     */
     public BlockStateBuilder state(BlockState state) {
         meta.setBlockState(state);
         return this;
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull BlockStateBuilder getThis() {
         return this;

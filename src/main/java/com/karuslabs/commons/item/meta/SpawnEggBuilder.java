@@ -32,23 +32,44 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
 
+/**
+ * Represents a builder for items with {@code SpawnEggMeta}.
+ */
 public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
     
+    /**
+     * Constructs a {@code SpawnEggBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public SpawnEggBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code SpawnEggBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public SpawnEggBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Sets the type of entity spawned.
+     * 
+     * @param type the entity type
+     * @return this
+     */
     public SpawnEggBuilder spawned(EntityType type) {
         meta.setSpawnedType(type);
         return this;
     }
     
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull SpawnEggBuilder getThis() {
         return this;

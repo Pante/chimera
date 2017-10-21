@@ -32,23 +32,47 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 
+/**
+ * Represents a builder for items with {@code EnchantmentStorageMeta}.
+ */
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder, EnchantmentStorageMeta> {
     
+    /**
+     * Constructs a {@code EnchantmentStorageBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public EnchantmentStorageBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code EnchantmentStorageBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public EnchantmentStorageBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Stores the specified enchantment, its level and if it ignores restrictions.
+     * 
+     * @param enchantment the enchantment
+     * @param level the level
+     * @param ignoreRestriction if the applied enchant should ignore vanilla limits
+     * @return this 
+     */
     public EnchantmentStorageBuilder stored(Enchantment enchantment, int level, boolean ignoreRestriction) {
         meta.addStoredEnchant(enchantment, level, ignoreRestriction);
         return this;
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull EnchantmentStorageBuilder getThis() {
         return this;

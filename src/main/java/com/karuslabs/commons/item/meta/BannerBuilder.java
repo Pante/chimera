@@ -35,32 +35,64 @@ import org.bukkit.inventory.meta.BannerMeta;
 import static org.bukkit.Material.BANNER;
 
 
+/**
+ * Represents a builder for items with {@code BannerMeta}.
+ */
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
+    
+    /**
+     * Constructs a {@code BannerBuilder} for an empty banner.
+     */
     public BannerBuilder() {
         this(new ItemStack(BANNER));
     }
     
+    
+    /**
+     * Constructs a {@code BannerBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public BannerBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code BannerBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public BannerBuilder(Builder builder) {
         super(builder);
     }    
 
     
+    /**
+     * Adds the specified {@code Pattern}.
+     * 
+     * @param pattern the Pattern
+     * @return this
+     */
     public BannerBuilder pattern(Pattern pattern) {
         meta.addPattern(pattern);
         return this;
     }
     
+    /**
+     * Adds the specified {@code Pattern}s.
+     * 
+     * @param patterns the Patterns list
+     * @return this
+     */
     public BannerBuilder patterns(List<Pattern> patterns) {
         meta.getPatterns().addAll(patterns);
         return this;
     }
     
-
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     protected @Nonnull BannerBuilder getThis() {
         return this;

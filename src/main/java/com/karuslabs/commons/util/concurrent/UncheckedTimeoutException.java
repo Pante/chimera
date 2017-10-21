@@ -26,16 +26,29 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.TimeoutException;
 
 
+/**
+ * Wraps an {@link java.util.concurrent.TimeoutException} with an unchecked exception.
+ */
 public class UncheckedTimeoutException extends RuntimeException {
     
     private TimeoutException cause;
     
     
+    /**
+     * Constructs an {@code UncheckedTimeoutException} which wraps the specified {@code TimeoutException}.
+     * 
+     * @param cause the TimeoutException
+     */
     public UncheckedTimeoutException(TimeoutException cause) {
         this.cause = cause;
     }
     
     
+    /**
+     * Returns the cause of this exception.
+     * 
+     * @return the TimeoutException which is the cause of this exception.
+     */
     @Override
     public TimeoutException getCause() {
         return cause;

@@ -24,10 +24,25 @@
 package com.karuslabs.commons.util.concurrent;
 
 
+/**
+ * Represents an object which may track the number of times it is invoked against a
+ * set number of iterations.
+ */
 public interface Repeatable {
     
+    
+    /**
+     * Returns the number of times this object has been invoked thus far.
+     * 
+     * @return the current iteration
+     */
     public long getCurrent();
     
+    /**
+     * Returns the set number of iterations the object is to be invoked.
+     * 
+     * @return the total number of iterations
+     */
     public long getIterations();
     
 }

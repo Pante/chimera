@@ -32,38 +32,78 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.BookMeta.Generation;
 
 
+/**
+ * Represents a builder for items with {@code BookMeta}.
+ */
 public class BookBuilder extends Builder<BookBuilder, BookMeta> {
     
+    /**
+     * Constructs a {@code BookBuilder} for the specified {@code ItemStack}.
+     *  
+     * @param item the ItemStack
+     */
     public BookBuilder(ItemStack item) {
         super(item);
     }
     
+    /**
+     * Constructs a {@code BookBuilder} which copies the specified {@code Builder}.
+     *  
+     * @param builder the Builder to be copied
+     */
     public BookBuilder(Builder builder) {
         super(builder);
     }
     
     
+    /**
+     * Sets the title.
+     * 
+     * @param title the title
+     * @return this
+     */
     public BookBuilder title(String title) {
         meta.setTitle(title);
         return this;
     }
     
+    /**
+     * Sets the author.
+     * 
+     * @param author the author
+     * @return this
+     */
     public BookBuilder author(String author) {
         meta.setAuthor(author);
         return this;
     }
     
+    /**
+     * Adds the specified pages.
+     * 
+     * @param pages the pages
+     * @return this
+     */
     public BookBuilder pages(String... pages) {
         meta.addPage(pages);
         return this;
     }
     
+    /**
+     * Sets the generation level.
+     * 
+     * @param generation the generation
+     * @return this
+     */
     public BookBuilder generation(Generation generation) {
         meta.setGeneration(generation);
         return this;
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull BookBuilder getThis() {
         return this;
