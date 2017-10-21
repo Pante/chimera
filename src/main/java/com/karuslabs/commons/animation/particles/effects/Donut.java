@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
+@Immutable
+public class Donut implements Task<Donut> {
     
     private Particles particles;
     private int perCircle = 10;
@@ -43,7 +44,6 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
     private float donutRadius = 2;
     private float tubeRadius = .5f;
     private Vector rotation;
-    private Vector vector;
     
     
     public Donut(Particles particles) {
@@ -57,13 +57,14 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
         this.donutRadius = donutRadius;
         this.tubeRadius = tubeRadius;
         this.rotation = rotation;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
+        
         for (int i = 0; i < circles; i++) {
             double theta = 2 * PI * i / circles;
             
@@ -83,8 +84,8 @@ public class Donut implements Task<Donut, BoundLocation, BoundLocation> {
     }
 
     @Override
-    public Donut get() {
-        return new Donut(particles, perCircle, circles, donutRadius, tubeRadius, rotation);
+    public @Immutable Donut get() {
+        return this;
     }
     
 }

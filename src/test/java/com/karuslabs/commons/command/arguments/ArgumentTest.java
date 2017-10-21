@@ -38,13 +38,13 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class ArgumentTest {
+class ArgumentTest {
 
-    private static Argument argument = new Argument("text");
+    static Argument argument = new Argument("text");
     
     
     @Test
-    public void match() {
+    void match() {
         Predicate<String> predicate = when(mock(Predicate.class).test("text")).thenReturn(true).getMock();
         
         assertTrue(argument.match(predicate));
@@ -53,7 +53,7 @@ public class ArgumentTest {
     
     
     @Test
-    public void as() {
+    void as() {
         Function<String, Boolean> function = when(mock(Function.class).apply("text")).thenReturn(true).getMock();
         
         assertTrue(argument.as(function));
@@ -63,7 +63,7 @@ public class ArgumentTest {
     
     @ParameterizedTest
     @MethodSource("asOrDefault_parameters")
-    public void asOrDefault(String returned, String expected) {
+    void asOrDefault(String returned, String expected) {
         Function<String, Object> function = when(mock(Function.class).apply("text")).thenReturn(returned).getMock();
         
         assertEquals(expected, argument.asOrDefault(function, "value"));
@@ -76,7 +76,7 @@ public class ArgumentTest {
     
     
     @Test
-    public void asOrThrow() {
+    void asOrThrow() {
         Function<String, Boolean> function = when(mock(Function.class).apply("text")).thenReturn(true).getMock();
         
         assertTrue(argument.asOrThrow(function, null));
@@ -85,11 +85,10 @@ public class ArgumentTest {
     
     
     @Test
-    public void asOrThrow_ThrowsException() {
+    void asOrThrow_ThrowsException() {
         Function<String, Boolean> function = when(mock(Function.class).apply("text")).thenReturn(null).getMock();
-        Supplier<IllegalArgumentException> supplier = IllegalArgumentException::new;
-        
-        assertThrows(IllegalArgumentException.class, () -> argument.asOrThrow(function, supplier));
+
+        assertThrows(IllegalArgumentException.class, () -> argument.asOrThrow(function, IllegalArgumentException::new));
     }
     
 }

@@ -29,26 +29,23 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.item.meta.SkullBuilder.Name.ZOMBIE;
 import static org.mockito.Mockito.*;
 
 
-public class SkullBuilderTest {
+class SkullBuilderTest {
     
     private SkullMeta meta = mock(SkullMeta.class);
     private SkullBuilder builder = new SkullBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         OfflinePlayer player = mock(OfflinePlayer.class);
         
         builder.owner(player);
-        builder.owner(ZOMBIE);
         builder.owner("name");
         
         verify(meta).setOwningPlayer(player);
-        verify(meta).setOwner(ZOMBIE.getName());
         verify(meta).setOwner("name");
     }
     

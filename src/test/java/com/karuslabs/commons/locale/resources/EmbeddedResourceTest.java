@@ -32,25 +32,20 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class EmbeddedResourceTest {
+class EmbeddedResourceTest {
     
-    private EmbeddedResource resource;
-    
-    
-    public EmbeddedResourceTest() {
-        resource = new EmbeddedResource("locale/resources");
-    }
+    EmbeddedResource resource = new EmbeddedResource("locale/resources");
     
     
     @Test
-    public void load() {
+    void load() {
         assertNotNull(resource.load("Resource.yml"));
     }
     
     
     @ParameterizedTest
     @CsvSource({"Resource.yml, true", "Failure.yml, false"})
-    public void exists(String path, boolean exists) {
+    void exists(String path, boolean exists) {
         assertEquals(exists, resource.exists(path));
     }
     

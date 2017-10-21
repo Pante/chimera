@@ -30,11 +30,11 @@ import org.bukkit.command.SimpleCommandMap;
 import static org.mockito.Mockito.mock;
 
 
-public class StubCommandMap extends ProxiedCommandMap {
+class StubCommandMap extends ProxiedCommandMap {
     
     List<Command> commands;
     
-    public StubCommandMap() {
+    StubCommandMap() {
         super(new StubServer(mock(SimpleCommandMap.class)));
     }
     

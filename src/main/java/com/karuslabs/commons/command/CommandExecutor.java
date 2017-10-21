@@ -27,6 +27,8 @@ import com.karuslabs.commons.command.arguments.Arguments;
 
 import javax.annotation.Nonnull;
 
+import static com.karuslabs.commons.command.ParentExecutor.*;
+
 
 @FunctionalInterface
 public interface CommandExecutor {
@@ -34,11 +36,11 @@ public interface CommandExecutor {
     public boolean execute(@Nonnull Context context, @Nonnull Arguments arguments);
     
     
-    public static final CommandExecutor ALIASES = ParentExecutor.ALIASES;
+    public static final CommandExecutor ALIASES = PARENT_ALIASES;
     
-    public static final CommandExecutor DESCRIPTION = ParentExecutor.DESCRIPTION;
+    public static final CommandExecutor DESCRIPTION = PARENT_DESCRIPTION;
     
-    public static final CommandExecutor HELP = ParentExecutor.HELP;
+    public static final CommandExecutor HELP = PARENT_HELP;
     
     public static final CommandExecutor NONE = (context, arguments) -> true;
 

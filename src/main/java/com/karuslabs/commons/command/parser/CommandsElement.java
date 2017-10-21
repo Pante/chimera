@@ -66,7 +66,7 @@ public class CommandsElement extends Element<Map<String, Command>> {
         return subcommands.getKeys(false).stream().collect(toMap(identity(), aKey -> {
             String declared = subcommands.getString(aKey);
             if (declared != null && declared.equals("declared")) {
-                return command.getDeclared(subcommands, aKey);
+                return command.handleDeclared(subcommands, aKey);
                 
             } else {
                 return command.parse(subcommands, aKey);

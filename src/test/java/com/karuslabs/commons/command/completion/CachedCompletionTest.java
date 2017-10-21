@@ -38,14 +38,14 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class CachedCompletionTest {
+class CachedCompletionTest {
     
-    private CachedCompletion completer = new CachedCompletion("arg", "argument", "another argument");
+    CachedCompletion completer = new CachedCompletion("arg", "argument", "another argument");
     
     
     @ParameterizedTest
     @MethodSource("complete_parameters")
-    public void complete(String argument, List<String> expected) {
+    void complete(String argument, List<String> expected) {
         assertEquals(expected, completer.complete(null, argument));
     }
     

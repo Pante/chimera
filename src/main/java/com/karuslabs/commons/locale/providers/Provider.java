@@ -42,6 +42,7 @@ public interface Provider {
     
     public @Nullable Locale get(Player player);
     
+    
     public default Locale getOrDefault(Player player, Locale locale) {
        return Get.orDefault(get(player), locale);
     }

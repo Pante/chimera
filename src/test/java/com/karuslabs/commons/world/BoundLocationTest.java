@@ -36,25 +36,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class BoundLocationTest {
+class BoundLocationTest {
     
-    private BoundLocation bound;
-    private Location location;
-    private PathVector offset;
-    
-    
-    public BoundLocationTest() {
-        location = mock(Location.class);
-        when(location.getYaw()).thenReturn(1F);
-        when(location.getPitch()).thenReturn(2F);
-        
-        offset = new PathVector(1, 2, 3, 4, 5);
-        bound = spy(new StubBuilder(new StubLocation(location, null, false)).offset(offset).relative(true).build());
-    }
+    Location location = spy(new Location(null, 0, 0, 0, 1, 2));
+    PathVector offset = new PathVector(1, 2, 3, 4, 5);
+    BoundLocation bound = spy(new StubBuilder(new StubLocation(location, null, false)).offset(offset).relative(true).build());
     
     
     @Test
-    public void addOffset() {
+    void addOffset() {
         bound.addOffset(new Vector(1, 1, 1), 1, 1);
         
         assertEquals(new PathVector(2, 3, 4, 5, 6), bound.getOffset());
@@ -63,7 +53,7 @@ public class BoundLocationTest {
     
     
     @Test
-    public void setDirection() {
+    void setDirection() {
         Vector direction = new Vector(1, 1, 1);
         doNothing().when(bound).updateDirection();
         
@@ -76,7 +66,7 @@ public class BoundLocationTest {
     
     @ParameterizedTest
     @CsvSource({"true, 5, 7", "false, 4, 5"})
-    public void updateDirection(boolean relative, float yaw, float pitch) {
+    void updateDirection(boolean relative, float yaw, float pitch) {
         bound.setRelative(relative);
         
         bound.updateDirection();
@@ -101,7 +91,7 @@ public class BoundLocationTest {
     
     private static class StubLocation extends BoundLocation {
 
-        public StubLocation(Location location, PathVector offset, boolean relative) {
+        StubLocation(Location location, PathVector offset, boolean relative) {
             super(location, offset, relative);
         }
 

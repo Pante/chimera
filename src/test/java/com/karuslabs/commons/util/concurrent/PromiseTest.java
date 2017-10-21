@@ -36,21 +36,21 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class PromiseTest {
+class PromiseTest {
     
-    private Future<String> future = mock(Future.class);
-    private Promise<String> promise = spy(Promise.of(future));
+    Future<String> future = mock(Future.class);
+    Promise<String> promise = spy(Promise.of(future));
     
     
     @Test
-    public void await() {
+    void await() {
         doThrow(CancellationException.class).when(promise).obtain();
         assertNull(promise.await());
     }
     
     
     @Test
-    public void await_Time() {
+    void await_Time() {
         doThrow(CancellationException.class).when(promise).obtain(anyLong(), any());
         assertNull(promise.await(0, null));
     }
@@ -58,7 +58,7 @@ public class PromiseTest {
     
     @ParameterizedTest
     @MethodSource("obtain_parameters")
-    public void obtain(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException {
+    void obtain(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException {
         doThrow(thrown).when(promise).get();
         
         assertEquals(thrown, assertThrows(type, () -> promise.obtain()).getCause());
@@ -74,7 +74,7 @@ public class PromiseTest {
     
     @ParameterizedTest
     @MethodSource("obtain_Time_parameters")
-    public void obtain_Time(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException, TimeoutException {
+    void obtain_Time(Class<? extends Exception> type, Exception thrown) throws InterruptedException, ExecutionException, TimeoutException {
         doThrow(thrown).when(promise).get(anyLong(), any());
         
         assertEquals(thrown, assertThrows(type, () -> promise.obtain(0, DAYS)).getCause());

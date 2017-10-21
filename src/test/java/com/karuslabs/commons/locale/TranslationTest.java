@@ -41,15 +41,16 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class TranslationTest {
+class TranslationTest {
     
-    private Translation translation = spy(new Translation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
-    private static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    
+    Translation translation = spy(new Translation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
     
     
     @ParameterizedTest
     @MethodSource("parameters")
-    public void get(Consumer<Translation> consumer, Locale expected) {
+    void get(Consumer<Translation> consumer, Locale expected) {
         doReturn(null).when(translation).get((Locale) any());
         
         consumer.accept(translation);
@@ -61,7 +62,7 @@ public class TranslationTest {
         return Stream.of(
             of(wrap(translation -> translation.get(player)), null),
             of(wrap(translation -> translation.getOrDefault(player, ITALY)), ITALY),
-            of(wrap(translation -> translation.getOrDetected(player)), SIMPLIFIED_CHINESE)
+            of(wrap(translation -> translation.getOrDetected(player)), CHINA)
         );
     }
     
@@ -71,7 +72,7 @@ public class TranslationTest {
     
     
     @Test
-    public void get_Locale() {
+    void get_Locale() {
         assertEquals("Japanese {0}", translation.get(JAPAN).getString("locale"));
     }
     

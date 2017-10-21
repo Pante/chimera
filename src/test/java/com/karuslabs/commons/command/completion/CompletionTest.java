@@ -33,44 +33,45 @@ import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
 
+import static com.karuslabs.commons.command.completion.Completion.*;
 import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class CompletionTest {
+class CompletionTest {
     
-    private StubServer server = new StubServer(new ArrayList<>(), new ArrayList<>());
-    private CommandSender sender = when(mock(CommandSender.class).getServer()).thenReturn(server).getMock();
+    StubServer server = new StubServer(new ArrayList<>(), new ArrayList<>());
+    CommandSender sender = when(mock(CommandSender.class).getServer()).thenReturn(server).getMock();
 
     
     @Test
-    public void none() {
-        assertSame(EMPTY_LIST, Completion.NONE.complete(null, null));
+    void none() {
+        assertSame(EMPTY_LIST, NONE.complete(null, null));
     }
     
     
     @Test
-    public void player_names() {
+    void player_names() {
         Player bob = when(mock(Player.class).getName()).thenReturn("bob").getMock();
         server.getOnlinePlayers().add(bob);
         
         Player bobby = when(mock(Player.class).getName()).thenReturn("bobby").getMock();
         server.getOnlinePlayers().add(bobby);
                 
-        assertEquals(singletonList("bobby"), Completion.PLAYER_NAMES.complete(sender, "bobb"));
+        assertEquals(singletonList("bobby"), PLAYER_NAMES.complete(sender, "bobb"));
     }
     
     
     @Test
-    public void world_names() {
+    void world_names() {
         World bob = when(mock(World.class).getName()).thenReturn("bob").getMock();
         server.getWorlds().add(bob);
         
         World bobby = when(mock(World.class).getName()).thenReturn("bobby").getMock();
         server.getWorlds().add(bobby);
         
-        assertEquals(singletonList("bobby"), Completion.WORLD_NAMES.complete(sender, "bobb"));
+        assertEquals(singletonList("bobby"), WORLD_NAMES.complete(sender, "bobb"));
     }
     
 }

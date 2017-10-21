@@ -73,6 +73,7 @@ public class ProgressBar extends AbstractBar {
             this.consumer = consumer;
         }
 
+        
         @Override
         protected void process() {
             bars.forEach(bar -> consumer.accept(bar, this));
@@ -92,7 +93,7 @@ public class ProgressBar extends AbstractBar {
     
     public static class ProgressBarBuilder extends AbstractBuilder<ProgressBarBuilder, ProgressBar>  {
 
-        public ProgressBarBuilder(ProgressBar bar) {
+        private ProgressBarBuilder(ProgressBar bar) {
             super(bar);
         }
 

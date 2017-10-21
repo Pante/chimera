@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
-public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLocation> {
+@Immutable
+public class AnimatedBall implements Task<AnimatedBall> {
     
     private static final Vector FACTOR = new Vector(1, 2, 1);
     private static final Vector OFFSET = new Vector(0, 0.8, 0);
@@ -47,8 +48,6 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
     private Vector factor;
     private Vector offset;
     private Vector rotation;
-    private int step;
-    private Vector vector;
     
     
     public AnimatedBall(Particles particles) {
@@ -63,33 +62,34 @@ public class AnimatedBall implements Task<AnimatedBall, BoundLocation, BoundLoca
         this.factor = factor;
         this.offset = offset;
         this.rotation = rotation;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
+        int count = context.count();
         
-        for (int i = 0; i < perIteration; i += particles.getAmount(), step++) {
-            float t = (float) (PI / total) * step;
+        for (int i = 0; i < perIteration; i += particles.getAmount(), count++) {
+            float t = (float) (PI / total) * count;
             float r = (float) sin(t) * size;
             float s = (float) (2 * PI * t);
 
-            vector.setX(factor.getX() * r * cos(s) + offset.getX())
-                    .setZ(factor.getY() * r * sin(s) + offset.getY())
-                    .setY(factor.getZ() * size * cos(t) + offset.getZ());
+            vector.setX(factor.getX() * r * cos(s) + offset.getX());
+            vector.setZ(factor.getY() * r * sin(s) + offset.getY());
+            vector.setY(factor.getZ() * size * cos(t) + offset.getZ());
 
             rotate(vector, rotation);
             
             context.render(particles, location, vector);
         }
+        context.count(count);
     }
 
     @Override
-    public AnimatedBall get() {
-        return new AnimatedBall(particles, total, perIteration, size, factor, offset, rotation);
+    public @Immutable AnimatedBall get() {
+        return this;
     }
     
 }

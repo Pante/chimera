@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
+@Immutable
+public class Cone implements Task<Cone> {
     
     private Particles particles;
     private float lengthGrowth;
@@ -44,8 +45,6 @@ public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
     private int perIteration;
     private double rotation;
     private boolean randomize;
-    private int step;
-    private Vector vector;
     
     
     public Cone(Particles particles) {
@@ -61,25 +60,26 @@ public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
         this.perIteration = perIteration;
         this.rotation = rotation;
         this.randomize = randomize;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
-        for (int x = 0; x < perIteration; x += particles.getAmount(), step++) {
-            if (step > size) {
-                step = 0;
+        Vector vector = context.getVector();
+        int count = context.count();
+        
+        for (int x = 0; x < perIteration; x += particles.getAmount(), count++) {
+            if (count > size) {
+                count = 0;
             }
-            if (step == 0 && randomize) {
+            if (count == 0 && randomize) {
                 rotation = randomAngle();
             }
             
-            double angle = step * angularVelocity + rotation;
-            float length = step * lengthGrowth;
-            float radius = step * radiusGrowth;
+            double angle = count * angularVelocity + rotation;
+            float length = count * lengthGrowth;
+            float radius = count * radiusGrowth;
             
             vector.setX(cos(angle) * radius).setY(length).setZ(sin(angle) * radius);
             rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
@@ -87,11 +87,12 @@ public class Cone implements Task<Cone, BoundLocation, BoundLocation> {
 
             context.render(particles, location, vector);
         }
+        context.count(count);
     }
 
     @Override
-    public Cone get() {
-        return new Cone(particles, lengthGrowth, radiusGrowth, angularVelocity, size, perIteration, rotation, randomize);
+    public @Immutable Cone get() {
+        return this;
     }
     
 }

@@ -21,45 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.configuration;
-
-import java.io.*;
-
-import org.bukkit.configuration.file.FileConfiguration;
+package com.karuslabs.commons.animation.particles.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-public class ProxiedConfigurationTest {
+class StarTest extends EffectBase {
     
-    private ProxiedConfiguration config = new ProxiedConfiguration("configuration/config.yml");
+    Star star = spy(new Star(PARTICLES).get());
     
     
     @Test
-    public void getString() {
-        assertEquals("name", config.getString("location.world"));
+    void render() {
+        doNothing().when(star).render(any(), any(), any(), anyDouble());
+        
+        star.render(context);
+        
+        verify(star, times(6)).render(eq(context), eq(RANDOM), eq(location), anyDouble());
     }
     
     
     @Test
-    public void save() throws IOException {
-        config.config = mock(FileConfiguration.class);
+    void render_rotation() {
+        when(random.nextFloat()).thenReturn(0.5F);
         
-        config.save();
+        star.render(context, random, location, PI / 3);
         
-        verify(config.config).save(config.file);
-    }
-    
-    
-    @Test
-    public void save_ThrowsException() throws IOException {
-        config.config = mock(FileConfiguration.class);
-        doThrow(IOException.class).when(config.config).save(config.file);
-        
-        assertThrows(UncheckedIOException.class, config::save);
+        verify(context, times(2)).render(PARTICLES, location, vector);
+        assertVector(from(-0.9485571585149866,-0.12500000000000067, 0.7500000000000001), context.location);
     }
     
 }

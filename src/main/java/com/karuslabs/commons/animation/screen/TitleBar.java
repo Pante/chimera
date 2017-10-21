@@ -104,7 +104,7 @@ public class TitleBar extends Bar {
     
     public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {
 
-        public TitleBarBuilder(TitleBar bar) {
+        private TitleBarBuilder(TitleBar bar) {
             super(bar);
         }
 

@@ -25,14 +25,13 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import org.bukkit.Location;
 
 import static java.lang.Math.*;
 
 
-public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
+public class Warp implements Task<Warp> {
 
     private Particles particles;
     private float radius;
@@ -57,7 +56,7 @@ public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
 
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         double x, y, z;
         
@@ -69,7 +68,7 @@ public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
         location.add(0, y, 0);
 
         for (int i = 0; i < total; i += particles.getAmount()) {
-            double angle = (double) 2 * PI * i / total;
+            double angle = 2 * PI * i / total;
 
             x = cos(angle) * radius;
             z = sin(angle) * radius;
@@ -85,4 +84,5 @@ public class Warp implements Task<Warp, BoundLocation, BoundLocation> {
     public Warp get() {
         return new Warp(particles, radius, total, grow, rings);
     }
+    
 }

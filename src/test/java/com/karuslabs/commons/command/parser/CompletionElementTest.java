@@ -39,13 +39,13 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-public class CompletionElementTest {
+class CompletionElementTest {
     
-    private CompletionElement element = new CompletionElement();
+    CompletionElement element = new CompletionElement();
     
     
     @Test
-    public void getDeclarations() {
+    void getDeclarations() {
         @JDK9("Replace with Map.of(...)")
         Map<String, Completion> completions = new HashMap<>();
         completions.put("NONE", Completion.NONE);
@@ -57,20 +57,20 @@ public class CompletionElementTest {
     
     
     @Test
-    public void getDeclaredKey() {
+    void getDeclaredKey() {
         assertEquals("translation", element.getDeclaredKey(COMMANDS, "commands.brush.translation"));
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, declare.translations.translation.embedded", "false, declare"})
-    public void check(boolean expected, String key) {
+    void check(boolean expected, String key) {
         assertEquals(expected, element.check(COMMANDS, key));
     }
     
     
     @Test
-    public void handle() {
+    void handle() {
         assertEquals(singletonList("path1"), element.handle(COMMANDS, "declare.translations.translation.embedded").getCompletions());
     }
     

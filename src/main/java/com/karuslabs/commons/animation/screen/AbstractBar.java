@@ -31,20 +31,20 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.Plugin;
 
 
-public abstract class AbstractBar extends Bar {
+abstract class AbstractBar extends Bar {
 
     protected Supplier<BossBar> supplier;
     
     
-    public AbstractBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, long iterations, long delay, long period) {
+    AbstractBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.supplier = supplier;
     }
     
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
+    static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericBar extends AbstractBar> extends Builder<GenericBuilder, GenericBar> {
         
-        public AbstractBuilder(GenericBar bar) {
+        AbstractBuilder(GenericBar bar) {
             super(bar);
         }
         

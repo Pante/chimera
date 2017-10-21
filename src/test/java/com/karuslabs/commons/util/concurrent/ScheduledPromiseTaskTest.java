@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class ScheduledPromiseTaskTest {
+class ScheduledPromiseTaskTest {
     
     private Runnable runnable = mock(Runnable.class);
     private ScheduledPromiseTask<String> task = spy(ScheduledPromiseTask.of(runnable, "result", 1));
@@ -39,7 +39,7 @@ public class ScheduledPromiseTaskTest {
     
     @ParameterizedTest
     @CsvSource({"0, -1, 0, 0, false", "0, 1, 1, 0, false", "1, 1, 1, 1, true"})
-    public void run(int current, int total, int expected, int callback, boolean done) {
+    void run(int current, int total, int expected, int callback, boolean done) {
         task.current = current;
         task.total = total;
         
@@ -52,7 +52,7 @@ public class ScheduledPromiseTaskTest {
     
     
     @Test
-    public void run_ThrowsException() {
+    void run_ThrowsException() {
         doThrow(Exception.class).when(runnable).run();
         
         task.run();

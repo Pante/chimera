@@ -94,24 +94,24 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
         if (arguments.length() == 0) {
             return EMPTY_LIST;
-        } 
-        
+        }
+
         String argument = arguments.get()[0];
-        if (!subcommands.isEmpty()) {
-            Command subcommand = subcommands.get(argument);
-            if (subcommand != null) {
-                arguments.trim();
-                return subcommand.complete(sender, arguments);
-                 
-            } else if (arguments.length() == 1) {
-                return subcommands.values().stream()
+        
+        Command subcommand = subcommands.get(argument);
+        if (subcommand != null) {
+            arguments.trim();
+            return subcommand.complete(sender, arguments);
+
+        } else if (!subcommands.isEmpty() && arguments.length() == 1) {
+            return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)
                     .collect(toList());
-            }
+
+        } else {
+            return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
         }
-        
-        return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
     }
        
 
@@ -138,6 +138,67 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     public Map<Integer, Completion> getCompletions() {
         return completions;
+    }
+    
+    
+    public static Builder builder(Plugin plugin) {
+        return new Builder(new Command("", plugin, MessageTranslation.NONE, "", "", new ArrayList<>(), CommandExecutor.NONE, new HashMap<>(), new HashMap<>()));
+    }
+    
+    public static class Builder {
+        
+        private Command command;
+        
+        
+        private Builder(Command command) {
+            this.command = command;
+        }
+        
+        
+        public Builder name(String name) {
+            command.setName(name);
+            return this;
+        }
+        
+        public Builder description(String description) {
+            command.setDescription(description);
+            return this;
+        }
+        
+        public Builder usage(String usage) {
+            command.setUsage(usage);
+            return this;
+        }
+        
+        public Builder aliases(List<String> aliases) {
+            command.setAliases(aliases);
+            return this;
+        }
+        
+        public Builder translation(MessageTranslation translation) {
+            command.translation = translation;
+            return this;
+        }
+        
+        public Builder executor(CommandExecutor executor) {
+            command.executor = executor;
+            return this;
+        }
+        
+        public Builder subcommands(Map<String, Command> subcommands) {
+            command.subcommands = subcommands;
+            return this;
+        }
+        
+        public Builder completions(Map<Integer, Completion> completions) {
+            command.completions = completions;
+            return this;
+        }
+        
+        public Command build() {
+            return command;
+        }
+        
     }
     
 }

@@ -41,27 +41,27 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CompletionsElementTest {
+class CompletionsElementTest {
     
     private CompletionElement completion = when(mock(CompletionElement.class).parse(any(), any())).thenReturn(PLAYER_NAMES).getMock();
     private CompletionsElement element = new CompletionsElement(completion);
     
     
     @Test
-    public void handleNull() {
+    void handleNull() {
         assertEquals(EMPTY_MAP, element.handleNull(COMMANDS, "path"));
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, declare", "false, declare.commands.help.aliases"})
-    public void check(boolean expected, String key) {
+    void check(boolean expected, String key) {
         assertEquals(expected, element.check(COMMANDS, key));
     }
     
     
     @Test
-    public void handle() {
+    void handle() {
         @JDK9("Replace with Map.of(...)")
         Map<Integer, Completion> completions = new HashMap<>();
         completions.put(0, PLAYER_NAMES);

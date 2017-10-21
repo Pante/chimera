@@ -25,26 +25,23 @@ package com.karuslabs.commons.configuration;
 
 import java.util.Map;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class ConfigurationsTest {
+class ConfigurationsTest {
     
     @Test
-    public void flatten() {
+    void flatten() {
         Map<String, Object> map = Configurations.flatten(Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")));
         assertEquals("name", map.get("location.world"));
     }
     
     
     @Test
-    public void from() {
-        ConfigurationSection config = Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml"));
-        assertEquals("name", config.get("location.world"));
+    void from() {
+        assertEquals("name", Configurations.from(getClass().getClassLoader().getResourceAsStream("configuration/config.yml")).get("location.world"));
     }
     
 }

@@ -38,20 +38,20 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class MatcherTest {
+class MatcherTest {
     
-    private Matcher matcher = spy(new Matcher(new String[] {"0", "1", "2", "3"}));
+    Matcher matcher = spy(new Matcher("0", "1", "2", "3"));
     
     
     @Test
-    public void matcher() {        
+    void matcher() {        
         assertEquals(0, matcher.getFirst());
         assertEquals(4, matcher.getLast());
     }
     
     
     @Test
-    public void all() {
+    void all() {
         matcher.between(2, 3);
         matcher.all();
         
@@ -61,7 +61,7 @@ public class MatcherTest {
     
     
     @Test
-    public void starting() {
+    void starting() {
         matcher.starting(2);
         
         verify(matcher).between(2, 4);
@@ -70,7 +70,7 @@ public class MatcherTest {
     
     @ParameterizedTest
     @CsvSource({"0, 4", "1, 3"})
-    public void between(int first, int last) {
+    void between(int first, int last) {
         matcher.between(first, last);
         
         assertEquals(first, matcher.getFirst());
@@ -79,8 +79,8 @@ public class MatcherTest {
     
     
     @Test
-    public void between_empty() {
-        Matcher matcher = new Matcher(new String[] {}).between(0, 0);
+    void between_empty() {
+        Matcher matcher = new Matcher().between(0, 0);
         
         assertEquals(0, matcher.getFirst());
         assertEquals(0, matcher.getLast());
@@ -89,7 +89,7 @@ public class MatcherTest {
     
     @ParameterizedTest
     @CsvSource({"-1, 3", "1, 5"})
-    public void between_ThrowsException(int first, int last) {
+    void between_ThrowsException(int first, int last) {
         assertEquals(
             "Invalid bounds specified: " + first + ", " + last,
             assertThrows(IllegalArgumentException.class, () -> matcher.between(first, last)).getMessage()
@@ -98,14 +98,14 @@ public class MatcherTest {
     
     
     @Test
-    public void stream() {
+    void stream() {
         assertEquals(asList("2", "3"), matcher.starting(2).stream().collect(toList()));
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, true, true", "true, false, false", "false, true, false"})
-    public void exact(boolean match1, boolean match2, boolean expected) {
+    void exact(boolean match1, boolean match2, boolean expected) {
         Predicate<String> predicate1 = when(mock(Predicate.class).test("1")).thenReturn(match1).getMock();
         Predicate<String> predicate2 = when(mock(Predicate.class).test("2")).thenReturn(match2).getMock();
         
@@ -114,7 +114,7 @@ public class MatcherTest {
     
     
     @Test
-    public void exact_ThrowsException() {
+    void exact_ThrowsException() {
         assertEquals(
             "Invalid number of matches specified.",
             assertThrows(IllegalArgumentException.class, () -> matcher.exact(arg -> true, arg -> true)).getMessage()
@@ -124,8 +124,8 @@ public class MatcherTest {
     
     @ParameterizedTest
     @MethodSource("anySequence_parameters")
-    public void anySequence(Predicate[] matches, boolean expected) {
-        Matcher matcher = new Matcher(new String[] {"1", "2", "3", "4", "5"});
+    void anySequence(Predicate[] matches, boolean expected) {
+        Matcher matcher = new Matcher("1", "2", "3", "4", "5");
         
         assertEquals(expected, matcher.anySequence(matches));
     }
@@ -139,7 +139,7 @@ public class MatcherTest {
     
     
     @Test
-    public void anySequence_ThrowsException() {
+    void anySequence_ThrowsException() {
        assertEquals(
             "Invalid number of matches specified.",
             assertThrows(IllegalArgumentException.class, () -> matcher.anySequence(arg -> true, arg -> true, arg -> true, arg -> true, arg -> true)).getMessage()
@@ -148,7 +148,7 @@ public class MatcherTest {
     
     
     @Test
-    public void using() {
+    void using() {
         Predicate<String[]> predicate = when(mock(Predicate.class).test(any())).thenReturn(true).getMock();
         
         assertTrue(matcher.using(predicate));

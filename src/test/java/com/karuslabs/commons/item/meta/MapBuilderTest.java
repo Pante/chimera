@@ -32,14 +32,14 @@ import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
-public class MapBuilderTest {
+class MapBuilderTest {
         
     private MapMeta meta = mock(MapMeta.class);
     private MapBuilder builder = new MapBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         builder.color(SILVER).locationName("name").scaling(true);
         
         verify(meta).setColor(SILVER);

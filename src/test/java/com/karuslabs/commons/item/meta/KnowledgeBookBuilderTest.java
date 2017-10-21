@@ -32,14 +32,14 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 
-public class KnowledgeBookBuilderTest {
+class KnowledgeBookBuilderTest {
     
     private KnowledgeBookMeta meta = mock(KnowledgeBookMeta.class);
     private KnowledgeBookBuilder builder = new KnowledgeBookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         NamespacedKey recipe = mock(NamespacedKey.class);
         builder.recipe(recipe);
         

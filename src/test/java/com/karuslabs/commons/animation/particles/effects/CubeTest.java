@@ -23,87 +23,66 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles;
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.world.*;
-
-import org.bukkit.Location;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.WHITE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class CubeTest {
-    
-    private static final double ROUNDING_ERROR = 0.00001;
-    
-    private Particles particles = new ColouredParticles(null, 100, WHITE);
-    private Cube cube = spy(new Cube(particles));
-    private Location location = new Location(null, 1, 1, 1);
-    private StaticLocation origin = new StaticLocation(location, null, false);
-    private StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, null, 0, 0));
+class CubeTest extends EffectBase {
+
+    Cube cube = spy(new Cube(PARTICLES));
     
     
     @ParameterizedTest
     @CsvSource({"true, 1, 0", "false, 0, 1"})
-    public void render(boolean solid, int walls, int outlines) {
-        doNothing().when(cube).renderWalls(context, location);
-        doNothing().when(cube).renderOutline(context, location, 4, 2);
+    void render(boolean solid, int walls, int outlines) {
+        doNothing().when(cube).renderWalls(context, location, vector, 0, 0, 0);
+        doNothing().when(cube).renderOutline(context, location, 4, 2, vector, 0, 0, 0);
         
         cube.solid = solid;
         
         cube.render(context);
         
-        verify(cube, times(walls)).renderWalls(context, location);
-        verify(cube, times(outlines)).renderOutline(context, location, 4, 2);
+        verify(cube, times(walls)).renderWalls(context, location, vector, 0, 0, 0);
+        verify(cube, times(outlines)).renderOutline(context, location, 4, 2, vector, 0, 0, 0);
+    }
+        
+    
+    @Test
+    void renderWalls() {
+        cube.perRow = 1;
+        
+        cube.renderWalls(context, location, vector, 0, 0, 0);
+        
+        verify(context).render(PARTICLES, location);
+        assertVector(from(-0.5, -0.5, -0.5), context.location);
     }
     
     
     @Test
-    public void renderOutline() {
-        doNothing().when(cube).renderPillarOutlines(context, location, 0);
+    void renderOutline() {
+        doNothing().when(cube).renderPillarOutlines(context, location, 0, vector, 0, 0, 0);
         
-        cube.renderOutline(context, location, 1, 1);
+        cube.renderOutline(context, location, 1, 1, vector, 0, 0, 0);
         
-        verify(context).render(particles, location);
-        verify(cube).renderPillarOutlines(context, location, 0);
-        assertEquals(2.5, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(2.5, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(-0.5, context.location.getZ(), ROUNDING_ERROR);
+        verify(context).render(PARTICLES, location);
+        verify(cube).renderPillarOutlines(context, location, 0, vector, 0, 0, 0);
+        assertVector(from(2.5, 2.5, -0.5), context.location);
     }
     
     
     @ParameterizedTest
-    @CsvSource({"true, 2.317145845959713, 2.9058444260611456, -0.17596081742664094", "false, 2.500014999925, -0.5, 2.499984999925"})
-    public void renderPillarOutlines(boolean rotate, double x, double y, double z) {
+    @CsvSource({"true, 2.317134151772411, 2.905858842747876, -0.17595055072672983", "false, 2.5, -0.5, 2.5"})
+    void renderPillarOutlines(boolean rotate, double x, double y, double z) {
         cube.rotate = rotate;
         cube.perRow = 1;
-        cube.rotation.setX(1).setY(2).setZ(3);
         
-        cube.renderPillarOutlines(context, location, ROUNDING_ERROR);
+        cube.renderPillarOutlines(context, location, 0, vector, 1, 2, 3);
         
-        verify(context).render(particles, location);
-        assertEquals(x, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(y, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(z, context.location.getZ(), ROUNDING_ERROR);
-    }
-    
-    
-    @Test
-    public void renderWalls() {
-        cube.perRow = 1;
-        
-        cube.renderWalls(context, location);
-        
-        verify(context).render(particles, location);
-        assertEquals(-0.5, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(-0.5, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(-0.5, context.location.getZ(), ROUNDING_ERROR);
+        verify(context).render(PARTICLES, location);
+        assertVector(from(x, y, z), context.location);
     }
     
 }

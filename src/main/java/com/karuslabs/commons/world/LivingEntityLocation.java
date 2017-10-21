@@ -58,7 +58,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     
     public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder<GenericEntity>, LivingEntityLocation<?>> {
 
-        public LivingEntityBuilder(LivingEntityLocation location) {
+        private LivingEntityBuilder(LivingEntityLocation location) {
             super(location);
         }
         

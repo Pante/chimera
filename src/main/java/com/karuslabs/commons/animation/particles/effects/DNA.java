@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,7 +34,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
+@Immutable
+public class DNA implements Task<DNA> {
     
     private Particles helix;
     private Particles base1;
@@ -46,8 +47,6 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
     private float length;
     private float growth;
     private float interval;
-    private int step;
-    private Vector vector;
     
     
     public DNA(Particles helix, Particles base1, Particles base2) {
@@ -65,55 +64,57 @@ public class DNA implements Task<DNA, BoundLocation, BoundLocation> {
         this.length = length;
         this.growth = growth;
         this.interval = interval;
-        step = 0;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
-        for (int j = 0; j < perHelix; j += helix.getAmount(), step++) {
-            if (step * growth > length) {
-                step = 0;
-            }
-            
-            renderHelix(context);
-            
-            if (step % interval == 0) {
-                renderBase(context, base1, 1, perBase);
-                renderBase(context, base2, -perBase, -1);
-            }
-        }
-    }
-    
-    protected void renderHelix(Context<BoundLocation, BoundLocation> context) {
-        for (int i = 0; i < 2; i++) {
-            double angle = step * radials + PI * i;
-            vector.setX(cos(angle) * radius).setY(step * growth).setZ(sin(angle) * radius);
-            render(context, helix);
-        }
-    }
-    
-    protected void renderBase(Context<BoundLocation, BoundLocation> context, Particles particles, int initial, int total) {
-        for (int i = initial; i <= total; i += particles.getAmount()) {
-            double angle = step * radials;
-            vector.setX(cos(angle)).setY(0).setZ(sin(angle)).multiply(radius * i / perBase).setY(step * growth);
-            render(context, particles);
-        }
-    }
-    
-    protected void render(Context<BoundLocation, BoundLocation> context, Particles particles) {
-        Location location = context.getOrigin().getLocation();
+    public void render(Context context) {
+        Vector vector = context.getVector();
+        int count = context.count();
         
+        for (int j = 0; j < perHelix; j += helix.getAmount(), count++) {
+            if (count * growth > length) {
+                count = 0;
+            }
+            
+            renderHelix(context, vector, count);
+            
+            if (count % interval == 0) {
+                renderBase(context, base1, vector, count, 1, perBase);
+                renderBase(context, base2, vector, count, -perBase, -1);
+            }
+        }
+        context.count(count);
+    }
+    
+    void renderHelix(Context context, Vector vector, int count) {
+        for (int i = 0; i < 2; i++) {
+            double angle = count * radials + PI * i;
+            vector.setX(cos(angle) * radius).setY(count * growth).setZ(sin(angle) * radius);
+            render(context, helix, vector);
+        }
+    }
+    
+    void renderBase(Context context, Particles particles, Vector vector, int count, int initial, int total) {
+        for (int i = initial; i <= total; i += particles.getAmount()) {
+            double angle = count * radials;
+            vector.setX(cos(angle)).setY(0).setZ(sin(angle)).multiply(radius * i / perBase).setY(count * growth);
+            render(context, particles, vector);
+        }
+    }
+    
+    void render(Context context, Particles particles, Vector vector) {
+        Location location = context.getOrigin().getLocation();
+
         rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
         rotateAroundYAxis(vector, toRadians(-location.getYaw()));
-
+        
         context.render(particles, location, vector);
     }
 
     @Override
-    public DNA get() {
-        return new DNA(helix, base1, base2, radials, radius, perHelix, perBase, length, growth, interval);
+    public @Immutable DNA get() {
+        return this;
     }
     
 }

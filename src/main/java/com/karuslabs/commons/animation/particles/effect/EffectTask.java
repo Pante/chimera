@@ -27,30 +27,34 @@ import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
 import com.karuslabs.commons.world.BoundLocation;
 
-import java.util.function.BiConsumer;
+import java.util.function.*;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> extends ScheduledPromiseTask<Void> implements Context<Origin, Target> {
+class EffectTask extends ScheduledPromiseTask<Void> implements Context {
 
-    protected Task<Task, Origin, Target> task;
+    protected Task task;
     protected BiConsumer<Particles, Location> render;
-    protected Origin origin;
-    protected Target target;
+    protected BoundLocation origin;
+    protected BoundLocation target;
     protected boolean orientate;
-
+    protected Vector vector;
+    protected int count;
     
-    EffectTask(Task<Task, Origin, Target> task, BiConsumer<Particles, Location> render, Origin origin, Target target, boolean orientate, long iterations) {
+    
+    EffectTask(Task task, BiConsumer<Particles, Location> render, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
         super(iterations);
         this.task = task;
         this.render = render;
         this.origin = origin;
         this.target = target;
         this.orientate = orientate;
+        count = 0;
     }
 
+    
     @Override
     protected void process() {
         if (origin.validate() && target.validate()) {
@@ -77,7 +81,7 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
     }
     
     
-    public Task<Task, Origin, Target> getTask() {
+    public Task getTask() {
         return task;
     }
     
@@ -86,14 +90,35 @@ class EffectTask<Origin extends BoundLocation, Target extends BoundLocation> ext
         render.accept(particles, location);
     }
 
+
     @Override
-    public Origin getOrigin() {
+    public BoundLocation getOrigin() {
         return origin;
     }
 
     @Override
-    public Target getTarget() {
+    public BoundLocation getTarget() {
         return target;
+    }
+    
+        
+    @Override
+    public Vector getVector() {
+        if (vector == null) {
+            vector = new Vector();
+        }
+        
+        return vector;
+    }
+    
+    @Override
+    public int count() {
+        return count;
+    }
+    
+    @Override
+    public void count(int count) {
+        this.count = count;
     }
     
     

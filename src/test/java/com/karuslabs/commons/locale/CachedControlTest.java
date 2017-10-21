@@ -28,38 +28,39 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 
 import static java.util.Collections.EMPTY_LIST;
+import static java.util.Locale.KOREA;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CachedControlTest {
+class CachedControlTest {
     
-    private CachedControl control;
-    private ResourceBundle bundle;
+    CachedControl control;
+    ResourceBundle bundle;
     
     
-    public CachedControlTest() {
+    CachedControlTest() {
         control = new CachedControl();
-        control.getBundles().put(Locale.KOREA, bundle = mock(ResourceBundle.class));
+        control.getBundles().put(KOREA, bundle = mock(ResourceBundle.class));
     }
     
     
     @Test
-    public void none() {
+    void none() {
         assertSame(CachedResourceBundle.NONE, CachedControl.NONE.newBundle(null, Locale.KOREA, null, null, true));
     }
     
     
     @Test
-    public void newBundle() {
-        assertSame(bundle, control.newBundle(null, Locale.KOREA, null, null, true));
+    void newBundle() {
+        assertSame(bundle, control.newBundle(null, KOREA, null, null, true));
     } 
     
     
     @Test
-    public void getFormats() {
+    void getFormats() {
         assertSame(EMPTY_LIST, control.getFormats(null));
     }
     

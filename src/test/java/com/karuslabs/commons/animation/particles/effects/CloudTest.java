@@ -23,60 +23,46 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles;
-import com.karuslabs.commons.world.*;
-
-import java.util.concurrent.ThreadLocalRandom;
-
-import org.bukkit.Location;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.WHITE;
 import static org.mockito.Mockito.*;
 
 
-public class CloudTest {
-    
-    private ColouredParticles particles = new ColouredParticles(null, 1, WHITE);
-    private ColouredParticles droplets = new ColouredParticles(null, 1, WHITE);
-    private Cloud cloud = spy(new Cloud(particles, droplets));
-    private Location location = new Location(null, 1, 1, 1);
-    private StaticLocation origin = new StaticLocation(location, null, false);
-    private StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, null, 0, 0));
+class CloudTest extends EffectBase {
+
+    Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
     
     
     @Test
-    public void render() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        doNothing().when(cloud).renderCloud(context, location, random, 50);
-        doNothing().when(cloud).renderDroplets(context, location, random, 15);
+    void render() {
+        doNothing().when(cloud).renderCloud(context, location, RANDOM, 50);
+        doNothing().when(cloud).renderDroplets(context, location, RANDOM, 15);
         
         cloud.render(context);
         
-        verify(cloud).renderCloud(context, location, random, 50);
-        verify(cloud).renderDroplets(context, location, random, 15);
+        verify(cloud).renderCloud(context, location, RANDOM, 50);
+        verify(cloud).renderDroplets(context, location, RANDOM, 15);
     }
     
     
     @Test
-    public void renderCloud() {
-        cloud.renderCloud(context, location, ThreadLocalRandom.current(), 1);
+    void renderCloud() {
+        cloud.renderCloud(context, location, random, 1);
         
-        verify(context).render(particles, location);
+        verify(context).render(PARTICLES, location);
     }
     
     
     @ParameterizedTest
     @CsvSource({"0, 2", "1, 0"})
-    public void renderDroplets(int number, int expected) {
-        ThreadLocalRandom random = when(mock(ThreadLocalRandom.class).nextInt(2)).thenReturn(number).getMock();
+    void renderDroplets(int number, int expected) {
+        when(random.nextInt(2)).thenReturn(number);
         
         cloud.renderDroplets(context, location, random, 1);
         
-        verify(context, times(expected)).render(droplets, location);
+        verify(context, times(expected)).render(COLOURED, location);
     }
     
 }

@@ -25,7 +25,6 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +35,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
-public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
+public class Dragon implements Task<Dragon> {
     
     private Particles particles;
     private float pitch;
@@ -69,33 +68,37 @@ public class Dragon implements Task<Dragon, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         for (int j = 0; j < stepsPerIteration; j++, step++) {
             if (step % perArc == 0) {
                 populate(ThreadLocalRandom.current());
             }
             
-            for (int i = 0; i < arcs; i++) {
-                float pitch = floats[i] * 2 * this.pitch - this.pitch;
-                float x = (step % perArc) * length / perArc;
-                float y = (float) (pitch * pow(x, 2));
-                
-                vector.setX(x).setY(y).setZ(0);
-
-                rotateAroundXAxis(vector, angles[i]);
-                rotateAroundYAxis(vector, toRadians(-(location.getYaw() + 90)));
-                rotateAroundZAxis(vector, toRadians(-location.getPitch()));
-                
-                context.render(particles, location, vector);
-            }
+            renderArcs(context, location);
         }
     }
     
-    protected void populate(ThreadLocalRandom random) {
+    void populate(ThreadLocalRandom random) {
         for (int i = 0; i < arcs; i++) {
             floats[i] = random.nextFloat();
             angles[i] = randomAngle();
+        }
+    }
+
+    void renderArcs(Context context, Location location) {
+        for (int i = 0; i < arcs; i++) {
+            float pitch = floats[i] * 2 * this.pitch - this.pitch;
+            float x = (step % perArc) * length / perArc;
+            float y = (float) (pitch * pow(x, 2));
+
+            vector.setX(x).setY(y).setZ(0);
+
+            rotateAroundXAxis(vector, angles[i]);
+            rotateAroundYAxis(vector, toRadians(-(location.getYaw() + 90)));
+            rotateAroundZAxis(vector, toRadians(-location.getPitch()));
+                
+            context.render(particles, location, vector);
         }
     }
 

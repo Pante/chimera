@@ -69,6 +69,7 @@ public class SharedProgressBar extends AbstractBar {
             this.consumer = consumer;
         }
 
+        
         @Override
         protected void process() {
             consumer.accept(bar, this);
@@ -88,7 +89,7 @@ public class SharedProgressBar extends AbstractBar {
     
     public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar> {
 
-        public SharedProgressBarBuilder(SharedProgressBar bar) {
+        private SharedProgressBarBuilder(SharedProgressBar bar) {
             super(bar);
         }
         

@@ -54,15 +54,13 @@ class ProxiedPromise<T> implements Promise<T> {
 
     @Override
     @Blocking
-    public @Nullable
-    T get() throws InterruptedException, ExecutionException {
+    public @Nullable T get() throws InterruptedException, ExecutionException {
         return future.get();
     }
 
     @Override
     @Blocking
-    public @Nullable
-    T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return future.get(timeout, unit);
     }
 

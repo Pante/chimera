@@ -33,13 +33,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-public class ClassMapTest {
+class ClassMapTest {
     
-    private ClassMap<Object> map = new ClassMap<>();
+    ClassMap<Object> map = new ClassMap<>();
 
     
     @Test
-    public void getInstance_ThrowsException() {
+    void getInstance_ThrowsException() {
         map.put(int.class, "");
         assertThrows(ClassCastException.class, () -> map.getInstance(int.class));
     }
@@ -47,7 +47,7 @@ public class ClassMapTest {
     
     @ParameterizedTest
     @MethodSource("getInstanceOrDefault_parameters")
-    public <T> void getInstanceOrDefault(Class<T> key, T value, T defaultValue, T expected) {
+    <T> void getInstanceOrDefault(Class<T> key, T value, T defaultValue, T expected) {
         map.put(key, value);
 
         assertEquals(expected, map.getInstanceOrDefault(key, defaultValue));
@@ -59,7 +59,7 @@ public class ClassMapTest {
     
     
     @Test
-    public void putInstance() {
+    void putInstance() {
         map.putInstance(int.class, 10);
         
         assertEquals(10, map.get(int.class));

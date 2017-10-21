@@ -23,10 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles.ColouredBuilder;
-import com.karuslabs.commons.animation.particles.ItemParticles.ItemBuilder;
-import com.karuslabs.commons.animation.particles.MaterialParticles.MaterialBuilder;
-import com.karuslabs.commons.animation.particles.StandardParticles.StandardBuilder;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.Collection;
 
@@ -34,24 +31,8 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
+@Immutable
 public abstract class Particles {
-    
-    public static ColouredBuilder coloured() {
-        return new ColouredBuilder(new ColouredParticles(null, 0, Color.WHITE));
-    }
-    
-    public static ItemBuilder item() {
-        return new ItemBuilder(new ItemParticles(null, 0, 0, 0, 0, 0, null));
-    }
-    
-    public static MaterialBuilder material() {
-        return new MaterialBuilder(new MaterialParticles(null, 0, 0, 0, 0, 0, null));
-    }
-    
-    public static StandardBuilder standard() {
-        return new StandardBuilder(new StandardParticles(null, 0, 0, 0, 0, 0));
-    }
-    
     
     protected Particle particle;
     protected int amount;

@@ -39,15 +39,15 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class ContextTest {
+class ContextTest {
     
-    private static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
-    private static final CommandSender SENDER = mock(CommandSender.class);
-    private static final Command COMMAND = mock(Command.class);
+    static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
+    static final CommandSender SENDER = mock(CommandSender.class);
+    static final Command COMMAND = mock(Command.class);
   
     
     @Test
-    public void update() {
+    void update() {
         Command parent = mock(Command.class);
         Command command = mock(Command.class);
         
@@ -62,7 +62,7 @@ public class ContextTest {
     
     @ParameterizedTest
     @MethodSource("getPlayer_parameters")
-    public void getPlayer(CommandSender sender, Player expected) {
+    void getPlayer(CommandSender sender, Player expected) {
         assertEquals(expected, new Context(sender, null, null, COMMAND).getPlayer());
     }
     
@@ -73,7 +73,7 @@ public class ContextTest {
     
     @ParameterizedTest
     @MethodSource("getLocale_parameters")
-    public void getLocale(CommandSender sender, Locale expected) {
+    void getLocale(CommandSender sender, Locale expected) {
         Context context = new Context(sender, null, null, COMMAND);
         assertEquals(expected, context.getLocale());
     }

@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,7 +36,8 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 import static java.lang.Math.*;
 
 
-public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
+@Immutable
+public class Fountain implements Task<Fountain> {
     
     private Particles particles;
     private int strands;
@@ -47,7 +48,6 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
     private float height;
     private float heightSpout;
     private double rotation;
-    private Vector vector;
     
     
     public Fountain(Particles particles) {
@@ -64,18 +64,18 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
         this.height = height;
         this.heightSpout = heightSpout;
         this.rotation = rotation;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         renderStrands(context, location);
         renderSpout(context, location, ThreadLocalRandom.current());
     }
     
-    protected void renderStrands(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderStrands(Context context, Location location) {
+        Vector vector = context.getVector();
         for (int i = 1; i <= strands; i++) {
             double angle = 2 * i * PI / strands + rotation;
             for (int j = 1; j <= perStrand; j += particles.getAmount()) {
@@ -84,13 +84,14 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
                 vector.setX(cos(angle) * radius * ratio);
                 vector.setY(sin(PI * j / perStrand) * height);
                 vector.setZ(sin(angle) * radius * ratio);
-                
+
                 context.render(particles, location, vector);
             }
         }
     }
     
-    protected void renderSpout(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
+    void renderSpout(Context context, Location location, ThreadLocalRandom random) {
+        Vector vector = context.getVector();
         for (int i = 0; i < perSpout; i += particles.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble(0, radius * radiusSpout));
             vector.setY(random.nextDouble(0, heightSpout));
@@ -98,11 +99,10 @@ public class Fountain implements Task<Fountain, BoundLocation, BoundLocation> {
             context.render(particles, location, vector);
         }
     }
-    
 
     @Override
-    public Fountain get() {
-        return new Fountain(particles, strands, perStrand, perSpout, radius, radiusSpout, height, heightSpout, rotation);
+    public @Immutable Fountain get() {
+        return this;
     }
     
 }

@@ -40,15 +40,15 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class ItemBuilderTest {
+class ItemBuilderTest {
     
-    private static ItemStack item = mock(ItemStack.class);
-    private static ItemBuilder builder = new ItemBuilder(item);
+    static ItemStack item = mock(ItemStack.class);
+    static ItemBuilder builder = new ItemBuilder(item);
     
     
     @ParameterizedTest
     @MethodSource("parameters")
-    public void as(ItemMeta meta, Supplier<Builder> supplier) {
+    void as(ItemMeta meta, Supplier<Builder> supplier) {
         when(item.getItemMeta()).thenReturn(meta);
         
         assertNotNull(supplier.get());

@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,11 +35,11 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
+@Immutable
+public class Flame implements Task<Flame> {
     
     private Particles flame;
     private int total;
-    private Vector vector;
     
     
     public Flame(Particles flame) {
@@ -49,29 +49,26 @@ public class Flame implements Task<Flame, BoundLocation, BoundLocation> {
     public Flame(Particles flame, int total) {
         this.flame = flame;
         this.total = total;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
-        for (int i = 0; i< total; i++) {
-            render(context, location, ThreadLocalRandom.current());
+        Vector vector = context.getVector();
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        
+        for (int i = 0; i < total; i++) {
+            randomCircle(vector).multiply(random.nextDouble(0, 0.6));
+            vector.setY(random.nextFloat() * 1.8);
+
+            context.render(flame, location, vector);
         }
     }
 
-    protected void render(Context<BoundLocation, BoundLocation> context, Location location, ThreadLocalRandom random) {
-        randomCircle(vector).multiply(random.nextDouble(0, 0.6));
-        vector.setY(random.nextFloat() * 1.8);
-
-        context.render(flame, location, vector);
-    }
-
-
     @Override
-    public Flame get() {
-        return new Flame(flame, total);
+    public @Immutable Flame get() {
+        return this;
     }
     
 }

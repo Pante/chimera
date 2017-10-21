@@ -52,7 +52,7 @@ public class StaticLocation extends BoundLocation {
     
     public static class StaticBuilder extends Builder<StaticBuilder, StaticLocation> {
 
-        public StaticBuilder(StaticLocation location) {
+        private StaticBuilder(StaticLocation location) {
             super(location);
         }
 

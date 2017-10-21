@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.commons.annotation.JDK9;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -37,14 +38,15 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CloseableLockTest {    
+class CloseableLockTest {    
     
-    private static CloseableLock lock = new CloseableLock();
+    static CloseableLock lock = new CloseableLock();
     
     
     @ParameterizedTest
     @MethodSource("acquire_parameters")
-    public void acquire(Supplier<Janitor> closeableLock) {
+    @JDK9
+    void acquire(Supplier<Janitor> closeableLock) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, lock.getHoldCount());
         }
@@ -58,7 +60,8 @@ public class CloseableLockTest {
     
     
     @Test
-    public void acquireInterruptibly() throws InterruptedException {
+    @JDK9
+    void acquireInterruptibly() throws InterruptedException {
         CloseableLock aLock = spy(new CloseableLock());
         doThrow(InterruptedException.class).when(aLock).acquireInterruptibly();
         

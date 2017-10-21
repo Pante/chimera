@@ -32,14 +32,14 @@ import static org.bukkit.inventory.meta.BookMeta.Generation.COPY_OF_COPY;
 import static org.mockito.Mockito.*;
 
 
-public class BookBuilderTest {
+class BookBuilderTest {
     
     private BookMeta meta = mock(BookMeta.class);
     private BookBuilder builder = new BookBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         builder.title("title").author("Pante").generation(COPY_OF_COPY).pages("pg 1", "pg 2");
         
         verify(meta).setTitle("title");

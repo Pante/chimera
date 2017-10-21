@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation;
 
 import com.karuslabs.commons.annotation.JDK9;
+
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -35,12 +36,12 @@ import static org.bukkit.SoundCategory.MASTER;
 import static org.mockito.Mockito.*;
 
 
-public class MusicTest {
+class MusicTest {
     
-    private Music music = spy(new Music(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
-    private World world = mock(World.class);
-    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
-    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    Music music = spy(new Music(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
+    World world = mock(World.class);
+    Location location = new Location(world, 0, 0, 0);
+    Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
     
     @Test
@@ -53,7 +54,7 @@ public class MusicTest {
     
     @Test
     @JDK9("List.of(...)")
-    public void play_Collection_Location() {
+    void play_Collection_Location() {
         music.play(singletonList(player), location);
         
         verify(music).play(player, location);
@@ -61,7 +62,7 @@ public class MusicTest {
     
     
     @Test
-    public void play_Player_Location() {
+    void play_Player_Location() {
         music.play(player, location);
         
         verify(player).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
@@ -69,7 +70,7 @@ public class MusicTest {
     
     
     @Test
-    public void play_Location() {
+    void play_Location() {
         music.play(location);
         
         verify(world).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);

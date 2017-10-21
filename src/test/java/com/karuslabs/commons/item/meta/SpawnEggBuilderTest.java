@@ -32,14 +32,14 @@ import static org.bukkit.entity.EntityType.MULE;
 import static org.mockito.Mockito.*;
 
 
-public class SpawnEggBuilderTest {
+class SpawnEggBuilderTest {
 
     private SpawnEggMeta meta = mock(SpawnEggMeta.class);
     private SpawnEggBuilder builder = new SpawnEggBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());    
     
     
     @Test
-    public void build() {
+    void build() {
         builder.spawned(MULE);
         
         verify(meta).setSpawnedType(MULE);

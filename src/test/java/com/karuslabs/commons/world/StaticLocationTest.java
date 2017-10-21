@@ -24,43 +24,32 @@
 package com.karuslabs.commons.world;
 
 import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static com.karuslabs.commons.world.StaticLocation.builder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class StaticLocationTest {
+class StaticLocationTest {
     
-    private Location internal;
-    private PathVector offset;
-    private StaticLocation location;
-        
-            
-    public StaticLocationTest() {
-        internal = mock(Location.class);
-        when(internal.getYaw()).thenReturn(1F);
-        when(internal.getPitch()).thenReturn(2F);
-        
-        offset = new PathVector(1, 2, 3, 4, 5);
-        
-        location = StaticLocation.builder(internal).offset(offset).build();
-    }
+    private Location internal = spy(new Location(null, 0, 0, 0, 1, 2));
+    private PathVector offset = new PathVector(1, 2, 3, 4, 5);
+    private StaticLocation location = builder(internal).offset(offset).build();
     
     
     @Test
-    public void validate() {
+    void validate() {
         assertTrue(location.validate());
     }
     
     
     @ParameterizedTest
     @CsvSource({"true", "false"})
-    public void updateOffset(boolean relative) {
+    void updateOffset(boolean relative) {
         location.setRelative(relative);
         
         location.updateOffset();

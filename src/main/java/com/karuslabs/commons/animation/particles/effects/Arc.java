@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -34,12 +34,12 @@ import static com.karuslabs.commons.world.Vectors.copy;
 import static java.lang.Math.pow;
 
 
-public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
+@Immutable
+public class Arc implements Task<Arc> {
     
     private Particles particles;
     private float height;
     private int total;
-    private Vector vector;
     
     
     public Arc(Particles particles) {
@@ -50,17 +50,17 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
         this.particles = particles;
         this.height = height;
         this.total = total;
-        vector = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Location target = context.getTarget().getLocation();
 
+        Vector vector = context.getVector();
         Vector link = target.toVector().subtract(location.toVector());
-        
+
         float length = (float) link.length();
         float pitch = (float) (4 * height / pow(length, 2));
         
@@ -70,15 +70,15 @@ public class Arc implements Task<Arc, BoundLocation, BoundLocation> {
             copy(link, vector).multiply((float) length * i / total);
             float x = ((float) i / total) * length - length / 2;
             float y = (float) (-pitch * pow(x, 2) + height);
-
+            
             context.render(particles, location.add(vector).add(0, y, 0));
             location.subtract(vector).subtract(0, y, 0);
         }
     }
 
     @Override
-    public Arc get() {
-        return new Arc(particles, height, total);
+    public @Immutable Arc get() {
+        return this;
     }
     
 }

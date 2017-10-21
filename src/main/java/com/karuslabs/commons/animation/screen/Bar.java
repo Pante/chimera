@@ -106,10 +106,8 @@ public abstract class Bar {
             bar.period = period;
             return getThis();
         }
-        
-                
+
         protected abstract @Nonnull GenericBuilder getThis();
-        
         
         public GenericBar build() {
             return bar;

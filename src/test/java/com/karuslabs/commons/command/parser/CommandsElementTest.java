@@ -42,41 +42,41 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class CommandsElementTest {
+class CommandsElementTest {
     
-    private CommandsElement element;
-    private CommandElement command;
+    CommandsElement element;
+    CommandElement command;
     
     
-    public CommandsElementTest() {
+    CommandsElementTest() {
         element = new CommandsElement(null);
-        command = when(mock(CommandElement.class).getDeclared(any(), any())).thenReturn(mock(Command.class)).getMock();
+        command = when(mock(CommandElement.class).handleDeclared(any(), any())).thenReturn(mock(Command.class)).getMock();
         when(command.parse(any(), any())).thenReturn(mock(Command.class));
         element.setCommandElement(command);
     }
     
     
     @Test
-    public void handleNull() {
+    void handleNull() {
         assertEquals(EMPTY_MAP, element.handleNull(null, null));
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, declare", "false, declare.commands.help.aliases"})
-    public void check(boolean expected, String key) {
+    void check(boolean expected, String key) {
         assertEquals(expected, element.check(COMMANDS, key));
     }
     
     
     @Test
-    public void handle() {
+    void handle() {
         @JDK9("Set.of(...)")
         Set<String> names = asSet("help", "fill");
                 
         String path = "commands.brush.subcommands";
         assertEquals(names, element.handle(COMMANDS, path).keySet());
-        verify(command).getDeclared(COMMANDS.getConfigurationSection(path), "help");
+        verify(command).handleDeclared(COMMANDS.getConfigurationSection(path), "help");
         verify(command).parse(COMMANDS.getConfigurationSection(path), "fill");
     }
     

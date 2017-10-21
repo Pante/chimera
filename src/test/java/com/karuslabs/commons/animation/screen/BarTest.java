@@ -37,21 +37,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class BarTest {
+class BarTest {
     
-    private Plugin plugin = mock(Plugin.class);
-    private ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
-    private Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
+    Plugin plugin = mock(Plugin.class);
+    ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
+    Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
     
     
     @Test
-    public void render_Player() {
+    void render_Player() {
         assertEquals(task, bar.render(mock(Player.class)));
     }
     
     
     @Test
-    public void render_Players() {
+    void render_Players() {
         assertEquals(task, bar.render(EMPTY_LIST));
         verify(task).runTaskTimerAsynchronously(plugin, 2, 3);
     }

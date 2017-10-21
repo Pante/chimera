@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -35,7 +35,8 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.PI;
 
 
-public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
+@Immutable
+public class Cube implements Task<Cube> {
     
     private Particles particles;
     private float edge;
@@ -44,8 +45,6 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
     int perRow;
     boolean rotate;
     boolean solid;
-    Vector vector;
-    Vector rotation;
     
     
     public Cube(Particles particles) {
@@ -60,65 +59,31 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
         this.perRow = perRow;
         this.rotate = rotate;
         this.solid = solid;
-        vector = new Vector();
-        rotation = new Vector();
     }
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
         long current = context.getCurrent();
+        
+        double x = 0, y = 0, z = 0;
         if (rotate) {
-            rotation.setX(current * angularVelocity.getX()).setY(current * angularVelocity.getY()).setZ(current * angularVelocity.getZ());
+            x = current * angularVelocity.getX();
+            y = current * angularVelocity.getY();
+            z = current * angularVelocity.getZ();
         }
         
         if (solid) {
-            renderWalls(context, location);
+            renderWalls(context, location, vector, x, y, z);
             
         } else {
-            renderOutline(context, location, 4 , 2);
+            renderOutline(context, location, 4, 2, vector, x, y, z);
         }
     }
     
-    protected void renderOutline(Context<BoundLocation, BoundLocation> context, Location location, int sides, int points) {
-        // top and bottom
-        double angleX, angleY;
-        for (int i = 0; i < sides; i++) {
-            angleY = i * PI / 2;
-            for (int j = 0; j < points; j++) {
-                angleX = j * PI;
-                for (int p = 0; p <= perRow; p += particles.getAmount()) {
-                    vector.setX(half).setY(half).setZ(edge * p / perRow - half);
-                    
-                    rotateAroundXAxis(vector, angleX);
-                    rotateAroundYAxis(vector, angleY);
-
-                    if (rotate) {
-                        rotate(vector, rotation);
-                    }
-                    
-                    context.render(particles, location, vector);
-                }
-            }
-            renderPillarOutlines(context, location, angleY);
-        }
-    }
-    
-    protected void renderPillarOutlines(Context<BoundLocation, BoundLocation> context, Location location, double angle) {
-        for (int p = 0; p <= perRow; p += particles.getAmount()) {
-            vector.setX(half).setZ(half).setY(edge * p / perRow - half);
-            rotateAroundYAxis(vector, angle);
-
-            if (rotate) {
-                rotate(vector, rotation);
-            }
-
-            context.render(particles, location, vector);
-        }
-    }
-
-    protected void renderWalls(Context<BoundLocation, BoundLocation> context, Location location) {
+    void renderWalls(Context context, Location location, Vector vector, double rotationX, double rotationY, double rotationZ) {
         for (int x = 0; x <= perRow; x += particles.getAmount()) {
             float posX = edge * ((float) x / perRow) - half;
             
@@ -133,7 +98,7 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
                     float posZ = edge * ((float) z / perRow) - half;
                     vector.setX(posX).setY(posY).setZ(posZ);
                     if (rotate) {
-                        rotate(vector, rotation);
+                        rotate(vector, rotationX, rotationY, rotationZ);
                     }
                     
                     context.render(particles, location, vector);
@@ -141,10 +106,47 @@ public class Cube implements Task<Cube, BoundLocation, BoundLocation> {
             }
         }
     }
+    
+    void renderOutline(Context context, Location location, int sides, int points, Vector vector, double x, double y, double z) {
+        // top and bottom
+        double angleX, angleY;
+        for (int i = 0; i < sides; i++) {
+            angleY = i * PI / 2;
+            for (int j = 0; j < points; j++) {
+                angleX = j * PI;
+                for (int p = 0; p <= perRow; p += particles.getAmount()) {
+                    vector.setX(half).setY(half).setZ(edge * p / perRow - half);
+                    
+                    rotateAroundXAxis(vector, angleX);
+                    rotateAroundYAxis(vector, angleY);
+
+                    if (rotate) {
+                        rotate(vector, x, y, z);
+                    }
+                    
+                    context.render(particles, location, vector);
+                }
+            }
+            renderPillarOutlines(context, location, angleY, vector, x, y, z);
+        }
+    }
+    
+    void renderPillarOutlines(Context context, Location location, double angle, Vector vector, double x, double y, double z) {
+        for (int p = 0; p <= perRow; p += particles.getAmount()) {
+            vector.setX(half).setZ(half).setY(edge * p / perRow - half);
+            rotateAroundYAxis(vector, angle);
+
+            if (rotate) {
+                rotate(vector, x, y, z);
+            }
+
+            context.render(particles, location, vector);
+        }
+    }
 
     @Override
-    public Cube get() {
-        return new Cube(particles, edge, angularVelocity, perRow, rotate, solid);
+    public @Immutable Cube get() {
+        return this;
     }
     
 }

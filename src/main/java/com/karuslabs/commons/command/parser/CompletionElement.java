@@ -30,6 +30,8 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static com.karuslabs.commons.command.completion.Completion.*;
+
 
 public class CompletionElement extends Element<Completion> {
     
@@ -39,9 +41,9 @@ public class CompletionElement extends Element<Completion> {
     
     public CompletionElement(Map<String, Completion> declarations) {
         super(declarations);
-        declarations.put("NONE", Completion.NONE);
-        declarations.put("PLAYER_NAMES", Completion.PLAYER_NAMES);
-        declarations.put("WORLD_NAMES", Completion.WORLD_NAMES);
+        declarations.put("NONE", NONE);
+        declarations.put("PLAYER_NAMES", PLAYER_NAMES);
+        declarations.put("WORLD_NAMES", WORLD_NAMES);
     }
 
     

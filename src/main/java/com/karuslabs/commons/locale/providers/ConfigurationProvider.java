@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale.providers;
 
-import com.karuslabs.commons.configuration.ProxiedConfiguration;
+import com.karuslabs.commons.configuration.BackedConfiguration;
 import com.karuslabs.commons.locale.Locales;
 
 import java.util.Locale;
@@ -34,10 +34,10 @@ import org.bukkit.entity.Player;
 
 public class ConfigurationProvider implements Provider {
     
-    private ProxiedConfiguration config;
+    private BackedConfiguration config;
     
     
-    public ConfigurationProvider(ProxiedConfiguration config) {
+    public ConfigurationProvider(BackedConfiguration config) {
         this.config = config;
     }
     

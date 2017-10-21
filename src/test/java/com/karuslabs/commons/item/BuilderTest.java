@@ -40,15 +40,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class BuilderTest {
+class BuilderTest {
     
-    private ItemMeta meta = mock(ItemMeta.class);
-    private ItemStack item = when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock();
-    private Builder builder = new StubBuilder(item);
+    ItemMeta meta = mock(ItemMeta.class);
+    ItemStack item = when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock();
+    Builder builder = new StubBuilder(item);
 
     
     @Test
-    public void builder() {
+    void builder() {
         Builder other = new StubBuilder(builder);
         
         assertTrue(builder.item == other.item);
@@ -57,7 +57,7 @@ public class BuilderTest {
     
     
     @Test
-    public void build() {
+    void build() {
         builder.amount(1).durability((short) 8).enchantment(OXYGEN, 2).enchantments(EMPTY_MAP).flags(HIDE_POTION_EFFECTS).name("lol").build();
         
         verify(item).setAmount(1);
@@ -74,7 +74,7 @@ public class BuilderTest {
     
     @ParameterizedTest
     @CsvSource({"true, 0", "false, 1"})
-    public void lore_String(boolean hasLore, int times) {
+    void lore_String(boolean hasLore, int times) {
         when(meta.hasLore()).thenReturn(hasLore);
         when(meta.getLore()).thenReturn(new ArrayList<>());
         
@@ -87,7 +87,7 @@ public class BuilderTest {
     
     @ParameterizedTest
     @CsvSource({"true, 0", "false, 1"})
-    public void lore_List(boolean hasLore, int setTimes) {
+    void lore_List(boolean hasLore, int setTimes) {
         when(meta.hasLore()).thenReturn(hasLore);
         when(meta.getLore()).thenReturn(new ArrayList<>());
         
@@ -101,11 +101,11 @@ public class BuilderTest {
     
     private static class StubBuilder extends Builder<StubBuilder, ItemMeta> {
         
-        public StubBuilder(Builder builder) {
+        StubBuilder(Builder builder) {
             super(builder);
         }
         
-        public StubBuilder(ItemStack item) {
+        StubBuilder(ItemStack item) {
             super(item);
         }
 

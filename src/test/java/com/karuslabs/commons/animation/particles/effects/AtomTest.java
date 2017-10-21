@@ -23,59 +23,43 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.ColouredParticles;
-import com.karuslabs.commons.world.*;
-
-import org.bukkit.Location;
-
 import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.PI;
-import static org.bukkit.Color.WHITE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class AtomTest {
-    
-    private static final double ROUNDING_ERROR = 0.000000000000001;
-    
-    private ColouredParticles nucleus = new ColouredParticles(null, 1, WHITE);
-    private ColouredParticles orbital = new ColouredParticles(null, 1, WHITE);
-    private Atom atom = new Atom(nucleus, orbital, 1, 1, 3, 0.2F, 1, 0, PI / 80);
-    private StaticLocation origin = new StaticLocation(new Location(null, 1, 1, 1), null, false);
-    private StubContext<BoundLocation, BoundLocation> context = spy(new StubContext<>(origin, null, 0, 0));
+class AtomTest extends EffectBase {
+
+    Atom atom = spy(new Atom(PARTICLES, COLOURED, 1, 1, 3, 0.2F, 1, 0, PI / 80).get());
     
     
     @Test
-    public void render() {
-        Atom atom = spy(new Atom(nucleus, orbital));
-        doNothing().when(atom).renderNucleus(context, origin.getLocation());
-        doNothing().when(atom).renderOrbitals(context, origin.getLocation());
+    void render() {
+        doNothing().when(atom).renderNucleus(context, location, vector);
+        doNothing().when(atom).renderOrbitals(context, location, vector, 0);
         
         atom.render(context);
         
-        verify(atom).renderNucleus(context, origin.getLocation());
-        verify(atom).renderOrbitals(context, origin.getLocation());
+        verify(atom).renderNucleus(context, location, vector);
+        verify(atom).renderOrbitals(context, location, vector, 0);
     }
     
     
     @Test
-    public void renderNucleus() {
-        atom.renderNucleus(context, origin.getLocation());
+    void renderNucleus() {
+        atom.renderNucleus(context, location, vector);
         
-        verify(context).render(nucleus, origin.getLocation());
+        verify(context).render(PARTICLES, location);
     }
     
     
     @Test
-    public void renderOrbitals() {
-        atom.renderOrbitals(context, origin.getLocation());
+    void renderOrbitals() {
+        atom.renderOrbitals(context, location, vector, 0);
         
-        verify(context).render(orbital, origin.getLocation());
-        assertEquals(4, context.location.getX(), ROUNDING_ERROR);
-        assertEquals(1, context.location.getY(), ROUNDING_ERROR);
-        assertEquals(1, context.location.getZ(), ROUNDING_ERROR);
+        verify(context).render(COLOURED, location);
+        assertVector(from(1, 1, 1), location);
     }
     
 }

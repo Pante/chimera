@@ -37,17 +37,17 @@ import static java.util.Collections.singleton;
 import static org.mockito.Mockito.*;
 
 
-public class ProgressBarTest {
+class ProgressBarTest {
     
-    private Player player = mock(Player.class);
-    private BossBar boss = mock(BossBar.class);
-    private BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
-    private ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).consumer(() -> consumer).build();
+    Player player = mock(Player.class);
+    BossBar boss = mock(BossBar.class);
+    BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
+    ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).consumer(() -> consumer).build();
     
     
     @Test
     @JDK9
-    public void process() {
+    void process() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         task.process();
@@ -60,7 +60,7 @@ public class ProgressBarTest {
     
     @Test
     @JDK9
-    public void callback() {
+    void callback() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         task.callback();

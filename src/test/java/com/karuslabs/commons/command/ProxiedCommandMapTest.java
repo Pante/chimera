@@ -42,16 +42,17 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class ProxiedCommandMapTest {
+class ProxiedCommandMapTest {
     
-    private static final Plugin PLUGIN = mock(Plugin.class);
-    private static final Command COMMAND = when(mock(Command.class).getPlugin()).thenReturn(PLUGIN).getMock();
-    private SimpleCommandMap map = mock(SimpleCommandMap.class);
-    private ProxiedCommandMap proxy = new ProxiedCommandMap(new StubServer(map));
+    static final Plugin PLUGIN = mock(Plugin.class);
+    static final Command COMMAND = when(mock(Command.class).getPlugin()).thenReturn(PLUGIN).getMock();
+    
+    SimpleCommandMap map = mock(SimpleCommandMap.class);
+    ProxiedCommandMap proxy = new ProxiedCommandMap(new StubServer(map));
     
     
     @Test
-    public void proxiedCommandMap() {
+    void proxiedCommandMap() {
         Server server = mock(Server.class);
         assertEquals(
             "If you are reading this message, you're screwed.",
@@ -61,7 +62,7 @@ public class ProxiedCommandMapTest {
     
     
     @Test
-    public void registerAll() {
+    void registerAll() {
         proxy.registerAll("",  singletonList(COMMAND));
         verify(map).register("", COMMAND);
     }
@@ -69,7 +70,7 @@ public class ProxiedCommandMapTest {
     
     @ParameterizedTest
     @MethodSource("getCommand_parameters")
-    public void getCommand(org.bukkit.command.Command command, Command expected) {
+    void getCommand(org.bukkit.command.Command command, Command expected) {
         when(map.getCommand("")).thenReturn(command);
         assertEquals(expected, proxy.getCommand(""));
     }
@@ -81,7 +82,7 @@ public class ProxiedCommandMapTest {
     
     
     @Test
-    public void getCommands() {
+    void getCommands() {
         org.bukkit.command.Command bukkit = mock(Command.class);
         Command command = mock(Command.class);
         when(map.getCommands()).thenReturn(asList(COMMAND, bukkit, command));

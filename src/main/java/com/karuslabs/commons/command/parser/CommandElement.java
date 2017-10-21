@@ -33,6 +33,8 @@ import javax.annotation.Nonnull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
+import static com.karuslabs.commons.command.CommandExecutor.NONE;
+
 
 public class CommandElement extends Element<Command> {
     
@@ -68,7 +70,7 @@ public class CommandElement extends Element<Command> {
             config.getString("description", ""),
             config.getString("usage", ""),
             config.getStringList("aliases"),
-            CommandExecutor.NONE,
+            NONE,
             subcommands.parse(config, "subcommands"),
             completions.parse(config, "completions")
         );

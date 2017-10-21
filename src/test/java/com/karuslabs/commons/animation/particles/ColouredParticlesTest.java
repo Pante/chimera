@@ -23,42 +23,40 @@
  */
 package com.karuslabs.commons.animation.particles;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
-
 import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Color.YELLOW;
+import static org.bukkit.Particle.BARRIER;
+
+import static com.karuslabs.commons.animation.particles.ColouredParticles.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class ColouredParticlesTest {
+class ColouredParticlesTest extends Base {
     
-    private ColouredParticles particles = spy(Particles.coloured().particle(Particle.BARRIER).colour(Color.YELLOW)).build();
-    private World world = mock(World.class);
-    private Location location = when(mock(Location.class).getWorld()).thenReturn(world).getMock();
-    private Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
     
     
     @Test
-    public void render_Player() {
+    void render_Player() {
         particles.render(player, location);
         
-        verify(player).spawnParticle(Particle.BARRIER, location, 0, 1, 1, 0, 1);
+        verify(player).spawnParticle(BARRIER, location, 0, 1, 1, 0, 1);
     }
     
     
     @Test
-    public void render() {
+    void render_Location() {
         particles.render(location);
         
-        verify(world).spawnParticle(Particle.BARRIER, location, 0, 1, 1, 0, 1);
+        verify(world).spawnParticle(BARRIER, location, 0, 1, 1, 0, 1);
     }
     
     
     @Test
-    public void getColor() {
-        assertEquals(Color.YELLOW, particles.getColour());
+    void getColor() {
+        assertEquals(YELLOW, particles.getColour());
     }
     
 }

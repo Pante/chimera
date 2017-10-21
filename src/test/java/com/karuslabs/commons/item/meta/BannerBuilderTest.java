@@ -38,14 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class BannerBuilderTest {
+class BannerBuilderTest {
     
     private BannerMeta meta = mock(BannerMeta.class);
     private BannerBuilder builder = new BannerBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         List<Pattern> patterns = singletonList(new Pattern(BLUE, BASE));                
         when(meta.getPatterns()).thenReturn(new ArrayList<>());
         

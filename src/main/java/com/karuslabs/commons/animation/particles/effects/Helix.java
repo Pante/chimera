@@ -25,14 +25,15 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.world.BoundLocation;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 
 import static java.lang.Math.*;
 
 
-public class Helix implements Task<Helix, BoundLocation, BoundLocation> {
+@Immutable
+public class Helix implements Task<Helix> {
     
     private Particles particles;
     private int strands;
@@ -57,7 +58,7 @@ public class Helix implements Task<Helix, BoundLocation, BoundLocation> {
     
     
     @Override
-    public void render(Context<BoundLocation, BoundLocation> context) {
+    public void render(Context context) {
         Location location = context.getOrigin().getLocation();
 
         for (int i = 1; i <= strands; i++) {

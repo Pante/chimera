@@ -31,7 +31,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public abstract class Element<T> {
     
-    private Map<String, T> declarations;
+    private final Map<String, T> declarations;
     
     
     public Element(@Nonnull Map<String, T> declarations) {
@@ -49,7 +49,7 @@ public abstract class Element<T> {
             return handleNull(config, key);
             
         } else if (config.isString(key)) {
-            return getDeclared(config, key);
+            return handleDeclared(config, key);
             
         } else if (check(config, key)) {
             return handle(config, key);
@@ -63,7 +63,7 @@ public abstract class Element<T> {
         throw new ParserException("Missing key: " + config.getCurrentPath() + "." + key);
     }
     
-    protected T getDeclared(ConfigurationSection config, String key) {
+    protected T handleDeclared(ConfigurationSection config, String key) {
         T declared = declarations.get(getDeclaredKey(config, key));
         if (declared != null) {
             return declared;

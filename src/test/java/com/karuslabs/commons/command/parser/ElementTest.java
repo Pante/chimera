@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class ElementTest {
+class ElementTest {
     
     @JDK9("Diamond inference")
     private Element<String> element = spy(new Element<String>(new HashMap<>()) {
@@ -56,7 +56,7 @@ public class ElementTest {
     
     
     @Test
-    public void declare() {
+    void declare() {
         doReturn("value").when(element).parse(COMMANDS, "");
         
         element.declare(COMMANDS, "");
@@ -68,21 +68,21 @@ public class ElementTest {
     
     @ParameterizedTest
     @CsvSource({"key, 1, 0, 0", "commands.brush.translation, 0, 1, 0", "declare, 0, 0, 1"})
-    public void parse(String key, int nullValue, int declaration, int handle) {
+    void parse(String key, int nullValue, int declaration, int handle) {
         doReturn("").when(element).handleNull(COMMANDS, key);
-        doReturn("").when(element).getDeclared(COMMANDS, key);
+        doReturn("").when(element).handleDeclared(COMMANDS, key);
         doReturn(true).when(element).check(COMMANDS, key);
         doReturn("").when(element).handle(COMMANDS, key);
         
         assertEquals("", element.parse(COMMANDS, key));
         verify(element, times(nullValue)).handleNull(COMMANDS, key);
-        verify(element, times(declaration)).getDeclared(COMMANDS, key);
+        verify(element, times(declaration)).handleDeclared(COMMANDS, key);
         verify(element, times(handle)).handle(COMMANDS, key);
     }
     
     
     @Test
-    public void parse_ThrowsException() {
+    void parse_ThrowsException() {
         doReturn(false).when(element).check(any(), any());
         
         assertEquals(
@@ -93,7 +93,7 @@ public class ElementTest {
     
     
     @Test
-    public void handleNull() {
+    void handleNull() {
         assertEquals(
             "Missing key: .key",
             assertThrows(ParserException.class, () -> element.handleNull(COMMANDS, "key")).getMessage()
@@ -102,17 +102,17 @@ public class ElementTest {
     
     
     @Test
-    public void getDeclared() {
+    void handleDeclared() {
         element.getDeclarations().put("key", "value");
-        assertEquals("value", element.getDeclared(COMMANDS, "key"));
+        assertEquals("value", element.handleDeclared(COMMANDS, "key"));
     }
     
     
     @Test
-    public void getDeclaration_ThrowsException() {
+    void getDeclaration_ThrowsException() {
         assertEquals(
             "Missing declaration: declare.key",
-            assertThrows(ParserException.class, () -> element.getDeclared(COMMANDS.getConfigurationSection("declare"), "key")).getMessage()
+            assertThrows(ParserException.class, () -> element.handleDeclared(COMMANDS.getConfigurationSection("declare"), "key")).getMessage()
         );
         
     }

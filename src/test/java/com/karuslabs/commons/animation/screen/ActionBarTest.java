@@ -32,22 +32,23 @@ import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
 
+import static com.karuslabs.commons.animation.screen.ActionBar.builder;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class ActionBarTest {
+class ActionBarTest {
     
-    private BiFunction<Player, Context, String> function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
-    private ActionBar bar = ActionBar.builder(null).function(() -> function).build();
-    private StubSpigot spigot = new StubSpigot();
-    private Player player = when(mock(Player.class).spigot()).thenReturn(spigot).getMock();
+    BiFunction<Player, Context, String> function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
+    ActionBar bar = builder(null).function(() -> function).build();
+    StubSpigot spigot = new StubSpigot();
+    Player player = when(mock(Player.class).spigot()).thenReturn(spigot).getMock();
     
     
     @Test
     @JDK9
-    public void process() {
+    void process() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singletonList(player));
         
         task.process();

@@ -38,29 +38,29 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class WeakTest {
+class WeakTest {
     
-    private static final String VALUE = "value";
-    private static Weak<String> value = new Weak<>(VALUE);
-    private static Weak<String> empty = new Weak<>(null);
-    private static Weak<String> other = new Weak<>(null);
+    static final String VALUE = "value";
+    static Weak<String> value = new Weak<>(VALUE);
+    static Weak<String> empty = new Weak<>(null);
+    static Weak<String> other = new Weak<>(null);
     
     
     @Test
-    public void get() {
+    void get() {
         assertEquals("value", value.get());
     }
     
     
     @Test
-    public void get_ThrowsException() {
+    void get_ThrowsException() {
         assertThrows(NoSuchElementException.class, empty::get);
     }
     
     
     @ParameterizedTest
     @MethodSource("ifPresent_parameters")
-    public void ifPresent(Weak<String> weak, int times) {
+    void ifPresent(Weak<String> weak, int times) {
         Consumer<String> consumer = mock(Consumer.class);
         
         weak.ifPreset(consumer);
@@ -75,7 +75,7 @@ public class WeakTest {
     
     @ParameterizedTest
     @MethodSource("ifPresentOrElse_parameters")
-    public void ifPresentOrElse(Weak<String> weak, int consumed, int ran) {
+    void ifPresentOrElse(Weak<String> weak, int consumed, int ran) {
         Consumer<String> consumer = mock(Consumer.class);
         Runnable runnable = mock(Runnable.class);
         
@@ -92,7 +92,7 @@ public class WeakTest {
     
     @ParameterizedTest
     @MethodSource("isPresent_parameters")
-    public void isPresent(Weak<String> weak, boolean expected) {
+    void isPresent(Weak<String> weak, boolean expected) {
         assertEquals(expected, weak.isPresent());
     }
     
@@ -103,7 +103,7 @@ public class WeakTest {
     
     @ParameterizedTest
     @MethodSource("or_parameters")
-    public void or(Weak<String> weak, Weak<String> value, Weak<String> expected) {
+    void or(Weak<String> weak, Weak<String> value, Weak<String> expected) {
         assertSame(expected, weak.or(() -> value));
     }
     
@@ -114,13 +114,13 @@ public class WeakTest {
     
     @ParameterizedTest
     @MethodSource("orElse_parameters")
-    public void orElse(Weak<String> weak, String other, String expected) {
+    void orElse(Weak<String> weak, String other, String expected) {
         assertEquals(expected, weak.orElse(other));
     }
     
     @ParameterizedTest
     @MethodSource("orElse_parameters")
-    public void orElseGet(Weak<String> weak, String other, String expected) {
+    void orElseGet(Weak<String> weak, String other, String expected) {
         assertEquals(expected, weak.orElseGet(() -> other));
     }
     
@@ -130,19 +130,19 @@ public class WeakTest {
     
     
     @Test
-    public void orElseThrow() {
+    void orElseThrow() {
         assertEquals("value", value.orElseThrow(RuntimeException::new));
     }
     
     @Test
-    public void orElseThrow_ThrowsException() {
+    void orElseThrow_ThrowsException() {
         assertThrows(RuntimeException.class, () -> empty.orElseThrow(RuntimeException::new));
     }
     
     
     @ParameterizedTest
     @MethodSource("stream_parameters")
-    public void stream(Weak<String> weak, int expected) {
+    void stream(Weak<String> weak, int expected) {
         assertEquals(expected, weak.stream().toArray().length);
     }
     
@@ -153,16 +153,15 @@ public class WeakTest {
     
     @ParameterizedTest
     @MethodSource("weaks")
-    public void equals(boolean expected, Object other) {
+    void equals(boolean expected, Object other) {
         assertEquals(expected, value.equals(other));
     }
     
     @ParameterizedTest
     @MethodSource("weaks")
-    public void hashCode(boolean expected, Object other) {
+    void hashCode(boolean expected, Object other) {
         assertEquals(expected, value.hashCode() == other.hashCode());
     }
-    
     
     static Stream<Arguments> weaks() {
         return Stream.of(

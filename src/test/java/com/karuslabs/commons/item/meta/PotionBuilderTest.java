@@ -33,14 +33,14 @@ import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
-public class PotionBuilderTest {
+class PotionBuilderTest {
         
     private PotionMeta meta = mock(PotionMeta.class);
     private PotionBuilder builder = new PotionBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         PotionData data = mock(PotionData.class);
         PotionEffect effect = mock(PotionEffect.class);
         

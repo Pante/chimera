@@ -44,26 +44,27 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-public class MessageTranslationTest {
+class MessageTranslationTest {
     
-    private MessageTranslation translation  = spy(new MessageTranslation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
-    private static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    static Player player = when(mock(Player.class).getLocale()).thenReturn("zh_CN").getMock();
+    
+    MessageTranslation translation  = spy(new MessageTranslation("Translation", new ExternalControl(new EmbeddedResource("locale")), player -> null));
     
     
     @Test
-    public void none_get() {
+    void none_get() {
         assertSame(CachedResourceBundle.NONE, NONE.get(ITALY));
     }
     
     
     @Test
-    public void none_format() {
+    void none_format() {
         assertEquals("key", NONE.format("key"));
     }
     
     
     @Test
-    public void none_locale() {
+    void none_locale() {
         NONE.format.setLocale(ENGLISH);
         NONE.locale(ITALY);
         
@@ -72,14 +73,14 @@ public class MessageTranslationTest {
     
     
     @Test
-    public void format() {
+    void format() {
         assertEquals("Japanese key", translation.locale(JAPAN).format("locale", "key"));
     }
     
     
     @ParameterizedTest
     @MethodSource("parameters")
-    public void locale_player(Consumer<MessageTranslation> consumer, Locale expected) {
+    void locale_player(Consumer<MessageTranslation> consumer, Locale expected) {
         doReturn(null).when(translation).locale((Locale) any());
         
         consumer.accept(translation);
@@ -91,7 +92,7 @@ public class MessageTranslationTest {
         return Stream.of(
             of(wrap(translation -> translation.locale(player)), null),
             of(wrap(translation -> translation.localeOrDefault(player, ITALY)), ITALY),
-            of(wrap(translation -> translation.localeOrDetected(player)), SIMPLIFIED_CHINESE)
+            of(wrap(translation -> translation.localeOrDetected(player)), CHINA)
         );
     }
     

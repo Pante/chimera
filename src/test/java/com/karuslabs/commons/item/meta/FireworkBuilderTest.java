@@ -34,14 +34,14 @@ import static org.bukkit.Color.SILVER;
 import static org.mockito.Mockito.*;
 
 
-public class FireworkBuilderTest {
+class FireworkBuilderTest {
         
     private FireworkMeta meta = mock(FireworkMeta.class);
     private FireworkBuilder builder = new FireworkBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
     @Test
-    public void build() {
+    void build() {
         FireworkEffect effect = FireworkEffect.builder().withColor(SILVER).build();
         builder.effects(effect).effects(singletonList(effect)).power(3);
         

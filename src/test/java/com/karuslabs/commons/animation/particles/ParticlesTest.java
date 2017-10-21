@@ -31,42 +31,42 @@ import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.singletonList;
+import static org.bukkit.Particle.PORTAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class ParticlesTest {
+class ParticlesTest extends Base {
     
-    private Particles particles = spy(new StubBuilder(new StubParticles(null, 0)).particle(Particle.PORTAL).amount(10).build());
-    private Player player = when(mock(Player.class).getLocation()).thenReturn(mock(Location.class)).getMock();
+    Particles particles = new StubBuilder(spy(new StubParticles(null, 0))).particle(PORTAL).amount(10).build();
     
     
     @Test
-    public void render() {
+    void render_Player() {
         particles.render(player);
         
-        verify(particles).render(player, player.getLocation());
+        verify(particles).render(player, location);
     }
     
     
     @Test
-    public void render_Players() {
-        particles.render(singletonList(player), player.getLocation());
+    void render_Players() {
+        particles.render(singletonList(player), location);
         
-        verify(particles).render(player, player.getLocation());
+        verify(particles).render(player, location);
     }
     
     
     @Test
-    public void get() {
-        assertEquals(Particle.PORTAL, particles.getParticle());
+    void get() {
+        assertEquals(PORTAL, particles.getParticle());
         assertEquals(10, particles.getAmount());
     }
     
     
-    public static class StubParticles extends Particles {
+    static class StubParticles extends Particles {
 
-        public StubParticles(Particle particle, int amount) {
+        private StubParticles(Particle particle, int amount) {
             super(particle, amount);
         }
 
@@ -82,9 +82,9 @@ public class ParticlesTest {
         
     }
     
-    public static class StubBuilder extends Builder<StubBuilder, StubParticles> {
+    static class StubBuilder extends Builder<StubBuilder, StubParticles> {
 
-        public StubBuilder(StubParticles particles) {
+        private StubBuilder(StubParticles particles) {
             super(particles);
         }
 
