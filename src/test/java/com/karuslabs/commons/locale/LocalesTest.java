@@ -24,7 +24,6 @@
 package com.karuslabs.commons.locale;
 
 import java.util.Locale;
-import java.util.function.Supplier;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,47 +31,50 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
 class LocalesTest {    
     
     @ParameterizedTest
-    @CsvSource({"en_US, true", "US_en, false", "US, false"})
+    @CsvSource({"'', '', ''", "en, '', en", "'', US, US", "en, US, en_US"})
+    void from(String language, String country, String expected) {
+        Locale locale = new Locale(language, country);
+        assertEquals(expected, Locales.from(locale));
+    }
+    
+    @ParameterizedTest
+    @CsvSource({"en_US, true", "US_en, false", "US, true", "en, true", "ZZ, false"})
     void get(String locale, boolean expected) {
         assertEquals(expected, Locales.get(locale) != null);
     }
     
     
     @ParameterizedTest
-    @CsvSource({"en_US, true", "US_en, false", "US, false"})
+    @CsvSource({"en_US, true", "US_en, false", "US, true", "en, true", "ZZ, false"})
     void getOrDefault(String locale, boolean expected) {
-        assertEquals(expected, Locales.getOrDefault(locale, Locale.getDefault()) != Locale.getDefault());
+        assertEquals(expected, Locales.getOrDefault(locale, (Locale) null) != null);
     }
     
     
     @ParameterizedTest
-    @CsvSource({"en_US, true, 0", "US_en, false, 1", "US, false, 1"})
-    void getOrDefault_Supplier(String locale, boolean expected, int times) {
-        Supplier<Locale> supplier = mock(Supplier.class);
-        
-        assertEquals(expected, Locales.getOrDefault(locale, supplier) != null);
-        verify(supplier, times(times)).get();
+    @CsvSource({"en_US, true", "US_en, false", "US, true", "en, true", "ZZ, false"})
+    void getOrDefault_Supplier(String locale, boolean expected) {
+        assertEquals(expected, Locales.getOrDefault(locale, () -> null) != null);
     }
     
     
     @ParameterizedTest
     @CsvSource({"Ss, true", "ZP, false", "ZPZ, false"})
-    void isValidCountry(String country, boolean expected) {
-        assertEquals(expected, Locales.isValidCountry(country));
+    void isCountry(String country, boolean expected) {
+        assertEquals(expected, Locales.isCountry(country));
     } 
     
     
     @ParameterizedTest
     @CsvSource({"eN, true", "ZZ, false", "LSA, false"})
-    void isValidLanguage(String language, boolean expected) {
-        assertEquals(expected, Locales.isValidLanguage(language));
+    void isLanguage(String language, boolean expected) {
+        assertEquals(expected, Locales.isLanguage(language));
     }
     
 }

@@ -23,60 +23,111 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.google.common.cache.*;
-import com.karuslabs.commons.annotation.JDK9;
+import com.google.common.cache.Cache;
+import com.karuslabs.commons.util.Get;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
-import static java.util.Arrays.asList;
+import static com.google.common.cache.CacheBuilder.newBuilder;
+import static java.util.Arrays.binarySearch;
 import static java.util.Locale.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 
 public class Locales {
     
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
+    private static final Map<String, Locale> CONSTANTS = new HashMap<>();
+    private static final Cache<String, Locale> CACHE = newBuilder().expireAfterAccess(5, MINUTES).build();
     
-    @JDK9("Replace with Set.of(...)")
-    private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
-    private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
+    private static final String[] COUNTRIES = getISOCountries();
+    private static final String[] LANGUAGES = getISOLanguages();
+    
+    
+    static {
+        try {
+            Field[] fields = Locale.class.getFields();
+            for (Field field : fields) {
+                if (field.getType() == Locale.class) {
+                    Locale locale = (Locale) field.get(null);
+                    CONSTANTS.put(from(locale), locale);
+                }
+            }
+            
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Failed to load constant Locales", e);
+        }
+    }
+
+    
+    public static String from(Locale locale) {
+        String language = locale.getLanguage();
+        String country = locale.getCountry();
+        
+        if (!language.isEmpty() && !country.isEmpty()) {
+            return language + "_" + country;
+            
+        } else if (!language.isEmpty()) {
+            return language;
+            
+        } else if (!country.isEmpty()) {
+            return country;
+            
+        } else {
+            return "";
+        }
+    }
     
     
     public static @Nullable Locale get(String locale) {
-        return getOrDefault(locale, () -> null);
+        Locale retrieved;
+        if ((retrieved = CONSTANTS.get(locale)) != null) {
+            return retrieved;
+            
+        } else if ((retrieved = CACHE.getIfPresent(locale)) != null) {
+            return retrieved;
+            
+        } else {
+            return from(locale);
+        }
     }
     
+    static @Nullable Locale from(String locale) {
+        String[] parts;
+        if (isCountry(locale)) {
+            return new Locale("", locale);
+            
+        } else if (isLanguage(locale)) {
+            return new Locale(locale);
+            
+        } else if ((parts = locale.split("_")).length == 2 && isLanguage(parts[0]) && isCountry(parts[1])) {
+            Locale created = new Locale(parts[0], parts[1]);
+            CACHE.put(locale, created);
+            return created;
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
     public static Locale getOrDefault(String locale, Locale value) {
-        return getOrDefault(locale, () -> value);
+        return Get.orDefault(get(locale), value);
     }
     
     public static Locale getOrDefault(String locale, Supplier<Locale> value) {
-        Locale aLocale = CACHE.getIfPresent(locale);
-        if (aLocale != null) {
-            return aLocale;
-        }
+        return Get.orDefault(get(locale), value);
+    }
+    
         
-        String[] parts = locale.split("_");
-        if (parts.length == 2 && isValidLanguage(parts[0]) && isValidCountry(parts[1])) {
-            aLocale = new Locale(parts[0], parts[1]);
-            CACHE.put(locale, aLocale);
-            
-            return aLocale;
-            
-        } else {
-            return value.get();
-        }
+    public static boolean isCountry(String country) {
+        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase()) >= 0;
     }
     
-    
-    public static boolean isValidCountry(String country) {
-        return country.length() == 2 && COUNTRIES.contains(country.toUpperCase());
-    }
-    
-    public static boolean isValidLanguage(String language) {
-        return language.length() == 2 && LANGUAGES.contains(language.toLowerCase());
+    public static boolean isLanguage(String language) {
+        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase()) >= 0;
     }
     
 }
