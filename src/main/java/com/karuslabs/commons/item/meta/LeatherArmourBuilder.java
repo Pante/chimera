@@ -33,16 +33,16 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 
 /**
- * Represents a builder for items with {@code LeatherArmorkMeta}.
+ * Represents a builder for items with {@code LeatherArmorMeta}.
  */
-public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
+public class LeatherArmourBuilder extends Builder<LeatherArmourBuilder, LeatherArmorMeta> {
     
     /**
      * Constructs a {@code LeatherArmourBuilder} for the specified {@code ItemStack}.
      *  
      * @param item the ItemStack
      */
-    public LeatherArmorBuilder(ItemStack item) {
+    public LeatherArmourBuilder(ItemStack item) {
         super(item);
     }
     
@@ -51,7 +51,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
      *  
      * @param builder the Builder to be copied
      */
-    public LeatherArmorBuilder(Builder builder) {
+    public LeatherArmourBuilder(Builder builder) {
         super(builder);
     }
     
@@ -59,11 +59,11 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
     /**
      * Sets the colour.
      * 
-     * @param color the colour
+     * @param colour the colour
      * @return this
      */
-    public LeatherArmorBuilder color(Color color) {
-        meta.setColor(color);
+    public LeatherArmourBuilder colour(Color colour) {
+        meta.setColor(colour);
         return this;
     }
     
@@ -71,7 +71,7 @@ public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArm
      * {@inheritDoc}
      */
     @Override
-    protected @Nonnull LeatherArmorBuilder getThis() {
+    protected @Nonnull LeatherArmourBuilder getThis() {
         return this;
     }
     

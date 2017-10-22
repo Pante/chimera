@@ -59,11 +59,11 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     /**
      * Sets the colour.
      * 
-     * @param color the colour
+     * @param colour the colour
      * @return this
      */
-    public MapBuilder color(Color color) {
-        meta.setColor(color);
+    public MapBuilder colour(Color colour) {
+        meta.setColor(colour);
         return this;
     }
     

@@ -24,7 +24,7 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
+import com.karuslabs.commons.util.concurrent.ScheduledAwaitableTask;
 
 import java.util.*;
 import java.util.function.*;
@@ -50,7 +50,7 @@ public class ProgressBar extends AbstractBar {
 
     
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledAwaitableTask<?> newTask(Collection<Player> players) {
         List<BossBar> bars = players.stream().map(player -> {
             BossBar bar = supplier.get();
             bar.addPlayer(player);

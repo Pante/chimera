@@ -28,13 +28,13 @@ import java.util.concurrent.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T> {
+public abstract class AwaitableTask<T> extends BukkitRunnable implements Awaitable<T> {
     
-    public static <T> PromiseTask<T> of(Runnable runnable, T result) {
+    public static <T> AwaitableTask<T> of(Runnable runnable, T result) {
         return new PromiseRunnable<>(runnable, result);
     }
     
-    public static <T> PromiseTask<T> of(Callable<T> callable) {
+    public static <T> AwaitableTask<T> of(Callable<T> callable) {
         return new PromiseCallable<>(callable);
     }
     
@@ -50,7 +50,7 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
     CountDownLatch latch;
     
     
-    public PromiseTask() {
+    public AwaitableTask() {
         state = NEW;
         interrupted = false;
         thrown = null;
@@ -148,7 +148,7 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
     }
     
     
-    static class PromiseRunnable<T> extends PromiseTask<T> {
+    static class PromiseRunnable<T> extends AwaitableTask<T> {
         
         private final Runnable runnable;
         private final T value;
@@ -170,7 +170,7 @@ public abstract class PromiseTask<T> extends BukkitRunnable implements Promise<T
         
     }
     
-    static class PromiseCallable<T> extends PromiseTask<T> {
+    static class PromiseCallable<T> extends AwaitableTask<T> {
         
         private final Callable<T> callable;
         private T value;

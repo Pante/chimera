@@ -60,11 +60,11 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     /**
      * Sets the colour.
      * 
-     * @param color the colour
+     * @param colour the colour
      * @return this
      */
-    public PotionBuilder color(Color color) {
-        meta.setColor(color);
+    public PotionBuilder colour(Color colour) {
+        meta.setColor(colour);
         return this;
     }
     

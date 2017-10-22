@@ -36,10 +36,10 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class PromiseTest {
+class AwaitableTest {
     
     Future<String> future = mock(Future.class);
-    Promise<String> promise = spy(Promise.of(future));
+    Awaitable<String> promise = spy(Awaitable.of(future));
     
     
     @Test

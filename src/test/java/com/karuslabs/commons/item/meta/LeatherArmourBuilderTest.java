@@ -1,4 +1,4 @@
-/*
+/* 
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,47 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.item.meta;
 
-import com.karuslabs.commons.annotation.Blocking;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.util.concurrent.*;
-import javax.annotation.Nullable;
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.Color.SILVER;
+import static org.mockito.Mockito.*;
 
 
-class ProxiedPromise<T> implements Promise<T> {
-
-    private final Future<T> future;
-
-    ProxiedPromise(Future<T> future) {
-        this.future = future;
+class LeatherArmourBuilderTest {
+        
+    private LeatherArmorMeta meta = mock(LeatherArmorMeta.class);
+    private LeatherArmourBuilder builder = new LeatherArmourBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+    
+    
+    @Test
+    void build() {
+        builder.colour(SILVER);
+        
+        verify(meta).setColor(SILVER);
     }
-
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        return future.cancel(mayInterruptIfRunning);
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return future.isCancelled();
-    }
-
-    @Override
-    public boolean isDone() {
-        return future.isDone();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get() throws InterruptedException, ExecutionException {
-        return future.get();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return future.get(timeout, unit);
-    }
-
+    
 }

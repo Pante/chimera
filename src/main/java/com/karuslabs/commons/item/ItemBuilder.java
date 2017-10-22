@@ -122,8 +122,8 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
      * 
      * @return a LeatherArmourBuilder
      */
-    public LeatherArmorBuilder asLeatherArmor() {
-        return new LeatherArmorBuilder(this);
+    public LeatherArmourBuilder asLeatherArmour() {
+        return new LeatherArmourBuilder(this);
     }
     
     /**

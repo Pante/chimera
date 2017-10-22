@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License
  *
  * Copyright 2017 Karus Labs.
@@ -21,28 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.meta;
-
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
+package com.karuslabs.commons.util.concurrent;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.bukkit.Color.SILVER;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class LeatherArmorBuilderTest {
+class ScheduledAwaitableTaskTest {
+    
+    private Runnable runnable = mock(Runnable.class);
+    private ScheduledAwaitableTask<String> task = spy(ScheduledAwaitableTask.of(runnable, "result", 1));
+    
+    
+    @ParameterizedTest
+    @CsvSource({"0, -1, 0, 0, false", "0, 1, 1, 0, false", "1, 1, 1, 1, true"})
+    void run(int current, int total, int expected, int callback, boolean done) {
+        task.current = current;
+        task.total = total;
         
-    private LeatherArmorMeta meta = mock(LeatherArmorMeta.class);
-    private LeatherArmorBuilder builder = new LeatherArmorBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
+        task.run();
+        
+        verify(task, times(callback)).callback();
+        assertEquals(expected, task.getCurrent());
+        assertEquals(done, task.isDone());
+    }
     
     
     @Test
-    void build() {
-        builder.color(SILVER);
+    void run_ThrowsException() {
+        doThrow(Exception.class).when(runnable).run();
         
-        verify(meta).setColor(SILVER);
+        task.run();
+        
+        verify(task).callback();
+        assertEquals(Exception.class, task.thrown.getClass());
+        assertTrue(task.isDone());
     }
     
 }

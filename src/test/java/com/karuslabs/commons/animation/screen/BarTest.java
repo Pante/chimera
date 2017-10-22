@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
+import com.karuslabs.commons.util.concurrent.ScheduledAwaitableTask;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class BarTest {
     
     Plugin plugin = mock(Plugin.class);
-    ScheduledPromiseTask<?> task = mock(ScheduledPromiseTask.class);
+    ScheduledAwaitableTask<?> task = mock(ScheduledAwaitableTask.class);
     Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
     
     
