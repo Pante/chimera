@@ -30,16 +30,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static com.karuslabs.commons.util.concurrent.PromiseTask.*;
+import static com.karuslabs.commons.util.concurrent.AwaitableTask.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class PromiseTaskTest {
+public class AwaitableTaskTest {
     
     private Runnable runnable = mock(Runnable.class);
-    private PromiseTask<String> task = spy(PromiseTask.of(runnable, "result"));
+    private AwaitableTask<String> task = spy(AwaitableTask.of(runnable, "result"));
     
     
     @Test
@@ -176,7 +176,7 @@ public class PromiseTaskTest {
     @Test
     public void of_Runnable() {
         Runnable runnable = mock(Runnable.class);
-        PromiseTask<String> task = PromiseTask.of(runnable, "result");
+        AwaitableTask<String> task = AwaitableTask.of(runnable, "result");
         
         task.run();
         verify(runnable).run();
@@ -187,7 +187,7 @@ public class PromiseTaskTest {
     @Test
     public void of_Callable() {
         Callable<String> callable = () -> "result";
-        PromiseTask<String> task = PromiseTask.of(callable);
+        AwaitableTask<String> task = AwaitableTask.of(callable);
         
         task.run();
         assertEquals("result", task.await());

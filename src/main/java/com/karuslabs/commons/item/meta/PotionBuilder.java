@@ -44,8 +44,8 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     }
     
     
-    public PotionBuilder color(Color color) {
-        meta.setColor(color);
+    public PotionBuilder colour(Color colour) {
+        meta.setColor(colour);
         return this;
     }
     

@@ -43,8 +43,8 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
     }
     
     
-    public MapBuilder color(Color color) {
-        meta.setColor(color);
+    public MapBuilder colour(Color colour) {
+        meta.setColor(colour);
         return this;
     }
     

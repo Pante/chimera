@@ -44,7 +44,7 @@ class PotionBuilderTest {
         PotionData data = mock(PotionData.class);
         PotionEffect effect = mock(PotionEffect.class);
         
-        builder.color(SILVER).data(data).effect(effect, true);
+        builder.colour(SILVER).data(data).effect(effect, true);
         
         verify(meta).setColor(SILVER);
         verify(meta).setBasePotionData(data);

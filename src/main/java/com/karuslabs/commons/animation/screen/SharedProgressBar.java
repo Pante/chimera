@@ -49,7 +49,7 @@ public class SharedProgressBar extends AbstractBar {
     
 
     @Override
-    protected @Nonnull ScheduledPromiseTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledAwaitableTask<?> newTask(Collection<Player> players) {
         BossBar bar = supplier.get();
         players.forEach(bar::addPlayer);
         

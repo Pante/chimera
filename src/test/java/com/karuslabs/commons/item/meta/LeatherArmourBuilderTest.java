@@ -23,35 +23,26 @@
  */
 package com.karuslabs.commons.item.meta;
 
-import com.karuslabs.commons.item.Builder;
-
-import javax.annotation.Nonnull;
-
-import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import org.junit.jupiter.api.Test;
 
-public class LeatherArmorBuilder extends Builder<LeatherArmorBuilder, LeatherArmorMeta> {
-    
-    public LeatherArmorBuilder(ItemStack item) {
-        super(item);
-    }
-    
-    public LeatherArmorBuilder(Builder builder) {
-        super(builder);
-    }
-    
-    
-    public LeatherArmorBuilder color(Color color) {
-        meta.setColor(color);
-        return this;
-    }
+import static org.bukkit.Color.SILVER;
+import static org.mockito.Mockito.*;
+
+
+class LeatherArmourBuilderTest {
+        
+    private LeatherArmorMeta meta = mock(LeatherArmorMeta.class);
+    private LeatherArmourBuilder builder = new LeatherArmourBuilder((ItemStack) when(mock(ItemStack.class).getItemMeta()).thenReturn(meta).getMock());
     
     
-    @Override
-    protected @Nonnull LeatherArmorBuilder getThis() {
-        return this;
+    @Test
+    void build() {
+        builder.colour(SILVER);
+        
+        verify(meta).setColor(SILVER);
     }
     
 }

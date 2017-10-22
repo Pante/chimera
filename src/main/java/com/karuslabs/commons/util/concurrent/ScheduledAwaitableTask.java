@@ -24,9 +24,9 @@
 package com.karuslabs.commons.util.concurrent;
 
 
-public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements Repeatable {
+public abstract class ScheduledAwaitableTask<T> extends AwaitableTask<T> implements Repeatable {
     
-    public static <T> ScheduledPromiseTask<T> of(Runnable runnable, T value, long iterations) {
+    public static <T> ScheduledAwaitableTask<T> of(Runnable runnable, T value, long iterations) {
         return new ScheduledPromiseRunnable<>(runnable, value, iterations);
     }
     
@@ -37,7 +37,7 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
     long total;
     
     
-    public ScheduledPromiseTask(long iterations) {
+    public ScheduledAwaitableTask(long iterations) {
         current = 0;
         total = iterations;
     }
@@ -81,7 +81,7 @@ public abstract class ScheduledPromiseTask<T> extends PromiseTask<T> implements 
     }
     
     
-    static class ScheduledPromiseRunnable<T> extends ScheduledPromiseTask<T> {
+    static class ScheduledPromiseRunnable<T> extends ScheduledAwaitableTask<T> {
         
         private final Runnable runnable;
         private final T value;

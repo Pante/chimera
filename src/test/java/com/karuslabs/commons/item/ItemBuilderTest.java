@@ -63,7 +63,7 @@ class ItemBuilderTest {
             of(mock(FireworkMeta.class), wrap(builder::asFirework)),
             of(mock(FireworkEffectMeta.class), wrap(builder::asFireworkEffect)),
             of(mock(KnowledgeBookMeta.class), wrap(builder::asKnowledgeBook)),
-            of(mock(LeatherArmorMeta.class), wrap(builder::asLeatherArmor)),
+            of(mock(LeatherArmorMeta.class), wrap(builder::asLeatherArmour)),
             of(mock(MapMeta.class), wrap(builder::asMap)),
             of(mock(PotionMeta.class), wrap(builder::asPotion)),
             of(mock(SkullMeta.class), wrap(builder::asSkull)),

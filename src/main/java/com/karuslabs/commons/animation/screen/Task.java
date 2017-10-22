@@ -24,13 +24,13 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledPromiseTask;
+import com.karuslabs.commons.util.concurrent.ScheduledAwaitableTask;
 
 import java.text.MessageFormat;
 import javax.annotation.Nullable;
 
 
-abstract class Task extends ScheduledPromiseTask<Void> implements Context {
+abstract class Task extends ScheduledAwaitableTask<Void> implements Context {
     
     private Translation translation;
     private MessageFormat format;

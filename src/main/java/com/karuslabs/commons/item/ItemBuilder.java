@@ -69,8 +69,8 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
         return new KnowledgeBookBuilder(this);
     }
     
-    public LeatherArmorBuilder asLeatherArmor() {
-        return new LeatherArmorBuilder(this);
+    public LeatherArmourBuilder asLeatherArmour() {
+        return new LeatherArmourBuilder(this);
     }
     
     public MapBuilder asMap() {

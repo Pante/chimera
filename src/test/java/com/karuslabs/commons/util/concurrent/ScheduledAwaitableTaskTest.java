@@ -23,45 +23,43 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.annotation.Blocking;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import java.util.concurrent.*;
-import javax.annotation.Nullable;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-class ProxiedPromise<T> implements Promise<T> {
-
-    private final Future<T> future;
-
-    ProxiedPromise(Future<T> future) {
-        this.future = future;
+class ScheduledAwaitableTaskTest {
+    
+    private Runnable runnable = mock(Runnable.class);
+    private ScheduledAwaitableTask<String> task = spy(ScheduledAwaitableTask.of(runnable, "result", 1));
+    
+    
+    @ParameterizedTest
+    @CsvSource({"0, -1, 0, 0, false", "0, 1, 1, 0, false", "1, 1, 1, 1, true"})
+    void run(int current, int total, int expected, int callback, boolean done) {
+        task.current = current;
+        task.total = total;
+        
+        task.run();
+        
+        verify(task, times(callback)).callback();
+        assertEquals(expected, task.getCurrent());
+        assertEquals(done, task.isDone());
     }
-
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        return future.cancel(mayInterruptIfRunning);
+    
+    
+    @Test
+    void run_ThrowsException() {
+        doThrow(Exception.class).when(runnable).run();
+        
+        task.run();
+        
+        verify(task).callback();
+        assertEquals(Exception.class, task.thrown.getClass());
+        assertTrue(task.isDone());
     }
-
-    @Override
-    public boolean isCancelled() {
-        return future.isCancelled();
-    }
-
-    @Override
-    public boolean isDone() {
-        return future.isDone();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get() throws InterruptedException, ExecutionException {
-        return future.get();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return future.get(timeout, unit);
-    }
-
+    
 }
