@@ -21,41 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
-
-import java.text.MessageFormat;
-import javax.annotation.Nullable;
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 
-abstract class Task extends ScheduledResultTask<Void> implements Context {
+@FunctionalInterface
+public interface Clickable extends Component {
     
-    private Translation translation;
-    private MessageFormat format;
+    public static final Clickable CANCEL = (point, event) -> event.setCancelled(true);
     
+    public static final Clickable NONE = (point, event) -> {};
     
-    Task(Translation translation, long iterations) {
-        super(iterations);
-        this.translation = translation;
-        format = new MessageFormat("");
-    }
-
-
-    @Override
-    public Translation getTranslation() {
-        return translation;
-    }
-
-    @Override
-    public MessageFormat getFormat() {
-        return format;
-    }
     
     @Override
-    protected @Nullable Void value() {
-        return null;
+    public default void drag(Point point, InventoryDragEvent event) {
+        event.setCancelled(true);
     }
     
 }

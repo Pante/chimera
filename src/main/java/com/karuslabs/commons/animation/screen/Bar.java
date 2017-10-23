@@ -59,17 +59,17 @@ public abstract class Bar {
     
     
     @JDK9("List.of(...)")
-    public @Nonnull Awaitable<?> render(Player... player) {
+    public @Nonnull Result<?> render(Player... player) {
         return render(asList(player));
     }
     
-    public @Nonnull Awaitable<?> render(Collection<Player> players) {
-        ScheduledAwaitableTask<?> task = newTask(players);
+    public @Nonnull Result<?> render(Collection<Player> players) {
+        ScheduledResultTask<?> task = newTask(players);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         return task;
     }
     
-    protected abstract @Nonnull ScheduledAwaitableTask<?> newTask(Collection<Player> players);
+    protected abstract @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {

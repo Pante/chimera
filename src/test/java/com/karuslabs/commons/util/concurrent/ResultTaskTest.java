@@ -30,126 +30,126 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static com.karuslabs.commons.util.concurrent.AwaitableTask.*;
+import static com.karuslabs.commons.util.concurrent.ResultTask.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-public class AwaitableTaskTest {
+class ResultTaskTest {
     
-    private Runnable runnable = mock(Runnable.class);
-    private AwaitableTask<String> task = spy(AwaitableTask.of(runnable, "result"));
+    Runnable runnable = mock(Runnable.class);
+    ResultTask<String> result = spy(ResultTask.of(runnable, "result"));
     
     
     @Test
-    public void run() {
-        doNothing().when(task).done();
+    void run() {
+        doNothing().when(result).done();
         
-        task.run();
+        result.run();
         
-        assertNull(task.thrown);
+        assertNull(result.thrown);
         verify(runnable).run();
-        verify(task).done();
+        verify(result).done();
     }
     
     
     @Test
-    public void run_ThrowsException() throws Exception {
-        doNothing().when(task).done();
+    void run_ThrowsException() throws Exception {
+        doNothing().when(result).done();
         doThrow(Exception.class).when(runnable).run();
         
-        task.run();
+        result.run();
         
-        assertEquals(Exception.class, task.thrown.getClass());
-        verify(task).process();
-        verify(task).done();
+        assertEquals(Exception.class, result.thrown.getClass());
+        verify(result).process();
+        verify(result).done();
     }
     
     
     @Test
-    public void done() {
-        doNothing().when(task).finish(COMPLETED);
+    void done() {
+        doNothing().when(result).finish(COMPLETED);
         
-        task.done();
+        result.done();
         
-        verify(task).finish(COMPLETED);
+        verify(result).finish(COMPLETED);
     }
     
     
     @Test
-    public void cancel() {
-        doReturn(true).when(task).cancel(true);
+    void cancel() {
+        doReturn(true).when(result).cancel(true);
         
-        task.cancel();
+        result.cancel();
         
-        verify(task).cancel(true);
+        verify(result).cancel(true);
     }
     
     
     @ParameterizedTest
     @CsvSource({"1, true, 1, true", "2, true, 0, false", "1, false, 0, false"})
-    public void cancel_interrupt(int state, boolean interrupt, int times, boolean expected) {
-        doNothing().when(task).finish(CANCELLED);
+    void cancel_interrupt(int state, boolean interrupt, int times, boolean expected) {
+        doNothing().when(result).finish(CANCELLED);
         
-        task.state = state;
-        task.interrupted = false;
+        result.state = state;
+        result.interrupted = false;
         
-        boolean success = task.cancel(interrupt);
+        boolean success = result.cancel(interrupt);
         
-        verify(task, times(times)).finish(CANCELLED);
+        verify(result, times(times)).finish(CANCELLED);
         assertEquals(expected, success);
-        assertEquals(expected, task.interrupted);
+        assertEquals(expected, result.interrupted);
     }
     
     
     @Test
-    public void finish() {
-        doNothing().when(task).cancelThis();
-        assertEquals(NEW, task.state);
-        assertEquals(1, task.latch.getCount());
+    void finish() {
+        doNothing().when(result).cancelThis();
+        assertEquals(NEW, result.state);
+        assertEquals(1, result.latch.getCount());
         
-        task.finish(COMPLETED);
+        result.finish(COMPLETED);
         
-        verify(task).cancelThis();
-        assertEquals(COMPLETED, task.state);
-        assertEquals(0, task.latch.getCount());
+        verify(result).cancelThis();
+        assertEquals(COMPLETED, result.state);
+        assertEquals(0, result.latch.getCount());
     }
     
     
     @Test
-    public void get() throws InterruptedException, ExecutionException {
-        task.latch = mock(CountDownLatch.class);
+    void get() throws InterruptedException, ExecutionException {
+        result.latch = mock(CountDownLatch.class);
         
-        assertEquals("result", task.get());
-        verify(task.latch).await();
+        assertEquals("result", result.get());
+        verify(result.latch).await();
     }
     
     
     @Test
-    public void get_Time() throws InterruptedException, ExecutionException, TimeoutException {
-        task.latch = mock(CountDownLatch.class);
+    void get_Time() throws InterruptedException, ExecutionException, TimeoutException {
+        result.latch = mock(CountDownLatch.class);
         
-        assertEquals("result", task.get(0, TimeUnit.DAYS));
-        verify(task.latch).await(0, TimeUnit.DAYS);
+        assertEquals("result", result.get(0, TimeUnit.DAYS));
+        verify(result.latch).await(0, TimeUnit.DAYS);
     }
     
     
     @Test
-    public void handle() throws ExecutionException {
-        task.state = COMPLETED;
+    void handle() throws ExecutionException {
+        result.state = COMPLETED;
         
-        assertEquals("result", task.handle());
+        assertEquals("result", result.handle());
     }
     
     
     @ParameterizedTest
     @MethodSource("handle_parameters")
-    public void handle_ThrowsException(Class<? extends Exception> type, Exception thrown, int state) {
-        task.thrown = thrown;
-        task.state = state;
+    void handle_ThrowsException(Class<? extends Exception> type, Exception thrown, int state) {
+        result.thrown = thrown;
+        result.state = state;
         
-        assertThrows(type, task::handle);
+        assertThrows(type, result::handle);
     }
     
     static Stream<Arguments> handle_parameters() {
@@ -159,24 +159,24 @@ public class AwaitableTaskTest {
     
     @ParameterizedTest
     @CsvSource({"3, true", "1, false"})
-    public void isCancelled(int state, boolean expected) {
-        task.state = state;
-        assertEquals(expected, task.isCancelled());
+    void isCancelled(int state, boolean expected) {
+        result.state = state;
+        assertEquals(expected, result.isCancelled());
     }
     
     
     @ParameterizedTest
     @CsvSource({"1, false", "2, true", "3, true"})
     public void isDone(int state, boolean expected) {
-        task.state = state;
-        assertEquals(expected, task.isDone());
+        result.state = state;
+        assertEquals(expected, result.isDone());
     }
     
     
     @Test
-    public void of_Runnable() {
+    void of_Runnable() {
         Runnable runnable = mock(Runnable.class);
-        AwaitableTask<String> task = AwaitableTask.of(runnable, "result");
+        ResultTask<String> task = ResultTask.of(runnable, "result");
         
         task.run();
         verify(runnable).run();
@@ -185,9 +185,9 @@ public class AwaitableTaskTest {
     
     
     @Test
-    public void of_Callable() {
+    void of_Callable() {
         Callable<String> callable = () -> "result";
-        AwaitableTask<String> task = AwaitableTask.of(callable);
+        ResultTask<String> task = ResultTask.of(callable);
         
         task.run();
         assertEquals("result", task.await());
