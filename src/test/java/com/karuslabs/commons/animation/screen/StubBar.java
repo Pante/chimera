@@ -24,7 +24,7 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledAwaitableTask;
+import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
 
 import java.util.Collection;
 
@@ -34,21 +34,21 @@ import org.bukkit.plugin.Plugin;
 
 class StubBar extends Bar {
 
-    ScheduledAwaitableTask<?> task;
+    ScheduledResultTask<?> task;
     
     
-    StubBar(Plugin plugin, ScheduledAwaitableTask<?> task, Translation translation, long iterations, long delay, long period) {
+    StubBar(Plugin plugin, ScheduledResultTask<?> task, Translation translation, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.task = task;
     }
 
     @Override
-    protected ScheduledAwaitableTask<?> newTask(Collection<Player> players) {
+    protected ScheduledResultTask<?> newTask(Collection<Player> players) {
         return task;
     }
     
     
-    static StubBuilder builder(Plugin plugin, ScheduledAwaitableTask<?> task) {
+    static StubBuilder builder(Plugin plugin, ScheduledResultTask<?> task) {
         return new StubBuilder(new StubBar(plugin, task, null, 0, 0, 0));
     }
     

@@ -34,7 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
-import com.karuslabs.commons.util.concurrent.Awaitable;
+import com.karuslabs.commons.util.concurrent.Result;
 
 
 public class Effect {    
@@ -63,20 +63,20 @@ public class Effect {
     }
     
         
-    public Awaitable<?> render(BoundLocation origin, BoundLocation target) {
+    public Result<?> render(BoundLocation origin, BoundLocation target) {
         return schedule(new EffectTask(supplier.get(), GLOBAL, origin, target, orientate, iterations));
     }
     
-    public Awaitable<?> render(Player player, BoundLocation origin, BoundLocation target) {
+    public Result<?> render(Player player, BoundLocation origin, BoundLocation target) {
         return schedule(new EffectTask(supplier.get(), (particles, location) -> particles.render(player, location), origin, target, orientate, iterations));
     }
     
-    public Awaitable<?> render(Collection<Player> players, BoundLocation origin, BoundLocation target) {
+    public Result<?> render(Collection<Player> players, BoundLocation origin, BoundLocation target) {
         Set<Player> targets = weakSet(players);
         return schedule(new EffectTask(supplier.get(), (particles, location) -> particles.render(targets, location), origin, target, orientate, iterations));
     }
     
-    Awaitable<?> schedule(EffectTask task) {
+    Result<?> schedule(EffectTask task) {
         if (async) {
             task.runTaskTimerAsynchronously(plugin, delay, period);
             

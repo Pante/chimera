@@ -21,41 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
+package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
+import com.karuslabs.commons.annotation.Blocking;
 
-import java.text.MessageFormat;
+import java.util.concurrent.*;
 import javax.annotation.Nullable;
 
 
-abstract class Task extends ScheduledResultTask<Void> implements Context {
-    
-    private Translation translation;
-    private MessageFormat format;
-    
-    
-    Task(Translation translation, long iterations) {
-        super(iterations);
-        this.translation = translation;
-        format = new MessageFormat("");
-    }
+class ProxiedResult<T> implements Result<T> {
 
+    private final Future<T> future;
 
-    @Override
-    public Translation getTranslation() {
-        return translation;
+    ProxiedResult(Future<T> future) {
+        this.future = future;
     }
 
     @Override
-    public MessageFormat getFormat() {
-        return format;
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return future.cancel(mayInterruptIfRunning);
     }
-    
+
     @Override
-    protected @Nullable Void value() {
-        return null;
+    public boolean isCancelled() {
+        return future.isCancelled();
     }
-    
+
+    @Override
+    public boolean isDone() {
+        return future.isDone();
+    }
+
+    @Override
+    @Blocking
+    public @Nullable T get() throws InterruptedException, ExecutionException {
+        return future.get();
+    }
+
+    @Override
+    @Blocking
+    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return future.get(timeout, unit);
+    }
+
 }

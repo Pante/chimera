@@ -21,47 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Blocking;
-
-import java.util.concurrent.*;
-import javax.annotation.Nullable;
+import org.bukkit.event.inventory.*;
 
 
-class ProxiedAwaitable<T> implements Awaitable<T> {
+public interface Component {
 
-    private final Future<T> future;
+    public static final Component CANCEL = new Component() {
+        @Override
+        public void click(Point point, InventoryClickEvent event) {
+            event.setCancelled(true);
+        }
 
-    ProxiedAwaitable(Future<T> future) {
-        this.future = future;
-    }
+        @Override
+        public void drag(Point point, InventoryDragEvent event) {
+            event.setCancelled(true);
+        }
+    };
+    
+    public static final Component NONE = new Component() {
+        @Override
+        public void click(Point point, InventoryClickEvent event) {
+            
+        }
 
-    @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        return future.cancel(mayInterruptIfRunning);
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return future.isCancelled();
-    }
-
-    @Override
-    public boolean isDone() {
-        return future.isDone();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get() throws InterruptedException, ExecutionException {
-        return future.get();
-    }
-
-    @Override
-    @Blocking
-    public @Nullable T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return future.get(timeout, unit);
-    }
-
+        @Override
+        public void drag(Point point, InventoryDragEvent event) {
+            
+        }
+    };
+    
+    
+    public void click(Point point, InventoryClickEvent event);
+    
+    public void drag(Point point, InventoryDragEvent event);
+    
 }

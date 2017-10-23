@@ -51,7 +51,7 @@ public class ActionBar extends Bar {
 
     
     @Override
-    protected @Nonnull ScheduledAwaitableTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), supplier.get(), translation, iterations);
     }
     

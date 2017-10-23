@@ -31,10 +31,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class ScheduledAwaitableTaskTest {
+class ScheduledResultTaskTest {
     
-    private Runnable runnable = mock(Runnable.class);
-    private ScheduledAwaitableTask<String> task = spy(ScheduledAwaitableTask.of(runnable, "result", 1));
+    Runnable runnable = mock(Runnable.class);
+    ScheduledResultTask<String> task = spy(ScheduledResultTask.of(runnable, "result", 1));
     
     
     @ParameterizedTest

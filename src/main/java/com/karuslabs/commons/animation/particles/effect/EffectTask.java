@@ -24,7 +24,7 @@
 package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.util.concurrent.ScheduledAwaitableTask;
+import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.function.*;
@@ -33,7 +33,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-class EffectTask extends ScheduledAwaitableTask<Void> implements Context {
+class EffectTask extends ScheduledResultTask<Void> implements Context {
 
     protected Task task;
     protected BiConsumer<Particles, Location> render;

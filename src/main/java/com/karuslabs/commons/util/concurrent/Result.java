@@ -29,10 +29,10 @@ import java.util.concurrent.*;
 import javax.annotation.*;
 
 
-public interface Awaitable<T> extends Future<T> {
+public interface Result<T> extends Future<T> {
     
-    public static <T> Awaitable<T> of(Future<T> future) {
-        return new ProxiedAwaitable<>(future);
+    public static <T> Result<T> of(Future<T> future) {
+        return new ProxiedResult<>(future);
     }
     
     

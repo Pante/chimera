@@ -51,7 +51,7 @@ public class TitleBar extends Bar {
 
     
     @Override
-    protected @Nonnull ScheduledAwaitableTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer.get(), translation, fadeIn, stay, fadeOut, iterations);
     }
     
