@@ -21,16 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.buttons;
+
+import com.karuslabs.commons.graphics.ClickContext;
 
 
-public interface Region extends Component {
+public abstract class CyclicButton<State> implements Button {
+
+    private State[] states;
+    private int current;
     
-    public boolean contains(int x, int y);
     
-    public boolean contains(Point point);
+    public CyclicButton(State... states) {
+        this.states = states;
+        this.current = 0;
+    }
     
     
-    public void drag(DragContext context);
+    @Override
+    public void click(ClickContext context) {
+        click(context, states[current]);
+        next();
+    }
+    
+    protected abstract void click(ClickContext context, State state);
+    
+    
+    public void reset() {
+        current = 0;
+    }
+    
+    public void next() {
+        int next = current + 1;
+        current = (next >= states.length ? 0 : next);
+    }
+    
+    public State getCurrent() {
+        return states[current];
+    }
     
 }

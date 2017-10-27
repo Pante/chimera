@@ -21,12 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
+
+import com.karuslabs.commons.graphics.buttons.Button;
+import com.karuslabs.commons.graphics.*;
+
+import java.util.*;
 
 
-@FunctionalInterface
-public interface Component {
+public class Shapeless<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
-    public void click(ClickContext context);
+    private Set<Point> points;
+    
+    
+    public Shapeless(Set<Point> points) {
+        this(new HashMap<>(), points);
+    }
+    
+    public Shapeless(Map<Point, GenericButton> map, Set<Point> points) {
+        super(map);
+        this.points = points;
+    }
+
+    
+    @Override
+    public boolean contains(Point point) {
+        return points.contains(point);
+    }
+    
+    @Override
+    public int size() {
+        return points.size();
+    }    
     
 }

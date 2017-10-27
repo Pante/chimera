@@ -21,12 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.buttons;
 
 
-@FunctionalInterface
-public interface Component {
+public abstract class BoundButton<State> implements Button {
     
-    public void click(ClickContext context);
+    private State state;
+    
+    
+    public BoundButton(State state) {
+        this.state = state;
+    }
+    
+    
+    public State getBound() {
+        return state;
+    }
     
 }

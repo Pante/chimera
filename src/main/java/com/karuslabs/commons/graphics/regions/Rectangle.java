@@ -21,12 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
+
+import com.karuslabs.commons.graphics.buttons.Button;
+import com.karuslabs.commons.graphics.*;
+
+import java.util.*;
 
 
-@FunctionalInterface
-public interface Component {
+public class Rectangle<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
-    public void click(ClickContext context);
+    private Point corner;
+    private int width;
+    private int height;
+
+    
+    public Rectangle(Point corner, int width, int height) {
+        this(new HashMap<>(), corner, width, height);
+    }
+    
+    public Rectangle(Map<Point, GenericButton> map, Point corner, int width, int height) {
+        super(map);
+        this.corner = corner;
+        this.width = width;
+        this.height = height;
+    }
+    
+    
+    @Override
+    public boolean contains(Point point) {
+        return (corner.x <= point.x && point.x <= corner.x + width) && (corner.y <= point.y && point.y <= corner.y + height);
+    }
+    
+    @Override
+    public int size() {
+        return width * height;
+    }
+    
+    public Point getCorner() {
+        return corner;
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public int getHeight() {
+        return height;
+    }
     
 }

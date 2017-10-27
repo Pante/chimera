@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
+
+import com.karuslabs.commons.graphics.*;
 
 
-@FunctionalInterface
-public interface Button extends Component {
+public interface Region extends Component {
     
-    public default void drag(Point point, DragContext context) {
-        context.setCancelled(true);
-    }
+    public boolean contains(Point point);
+    
+    public void drag(DragContext context);
     
 }

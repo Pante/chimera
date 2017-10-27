@@ -21,12 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
+
+import com.karuslabs.commons.graphics.buttons.Button;
+import com.karuslabs.commons.graphics.*;
 
 
-@FunctionalInterface
-public interface Component {
+class Singleton implements Region {
     
-    public void click(ClickContext context);
+    private Point point;
+    private Button button;
+    
+    
+    Singleton(Point point, Button button) {
+        this.point = point;
+        this.button = button;
+    }
+    
+    
+    @Override
+    public boolean contains(Point point) {
+        return this.point.equals(point);
+    }
+    
+    @Override
+    public void click(ClickContext context) {
+        button.click(context);
+    }
+    
+    @Override
+    public void drag(DragContext context) {
+        button.drag(point, context);
+    }
     
 }

@@ -31,16 +31,22 @@ import org.bukkit.inventory.*;
 
 public class ClickContext extends InventoryClickEvent {
     
+    private Point point;
     private MessageTranslation translation;
     private InventoryClickEvent event;
     
     
-    public ClickContext(MessageTranslation translation, InventoryClickEvent event) {
+    public ClickContext(Point point, MessageTranslation translation, InventoryClickEvent event) {
         super(event.getView(), event.getSlotType(), event.getRawSlot(), event.getClick(), event.getAction(), event.getHotbarButton());
+        this.point = point;
         this.translation = translation;
         this.event = event;
     }
     
+    
+    public Point getPoint() {
+        return point;
+    }
     
     public MessageTranslation getTranslation() {
         return translation;
