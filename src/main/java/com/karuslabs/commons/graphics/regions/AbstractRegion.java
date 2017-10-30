@@ -29,11 +29,21 @@ import com.karuslabs.commons.graphics.*;
 
 import java.util.Map;
 
+import org.bukkit.event.inventory.*;
+
 
 public abstract class AbstractRegion<GenericButton extends Button> extends ProxiedMap<Point, GenericButton> implements Region {
     
+    protected boolean reset;
+    
+    
     public AbstractRegion(Map<Point, GenericButton> map) {
+        this(map, false);
+    }
+    
+    public AbstractRegion(Map<Point, GenericButton> map, boolean reset) {
         super(map);
+        this.reset = reset;
     }
 
     
@@ -75,6 +85,41 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
         context.setCancelled(true);
     }
     
+    
+    @Override
+    public void open(InventoryOpenEvent event) {
+        onOpen(event);
+        map.values().forEach(button -> button.open(event));
+    }
+    
+    protected void onOpen(InventoryOpenEvent event) {
+        
+    }
+    
+    @Override
+    public void close(InventoryCloseEvent event) {
+        onClose(event);
+        map.values().forEach(button -> button.close(event));
+        
+    }
+    
+    protected void onClose(InventoryCloseEvent event) {
+        
+    }
+    
+    @Override
+    public void reset(InventoryCloseEvent event) {
+        if (reset) {
+            onReset(event);
+            map.values().forEach(button -> button.reset(event));
+        }
+    }
+    
+    protected void onReset(InventoryCloseEvent event) {
+        
+    }
+    
+    
     @Override
     public GenericButton put(Point point, GenericButton button) {
         if (contains(point)) {
@@ -90,6 +135,17 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
     
     public int buttons() {
         return map.size();
+    }
+    
+    
+    @Override
+    public boolean isReset() {
+        return reset;
+    }
+    
+    @Override
+    public void setReset(boolean reset) {
+        this.reset = reset;
     }
     
 }

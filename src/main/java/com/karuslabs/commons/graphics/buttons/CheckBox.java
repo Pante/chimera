@@ -23,14 +23,54 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.graphics.ClickContext;
+
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 
-@FunctionalInterface
-public interface Button extends Component {
+public class CheckBox implements Button {
     
-    public default void drag(Point point, DragContext context) {
-        context.setCancelled(true);
+    private boolean checked;
+    private boolean original;
+    
+    
+    public CheckBox() {
+        this(false);
+    }
+    
+    public CheckBox(boolean checked) {
+        this.checked = checked;
+        this.original = checked;
+    }
+    
+    
+    @Override
+    public void click(ClickContext context) {
+        if (checked) {
+            checked = uncheck(context);
+            
+        } else {
+            checked = check(context);
+        }
+    }
+    
+    protected boolean check(ClickContext context) {
+        return true;
+    }
+    
+    protected boolean uncheck(ClickContext context) {
+        return false;
+    }
+    
+    
+    @Override
+    public void reset(InventoryCloseEvent event) {
+        checked = original;
+    }
+    
+    
+    public boolean isChecked() {
+        return checked;
     }
     
 }

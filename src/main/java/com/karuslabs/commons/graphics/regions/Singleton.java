@@ -26,11 +26,14 @@ package com.karuslabs.commons.graphics.regions;
 import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.graphics.*;
 
+import org.bukkit.event.inventory.*;
+
 
 class Singleton implements Region {
     
     private Point point;
     private Button button;
+    private boolean reset;
     
     
     Singleton(Point point, Button button) {
@@ -54,4 +57,25 @@ class Singleton implements Region {
         button.drag(point, context);
     }
     
+    @Override
+    public void open(InventoryOpenEvent event) {
+        button.open(event);
+    }
+    
+    @Override
+    public void close(InventoryCloseEvent event) {
+        button.close(event);
+    }
+
+    
+    @Override
+    public boolean isReset() {
+        return reset;
+    }
+
+    @Override
+    public void setReset(boolean reset) {
+        this.reset = reset;
+    }
+
 }

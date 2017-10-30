@@ -26,7 +26,7 @@ package com.karuslabs.commons.graphics.buttons;
 
 public abstract class BoundButton<State> implements Button {
     
-    private State state;
+    protected State state;
     
     
     public BoundButton(State state) {

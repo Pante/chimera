@@ -32,4 +32,8 @@ public interface Region extends Component {
     
     public void drag(DragContext context);
     
+    public boolean isReset();
+    
+    public void setReset(boolean reset);
+    
 }

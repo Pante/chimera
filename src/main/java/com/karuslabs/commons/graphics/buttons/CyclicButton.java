@@ -25,39 +25,60 @@ package com.karuslabs.commons.graphics.buttons;
 
 import com.karuslabs.commons.graphics.ClickContext;
 
+import org.bukkit.event.inventory.InventoryCloseEvent;
+
 
 public abstract class CyclicButton<State> implements Button {
-
-    private State[] states;
-    private int current;
     
+    State[] states;
+    int index;
+
     
     public CyclicButton(State... states) {
+        if (states.length == 0) {
+            throw new IllegalArgumentException("Button must be initialised with at least one state");
+        }
         this.states = states;
-        this.current = 0;
+        this.index = 0;
     }
     
     
     @Override
     public void click(ClickContext context) {
-        click(context, states[current]);
+        onClick(context, states[index]);
         next();
     }
     
-    protected abstract void click(ClickContext context, State state);
-    
-    
-    public void reset() {
-        current = 0;
+    protected void onClick(ClickContext context, State state) {
+        
     }
     
-    public void next() {
-        int next = current + 1;
-        current = (next >= states.length ? 0 : next);
+    @Override
+    public void reset(InventoryCloseEvent event) {
+        onReset(event);
+        index = 0;
     }
     
-    public State getCurrent() {
-        return states[current];
+    protected void onReset(InventoryCloseEvent event) {
+        
+    }
+    
+    
+    public State current() {
+        return states[index];
+    }
+    
+    public State next() {
+        index = ++index < states.length ? index : 0;
+        return states[index];
+    }
+    
+    public int index() {
+        return index;
+    }
+    
+    public int length() {
+        return states.length;
     }
     
 }

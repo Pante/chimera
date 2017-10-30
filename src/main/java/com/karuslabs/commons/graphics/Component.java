@@ -23,10 +23,25 @@
  */
 package com.karuslabs.commons.graphics;
 
+import org.bukkit.event.inventory.*;
+
 
 @FunctionalInterface
 public interface Component {
     
     public void click(ClickContext context);
+    
+    
+    public default void open(InventoryOpenEvent event) {
+        
+    }
+    
+    public default void close(InventoryCloseEvent event) {
+        
+    }
+    
+    public default void reset(InventoryCloseEvent event) {
+        
+    }
     
 }
