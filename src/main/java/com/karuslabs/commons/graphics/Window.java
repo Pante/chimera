@@ -21,47 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.*;
-
-import java.util.Collection;
-
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.*;
 
 
-@Immutable
-public class Music {
+public abstract class Window<GenericInventory extends Inventory> implements Component, InventoryHolder {
     
-    private Sound sound;
-    private SoundCategory category;
-    private float volume;
-    private float pitch;
+    protected GenericInventory inventory;
     
     
-    public Music(Sound sound, SoundCategory category, float volume, float pitch) {
-        this.sound = sound;
-        this.category = category;
-        this.volume = volume;
-        this.pitch = pitch;
-    }
-
-    
-    public void play(Player player) {
-        play(player, player.getLocation());
+    public Window(GenericInventory inventory) {
+        this.inventory = inventory;
     }
     
-    public void play(Collection<Player> players, Location location) {
-        players.forEach(player -> play(player, location));
-    }
     
-    public void play(Player player, Location location) {
-        player.playSound(location, sound, category, volume, pitch);
-    }
-    
-    public void play(Location location) {
-        location.getWorld().playSound(location, sound, category, volume, pitch);
+    @Override
+    public GenericInventory getInventory() {
+        return inventory;
     }
     
 }

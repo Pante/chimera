@@ -36,9 +36,9 @@ import static org.bukkit.SoundCategory.MASTER;
 import static org.mockito.Mockito.*;
 
 
-class MusicTest {
+class AudioTest {
     
-    Music music = spy(new Music(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
+    Audio music = spy(new Audio(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
     World world = mock(World.class);
     Location location = new Location(world, 0, 0, 0);
     Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
