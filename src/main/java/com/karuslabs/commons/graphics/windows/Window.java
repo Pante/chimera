@@ -21,23 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.windows;
 
+import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.locale.MessageTranslation;
+
+import javax.annotation.Nullable;
+
+import org.bukkit.event.*;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
 
-public abstract class Window<GenericInventory extends Inventory> implements Component, InventoryHolder {
+public abstract class Window<GenericInventory extends Inventory> implements Component, Listener, InventoryHolder {
     
-    protected GenericInventory inventory;
+    protected MessageTranslation translation;
+    protected @Nullable GenericInventory inventory;
     
     
-    public Window(GenericInventory inventory) {
+    public Window(MessageTranslation translation, @Nullable GenericInventory inventory) {
+        this.translation = translation;
         this.inventory = inventory;
     }
     
+        
+    protected abstract Point from(int slot);
+    
+    
+    @EventHandler
+    public void click(InventoryClickEvent event) {
+        click(new ClickContext(from(event.getSlot()), translation, event));
+    }
+    
+    @EventHandler
+    public void drag(InventoryDragEvent event) {
+        drag(new DragContext(event.getRawSlots().stream().map(this::from).toArray(Point[]::new), translation, event));
+    }
+    
+    
+    public MessageTranslation getTranslation() {
+        return translation;
+    }
     
     @Override
-    public GenericInventory getInventory() {
+    public @Nullable GenericInventory getInventory() {
         return inventory;
     }
     
