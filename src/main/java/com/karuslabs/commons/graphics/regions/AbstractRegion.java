@@ -26,6 +26,7 @@ package com.karuslabs.commons.graphics.regions;
 import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.collection.ProxiedMap;
 import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.Map;
 
@@ -48,31 +49,31 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
 
     
     @Override
-    public void click(ClickContext context) {
-        GenericButton button = map.get(context.getPoint());
+    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+        GenericButton button = map.get(clicked);
         if (button != null) {
-            button.click(context);
+            button.click(clicked, event, translation);
             
         } else {
-            clickBlank(context);
+            clickBlank(clicked, event, translation);
         }
     }
     
-    protected void clickBlank(ClickContext context) {
-        context.setCancelled(true);
+    protected void clickBlank(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+        event.setCancelled(true);
     }
     
     
     @Override
-    public void drag(DragContext context) {
-        for (Point point : context.getDragged()) {
-            if (!context.isCancelled()) {
+    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
+        for (Point point : dragged) {
+            if (!event.isCancelled()) {
                 GenericButton button = map.get(point);
                 if (button != null) {
-                    button.drag(point, context);
+                    button.drag(point, dragged, event, translation);
                     
                 } else {
-                    dragBlank(point, context);
+                    dragBlank(point, dragged, event, translation);
                 }
                 
             } else {
@@ -81,25 +82,25 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
         }
     }
     
-    protected void dragBlank(Point point, DragContext context) {
-        context.setCancelled(true);
+    protected void dragBlank(Point point, Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
+        event.setCancelled(true);
     }
     
     
     @Override
-    public void open(InventoryOpenEvent event) {
-        onOpen(event);
-        map.values().forEach(button -> button.open(event));
+    public void open(InventoryOpenEvent event, MessageTranslation translation) {
+        onOpen(event, translation);
+        map.values().forEach(button -> button.open(event, translation));
     }
     
-    protected void onOpen(InventoryOpenEvent event) {
+    protected void onOpen(InventoryOpenEvent event, MessageTranslation translation) {
         
     }
     
     @Override
-    public void close(InventoryCloseEvent event) {
+    public void close(InventoryCloseEvent event, MessageTranslation translation) {
         onClose(event);
-        map.values().forEach(button -> button.close(event));
+        map.values().forEach(button -> button.close(event, translation));
         
     }
     

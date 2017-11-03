@@ -24,13 +24,16 @@
 package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.locale.MessageTranslation;
+
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 
 public interface Region extends Component {
     
     public boolean contains(Point point);
     
-    public void drag(DragContext context);
+    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation);
     
     public boolean isReset();
     

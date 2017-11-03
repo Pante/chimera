@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.ClickContext;
+import com.karuslabs.commons.graphics.Point;
+import com.karuslabs.commons.locale.MessageTranslation;
 
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 
 
 public abstract class CyclicButton<State> implements Button {
@@ -44,12 +45,12 @@ public abstract class CyclicButton<State> implements Button {
     
     
     @Override
-    public void click(ClickContext context) {
-        onClick(context, states[index]);
+    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+        click(clicked, event, translation, states[index]);
         next();
     }
     
-    protected void onClick(ClickContext context, State state) {
+    protected void click(Point clicked, InventoryClickEvent event, MessageTranslation translation, State state) {
         
     }
     

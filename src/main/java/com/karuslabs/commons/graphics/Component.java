@@ -23,20 +23,22 @@
  */
 package com.karuslabs.commons.graphics;
 
+import com.karuslabs.commons.locale.MessageTranslation;
+
 import org.bukkit.event.inventory.*;
 
 
 @FunctionalInterface
 public interface Component {
     
-    public void click(ClickContext context);
+    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation);
     
     
-    public default void open(InventoryOpenEvent event) {
+    public default void open(InventoryOpenEvent event, MessageTranslation translation) {
         
     }
     
-    public default void close(InventoryCloseEvent event) {
+    public default void close(InventoryCloseEvent event, MessageTranslation translation) {
         
     }
     

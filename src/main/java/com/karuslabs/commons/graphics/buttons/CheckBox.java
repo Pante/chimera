@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.ClickContext;
+import com.karuslabs.commons.graphics.Point;
+import com.karuslabs.commons.locale.MessageTranslation;
 
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 
 
 public class CheckBox implements Button {
@@ -45,20 +46,20 @@ public class CheckBox implements Button {
     
     
     @Override
-    public void click(ClickContext context) {
+    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
         if (checked) {
-            checked = uncheck(context);
+            checked = uncheck(clicked, event, translation);
             
         } else {
-            checked = check(context);
+            checked = check(clicked, event, translation);
         }
     }
     
-    protected boolean check(ClickContext context) {
+    protected boolean check(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
         return true;
     }
     
-    protected boolean uncheck(ClickContext context) {
+    protected boolean uncheck(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
         return false;
     }
     

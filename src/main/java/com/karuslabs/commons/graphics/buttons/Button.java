@@ -24,13 +24,16 @@
 package com.karuslabs.commons.graphics.buttons;
 
 import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.locale.MessageTranslation;
+
+import org.bukkit.event.inventory.InventoryDragEvent;
 
 
 @FunctionalInterface
 public interface Button extends Component {
     
-    public default void drag(Point point, DragContext context) {
-        context.setCancelled(true);
+    public default void drag(Point point, Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
+        event.setCancelled(true);
     }
     
 }

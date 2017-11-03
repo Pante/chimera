@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.windows;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import javax.annotation.Nullable;
@@ -33,15 +33,17 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
 
-public abstract class Window<GenericInventory extends Inventory> implements Component, Listener, InventoryHolder {
+public abstract class Window<GenericInventory extends Inventory> implements Listener, InventoryHolder {
     
     protected MessageTranslation translation;
     protected @Nullable GenericInventory inventory;
+    protected Region[] regions;
     
     
-    public Window(MessageTranslation translation, @Nullable GenericInventory inventory) {
+    public Window(MessageTranslation translation, @Nullable GenericInventory inventory, Region... regions) {
         this.translation = translation;
         this.inventory = inventory;
+        this.regions = regions;
     }
     
         
@@ -50,12 +52,40 @@ public abstract class Window<GenericInventory extends Inventory> implements Comp
     
     @EventHandler
     public void click(InventoryClickEvent event) {
-        click(new ClickContext(from(event.getSlot()), translation, event));
+        Point point = from(event.getRawSlot());
+        onClick(point, event);
+        for (Region region : regions) {
+            region.click(point, event, translation);
+        }
     }
+    
+    protected void onClick(Point point, InventoryClickEvent event) {
+        
+    }
+    
     
     @EventHandler
     public void drag(InventoryDragEvent event) {
-        drag(new DragContext(event.getRawSlots().stream().map(this::from).toArray(Point[]::new), translation, event));
+        Point[] dragged = event.getRawSlots().stream().map(this::from).toArray(Point[]::new);
+        for (Region region : regions) {
+            region.drag(dragged, event, translation);
+        }
+    }
+    
+    protected void onDrag(Point[] dragged, InventoryDragEvent event) {
+        
+    }
+    
+    
+    @EventHandler
+    public void open(InventoryOpenEvent event) {
+        for (Region region : regions) {
+            region.open(event, translation);
+        }
+    }
+    
+    protected void onOpen(InventoryOpenEvent event) {
+        
     }
     
     

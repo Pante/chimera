@@ -25,6 +25,7 @@ package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.bukkit.event.inventory.*;
 
@@ -48,23 +49,23 @@ class Singleton implements Region {
     }
     
     @Override
-    public void click(ClickContext context) {
-        button.click(context);
+    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+        button.click(clicked, event, translation);
     }
     
     @Override
-    public void drag(DragContext context) {
-        button.drag(point, context);
+    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
+        button.drag(point, dragged, event, translation);
     }
     
     @Override
-    public void open(InventoryOpenEvent event) {
-        button.open(event);
+    public void open(InventoryOpenEvent event, MessageTranslation translation) {
+        button.open(event, translation);
     }
     
     @Override
-    public void close(InventoryCloseEvent event) {
-        button.close(event);
+    public void close(InventoryCloseEvent event, MessageTranslation translation) {
+        button.close(event, translation);
     }
 
     
