@@ -23,19 +23,25 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.Point;
+import com.karuslabs.commons.graphics.ResettableComponent;
+import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.bukkit.event.inventory.*;
 
 
-public abstract class CyclicButton<State> implements Button {
+public abstract class CyclicButton<State> extends ResettableComponent implements Button {
     
-    State[] states;
-    int index;
+    protected State[] states;
+    protected int index;
 
     
     public CyclicButton(State... states) {
+        this(false, states);
+    } 
+    
+    public CyclicButton(boolean reset, State... states) {
+        super(reset);
         if (states.length == 0) {
             throw new IllegalArgumentException("Button must be initialised with at least one state");
         }
@@ -46,22 +52,21 @@ public abstract class CyclicButton<State> implements Button {
     
     @Override
     public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
-        click(clicked, event, translation, states[index]);
+        onClick(clicked, event, translation, states[index]);
         next();
     }
     
-    protected void click(Point clicked, InventoryClickEvent event, MessageTranslation translation, State state) {
+    protected void onClick(Point clicked, InventoryClickEvent event, MessageTranslation translation, State state) {
         
     }
     
+
     @Override
-    public void reset(InventoryCloseEvent event) {
-        onReset(event);
-        index = 0;
-    }
-    
-    protected void onReset(InventoryCloseEvent event) {
-        
+    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+        if (reset) {
+            onReset(event, translation);
+            index = 0;
+        }
     }
     
     

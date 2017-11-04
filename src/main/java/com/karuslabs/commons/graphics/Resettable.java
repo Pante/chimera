@@ -21,30 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.regions;
-
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.locale.MessageTranslation;
-
-import org.bukkit.event.inventory.InventoryDragEvent;
+package com.karuslabs.commons.graphics;
 
 
-public interface Region extends Component, Resettable {    
+public interface Resettable {
     
-    public boolean contains(Point point);
+    public boolean reset();
     
-    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation);
-    
-    public int size();
-    
-    
-    public static Region singleton(Point point, Button button) {
-        return singleton(point, button, false);
-    }
-     
-    public static Region singleton(Point point, Button button, boolean reset) {
-        return new Singleton(point, button, reset);
-    }
+    public void reset(boolean reset);
     
 }

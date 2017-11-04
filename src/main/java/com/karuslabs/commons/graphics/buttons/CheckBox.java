@@ -23,23 +23,25 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.Point;
+import com.karuslabs.commons.graphics.ResettableComponent;
+import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.bukkit.event.inventory.*;
 
 
-public class CheckBox implements Button {
+public class CheckBox extends ResettableComponent implements Button {
     
     private boolean checked;
     private boolean original;
     
     
-    public CheckBox() {
-        this(false);
+    public CheckBox(boolean reset) {
+        this(false, false);
     }
     
-    public CheckBox(boolean checked) {
+    public CheckBox(boolean checked, boolean reset) {
+        super(reset);
         this.checked = checked;
         this.original = checked;
     }
@@ -65,13 +67,11 @@ public class CheckBox implements Button {
     
     
     @Override
-    public void reset(InventoryCloseEvent event) {
-        checked = original;
-    }
-    
-    
-    public boolean isChecked() {
-        return checked;
+    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+        if (reset) {
+            onReset(event, translation);
+            checked = original;
+        }
     }
     
 }

@@ -42,7 +42,7 @@ public interface Component {
         
     }
     
-    public default void reset(InventoryCloseEvent event) {
+    public default void reset(InventoryCloseEvent event, MessageTranslation translation) {
         
     }
     

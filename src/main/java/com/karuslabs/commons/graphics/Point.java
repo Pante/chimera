@@ -76,6 +76,10 @@ public class Point implements Comparable<Point>, Supplier<Point> {
         return new Point(x, y);
     }
     
+    public boolean equals(Point point) {
+        return x == point.x && y == point.y;
+    }
+    
     @Override
     public boolean equals(Object object) {
         if (object instanceof Point) {

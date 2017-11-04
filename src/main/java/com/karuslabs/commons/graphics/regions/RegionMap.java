@@ -23,28 +23,41 @@
  */
 package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.collection.ProxiedMap;
+import com.karuslabs.commons.graphics.Point;
 import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.locale.MessageTranslation;
 
-import org.bukkit.event.inventory.InventoryDragEvent;
+import java.util.*;
 
 
-public interface Region extends Component, Resettable {    
+public class RegionMap<GenericButton extends Button> extends ProxiedMap<Point, GenericButton> {
     
-    public boolean contains(Point point);
-    
-    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation);
-    
-    public int size();
+    private final Region region;
     
     
-    public static Region singleton(Point point, Button button) {
-        return singleton(point, button, false);
-    }
-     
-    public static Region singleton(Point point, Button button, boolean reset) {
-        return new Singleton(point, button, reset);
+    public RegionMap(Region region) {
+        this(region, new HashMap<>());
     }
     
+    public RegionMap(Region region, Map<Point, GenericButton> map) {
+        super(map);
+        this.region = region;
+    }
+    
+    
+    @Override
+    public GenericButton put(Point point, GenericButton button) {
+        if (region.contains(point)) {
+            return map.put(point, button);
+            
+        } else {
+            throw new IllegalArgumentException("Point must be within region");
+        }
+    }
+    
+    
+    public Region getRegion() {
+        return region;
+    }
+        
 }

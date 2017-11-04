@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.collection.ProxiedMap;
 import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.Map;
@@ -33,9 +32,9 @@ import java.util.Map;
 import org.bukkit.event.inventory.*;
 
 
-public abstract class AbstractRegion<GenericButton extends Button> extends ProxiedMap<Point, GenericButton> implements Region {
+public abstract class AbstractRegion<GenericButton extends Button> extends ResettableComponent implements Region {
     
-    protected boolean reset;
+    private final RegionMap<GenericButton> map;
     
     
     public AbstractRegion(Map<Point, GenericButton> map) {
@@ -43,8 +42,8 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
     }
     
     public AbstractRegion(Map<Point, GenericButton> map, boolean reset) {
-        super(map);
-        this.reset = reset;
+        super(reset);
+        this.map = new RegionMap<>(this, map);
     }
 
     
@@ -67,17 +66,18 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
     @Override
     public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
         for (Point point : dragged) {
-            if (!event.isCancelled()) {
+            if (event.isCancelled()) {
+                return;
+            }
+            
+            if (contains(point)) {
                 GenericButton button = map.get(point);
                 if (button != null) {
                     button.drag(point, dragged, event, translation);
-                    
+
                 } else {
                     dragBlank(point, dragged, event, translation);
                 }
-                
-            } else {
-                break;
             }
         }
     }
@@ -97,6 +97,7 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
         
     }
     
+    
     @Override
     public void close(InventoryCloseEvent event, MessageTranslation translation) {
         onClose(event);
@@ -108,45 +109,13 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Proxi
         
     }
     
+    
     @Override
-    public void reset(InventoryCloseEvent event) {
+    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
         if (reset) {
-            onReset(event);
-            map.values().forEach(button -> button.reset(event));
+            onReset(event, translation);
+            map.values().forEach(button -> button.reset(event, translation));
         }
     }
-    
-    protected void onReset(InventoryCloseEvent event) {
-        
-    }
-    
-    
-    @Override
-    public GenericButton put(Point point, GenericButton button) {
-        if (contains(point)) {
-            return map.put(point, button);
-            
-        } else {
-            throw new IllegalArgumentException("Point must be within region");
-        }
-    }
-    
-    @Override
-    public abstract int size();
-    
-    public int buttons() {
-        return map.size();
-    }
-    
-    
-    @Override
-    public boolean isReset() {
-        return reset;
-    }
-    
-    @Override
-    public void setReset(boolean reset) {
-        this.reset = reset;
-    }
-    
+
 }

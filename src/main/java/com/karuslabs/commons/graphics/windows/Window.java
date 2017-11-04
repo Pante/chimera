@@ -21,11 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.windows;
 
+import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 import org.bukkit.event.*;
@@ -33,25 +35,30 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
 
-public abstract class Window<GenericInventory extends Inventory> implements Listener, InventoryHolder {
+public abstract class Window<GenericInventory extends Inventory> implements Listener, InventoryHolder, Resettable {
     
+    protected List<Region> regions;
     protected MessageTranslation translation;
     protected @Nullable GenericInventory inventory;
-    protected Region[] regions;
+    protected boolean reset;
     
     
-    public Window(MessageTranslation translation, @Nullable GenericInventory inventory, Region... regions) {
-        this.translation = translation;
-        this.inventory = inventory;
+    public Window(List<Region> regions, MessageTranslation translation, boolean reset) {
         this.regions = regions;
+        this.translation = translation;
+        this.reset = reset;
     }
     
-        
+    
     protected abstract Point from(int slot);
     
     
     @EventHandler
     public void click(InventoryClickEvent event) {
+        if (!validate(event)) {
+            return;
+        }
+        
         Point point = from(event.getRawSlot());
         onClick(point, event);
         for (Region region : regions) {
@@ -66,7 +73,12 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     
     @EventHandler
     public void drag(InventoryDragEvent event) {
+        if (!validate(event)) {
+            return;
+        }
+        
         Point[] dragged = event.getRawSlots().stream().map(this::from).toArray(Point[]::new);
+        onDrag(dragged, event);
         for (Region region : regions) {
             region.drag(dragged, event, translation);
         }
@@ -79,6 +91,11 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     
     @EventHandler
     public void open(InventoryOpenEvent event) {
+        if (!validate(event)) {
+            return;
+        }
+        
+        onOpen(event);
         for (Region region : regions) {
             region.open(event, translation);
         }
@@ -89,6 +106,43 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     }
     
     
+    @EventHandler
+    public void close(InventoryCloseEvent event) {
+        if (!validate(event)) {
+            return;
+        }
+        
+        onClose(event);
+        for (Region region : regions) {
+            region.close(event, translation);
+        }
+        
+        if (reset) {
+            onReset(event);
+            for (Region region : regions) {
+                region.reset(event, translation);
+            }
+        }
+    }
+    
+    protected void onClose(InventoryCloseEvent event) {
+        
+    }
+    
+    protected void onReset(InventoryCloseEvent event) {
+        
+    }
+
+    
+    protected boolean validate(InventoryEvent event) {
+        return this == event.getInventory().getHolder();
+    }
+    
+    
+    public List<Region> getRegions() {
+        return regions;
+    }
+    
     public MessageTranslation getTranslation() {
         return translation;
     }
@@ -96,6 +150,20 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     @Override
     public @Nullable GenericInventory getInventory() {
         return inventory;
+    }
+    
+    public void setInventory(@Nullable GenericInventory inventory) {
+        this.inventory = inventory;
+    }
+    
+    @Override
+    public boolean reset() {
+        return reset;
+    }
+    
+    @Override
+    public void reset(boolean reset) {
+        this.reset = reset;
     }
     
 }

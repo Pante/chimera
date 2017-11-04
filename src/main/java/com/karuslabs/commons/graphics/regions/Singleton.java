@@ -30,14 +30,14 @@ import com.karuslabs.commons.locale.MessageTranslation;
 import org.bukkit.event.inventory.*;
 
 
-class Singleton implements Region {
+class Singleton extends ResettableComponent implements Region {
     
     private Point point;
     private Button button;
-    private boolean reset;
     
     
-    Singleton(Point point, Button button) {
+    Singleton(Point point, Button button, boolean reset) {
+        super(reset);
         this.point = point;
         this.button = button;
     }
@@ -50,12 +50,23 @@ class Singleton implements Region {
     
     @Override
     public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
-        button.click(clicked, event, translation);
+        if (clicked.equals(point)) {
+            button.click(clicked, event, translation);
+        }
     }
     
     @Override
     public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
-        button.drag(point, dragged, event, translation);
+        if (event.isCancelled()) {
+            return;
+        }
+        
+        for (Point point : dragged) {
+            if (contains(point)) {
+                button.drag(point, dragged, event, translation);
+                break;
+            }
+        }
     }
     
     @Override
@@ -68,15 +79,9 @@ class Singleton implements Region {
         button.close(event, translation);
     }
 
-    
     @Override
-    public boolean isReset() {
-        return reset;
-    }
-
-    @Override
-    public void setReset(boolean reset) {
-        this.reset = reset;
+    public int size() {
+        return 1;
     }
 
 }
