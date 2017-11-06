@@ -40,18 +40,22 @@ public class Cloud implements Task<Cloud> {
     
     private Particles cloud;
     private Particles droplets;
+    private int cloudTotal;
+    private int dropletsTotal;
     private float size;
     private float radius;
     private double offsetY;
     
     
     public Cloud(Particles cloud, Particles droplets) {
-        this(cloud, droplets, 0.7F, 0.7F - 0.1F, 0.8);
+        this(cloud, droplets, 50, 15, 0.7F, 0.7F - 0.1F, 0.8);
     }
     
-    public Cloud(Particles cloud, Particles droplets, float size, float radius, double offsetY) {
+    public Cloud(Particles cloud, Particles droplets, int cloudTotal, int dropletsTotal, float size, float radius, double offsetY) {
         this.cloud = cloud;
         this.droplets = droplets;
+        this.cloudTotal = cloudTotal;
+        this.dropletsTotal = dropletsTotal;
         this.size = size;
         this.radius = radius;
         this.offsetY = offsetY;
@@ -63,20 +67,20 @@ public class Cloud implements Task<Cloud> {
         Location location = context.getOrigin().getLocationCopy();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        renderCloud(context, location.add(0, offsetY, 0), random, 50);
-        renderDroplets(context, location.add(0, 0.2, 0), random, 15);
+        renderCloud(context, location.add(0, offsetY, 0), random, cloudTotal);
+        renderDroplets(context, location.add(0, 0.2, 0), random, dropletsTotal);
     }
     
     void renderCloud(Context context, Location location, ThreadLocalRandom random, int amount) {
         Vector vector = context.getVector();
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i+= cloud.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble() * size);
             context.render(cloud, location, vector);
         }
     }
     
     void renderDroplets(Context context, Location location, ThreadLocalRandom random, int amount) {
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i+= droplets.getAmount()) {
             if (random.nextInt(2) != 1) {
                 double x = random.nextDouble() * radius;
                 double z = random.nextDouble() * radius;

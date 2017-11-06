@@ -44,8 +44,8 @@ class CloudTest extends EffectBase {
         
         cloud.render(context);
         
-        verify(cloud).renderCloud(context, new Location(null, 1.0, 2.0, 1.0), RANDOM, 50);
-        verify(cloud).renderDroplets(context, location, RANDOM, 15);
+        verify(cloud).renderCloud(context, original.getLocationCopy(), RANDOM, 50);
+        verify(cloud).renderDroplets(context, original.getLocationCopy(), RANDOM, 15);
     }
     
     
