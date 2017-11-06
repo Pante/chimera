@@ -79,11 +79,7 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
         origin.setDirection(direction);
         target.setDirection(direction.multiply(-1));
     }
-    
-    
-    public Task getTask() {
-        return task;
-    }
+
     
     @Override
     public void render(Particles particles, Location location) {

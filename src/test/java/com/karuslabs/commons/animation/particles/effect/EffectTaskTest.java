@@ -84,20 +84,20 @@ class EffectTaskTest {
     
     
     @Test
-    void get() {
-        assertEquals(task, effect.getTask());
-        assertNotNull(effect.getVector());
-        assertNull(effect.value());
-    }
-    
-    
-    @Test
     void render() {
         Particles particles = mock(Particles.class);
 
         effect.render(particles, location);
         
         verify(consumer).accept(particles, location);
+    }
+    
+    
+    @Test
+    void get() {
+        assertEquals(task, effect.task);
+        assertNotNull(effect.getVector());
+        assertNull(effect.value());
     }
     
 }

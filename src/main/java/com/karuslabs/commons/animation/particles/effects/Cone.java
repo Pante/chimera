@@ -67,8 +67,8 @@ public class Cone implements Task<Cone> {
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        int count = context.count();
         
+        int count = context.count();
         for (int x = 0; x < perIteration; x += particles.getAmount(), count++) {
             if (count > size) {
                 count = 0;

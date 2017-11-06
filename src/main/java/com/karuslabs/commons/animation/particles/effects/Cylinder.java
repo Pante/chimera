@@ -46,6 +46,7 @@ public class Cylinder implements Task<Cylinder> {
     private int perRow;
     boolean rotate;
     private boolean solid;
+    int count;
     
     
     public Cylinder(Particles particles) {
@@ -62,13 +63,13 @@ public class Cylinder implements Task<Cylinder> {
         this.perRow = perRow;
         this.rotate = rotate;
         this.solid = solid;
+        count = 0;
     }
     
     
     @Override
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
-        int count = context.count();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double x = rotation.getX(), y = rotation.getY(), z = rotation.getZ();
         
@@ -78,11 +79,10 @@ public class Cylinder implements Task<Cylinder> {
             z += count * angularVelocity.getZ();
         }
         
-        renderSurface(context, location, context.getVector(), count, random, x, y, z);
-        context.count(count);
+        renderSurface(context, location, context.getVector(), random, x, y, z);
     }
     
-    protected void renderSurface(Context context, Location location, Vector vector, int count, ThreadLocalRandom random, double x, double y, double z) {
+    protected void renderSurface(Context context, Location location, Vector vector, ThreadLocalRandom random, double x, double y, double z) {
         for (int i = 0; i < perRow; i += particles.getAmount(), count++) {
             randomCircle(vector).multiply(radius);
             calculate(vector, random, solid ? random.nextFloat() : 1);

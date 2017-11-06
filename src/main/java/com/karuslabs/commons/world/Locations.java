@@ -21,37 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effects;
-
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.annotation.Immutable;
+package com.karuslabs.commons.world;
 
 import org.bukkit.Location;
 
 
-@Immutable
-public class Composite implements Task<Composite> {
+public class Locations {
     
-    private Particles[] particles;
-    
-    
-    public Composite(Particles... particles) {
-        this.particles = particles;
-    }
-    
-    
-    @Override
-    public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
-        for (Particles particle : particles) {
-           context.render(particle, location);
-        }
-    }
-
-    @Override
-    public @Immutable Composite get() {
-        return this;
+    public static Location copy(Location source, Location destination) {
+        destination.setWorld(source.getWorld());
+        destination.setX(source.getX());
+        destination.setY(source.getY());
+        destination.setZ(source.getZ());
+        destination.setYaw(source.getYaw());
+        destination.setPitch(source.getPitch());
+        return destination;
     }
     
 }

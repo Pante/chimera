@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.util.concurrent.Result;
 import com.karuslabs.commons.world.BoundLocation;
 
 import java.util.*;
@@ -34,7 +35,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.collection.Sets.weakSet;
-import com.karuslabs.commons.util.concurrent.Result;
 
 
 public class Effect {    
@@ -44,7 +44,7 @@ public class Effect {
     private static final BiConsumer<Particles, Location> GLOBAL = Particles::render;
     
     private Plugin plugin;
-    private Supplier<Task> supplier;
+    private Supplier<? extends Task> supplier;
     private boolean orientate;
     private long iterations;
     private long delay;
@@ -52,7 +52,7 @@ public class Effect {
     boolean async;
     
     
-    public Effect(Plugin plugin, Supplier<Task> supplier, boolean orientate, long iterations, long delay, long period, boolean async) {
+    public Effect(Plugin plugin, Supplier<? extends Task> supplier, boolean orientate, long iterations, long delay, long period, boolean async) {
         this.plugin = plugin;
         this.supplier = supplier;
         this.orientate = orientate;
@@ -101,7 +101,7 @@ public class Effect {
             this.effect = effect;
         }
         
-        public Builder supplier(Supplier<Task> supplier) {
+        public Builder supplier(Supplier<? extends Task> supplier) {
             effect.supplier = supplier;
             return this;
         }
@@ -112,6 +112,11 @@ public class Effect {
         
         public Builder async(boolean async) {
             effect.async = async;
+            return this;
+        }
+        
+        public Builder infinite() {
+            effect.iterations = INFINITE;
             return this;
         }
         

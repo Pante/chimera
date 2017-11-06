@@ -60,7 +60,7 @@ public class Cloud implements Task<Cloud> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
+        Location location = context.getOrigin().getLocationCopy();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
         renderCloud(context, location.add(0, offsetY, 0), random, 50);

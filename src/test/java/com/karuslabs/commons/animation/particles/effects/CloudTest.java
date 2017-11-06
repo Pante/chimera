@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import org.bukkit.Location;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -42,7 +44,7 @@ class CloudTest extends EffectBase {
         
         cloud.render(context);
         
-        verify(cloud).renderCloud(context, location, RANDOM, 50);
+        verify(cloud).renderCloud(context, new Location(null, 1.0, 2.0, 1.0), RANDOM, 50);
         verify(cloud).renderDroplets(context, location, RANDOM, 15);
     }
     

@@ -33,7 +33,7 @@ import static java.lang.Math.*;
 
 
 @Immutable
-public class Helix implements Task<Helix> {
+public class Spiral implements Task<Spiral> {
     
     private Particles particles;
     private int strands;
@@ -43,11 +43,11 @@ public class Helix implements Task<Helix> {
     private double rotation;
     
     
-    public Helix(Particles particles) {
+    public Spiral(Particles particles) {
         this(particles, 8, 80, 10, 10, PI / 4);
     }
     
-    public Helix(Particles particles, int strands, int perStrand, float radius, float curve, double rotation) {
+    public Spiral(Particles particles, int strands, int perStrand, float radius, float curve, double rotation) {
         this.particles = particles;
         this.strands = strands;
         this.perStrand = perStrand;
@@ -75,7 +75,7 @@ public class Helix implements Task<Helix> {
     }
 
     @Override
-    public Helix get() {
+    public Spiral get() {
         return this;
     }
     
