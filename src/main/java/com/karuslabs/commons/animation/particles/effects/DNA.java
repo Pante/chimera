@@ -71,7 +71,7 @@ public class DNA implements Task<DNA> {
     public void render(Context context) {
         Vector vector = context.getVector();
         int count = context.count();
-        for (int j = 0; j < perHelix; j += helix.getAmount(), count++) {
+        for (int i = 0; i < perHelix; i += helix.getAmount(), count++) {
             if (count * growth > length) {
                 count = 0;
             }

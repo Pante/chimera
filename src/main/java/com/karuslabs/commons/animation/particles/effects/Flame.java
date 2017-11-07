@@ -58,7 +58,7 @@ public class Flame implements Task<Flame> {
         Vector vector = context.getVector();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        for (int i = 0; i < total; i++) {
+        for (int i = 0; i < total; i += flame.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble(0, 0.6));
             vector.setY(random.nextFloat() * 1.8);
 

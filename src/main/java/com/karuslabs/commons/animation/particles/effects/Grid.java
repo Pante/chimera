@@ -75,7 +75,7 @@ public class Grid implements Task<Grid> {
             for (int j = 0; j < perWidth * (columns + 1); j += particles.getAmount()) {
                 vector.setY(i * cellHeight);
                 vector.setX(j * cellWidth / perWidth);
-                render(context, location);
+                render(context, location, vector);
             }
         }
     }
@@ -86,13 +86,12 @@ public class Grid implements Task<Grid> {
             for (int j = 0; j < perHeight * (rows + 1); j++) {
                 vector.setX(i * cellWidth);
                 vector.setY(j * cellHeight / perHeight);
-                render(context, location);
+                render(context, location, vector);
             }
         }
     }
 
-    void render(Context context, Location location) {
-        Vector vector = context.getVector();
+    void render(Context context, Location location, Vector vector) {
         vector.setZ(0);
         rotateAroundYAxis(vector, rotation);
         context.render(particles, location, vector);

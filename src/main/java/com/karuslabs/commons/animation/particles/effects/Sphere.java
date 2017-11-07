@@ -60,14 +60,15 @@ public class Sphere implements Task<Sphere> {
     public void render(Context context) {
         Vector vector = context.getVector();
         Location location = context.getOrigin().getLocation();
-        location.add(0, yOffset, 0);
         
         double radius = this.radius + context.getCurrent() * increment;
-
+        
+        location.add(0, yOffset, 0);
         for (int i = 0; i < perIteration; i += particles.getAmount()) {
             random(vector).multiply(radius);
             context.render(particles, location, vector);
         }
+        location.subtract(0, yOffset, 0);
     }
 
     @Override

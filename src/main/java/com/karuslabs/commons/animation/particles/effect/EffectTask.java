@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -88,18 +89,18 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
 
 
     @Override
-    public BoundLocation getOrigin() {
+    public @Shared BoundLocation getOrigin() {
         return origin;
     }
 
     @Override
-    public BoundLocation getTarget() {
+    public @Shared BoundLocation getTarget() {
         return target;
     }
     
         
     @Override
-    public Vector getVector() {
+    public @Shared Vector getVector() {
         if (vector == null) {
             vector = new Vector();
         }

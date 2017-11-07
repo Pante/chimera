@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.annotation.*;
 
 import java.util.function.*;
 
@@ -51,7 +51,7 @@ public class Arguments {
     }
         
     
-     public Matcher match() {        
+     public @Shared Matcher match() {        
         if (matcher == null) {
             matcher = new Matcher(arguments);
             
@@ -63,12 +63,12 @@ public class Arguments {
     }
     
     
-    public Argument get(int index) {
+    public @Shared Argument get(int index) {
         mutable.set(contains(index) ? arguments[index] : "");
         return mutable;
     }
     
-    public Argument getLast() {
+    public @Shared Argument getLast() {
         return get(arguments.length - 1);
     }
     
@@ -82,7 +82,7 @@ public class Arguments {
     }
     
     
-    protected Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
+    protected @Shared Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
         if (contains(index)) {
             return function.apply(arguments[index]);
             

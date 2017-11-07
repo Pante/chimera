@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.annotation.Shared;
+
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -93,7 +95,7 @@ public abstract class BoundLocation {
         return location;
     }
     
-    public Location getLocationCopy() {
+    public @Shared Location getLocationCopy() {
         if (copy == null) {
             copy = location.clone();
         } else {

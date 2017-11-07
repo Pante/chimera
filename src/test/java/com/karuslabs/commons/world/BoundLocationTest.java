@@ -76,6 +76,19 @@ class BoundLocationTest {
     }
     
     
+    @Test
+    public void getLocationCopy() {
+        Location location = bound.getLocationCopy();
+        location.setX(1);
+        location.setY(2);
+        location.setZ(3);
+        location.setYaw(100);
+        location.setPitch(200);
+        
+        assertEquals(bound.getLocationCopy(), location);
+    }
+    
+    
     private static class StubBuilder extends Builder<StubBuilder, BoundLocation> {
 
         public StubBuilder(BoundLocation location) {

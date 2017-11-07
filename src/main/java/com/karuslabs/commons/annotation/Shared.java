@@ -21,38 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effect;
+package com.karuslabs.commons.annotation;
 
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.annotation.Shared;
-import com.karuslabs.commons.util.concurrent.Repeatable;
-import com.karuslabs.commons.world.BoundLocation;
+import java.lang.annotation.*;
 
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public interface Context extends Repeatable {
-    
-    public void render(Particles particles, Location location);
-    
-    public default void render(Particles particles, Location location, Vector offset) {
-        render(particles, location.add(offset));
-        location.subtract(offset);
-    }
-    
-    public void cancel();
-    
-    
-    public @Shared BoundLocation getOrigin();
-    
-    public @Shared BoundLocation getTarget();
-    
-        
-    public @Shared Vector getVector();
-    
-    public int count();
-    
-    public void count(int count);
+@Documented
+@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
+@Retention(RUNTIME)
+public @interface Shared {
     
 }

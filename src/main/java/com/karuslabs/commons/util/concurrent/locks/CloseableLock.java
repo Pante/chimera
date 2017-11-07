@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.commons.annotation.Shared;
+
 import java.util.concurrent.locks.*;
 import javax.annotation.Nonnull;
 
@@ -43,12 +45,12 @@ public class CloseableLock extends ReentrantLock {
     
     
     
-    public @Nonnull Janitor acquire() {
+    public @Shared @Nonnull Janitor acquire() {
         lock();
         return janitor;
     }
     
-    public @Nonnull Janitor acquireInterruptibly() throws InterruptedException {
+    public @Shared @Nonnull Janitor acquireInterruptibly() throws InterruptedException {
         lockInterruptibly();
         return janitor;
     }

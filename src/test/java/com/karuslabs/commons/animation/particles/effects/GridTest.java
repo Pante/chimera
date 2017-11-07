@@ -47,29 +47,29 @@ class GridTest extends EffectBase {
     
     @Test
     void renderRows() {
-        doNothing().when(grid).render(context, location);
+        doNothing().when(grid).render(context, location, context.vector);
         
         grid.renderRows(context, location);
         
-        verify(grid, times(7)).render(context, location);
+        verify(grid, times(7)).render(context, location, context.vector);
         assertVector(from(0, 6, 0), vector);
     }
     
     
     @Test
     void renderColumns() {
-        doNothing().when(grid).render(context, location);
+        doNothing().when(grid).render(context, location, context.vector);
         
         grid.renderColumns(context, location);
         
-        verify(grid, times(18)).render(context, location);
+        verify(grid, times(18)).render(context, location, context.vector);
         assertVector(from(0, 5.666666507720947, 0), vector);
     }
     
     
     @Test
     void render_Location() {
-        grid.render(context, location);
+        grid.render(context, location, vector);
         
         verify(context).render(PARTICLES, location, vector);
         assertVector(from(1, 1, 1), location);

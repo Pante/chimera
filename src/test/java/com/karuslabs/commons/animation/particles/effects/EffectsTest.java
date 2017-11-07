@@ -79,7 +79,7 @@ class EffectsTest extends EffectBase {
     
     static Stream<Arguments> random_parameters() {
         return Stream.of(
-            of(new Flame(PARTICLES).get(), 10),
+            of(new Flame(PARTICLES).get(), 1),
             of(new Shield(PARTICLES).get(), 1),
             of(new Smoke(PARTICLES).get(), 1),
             of(new Sphere(PARTICLES).get(), 1)
