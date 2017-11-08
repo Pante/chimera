@@ -74,7 +74,7 @@ class EffectsTest extends EffectBase {
     void render_Random(Task<Task> task, int times) {
         task.render(context);
         
-        verify(context, times(times)).render(PARTICLES, location);
+        verify(context, times(times)).render(eq(PARTICLES), any(Location.class));
     }
     
     static Stream<Arguments> random_parameters() {

@@ -78,7 +78,7 @@ class TraceTest extends EffectBase {
         
         trace.render(context, location);
         
-        verify(context).render(PARTICLES, new Location(null, 3, 3, 3));
+        verify(context).render(PARTICLES, new Location(null, 3, 3, 3, 60, 120));
         assertVector(from(3, 3, 3), context.location);
     }
     

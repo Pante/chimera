@@ -50,7 +50,7 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     }
     
     
-    protected abstract Point from(int slot);
+    public abstract Point at(int slot);
     
     
     @EventHandler
@@ -59,7 +59,7 @@ public abstract class Window<GenericInventory extends Inventory> implements List
             return;
         }
         
-        Point point = from(event.getRawSlot());
+        Point point = at(event.getRawSlot());
         onClick(point, event);
         for (Region region : regions) {
             region.click(point, event, translation);
@@ -77,7 +77,7 @@ public abstract class Window<GenericInventory extends Inventory> implements List
             return;
         }
         
-        Point[] dragged = event.getRawSlots().stream().map(this::from).toArray(Point[]::new);
+        Point[] dragged = event.getRawSlots().stream().map(this::at).toArray(Point[]::new);
         onDrag(dragged, event);
         for (Region region : regions) {
             region.drag(dragged, event, translation);
