@@ -42,7 +42,7 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
     protected BoundLocation target;
     protected boolean orientate;
     protected Vector vector;
-    protected int count;
+    protected double count;
     
     
     EffectTask(Task task, BiConsumer<Particles, Location> render, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
@@ -109,12 +109,12 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
     }
     
     @Override
-    public int count() {
+    public double count() {
         return count;
     }
     
     @Override
-    public void count(int count) {
+    public void count(double count) {
         this.count = count;
     }
     

@@ -25,7 +25,7 @@ package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.Window;
 
 import java.util.Map;
 
@@ -34,74 +34,74 @@ import org.bukkit.event.inventory.*;
 
 public abstract class AbstractRegion<GenericButton extends Button> extends ResettableComponent implements Region {
     
-    private final RegionMap<GenericButton> map;
+    private final Buttons<GenericButton> map;
     
     
-    public AbstractRegion(Map<Point, GenericButton> map) {
+    public AbstractRegion(Map<Integer, GenericButton> map) {
         this(map, false);
     }
     
-    public AbstractRegion(Map<Point, GenericButton> map, boolean reset) {
+    public AbstractRegion(Map<Integer, GenericButton> map, boolean reset) {
         super(reset);
-        this.map = new RegionMap<>(this, map);
+        this.map = new Buttons<>(this, map);
     }
 
     
     @Override
-    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
-        GenericButton button = map.get(clicked);
+    public void click(ClickEvent event) {
+        GenericButton button = map.get(event.getRawSlot());
         if (button != null) {
-            button.click(clicked, event, translation);
+            button.click(event);
             
         } else {
-            clickBlank(clicked, event, translation);
+            clickBlank(event);
         }
     }
     
-    protected void clickBlank(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+    protected void clickBlank(ClickEvent event) {
         event.setCancelled(true);
     }
     
     
     @Override
-    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
-        for (Point point : dragged) {
+    public void drag(DragEvent event) {
+        for (int dragged : event.getRawSlots()) {
             if (event.isCancelled()) {
                 return;
             }
             
-            if (contains(point)) {
-                GenericButton button = map.get(point);
+            if (contains(dragged)) {
+                GenericButton button = map.get(dragged);
                 if (button != null) {
-                    button.drag(point, dragged, event, translation);
+                    button.drag(event, dragged);
 
                 } else {
-                    dragBlank(point, dragged, event, translation);
+                    dragBlank(event, dragged);
                 }
             }
         }
     }
     
-    protected void dragBlank(Point point, Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
+    protected void dragBlank(DragEvent event, int dragged) {
         event.setCancelled(true);
     }
     
     
     @Override
-    public void open(InventoryOpenEvent event, MessageTranslation translation) {
-        onOpen(event, translation);
-        map.values().forEach(button -> button.open(event, translation));
+    public void open(Window window, InventoryOpenEvent event) {
+        onOpen(window, event);
+        map.values().forEach(button -> button.open(window, event));
     }
     
-    protected void onOpen(InventoryOpenEvent event, MessageTranslation translation) {
+    protected void onOpen(Window window, InventoryOpenEvent event) {
         
     }
     
     
     @Override
-    public void close(InventoryCloseEvent event, MessageTranslation translation) {
+    public void close(Window window, InventoryCloseEvent event) {
         onClose(event);
-        map.values().forEach(button -> button.close(event, translation));
+        map.values().forEach(button -> button.close(window, event));
         
     }
     
@@ -111,10 +111,10 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
     
     
     @Override
-    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+    public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
-            onReset(event, translation);
-            map.values().forEach(button -> button.reset(event, translation));
+            onReset(window, event);
+            map.values().forEach(button -> button.reset(window, event));
         }
     }
 

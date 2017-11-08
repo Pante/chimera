@@ -26,69 +26,50 @@ package com.karuslabs.commons.animation.particles.effects;
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.annotation.Immutable;
+import static java.lang.Math.*;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
-import static com.karuslabs.commons.world.Vectors.rotate;
-import static java.lang.Math.*;
-
 
 @Immutable
-public class AnimatedBall implements Task<AnimatedBall> {
-    
-    private static final Vector FACTOR = new Vector(1, 2, 1);
-    private static final Vector OFFSET = new Vector(0, 0.8, 0);
+public class Helix implements Task<Helix> {
     
     private Particles particles;
-    private int total;
-    private int perIteration;
-    private float size;
-    private Vector factor;
-    private Vector offset;
-    private Vector rotation;
+    private int trail;
+    private double radius;
+    private double height;
+    private double increment;
     
     
-    public AnimatedBall(Particles particles) {
-        this(particles, 150, 10, 1F, FACTOR, OFFSET, NONE);
+    public Helix(Particles particles) {
+        this(particles, 10, 5, 10, 0.05);
     }
     
-    public AnimatedBall(Particles particles, int total, int perIteration, float size, Vector factor, Vector offset, Vector rotation) {
+    public Helix(Particles particles, int trail, double radius, double height, double increment) {
         this.particles = particles;
-        this.total = total;
-        this.perIteration = perIteration;
-        this.size = size;
-        this.factor = factor;
-        this.offset = offset;
-        this.rotation = rotation;
+        this.trail = trail;
+        this.radius = radius;
+        this.height = height;
+        this.increment = increment;
     }
     
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        int count = (int) context.count();
+        Location location = context.getOrigin().getLocation();
         
-        for (int i = 0; i < perIteration; i += particles.getAmount(), count++) {
-            float t = (float) (PI / total) * count;
-            float r = (float) sin(t) * size;
-            float s = (float) (2 * PI * t);
-
-            vector.setX(factor.getX() * r * cos(s) + offset.getX());
-            vector.setZ(factor.getY() * r * sin(s) + offset.getY());
-            vector.setY(factor.getZ() * size * cos(t) + offset.getZ());
-
-            rotate(vector, rotation);
-            
+        double y = context.count();
+        for (int i = 0; i < trail && y <= height; i += particles.getAmount(), y += increment) {
+            vector.setX(radius * cos(y)).setY(y).setZ(radius * sin(y));
             context.render(particles, location, vector);
         }
-        context.count(count);
+        context.count(y);
     }
 
     @Override
-    public @Immutable AnimatedBall get() {
+    public @Immutable Helix get() {
         return this;
     }
     

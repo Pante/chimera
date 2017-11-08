@@ -68,7 +68,7 @@ public class Cone implements Task<Cone> {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
         
-        int count = context.count();
+        int count = (int) context.count();
         double pitch = toRadians(location.getPitch() + 90);
         double yaw = toRadians(-location.getYaw());
         for (int x = 0; x < perIteration; x += particles.getAmount(), count++) {

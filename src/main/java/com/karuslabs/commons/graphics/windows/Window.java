@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.graphics.windows;
 
+import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
@@ -34,19 +35,34 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
+import static java.util.Collections.unmodifiableList;
 
-public abstract class Window<GenericInventory extends Inventory> implements Listener, InventoryHolder, Resettable {
+
+public abstract class Window implements Listener, InventoryHolder, Resettable {    
     
     protected List<Region> regions;
+    protected List<Region> view;
     protected MessageTranslation translation;
-    protected @Nullable GenericInventory inventory;
+    protected @Nullable Inventory inventory;
     protected boolean reset;
     
     
     public Window(List<Region> regions, MessageTranslation translation, boolean reset) {
         this.regions = regions;
+        this.view = unmodifiableList(regions);
         this.translation = translation;
         this.reset = reset;
+    }
+    
+    
+    public void attach(Region region) {
+        region.attach(this);
+        regions.add(region);
+    }
+    
+    public void unattach(Region region) {
+        region.unattach(this);
+        regions.remove(region);
     }
     
     
@@ -55,49 +71,43 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     
     @EventHandler
     public void click(InventoryClickEvent event) {
-        if (!validate(event)) {
-            return;
-        }
-        
-        Point point = at(event.getRawSlot());
-        onClick(point, event);
-        for (Region region : regions) {
-            region.click(point, event, translation);
+        if (validate(event)) {
+            ClickEvent click = new ClickEvent(this, event);
+            onClick(click);
+            for (Region region : regions) {
+                region.click(click);
+            }
         }
     }
     
-    protected void onClick(Point point, InventoryClickEvent event) {
+    protected void onClick(ClickEvent event) {
         
     }
     
     
     @EventHandler
     public void drag(InventoryDragEvent event) {
-        if (!validate(event)) {
-            return;
-        }
-        
-        Point[] dragged = event.getRawSlots().stream().map(this::at).toArray(Point[]::new);
-        onDrag(dragged, event);
-        for (Region region : regions) {
-            region.drag(dragged, event, translation);
+        if (validate(event)) {
+            DragEvent drag = new DragEvent(this, event);
+            onDrag(drag);
+            for (Region region : regions) {
+                region.drag(drag);
+            }
         }
     }
     
-    protected void onDrag(Point[] dragged, InventoryDragEvent event) {
+    protected void onDrag(DragEvent event) {
         
     }
     
     
     @EventHandler
     public void open(InventoryOpenEvent event) {
-        if (!validate(event)) {
-            return;
-        }
-        
-        onOpen(event);
-        for (Region region : regions) {
-            region.open(event, translation);
+        if (validate(event)) {
+            onOpen(event);
+            for (Region region : regions) {
+                region.open(this, event);
+            }
         }
     }
     
@@ -114,13 +124,13 @@ public abstract class Window<GenericInventory extends Inventory> implements List
         
         onClose(event);
         for (Region region : regions) {
-            region.close(event, translation);
+            region.close(this, event);
         }
         
         if (reset) {
             onReset(event);
             for (Region region : regions) {
-                region.reset(event, translation);
+                region.reset(this, event);
             }
         }
     }
@@ -139,8 +149,8 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     }
     
     
-    public List<Region> getRegions() {
-        return regions;
+    public @Immutable List<Region> getRegions() {
+        return view;
     }
     
     public MessageTranslation getTranslation() {
@@ -148,11 +158,11 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     }
     
     @Override
-    public @Nullable GenericInventory getInventory() {
+    public @Nullable Inventory getInventory() {
         return inventory;
     }
     
-    public void setInventory(@Nullable GenericInventory inventory) {
+    public void setInventory(@Nullable Inventory inventory) {
         this.inventory = inventory;
     }
     
@@ -164,6 +174,15 @@ public abstract class Window<GenericInventory extends Inventory> implements List
     @Override
     public void reset(boolean reset) {
         this.reset = reset;
+    }
+    
+
+    public int getWidth() { 
+        return 1;
+    }
+    
+    public int getHeight() {
+        return 1;
     }
     
 }

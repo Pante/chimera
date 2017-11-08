@@ -24,34 +24,33 @@
 package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.graphics.*;
 
 import java.util.*;
 
 
 public class Shapeless<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
-    private Set<Point> points;
+    private Set<Integer> slots;
     
     
-    public Shapeless(Set<Point> points) {
-        this(new HashMap<>(), points);
+    public Shapeless(Set<Integer> slots) {
+        this(new HashMap<>(), slots);
     }
     
-    public Shapeless(Map<Point, GenericButton> map, Set<Point> points) {
+    public Shapeless(Map<Integer, GenericButton> map, Set<Integer> slots) {
         super(map);
-        this.points = points;
+        this.slots = slots;
     }
 
     
     @Override
-    public boolean contains(Point point) {
-        return points.contains(point);
+    public boolean contains(int slot) {
+        return slots.contains(slot);
     }
     
     @Override
     public int size() {
-        return points.size();
+        return slots.size();
     }    
     
 }

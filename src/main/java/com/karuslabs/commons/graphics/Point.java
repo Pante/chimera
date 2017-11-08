@@ -31,8 +31,9 @@ import java.util.function.Supplier;
 @ValueBased
 public class Point implements Comparable<Point>, Supplier<Point> {
     
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
+    private int hash;
     
     
     public Point() {
@@ -42,6 +43,7 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+        hash = 0;
     }
     
     
@@ -56,18 +58,6 @@ public class Point implements Comparable<Point>, Supplier<Point> {
         } else {
             return 1;
         }
-    }
-    
-    public Point move(int x, int y) {
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-    
-    public Point set(int x, int y) {
-        this.x = x;
-        this.y = y;
-        return this;
     }
     
     
@@ -93,8 +83,19 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     
     @Override
     public int hashCode() {
-        return x * 151 + y;
+        if (hash == 0) {
+            hash = hash();
+        }
+        return hash;
     }
+    
+    private int hash() {
+        int hash = 7;
+        hash = 31 * hash + x;
+        hash = 31 * hash + y;
+        return hash;
+    }
+    
     
     @Override
     public String toString() {

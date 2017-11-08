@@ -30,25 +30,25 @@ import com.karuslabs.commons.graphics.buttons.Button;
 import java.util.*;
 
 
-public class RegionMap<GenericButton extends Button> extends ProxiedMap<Point, GenericButton> {
+public class Buttons<GenericButton extends Button> extends ProxiedMap<Integer, GenericButton> {
     
     private final Region region;
     
     
-    public RegionMap(Region region) {
+    public Buttons(Region region) {
         this(region, new HashMap<>());
     }
     
-    public RegionMap(Region region, Map<Point, GenericButton> map) {
+    public Buttons(Region region, Map<Integer, GenericButton> map) {
         super(map);
         this.region = region;
     }
     
     
     @Override
-    public GenericButton put(Point point, GenericButton button) {
-        if (region.contains(point)) {
-            return map.put(point, button);
+    public GenericButton put(Integer slot, GenericButton button) {
+        if (region.contains(slot)) {
+            return map.put(slot, button);
             
         } else {
             throw new IllegalArgumentException("Point must be within region");

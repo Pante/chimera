@@ -60,6 +60,7 @@ class EffectsTest extends EffectBase {
             of(new Cone(PARTICLES, 0.5F, 0.006F, PI / 16, 180, 1, 0, false).get(), from(1, 1, 1)),
             of(new Donut(PARTICLES, 1, 1, 2, 0.5F, NONE).get(), from(3.5, 1, 1)),
             of(new Heart(PARTICLES).get(), from(1, 1, 1)),
+            of(new Helix(PARTICLES).get(), from(6, 1, 1)),
             of(new Hill(PARTICLES).get(), from(1, 1, 1)),
             of(new Music(PARTICLES).get(), from(1.4000000059604645, 2.899999976158142, 1)),
             of(new Vortex(PARTICLES, 2, 0.5f, PI / 16, 1, 1).get(), from(2, 1, 2.732050807568877)),

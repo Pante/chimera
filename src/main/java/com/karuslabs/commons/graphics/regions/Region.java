@@ -25,26 +25,32 @@ package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.buttons.Button;
-import com.karuslabs.commons.locale.MessageTranslation;
-
-import org.bukkit.event.inventory.InventoryDragEvent;
+import com.karuslabs.commons.graphics.windows.Window;
 
 
 public interface Region extends Component, Resettable {    
     
-    public boolean contains(Point point);
+    public default void attach(Window window) {
+        
+    }
     
-    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation);
+    public default void unattach(Window window) {
+        
+    }
+    
+    public boolean contains(int slot);
+    
+    public void drag(DragEvent event);
     
     public int size();
     
     
-    public static Region singleton(Point point, Button button) {
-        return singleton(point, button, false);
+    public static Region singleton(int slot, Button button) {
+        return singleton(slot, button, false);
     }
      
-    public static Region singleton(Point point, Button button, boolean reset) {
-        return new Singleton(point, button, reset);
+    public static Region singleton(int slot, Button button, boolean reset) {
+        return new Singleton(slot, button, reset);
     }
     
 }

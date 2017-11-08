@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.Window;
 
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
@@ -39,13 +39,13 @@ public abstract class ResettableComponent implements Component, Resettable {
     
     
     @Override
-    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+    public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
-            onReset(event, translation);
+            onReset(window, event);
         }
     }
     
-    protected void onReset(InventoryCloseEvent event, MessageTranslation translation) {
+    protected void onReset(Window window, InventoryCloseEvent event) {
         
     }
 

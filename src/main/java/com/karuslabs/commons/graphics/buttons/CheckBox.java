@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.ResettableComponent;
 import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.Window;
 
 import org.bukkit.event.inventory.*;
 
@@ -48,28 +47,28 @@ public class CheckBox extends ResettableComponent implements Button {
     
     
     @Override
-    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+    public void click(ClickEvent event) {
         if (checked) {
-            checked = uncheck(clicked, event, translation);
+            checked = uncheck(event);
             
         } else {
-            checked = check(clicked, event, translation);
+            checked = check(event);
         }
     }
     
-    protected boolean check(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+    protected boolean check(ClickEvent event) {
         return true;
     }
     
-    protected boolean uncheck(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
+    protected boolean uncheck(ClickEvent event) {
         return false;
     }
     
     
     @Override
-    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+    public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
-            onReset(event, translation);
+            onReset(window, event);
             checked = original;
         }
     }

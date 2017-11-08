@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.ResettableComponent;
 import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.Window;
 
 import org.bukkit.event.inventory.*;
 
@@ -51,20 +50,20 @@ public abstract class CyclicButton<State> extends ResettableComponent implements
     
     
     @Override
-    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
-        onClick(clicked, event, translation, states[index]);
+    public void click(ClickEvent event) {
+        onClick(event, states[index]);
         next();
     }
     
-    protected void onClick(Point clicked, InventoryClickEvent event, MessageTranslation translation, State state) {
+    protected void onClick(ClickEvent event, State state) {
         
     }
     
 
     @Override
-    public void reset(InventoryCloseEvent event, MessageTranslation translation) {
+    public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
-            onReset(event, translation);
+            onReset(window, event);
             index = 0;
         }
     }

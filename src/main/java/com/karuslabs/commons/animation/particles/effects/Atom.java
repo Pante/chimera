@@ -71,7 +71,7 @@ public class Atom implements Task<Atom> {
         Vector vector = context.getVector();
         
         renderNucleus(context, location, vector);
-        renderOrbitals(context, location, vector, context.count());
+        renderOrbitals(context, location, vector, (int) context.count());
     }
     
     void renderNucleus(Context context, Location location, Vector vector) {

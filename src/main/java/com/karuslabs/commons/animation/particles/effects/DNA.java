@@ -70,7 +70,7 @@ public class DNA implements Task<DNA> {
     @Override
     public void render(Context context) {
         Vector vector = context.getVector();
-        int count = context.count();
+        int count = (int) context.count();
         for (int i = 0; i < perHelix; i += helix.getAmount(), count++) {
             if (count * growth > length) {
                 count = 0;

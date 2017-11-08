@@ -25,58 +25,51 @@ package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.Window;
 
 import org.bukkit.event.inventory.*;
 
 
 class Singleton extends ResettableComponent implements Region {
     
-    private Point point;
+    private int slot;
     private Button button;
     
     
-    Singleton(Point point, Button button, boolean reset) {
+    Singleton(int slot, Button button, boolean reset) {
         super(reset);
-        this.point = point;
+        this.slot = slot;
         this.button = button;
     }
     
     
     @Override
-    public boolean contains(Point point) {
-        return this.point.equals(point);
+    public boolean contains(int slot) {
+        return this.slot == slot;
     }
     
     @Override
-    public void click(Point clicked, InventoryClickEvent event, MessageTranslation translation) {
-        if (clicked.equals(point)) {
-            button.click(clicked, event, translation);
+    public void click(ClickEvent event) {
+        if (slot == event.getRawSlot()) {
+            button.click(event);
         }
     }
     
     @Override
-    public void drag(Point[] dragged, InventoryDragEvent event, MessageTranslation translation) {
-        if (event.isCancelled()) {
-            return;
-        }
-        
-        for (Point point : dragged) {
-            if (contains(point)) {
-                button.drag(point, dragged, event, translation);
-                break;
-            }
+    public void drag(DragEvent event) {
+        if (!event.isCancelled() && event.getRawSlots().contains(slot)) {
+            button.drag(event, slot);
         }
     }
     
     @Override
-    public void open(InventoryOpenEvent event, MessageTranslation translation) {
-        button.open(event, translation);
+    public void open(Window window, InventoryOpenEvent event) {
+        button.open(window, event);
     }
     
     @Override
-    public void close(InventoryCloseEvent event, MessageTranslation translation) {
-        button.close(event, translation);
+    public void close(Window window, InventoryCloseEvent event) {
+        button.close(window, event);
     }
 
     @Override

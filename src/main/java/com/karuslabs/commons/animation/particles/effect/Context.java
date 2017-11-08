@@ -51,8 +51,8 @@ public interface Context extends Repeatable {
         
     public @Shared Vector getVector();
     
-    public int count();
+    public double count();
     
-    public void count(int count);
+    public void count(double count);
     
 }
