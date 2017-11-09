@@ -21,27 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.regions;
+package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.buttons.Button;
+import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.graphics.Point;
+import com.karuslabs.commons.graphics.regions.Region;
+import com.karuslabs.commons.locale.MessageTranslation;
+
+import java.util.List;
 
 
-public interface Region extends Component, Resettable {    
+public class RectangleWindow extends Window {
     
-    public boolean contains(int slot);
-    
-    public void drag(DragEvent event);
-    
-    public int size();
+    private int width;
+    private int height;
     
     
-    public static Region singleton(int slot, Button button) {
-        return singleton(slot, button, false);
+    public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
+        super(regions, translation, reset);
+        this.width = width;
+        this.height = height;
     }
-     
-    public static Region singleton(int slot, Button button, boolean reset) {
-        return new Singleton(slot, button, reset);
+
+    
+    @Override
+    public @Immutable Point at(int slot) {
+        int x = (slot % width) - 1;
+        int y = slot / width;
+        return new Point(x, y);
+    }
+    
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public int getHeight() {
+        return height;
     }
     
 }

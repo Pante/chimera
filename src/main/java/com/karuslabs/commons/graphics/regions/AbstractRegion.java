@@ -34,7 +34,7 @@ import org.bukkit.event.inventory.*;
 
 public abstract class AbstractRegion<GenericButton extends Button> extends ResettableComponent implements Region {
     
-    private final Buttons<GenericButton> map;
+    protected final Buttons<GenericButton> map;
     
     
     public AbstractRegion(Map<Integer, GenericButton> map) {

@@ -23,25 +23,28 @@
  */
 package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
 
-import java.util.List;
+import java.util.*;
 import javax.annotation.Nullable;
 
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
-import static java.util.Collections.unmodifiableList;
+import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 
 
 public abstract class Window implements Listener, InventoryHolder, Resettable {    
     
+    @JDK9
+    protected static final @Immutable Set<Integer> OUTSIDE = unmodifiableSet(new HashSet<>(asList(-1 -999)));
+    
     protected List<Region> regions;
-    protected List<Region> view;
     protected MessageTranslation translation;
     protected @Nullable Inventory inventory;
     protected boolean reset;
@@ -49,20 +52,8 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     
     public Window(List<Region> regions, MessageTranslation translation, boolean reset) {
         this.regions = regions;
-        this.view = unmodifiableList(regions);
         this.translation = translation;
         this.reset = reset;
-    }
-    
-    
-    public void attach(Region region) {
-        region.attach(this);
-        regions.add(region);
-    }
-    
-    public void unattach(Region region) {
-        region.unattach(this);
-        regions.remove(region);
     }
     
     
@@ -71,39 +62,61 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     
     @EventHandler
     public void click(InventoryClickEvent event) {
-        if (validate(event)) {
+        if (this != event.getInventory().getHolder()) {
+            return;
+        }
+
+        if (event.getRawSlot() >= 0) {
+            onClick(event);
             ClickEvent click = new ClickEvent(this, event);
-            onClick(click);
             for (Region region : regions) {
                 region.click(click);
             }
+            
+        } else {
+            outside(event);
         }
     }
     
-    protected void onClick(ClickEvent event) {
+    protected void onClick(InventoryClickEvent event) {
+        
+    }
+        
+    protected void outside(InventoryClickEvent event) {
         
     }
     
     
     @EventHandler
     public void drag(InventoryDragEvent event) {
-        if (validate(event)) {
+        if (this != event.getInventory().getHolder()) {
+            return;
+        }
+
+        if (disjoint(event.getRawSlots(), OUTSIDE)) {
+            onDrag(event);
             DragEvent drag = new DragEvent(this, event);
-            onDrag(drag);
             for (Region region : regions) {
                 region.drag(drag);
             }
+            
+        } else {
+            outside(event);
         }
     }
     
-    protected void onDrag(DragEvent event) {
+    protected void onDrag(InventoryDragEvent event) {
         
+    }
+    
+    protected void outside(InventoryDragEvent event) {
+        event.setCancelled(true);
     }
     
     
     @EventHandler
     public void open(InventoryOpenEvent event) {
-        if (validate(event)) {
+        if (this == event.getInventory().getHolder()) {
             onOpen(event);
             for (Region region : regions) {
                 region.open(this, event);
@@ -118,7 +131,7 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     
     @EventHandler
     public void close(InventoryCloseEvent event) {
-        if (!validate(event)) {
+        if (this != event.getInventory().getHolder()) {
             return;
         }
         
@@ -142,15 +155,10 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     protected void onReset(InventoryCloseEvent event) {
         
     }
-
-    
-    protected boolean validate(InventoryEvent event) {
-        return this == event.getInventory().getHolder();
-    }
     
     
-    public @Immutable List<Region> getRegions() {
-        return view;
+    public List<Region> getRegions() {
+        return regions;
     }
     
     public MessageTranslation getTranslation() {
@@ -174,15 +182,6 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     @Override
     public void reset(boolean reset) {
         this.reset = reset;
-    }
-    
-
-    public int getWidth() { 
-        return 1;
-    }
-    
-    public int getHeight() {
-        return 1;
     }
     
 }

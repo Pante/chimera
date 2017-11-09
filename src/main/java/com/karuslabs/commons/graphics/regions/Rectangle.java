@@ -25,66 +25,64 @@ package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.graphics.buttons.Button;
 import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
 
 import java.util.*;
 
 
 public class Rectangle<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
-    private Point corner;
-    private int width;
-    private int height;
-    private int windowWidth;
+    private Point min;
+    private Point max;
+    private int minSlot;
+    private int maxSlot;
+    private int window;
+    private int size;
     
     
-    public Rectangle(Point corner, int width, int height) {
-        this(new HashMap<>(), corner, width, height);
+    public Rectangle(Point min, int minSlot, Point max, int maxSlot) {
+        this(new HashMap<>(), min, minSlot, max, maxSlot);
     }
     
-    public Rectangle(Map<Integer, GenericButton> map, Point corner, int width, int height) {
+    public Rectangle(Map<Integer, GenericButton> map, Point min, int minSlot, Point max, int maxSlot) {
         super(map);
-        this.corner = corner;
-        this.width = width;
-        this.height = height;
-        windowWidth = 1;
-    }
-
-    
-    @Override
-    public void attach(Window window) {
-        windowWidth = window.getWidth();
-    }
-    
-    @Override
-    public void unattach(Window window) {
-        windowWidth = 1;
+        this.min = min;
+        this.max = max;
+        this.minSlot = minSlot;
+        this.maxSlot = maxSlot;
+        int width = max.x - min.x;
+        int height = max.y - min.y;
+        this.window = (maxSlot - minSlot - width + 1) / height - 1;
+        this.size = width * height;
     }
     
     
     @Override
     public boolean contains(int slot) {
-        int x = (slot % windowWidth) - 1;
-        int y = slot / windowWidth;
-        return (corner.x <= x && x <= corner.x + width) && (corner.y <= y && y <= corner.y + height);
+        int x = (slot % window) - 1;
+        int y = slot / window;
+        return (min.x <= x && x <= max.x) && (min.y <= y && y <= max.y);
     }
     
     @Override
     public int size() {
-        return width * height;
+        return size;
     }
     
     
-    public Point getCorner() {
-        return corner;
+    public Point getMin() {
+        return min;
     }
     
-    public int getWidth() {
-        return width;
+    public Point getMax() {
+        return max;
     }
     
-    public int getHeight() {
-        return height;
+    public int getMinSlot() {
+        return minSlot;
+    }
+    
+    public int getMaxSlot() {
+        return maxSlot;
     }
     
 }
