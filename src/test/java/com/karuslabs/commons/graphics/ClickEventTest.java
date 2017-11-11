@@ -21,43 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.windows;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Immutable;
-import com.karuslabs.commons.graphics.Point;
-import com.karuslabs.commons.graphics.regions.Region;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.ShapelessWindow;
 
-import java.util.List;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.*;
+
+import org.junit.jupiter.api.Test;
+
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class RectangleWindow extends Window {
+class ClickEventTest {
     
-    private int width;
-    private int height;
-    
-    
-    public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
-        super(regions, translation, reset);
-        this.width = width;
-        this.height = height;
-    }
+    InventoryClickEvent click = when(mock(InventoryClickEvent.class).getView()).thenReturn(mock(InventoryView.class)).getMock();
+    ClickEvent event = new ClickEvent(new ShapelessWindow(null, NONE, false), click);
 
     
-    @Override
-    public @Immutable Point inside(int slot) {
-        int x = (slot % width) - 1;
-        int y = slot / width;
-        return new Point(x, y);
-    }
-    
-    
-    public int getWidth() {
-        return width;
+    @Test
+    void getClicked() {
+        when(click.getRawSlot()).thenReturn(25);
+        Point point = event.getClicked();
+        
+        assertEquals(new Point(25, 0), point);
+        assertSame(point, event.getClicked());
     }
     
-    public int getHeight() {
-        return height;
+    
+    @Test
+    void currentItem() {
+        event.getCurrentItem();
+        verify(click).getCurrentItem();
+        
+        ItemStack item = mock(ItemStack.class);
+        event.setCurrentItem(item);
+        verify(click).setCurrentItem(item);
     }
     
 }

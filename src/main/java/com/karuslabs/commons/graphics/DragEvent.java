@@ -25,7 +25,6 @@ package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.graphics.windows.Window;
-import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ import org.bukkit.inventory.*;
 import static java.util.Collections.EMPTY_MAP;
 
 
-public class DragEvent extends InventoryDragEvent {
+public class DragEvent extends InventoryDragEvent implements InteractEvent<InventoryDragEvent> {
     
     private Window window;
     private InventoryDragEvent event;
@@ -47,7 +46,13 @@ public class DragEvent extends InventoryDragEvent {
         this.window = window;
         this.event = event;
     }
-
+    
+        
+    @Override
+    public Window getWindow() {
+        return window;
+    }
+    
     
     public @Shared Point[] getDragged() {
         if (dragged == null) {
@@ -55,16 +60,7 @@ public class DragEvent extends InventoryDragEvent {
         }
         
         return dragged;
-    }    
-    
-    public Window getWindow() {
-        return window;
     }
-    
-    public MessageTranslation getTranslation() {
-        return window.getTranslation();
-    }
-    
     
     @Override
     public Map<Integer, ItemStack> getNewItems() {
@@ -94,6 +90,11 @@ public class DragEvent extends InventoryDragEvent {
     @Override
     public DragType getType() {
         return event.getType();
+    }
+
+    @Override
+    public InventoryDragEvent getEvent() {
+        return event;
     }
     
 }

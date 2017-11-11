@@ -23,56 +23,48 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Shared;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.windows.ShapelessWindow;
 
-import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.InventoryView;
+
+import org.junit.jupiter.api.Test;
+
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.*;
 
 
-public class ClickEvent extends InventoryClickEvent implements InteractEvent<InventoryClickEvent> {
+class InteractEventTest {
     
-    private Window window;
-    private InventoryClickEvent event;
-    private Point clicked;
+    InventoryClickEvent click = when(mock(InventoryClickEvent.class).getView()).thenReturn(mock(InventoryView.class)).getMock();
+    InteractEvent<InventoryClickEvent> event = new ClickEvent(new ShapelessWindow(null, NONE, false), click);
+
     
-    
-    public ClickEvent(Window window, InventoryClickEvent event) {
-        super(event.getView(), event.getSlotType(), event.getRawSlot(), event.getClick(), event.getAction(), event.getHotbarButton());
-        this.window = window;
-        this.event = event;
+    @Test
+    void getTranslation() {
+        assertSame(event.getWindow().getTranslation(), event.getTranslation());
     }
+    
+    
+    @Test
+    void result() {
+        event.getResult();
+        verify(event.getEvent()).getResult();
         
-    
-    @Override
-    public Window getWindow() {
-        return window;
+        event.setResult(Event.Result.DEFAULT);
+        verify(event.getEvent()).setResult(Event.Result.DEFAULT);
     }
     
-    public @Shared Point getClicked() {
-        if (clicked == null) {
-            clicked = window.at(event.getRawSlot());
-        }
+    
+    @Test
+    void cancelled() {
+        event.isCancelled();
+        verify(event.getEvent()).isCancelled();
         
-        return clicked;
-    }
-    
-    
-    @Override
-    public ItemStack getCurrentItem() {
-        return event.getCurrentItem();
-    }
-
-    @Override
-    public void setCurrentItem(ItemStack item) {
-        event.setCurrentItem(item);
-    }
-
-    
-    @Override
-    public InventoryClickEvent getEvent() {
-        System.out.println("Event returned");
-        return event;
+        event.setCancelled(true);
+        verify(event.getEvent()).setCancelled(true);
     }
     
 }

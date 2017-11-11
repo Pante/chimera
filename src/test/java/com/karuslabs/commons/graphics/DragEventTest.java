@@ -21,43 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.windows;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Immutable;
-import com.karuslabs.commons.graphics.Point;
-import com.karuslabs.commons.graphics.regions.Region;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.graphics.windows.ShapelessWindow;
 
-import java.util.List;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.ItemStack;
+
+import org.junit.jupiter.api.Test;
+
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class RectangleWindow extends Window {
+class DragEventTest {
     
-    private int width;
-    private int height;
-    
-    
-    public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
-        super(regions, translation, reset);
-        this.width = width;
-        this.height = height;
-    }
-
-    
-    @Override
-    public @Immutable Point inside(int slot) {
-        int x = (slot % width) - 1;
-        int y = slot / width;
-        return new Point(x, y);
-    }
+    InventoryDragEvent drag = spy(new InventoryDragEvent(null, null, mock(ItemStack.class), false, EMPTY_MAP));
+    DragEvent event = new DragEvent(new ShapelessWindow(null, NONE, false), drag);
     
     
-    public int getWidth() {
-        return width;
-    }
-    
-    public int getHeight() {
-        return height;
+    @Test
+    void getDragged() {
+        when(drag.getRawSlots()).thenReturn(singleton(15));
+        
+        Point[] points = event.getDragged();
+        
+        assertEquals(new Point[] {new Point(15, 0)}, points);
+        assertSame(points, event.getDragged());
     }
     
 }

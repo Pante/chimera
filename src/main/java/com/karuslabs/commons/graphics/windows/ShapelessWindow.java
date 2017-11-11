@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.graphics.Point;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
@@ -31,33 +30,16 @@ import com.karuslabs.commons.locale.MessageTranslation;
 import java.util.List;
 
 
-public class RectangleWindow extends Window {
-    
-    private int width;
-    private int height;
-    
-    
-    public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
+public class ShapelessWindow extends Window {
+
+    public ShapelessWindow(List<Region> regions, MessageTranslation translation, boolean reset) {
         super(regions, translation, reset);
-        this.width = width;
-        this.height = height;
     }
 
     
     @Override
-    public @Immutable Point inside(int slot) {
-        int x = (slot % width) - 1;
-        int y = slot / width;
-        return new Point(x, y);
-    }
-    
-    
-    public int getWidth() {
-        return width;
-    }
-    
-    public int getHeight() {
-        return height;
+    protected Point inside(int slot) {
+        return new Point(slot, 0);
     }
     
 }

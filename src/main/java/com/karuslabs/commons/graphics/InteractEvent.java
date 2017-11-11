@@ -21,43 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.windows;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Immutable;
-import com.karuslabs.commons.graphics.Point;
-import com.karuslabs.commons.graphics.regions.Region;
+import com.karuslabs.commons.graphics.windows.Window;
 import com.karuslabs.commons.locale.MessageTranslation;
 
-import java.util.List;
+import org.bukkit.event.Event.Result;
+import org.bukkit.event.inventory.InventoryInteractEvent;
 
 
-public class RectangleWindow extends Window {
+interface InteractEvent<GenericEvent extends InventoryInteractEvent> {
     
-    private int width;
-    private int height;
+    public Window getWindow();
     
-    
-    public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
-        super(regions, translation, reset);
-        this.width = width;
-        this.height = height;
-    }
-
-    
-    @Override
-    public @Immutable Point inside(int slot) {
-        int x = (slot % width) - 1;
-        int y = slot / width;
-        return new Point(x, y);
+    public default MessageTranslation getTranslation() {
+        return getWindow().getTranslation();
     }
     
     
-    public int getWidth() {
-        return width;
+    public GenericEvent getEvent();
+    
+    
+    public default Result getResult() {
+        System.out.println("getResult() called");
+        return getEvent().getResult();
     }
     
-    public int getHeight() {
-        return height;
+    public default void setResult(Result result) {
+        getEvent().setResult(result);
+    }
+
+    
+    public default boolean isCancelled() {
+        return getEvent().isCancelled();
+    }
+
+    public default void setCancelled(boolean cancelled) {
+        getEvent().setCancelled(cancelled);
     }
     
 }

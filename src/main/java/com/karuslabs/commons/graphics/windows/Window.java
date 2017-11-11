@@ -42,7 +42,10 @@ import static java.util.Collections.*;
 public abstract class Window implements Listener, InventoryHolder, Resettable {    
     
     @JDK9
-    protected static final @Immutable Set<Integer> OUTSIDE = unmodifiableSet(new HashSet<>(asList(-1 -999)));
+    protected static final @Immutable Set<Integer> INVALID = unmodifiableSet(new HashSet<>(asList(-1 -999)));
+    
+    protected static final Point OUTLINE = new Point(-1, 0);
+    protected static final Point OUTSIDE = new Point(-999, 0);
     
     protected List<Region> regions;
     protected MessageTranslation translation;
@@ -57,7 +60,20 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
     }
     
     
-    public abstract Point at(int slot);
+    public @Immutable Point at(int slot) {
+        switch (slot) {
+            case -999:
+                return OUTSIDE;
+                
+            case -1:
+                return OUTLINE;
+                
+            default:
+                return inside(slot);
+        }
+    }
+    
+    protected abstract @Immutable Point inside(int slot);
     
     
     @EventHandler
@@ -93,7 +109,7 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
             return;
         }
 
-        if (disjoint(event.getRawSlots(), OUTSIDE)) {
+        if (disjoint(event.getRawSlots(), INVALID)) {
             onDrag(event);
             DragEvent drag = new DragEvent(this, event);
             for (Region region : regions) {
