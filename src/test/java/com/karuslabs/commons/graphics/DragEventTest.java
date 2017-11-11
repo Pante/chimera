@@ -32,13 +32,14 @@ import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Collections.*;
+import static org.bukkit.Material.AIR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 class DragEventTest {
     
-    InventoryDragEvent drag = spy(new InventoryDragEvent(null, null, mock(ItemStack.class), false, EMPTY_MAP));
+    InventoryDragEvent drag = spy(new InventoryDragEvent(null, null, new ItemStack(AIR), false, EMPTY_MAP));
     DragEvent event = new DragEvent(new ShapelessWindow(null, NONE, false), drag);
     
     
@@ -48,8 +49,31 @@ class DragEventTest {
         
         Point[] points = event.getDragged();
         
-        assertEquals(new Point[] {new Point(15, 0)}, points);
+        assertArrayEquals(new Point[] {new Point(15, 0)}, points);
         assertSame(points, event.getDragged());
+    }
+    
+    
+    @Test
+    void get() {
+        event.getNewItems();
+        verify(drag).getNewItems();
+        
+        event.getRawSlots();
+        verify(drag).getRawSlots();
+        
+        event.getInventorySlots();
+        verify(drag).getInventorySlots();
+        
+        event.getCursor();
+        verify(drag).getCursor();
+        
+        ItemStack item = new ItemStack(AIR);
+        event.setCursor(item);
+        verify(drag).setCursor(item);
+        
+        event.getType();
+        verify(drag).getType();
     }
     
 }

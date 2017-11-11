@@ -24,15 +24,38 @@
 package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.graphics.windows.Window;
-import com.karuslabs.commons.locale.MessageTranslation;
+
+import org.bukkit.event.inventory.InventoryCloseEvent;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-public interface InteractEvent {
+class ResettableComponentTest {
     
-    public Window getWindow();
+    ResettableComponent component = spy(new ResettableComponent(true) {
+        @Override
+        public void click(ClickEvent event) {
+            
+        }
+    });
     
-    public default MessageTranslation getTranslation() {
-        return getWindow().getTranslation();
+    
+    @ParameterizedTest
+    @CsvSource({"true, 1", "false, 0"})
+    void reset(boolean reset, int times) {
+        Window window = mock(Window.class);
+        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
+        
+        component.reset(reset);
+
+        component.reset(window, event);
+        
+        assertEquals(reset, component.reset());
+        verify(component, times(times)).onReset(window, event);
     }
     
 }

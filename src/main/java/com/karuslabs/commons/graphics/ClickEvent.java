@@ -25,12 +25,13 @@ package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
 
-public class ClickEvent extends InventoryClickEvent implements InteractEvent<InventoryClickEvent> {
+public class ClickEvent extends InventoryClickEvent implements InteractEvent {
     
     private Window window;
     private InventoryClickEvent event;
@@ -48,6 +49,7 @@ public class ClickEvent extends InventoryClickEvent implements InteractEvent<Inv
     public Window getWindow() {
         return window;
     }
+
     
     public @Shared Point getClicked() {
         if (clicked == null) {
@@ -68,11 +70,26 @@ public class ClickEvent extends InventoryClickEvent implements InteractEvent<Inv
         event.setCurrentItem(item);
     }
 
+        
+    @Override
+    public Result getResult() {
+        return event.getResult();
+    }
     
     @Override
-    public InventoryClickEvent getEvent() {
-        System.out.println("Event returned");
-        return event;
+    public void setResult(Result result) {
+        event.setResult(result);
+    }
+
+    
+    @Override
+    public boolean isCancelled() {
+        return event.isCancelled();
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        event.setCancelled(cancelled);
     }
     
 }

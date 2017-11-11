@@ -25,14 +25,13 @@ package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.annotation.ValueBased;
 
-import java.util.function.Supplier;
-
 
 @ValueBased
-public class Point implements Comparable<Point>, Supplier<Point> {
+public class Point implements Comparable<Point> {
     
     public final int x;
     public final int y;
+    private final int area;
     private int hash;
     
     
@@ -43,28 +42,24 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+        area = x * y;
         hash = 0;
     }
     
     
     @Override
     public int compareTo(Point other) {
-        if (y < other.y || (y == other.y && x < other.x)) {
-            return -1;
+        if (area > other.area) {
+            return 1;
 
-        } else if (y == other.y && x == other.x) {
+        } else if (area == other.area) {
             return 0;
 
         } else {
-            return 1;
+            return -1;
         }
     }
-    
-    
-    @Override
-    public Point get() {
-        return new Point(x, y);
-    }
+
     
     public boolean equals(Point point) {
         return x == point.x && y == point.y;
@@ -72,7 +67,10 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     
     @Override
     public boolean equals(Object object) {
-        if (object instanceof Point) {
+        if (this == object) {
+            return true;
+            
+        } else if (object instanceof Point) {
             Point point = (Point) object;
             return x == point.x && y == point.y;
             
@@ -90,10 +88,7 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     }
     
     private int hash() {
-        int hash = 7;
-        hash = 31 * hash + x;
-        hash = 31 * hash + y;
-        return hash;
+        return 31 * (217 + x) + y;
     }
     
     

@@ -25,46 +25,63 @@ package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.graphics.windows.ShapelessWindow;
 
+import java.util.stream.Stream;
+
 import org.bukkit.event.Event;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.InventoryView;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
+import static java.util.Collections.EMPTY_MAP;
+import static org.bukkit.Material.AIR;
+import org.bukkit.inventory.ItemStack;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 class InteractEventTest {
     
-    InventoryClickEvent click = when(mock(InventoryClickEvent.class).getView()).thenReturn(mock(InventoryView.class)).getMock();
-    InteractEvent<InventoryClickEvent> event = new ClickEvent(new ShapelessWindow(null, NONE, false), click);
-
-    
-    @Test
-    void getTranslation() {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void getTranslation(InteractEvent event, InventoryInteractEvent delegated) {
         assertSame(event.getWindow().getTranslation(), event.getTranslation());
     }
     
     
-    @Test
-    void result() {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void result(InventoryInteractEvent event, InventoryInteractEvent delegated) {
         event.getResult();
-        verify(event.getEvent()).getResult();
+        verify(delegated).getResult();
         
         event.setResult(Event.Result.DEFAULT);
-        verify(event.getEvent()).setResult(Event.Result.DEFAULT);
+        verify(delegated).setResult(Event.Result.DEFAULT);
     }
     
     
-    @Test
-    void cancelled() {
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void cancelled(InventoryInteractEvent event, InventoryInteractEvent delegated) {
         event.isCancelled();
-        verify(event.getEvent()).isCancelled();
+        verify(delegated).isCancelled();
         
         event.setCancelled(true);
-        verify(event.getEvent()).setCancelled(true);
+        verify(delegated).setCancelled(true);
+    }
+    
+    
+    static Stream<Arguments> parameters() {
+        InventoryClickEvent click = when(mock(InventoryClickEvent.class).getView()).thenReturn(mock(InventoryView.class)).getMock();
+        InventoryDragEvent drag = spy(new InventoryDragEvent(mock(InventoryView.class), null, new ItemStack(AIR), false, EMPTY_MAP));
+        
+        return Stream.of(
+            of(new ClickEvent(new ShapelessWindow(null, NONE, false), click), click),
+            of(new DragEvent(new ShapelessWindow(null, NONE, false), drag), drag)
+        );
     }
     
 }
