@@ -67,8 +67,10 @@ public class Cone implements Task<Cone> {
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        int count = context.count();
         
+        int count = (int) context.count();
+        double pitch = toRadians(location.getPitch() + 90);
+        double yaw = toRadians(-location.getYaw());
         for (int x = 0; x < perIteration; x += particles.getAmount(), count++) {
             if (count > size) {
                 count = 0;
@@ -82,8 +84,8 @@ public class Cone implements Task<Cone> {
             float radius = count * radiusGrowth;
             
             vector.setX(cos(angle) * radius).setY(length).setZ(sin(angle) * radius);
-            rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
-            rotateAroundYAxis(vector, toRadians(-location.getYaw()));
+            rotateAroundXAxis(vector, pitch);
+            rotateAroundYAxis(vector, yaw);
 
             context.render(particles, location, vector);
         }

@@ -23,16 +23,16 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.*;
-
-import java.util.function.Supplier;
+import com.karuslabs.commons.annotation.ValueBased;
 
 
 @ValueBased
-public class Point implements Comparable<Point>, Supplier<Point> {
+public class Point implements Comparable<Point> {
     
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
+    private final int area;
+    private int hash;
     
     
     public Point() {
@@ -42,45 +42,36 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-    
-    
-    public Point add(int x, int y) {
-        this.x += x;
-        this.y += y;
-        return this;
-    }
-    
-    public Point set(int x, int y) {
-        this.x += x;
-        this.y += y;
-        return this;
+        area = x * y;
+        hash = 0;
     }
     
     
     @Override
     public int compareTo(Point other) {
-        if (y < other.y || (y == other.y && x < other.x)) {
-            return -1;
+        if (area > other.area) {
+            return 1;
 
-        } else if (y == other.y && x == other.x) {
+        } else if (area == other.area) {
             return 0;
 
         } else {
-            return 1;
+            return -1;
         }
     }
+
     
-    @Override
-    public @Immutable Point get() {
-        return new Point(x, y);
+    public boolean equals(Point point) {
+        return x == point.x && y == point.y;
     }
     
-    
     @Override
-    public boolean equals(Object other) {
-        if (other instanceof Point) {
-            Point point = (Point) other;
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+            
+        } else if (object instanceof Point) {
+            Point point = (Point) object;
             return x == point.x && y == point.y;
             
         } else {
@@ -90,12 +81,20 @@ public class Point implements Comparable<Point>, Supplier<Point> {
     
     @Override
     public int hashCode() {
-        return x * 151 + y;
+        if (hash == 0) {
+            hash = hash();
+        }
+        return hash;
     }
+    
+    private int hash() {
+        return 31 * (217 + x) + y;
+    }
+    
     
     @Override
     public String toString() {
-        return "(x: " + x + ", y: " + y + ")";
+        return "(" + x + ", " + y + ")";
     }
     
 }

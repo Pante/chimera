@@ -21,37 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effects;
+package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.animation.particles.Particles;
-import com.karuslabs.commons.animation.particles.effect.*;
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.graphics.buttons.Button;
+import com.karuslabs.commons.graphics.*;
+import com.karuslabs.commons.graphics.windows.Window;
 
-import org.bukkit.Location;
+import org.bukkit.event.inventory.*;
 
 
-@Immutable
-public class Composite implements Task<Composite> {
+class Singleton extends ResettableComponent implements Region {
     
-    private Particles[] particles;
+    private int slot;
+    private Button button;
     
     
-    public Composite(Particles... particles) {
-        this.particles = particles;
+    Singleton(int slot, Button button, boolean reset) {
+        super(reset);
+        this.slot = slot;
+        this.button = button;
     }
     
     
     @Override
-    public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
-        for (Particles particle : particles) {
-           context.render(particle, location);
+    public boolean contains(int slot) {
+        return this.slot == slot;
+    }
+    
+    @Override
+    public void click(ClickEvent event) {
+        if (slot == event.getRawSlot()) {
+            button.click(event);
         }
     }
-
+    
     @Override
-    public @Immutable Composite get() {
-        return this;
+    public void drag(DragEvent event) {
+        if (!event.isCancelled() && event.getRawSlots().contains(slot)) {
+            button.drag(event, slot);
+        }
     }
     
+    @Override
+    public void open(Window window, InventoryOpenEvent event) {
+        button.open(window, event);
+    }
+    
+    @Override
+    public void close(Window window, InventoryCloseEvent event) {
+        button.close(window, event);
+    }
+
+    @Override
+    public int size() {
+        return 1;
+    }
+
 }

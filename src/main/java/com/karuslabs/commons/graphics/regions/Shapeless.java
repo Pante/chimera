@@ -21,22 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
 
-import org.bukkit.event.inventory.InventoryDragEvent;
+import com.karuslabs.commons.graphics.buttons.Button;
+
+import java.util.*;
 
 
-@FunctionalInterface
-public interface Clickable extends Component {
+public class Shapeless<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
-    public static final Clickable CANCEL = (point, event) -> event.setCancelled(true);
+    private Set<Integer> slots;
     
-    public static final Clickable NONE = (point, event) -> {};
     
+    public Shapeless(Set<Integer> slots) {
+        this(new HashMap<>(), slots);
+    }
+    
+    public Shapeless(Map<Integer, GenericButton> map, Set<Integer> slots) {
+        super(map);
+        this.slots = slots;
+    }
+
     
     @Override
-    public default void drag(Point point, InventoryDragEvent event) {
-        event.setCancelled(true);
+    public boolean contains(int slot) {
+        return slots.contains(slot);
     }
+    
+    @Override
+    public int size() {
+        return slots.size();
+    }    
     
 }

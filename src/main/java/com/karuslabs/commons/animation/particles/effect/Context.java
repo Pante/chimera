@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.util.concurrent.Repeatable;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -43,15 +44,15 @@ public interface Context extends Repeatable {
     public void cancel();
     
     
-    public BoundLocation getOrigin();
+    public @Shared BoundLocation getOrigin();
     
-    public BoundLocation getTarget();
+    public @Shared BoundLocation getTarget();
     
         
-    public Vector getVector();
+    public @Shared Vector getVector();
     
-    public int count();
+    public double count();
     
-    public void count(int count);
+    public void count(double count);
     
 }

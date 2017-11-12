@@ -57,7 +57,7 @@ public class Trace implements Task<Trace> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
+        Location location = context.getOrigin().getLocationCopy();
         if (world == null) {
             world = location.getWorld();
             
@@ -73,8 +73,6 @@ public class Trace implements Task<Trace> {
         waypoints.add(process(location));
         
         if ((context.getCurrent() + 1) % refresh == 0) {
-            location = new Location(world, 0, 0, 0);
-            
             for (Vector position : waypoints) {
                 location.setX(position.getX());
                 location.setY(position.getY());

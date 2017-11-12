@@ -26,56 +26,50 @@ package com.karuslabs.commons.animation.particles.effects;
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
 import com.karuslabs.commons.annotation.Immutable;
+import static java.lang.Math.*;
 
 import org.bukkit.Location;
-
-import static java.lang.Math.*;
+import org.bukkit.util.Vector;
 
 
 @Immutable
 public class Helix implements Task<Helix> {
     
     private Particles particles;
-    private int strands;
-    private int perStrand;
-    private float radius;
-    private float curve;
-    private double rotation;
+    private int trail;
+    private double radius;
+    private double height;
+    private double increment;
     
     
     public Helix(Particles particles) {
-        this(particles, 8, 80, 10, 10, PI / 4);
+        this(particles, 10, 5, 10, 0.05);
     }
     
-    public Helix(Particles particles, int strands, int perStrand, float radius, float curve, double rotation) {
+    public Helix(Particles particles, int trail, double radius, double height, double increment) {
         this.particles = particles;
-        this.strands = strands;
-        this.perStrand = perStrand;
+        this.trail = trail;
         this.radius = radius;
-        this.curve = curve;
-        this.rotation = rotation;
+        this.height = height;
+        this.increment = increment;
     }
     
     
     @Override
     public void render(Context context) {
+        Vector vector = context.getVector();
         Location location = context.getOrigin().getLocation();
-
-        for (int i = 1; i <= strands; i++) {
-            for (int j = 1; j <= perStrand; j += particles.getAmount()) {
-                float ratio = (float) j / perStrand;
-                double angle = curve * ratio * 2 * PI / strands + (2 * PI * i / strands) + rotation;
-                double x = cos(angle) * ratio * radius;
-                double z = sin(angle) * ratio * radius;
-                
-                context.render(particles, location.add(x, 0, z));
-                location.subtract(x, 0, z);
-            }
+        
+        double y = context.count();
+        for (int i = 0; i < trail && y <= height; i += particles.getAmount(), y += increment) {
+            vector.setX(radius * cos(y)).setY(y).setZ(radius * sin(y));
+            context.render(particles, location, vector);
         }
+        context.count(y);
     }
 
     @Override
-    public Helix get() {
+    public @Immutable Helix get() {
         return this;
     }
     

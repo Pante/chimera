@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.commons.annotation.Shared;
+
 import java.util.concurrent.locks.*;
 import javax.annotation.Nonnull;
 
@@ -60,7 +62,7 @@ public class CloseableLock extends ReentrantLock {
      * 
      * @return the Janitor used by the try-with-resources block to unlock this lock
      */
-    public @Nonnull Janitor acquire() {
+    public @Shared @Nonnull Janitor acquire() {
         lock();
         return janitor;
     }
@@ -72,7 +74,7 @@ public class CloseableLock extends ReentrantLock {
      * @return the Janitor used by the try-with-resources block to unlock this lock
      * @throws InterruptedException if the current thread is interrupted
      */
-    public @Nonnull Janitor acquireInterruptibly() throws InterruptedException {
+    public @Shared @Nonnull Janitor acquireInterruptibly() throws InterruptedException {
         lockInterruptibly();
         return janitor;
     }

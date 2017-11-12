@@ -56,6 +56,7 @@ public class MessageTranslation extends Translation {
     
     
     protected MessageFormat format;
+    protected ResourceBundle bundle;
     
     
     public MessageTranslation(String bundle, ResourceBundle.Control control, Provider provider) {
@@ -65,7 +66,11 @@ public class MessageTranslation extends Translation {
     
     
     public String format(String key, Object... arguments) {
-        format.applyPattern(get(format.getLocale()).getString(key));
+        if (bundle == null) {
+            bundle = get(format.getLocale());
+        }
+        
+        format.applyPattern(bundle.getString(key));
         return format.format(arguments);
     }
     
@@ -83,6 +88,7 @@ public class MessageTranslation extends Translation {
     
     public MessageTranslation locale(Locale locale) {
         format.setLocale(locale);
+        bundle = null;
         return this;
     }
     

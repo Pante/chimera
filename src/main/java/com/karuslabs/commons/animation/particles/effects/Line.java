@@ -70,7 +70,7 @@ public class Line implements Task<Line> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
+        Location location = context.getOrigin().getLocationCopy();
         resolveLink(context);
 
         double amount = perArc / zigzags;

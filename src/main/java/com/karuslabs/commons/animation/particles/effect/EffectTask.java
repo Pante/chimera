@@ -24,6 +24,7 @@
 package com.karuslabs.commons.animation.particles.effect;
 
 import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -41,7 +42,7 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
     protected BoundLocation target;
     protected boolean orientate;
     protected Vector vector;
-    protected int count;
+    protected double count;
     
     
     EffectTask(Task task, BiConsumer<Particles, Location> render, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
@@ -79,11 +80,7 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
         origin.setDirection(direction);
         target.setDirection(direction.multiply(-1));
     }
-    
-    
-    public Task getTask() {
-        return task;
-    }
+
     
     @Override
     public void render(Particles particles, Location location) {
@@ -92,18 +89,18 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
 
 
     @Override
-    public BoundLocation getOrigin() {
+    public @Shared BoundLocation getOrigin() {
         return origin;
     }
 
     @Override
-    public BoundLocation getTarget() {
+    public @Shared BoundLocation getTarget() {
         return target;
     }
     
         
     @Override
-    public Vector getVector() {
+    public @Shared Vector getVector() {
         if (vector == null) {
             vector = new Vector();
         }
@@ -112,12 +109,12 @@ class EffectTask extends ScheduledResultTask<Void> implements Context {
     }
     
     @Override
-    public int count() {
+    public double count() {
         return count;
     }
     
     @Override
-    public void count(int count) {
+    public void count(double count) {
         this.count = count;
     }
     

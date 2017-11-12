@@ -69,27 +69,22 @@ public class Atom implements Task<Atom> {
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        int count = context.count();
         
         renderNucleus(context, location, vector);
-        renderOrbitals(context, location, vector, count);
-        
-        context.count(count);
+        renderOrbitals(context, location, vector, (int) context.count());
     }
     
     void renderNucleus(Context context, Location location, Vector vector) {
         for (int i = 0; i < nucleusTotal; i += nucleus.getAmount()) {
             random(vector).multiply(radius * nucleusRadius);
 
-            context.render(nucleus, location.add(vector));
-            location.subtract(vector);
+            context.render(nucleus, location, vector);
         }
     }
     
     void renderOrbitals(Context context, Location location, Vector vector, int count) {
         for (int i = 0; i < orbitalTotal; i += orbital.getAmount(), count++) {
             double angle = count * angularVelocity;
-            
             for (int j = 0; j < orbitals; j++) {        
                 vector.setX(cos(angle)).setY(sin(angle)).setZ(0).multiply(radius);
                 
@@ -101,6 +96,7 @@ public class Atom implements Task<Atom> {
                 context.render(orbital, location, vector);
             }
         }
+        context.count(count);
     }
 
     @Override

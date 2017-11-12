@@ -65,8 +65,8 @@ public class Warp implements Task<Warp> {
         }
         
         y = step * grow;
+        
         location.add(0, y, 0);
-
         for (int i = 0; i < total; i += particles.getAmount()) {
             double angle = 2 * PI * i / total;
 
@@ -76,7 +76,6 @@ public class Warp implements Task<Warp> {
             context.render(particles, location.add(x, 0, z));
             location.subtract(x, 0, z);
         }
-
         location.subtract(0, y, 0);
     }
 

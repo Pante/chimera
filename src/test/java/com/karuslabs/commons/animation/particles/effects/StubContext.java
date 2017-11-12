@@ -42,7 +42,7 @@ public class StubContext implements Context {
     Location location;
     ThreadLocalRandom random;
     Vector vector;
-    int count;
+    double count;
     
     
     public StubContext(BoundLocation origin, BoundLocation target, long current, long iterations) {
@@ -96,12 +96,12 @@ public class StubContext implements Context {
     }
     
     @Override
-    public int count() {
+    public double count() {
         return count;
     }
     
     @Override
-    public void count(int count) {
+    public void count(double count) {
         this.count = count;
     }
     

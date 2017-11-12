@@ -23,63 +23,41 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.collection.ProxiedMap;
+import com.karuslabs.commons.graphics.windows.Window;
 
-import java.util.Map;
-
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 
-public abstract class Region<GenericComponent extends Component> extends ProxiedMap<Point, GenericComponent> implements Component {
+public abstract class ResettableComponent implements Component, Resettable {
     
-    private Point mutable;
+    protected boolean reset;
     
     
-    public Region(Map<Point, GenericComponent> map) {
-        super(map);
+    public ResettableComponent(boolean reset) {
+        this.reset = reset;
     }
-    
-    
-    public boolean contains(int x, int y) {
-        if (mutable == null) {
-            mutable = new Point();
-        }
-        
-        return contains(mutable.set(x, y));
-    }
-    
-    public abstract boolean contains(Point point);
     
     
     @Override
-    public void click(Point point, InventoryClickEvent event) {
-        GenericComponent component = map.get(point);
-        if (component != null) {
-            component.click(point, event);
-            
-        } else {
-            clickBlank(point, event);
+    public void reset(Window window, InventoryCloseEvent event) {
+        if (reset) {
+            onReset(window, event);
         }
     }
     
-    protected void clickBlank(Point point, InventoryClickEvent event) {
+    protected void onReset(Window window, InventoryCloseEvent event) {
         
     }
-    
 
+    
     @Override
-    public void drag(Point point, InventoryDragEvent event) {
-        GenericComponent component = map.get(point);
-        if (component != null) {
-            component.drag(point, event);
-            
-        } else {
-            dragBlank(point, event);
-        }
+    public boolean reset() {
+        return reset;
     }
     
-    protected void dragBlank(Point point, InventoryDragEvent event) {
-        
+    @Override
+    public void reset(boolean reset) {
+        this.reset = reset;
     }
     
 }

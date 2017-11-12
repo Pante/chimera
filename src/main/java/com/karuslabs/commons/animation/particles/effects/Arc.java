@@ -71,8 +71,8 @@ public class Arc implements Task<Arc> {
             float x = ((float) i / total) * length - length / 2;
             float y = (float) (-pitch * pow(x, 2) + height);
             
-            context.render(particles, location.add(vector).add(0, y, 0));
-            location.subtract(vector).subtract(0, y, 0);
+            context.render(particles, location.add(0, y, 0), vector);
+            location.subtract(0, y, 0);
         }
     }
 

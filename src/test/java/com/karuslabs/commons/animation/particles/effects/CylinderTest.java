@@ -36,21 +36,20 @@ class CylinderTest extends EffectBase {
     
     
     @ParameterizedTest
-    @CsvSource({"true, 0.015707963267948967, 0.018479956785822312, 0.02026833970057931", "false, 0.0, 0.0, 0.0"})
-    void render(boolean rotate, double x, double y, double z) {
-        doNothing().when(cylinder).renderSurface(any(), any(), any(), anyInt(), any(), anyDouble(), anyDouble(), anyDouble());
+    @CsvSource({"true", "false"})
+    void render(boolean rotate) {
+        doNothing().when(cylinder).renderSurface(any(), any(), any(), any(), anyDouble(), anyDouble(), anyDouble());
         cylinder.rotate = rotate;
-        context.count = 1;
         
         cylinder.render(context);
         
-        verify(cylinder).renderSurface(context, location, vector, 1, RANDOM, x, y, z);
+        verify(cylinder).renderSurface(context, location, vector, RANDOM, 0, 0, 0);
     }
     
     
     @Test
     void renderSurface() {
-        cylinder.renderSurface(context, location, vector, 0, RANDOM, 1, 2, 3);
+        cylinder.renderSurface(context, location, vector, RANDOM, 1, 2, 3);
         
         verify(context, times(2)).render(PARTICLES, location);
     }

@@ -23,38 +23,27 @@
  */
 package com.karuslabs.commons.graphics;
 
+import com.karuslabs.commons.graphics.windows.Window;
+
 import org.bukkit.event.inventory.*;
 
 
+@FunctionalInterface
 public interface Component {
-
-    public static final Component CANCEL = new Component() {
-        @Override
-        public void click(Point point, InventoryClickEvent event) {
-            event.setCancelled(true);
-        }
-
-        @Override
-        public void drag(Point point, InventoryDragEvent event) {
-            event.setCancelled(true);
-        }
-    };
     
-    public static final Component NONE = new Component() {
-        @Override
-        public void click(Point point, InventoryClickEvent event) {
-            
-        }
-
-        @Override
-        public void drag(Point point, InventoryDragEvent event) {
-            
-        }
-    };
+    public void click(ClickEvent event);
     
     
-    public void click(Point point, InventoryClickEvent event);
+    public default void open(Window window, InventoryOpenEvent event) {
+        
+    }
     
-    public void drag(Point point, InventoryDragEvent event);
+    public default void close(Window window, InventoryCloseEvent event) {
+        
+    }
+    
+    public default void reset(Window window, InventoryCloseEvent event) {
+        
+    }
     
 }

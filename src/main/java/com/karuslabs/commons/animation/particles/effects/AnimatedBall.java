@@ -69,7 +69,7 @@ public class AnimatedBall implements Task<AnimatedBall> {
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
-        int count = context.count();
+        int count = (int) context.count();
         
         for (int i = 0; i < perIteration; i += particles.getAmount(), count++) {
             float t = (float) (PI / total) * count;

@@ -21,47 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.*;
+import com.karuslabs.commons.graphics.windows.Window;
 
-import java.util.Collection;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-@Immutable
-public class Music {
+class ResettableComponentTest {
     
-    private Sound sound;
-    private SoundCategory category;
-    private float volume;
-    private float pitch;
+    ResettableComponent component = spy(new ResettableComponent(true) {
+        @Override
+        public void click(ClickEvent event) {
+            
+        }
+    });
     
     
-    public Music(Sound sound, SoundCategory category, float volume, float pitch) {
-        this.sound = sound;
-        this.category = category;
-        this.volume = volume;
-        this.pitch = pitch;
-    }
+    @ParameterizedTest
+    @CsvSource({"true, 1", "false, 0"})
+    void reset(boolean reset, int times) {
+        Window window = mock(Window.class);
+        InventoryCloseEvent event = mock(InventoryCloseEvent.class);
+        
+        component.reset(reset);
 
-    
-    public void play(Player player) {
-        play(player, player.getLocation());
-    }
-    
-    public void play(Collection<Player> players, Location location) {
-        players.forEach(player -> play(player, location));
-    }
-    
-    public void play(Player player, Location location) {
-        player.playSound(location, sound, category, volume, pitch);
-    }
-    
-    public void play(Location location) {
-        location.getWorld().playSound(location, sound, category, volume, pitch);
+        component.reset(window, event);
+        
+        assertEquals(reset, component.reset());
+        verify(component, times(times)).onReset(window, event);
     }
     
 }

@@ -57,7 +57,7 @@ public class Smoke implements Task<Smoke> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
+        Location location = context.getOrigin().getLocationCopy();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
         for (int i = 0; i < perIteration; i += particles.getAmount()) {

@@ -64,7 +64,7 @@ public class Circle implements Task<Circle> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation().subtract(subtract);
+        Location location = context.getOrigin().getLocationCopy().subtract(subtract);
         Vector vector = context.getVector();
         long current = context.getCurrent();
         

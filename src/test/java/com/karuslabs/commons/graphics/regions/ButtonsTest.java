@@ -21,24 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.graphics.regions;
 
-import java.util.Map;
+import com.karuslabs.commons.graphics.buttons.Button;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class Rectangle<GenericComponent extends Component> extends Region<GenericComponent> {
+class ButtonsTest {
     
-    private Point min;
-    private Point max;
+    Region region = mock(Region.class);
+    Buttons buttons = new Buttons(region);
     
     
-    public Rectangle(Map<Point, GenericComponent> map) {
-        super(map);
+    @Test
+    void put() {
+        when(region.contains(10)).thenReturn(true);
+        Button button = e -> {};
+        
+        buttons.put(10, button);
+        
+        assertSame(button, buttons.get(10));
     }
-
-    @Override
-    public boolean contains(Point point) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    
+    @Test
+    void put_ThrowsException() {
+        when(region.contains(10)).thenReturn(false);
+        Button button = e -> {};
+        
+        assertEquals(
+            "Slot must be within region", 
+            assertThrows(IllegalArgumentException.class, () -> buttons.put(10, button)).getMessage()
+        );
     }
     
 }
