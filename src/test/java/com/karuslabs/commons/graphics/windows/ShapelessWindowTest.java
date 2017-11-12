@@ -21,56 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.buttons;
+package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.Point;
 
-import org.bukkit.event.inventory.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+class ShapelessWindowTest {
     
-    boolean checked;
-    boolean original;
-    
-    
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
-    }
+    ShapelessWindow window = new ShapelessWindow(null, null, false);
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
-    }
-    
-    
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void at() {
+        assertEquals(new Point(25, 0), window.at(25));
     }
     
 }

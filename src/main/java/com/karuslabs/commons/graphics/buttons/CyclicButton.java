@@ -31,8 +31,8 @@ import org.bukkit.event.inventory.*;
 
 public abstract class CyclicButton<State> extends ResettableComponent implements Button {
     
-    protected State[] states;
-    protected int index;
+    State[] states;
+    int index;
 
     
     public CyclicButton(State... states) {
@@ -42,7 +42,7 @@ public abstract class CyclicButton<State> extends ResettableComponent implements
     public CyclicButton(boolean reset, State... states) {
         super(reset);
         if (states.length == 0) {
-            throw new IllegalArgumentException("Button must be initialised with at least one state");
+            throw new IllegalArgumentException("Invalid number of states");
         }
         this.states = states;
         this.index = 0;

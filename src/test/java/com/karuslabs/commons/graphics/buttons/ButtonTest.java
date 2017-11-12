@@ -23,54 +23,25 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.DragEvent;
 
-import org.bukkit.event.inventory.*;
+import org.junit.jupiter.api.Test;
+
+import static org.mockito.Mockito.*;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+class ButtonTest {
     
-    boolean checked;
-    boolean original;
-    
-    
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
-    }
+    Button button = e -> {};
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
-    }
-    
-    
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void drag() {
+        DragEvent event = mock(DragEvent.class);
+        
+        button.drag(event, 0);
+        
+        verify(event).setCancelled(true);
     }
     
 }

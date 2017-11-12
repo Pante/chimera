@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.annotation.Immutable;
 import com.karuslabs.commons.graphics.Point;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.MessageTranslation;
@@ -45,8 +44,8 @@ public class RectangleWindow extends Window {
 
     
     @Override
-    public @Immutable Point inside(int slot) {
-        int x = (slot % width) - 1;
+    protected Point inside(int slot) {
+        int x = slot % width;
         int y = slot / width;
         return new Point(x, y);
     }

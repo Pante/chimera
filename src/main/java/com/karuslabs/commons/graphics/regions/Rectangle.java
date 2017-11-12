@@ -35,9 +35,9 @@ public class Rectangle<GenericButton extends Button> extends AbstractRegion<Gene
     private Point max;
     private int minSlot;
     private int maxSlot;
-    private int window;
     private int size;
-    
+    private int width;
+        
     
     public Rectangle(Point min, int minSlot, Point max, int maxSlot) {
         this(new HashMap<>(), min, minSlot, max, maxSlot);
@@ -49,17 +49,17 @@ public class Rectangle<GenericButton extends Button> extends AbstractRegion<Gene
         this.max = max;
         this.minSlot = minSlot;
         this.maxSlot = maxSlot;
-        int width = max.x - min.x;
-        int height = max.y - min.y;
-        this.window = (maxSlot - minSlot - width + 1) / height - 1;
+        int width = (max.x - min.x) + 1;
+        int height = (max.y - min.y) + 1;
         this.size = width * height;
+        this.width = (maxSlot - minSlot - width + 1) / (height - 1);
     }
     
     
     @Override
     public boolean contains(int slot) {
-        int x = (slot % window) - 1;
-        int y = slot / window;
+        int x = slot % width;
+        int y = slot / width;
         return (min.x <= x && x <= max.x) && (min.y <= y && y <= max.y);
     }
     

@@ -21,56 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.buttons;
+package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import org.junit.jupiter.api.Test;
 
-import org.bukkit.event.inventory.*;
+import static java.util.Collections.singleton;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+class ShapelessTest {
     
-    boolean checked;
-    boolean original;
+    Shapeless region = new Shapeless(singleton(10));
     
     
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
+    @Test
+    void contains() {
+        assertTrue(region.contains(10));
     }
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
-    }
-    
-    
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void size() {
+        assertEquals(1, region.size());
     }
     
 }

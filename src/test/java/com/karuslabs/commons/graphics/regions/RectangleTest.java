@@ -21,56 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.buttons;
+package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.Point;
 
-import org.bukkit.event.inventory.*;
+import org.junit.jupiter.api.*;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+@TestInstance(PER_CLASS)
+class RectangleTest {
     
-    boolean checked;
-    boolean original;
+    Rectangle region = new Rectangle(new Point(1, 1), 6, new Point(2, 3), 17);
     
     
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
+    @ParameterizedTest
+    @CsvSource({"6, true", "17, true", "7, true", "16, true", "15, false", "8, false"})
+    void contains(int slot, boolean contains) {
+        assertEquals(contains, region.contains(slot));
     }
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
-    }
-    
-    
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void get() {
+        assertEquals(6, region.size());
+        
+        assertEquals(new Point(1, 1), region.getMin());
+        assertEquals(6, region.getMinSlot());
+        
+        assertEquals(new Point(2, 3), region.getMax());
+        assertEquals(17, region.getMaxSlot());
     }
     
 }

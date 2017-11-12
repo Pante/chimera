@@ -21,56 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.buttons;
+package com.karuslabs.commons.graphics.regions;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.buttons.Button;
 
-import org.bukkit.event.inventory.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+class ButtonsTest {
     
-    boolean checked;
-    boolean original;
-    
-    
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
-    }
+    Region region = mock(Region.class);
+    Buttons buttons = new Buttons(region);
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
+    @Test
+    void put() {
+        when(region.contains(10)).thenReturn(true);
+        Button button = e -> {};
+        
+        buttons.put(10, button);
+        
+        assertSame(button, buttons.get(10));
     }
     
     
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void put_ThrowsException() {
+        when(region.contains(10)).thenReturn(false);
+        Button button = e -> {};
+        
+        assertEquals(
+            "Slot must be within region", 
+            assertThrows(IllegalArgumentException.class, () -> buttons.put(10, button)).getMessage()
+        );
     }
     
 }

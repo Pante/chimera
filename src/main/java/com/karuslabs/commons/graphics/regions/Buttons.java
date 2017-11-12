@@ -24,7 +24,6 @@
 package com.karuslabs.commons.graphics.regions;
 
 import com.karuslabs.commons.collection.ProxiedMap;
-import com.karuslabs.commons.graphics.Point;
 import com.karuslabs.commons.graphics.buttons.Button;
 
 import java.util.*;
@@ -51,7 +50,7 @@ public class Buttons<GenericButton extends Button> extends ProxiedMap<Integer, G
             return map.put(slot, button);
             
         } else {
-            throw new IllegalArgumentException("Point must be within region");
+            throw new IllegalArgumentException("Slot must be within region");
         }
     }
     

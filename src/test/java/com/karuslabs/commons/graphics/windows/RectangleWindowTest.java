@@ -21,56 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.graphics.buttons;
+package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.graphics.*;
-import com.karuslabs.commons.graphics.windows.Window;
+import com.karuslabs.commons.graphics.Point;
 
-import org.bukkit.event.inventory.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-public abstract class CheckBox extends ResettableComponent implements Button {
+@TestInstance(PER_CLASS)
+class RectangleWindowTest {
     
-    boolean checked;
-    boolean original;
+    RectangleWindow window = new RectangleWindow(null, null, false, 9, 6);
     
     
-    public CheckBox(boolean reset) {
-        this(false, false);
-    }
-    
-    public CheckBox(boolean checked, boolean reset) {
-        super(reset);
-        this.checked = checked;
-        this.original = checked;
+    @ParameterizedTest
+    @CsvSource({"0, 0, 0",  "53, 8, 5", "19, 1, 2"})
+    void at(int slot, int x, int y) {
+        assertEquals(new Point(x, y), window.at(slot));
     }
     
     
-    @Override
-    public void click(ClickEvent event) {
-        if (checked) {
-            checked = uncheck(event);
-            
-        } else {
-            checked = check(event);
-        }
-    }
-    
-    protected boolean check(ClickEvent event) {
-        return true;
-    }
-    
-    protected boolean uncheck(ClickEvent event) {
-        return false;
-    }
-    
-    
-    @Override
-    public void reset(Window window, InventoryCloseEvent event) {
-        if (reset) {
-            onReset(window, event);
-            checked = original;
-        }
+    @Test
+    void get() {
+        assertEquals(9, window.getWidth());
+        assertEquals(6, window.getHeight());
     }
     
 }

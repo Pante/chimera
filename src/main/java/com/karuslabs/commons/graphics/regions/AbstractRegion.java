@@ -34,7 +34,7 @@ import org.bukkit.event.inventory.*;
 
 public abstract class AbstractRegion<GenericButton extends Button> extends ResettableComponent implements Region {
     
-    protected final Buttons<GenericButton> map;
+    protected final Buttons<GenericButton> buttons;
     
     
     public AbstractRegion(Map<Integer, GenericButton> map) {
@@ -43,13 +43,17 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
     
     public AbstractRegion(Map<Integer, GenericButton> map, boolean reset) {
         super(reset);
-        this.map = new Buttons<>(this, map);
+        buttons = new Buttons<>(this, map);
     }
 
     
     @Override
     public void click(ClickEvent event) {
-        GenericButton button = map.get(event.getRawSlot());
+        if (!contains(event.getRawSlot())) {
+            return;
+        }
+        
+        GenericButton button = buttons.get(event.getRawSlot());
         if (button != null) {
             button.click(event);
             
@@ -71,7 +75,7 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
             }
             
             if (contains(dragged)) {
-                GenericButton button = map.get(dragged);
+                GenericButton button = buttons.get(dragged);
                 if (button != null) {
                     button.drag(event, dragged);
 
@@ -90,7 +94,7 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
     @Override
     public void open(Window window, InventoryOpenEvent event) {
         onOpen(window, event);
-        map.values().forEach(button -> button.open(window, event));
+        buttons.values().forEach(button -> button.open(window, event));
     }
     
     protected void onOpen(Window window, InventoryOpenEvent event) {
@@ -100,12 +104,12 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
     
     @Override
     public void close(Window window, InventoryCloseEvent event) {
-        onClose(event);
-        map.values().forEach(button -> button.close(window, event));
+        onClose(window, event);
+        buttons.values().forEach(button -> button.close(window, event));
         
     }
     
-    protected void onClose(InventoryCloseEvent event) {
+    protected void onClose(Window window, InventoryCloseEvent event) {
         
     }
     
@@ -114,8 +118,13 @@ public abstract class AbstractRegion<GenericButton extends Button> extends Reset
     public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
             onReset(window, event);
-            map.values().forEach(button -> button.reset(window, event));
+            buttons.values().forEach(button -> button.reset(window, event));
         }
+    }
+    
+    
+    public Buttons<GenericButton> getButtons() {
+        return buttons;
     }
 
 }
