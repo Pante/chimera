@@ -32,21 +32,52 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 
 
+/**
+ * Provides the resolved locale for the specified {@code Player}.
+ */
 @FunctionalInterface
 public interface Provider {
     
+    /**
+     * Provider which always return the default locale specified by {@link Locale#getDefault()}.
+     */
     public static final Provider NONE = player -> Locale.getDefault();
     
+    /**
+     * Provider which returns the locale specified by {@link Player#getLocale()}, or {@code null} if 
+     * the locale specified by {@link Player#getLocale()} is invalid.
+     */
     public static final Provider DETECTED = player -> Locales.get(player.getLocale());
     
     
+    /**
+     * Returns the locale of the specified {@code Player}, or {@code null} if
+     * this provider fails to resolve the locale of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @return the locale of the specified player, or null if this provider fails to resolve the locale
+     */
     public @Nullable Locale get(Player player);
     
-    
+    /**
+     * Returns the locale of the specified {@code Player}, or {@code locale} if this
+     * provider fails to resolve the locale of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @param locale the default locale of the player
+     * @return the resolved locale of the specified player, or locale if this provider fails to resolve the locale
+     */
     public default Locale getOrDefault(Player player, Locale locale) {
        return Get.orDefault(get(player), locale);
     }
     
+    /**
+     * Returns the locale of the specified {@code Player}, or the detected locale specified by
+     * {@link Player#getLocale()} if this provider fails to resolve the locale of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @return the locale of the specified player, or the detected locale if this provider fails to resolve the locale
+     */
     public default Locale getOrDetected(Player player) {
         Locale locale = get(player);
         if (locale != null) {

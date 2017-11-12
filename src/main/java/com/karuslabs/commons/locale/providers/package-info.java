@@ -21,22 +21,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-
-/**
- * Signifies that the annotated target may be modified by the returning method.
- * Holding a reference to the annotated target beyond the scope it was called may
- * result in unpredictable and confusing behaviour.
- */
-@Documented
-@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
-@Retention(RUNTIME)
-public @interface Shared {
-    
-}
+package com.karuslabs.commons.locale.providers;

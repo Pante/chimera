@@ -24,7 +24,7 @@
 package com.karuslabs.commons.annotation;
 
 /**
- * Internally used to signify that the target may be rewritten during migration to Java 9.
+ * Used internally to signify that the target may be rewritten during migration to Java 9.
  * This annotation will be removed after migration.
  */
 @Deprecated
