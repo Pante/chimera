@@ -6,7 +6,18 @@
     <artifactId>commons</artifactId>
     <version>${version}</version>
     <packaging>jar</packaging>
+    
+    
+    <name>Karus-Commons</name>
+    <description>Karus Lab's commons library</description>
 
+
+    <properties>
+        <version>3.0.0-SNAPSHOT</version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    
 
     <reporting>
         <plugins>
@@ -25,17 +36,6 @@
         </plugins>
     </reporting>
     
-    
-    <name>Karus-Commons</name>
-    <description>Karus Lab's commons library</description>
-
-
-    <properties>
-        <version>3.0.0-SNAPSHOT</version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
     
     <distributionManagement>
         <repository>
@@ -125,6 +125,11 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
     
