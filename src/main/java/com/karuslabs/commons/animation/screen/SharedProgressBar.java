@@ -49,7 +49,7 @@ public class SharedProgressBar extends AbstractBar {
     
 
     @Override
-    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         BossBar bar = supplier.get();
         players.forEach(bar::addPlayer);
         
@@ -86,6 +86,7 @@ public class SharedProgressBar extends AbstractBar {
     public static SharedProgressBarBuilder builder(Plugin plugin) {
         return new SharedProgressBarBuilder(new SharedProgressBar(plugin, NONE, null, null, 0, 0, 0));
     }
+    
     
     public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar> {
 

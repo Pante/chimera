@@ -36,20 +36,20 @@ public class MaterialParticles extends AbstractParticles {
     private MaterialData data;
     
     
-    public MaterialParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, MaterialData data) {
+    public MaterialParticles(Particle type, MaterialData data, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
         super(type, amount, offsetX, offsetY, offsetZ, speed);
         this.data = data;
     }
     
     
     @Override
-    public void render(Player player, Location location) {
-        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, data);
-    }
-
-    @Override
     public void render(Location location) {
         location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, data);
+    }
+    
+    @Override
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, data);
     }
     
     
@@ -59,8 +59,9 @@ public class MaterialParticles extends AbstractParticles {
     
         
     public static MaterialBuilder builder() {
-        return new MaterialBuilder(new MaterialParticles(null, 0, 0, 0, 0, 0, null));
+        return new MaterialBuilder(new MaterialParticles(null, null, 0, 0, 0, 0, 0));
     }
+    
     
     public static class MaterialBuilder extends AbstractBuilder<MaterialBuilder, MaterialParticles> {
 

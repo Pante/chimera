@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.Base;
 import com.karuslabs.commons.animation.particles.Particles.Builder;
 
 import org.bukkit.*;
@@ -30,7 +31,7 @@ import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.singleton;
 import static org.bukkit.Particle.PORTAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,17 @@ import static org.mockito.Mockito.*;
 
 class ParticlesTest extends Base {
     
-    Particles particles = new StubBuilder(spy(new StubParticles(null, 0))).particle(PORTAL).amount(10).build();
+    Particles particles = new StubBuilder(spy(new Particles(null, 0) {
+        @Override
+        public void render(Player player, Location location) {
+            
+        }
+
+        @Override
+        public void render(Location location) {
+            
+        }
+    })).particle(PORTAL).amount(10).build();
     
     
     @Test
@@ -50,41 +61,23 @@ class ParticlesTest extends Base {
     
     
     @Test
-    void render_Players() {
-        particles.render(singletonList(player), location);
+    void render_Players_Location() {
+        particles.render(singleton(player), location);
         
         verify(particles).render(player, location);
     }
     
     
     @Test
-    void get() {
+    void getters() {
         assertEquals(PORTAL, particles.getParticle());
         assertEquals(10, particles.getAmount());
     }
     
     
-    static class StubParticles extends Particles {
+    static class StubBuilder extends Builder<StubBuilder, Particles> {
 
-        private StubParticles(Particle particle, int amount) {
-            super(particle, amount);
-        }
-
-        @Override
-        public void render(Player player, Location location) {
-            
-        }
-
-        @Override
-        public void render(Location location) {
-            
-        }
-        
-    }
-    
-    static class StubBuilder extends Builder<StubBuilder, StubParticles> {
-
-        private StubBuilder(StubParticles particles) {
+        private StubBuilder(Particles particles) {
             super(particles);
         }
 

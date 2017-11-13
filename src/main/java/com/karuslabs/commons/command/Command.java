@@ -145,6 +145,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return new Builder(new Command("", plugin, MessageTranslation.NONE, "", "", new ArrayList<>(), CommandExecutor.NONE, new HashMap<>(), new HashMap<>()));
     }
     
+    
     public static class Builder {
         
         private Command command;

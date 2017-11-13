@@ -25,6 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,6 +36,7 @@ import static com.karuslabs.commons.animation.particles.effects.DiscoBall.Direct
 import static com.karuslabs.commons.world.Vectors.random;
 
 
+@Immutable
 public class DiscoBall implements Task<DiscoBall> {
     
     public enum Direction {
@@ -49,9 +51,6 @@ public class DiscoBall implements Task<DiscoBall> {
     private int lines;
     private int lineLength;
     Direction direction;
-    Vector vector;
-    Vector distance;
-    
     
     public DiscoBall(Particles sphere, Particles line) {
         this(sphere, line, 50, 100, 0.6F, 7, 15, DOWN);
@@ -66,21 +65,20 @@ public class DiscoBall implements Task<DiscoBall> {
         this.lines = lines;
         this.lineLength = lineLength;
         this.direction = direction;
-        vector = new Vector();
-        distance = new Vector();
     }
     
     
     @Override
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
+        Vector vector = context.getVector();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        renderLines(context, location, random);
-        renderSphere(context, location);
+        renderLines(context, location, vector, random);
+        renderSphere(context, location, vector);
     }
     
-    void renderLines(Context context, Location location, ThreadLocalRandom random) {
+    void renderLines(Context context, Location location, Vector vector, ThreadLocalRandom random) {
         int max = random.nextInt(2, lines) * 2;
         for (int i = 0; i < max; i++) {
             double x = random.nextInt(-lineLength, lineLength);
@@ -91,12 +89,11 @@ public class DiscoBall implements Task<DiscoBall> {
             double ratio = vector.length() / lineTotal;
             vector.normalize().multiply(ratio);
             
-            distance.setX(0).setY(0).setZ(0);
+            location.subtract(vector);
             for (int j = 0; j < lineTotal; j += line.getAmount()) {
-                context.render(line, location.add(distance));
-                distance.add(vector);
+                context.render(line, location.add(vector));
             }
-            location.subtract(distance);
+            location.subtract(vector.multiply(lineTotal - 1));
         }
     }
     
@@ -113,7 +110,7 @@ public class DiscoBall implements Task<DiscoBall> {
         }
     }
     
-    void renderSphere(Context context, Location location) {
+    void renderSphere(Context context, Location location, Vector vector) {
         for (int i = 0; i < sphereTotal; i += sphere.getAmount()) {
             random(vector).multiply(radius);
             context.render(sphere, location, vector);
@@ -121,8 +118,8 @@ public class DiscoBall implements Task<DiscoBall> {
     }
     
     @Override
-    public DiscoBall get() {
-        return new DiscoBall(sphere, line, sphereTotal, lineTotal, radius, lines, lineLength, direction);
+    public @Immutable DiscoBall get() {
+        return this;
     }
     
 }

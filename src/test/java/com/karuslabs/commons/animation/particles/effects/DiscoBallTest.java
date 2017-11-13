@@ -44,13 +44,13 @@ class DiscoBallTest extends EffectBase {
     
     @Test
     void render() {
-        doNothing().when(ball).renderSphere(context, location);
-        doNothing().when(ball).renderLines(context, location, RANDOM);
+        doNothing().when(ball).renderSphere(context, location, vector);
+        doNothing().when(ball).renderLines(context, location, vector, RANDOM);
         
         ball.render(context);
         
-        verify(ball).renderSphere(context, location);
-        verify(ball).renderLines(context, location, RANDOM);
+        verify(ball).renderSphere(context, location, vector);
+        verify(ball).renderLines(context, location, vector, RANDOM);
     }
     
     
@@ -59,10 +59,10 @@ class DiscoBallTest extends EffectBase {
         ThreadLocalRandom random = spy(RANDOM);
         doReturn(2).when(random).nextInt(anyInt(), anyInt());
         
-        ball.renderLines(context, location, random);
+        ball.renderLines(context, location, vector, random);
         
         verify(context, times(4)).render(COLOURED, location);
-        assertVector(from(1.06, 1.06, 1.06), context.location);
+        assertVector(from(6.940000000000001, 6.940000000000001, 6.940000000000001), context.location);
     }
     
     
@@ -90,7 +90,7 @@ class DiscoBallTest extends EffectBase {
     
     @Test
     void renderSphere() {
-        ball.renderSphere(context, location);
+        ball.renderSphere(context, location, vector);
         
         verify(context).render(PARTICLES, location);
     }

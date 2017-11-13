@@ -34,21 +34,21 @@ import org.bukkit.plugin.Plugin;
 
 class StubBar extends Bar {
 
-    ScheduledResultTask<?> task;
+    ScheduledResultTask<Void> task;
     
     
-    StubBar(Plugin plugin, ScheduledResultTask<?> task, Translation translation, long iterations, long delay, long period) {
+    StubBar(Plugin plugin, ScheduledResultTask<Void> task, Translation translation, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.task = task;
     }
 
     @Override
-    protected ScheduledResultTask<?> newTask(Collection<Player> players) {
+    protected ScheduledResultTask<Void> newTask(Collection<Player> players) {
         return task;
     }
     
     
-    static StubBuilder builder(Plugin plugin, ScheduledResultTask<?> task) {
+    static StubBuilder builder(Plugin plugin, ScheduledResultTask<Void> task) {
         return new StubBuilder(new StubBar(plugin, task, null, 0, 0, 0));
     }
     

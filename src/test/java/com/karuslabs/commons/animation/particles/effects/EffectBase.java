@@ -38,8 +38,8 @@ import static org.mockito.Mockito.*;
 public abstract class EffectBase extends VectorBase {
     
     public static final Particles PARTICLES = new StandardParticles(null, 100, 0, 0, 0, 1);
-    public static final Particles COLOURED = new ColouredParticles(null, 100, WHITE);
-    public static final Particles MATERIAL = new MaterialParticles(null, 100, 0, 0, 0, 0, null);
+    public static final Particles COLOURED = new ColouredParticles(null, WHITE, 100);
+    public static final Particles MATERIAL = new MaterialParticles(null, null, 100, 0, 0, 0, 0);
     public static final Particles SINGLE = new StandardParticles(null, 1, 0, 0, 0, 1);
     public static final Particles SPAM = new StandardParticles(null, 1000, 0, 0, 0, 1);
     

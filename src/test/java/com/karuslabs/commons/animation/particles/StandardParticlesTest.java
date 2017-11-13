@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.Base;
+
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.animation.particles.StandardParticles.builder;
@@ -34,6 +36,14 @@ import static org.mockito.Mockito.*;
 class StandardParticlesTest extends Base {
     
     StandardParticles particles = builder().particle(CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).build();
+ 
+    
+    @Test
+    void render_Location() {
+        particles.render(location);
+        
+        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4);
+    }
     
     
     @Test
@@ -45,15 +55,7 @@ class StandardParticlesTest extends Base {
     
     
     @Test
-    void render() {
-        particles.render(location);
-        
-        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4);
-    }
-    
-    
-    @Test
-    void get() {
+    void getters() {
         assertEquals(1, particles.getOffsetX());
         assertEquals(2, particles.getOffsetY());
         assertEquals(3, particles.getOffsetZ());

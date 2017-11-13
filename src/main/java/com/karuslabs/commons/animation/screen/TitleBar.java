@@ -51,7 +51,7 @@ public class TitleBar extends Bar {
 
     
     @Override
-    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer.get(), translation, fadeIn, stay, fadeOut, iterations);
     }
     
@@ -101,6 +101,7 @@ public class TitleBar extends Bar {
     public static TitleBarBuilder builder(Plugin plugin) {
         return new TitleBarBuilder(new TitleBar(plugin, NONE, null, 0, 0, 0, 0, 0, 0));
     }
+    
     
     public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {
 

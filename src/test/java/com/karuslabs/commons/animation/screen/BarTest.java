@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class BarTest {
     
     Plugin plugin = mock(Plugin.class);
-    ScheduledResultTask<?> task = mock(ScheduledResultTask.class);
+    ScheduledResultTask<Void> task = mock(ScheduledResultTask.class);
     Bar bar = spy(builder(plugin, task).translation(NONE).iterations(1).infinite().delay(2).period(3).build());
     
     

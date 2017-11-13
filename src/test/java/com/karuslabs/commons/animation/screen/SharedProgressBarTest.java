@@ -24,7 +24,6 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.animation.screen.SharedProgressBar.ScheduledTask;
-import com.karuslabs.commons.annotation.JDK9;
 
 import java.util.function.BiConsumer;
 
@@ -47,7 +46,6 @@ class SharedProgressBarTest {
     
     
     @Test
-    @JDK9
     void process() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
@@ -58,7 +56,6 @@ class SharedProgressBarTest {
     }
     
     @Test
-    @JDK9
     void callback() {
         ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         

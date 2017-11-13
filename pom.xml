@@ -2,11 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <name>Karus-Commons</name>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
     <version>3.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>jar</packaging> 
+    
+    
+    <name>Karus-Commons</name>
+    <description>Karus Lab's commons library</description>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     
     
     <distributionManagement>
@@ -20,25 +29,9 @@
             <url>http://repo.karuslabs.com/repository/karus-commons/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-    
-    
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-    
-    
-    <repositories>
-    
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        
-    </repositories>
+     
      
     <dependencies>
-        
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -49,7 +42,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.0</version>
+            <version>23.3-jre</version>
             <scope>provided</scope>
         </dependency>
         
@@ -101,14 +94,20 @@
             <version>2.10.0</version>
             <scope>test</scope>
         </dependency>
-        
     </dependencies>
+    
+    
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
     
     
     <build>
         <defaultGoal>clean package install</defaultGoal>
-        <plugins>
-            
+        <plugins>  
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
@@ -189,7 +188,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
         </plugins>
     </build>
     

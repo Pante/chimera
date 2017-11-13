@@ -50,7 +50,7 @@ public class ProgressBar extends AbstractBar {
 
     
     @Override
-    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         List<BossBar> bars = players.stream().map(player -> {
             BossBar bar = supplier.get();
             bar.addPlayer(player);
@@ -90,6 +90,7 @@ public class ProgressBar extends AbstractBar {
     public static ProgressBarBuilder builder(Plugin plugin) {
         return new ProgressBarBuilder(new ProgressBar(plugin, NONE, null, null, 0, 0, 0));
     }
+    
     
     public static class ProgressBarBuilder extends AbstractBuilder<ProgressBarBuilder, ProgressBar>  {
 

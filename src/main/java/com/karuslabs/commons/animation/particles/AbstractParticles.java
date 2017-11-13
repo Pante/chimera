@@ -26,7 +26,6 @@ package com.karuslabs.commons.animation.particles;
 import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 
 
 @Immutable
@@ -45,18 +44,7 @@ abstract class AbstractParticles extends Particles {
         this.offsetZ = offsetZ;
         this.speed = speed;
     }
-
     
-    @Override
-    public void render(Player player, Location location) {
-        player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed);
-    }
-
-    @Override
-    public void render(Location location) {
-        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed);
-    }
-
     
     public double getOffsetX() {
         return offsetX;

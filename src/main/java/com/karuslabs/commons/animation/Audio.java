@@ -25,13 +25,17 @@ package com.karuslabs.commons.animation;
 
 import com.karuslabs.commons.annotation.*;
 
-import java.util.Collection;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
+import static java.lang.Float.floatToIntBits;
+import static org.bukkit.SoundCategory.MASTER;
+
 
 @Immutable
+@ValueBased
 public class Audio {
     
     private Sound sound;
@@ -40,6 +44,10 @@ public class Audio {
     private float pitch;
     
     
+    public Audio(Sound sound, float volume, float pitch) {
+        this(sound, MASTER, volume, pitch);
+    }
+    
     public Audio(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
         this.category = category;
@@ -47,6 +55,11 @@ public class Audio {
         this.pitch = pitch;
     }
 
+        
+    public void play(Location location) {
+        location.getWorld().playSound(location, sound, category, volume, pitch);
+    }
+    
     
     public void play(Player player) {
         play(player, player.getLocation());
@@ -60,8 +73,32 @@ public class Audio {
         player.playSound(location, sound, category, volume, pitch);
     }
     
-    public void play(Location location) {
-        location.getWorld().playSound(location, sound, category, volume, pitch);
+    
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+            
+        } else if (other instanceof Audio) {
+            return equals((Audio) other);
+            
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean equals(Audio other) {
+        return sound == other.sound && category == other.category && volume == other.volume && pitch == other.pitch;
+    } 
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(sound);
+        hash = 53 * hash + Objects.hashCode(category);
+        hash = 53 * hash + floatToIntBits(volume);
+        hash = 53 * hash + floatToIntBits(pitch);
+        return hash;
     }
     
 }

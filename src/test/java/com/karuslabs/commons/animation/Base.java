@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles;
+package com.karuslabs.commons.animation;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -29,10 +29,10 @@ import org.bukkit.entity.Player;
 import static org.mockito.Mockito.*;
 
 
-abstract class Base {
+public abstract class Base {
     
-    World world = mock(World.class);
-    Location location = new Location(world, 0, 0, 0);
-    Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    public World world = mock(World.class);
+    public Location location = new Location(world, 0, 0, 0);
+    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
     
 }

@@ -36,23 +36,23 @@ import static org.bukkit.boss.BarStyle.SEGMENTED_10;
 
 
 @Immutable
-public class BossBarSupplier implements Supplier<BossBar> {
+public class BarSupplier implements Supplier<BossBar> {
     
     private Server server;
     private String message;
     private BarColor colour;
     private BarStyle style;
-    private BarFlag[] flags;
     private double progress;
+    private BarFlag[] flags;
 
     
-    public BossBarSupplier(Server server, String message, BarColor colour, BarStyle style, double progress, BarFlag... flags) {
+    public BarSupplier(Server server, String message, BarColor colour, BarStyle style, double progress, BarFlag... flags) {
         this.server = server;
         this.message = message;
         this.colour = colour;
         this.style = style;
-        this.flags = flags;
         this.progress = progress;
+        this.flags = flags;
     }
     
     
@@ -65,15 +65,15 @@ public class BossBarSupplier implements Supplier<BossBar> {
     
     
     public static Builder builder(Server server) {
-        return new Builder(new BossBarSupplier(server, "", BLUE, SEGMENTED_10, 1));
+        return new Builder(new BarSupplier(server, "", BLUE, SEGMENTED_10, 1));
     }
     
     public static class Builder {
         
-        private BossBarSupplier supplier;
+        private BarSupplier supplier;
         
         
-        private Builder(BossBarSupplier supplier) {
+        private Builder(BarSupplier supplier) {
             this.supplier = supplier;
         }
         
@@ -92,19 +92,19 @@ public class BossBarSupplier implements Supplier<BossBar> {
             supplier.style = style;
             return this;
         }
+                
+        public Builder progress(double progress) {
+            supplier.progress = progress;
+            return this;
+        }
         
         public Builder flags(BarFlag... flags) {
             supplier.flags = flags;
             return this;
         }
         
-        public Builder progress(double progress) {
-            supplier.progress = progress;
-            return this;
-        }
         
-        
-        public BossBarSupplier build() {
+        public BarSupplier build() {
             return supplier;
         }
         

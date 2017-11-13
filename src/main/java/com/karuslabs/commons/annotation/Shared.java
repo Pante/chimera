@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 @Documented
-@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
+@Target({PARAMETER, TYPE, TYPE_USE})
 @Retention(RUNTIME)
 public @interface Shared {
     
