@@ -94,7 +94,7 @@ class EffectTaskTest {
     
     
     @Test
-    void get() {
+    void getters() {
         assertEquals(task, effect.task);
         assertNotNull(effect.getVector());
         assertNull(effect.value());

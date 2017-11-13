@@ -24,7 +24,6 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.animation.screen.ActionBar.ScheduledTask;
-import com.karuslabs.commons.annotation.JDK9;
 
 import java.util.function.BiFunction;
 
@@ -33,7 +32,7 @@ import org.bukkit.entity.Player;
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.animation.screen.ActionBar.builder;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.singleton;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -47,14 +46,13 @@ class ActionBarTest {
     
     
     @Test
-    @JDK9
     void process() {
-        ScheduledTask task = (ScheduledTask) bar.newTask(singletonList(player));
+        ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
         
         task.process();
 
-        assertEquals("value", spigot.values[0].toPlainText());
         verify(function).apply(player, task);
+        assertEquals("value", spigot.values[0].toPlainText());
     }
     
 }

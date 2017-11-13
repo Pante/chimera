@@ -38,7 +38,7 @@ public class ColouredParticles extends Particles {
     private double r, g, b;
     
     
-    public ColouredParticles(Particle type, int amount, Color colour) {
+    public ColouredParticles(Particle type, Color colour, int amount) {
         super(type, amount);
         setColour(colour);
     }
@@ -52,13 +52,13 @@ public class ColouredParticles extends Particles {
 
     
     @Override
-    public void render(Player player, Location location) {
-        player.spawnParticle(particle, location, amount, r, g, b, 1);
-    }    
-
-    @Override
     public void render(Location location) {
         location.getWorld().spawnParticle(particle, location, amount, r, g, b, 1);
+    }
+    
+    @Override
+    public void render(Player player, Location location) {
+        player.spawnParticle(particle, location, amount, r, g, b, 1);
     }
 
     
@@ -68,7 +68,7 @@ public class ColouredParticles extends Particles {
     
     
     public static ColouredBuilder builder() {
-        return new ColouredBuilder(new ColouredParticles(null, 0, WHITE));
+        return new ColouredBuilder(new ColouredParticles(null, WHITE, 0));
     }
     
     public static class ColouredBuilder extends Builder<ColouredBuilder, ColouredParticles> {

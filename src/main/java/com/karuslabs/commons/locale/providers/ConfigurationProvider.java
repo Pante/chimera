@@ -33,13 +33,14 @@ import org.bukkit.entity.Player;
 
 
 /**
- * A {@code Provider} implementation backed by a configuration file.
+ * An implementation of {@code Provider} which retrieves the locales of {@code Player}s stored
+ * in a backing configuration file.
  * 
- * Locales of {@code Player}s are stored in the configuration file by
- * mapping the UUID of the {@code Player} to the specified locale in the format, 
- * {@code [Player UUID]: "[ISO 3166 alpha-2 langauge]_[ISO 639 alpha-2 country]"}.
+ * The UUID of {@code Player}s are mapped to the locales and are stored as key-value 
+ * pairs in the format: {@code [UUID]: [ISO 3166 alpha-2 langauge]_[ISO 639 alpha-2 country]}.
  * 
- * Changes are not automatically saved to disk and must be manually triggered via {@link #save()}.
+ * Changes made to the stored locales are not automatically saved to disk and must be manually
+ * saved through {@link #save()}.
  */
 public class ConfigurationProvider implements Provider {
     
@@ -47,9 +48,9 @@ public class ConfigurationProvider implements Provider {
     
     
     /**
-     * Constructs a new {@code ConfigurationProvider} backed by the specified {@code BackedConfiguration}.
+     * Constructs a {@code ConfigurationProvider} backed by the specified {@code BackedConfiguration}.
      * 
-     * @param config the configuration
+     * @param config the configuration which stores the locales of players
      */
     public ConfigurationProvider(BackedConfiguration config) {
         this.config = config;
@@ -57,7 +58,11 @@ public class ConfigurationProvider implements Provider {
     
     
     /**
-     * {@inheritDoc}
+     * Returns the locale of the specified {@code Player} stored in the backing configuration file, or {@code null}
+     * if the configuration file contains no mapping for the specified {@code Player}.
+     * 
+     * @param player the player
+     * @return the locale of the specified player, or null if the configuration file contains no mapping for the specified player
      */
     @Override
     public @Nullable Locale get(Player player) {
@@ -67,10 +72,13 @@ public class ConfigurationProvider implements Provider {
     }
     
     /**
+     * Associates the specified locale with the specified {@code Player}.
+     * Changes will immediately be reflected when obtaining the locales of {@code Player}s
+     * through {@link #get(Player)} but will not be automatically saved to disk. Changes must
+     * be manually saved to disk through {@link #save()}.
      * 
-     * 
-     * @param player
-     * @param locale 
+     * @param player the player
+     * @param locale the locale of the specified player
      */
     public void set(Player player, Locale locale) {
         String id = player.getUniqueId().toString();

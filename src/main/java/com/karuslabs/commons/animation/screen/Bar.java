@@ -24,7 +24,6 @@
 package com.karuslabs.commons.animation.screen;
 
 
-import com.karuslabs.commons.annotation.JDK9;
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
@@ -58,18 +57,17 @@ public abstract class Bar {
     }
     
     
-    @JDK9("List.of(...)")
-    public @Nonnull Result<?> render(Player... player) {
+    public @Nonnull Result<Void> render(Player... player) {
         return render(asList(player));
     }
     
-    public @Nonnull Result<?> render(Collection<Player> players) {
-        ScheduledResultTask<?> task = newTask(players);
+    public @Nonnull Result<Void> render(Collection<Player> players) {
+        ScheduledResultTask<Void> task = newTask(players);
         task.runTaskTimerAsynchronously(plugin, delay, period);
         return task;
     }
     
-    protected abstract @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players);
+    protected abstract @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericBar extends Bar> {

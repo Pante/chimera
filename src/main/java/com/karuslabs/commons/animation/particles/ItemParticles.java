@@ -36,20 +36,20 @@ public class ItemParticles extends AbstractParticles {
     private ItemStack item;
 
     
-    public ItemParticles(Particle type, int amount, double offsetX, double offsetY, double offsetZ, double speed, ItemStack item) {
+    public ItemParticles(Particle type, ItemStack item, int amount, double offsetX, double offsetY, double offsetZ, double speed) {
         super(type, amount, offsetX, offsetY, offsetZ, speed);
         this.item = item;
     }
+
     
+    @Override
+    public void render(Location location) {
+        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
+    }
     
     @Override
     public void render(Player player, Location location) {
         player.spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
-    }
-
-    @Override
-    public void render(Location location) {
-        location.getWorld().spawnParticle(particle, location, amount, offsetX, offsetY, offsetZ, speed, item);
     }
     
     
@@ -59,8 +59,9 @@ public class ItemParticles extends AbstractParticles {
     
     
     public static ItemBuilder builder() {
-        return new ItemBuilder(new ItemParticles(null, 0, 0, 0, 0, 0, null));
+        return new ItemBuilder(new ItemParticles(null, null, 0, 0, 0, 0, 0));
     }   
+    
     
     public static class ItemBuilder extends AbstractBuilder<ItemBuilder, ItemParticles> {
 

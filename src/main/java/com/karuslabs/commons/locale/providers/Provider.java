@@ -45,7 +45,7 @@ public interface Provider {
     
     /**
      * A provider which returns the locale specified by {@link Player#getLocale()}, or {@code null} if 
-     * the is unable to be resolved.
+     * the locale is unable to be resolved.
      */
     public static final Provider DETECTED = player -> Locales.get(player.getLocale());
     

@@ -102,9 +102,9 @@ public class ClassMap<V> extends ProxiedMap<Class<? extends V>, V> {
      * the specified instance.
      * 
      * @param <U> the instance type
-     * @param type class with which the specified instance is to be associated
-     * @param value instance to be associated with the specified class
-     * @return the previous instance associated with the specified class, or {@code null} if there was no mapping for the class
+     * @param type the class with which the specified instance is to be associated
+     * @param value the instance to be associated with the specified class
+     * @return the previous instance associated with the specified class, or null if there was no mapping for the class
      * @throws ClassCastException if the old instance associated cannot be cast to the specified class
      */
     public <U extends V> @Nullable U putInstance(Class<U> type, U value) {

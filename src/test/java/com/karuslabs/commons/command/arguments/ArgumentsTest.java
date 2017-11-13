@@ -75,12 +75,12 @@ class ArgumentsTest {
     
     @Test
     void getImmutable() {
-        assertFalse(arguments.getImmutable(0) == arguments.getImmutable(0));
+        assertFalse(arguments.getCopy(0) == arguments.getCopy(0));
     }
     
     @Test
     void getLastImmutable() {
-        assertFalse(arguments.getLastImmutable() == arguments.getLastImmutable());
+        assertFalse(arguments.getLastCopy() == arguments.getLastCopy());
     }
     
     

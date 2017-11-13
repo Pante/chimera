@@ -29,6 +29,13 @@ import java.util.concurrent.*;
 import javax.annotation.*;
 
 
+/**
+ * A {@code Result} represents the result of an asynchronous computation.
+ * In addition to {@code get()}, {@code Result} contains additional convenience
+ * methods for retrieving the result of an asynchronous computation.
+ * 
+ * @param <T> the result type of the asynchronous computation
+ */
 public interface Result<T> extends Future<T> {
     
     public static <T> Result<T> of(Future<T> future) {
@@ -36,6 +43,15 @@ public interface Result<T> extends Future<T> {
     }
     
     
+    /**
+     * Waits if necessary for the computation to complete, and then
+     * returns the result, or {@code null} if a {@code CancellationException}
+     * was thrown.
+     * 
+     * @return the result of the computation, or null if a CancellationException was thrown.
+     * @throws UncheckedExecutionException if the computation threw an exception
+     * @throws UncheckedInterruptedException if the current thread was interrupted while waiting
+     */
     @Blocking
     public default @Nullable T await() {
         try {
@@ -46,6 +62,17 @@ public interface Result<T> extends Future<T> {
         }
     }
     
+    /**
+     * Waits if necessary for at most the given time for the computation
+     * to complete, and then returns the result, or {@code null} if either the result is not available or 
+     * a {@code CancellationException} was thrown.
+     *
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result, or null
+     * @throws UncheckedExecutionException if the computation threw an exception
+     * @throws UncheckedInterruptedException if the current thread was interrupted while waiting
+     */
     @Blocking
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
@@ -57,6 +84,14 @@ public interface Result<T> extends Future<T> {
     }
     
     
+    /**
+     * Waits if necessary for the computation to complete, and then retrieves its result.
+     *
+     * @return the computed result
+     * @throws CancellationException if the computation was cancelled
+     * @throws UncheckedExecutionException if the computation threw an exception
+     * @throws UncheckedInterruptedException if the current thread was interrupted while waiting
+     */
     @Blocking
     public default @Nullable T obtain() {
         try {
@@ -70,6 +105,20 @@ public interface Result<T> extends Future<T> {
         }
     }
     
+    /**
+     * Waits if necessary for at most the given time for the computation to complete, 
+     * and then retrieves its result, if available.
+     *
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result
+     * @throws CancellationException if the computation was cancelled
+     * @throws UncheckedExecutionException if the computation threw an
+     * exception
+     * @throws UncheckedInterruptedException if the current thread was interrupted
+     * while waiting
+     * @throws UncheckedTimeoutException if the wait timed out
+     */
     @Blocking
     public default @Nullable T obtain(long timeout, TimeUnit unit) {
         try {

@@ -43,6 +43,9 @@ public abstract class Particles {
         this.amount = amount;
     }
     
+        
+    public abstract void render(Location location);
+    
     
     public void render(Player player) {
         render(player, player.getLocation());
@@ -53,8 +56,6 @@ public abstract class Particles {
     }
 
     public abstract void render(Player player, Location location);
-    
-    public abstract void render(Location location);
     
 
     public Particle getParticle() {
@@ -87,7 +88,8 @@ public abstract class Particles {
         }
         
         protected abstract GenericBuilder getThis();
-                
+        
+        
         public GenericParticles build() {
             return particles;
         }

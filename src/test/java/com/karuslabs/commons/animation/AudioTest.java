@@ -23,57 +23,78 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.annotation.JDK9;
-
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.singleton;
 import static org.bukkit.Sound.WEATHER_RAIN;
 import static org.bukkit.SoundCategory.MASTER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class AudioTest {
+class AudioTest extends Base {
     
-    Audio music = spy(new Audio(WEATHER_RAIN, MASTER, 0.5F, 0.75F));
-    World world = mock(World.class);
-    Location location = new Location(world, 0, 0, 0);
-    Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
-    
+    static Audio equality = new Audio(WEATHER_RAIN, 0.5F, 0.75F);
+    Audio audio = spy(new Audio(WEATHER_RAIN, 0.5F, 0.75F));
+
     
     @Test
-    public void play() {
-        music.play(player);
+    void play_Location() {
+        audio.play(location);
         
-        verify(music).play(player, location);
+        verify(world).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
     }
     
     
     @Test
-    @JDK9("List.of(...)")
-    void play_Collection_Location() {
-        music.play(singletonList(player), location);
+    void play_Player() {
+        audio.play(player);
         
-        verify(music).play(player, location);
+        verify(audio).play(player, location);
+    }
+    
+    
+    @Test
+    void play_Players_Location() {
+        audio.play(singleton(player), location);
+        
+        verify(audio).play(player, location);
     }
     
     
     @Test
     void play_Player_Location() {
-        music.play(player, location);
+        audio.play(player, location);
         
         verify(player).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
     }
     
     
-    @Test
-    void play_Location() {
-        music.play(location);
-        
-        verify(world).playSound(location, WEATHER_RAIN, MASTER, 0.5F, 0.75F);
+    @ParameterizedTest
+    @MethodSource("equality_parameters")
+    void equals_Object(Object other, boolean expected) {
+        assertEquals(expected, equality.equals(other));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("equality_parameters")
+    void hashcode(Object other, boolean expected) {
+        assertEquals(expected, equality.hashCode() == other.hashCode());
+    }
+    
+    static Stream<Arguments> equality_parameters() {
+        return Stream.of(
+            of(equality, true),
+            of(new Audio(WEATHER_RAIN, 0.5F, 0.75F), true),
+            of(new Audio(WEATHER_RAIN, 0.6F, 0.75F), false),
+            of(new Object(), false)
+        );
     }
     
 }

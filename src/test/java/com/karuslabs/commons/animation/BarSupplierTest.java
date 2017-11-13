@@ -28,13 +28,13 @@ import org.bukkit.boss.*;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.BossBarSupplier.builder;
+import static com.karuslabs.commons.animation.BarSupplier.builder;
 import static org.bukkit.boss.BarColor.BLUE;
 import static org.bukkit.boss.BarStyle.SEGMENTED_10;
 import static org.mockito.Mockito.*;
 
 
-class BossBarSupplierTest {
+class BarSupplierTest {
     
     @Test
     void get() {

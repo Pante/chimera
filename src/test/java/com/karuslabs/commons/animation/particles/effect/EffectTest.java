@@ -44,9 +44,9 @@ import static org.mockito.Mockito.*;
 
 class EffectTest {
     
-    Plugin plugin = mock(Plugin.class);;
-    Task<Task> task = mock(Task.class);;
-    Effect effect = spy(Effect.builder(plugin).supplier(task).orientate(true).iterations(1).delay(2).period(3).async(true).build());
+    Plugin plugin = mock(Plugin.class);
+    Task<Task> task = mock(Task.class);
+    Effect effect = spy(Effect.builder(plugin).task(task).orientate(true).iterations(1).delay(2).period(3).async(true).build());
     Player player = mock(Player.class);
     ArgumentCaptor<EffectTask> captor = forClass(EffectTask.class);
     Particles particles = mock(Particles.class);
@@ -99,7 +99,7 @@ class EffectTest {
     
     @ParameterizedTest
     @CsvSource({"true, 1, 0", "false, 0, 1"})
-    void schedule_Parameters(boolean async, int asyncTimes, int syncTimes) {
+    void schedule(boolean async, int asyncTimes, int syncTimes) {
         effect.async = async;
         EffectTask task = mock(EffectTask.class);
         

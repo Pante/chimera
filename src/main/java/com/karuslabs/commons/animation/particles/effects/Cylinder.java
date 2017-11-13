@@ -25,6 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
+import com.karuslabs.commons.annotation.Immutable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,6 +36,7 @@ import static com.karuslabs.commons.animation.particles.effects.Constants.*;
 import static com.karuslabs.commons.world.Vectors.*;
 
 
+@Immutable
 public class Cylinder implements Task<Cylinder> {
   
     private Particles particles;
@@ -46,7 +48,6 @@ public class Cylinder implements Task<Cylinder> {
     private int perRow;
     boolean rotate;
     private boolean solid;
-    int count;
     
     
     public Cylinder(Particles particles) {
@@ -63,26 +64,26 @@ public class Cylinder implements Task<Cylinder> {
         this.perRow = perRow;
         this.rotate = rotate;
         this.solid = solid;
-        count = 0;
     }
     
     
     @Override
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
-        ThreadLocalRandom random = ThreadLocalRandom.current();
+        ThreadLocalRandom random = ThreadLocalRandom.current();        
+        renderSurface(context, location, context.getVector(), random);
+    }
+    
+    protected void renderSurface(Context context, Location location, Vector vector, ThreadLocalRandom random) {
         double x = rotation.getX(), y = rotation.getY(), z = rotation.getZ();
+        int count = (int) context.count();
         
         if (rotate) {
-            x += count * angularVelocity.getX();
+            x = count * angularVelocity.getX();
             y += count * angularVelocity.getY();
             z += count * angularVelocity.getZ();
         }
         
-        renderSurface(context, location, context.getVector(), random, x, y, z);
-    }
-    
-    protected void renderSurface(Context context, Location location, Vector vector, ThreadLocalRandom random, double x, double y, double z) {
         for (int i = 0; i < perRow; i += particles.getAmount(), count++) {
             randomCircle(vector).multiply(radius);
             calculate(vector, random, solid ? random.nextFloat() : 1);
@@ -94,6 +95,7 @@ public class Cylinder implements Task<Cylinder> {
             context.render(particles, location, vector);
         }
         context.render(particles, location);
+        context.count(count);
     }
     
     protected void calculate(Vector vector, ThreadLocalRandom random, float multiple) {
@@ -114,8 +116,8 @@ public class Cylinder implements Task<Cylinder> {
     }
 
     @Override
-    public Cylinder get() {
-        return new Cylinder(particles, radius, height, ratio, angularVelocity, rotation, perRow, rotate, solid);
+    public @Immutable Cylinder get() {
+        return this;
     }
     
 }

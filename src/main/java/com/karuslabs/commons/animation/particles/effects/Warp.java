@@ -25,6 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import com.karuslabs.commons.animation.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.*;
+import com.karuslabs.commons.annotation.Immutable;
 
 import org.bukkit.Location;
 
@@ -38,7 +39,6 @@ public class Warp implements Task<Warp> {
     private int total;
     private float grow;
     private int rings;
-    private int step;
     
     
     public Warp(Particles particles) {
@@ -51,7 +51,6 @@ public class Warp implements Task<Warp> {
         this.total = total;
         this.grow = grow;
         this.rings = rings;
-        this.step = 0;
     }
 
     
@@ -60,6 +59,7 @@ public class Warp implements Task<Warp> {
         Location location = context.getOrigin().getLocation();
         double x, y, z;
         
+        int step = (int) context.count();
         if (step > rings) {
             step = 0;
         }
@@ -77,11 +77,13 @@ public class Warp implements Task<Warp> {
             location.subtract(x, 0, z);
         }
         location.subtract(0, y, 0);
+        
+        context.count(++step);
     }
 
     @Override
-    public Warp get() {
-        return new Warp(particles, radius, total, grow, rings);
+    public @Immutable Warp get() {
+        return this;
     }
     
 }

@@ -51,7 +51,7 @@ public class ActionBar extends Bar {
 
     
     @Override
-    protected @Nonnull ScheduledResultTask<?> newTask(Collection<Player> players) {
+    protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), supplier.get(), translation, iterations);
     }
     
@@ -80,6 +80,7 @@ public class ActionBar extends Bar {
     public static ActionBarBuilder builder(Plugin plugin) {
         return new ActionBarBuilder(new ActionBar(plugin, NONE, null, 0, 0, 0));
     }
+    
     
     public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
 

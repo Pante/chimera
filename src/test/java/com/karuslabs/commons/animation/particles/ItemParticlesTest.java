@@ -23,11 +23,14 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.Base;
+
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.animation.particles.ItemParticles.builder;
+import static org.bukkit.Material.AIR;
 import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -35,16 +38,8 @@ import static org.mockito.Mockito.*;
 
 class ItemParticlesTest extends Base {
     
-    ItemStack item = mock(ItemStack.class);
+    ItemStack item = new ItemStack(AIR);
     ItemParticles particles = builder().particle(CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).item(item).build();
-    
-    
-    @Test
-    void render_Player() {
-        particles.render(player, location);
-        
-        verify(player).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, item);
-    }
     
     
     @Test
@@ -52,6 +47,14 @@ class ItemParticlesTest extends Base {
         particles.render(location);
         
         verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, item);
+    }
+    
+    
+    @Test
+    void render_Player() {
+        particles.render(player, location);
+        
+        verify(player).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, item);
     }
     
     

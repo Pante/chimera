@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.Base;
+
 import org.junit.jupiter.api.Test;
 
 import static org.bukkit.Color.YELLOW;
@@ -36,15 +38,7 @@ import static org.mockito.Mockito.*;
 class ColouredParticlesTest extends Base {
     
     ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-    
-    
-    @Test
-    void render_Player() {
-        particles.render(player, location);
         
-        verify(player).spawnParticle(BARRIER, location, 0, 1, 1, 0, 1);
-    }
-    
     
     @Test
     void render_Location() {
@@ -55,7 +49,15 @@ class ColouredParticlesTest extends Base {
     
     
     @Test
-    void getColor() {
+    void render_Player_Location() {
+        particles.render(player, location);
+        
+        verify(player).spawnParticle(BARRIER, location, 0, 1, 1, 0, 1);
+    }
+    
+    
+    @Test
+    void getters() {
         assertEquals(YELLOW, particles.getColour());
     }
     

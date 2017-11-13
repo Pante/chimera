@@ -27,10 +27,26 @@ import java.io.InputStream;
 import javax.annotation.*;
 
 
+/**
+ * Represents a {@code Resource} which contains files from which {@code ResourceBundle}s may be loaded.
+ */
 public interface Resource {
     
+    /**
+     * Returns an {@code InputStream} for the file with the specified name, or {@code null} if this {@code Resource}
+     * contains no such file with the specified name.
+     * 
+     * @param name the file name
+     * @return an InputStream for the file, or null if this Resource contains no such file
+     */
     public @Nullable InputStream load(@Nonnull String name);
     
+    /**
+     * Checks if this {@code Resource} contains a file with the specified name.
+     * 
+     * @param name the file name
+     * @return true if this Resource contains a file with the specified name; else false
+     */
     public boolean exists(@Nonnull String name);
     
 }

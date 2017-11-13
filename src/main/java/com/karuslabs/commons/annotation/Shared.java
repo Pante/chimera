@@ -30,12 +30,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies that the instance returned by the annotated method is shared and is reused
- * by the annotated method. Holding a reference to the instance beyond the scope it was called may
+ * Signifies that the annotated instance is shared and reused by the source.
+ * Holding a reference to the instance beyond the scope it was called may
  * result in unpredictable and confusing behaviour.
  */
 @Documented
-@Target({FIELD, LOCAL_VARIABLE, PARAMETER, TYPE, TYPE_USE})
+@Target({PARAMETER, TYPE, TYPE_USE})
 @Retention(RUNTIME)
 public @interface Shared {
     

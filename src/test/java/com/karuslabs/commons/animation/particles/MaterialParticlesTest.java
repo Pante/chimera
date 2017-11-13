@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.animation.Base;
+
 import org.bukkit.material.MaterialData;
 
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,14 @@ public class MaterialParticlesTest extends Base {
     MaterialData data = new MaterialData(ACACIA_DOOR);
     MaterialParticles particles = builder().particle(CLOUD).offsetX(1).offsetY(2).offsetZ(3).speed(4).data(data).build();
     
+        
+    @Test
+    void render_Location() {
+        particles.render(location);
+        
+        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, data);
+    }
+    
     
     @Test
     void render_Player() {
@@ -49,15 +59,7 @@ public class MaterialParticlesTest extends Base {
     
     
     @Test
-    void render_Location() {
-        particles.render(location);
-        
-        verify(world).spawnParticle(CLOUD, location, 0, 1, 2, 3, 4, data);
-    }
-    
-    
-    @Test
-    void get() {
+    void getters() {
         assertEquals(1, particles.getOffsetX());
         assertEquals(2, particles.getOffsetY());
         assertEquals(3, particles.getOffsetZ());

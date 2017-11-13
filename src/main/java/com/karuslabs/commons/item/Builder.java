@@ -45,7 +45,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
      */
     protected ItemStack item;
     /**
-     * The {@code ItemMeta} the {@code ItemStack} to build contains.
+     * The {@code ItemMeta} of the {@code ItemStack} to build.
      */
     protected GenericMeta meta;
 
@@ -90,7 +90,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     
     
     /**
-     * Generic workaround for returning {@code this}.
+     * Workaround for returning the generic {@code this}.
      * 
      * @return this
      */

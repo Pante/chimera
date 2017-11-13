@@ -73,11 +73,11 @@ public class Arguments {
     }
     
     
-    public @Immutable Argument getImmutable(int index) {
+    public Argument getCopy(int index) {
         return getOr(index, Argument::new, Argument::new);
     }
     
-    public @Immutable Argument getLastImmutable() {
+    public Argument getLastCopy() {
         return getOr(arguments.length - 1, Argument::new, Argument::new);
     }
     

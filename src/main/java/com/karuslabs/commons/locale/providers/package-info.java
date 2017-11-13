@@ -21,4 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+/**
+ * Contains {@code Provider}s for resolving the locales of {@code Player}s.
+ */
 package com.karuslabs.commons.locale.providers;
