@@ -21,32 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.annotation;
 
-import java.io.InputStream;
-import javax.annotation.*;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Represents a {@code Resource} which references files from which {@code ResourceBundle}s may be loaded.
+ * Signifies that the annotated class consists exclusively of static constants and functions.
+ * Instances of the annotated class should never be constructed.
  */
-public interface Resource {
-    
-    /**
-     * Returns an {@code InputStream} for the file with the specified name, or {@code null} if this {@code Resource}
-     * contains no such file with the specified name.
-     * 
-     * @param name the file name
-     * @return an InputStream for the file, or null if no such file exists
-     */
-    public @Nullable InputStream load(@Nonnull String name);
-    
-    /**
-     * Checks if this {@code Resource} contains a file with the specified name.
-     * 
-     * @param name the file name
-     * @return true if this Resource contains a file with the specified name; else false
-     */
-    public boolean exists(@Nonnull String name);
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Static {
     
 }

@@ -23,10 +23,13 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.util.function.*;
 import javax.annotation.*;
 
 
+@Static
 public class Get {
 
     public static <T> T orDefault(@Nullable T object, T value) {

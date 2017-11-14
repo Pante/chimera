@@ -21,30 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
 
-import com.google.common.primitives.*;
-
-import java.util.function.Predicate;
-
-import org.bukkit.Bukkit;
-
-
-@FunctionalInterface
-public interface Match extends Predicate<String> {
-    
-    public static final Match EMPTY = String::isEmpty;
-    
-    public static final Match BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
-    
-    public static final Match INT = argument -> Ints.tryParse(argument) != null;
-    
-    public static final Match DOUBLE = argument -> Doubles.tryParse(argument) != null;
-    
-    public static final Match FLOAT = argument -> Floats.tryParse(argument) != null;
-    
-    public static final Match PLAYER = argument -> Bukkit.getPlayer(argument) != null;
-    
-    public static final Match WORLD = argument -> Bukkit.getWorld(argument) != null;
-    
-}
+/**
+ * Contains {@code Resource}s which references files from which {@code ResourceBundle}s may be loaded.
+ */
+package com.karuslabs.commons.locale.resources;

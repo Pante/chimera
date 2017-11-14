@@ -23,9 +23,12 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.annotation.Static;
+
 import org.bukkit.Location;
 
 
+@Static
 public class Locations {
     
     public static Location copy(Location source, Location destination) {

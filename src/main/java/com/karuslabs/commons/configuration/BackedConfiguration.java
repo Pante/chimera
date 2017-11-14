@@ -354,10 +354,10 @@ public class BackedConfiguration implements ConfigurationSection {
     }
 
     @Override
-    public boolean equals(Object o) {
-        Object target = o;
-        if (o instanceof BackedConfiguration) {
-            target = ((BackedConfiguration) o).config;
+    public boolean equals(Object other) {
+        Object target = other;
+        if (other instanceof BackedConfiguration) {
+            target = ((BackedConfiguration) other).config;
         }
         return config.equals(target);
     }
@@ -365,6 +365,11 @@ public class BackedConfiguration implements ConfigurationSection {
     @Override
     public int hashCode() {
         return config.hashCode();
+    }
+    
+    @Override
+    public String toString() {
+        return config.toString();
     }
     
 }

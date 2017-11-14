@@ -76,10 +76,16 @@ public interface Result<T> extends Future<T> {
     @Blocking
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
-            return obtain(timeout, unit);
+            return get(timeout, unit);
             
-        } catch (CancellationException e) {
-            return null;   
+        } catch (CancellationException | TimeoutException e) {
+            return null;
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
         }
     }
     
@@ -113,10 +119,8 @@ public interface Result<T> extends Future<T> {
      * @param unit the time unit of the timeout argument
      * @return the computed result
      * @throws CancellationException if the computation was cancelled
-     * @throws UncheckedExecutionException if the computation threw an
-     * exception
-     * @throws UncheckedInterruptedException if the current thread was interrupted
-     * while waiting
+     * @throws UncheckedExecutionException if the computation threw an exception
+     * @throws UncheckedInterruptedException if the current thread was interrupted while waiting
      * @throws UncheckedTimeoutException if the wait timed out
      */
     @Blocking

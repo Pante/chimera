@@ -97,4 +97,10 @@ class AudioTest extends Base {
         );
     }
     
+    
+    @Test
+    void tostring() {
+        assertEquals("Audio[sound: " + WEATHER_RAIN + " category: " + MASTER + " volume: " + 0.5F + " pitch: " + 0.75F + "]", audio.toString());
+    }
+    
 }

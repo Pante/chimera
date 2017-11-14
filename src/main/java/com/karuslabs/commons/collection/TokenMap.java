@@ -180,6 +180,11 @@ public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
             return hash;
         }
         
+        @Override
+        public String toString() {
+            return "Key[name: " + name + " class: " + type.getSimpleName() + "]";
+        }
+        
     }
     
 }

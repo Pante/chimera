@@ -82,7 +82,12 @@ public class ConfigurationProvider implements Provider {
      */
     public void set(Player player, Locale locale) {
         String id = player.getUniqueId().toString();
-        config.set(id, locale.getLanguage() + "_" + locale.getCountry());
+        String formatted = locale.getLanguage() + "_" + locale.getCountry();
+        if (formatted.startsWith("_") || formatted.endsWith("_")) {
+            formatted = formatted.replace("_", "");
+        }
+        
+        config.set(id, formatted);
     }
     
     

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.TestInstance;
@@ -31,18 +32,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 
-import static com.karuslabs.commons.command.arguments.Match.*;
+import static com.karuslabs.commons.command.arguments.Matches.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-class MatchTest {
+class MatchesTest {
     
     @ParameterizedTest
     @MethodSource("test_parameters")
-    void test(Match match, String text, boolean expected) {
+    void test(Predicate<String> match, String text, boolean expected) {
         assertEquals(expected, match.test(text));
     }
     

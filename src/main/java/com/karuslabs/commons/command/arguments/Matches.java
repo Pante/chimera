@@ -21,32 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.command.arguments;
 
-import java.io.InputStream;
-import javax.annotation.*;
+import com.google.common.primitives.*;
+
+import com.karuslabs.commons.annotation.Static;
+
+import java.util.function.Predicate;
+
+import org.bukkit.Bukkit;
 
 
-/**
- * Represents a {@code Resource} which references files from which {@code ResourceBundle}s may be loaded.
- */
-public interface Resource {
+@Static
+public class Matches {
     
-    /**
-     * Returns an {@code InputStream} for the file with the specified name, or {@code null} if this {@code Resource}
-     * contains no such file with the specified name.
-     * 
-     * @param name the file name
-     * @return an InputStream for the file, or null if no such file exists
-     */
-    public @Nullable InputStream load(@Nonnull String name);
+    public static final Predicate<String> EMPTY = String::isEmpty;
     
-    /**
-     * Checks if this {@code Resource} contains a file with the specified name.
-     * 
-     * @param name the file name
-     * @return true if this Resource contains a file with the specified name; else false
-     */
-    public boolean exists(@Nonnull String name);
+    public static final Predicate<String> BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
+    
+    public static final Predicate<String> INT = argument -> Ints.tryParse(argument) != null;
+    
+    public static final Predicate<String> DOUBLE = argument -> Doubles.tryParse(argument) != null;
+    
+    public static final Predicate<String> FLOAT = argument -> Floats.tryParse(argument) != null;
+    
+    public static final Predicate<String> PLAYER = argument -> Bukkit.getPlayer(argument) != null;
+    
+    public static final Predicate<String> WORLD = argument -> Bukkit.getWorld(argument) != null;
     
 }

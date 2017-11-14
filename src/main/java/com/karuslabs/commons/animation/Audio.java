@@ -101,4 +101,9 @@ public class Audio {
         return hash;
     }
     
+    @Override
+    public String toString() {
+        return "Audio[sound: " + sound + " category: " + category + " volume: " + volume + " pitch: " + pitch + "]";
+    }
+    
 }

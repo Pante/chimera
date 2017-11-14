@@ -27,16 +27,32 @@ import java.io.*;
 import javax.annotation.*;
 
 
+/**
+ * A {@code Resource} implementation which references files external of this JAR and are
+ * on the same machine, from which {@code ResourceBundle}s may be loaded.
+ */
 public class FileResource implements Resource {
     
     private File folder;
     
     
+    /**
+     * Constructs a {@code FileResource} with the specified folder which contains the files from which
+     * {@code ResourceBundle}s may be loaded.
+     *  
+     * @param folder the folder
+     */
     public FileResource(File folder) {
         this.folder = folder;
     }
     
-    
+    /**
+     * Returns an {@code InputStream} for the file with the specified name, or {@code null} if no
+     * such file exists.
+     * 
+     * @param name the file name
+     * @return an InputStream if the file exists; else null 
+     */
     @Override
     public @Nullable InputStream load(@Nonnull String name) {
         File file = new File(folder, name);
@@ -51,7 +67,13 @@ public class FileResource implements Resource {
             return null;
         }
     }
-
+    
+    /**
+     * Checks if this {@code FiledResource} holds a reference to a file with the specified name.
+     * 
+     * @param name the file name
+     * @return true if the file exists; else false
+     */
     @Override
     public boolean exists(@Nonnull String name) {
         return exists(new File(folder, name));
@@ -62,6 +84,12 @@ public class FileResource implements Resource {
     }
     
     
+    /**
+     * Returns the path to the folder which contains the files which {@code ResourceBundle}s may be
+     * loaded from, specified by {@link File#getPath()}.
+     * 
+     * @return the path to the folder
+     */
     public String getPath() {
         return folder.getPath();
     }

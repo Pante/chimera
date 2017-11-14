@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
@@ -31,6 +33,7 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 
 
+@Static
 public final class Vectors {
     
     public static Vector copy(Vector source, Vector destination) {

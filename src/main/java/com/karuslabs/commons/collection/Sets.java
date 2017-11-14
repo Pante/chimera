@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.collection;
 
-import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.commons.annotation.*;
 
 import java.util.*;
 
@@ -34,6 +34,7 @@ import static java.util.Collections.newSetFromMap;
 /**
  * This class consists exclusively of static methods which operation on or return sets.
  */
+@Static
 public class Sets {
     
     @Deprecated 
