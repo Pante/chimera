@@ -30,6 +30,8 @@ import java.util.*;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -50,11 +52,12 @@ public class ConfigurationProviderTest {
     }
     
     
-    @Test
-    public void set() {
-        provider.set(player, Locale.JAPAN);
+    @ParameterizedTest
+    @CsvSource({"ja, jp, ja_JP", "en, '', en", "'', UK, UK"})
+    public void set(String language, String country, String expected) {
+        provider.set(player, new Locale(language, country));
         
-        verify(config).set(player.getUniqueId().toString(), "ja_JP");
+        verify(config).set(player.getUniqueId().toString(), expected);
     }
     
     

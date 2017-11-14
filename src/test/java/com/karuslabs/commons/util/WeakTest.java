@@ -172,4 +172,10 @@ class WeakTest {
         );
     }
     
+    @Test
+    void tostring() {
+        assertEquals("Weak[value]", value.toString());
+        assertEquals("Weak.empty", empty.toString());
+    }
+    
 }

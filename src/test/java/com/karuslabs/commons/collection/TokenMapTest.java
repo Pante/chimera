@@ -100,4 +100,10 @@ class TokenMapTest {
         );
     }
     
+    
+    @Test
+    void tostring() {
+        assertEquals("Key[name: name class: " + Integer.class.getSimpleName() + "]", KEY.toString());
+    }
+    
 }

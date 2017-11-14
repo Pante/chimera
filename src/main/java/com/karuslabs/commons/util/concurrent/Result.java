@@ -49,10 +49,16 @@ public interface Result<T> extends Future<T> {
     @Blocking
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
-            return obtain(timeout, unit);
+            return get(timeout, unit);
             
-        } catch (CancellationException e) {
-            return null;   
+        } catch (CancellationException | TimeoutException e) {
+            return null;
+            
+        } catch (InterruptedException e) {
+            throw new UncheckedInterruptedException(e);
+            
+        } catch (ExecutionException e) {
+            throw new UncheckedExecutionException(e);
         }
     }
     

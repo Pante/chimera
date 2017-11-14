@@ -24,6 +24,8 @@
 package com.karuslabs.commons.locale;
 
 import com.google.common.cache.Cache;
+
+import com.karuslabs.commons.annotation.Static;
 import com.karuslabs.commons.util.Get;
 
 import java.lang.reflect.Field;
@@ -37,6 +39,7 @@ import static java.util.Locale.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 
+@Static 
 public class Locales {
     
     private static final Map<String, Locale> CONSTANTS = new HashMap<>();

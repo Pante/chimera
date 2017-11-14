@@ -21,30 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.annotation;
 
-import com.google.common.primitives.*;
+import java.lang.annotation.*;
 
-import java.util.function.Predicate;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import org.bukkit.Bukkit;
 
-
-@FunctionalInterface
-public interface Match extends Predicate<String> {
-    
-    public static final Match EMPTY = String::isEmpty;
-    
-    public static final Match BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
-    
-    public static final Match INT = argument -> Ints.tryParse(argument) != null;
-    
-    public static final Match DOUBLE = argument -> Doubles.tryParse(argument) != null;
-    
-    public static final Match FLOAT = argument -> Floats.tryParse(argument) != null;
-    
-    public static final Match PLAYER = argument -> Bukkit.getPlayer(argument) != null;
-    
-    public static final Match WORLD = argument -> Bukkit.getWorld(argument) != null;
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Static {
     
 }

@@ -49,10 +49,30 @@ class ResultTest {
     }
     
     
-    @Test
-    void await_Time() {
-        doThrow(CancellationException.class).when(result).obtain(anyLong(), any());
+    @ParameterizedTest
+    @MethodSource("await_Time_parameters")
+    void await_Time(Class<? extends Exception> type) throws Exception {
+        doThrow(type).when(result).get(anyLong(), any());
         assertNull(result.await(0, null));
+    }
+    
+    static Stream<Arguments> await_Time_parameters() {
+        return Stream.of(of(CancellationException.class), of(TimeoutException.class));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("await_Time_ThrowsException_parameters")
+    void await_Time_ThorwsException(Class<? extends Exception> thrown, Class<? extends Exception> expected) throws Exception {
+        doThrow(thrown).when(result).get(anyLong(), any());
+        assertThrows(expected, () -> result.await(0, null));
+    }
+    
+    static Stream<Arguments> await_Time_ThrowsException_parameters() {
+        return Stream.of(
+            of(InterruptedException.class, UncheckedInterruptedException.class),
+            of(ExecutionException.class, UncheckedExecutionException.class)
+        );
     }
     
     

@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.configuration;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -35,6 +37,7 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 
+@Static
 public class Configurations {
         
     public static Map<String, Object> flatten(ConfigurationSection config) {

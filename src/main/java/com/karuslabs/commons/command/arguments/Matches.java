@@ -21,29 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.collection;
+package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.annotation.*;
+import com.google.common.primitives.*;
 
-import java.util.*;
+import com.karuslabs.commons.annotation.Static;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.newSetFromMap;
+import java.util.function.Predicate;
+
+import org.bukkit.Bukkit;
 
 
 @Static
-public class Sets {
+public class Matches {
     
-    @Deprecated 
-    @JDK9("Redundant in Java 9, Set.of(...)")
-    public static <T> Set<T> asSet(T... t) {
-        return new HashSet<>(asList(t));
-    }
+    public static final Predicate<String> EMPTY = String::isEmpty;
     
-    public static <T> Set<T> weakSet(Collection<T> collection) {
-        Set<T> set = newSetFromMap(new WeakHashMap<>());
-        set.addAll(collection);
-        return set;
-    }
+    public static final Predicate<String> BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
+    
+    public static final Predicate<String> INT = argument -> Ints.tryParse(argument) != null;
+    
+    public static final Predicate<String> DOUBLE = argument -> Doubles.tryParse(argument) != null;
+    
+    public static final Predicate<String> FLOAT = argument -> Floats.tryParse(argument) != null;
+    
+    public static final Predicate<String> PLAYER = argument -> Bukkit.getPlayer(argument) != null;
+    
+    public static final Predicate<String> WORLD = argument -> Bukkit.getWorld(argument) != null;
     
 }

@@ -23,9 +23,12 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.util.regex.Pattern;
 
 
+@Static
 public class Patterns {
         
     private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
