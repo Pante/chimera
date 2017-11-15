@@ -86,7 +86,12 @@ public class CachedResourceBundle extends ResourceBundle {
     
     @Override
     public @Immutable Enumeration<String> getKeys() {
-        return enumeration(messages.keySet());
+        if (parent == null) {
+            return enumeration(messages.keySet());
+            
+        } else {
+            return new ResourceBundleEnumeration(parent.getKeys(), messages.keySet());
+        }
     }
     
     @Override

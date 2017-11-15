@@ -23,57 +23,30 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.locale.CachedResourceBundle.NONE;
+import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-@TestInstance(PER_CLASS)
-class CachedResourceBundleTest {
+class ResourceBundleEnumerationTest {
     
-    CachedResourceBundle bundle;
+    ResourceBundleEnumeration enumeration = new ResourceBundleEnumeration(enumeration(singleton("a")), EMPTY_SET);
     
     
-    CachedResourceBundleTest() {
-        bundle = new CachedResourceBundle();
-        bundle.getMessages().put("key", "message");
+    @Test
+    void hasMoreElements() {
+        assertTrue(enumeration.hasMoreElements());
+        assertEquals("a", enumeration.nextElement());
     }
     
     
     @Test
-    void none_handleGetObject() {
-        assertEquals("key", NONE.handleGetObject("key"));
-    }
-    
-    
-    @Test
-    void none_getKeys() {
-        assertSame(NONE.getKeys(), NONE.getKeys());
-    }
-    
-    
-    @Test
-    void getKeys() {
-        assertEquals("key", bundle.getKeys().nextElement());
-    }
-    
-    
-    @Test
-    void getKeys_Parent() {
-        CachedResourceBundle bundle = new CachedResourceBundle() {
-          @Override
-          public Enumeration<String> getKeys() {
-              parent = NONE;
-              return super.getKeys();
-          }
-        };
-        bundle.getMessages().put("key", "message");
-        
-        assertEquals("key", bundle.getKeys().nextElement());
+    void nextElement_ThrowsException() {
+        enumeration.nextElement();
+        assertThrows(NoSuchElementException.class, enumeration::nextElement);
     }
     
 }

@@ -23,57 +23,52 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.Enumeration;
-
-import org.junit.jupiter.api.*;
-
-import static com.karuslabs.commons.locale.CachedResourceBundle.NONE;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import java.util.*;
+import javax.annotation.Nonnull;
 
 
-@TestInstance(PER_CLASS)
-class CachedResourceBundleTest {
+class ResourceBundleEnumeration implements Enumeration<String> {
     
-    CachedResourceBundle bundle;
+    private Enumeration<String> parent;
+    private Set<String> keys;
+    
+    private Iterator<String> iterator;
+    private String next;
     
     
-    CachedResourceBundleTest() {
-        bundle = new CachedResourceBundle();
-        bundle.getMessages().put("key", "message");
+    ResourceBundleEnumeration(@Nonnull Enumeration<String> parent, @Nonnull Set<String> keys) {
+        this.parent = parent;
+        this.keys = keys;
+        iterator = keys.iterator();
     }
     
     
-    @Test
-    void none_handleGetObject() {
-        assertEquals("key", NONE.handleGetObject("key"));
+    @Override
+    public boolean hasMoreElements() {
+        if (next == null) {
+            if (iterator.hasNext()) {
+                next = iterator.next();
+            } else {
+                while (parent.hasMoreElements()) {
+                    next = parent.nextElement();
+                    if (!keys.contains(next)) {
+                        break;
+                    }
+                }
+            }
+        }
+        return next != null;
     }
-    
-    
-    @Test
-    void none_getKeys() {
-        assertSame(NONE.getKeys(), NONE.getKeys());
-    }
-    
-    
-    @Test
-    void getKeys() {
-        assertEquals("key", bundle.getKeys().nextElement());
-    }
-    
-    
-    @Test
-    void getKeys_Parent() {
-        CachedResourceBundle bundle = new CachedResourceBundle() {
-          @Override
-          public Enumeration<String> getKeys() {
-              parent = NONE;
-              return super.getKeys();
-          }
-        };
-        bundle.getMessages().put("key", "message");
-        
-        assertEquals("key", bundle.getKeys().nextElement());
+
+    @Override
+    public String nextElement() {
+        if (hasMoreElements()) {
+            String result = next;
+            next = null;
+            return result;
+        } else {
+            throw new NoSuchElementException();
+        }
     }
     
 }
