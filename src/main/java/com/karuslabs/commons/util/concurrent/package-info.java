@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and interfaces commonly useful in locking.
+ * Contains classes and interfaces commonly useful in concurrent programming.
  */
-package com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.util.concurrent;

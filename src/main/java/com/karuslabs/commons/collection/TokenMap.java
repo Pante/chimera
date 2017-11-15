@@ -31,11 +31,11 @@ import javax.annotation.Nullable;
 
 
 /**
- * A map which maps a {@code Key} which consists of a class and a identifier to an instance of that class.
- * 
- * Associates multiple instances of a class with {@code Key}s with contain the same class, uniquely identified by
- * the combination of the name and class contained in a {@code Key}.
- * 
+ * A type-safe map which maps a {@code Key} to an instance of the class the associated {@code Key} contains.
+ * <p>
+ * This map allows multiple instances of the same class to be inserted. The uniqueness of each {@code Key} is maintained
+ * through comparing both the name and contained class of each {@code Key}.
+ * <P>
  * Primitive classes and their respective wrapper classes are mapped to distinct instances.
  * For example: {@code map.put(new Key<>(int.class, "a"), 1)} and {@code map.put(new Key<>(Integer.class, "a"), 2)}.
  * 

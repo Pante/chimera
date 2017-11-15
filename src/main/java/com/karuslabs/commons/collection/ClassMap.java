@@ -28,9 +28,13 @@ import javax.annotation.Nullable;
 
 
 /**
- * A map which maps a class to an instance of that class.
+ * A type-safe map which maps a class to an instance of that class.
+ * <p>
+ * Instances are implicitly cast to their associated classes when retrieved from this map. 
+ * To ensure type-safety, instances are verified to be castable to their associated classes during insertion.
+ * <p>
  * Primitive classes and their respective wrapper classes are mapped to distinct instances.
- * For example, {@code map.put(int.class, 1} and {@code map.put(Integer.class, 2}.
+ * For example: {@code map.put(int.class, 1} and {@code map.put(Integer.class, 2)}.
  * 
  * @param <V> the common super-type that all entries must share.
  */

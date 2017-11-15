@@ -28,12 +28,42 @@ import java.util.concurrent.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
+/**
+ * A skeleton implementation of {@code Result} which represents a cancellable asynchronous computation.
+ * <p>
+ * This class is a Bukkit/Spigot-specific counterpart for {@link FutureTask} which works in conjuction
+ * with the Bukkit/Spigot scheduler.
+ * <p>
+ * This class provides a base implementation of {@link Result} with methods to start and cancel a computation, 
+ * query to see if the computation is complete, and retrieve the result of the computation. 
+ * The result can only be retrieved when the computation has completed. Once the computation has completed, 
+ * the computation cannot be restarted or cancelled.
+ * <p>
+ * 
+ * @param <T> the result type of the asynchronous computation
+ */
 public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> {
     
+    /**
+     * Returns a {@code ResultTask} which will, upon running, execute the specified {@code Runnable} and return the specified {@code result}
+     * upon successful completion.
+     * 
+     * @param <T> the result type of the asynchronous computation
+     * @param runnable the runnable
+     * @param result the result to return on successful completion
+     * @return the ResultTask
+     */
     public static <T> ResultTask<T> of(Runnable runnable, T result) {
         return new PromiseRunnable<>(runnable, result);
     }
     
+    /**
+     * Returns a {@code ResultTask} which will, upon running, execute the specified {@code Callable}.
+     * 
+     * @param <T> the result type of the asynchronous computation
+     * @param callable the callable
+     * @return the ResultTask
+     */
     public static <T> ResultTask<T> of(Callable<T> callable) {
         return new PromiseCallable<>(callable);
     }
@@ -50,6 +80,9 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     CountDownLatch latch;
     
     
+    /**
+     * Constructs a {@code ResulTask}.
+     */
     public ResultTask() {
         state = NEW;
         interrupted = false;
@@ -57,7 +90,9 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         latch = new CountDownLatch(1);
     }
 
-    
+    /**
+     * Sets this {@code ResultTask} to the result of its computation unless it has been cancelled.
+     */
     @Override
     public void run() {
         try {
@@ -71,17 +106,32 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         }
     }
     
+    /**
+     * Sets this {@code ResultTask} to the result of its computation if successful; else throws an {@code Exception}.
+     * Subclasses of {@code ResultTask} should implement this method to customise the computation invoked when {@link #run()} is invoked.
+     * 
+     * @throws Exception if this ResultTask fails to complete
+     */
     protected abstract void process() throws Exception;        
     
+    /**
+     * Sets the state of this {@code ResultTask} as completed.
+     */
     public void done() {
         finish(COMPLETED);
     }
-     
+    
+    /**
+     * Cancels the asynchronous computation for this {@code ResultTask} and interrupts the computation if running.
+     */
     @Override
     public void cancel() {
         cancel(true);
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
         if (state < COMPLETED && mayInterruptIfRunning) {
@@ -110,18 +160,33 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T get() throws InterruptedException, ExecutionException {
         latch.await();
         return handle();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         latch.await(timeout, unit);
         return handle();
     }
     
+    /**
+     * Handles the result of the computation. Returns the result if this task was successfully completed,
+     * throws an {@code ExecutionException} if an exception was thrown during the computation, or throws a
+     * {@code CancellationException} if this task was cancelled.
+     * 
+     * @return the result of this task if successfully completed
+     * @throws ExecutionException if an exception was thrown during the computation for this task
+     * @throws CancellationException if this task was cancelled
+     */
     protected T handle() throws ExecutionException {
         if (thrown != null) {
             throw new ExecutionException(thrown);
@@ -134,14 +199,29 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         }
     }
     
+    /**
+     * Returns the value to return if this {@code ResulTask} successfully completes.
+     * 
+     * @return the value to return if this ResultTask successfully completes
+     */
     protected abstract T value();
     
-        
+    
+    /**
+     * Returns whether this task was cancelled.
+     * 
+     * @return true if this task was cancelled; else false
+     */
     @Override
     public boolean isCancelled() {
         return state == CANCELLED;
     }
     
+    /**
+     * Returns whether this task is done.
+     * 
+     * @return true if this task is done; else false
+     */
     @Override
     public boolean isDone() {
         return RUNNING < state;

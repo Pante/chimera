@@ -38,6 +38,13 @@ import javax.annotation.*;
  */
 public interface Result<T> extends Future<T> {
     
+    /**
+     * Wraps the specified {@link Future} with a {@code Result}.
+     * 
+     * @param <T> the result type of the asynchronous computation
+     * @param future the Future
+     * @return a Result which wraps the specified future
+     */
     public static <T> Result<T> of(Future<T> future) {
         return new ProxiedResult<>(future);
     }

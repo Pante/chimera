@@ -90,7 +90,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     
     
     /**
-     * Workaround for returning the generic {@code this}.
+     * Returns a generic version of {@code this}.
      * 
      * @return this
      */

@@ -34,15 +34,18 @@ import static java.util.Collections.enumeration;
 
 
 /**
- * A concrete, thread-safe subclass of {@code ResourceBundle} which manages resources for a locale using a {@code ConcurrentMap}.
- * 
- *  This class
+ * A concrete, thread-safe subclass of {@code ResourceBundle} which manages resources for a locale using a backing {@code ConcurrentMap}.
+ * <p>
+ * The backing {@code ConcurrentMap} may only contain {@code String}s and {@code String[]}s.
+ * <P>
+ * Instances of this class should never to be constructed directly, but rather through invoking {@link ResourceBundle#getBundle(String)} or 
+ * any other overloaded variant.
  */
 public class CachedResourceBundle extends ResourceBundle {
     
     /**
      * Represents an empty {@code CachedResourceBundle} which always returns the specified key
-     * when {@link #getString(String)} is invoked.
+     * when {@code getString(String)} is invoked.
      */
     public static final CachedResourceBundle NONE = new CachedResourceBundle() {
 
@@ -67,23 +70,26 @@ public class CachedResourceBundle extends ResourceBundle {
     
     
     /**
-     * Constructs a {@code CachedResourceBundle} with an empty {@code ConcurrentHashMap}.
+     * Constructs an empty {@code CachedResourceBundle} backed by a {@code ConcurrentHashMap}.
      */
     public CachedResourceBundle() {
         this(new ConcurrentHashMap<>());
     }
     
     /**
-     * Constructs a {@code CachedResourceBundle} with the specified {@ode ConcurrentMap} 
-     * which contains the messages and associated keys.
+     * Constructs a {@code CachedResourceBundle} backed by the specified {@code ConcurrentMap} 
+     * which contains the keys and associated messages.
      * 
-     * @param messages the map which contains the messages and associated keys
+     * @param messages the backing map which contains the keys and associated messages
      */
     public CachedResourceBundle(ConcurrentMap<String, Object> messages) {
         this.messages = messages;
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Immutable Enumeration<String> getKeys() {
         if (parent == null) {
@@ -94,12 +100,20 @@ public class CachedResourceBundle extends ResourceBundle {
         }
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nullable Object handleGetObject(String key) {
         return messages.get(key);
     }
     
     
+    /**
+     * Returns the keys and associated messages for this {@code CachedResourceBundle}.
+     * 
+     * @return the keys and associated messages
+     */
     public ConcurrentMap<String, Object> getMessages() {
         return messages;
     }
