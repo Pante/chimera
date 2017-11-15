@@ -29,7 +29,7 @@ import javax.annotation.*;
 
 public class EmbeddedResource implements Resource {
     
-    public String path;
+    private String path;
     
     
     public EmbeddedResource(String path) {
