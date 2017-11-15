@@ -33,8 +33,17 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.enumeration;
 
 
+/**
+ * A concrete, thread-safe subclass of {@code ResourceBundle} which manages resources for a locale using a {@code ConcurrentMap}.
+ * 
+ *  This class
+ */
 public class CachedResourceBundle extends ResourceBundle {
     
+    /**
+     * Represents an empty {@code CachedResourceBundle} which always returns the specified key
+     * when {@link #getString(String)} is invoked.
+     */
     public static final CachedResourceBundle NONE = new CachedResourceBundle() {
 
         private final Enumeration<String> keys = enumeration(EMPTY_LIST);
@@ -57,10 +66,19 @@ public class CachedResourceBundle extends ResourceBundle {
     private final ConcurrentMap<String, Object> messages;
     
     
+    /**
+     * Constructs a {@code CachedResourceBundle} with an empty {@code ConcurrentHashMap}.
+     */
     public CachedResourceBundle() {
         this(new ConcurrentHashMap<>());
     }
     
+    /**
+     * Constructs a {@code CachedResourceBundle} with the specified {@ode ConcurrentMap} 
+     * which contains the messages and associated keys.
+     * 
+     * @param messages the map which contains the messages and associated keys
+     */
     public CachedResourceBundle(ConcurrentMap<String, Object> messages) {
         this.messages = messages;
     }

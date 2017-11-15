@@ -32,8 +32,8 @@ import javax.annotation.*;
  * The files are relative to the {@code ClassLoader} of this class.
  */
 public class EmbeddedResource implements Resource {
-
-    public String path;
+    
+    private String path;
     
     
     /**
