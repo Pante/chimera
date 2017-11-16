@@ -93,22 +93,9 @@ public abstract class ScheduledResultTask<T> extends ResultTask<T> implements Re
         }
     }
     
-    @Override
-    void finish(int updated) {
-        super.finish(updated);
-        callback();
-    }
     
     /**
-     * Runs upon the completion of this task.
-     */
-    protected void callback() {};
-    
-    
-    /**
-     * Returns the number of iterations ran.
-     * 
-     * @return the number of iterations
+     * {@inheritDoc}
      */
     @Override
     public long getCurrent() {
@@ -116,9 +103,7 @@ public abstract class ScheduledResultTask<T> extends ResultTask<T> implements Re
     }
     
     /**
-     * Returns the total number of iterations this task is to run.
-     * 
-     * @return the total number of iterations
+     * {@inheritDoc}
      */
     @Override
     public long getIterations() {

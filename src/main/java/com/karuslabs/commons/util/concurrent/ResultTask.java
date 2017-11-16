@@ -117,7 +117,7 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     /**
      * Sets the state of this {@code ResultTask} as completed.
      */
-    public void done() {
+    protected void done() {
         finish(COMPLETED);
     }
     
@@ -148,7 +148,13 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         cancelThis();
         latch.countDown();
         state = updated;
+        callback();
     }
+    
+    /**
+     * Runs upon the cancellation or completion of this task.
+     */
+    protected void callback() {};
     
     void cancelThis() {
         try {
