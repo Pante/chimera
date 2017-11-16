@@ -73,7 +73,7 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     
     protected abstract void process() throws Exception;        
     
-    public void done() {
+    protected void done() {
         finish(COMPLETED);
     }
      
@@ -98,7 +98,10 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         cancelThis();
         latch.countDown();
         state = updated;
+        callback();
     }
+    
+    protected void callback() {};
     
     void cancelThis() {
         try {

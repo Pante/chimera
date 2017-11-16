@@ -45,14 +45,19 @@ class EffectTaskTest {
     Location location = new Location(null, 1, 2, 3);
     StaticLocation origin = spy(new StaticLocation(location, null, false));
     StaticLocation target = spy(new StaticLocation(new Location(null, 2, 3, 4), null, false));
-    EffectTask effect = spy(new EffectTask(task, consumer, origin, target, true, 0));
+    Runnable runnable = mock(Runnable.class);
+    EffectTask effect = spy(new EffectTask(task, consumer, origin, target, true, 0) {
+        @Override
+        protected void done() {
+            runnable.run();
+        }
+    });
     
     
     @ParameterizedTest
     @CsvSource({"true, true, true, 1, 1, 0", "true, true, false, 1, 0, 0", "true, false, true, 0, 0, 1", "false, true, true, 0, 0, 1"})
     void process(boolean origin, boolean target, boolean orientate, int times, int orientateTimes, int done) {
         doNothing().when(effect).orientate();
-        doNothing().when(effect).done();
         
         doReturn(origin).when(this.origin).validate();
         doReturn(target).when(this.target).validate();
@@ -64,7 +69,7 @@ class EffectTaskTest {
         verify(this.target, times(times)).update();
         verify(effect, times(orientateTimes)).orientate();
         verify(task, times(times)).render(effect);
-        verify(effect, times(done)).done();
+        verify(runnable, times(done)).run();
     }
     
     

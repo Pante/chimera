@@ -61,14 +61,6 @@ public abstract class ScheduledResultTask<T> extends ResultTask<T> implements Re
         }
     }
     
-    @Override
-    void finish(int updated) {
-        super.finish(updated);
-        callback();
-    }
-    
-    protected void callback() {};
-    
 
     @Override
     public long getCurrent() {
