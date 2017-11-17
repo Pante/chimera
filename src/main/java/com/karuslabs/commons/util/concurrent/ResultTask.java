@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.commons.annotation.Blocking;
+
 import java.util.concurrent.*;
 
 import org.bukkit.scheduler.BukkitRunnable;
@@ -114,12 +116,14 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
 
     
     @Override
+    @Blocking
     public T get() throws InterruptedException, ExecutionException {
         latch.await();
         return handle();
     }
 
     @Override
+    @Blocking
     public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         latch.await(timeout, unit);
         return handle();
