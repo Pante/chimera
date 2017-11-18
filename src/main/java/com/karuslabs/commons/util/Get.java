@@ -36,8 +36,8 @@ public class Get {
         return object != null ? object : value;
     }
     
-    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
-        return object != null ? object : value.get();
+    public static <T> T orDefault(@Nullable T object, Supplier<T> supplier) {
+        return object != null ? object : supplier.get();
     }
     
     public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {

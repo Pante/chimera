@@ -29,6 +29,7 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
 import static java.util.stream.Stream.*;
 
@@ -56,7 +57,11 @@ public final class Weak<T> {
         } else {
             throw new NoSuchElementException();
         }
-    }    
+    }
+    
+    public @Nullable T getNullable() {
+        return reference.get();
+    }
     
     
     public void ifPreset(Consumer<? super T> consumer) {

@@ -27,22 +27,14 @@ package com.karuslabs.commons.util;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-@TestInstance(PER_CLASS)
 class MemoisableTest {
     
     @Test
     void memoise() {
-        Memoisable object = new Memoisable() {};
-        assertSame(object, Memoisable.memoise(object).get());
-    }
-    
-    @Test
-    void memoiseUnchecked() {
         Object object = new Object();
-        assertSame(object, Memoisable.memoiseUnchecked(object).get());
+        assertSame(object, Memoise.memoise(object).get());
     }
     
 }

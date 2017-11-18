@@ -23,16 +23,15 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.util.function.Supplier;
 
 
-public interface Memoisable {
+@Static
+public class Memoise {
     
-    public static<T extends Memoisable> Supplier<T> memoise(T value) {
-        return () -> value;
-    }
-    
-    public static<T> Supplier<T> memoiseUnchecked(T value) {
+    public static <T> Supplier<T> memoise(T value) {
         return () -> value;
     }
     

@@ -53,6 +53,12 @@ class WeakTest {
     
     
     @Test
+    void getNullable() {
+        assertNull(empty.getNullable());
+    }
+    
+    
+    @Test
     void get_ThrowsException() {
         assertThrows(NoSuchElementException.class, empty::get);
     }
