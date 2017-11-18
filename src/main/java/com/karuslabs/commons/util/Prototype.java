@@ -32,7 +32,6 @@ import javax.annotation.Nonnull;
  * 
  * @param <T> the type of the instance to copy and return
  */
-@FunctionalInterface
 public interface Prototype<T extends Prototype> {
     
     /**

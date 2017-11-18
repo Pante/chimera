@@ -23,38 +23,28 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.commons.annotation.Static;
+
 import java.util.function.Supplier;
 
 
 /**
- * Represents a type that is reusable in conjuction with functions which return instances of the same type.
- * <P>
- * For example:
- * {@code 
- *  
- * }
+ * This class consist exclusively of methods which produces functions that cache the values returned.
+ * <p>
+ * For example: assuming that {@code Foo} is extremely expensive to create, caching the value returned by
+ * {@code Supplier<Foo>} may result in performance improvements.
  */
-public interface Memoisable {
+@Static
+public class Memoise {
     
     /**
      * Returns a {@code Supplier} which returns the same specified {@code value} when invoked.
      * 
      * @param <T> the type of the value
      * @param value the value to memoise
-     * @return a supplier which returns the same specified value when invoked
+     * @return a supplier which will returns the same specified value when invoked
      */
-    public static<T extends Memoisable> Supplier<T> memoise(T value) {
-        return () -> value;
-    }
-    
-    /**
-     * Returns a {@code Supplier} which returns the specified {@code value.
-     * 
-     * @param <T> the type of the value
-     * @param value the value to be memoised
-     * @return a supplier which will always return the specified value
-     */
-    public static<T> Supplier<T> memoiseUnchecked(T value) {
+    public static <T> Supplier<T> memoise(T value) {
         return () -> value;
     }
     

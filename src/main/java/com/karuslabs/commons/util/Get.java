@@ -54,11 +54,11 @@ public class Get {
      * 
      * @param <T> the type of the instance to return
      * @param object the instance to return if non-null
-     * @param value the supplying function which produces a value
+     * @param supplier the supplying function which produces a value
      * @return the specified object if non-null; else the value produced by the specified Supplier
      */
-    public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
-        return object != null ? object : value.get();
+    public static <T> T orDefault(@Nullable T object, Supplier<T> supplier) {
+        return object != null ? object : supplier.get();
     }
     
     /**
