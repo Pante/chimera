@@ -84,7 +84,7 @@ public class Audio {
     
     
     /**
-     * Plays this {@code Audio} at the location of the specified {@code Player} for the specified {@code Player} only.
+     * Plays this {@code Audio} for the specified {@code Player} only at the location of the specified {@code Player} .
      * 
      * @param player the player
      */
@@ -93,7 +93,7 @@ public class Audio {
     }
     
     /**
-     * Plays this {@code Audio} at the specified location for the specified {@code Player}s only.
+     * Plays this {@code Audio}  for the specified {@code Player}s only at the specified location.
      * 
      * @param players the players
      * @param location the location
@@ -103,7 +103,7 @@ public class Audio {
     }
     
     /**
-     * Plays this {@code Audio} at the specified location for the specified {@code Player} only.
+     * Plays this {@code Audio} for the specified {@code Player} only at the specified location .
      * 
      * @param player the player
      * @param location the location
