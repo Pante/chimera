@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains miscellaneous utility classes.
+ * Contains miscellaneous utilities.
  */
 package com.karuslabs.commons.util;

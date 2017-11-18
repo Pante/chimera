@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and interfaces commonly useful for locking.
+ * Contains localisation classes and utilities.
  */
-package com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.locale;

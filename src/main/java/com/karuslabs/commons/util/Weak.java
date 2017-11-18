@@ -29,13 +29,14 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
 import static java.util.stream.Stream.*;
 
 
 /**
  * A container object which may or may not hold a weak reference to a value.
- * If a value is present, {@code isPresent} will return {@code true} and {@code get()} will return the value.
+ * If a value is non-null, {@code isPresent} will return {@code true} and {@link #get()} will return the value.
  * 
  * Additional methods that depend on the presence or absence of a contained value are provided, 
  * such as {@code orElse()} (return a default value if value not present) and {@code ifPresent()} (execute a block of code if the value is present). 
@@ -47,7 +48,7 @@ import static java.util.stream.Stream.*;
 public final class Weak<T> {
     
     /**
-     * A {@code Weak} which represents an empty {@code Weak} instance.
+     * Represents an empty instance of {@code Weak}
      */
     public static final Weak<?> EMPTY = new Weak<>(null);
     
@@ -79,7 +80,16 @@ public final class Weak<T> {
         } else {
             throw new NoSuchElementException();
         }
-    }    
+    }
+    
+    /**
+     * Returns the value held by this {@code Weak}
+     * 
+     * @return the value held by this Weak
+     */
+    public @Nullable T getNullable() {
+        return reference.get();
+    }
     
     
     /**

@@ -33,8 +33,15 @@ import javax.annotation.Nonnull;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A concrete subclass of {@code Translation} which provides facilities for formatting messages.
+ */
 public class MessageTranslation extends Translation {
     
+    /**
+     * Represents an empty {@code MessageTranslation} which returns an empty {@code ResourceBundle} when {@link #get(Locale)} is invoked and key when
+     * {@link #format(String, Object...)} is invoked.
+     */
     public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE, Provider.NONE) {
         
         @Override
@@ -55,16 +62,36 @@ public class MessageTranslation extends Translation {
     };
     
     
+    /**
+     * Represents the {@code MessageFormat} used to format messages.
+     */
     protected MessageFormat format;
+    /**
+     * Represents the cached {@code ResourceBundle} which was last used.
+     */
     protected ResourceBundle bundle;
     
     
+    /**
+     * Constructs a {@code MessageTranslation} with the specified bundle name, {@code Control} and {@code Provider}.
+     * 
+     * @param bundle the base bundle name
+     * @param control the control which provides the ResourceBundles
+     * @param provider the provider which provides the locales of the players
+     */
     public MessageTranslation(String bundle, ResourceBundle.Control control, Provider provider) {
         super(bundle, control, provider);
         format = new MessageFormat("");
     }
     
     
+    /**
+     * Returns the message associated with the specified key formatted using the specified arguments.
+     * 
+     * @param key the key
+     * @param arguments the arguments
+     * @return the formatted message
+     */
     public String format(String key, Object... arguments) {
         if (bundle == null) {
             bundle = get(format.getLocale());
@@ -74,18 +101,47 @@ public class MessageTranslation extends Translation {
         return format.format(arguments);
     }
     
+    /**
+     * Sets the locale of this {@code MessageTranslation} to the locale of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @return this
+     */
     public MessageTranslation locale(Player player) {
         return locale(provider.get(player));
     }
     
+    /**
+     * Sets the locale of this {@code MessageTranslation} to the locale of the specified {@code Player},
+     * or the specified {@code locale} if this {@code MessageTranslation} is unable to resolve the locale
+     * of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @param locale the default locale
+     * @return this
+     */
     public MessageTranslation localeOrDefault(Player player, Locale locale) {
         return locale(provider.getOrDefault(player, locale));
     }
     
+    /**
+     * Sets the locale of this {@code MessageTranslation} to the locale of the specified {@code Player},
+     * or the detected locale if this {@code MessageTranslation} is unable to resolve the locale of the
+     * specified {@code Player}.
+     * 
+     * @param player the player
+     * @return this
+     */
     public MessageTranslation localeOrDetected(Player player) {
         return locale(provider.getOrDetected(player));
     }
     
+    /**
+     * Sets the locale of this {@code MessageTranslation} to the specified locale.
+     * 
+     * @param locale the locale
+     * @return this
+     */
     public MessageTranslation locale(Locale locale) {
         format.setLocale(locale);
         bundle = null;

@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and interfaces commonly useful for locking.
+ * Contains animation related classes.
  */
-package com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.animation;

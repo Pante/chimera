@@ -31,6 +31,11 @@ import java.util.ResourceBundle.Control;
 import org.bukkit.entity.Player;
 
 
+/**
+ * Represents a translation which provides variants of a default {@code ResourceBundle} for different locales.
+ * 
+ * This class will attempt to retrieve the most relevant {@code ResourceBundle} if it is unable to resolve a locale.
+ */
 public class Translation {
     
     private String bundle;
@@ -38,6 +43,13 @@ public class Translation {
     protected Provider provider;
     
     
+    /**
+     * Constructs a {@code Translation} with the specified name, {@code Control} and {@code Provider}.
+     * 
+     * @param bundle the bundle name
+     * @param control the control which provides the ResourceBundles
+     * @param provider the provider which provides the locales of the players
+     */
     public Translation(String bundle, Control control, Provider provider) {
         this.bundle = bundle;
         this.control = control;
@@ -45,31 +57,73 @@ public class Translation {
     }
          
     
+    /**
+     * Returns the {@code ResourceBundle} for the locale of the specified {@code Player}.
+     * 
+     * @param player the player
+     * @return the ResourceBundle for the locale of the specified Player if 
+     */
     public ResourceBundle get(Player player) {
         return get(provider.get(player));
     }
     
+    /**
+     * Returns the {@code ResourceBundle} for the locale of the specified {@code Player}, or the specified {@code locale}
+     * if the locale of the specified {@code Player} is unable to be resolved.
+     * 
+     * @param player the player
+     * @param locale the default locale
+     * @return the ResourceBundle for the locale of the specified Player if able to be resolved; else the specified locale
+     */
     public ResourceBundle getOrDefault(Player player, Locale locale) {
         return get(provider.getOrDefault(player, locale));
     }
-        
+    
+    /**
+     * Returns the {@code ResourceBundle} for the locale of the specified {@code Player}, or the detected locale
+     * if the locale of the specified {@code Player} is unable to be resolved.
+     * 
+     * @param player the player
+     * @return the ResourceBundle for the locale of the specified Player if able to be resolved; else the detected locale
+     */
     public ResourceBundle getOrDetected(Player player) {
         return get(provider.getOrDetected(player));
     }
     
+    /**
+     * Returns the {@code ResourceBundle} for the specified {@code locale}.
+     * 
+     * @param locale the locale
+     * @return the ResourceBundle for the specified locale;
+     */
     public ResourceBundle get(Locale locale) {
         return ResourceBundle.getBundle(bundle, locale, control);
     }
     
     
+    /**
+     * Returns the name of the base {@code ResourceBundle}.
+     * 
+     * @return the bundle name
+     */
     public String getBundleName() {
         return bundle;
     }
     
+    /**
+     * Returns the {@code Control} which retrieves the {@code ResourceBundle}s.
+     * 
+     * @return the Control
+     */
     public Control getControl() {
         return control;
     }
     
+    /**
+     * Returns the {@code Provider} which provides the locales of {@code Player}s.
+     * 
+     * @return the Provider
+     */
     public Provider getProvider() {
         return provider;
     }

@@ -39,6 +39,12 @@ import static java.util.Locale.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 
+/**
+ * This class consists exclusively of static methods which operate on or return {@code Locale}s.
+ * <p>
+ * The standard string representation for {@code Locale}s is {@code [ISO 3166 alpha-2 language]_[ISO 639 alpha-2 country]} i.e. {@code EN_UK}, with the
+ * underscore omitted in the absence of either the language or country.
+ */
 @Static 
 public class Locales {
     
@@ -65,6 +71,12 @@ public class Locales {
     }
 
     
+    /**
+     * Returns a {@code String} representing the specified {@code Loclae}.
+     * 
+     * @param locale the locale
+     * @return a standard String representation of the specified Locale
+     */
     public static String from(Locale locale) {
         String language = locale.getLanguage();
         String country = locale.getCountry();
@@ -84,6 +96,13 @@ public class Locales {
     }
     
     
+    /**
+     * Creates a {@code Locale} from the specified standard {@code String} representation of a {@code Locale},
+     * or {@code null} if the specified standard {@code String} representation is malformed.
+     * 
+     * @param locale the standard String representation of a Locale
+     * @return a Locale if the specified String representation is properly formatted; else null
+     */
     public static @Nullable Locale get(String locale) {
         Locale retrieved;
         if ((retrieved = CONSTANTS.get(locale)) != null) {
@@ -96,7 +115,7 @@ public class Locales {
             return from(locale);
         }
     }
-    
+
     static @Nullable Locale from(String locale) {
         String[] parts;
         if (isCountry(locale)) {
@@ -116,19 +135,48 @@ public class Locales {
     }
     
     
+    /**
+     * Creates a {@code Locale} from the specified standard {@code String} representation of a {@code Locale},
+     * or {@code value} if the specified standard {@code String} representation is malformed.
+     * 
+     * @param locale the standard String representation of a Locale
+     * @param value the default value
+     * @return a Locale if the specified String representation is properly formatted; else the specified value
+     */
     public static Locale getOrDefault(String locale, Locale value) {
         return Get.orDefault(get(locale), value);
     }
     
+    /**
+     * Creates a {@code Locale} from the specified standard {@code String} representation of a {@code Locale},
+     * or the {@code Locale} produced by the specified {@code Supplier} if the specified standard {@code String} 
+     * representation is malformed.
+     * 
+     * @param locale the standard String representation of a Locale
+     * @param value the supplying function which produces a value
+     * @return a Locale if the specified String representation is properly formatted; else the value produced by the specified Supplier
+     */
     public static Locale getOrDefault(String locale, Supplier<Locale> value) {
         return Get.orDefault(get(locale), value);
     }
     
         
+    /**
+     * Returns {@code true} if the specified {@code country} is an ISO 639 alpha-2 country i.e. {@code UK}; else {@code false}.
+     * 
+     * @param country the country
+     * @return true if the specified country is an ISO 639 alpha-2 country country; else false
+     */
     public static boolean isCountry(String country) {
         return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase()) >= 0;
     }
     
+    /**
+     * Returns {@code true} if the specified {@code language} is an ISO 3166 alpha-2 language i.e. {@code EN}; else {@code false}.
+     * 
+     * @param language the language
+     * @return true if the specified country is an ISO 3166 alpha-2 language; else false
+     */
     public static boolean isLanguage(String language) {
         return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase()) >= 0;
     }

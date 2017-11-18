@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
  * in a backing configuration file.
  * 
  * The UUID of {@code Player}s are mapped to the locales and are stored as key-value 
- * pairs in the format: {@code [UUID]: [ISO 3166 alpha-2 langauge]_[ISO 639 alpha-2 country]}.
+ * pairs in the format: {@code [UUID]: [ISO 3166 alpha-2 language]_[ISO 639 alpha-2 country]}.
  * 
  * Changes made to the stored locales are not automatically saved to disk and must be manually
  * saved through {@link #save()}.

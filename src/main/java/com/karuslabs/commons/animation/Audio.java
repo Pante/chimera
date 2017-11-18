@@ -33,7 +33,9 @@ import org.bukkit.entity.Player;
 import static java.lang.Float.floatToIntBits;
 import static org.bukkit.SoundCategory.MASTER;
 
-
+/**
+ * Represents a {@code Audio} which consist of a {@code Sound}, {@code SoundCategory}, volume and pitch.
+ */
 @Immutable
 @ValueBased
 public class Audio {
@@ -44,10 +46,25 @@ public class Audio {
     private float pitch;
     
     
+    /**
+     * Constructs an {@code Audio} with the specified {@code Sound}, volume and pitch and {@link SoundCategory#MASTER}.
+     * 
+     * @param sound the sound
+     * @param volume the volume
+     * @param pitch the pitch
+     */
     public Audio(Sound sound, float volume, float pitch) {
         this(sound, MASTER, volume, pitch);
     }
     
+    /**
+     * Constructs an {@code Audio} with the specified {@code Sound}, {@code SoundCategory}, volume and pitch.
+     * 
+     * @param sound the sound
+     * @param category the category
+     * @param volume the volume
+     * @param pitch the pitch
+     */
     public Audio(Sound sound, SoundCategory category, float volume, float pitch) {
         this.sound = sound;
         this.category = category;
@@ -55,20 +72,42 @@ public class Audio {
         this.pitch = pitch;
     }
 
-        
+    
+    /**
+     * Plays this {@code Audio} at the specified location.
+     * 
+     * @param location the location
+     */
     public void play(Location location) {
         location.getWorld().playSound(location, sound, category, volume, pitch);
     }
     
     
+    /**
+     * Plays this {@code Audio} at the location of the specified {@code Player} for the specified {@code Player} only.
+     * 
+     * @param player the player
+     */
     public void play(Player player) {
         play(player, player.getLocation());
     }
     
+    /**
+     * Plays this {@code Audio} at the specified location for the specified {@code Player}s only.
+     * 
+     * @param players the players
+     * @param location the location
+     */
     public void play(Collection<Player> players, Location location) {
         players.forEach(player -> play(player, location));
     }
     
+    /**
+     * Plays this {@code Audio} at the specified location for the specified {@code Player} only.
+     * 
+     * @param player the player
+     * @param location the location
+     */
     public void play(Player player, Location location) {
         player.playSound(location, sound, category, volume, pitch);
     }

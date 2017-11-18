@@ -36,6 +36,10 @@ import static java.util.Arrays.*;
 import static java.util.Collections.unmodifiableList;
 
 
+/**
+ * A concrete subclass of {@code ResourceBundle.Control} which retrieves the {@code ResourceBundle}s
+ * from {@code Resource}s.
+ */
 public class ExternalControl extends Control {
     
     @JDK9("UPDATE TO List.of(...) when updating to Java 9")
@@ -45,11 +49,18 @@ public class ExternalControl extends Control {
     private Resource[] resources;
     
     
+    /**
+     * Constructs an {@code ExternalControl} with the specified {@code Resource}s.
+     * 
+     * @param resources the Resources from which ResourceBundles may be loaded
+     */
     public ExternalControl(Resource... resources) {
         this.resources = resources;
     }
     
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable ResourceBundle newBundle(String baseName, Locale locale, String format, @Ignored ClassLoader loader, @Ignored boolean reload) {
         if (getFormats(baseName).contains(format)) {
@@ -64,6 +75,14 @@ public class ExternalControl extends Control {
         return null;
     }
     
+    /**
+     * Returns a {@code ResourceBundle} from the specified format and {@code InputStream}, or {@code null}
+     * if the specified format is not supported.
+     * 
+     * @param format the ResourceBundle format
+     * @param stream the ResourceBundle format to be loaded
+     * @return the ResourceBundle if the specified format is supported; else null
+     */
     @JDK9
     protected @Nullable ResourceBundle load(@Nonnull String format, @Nullable InputStream stream) {
         switch (format) {
@@ -85,12 +104,20 @@ public class ExternalControl extends Control {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Immutable List<String> getFormats(@Ignored String bundleName) {
         return FORMATS;
     }
     
     
+    /**
+     * Returns a copy of the {@code Resource}s from which this {@code ExternalControl} retrieves the {@code ResourceBundle}s.
+     * 
+     * @return the Resources
+     */
     public @Immutable Resource[] getResources() {
         return copyOf(resources, resources.length);
     }
