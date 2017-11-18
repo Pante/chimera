@@ -26,9 +26,20 @@ package com.karuslabs.commons.util;
 import javax.annotation.Nonnull;
 
 
+/**
+ * Represents an alternative to {@link Object#clone()} and {@link Cloneable} which
+ * supports generics and the <a href = "https://en.wikipedia.org/wiki/Prototype_pattern">Prototype design pattern</a>.
+ * 
+ * @param <T> the type of the instance to copy and return
+ */
 @FunctionalInterface
 public interface Prototype<T extends Prototype> {
     
+    /**
+     * Creates and returns a copy of {@code this}.
+     * 
+     * @return a copy of this
+     */
     public @Nonnull T copy();
     
 }

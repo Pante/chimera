@@ -29,17 +29,49 @@ import java.util.function.*;
 import javax.annotation.*;
 
 
+/**
+ * This class consist exclusively of static methods which handles the retrieval of {@code null}able instances.
+ */
 @Static
 public class Get {
-
+    
+    /**
+     * Returns the specified {@code object}, or the specified {@code value}
+     * if the specified {@code object} is null.
+     * 
+     * @param <T> the type of the instance to return
+     * @param object the instance to return if non-null
+     * @param value the value to return if the specified object is null
+     * @return the specified object if non-null; else the specified value
+     */
     public static <T> T orDefault(@Nullable T object, T value) {
         return object != null ? object : value;
     }
     
+    /**
+     * Returns the specified {@code object}, or the value produced by the specified {@code Supplier} 
+     * if the specified {@code object} is null.
+     * 
+     * @param <T> the type of the instance to return
+     * @param object the instance to return if non-null
+     * @param value the supplying function which produces a value
+     * @return the specified object if non-null; else the value produced by the specified Supplier
+     */
     public static <T> T orDefault(@Nullable T object, Supplier<T> value) {
         return object != null ? object : value.get();
     }
     
+    /**
+     * Returns the specified {@code object}, or throws an exception produced by the specified {@code exception}
+     * if the specified {@code object} is null.
+     * 
+     * @param <T> the type of the instance to return
+     * @param <E> the type of the exception to throw
+     * @param object the instance to return of non-null
+     * @param exception the supplying function which produces an exception to throw
+     * @return the specified object if non-null
+     * @throws E if the specified object is null
+     */
     public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
         if (object != null) {
             return object;
