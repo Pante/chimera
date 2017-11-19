@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and utilities for localisation.
+ * Contains classes and utilities for manipulating configuration files.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.configuration;

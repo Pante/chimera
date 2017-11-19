@@ -46,18 +46,38 @@ abstract class AbstractParticles extends Particles {
     }
     
     
+    /**
+     * Returns the maximum random offset on the X axis.
+     * 
+     * @return the offset on the X axis
+     */
     public double getOffsetX() {
         return offsetX;
     }
-
+    
+    /**
+     * Returns the maximum random offset on the Y axis.
+     * 
+     * @return the offset on the Y axis
+     */
     public double getOffsetY() {
         return offsetY;
     }
-
+    
+    /**
+     * Returns the maximum random offset on the Z axis.
+     * 
+     * @return the offset on the Z axis
+     */
     public double getOffsetZ() {
         return offsetZ;
     }
 
+    /**
+     * Returns the speed.
+     * 
+     * @return the speed
+     */
     public double getSpeed() {
         return speed;
     }
@@ -69,22 +89,45 @@ abstract class AbstractParticles extends Particles {
             super(particles);
         }
         
-        
+        /**
+         * Sets the maximum random offset on the X axis.
+         * 
+         * @param x the maximum offset on the X axis
+         * @return this
+         */
         public GenericBuilder offsetX(double x) {
             particles.offsetX = x;
             return getThis();
         }
         
+        /**
+         * Sets the maximum random offset on the Y axis.
+         * 
+         * @param y the maximum offset on the Y axis
+         * @return this
+         */
         public GenericBuilder offsetY(double y) {
             particles.offsetY = y;
             return getThis();
         }
         
+        /**
+         * Sets the maximum random offset on the Z axis.
+         * 
+         * @param z the maximum offset on the Z axis
+         * @return this
+         */
         public GenericBuilder offsetZ(double z) {
             particles.offsetZ = z;
             return getThis();
         }
         
+        /**
+         * Sets the speed.
+         * 
+         * @param speed the speed
+         * @return this
+         */
         public GenericBuilder speed(double speed) {
             particles.speed = speed;
             return getThis();

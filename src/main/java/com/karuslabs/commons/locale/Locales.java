@@ -153,11 +153,11 @@ public class Locales {
      * representation is malformed.
      * 
      * @param locale the standard String representation of a Locale
-     * @param value the supplying function which produces a value
+     * @param supplier the supplying function which produces a value
      * @return a Locale if the specified String representation is properly formatted; else the value produced by the specified Supplier
      */
-    public static Locale getOrDefault(String locale, Supplier<Locale> value) {
-        return Get.orDefault(get(locale), value);
+    public static Locale getOrDefault(String locale, Supplier<Locale> supplier) {
+        return Get.orDefault(get(locale), supplier);
     }
     
         

@@ -31,6 +31,12 @@ import org.bukkit.entity.Player;
 import static org.bukkit.Color.WHITE;
 
 
+/**
+ * A concrete subclass of {@code Particles} which additionally consist of a colour.
+ * <p>
+ * This class may contain {@code Particle} type(s) of {@link Particle#SPELL}, {@link Particle#SPELL_INSTANT}, 
+ * {@link Particle#SPELL_MOB}, {@link Particle#SPELL_MOB_AMBIENT} and {@link Particle#REDSTONE} only.
+ */
 @Immutable
 public class ColouredParticles extends Particles {
     
@@ -38,6 +44,13 @@ public class ColouredParticles extends Particles {
     private double r, g, b;
     
     
+    /**
+     * Constructs a {@code ColouredParticles} with the specified {@code Particle} type, colour and amount.
+     * 
+     * @param type the Particle type
+     * @param colour the colour
+     * @param amount the amount
+     */
     public ColouredParticles(Particle type, Color colour, int amount) {
         super(type, amount);
         setColour(colour);
@@ -49,28 +62,47 @@ public class ColouredParticles extends Particles {
         g = colour.getGreen() / 255.0;
         b = colour.getBlue() / 255.0;
     }
-
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Location location) {
         location.getWorld().spawnParticle(particle, location, amount, r, g, b, 1);
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Player player, Location location) {
         player.spawnParticle(particle, location, amount, r, g, b, 1);
     }
 
     
+    /**
+     * Returns the colour.
+     * 
+     * @return the colour
+     */
     public Color getColour() {
         return colour;
     }
     
     
+    /**
+     * Creates a {@code ColouredParticles} builder.
+     * 
+     * @return the Builder
+     */
     public static ColouredBuilder builder() {
         return new ColouredBuilder(new ColouredParticles(null, WHITE, 0));
     }
     
+    
+    /**
+     * Represents a builder for {@code ColouredParticles}.
+     */
     public static class ColouredBuilder extends Builder<ColouredBuilder, ColouredParticles> {
 
         private ColouredBuilder(ColouredParticles particles) {
@@ -78,11 +110,20 @@ public class ColouredParticles extends Particles {
         }
         
         
+        /**
+         * Sets the colour.
+         * 
+         * @param colour the colour
+         * @return this
+         */
         public ColouredBuilder colour(Color colour) {
             particles.setColour(colour);
             return this;
         }
-
+        
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected ColouredBuilder getThis() {
             return this;

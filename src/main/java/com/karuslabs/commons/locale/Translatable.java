@@ -21,8 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.locale;
+
 
 /**
- * Contains classes and utilities for localisation.
+ * Represents a type which contains a {@code Translation}.
  */
-package com.karuslabs.commons.locale;
+public interface Translatable {
+    
+    /**
+     * Returns the {@code Translation} for this {@code Translatable}.
+     * 
+     * @return the translation
+     */
+    public Translation getTranslation();
+    
+}

@@ -37,13 +37,30 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
 
+/**
+ * This class consists exclusively of static methods which operate on and return {@code ConfigurationSection}s and its implementations.
+ */
 @Static
 public class Configurations {
-        
+    
+    /**
+     * Creates a {@code Map} from the specified {@code ConfigurationSection} which 
+     * contains the keys of all nested children {@code ConfigurationSection}s and associated values.
+     * 
+     * @param config the ConfigurationSection
+     * @return the Map which contains the keys of the specified ConfigurationSection and associated values
+     */
     public static Map<String, Object> flatten(ConfigurationSection config) {
         return stream(config).collect(toMap(identity(), config::get));
     }
     
+    /**
+     * Creates a {@code ConcurrentMap} from the specified {@code ConfigurationSection} which 
+     * contains the keys of all nested children {@code ConfigurationSection}s and associated values.
+     * 
+     * @param config the ConfigurationSection
+     * @return the ConcurrentMap which contains the keys of the specified ConfigurationSection and associated values
+     */
     public static ConcurrentMap<String, Object> concurrentFlatten(ConfigurationSection config) {
         return stream(config).collect(toConcurrentMap(identity(), config::get));
     }
@@ -53,6 +70,13 @@ public class Configurations {
     }
     
     
+    /**
+     * Creates a {@code YamlConfiguration} from the specified {@code InputStream}.
+     * 
+     * @param stream the InputStream
+     * @return a YamlConfiguration from the specified InputStream
+     * @throws UncheckedIOException if the specified InputStream is not UTF-8 encoded
+     */
     public static YamlConfiguration from(InputStream stream) {
         try {
             return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, "UTF-8"));

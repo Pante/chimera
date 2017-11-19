@@ -25,7 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.locale.*;
 
 import java.util.*;
 import javax.annotation.Nonnull;
@@ -39,7 +39,11 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
 
-public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {    
+/**
+ * Represents a {@code Command} for a {@code Plugin}, which either delegates execution of the various tasks upon user input
+ * to the {@code CommandExecutor} for this {@code Command}, or a subcommand of this {@code Command}.
+ */
+public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand, Translatable {    
     
     private Plugin plugin;
     private MessageTranslation translation;
@@ -48,14 +52,45 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     private Map<Integer, Completion> completions;
     
     
+    /**
+     * Constructs a {@code Command} for the specified {@code Plugin} with the specified name.
+     * 
+     * @param name the name
+     * @param plugin the Plugin
+     */
     public Command(String name, Plugin plugin) {
         this(name, plugin, "", "", new ArrayList<>(), CommandExecutor.NONE);
     }
     
+    /**
+     * Constructs a {@code Command} for the specified {@code Plugin} with the specified 
+     * name, description, usage, aliases and {@code CommandExeucutor}.
+     * 
+     * @param name the name
+     * @param plugin the Plugin
+     * @param description the description
+     * @param usage the usage
+     * @param aliases the aliases
+     * @param executor the CommandExecutor
+     */
     public Command(String name, Plugin plugin, String description, String usage, List<String> aliases, CommandExecutor executor) {
         this(name, plugin, MessageTranslation.NONE, description, usage, aliases, executor, new HashMap<>(), new HashMap<>());
     }
     
+    /**
+     * Constructs a {@code Command}  for the specified {@code Plugin} with the specified name, {@code MessageTranslation}, 
+     * description, usage, aliases, {@code CommandExeuctor}, subcommands, {@code Completion}s.
+     * 
+     * @param name the name
+     * @param plugin the Plugin
+     * @param translation the MessageTranslation
+     * @param description the description
+     * @param usage the usage
+     * @param aliases the aliases
+     * @param executor the CommandExecutor
+     * @param subcommands the subcommands
+     * @param completions the Completions
+     */
     public Command(String name, Plugin plugin, MessageTranslation translation, String description, String usage, List<String> aliases, CommandExecutor executor, Map<String, Command> subcommands, Map<Integer, Completion> completions) {
         super(name, description, usage, aliases);
         this.plugin = plugin;
@@ -65,12 +100,30 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         this.completions = completions;
     }
 
-
+    
+    /**
+     * Delegates execution of this {@code Command} to {@link #execute(Context, Arguments)},
+     * resplitting the arguments to preserve arguments with spaces enclosed in quotation marks.
+     * 
+     * @param sender the source object which is executing this Command
+     * @param label the label of the command used
+     * @param args all arguments passed to this Command, split via ' '
+     * @return true if the command was successful; else false
+     */
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         return execute(new Context(sender, label, null, this), new Arguments(preserveQuotes(args)));
     }
     
+    /**
+     * Updates the specified {@code Context} and removes the first argument in the specified {@code Arguments} 
+     * before delegating execution to a subcommand, or executes this {@code Command}
+     * if a subcommand with a name equal to the last argument is not present.
+     * 
+     * @param context the context which this command is executed in
+     * @param arguments the arguments passed to this Command
+     * @return true if the command was successful; else false
+     */
     public boolean execute(Context context, Arguments arguments) {
         String argument = arguments.getLast().text();
         Command subcommand = subcommands.get(argument);
@@ -86,11 +139,26 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     
+    /**
+     * Delegates tab completion of this {@code Command} to {@link #complete(CommandSender, Arguments)},
+     * resplitting the arguments to preserve arguments with spaces enclosed in quotation marks.
+     * 
+     * @param sender the source object which is executing this Command
+     * @param alias the alias of the command used
+     * @param args all arguments passed to this Command, split via ' '
+     * @return a list of tab-completions for the specified arguments
+     */
     @Override
     public @Nonnull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
         return complete(sender, new Arguments(preserveQuotes(args)));
     }
     
+    /**
+     * 
+     * @param sender
+     * @param arguments
+     * @return 
+     */
     public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
         if (arguments.length() == 0) {
             return EMPTY_LIST;
@@ -114,20 +182,37 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         }
     }
        
-
+    
+    /**
+     * 
+     * @return 
+     */
     @Override
     public Plugin getPlugin() {
         return plugin;
     }
-            
+    
+    /**
+     * 
+     * @return 
+     */
+    @Override
     public MessageTranslation getTranslation() {
         return translation;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public CommandExecutor getExecutor() {
         return executor;
     }
     
+    /**
+     * 
+     * @param executor 
+     */
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
     }

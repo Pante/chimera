@@ -34,7 +34,7 @@ import static java.lang.Float.floatToIntBits;
 import static org.bukkit.SoundCategory.MASTER;
 
 /**
- * Represents a {@code Audio} which consist of a {@code Sound}, {@code SoundCategory}, volume and pitch.
+ * Represents a {@code Audio} which consists of a {@code Sound}, {@code SoundCategory}, volume and pitch.
  */
 @Immutable
 @ValueBased
@@ -74,7 +74,7 @@ public class Audio {
 
     
     /**
-     * Plays this {@code Audio} at the specified location.
+     * Plays this {@code Audio} at the specified {@code Location}.
      * 
      * @param location the location
      */
@@ -84,7 +84,7 @@ public class Audio {
     
     
     /**
-     * Plays this {@code Audio} for the specified {@code Player} only at the location of the specified {@code Player} .
+     * Plays this {@code Audio} for the specified {@code Player} only at the {@code Location} of the specified {@code Player} .
      * 
      * @param player the player
      */
@@ -93,7 +93,7 @@ public class Audio {
     }
     
     /**
-     * Plays this {@code Audio}  for the specified {@code Player}s only at the specified location.
+     * Plays this {@code Audio}  for the specified {@code Player}s only at the specified {@code Location}.
      * 
      * @param players the players
      * @param location the location
@@ -103,7 +103,7 @@ public class Audio {
     }
     
     /**
-     * Plays this {@code Audio} for the specified {@code Player} only at the specified location .
+     * Plays this {@code Audio} for the specified {@code Player} only at the specified {@code Location}.
      * 
      * @param player the player
      * @param location the location

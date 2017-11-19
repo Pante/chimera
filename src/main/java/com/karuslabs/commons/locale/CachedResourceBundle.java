@@ -38,7 +38,7 @@ import static java.util.Collections.enumeration;
  * <p>
  * The backing {@code ConcurrentMap} may only contain {@code String}s and {@code String[]}s.
  * <P>
- * Instances of this class should never to be constructed directly, but rather through invoking {@link ResourceBundle#getBundle(String)} or 
+ * Instances of this class should never be constructed directly, but rather through invoking {@link ResourceBundle#getBundle(String)} or 
  * any other overloaded variant.
  */
 public class CachedResourceBundle extends ResourceBundle {

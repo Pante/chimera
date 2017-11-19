@@ -94,7 +94,7 @@ public class BarSupplier implements Supplier<BossBar> {
     }
     
     /**
-     * Represents a builder for {@code BarSupplier}.
+     * Represents a builder for {@code BarSupplier}s.
      */
     public static class Builder {
         
@@ -142,7 +142,7 @@ public class BarSupplier implements Supplier<BossBar> {
         /**
          * Sets the progress.
          * 
-         * @param progress
+         * @param progress the progress
          * @return this
          */
         public Builder progress(double progress) {

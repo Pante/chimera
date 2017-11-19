@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and utilities for localisation.
+ * Contains classes for different {@code Particles} types.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.animation.particles;

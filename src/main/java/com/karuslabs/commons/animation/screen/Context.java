@@ -23,15 +23,13 @@
  */
 package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.locale.Translatable;
 import com.karuslabs.commons.util.concurrent.Repeatable;
 
 import java.text.MessageFormat;
 
 
-public interface Context extends Repeatable {
-    
-    public Translation getTranslation();
+public interface Context extends Translatable, Repeatable {
     
     public MessageFormat getFormat();
     

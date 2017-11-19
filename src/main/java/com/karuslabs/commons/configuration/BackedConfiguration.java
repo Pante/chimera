@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.annotation.ValueBased;
-
 import java.io.*;
 import java.util.*;
 
@@ -35,23 +33,34 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 
-@ValueBased
+/**
+ * Represents a {@code ConfigurationSection} backed by a {@code File}.
+ */
 public class BackedConfiguration implements ConfigurationSection {
     
     File file;
     FileConfiguration config;
 
     
+    @Deprecated
     public BackedConfiguration(String embedded) {
         this(new File(BackedConfiguration.class.getClassLoader().getResource(embedded).getPath()));
     }
     
+    /**
+     * Constructs a {@code BackedConfiguration} backed by the specified {@code File}.
+     * 
+     * @param file the file
+     */
     public BackedConfiguration(File file) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
     }
     
     
+    /**
+     * Saves this {@code BackConfiguration} to the backing {@code File}.
+     */
     public void save() {
         try {
             config.save(file);
@@ -351,25 +360,6 @@ public class BackedConfiguration implements ConfigurationSection {
     @Override
     public void addDefault(String path, Object value) {
         config.addDefault(path, value);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        Object target = other;
-        if (other instanceof BackedConfiguration) {
-            target = ((BackedConfiguration) other).config;
-        }
-        return config.equals(target);
-    }
-
-    @Override
-    public int hashCode() {
-        return config.hashCode();
-    }
-    
-    @Override
-    public String toString() {
-        return config.toString();
     }
     
 }

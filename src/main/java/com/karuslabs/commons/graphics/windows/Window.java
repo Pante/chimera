@@ -26,7 +26,7 @@ package com.karuslabs.commons.graphics.windows;
 import com.karuslabs.commons.annotation.*;
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.locale.*;
 
 import java.util.*;
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 
 
-public abstract class Window implements Listener, InventoryHolder, Resettable {    
+public abstract class Window implements Listener, Translatable, InventoryHolder, Resettable {    
     
     @JDK9
     protected static final @Immutable Set<Integer> INVALID = unmodifiableSet(new HashSet<>(asList(-1, -999)));
@@ -178,6 +178,7 @@ public abstract class Window implements Listener, InventoryHolder, Resettable {
         return regions;
     }
     
+    @Override
     public MessageTranslation getTranslation() {
         return translation;
     }
