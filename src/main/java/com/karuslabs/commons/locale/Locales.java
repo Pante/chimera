@@ -120,8 +120,8 @@ public class Locales {
         return Get.orDefault(get(locale), value);
     }
     
-    public static Locale getOrDefault(String locale, Supplier<Locale> value) {
-        return Get.orDefault(get(locale), value);
+    public static Locale getOrDefault(String locale, Supplier<Locale> supplier) {
+        return Get.orDefault(get(locale), supplier);
     }
     
         

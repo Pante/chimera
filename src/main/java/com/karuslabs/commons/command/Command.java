@@ -25,7 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.locale.*;
 
 import java.util.*;
 import javax.annotation.Nonnull;
@@ -39,7 +39,7 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
 
-public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand {    
+public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand, Translatable {    
     
     private Plugin plugin;
     private MessageTranslation translation;
@@ -119,7 +119,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     public Plugin getPlugin() {
         return plugin;
     }
-            
+    
+    @Override
     public MessageTranslation getTranslation() {
         return translation;
     }

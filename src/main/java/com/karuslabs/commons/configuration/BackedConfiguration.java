@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.annotation.ValueBased;
-
 import java.io.*;
 import java.util.*;
 
@@ -35,7 +33,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 
-@ValueBased
 public class BackedConfiguration implements ConfigurationSection {
     
     File file;
@@ -351,25 +348,6 @@ public class BackedConfiguration implements ConfigurationSection {
     @Override
     public void addDefault(String path, Object value) {
         config.addDefault(path, value);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        Object target = other;
-        if (other instanceof BackedConfiguration) {
-            target = ((BackedConfiguration) other).config;
-        }
-        return config.equals(target);
-    }
-
-    @Override
-    public int hashCode() {
-        return config.hashCode();
-    }
-    
-    @Override
-    public String toString() {
-        return config.toString();
     }
     
 }

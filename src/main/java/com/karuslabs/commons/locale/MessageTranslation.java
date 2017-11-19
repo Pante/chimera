@@ -28,6 +28,7 @@ import com.karuslabs.commons.locale.providers.Provider;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.ResourceBundle.Control;
 import javax.annotation.Nonnull;
 
 import org.bukkit.entity.Player;
@@ -59,7 +60,7 @@ public class MessageTranslation extends Translation {
     protected ResourceBundle bundle;
     
     
-    public MessageTranslation(String bundle, ResourceBundle.Control control, Provider provider) {
+    public MessageTranslation(String bundle, Control control, Provider provider) {
         super(bundle, control, provider);
         format = new MessageFormat("");
     }

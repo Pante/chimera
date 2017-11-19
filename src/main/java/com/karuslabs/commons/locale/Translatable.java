@@ -21,16 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.screen;
-
-import com.karuslabs.commons.locale.Translatable;
-import com.karuslabs.commons.util.concurrent.Repeatable;
-
-import java.text.MessageFormat;
+package com.karuslabs.commons.locale;
 
 
-public interface Context extends Translatable, Repeatable {
+public interface Translatable {
     
-    public MessageFormat getFormat();
+    public Translation getTranslation();
     
 }
