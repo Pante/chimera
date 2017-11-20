@@ -34,17 +34,36 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
 
+/**
+ * Provides the {@code Command} which is executed on tab-completion with a list of suggestions.
+ */
 @FunctionalInterface
 public interface Completion {
     
+    /**
+     * Returns a list of possible completions for the specified {@code CommandSender} and argument.
+     * 
+     * @param sender the CommandSender
+     * @param argument the argument
+     * @return a list of possible completions
+     */
     public @Nonnull List<String> complete(@Nonnull CommandSender sender, @Nonnull String argument);
     
     
+    /**
+     * A {@code Completion} which returns an empty list.
+     */
     public static final Completion NONE = (sender, argument) -> EMPTY_LIST;
     
+    /**
+     * A {@code Completion} which returns a list of the names of online {@code Player}s which begin with the specified argument.
+     */
     public static final Completion PLAYER_NAMES = (sender, argument) -> 
             sender.getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
     
+    /**
+     * A {@code Completion} which returns a list of the names of loaded {@code World}s which begin with the specified argument.
+     */
     public static final Completion WORLD_NAMES = (sender, argument) -> 
             sender.getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
     

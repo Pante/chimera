@@ -35,11 +35,20 @@ import org.bukkit.plugin.Plugin;
 import static java.util.stream.Collectors.toMap;
 
 
+/**
+ * Represents a proxy for the {@code SimpleCommandMap} of the {@code Server}.
+ */
 public class ProxiedCommandMap {
     
     private SimpleCommandMap map;
     
     
+    /**
+     * Constructs a {@code ProxiedCommandMap} for the specified {@code Server}.
+     * 
+     * @param server the Server
+     * @throws IllegalArgumentException if the specified Server does not contain a SimpleCommandMap
+     */
     public ProxiedCommandMap(Server server) {
         try {
             Field field = server.getClass().getDeclaredField("commandMap");
@@ -52,35 +61,113 @@ public class ProxiedCommandMap {
     }
     
     
+    /**
+     * Registers all the commands belonging to a certain plugin.
+     * <p>
+     * Caller can use:-
+     * <ul>
+     * <li>command.getName() to determine the label registered for this
+     *     command
+     * <li>command.getAliases() to determine the aliases which where
+     *     registered
+     * </ul>
+     *
+     * @param fallbackPrefix a prefix which is prepended to each command with
+     *     a ':' one or more times to make the command unique
+     * @param commands a list of commands to register
+     */
     public void registerAll(String fallbackPrefix, List<Command> commands) {
         commands.forEach(command -> register(fallbackPrefix, command));
     }
-
+    
+    /**
+     * Registers a command. Returns true on success; false if name is already
+     * taken and fallback had to be used.
+     * <p>
+     * Caller can use:-
+     * <ul>
+     * <li>command.getName() to determine the label registered for this
+     *     command
+     * <li>command.getAliases() to determine the aliases which where
+     *     registered
+     * </ul>
+     *
+     * @param label the label of the command, without the '/'-prefix.
+     * @param fallbackPrefix a prefix which is prepended to the command with a
+     *     ':' one or more times to make the command unique
+     * @param command the command to register
+     * @return true if command was registered with the passed in label, false
+     *     otherwise, which indicates the fallbackPrefix was used one or more
+     *     times
+     */
     public boolean register(String label, String fallbackPrefix, Command command) {
         return map.register(label, fallbackPrefix, command);
     }
-
+    
+    /**
+     * Registers a command. Returns true on success; false if name is already
+     * taken and fallback had to be used.
+     * <p>
+     * Caller can use:-
+     * <ul>
+     * <li>command.getName() to determine the label registered for this
+     *     command
+     * <li>command.getAliases() to determine the aliases which where
+     *     registered
+     * </ul>
+     *
+     * @param fallbackPrefix a prefix which is prepended to the command with a
+     *     ':' one or more times to make the command unique
+     * @param command the command to register, from which label is determined
+     *     from the command name
+     * @return true if command was registered with the passed in label, false
+     *     otherwise, which indicates the fallbackPrefix was used one or more
+     *     times
+     */
     public boolean register(String fallbackPrefix, Command command) {
         return map.register(fallbackPrefix, command);
     }
     
     
+    /**
+     * Looks for the requested command and executes it if found.
+     *
+     * @param sender The command's sender
+     * @param cmdLine command + arguments. Example: "/test abc 123"
+     * @return returns false if no target is found, true otherwise.
+     */
     public boolean dispatch(CommandSender sender, String cmdLine) {
         return map.dispatch(sender, cmdLine);
     }
 
     
+    /**
+     * Clears all registered commands.
+     */
     public void clearCommands() {
         map.clearCommands();
     }
 
     
+    /**
+     * Gets the command registered to the specified name, or {@code null} if no such {@code Command} exists.
+     *
+     * @param name Name of the command to retrieve
+     * @return Command with the specified name or null if a command with that
+     *     label doesn't exist
+     */
     public @Nullable Command getCommand(String name) {
         org.bukkit.command.Command command = map.getCommand(name);
         return command instanceof Command ? (Command) command : null;
     }
     
     
+    /**
+     * Gets the names and associated {@code Command}s of the specified {@code Plugin}.
+     * 
+     * @param plugin the Plugin
+     * @return a Map which contains the names and associated Commands of the specified Plugin
+     */
     public Map<String, Command> getCommands(Plugin plugin) {
         return map.getCommands().stream()
             .filter(command -> command instanceof Command && plugin.equals(((Command) command).getPlugin()))
@@ -88,15 +175,43 @@ public class ProxiedCommandMap {
     }
     
     
+    /**
+     * Looks for the requested command and executes an appropriate
+     * tab-completer if found. This method will also tab-complete partial
+     * commands.
+     *
+     * @param sender The command's sender.
+     * @param cmdLine The entire command string to tab-complete, excluding
+     *     initial slash.
+     * @return a list of possible tab-completions. This list may be immutable.
+     *     Will be null if no matching command of which sender has permission.
+     */
     public List<String> tabComplete(CommandSender sender, String cmdLine)  {
         return map.tabComplete(sender, cmdLine);
     }
     
+    /**
+     * Looks for the requested command and executes an appropriate
+     * tab-completer if found. This method will also tab-complete partial
+     * commands.
+     *
+     * @param sender The command's sender.
+     * @param cmdLine The entire command string to tab-complete, excluding
+     *     initial slash.
+     * @param location The position looked at by the sender, or null if none
+     * @return a list of possible tab-completions. This list may be immutable.
+     *     Will be null if no matching command of which sender has permission.
+     */
     public List<String> tabComplete(CommandSender sender, String cmdLine, Location location) {
         return map.tabComplete(sender, cmdLine, location);
     }
     
     
+    /**
+     * Returns the proxied {@code SimpleCommandMap}.
+     * 
+     * @return the SimpleCommandMap
+     */
     public SimpleCommandMap getProxiedMap() {
         return map;
     }

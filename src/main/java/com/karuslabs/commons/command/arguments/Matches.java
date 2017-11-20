@@ -32,21 +32,52 @@ import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 
 
+/**
+ * This class consist exclusively of stateless {@code Predicate}s for testing arguments.
+ */
 @Static
 public class Matches {
     
+    /**
+     * A predicate which tests if the specified argument is empty. 
+     * Returns {@code true} if the specified argument is empty; else {@code false}.
+     */
     public static final Predicate<String> EMPTY = String::isEmpty;
     
+    /**
+     * A predicate which tests if the specified argument is a {@code boolean}.
+     * Returns {@code true} if the specified argument is equal to either {@code "true"} or {@code "false}, case insensitive; else {@code false}.
+     */
     public static final Predicate<String> BOOLEAN = argument -> argument.toLowerCase().matches("(true|false)");
     
+    /**
+     * A predicate which tests if the specified argument is an {@code int}.
+     * Returns {@code} true if the specified argument is an {@code int}; else {@code false}.
+     */
     public static final Predicate<String> INT = argument -> Ints.tryParse(argument) != null;
     
+    /**
+     * A predicate which tests if the specified argument is a {@code double}.
+     * Returns {@code} true if the specified argument is an {@code double}; else {@code false}.
+     */
     public static final Predicate<String> DOUBLE = argument -> Doubles.tryParse(argument) != null;
     
+    /**
+     * A predicate which tests if the specified argument is a {@code float}.
+     * Returns {@code} true if the specified argument is an {@code float}; else {@code false}.
+     */
     public static final Predicate<String> FLOAT = argument -> Floats.tryParse(argument) != null;
     
+    /**
+     * A predicate which tests if the specified argument is the name of an online {@code Player}.
+     * Returns {@code} true if the specified argument is the name of an online {@code Player}; else {@code false}.
+     */
     public static final Predicate<String> PLAYER = argument -> Bukkit.getPlayer(argument) != null;
     
+    /**
+     * A predicate which tests if the specified argument is the name of a loaded {@code World}.
+     * Returns {@code} true if the specified argument is the name of a loaded {@code World}; else {@code false}.
+     */
     public static final Predicate<String> WORLD = argument -> Bukkit.getWorld(argument) != null;
     
 }

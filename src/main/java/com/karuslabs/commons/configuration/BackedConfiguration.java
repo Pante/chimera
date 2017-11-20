@@ -40,12 +40,7 @@ public class BackedConfiguration implements ConfigurationSection {
     
     File file;
     FileConfiguration config;
-
     
-    @Deprecated
-    public BackedConfiguration(String embedded) {
-        this(new File(BackedConfiguration.class.getClassLoader().getResource(embedded).getPath()));
-    }
     
     /**
      * Constructs a {@code BackedConfiguration} backed by the specified {@code File}.

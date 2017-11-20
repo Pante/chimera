@@ -26,6 +26,8 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
@@ -103,7 +105,7 @@ public class Commands {
      * @param name the name of the Command
      * @return the Command if present; else null
      */
-    public Command getCommand(String name) {
+    public @Nullable Command getCommand(String name) {
         return map.getCommand(name);
     }
     

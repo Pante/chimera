@@ -32,26 +32,52 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 
+/**
+ * An implementation of {@code Completion} which contains a list of completions and
+ * returns a list of completions that begin with the given argument.
+ */
 public class CachedCompletion implements Completion {
     
     private List<String> completions;
     
     
+    /**
+     * Constructs a {@code CachedCompletion} with the specified completions.
+     * 
+     * @param completions the completions
+     */
     public CachedCompletion(String... completions) {
         this(asList(completions));
     }
     
+    /**
+     * Constructs a {@code CachedCompletion} with the specified completions.
+     * 
+     * @param completions the completions
+     */
     public CachedCompletion(List<String> completions) {
         this.completions = completions;
     }
     
     
+    /**
+     * Returns a list of completions which begin with the specified argument.
+     * 
+     * @param sender the CommandSender
+     * @param argument the argument
+     * @return a list of completions which begin with the specified argument
+     */
     @Override
     public @Nonnull List<String> complete(@Nonnull CommandSender sender, @Nonnull String argument) {
         return completions.stream().filter(possibility -> possibility.startsWith(argument)).collect(toList());
     }
     
     
+    /**
+     * Returns the list of completions.
+     * 
+     * @return the completions
+     */
     public List<String> getCompletions() {
         return completions;
     }

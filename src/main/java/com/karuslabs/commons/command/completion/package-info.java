@@ -21,31 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
-
-import com.karuslabs.commons.annotation.Static;
-
-import java.util.regex.Pattern;
-
 
 /**
- * This class consists exclusively of methods which merge and split arrays of {@code String}s.
+ * Contains {@code Completion}s which handles tab-completion for {@code Command}s.
  */
-@Static
-public class Patterns {
-        
-    private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
-    
-    /**
-     * Merges the specified arguments with spaces which are enclosed in quotation marks,
-     * and removes the enclosing quotation marks thereafter.
-     * 
-     * 
-     * @param arguments the arguments
-     * @return the merged arguments
-     */
-    public static String[] preserveQuotes(String[] arguments) {
-        return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
-    }
-    
-}
+package com.karuslabs.commons.command.completion;

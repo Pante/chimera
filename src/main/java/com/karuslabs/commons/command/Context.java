@@ -32,7 +32,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class Context {
+/**
+ * Represents the context in which a {@code Command} is executed.
+ */
+public class Context implements Translatable {
     
     private CommandSender sender;
     private Locale locale;
@@ -43,10 +46,29 @@ public class Context {
     private MessageTranslation translation;
     
     
+    /**
+     * Constructs a {@code Context} with the specified {@code Commandsender}, label, parent {@code Command} and {@code Command} which is executed.
+     * 
+     * @param sender the CommandSender
+     * @param label the label
+     * @param parent the parent of the Command which is executed
+     * @param command the Command which is executed
+     */
     public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
         this(sender, sender instanceof Player ? Locales.get(((Player) sender).getLocale()) : Locale.getDefault(), label, parent, command, command.getTranslation());
     }
     
+    /**
+     * Constructs a {@code Context} with the specified {@code CommandSender}, locale of the {@code CommandSender}, label, parent {@code Command},
+     * {@code Command} which is executed and the {@code MessageTranslation}.
+     * 
+     * @param sender the CommandSender
+     * @param locale the locale of the CommandSender
+     * @param label the label of the command used
+     * @param parent the parent of the Command which is executed
+     * @param command the Command which is executed
+     * @param translation the MessageTranslation of the Command executed
+     */
     public Context(CommandSender sender, Locale locale, String label, @Nullable Command parent, Command command, MessageTranslation translation) {
         this.sender = sender;
         this.locale = locale;
@@ -57,6 +79,13 @@ public class Context {
     }
     
     
+    /**
+     * Updates this {@code Context} with the specified label and {@code Command},
+     * setting the current {@code Command} as the parent {@code Command}.
+     * 
+     * @param label the label
+     * @param command the Command
+     */
     public void update(String label, Command command) {
         this.label = label;
         this.parent = this.command;
@@ -65,39 +94,83 @@ public class Context {
     }
     
     
+    /**
+     * Returns the {@code CommandSender}.
+     * 
+     * @return the CommandSender
+     */
     public CommandSender getSender() {
         return sender;
     }
     
+    /**
+     * Returns the {@code CommandSender} if the {@code CommandSender} is a {@code Player}, or {@code null}
+     * if the {@code CommandSender} is not a {@code Player}.
+     * 
+     * @return the Player if the CommandSender is a Player; else null
+     */
     public @Nullable Player getPlayer() {
         return isPlayer() ? (Player) sender : null;
     }
-        
+    
+    /**
+     * Returns {@code true} if the {@code CommandSender} is a {@code Player}; else {@code false}.
+     * 
+     * @return true if the CommandSender is a Player; else false
+     */
     public boolean isPlayer() {
         return sender instanceof Player;
     }
     
+    /**
+     * Returns the {@code Locale} of the {@code CommandSender}.
+     * 
+     * @return the Locale
+     */
     public Locale getLocale() {
         return locale;
     }
     
+    /**
+     * Sets the {@code locale}.
+     * 
+     * @param locale the Locale
+     */
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
     
-    
+    /**
+     * Returns the label of the {@code Command} used.
+     * 
+     * @return the label
+     */
     public String getLabel() {
         return label;
     }
     
+    /**
+     * Returns the parent of the {@code Command} which is executed, or {@code null} if the {@code Command} has no parent. 
+     * 
+     * @return the parent Command if the Command executed has a parent; else null
+     */
     public @Nullable Command getParentCommand() {
         return parent;
     }
     
+    /**
+     * Returns the {@code Command} which is executed.
+     * 
+     * @return the Command
+     */
     public Command getCommand() {
         return command;
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public MessageTranslation getTranslation() {
         return translation;
     }
