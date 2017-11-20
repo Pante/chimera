@@ -40,7 +40,7 @@ import static java.util.Collections.EMPTY_LIST;
 public class CachedControl extends Control {
     
     /**
-     * Represents a {@code CachedControl} which always returns an empty {@code ResourceBundle}.
+     * A {@code CachedControl} which always returns an empty {@code ResourceBundle}.
      */
     public static final CachedControl NONE = new CachedControl() {
         

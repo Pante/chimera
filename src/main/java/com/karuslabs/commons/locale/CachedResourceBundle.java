@@ -44,7 +44,7 @@ import static java.util.Collections.enumeration;
 public class CachedResourceBundle extends ResourceBundle {
     
     /**
-     * Represents an empty {@code CachedResourceBundle} which always returns the specified key
+     * An empty {@code CachedResourceBundle} which always returns the specified key
      * when {@code getString(String)} is invoked.
      */
     public static final CachedResourceBundle NONE = new CachedResourceBundle() {

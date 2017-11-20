@@ -48,7 +48,7 @@ import static java.util.stream.Stream.*;
 public final class Weak<T> {
     
     /**
-     * Represents an empty instance of {@code Weak}
+     * An empty instance of {@code Weak}
      */
     public static final Weak<?> EMPTY = new Weak<>(null);
     

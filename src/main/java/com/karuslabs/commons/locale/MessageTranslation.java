@@ -40,7 +40,7 @@ import org.bukkit.entity.Player;
 public class MessageTranslation extends Translation {
     
     /**
-     * Represents an empty {@code MessageTranslation} which returns an empty {@code ResourceBundle} when {@link #get(Locale)} is invoked and key when
+     * An empty {@code MessageTranslation} which returns an empty {@code ResourceBundle} when {@link #get(Locale)} is invoked and key when
      * {@link #format(String, Object...)} is invoked.
      */
     public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE, Provider.NONE) {

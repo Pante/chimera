@@ -31,6 +31,10 @@ import org.bukkit.plugin.Plugin;
 import static com.karuslabs.commons.configuration.Configurations.from;
 
 
+/**
+ * Represent the {@code Command}s for a {@code Plugin} and provides facilities for loading and manipulating
+ * the {@code Command}s.
+ */
 public class Commands {
     
     Plugin plugin;
@@ -38,10 +42,24 @@ public class Commands {
     Provider provider;
     
     
+    /**
+     * Constructs a {@code Commands} for the specified {@code Plugin} with the specified locale {@code Provider}.
+     * 
+     * @param plugin the Plugin
+     * @param provider the locale Provider
+     */
     public Commands(Plugin plugin, Provider provider) {
         this(plugin, new ProxiedCommandMap(plugin.getServer()), provider);
     }
     
+    /**
+     * Constructs a {@code Commands} for the specified {@code Plugin} with 
+     * the specified {@code ProxiedCommandMap} and locale {@code Provider}.
+     * 
+     * @param plugin the Plugin
+     * @param map the ProxiedCommandMap
+     * @param provider the locale Provider
+     */
     public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider) {
         this.plugin = plugin;
         this.map = map;
@@ -49,6 +67,12 @@ public class Commands {
     }
     
     
+    /**
+     * Loads the {@code Command}s for this {@code Plugin} from an embedded YAML file at the specified path,
+     * using a {@code Parser} with the default configuration.
+     * 
+     * @param path the path to the embedded YAML file
+     */
     public void load(String path) {
         CompletionElement completion = new CompletionElement();
         CompletionsElement completions = new CompletionsElement(completion);
@@ -60,16 +84,34 @@ public class Commands {
         
         load(new Parser(command, translation, completion), path);
     }
-
+    
+    /**
+     * Loads the {@code Command}s for this {@code Plugin} from an embedded file at the specified path,
+     * using the specified {@code Parser}.
+     * 
+     * @param parser the Parser
+     * @param path the path to the embedded file
+     */
     public void load(Parser parser, String path) {
         map.registerAll(plugin.getName(), parser.parse(from(getClass().getClassLoader().getResourceAsStream(path))));
     }
     
     
+    /**
+     * Returns a {@code Command} with the specified name, or {@code null} if the {@code Command} is not present.
+     * 
+     * @param name the name of the Command
+     * @return the Command if present; else null
+     */
     public Command getCommand(String name) {
         return map.getCommand(name);
     }
     
+    /**
+     * Returns the {@code ProxiedCommandMap}.
+     * 
+     * @return the ProxiedCommandMap
+     */
     public ProxiedCommandMap getProxiedCommandMap() {
         return map;
     }

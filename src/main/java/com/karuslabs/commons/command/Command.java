@@ -78,7 +78,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
-     * Constructs a {@code Command}  for the specified {@code Plugin} with the specified name, {@code MessageTranslation}, 
+     * Constructs a {@code Command} for the specified {@code Plugin} with the specified name, {@code MessageTranslation}, 
      * description, usage, aliases, {@code CommandExeuctor}, subcommands, {@code Completion}s.
      * 
      * @param name the name
@@ -102,8 +102,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     
     /**
-     * Delegates execution of this {@code Command} to {@link #execute(Context, Arguments)},
-     * resplitting the arguments to preserve arguments with spaces enclosed in quotation marks.
+     * Merges the arguments with spaces, enclosed in quotation marks and 
+     * delegates execution of this {@code Command} to {@link #execute(Context, Arguments)}
      * 
      * @param sender the source object which is executing this Command
      * @param label the label of the command used
@@ -116,9 +116,9 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
-     * Updates the specified {@code Context} and removes the first argument in the specified {@code Arguments} 
-     * before delegating execution to a subcommand, or executes this {@code Command}
-     * if a subcommand with a name equal to the last argument is not present.
+     * Delegates execution to a subcommand with the updated {@code Context} and trimmed {@code Arguments},
+     * or the {@code CommandExecutor} for this {@code Command} if no subcommand with 
+     * a name equal to the last argument exists.
      * 
      * @param context the context which this command is executed in
      * @param arguments the arguments passed to this Command
@@ -140,8 +140,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     /**
-     * Delegates tab completion of this {@code Command} to {@link #complete(CommandSender, Arguments)},
-     * resplitting the arguments to preserve arguments with spaces enclosed in quotation marks.
+     * Merges the arguments with spaces, enclosed in quotation marks and
+     * delegates tab completion of this {@code Command} to {@link #complete(CommandSender, Arguments)}.
      * 
      * @param sender the source object which is executing this Command
      * @param alias the alias of the command used
@@ -154,10 +154,19 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
+     * Delegates tab completion to a subcommand with a name equal to the first argument if present,
      * 
-     * @param sender
-     * @param arguments
-     * @return 
+     * else returns a list of subcommands which begin with the last argument 
+     * if this {@code Command} has subcommands and the number of arguments is 1,
+     * 
+     * else delegates execution to a {@code Completion} with an associated index equal to the index of the last argument if present, or returns a list of
+     * {@code Player} names if not present.
+     * 
+     * Otherwise, return an empty list if the number of arguments is 0.
+     * 
+     * @param sender the source object which is executing this Command
+     * @param arguments all arguments passed to this Command
+     * @return a list of tab-completions for the specified Arguments
      */
     public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
         if (arguments.length() == 0) {
@@ -184,8 +193,9 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
        
     
     /**
+     * Returns the {@code Plugin} which this {@code command} belongs to.
      * 
-     * @return 
+     * @return the Plugin
      */
     @Override
     public Plugin getPlugin() {
@@ -193,8 +203,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
-     * 
-     * @return 
+     * {@inheritDoc}
      */
     @Override
     public MessageTranslation getTranslation() {
@@ -202,35 +211,56 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
+     * Returns the {@code CommandExecutor} for this {@code Command}.
      * 
-     * @return 
+     * @return the CommandExecutor
      */
     public CommandExecutor getExecutor() {
         return executor;
     }
     
     /**
+     * Sets the {@code CommandExecutor} for this {@code Command}.
      * 
-     * @param executor 
+     * @param executor the CommandExecutor
      */
     public void setExecutor(CommandExecutor executor) {
         this.executor = executor;
     }
 
+    /**
+     * Returns the subcommands for this {@code Command}.
+     * 
+     * @return the subcommands
+     */
     public Map<String, Command> getSubcommands() {
         return subcommands;
     }
-
+    
+    /**
+     * Returns the {@code Completion}s.
+     * 
+     * @return the Completions
+     */
     public Map<Integer, Completion> getCompletions() {
         return completions;
     }
     
     
+    /**
+     * Represents a {@code Command} builder for the specified {@code Plugin}.
+     * 
+     * @param plugin the Plugin
+     * @return the builder
+     */
     public static Builder builder(Plugin plugin) {
         return new Builder(new Command("", plugin, MessageTranslation.NONE, "", "", new ArrayList<>(), CommandExecutor.NONE, new HashMap<>(), new HashMap<>()));
     }
     
     
+    /**
+     * Represents a builder for {@code Command}s.
+     */
     public static class Builder {
         
         private Command command;
@@ -241,46 +271,99 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         }
         
         
+        /**
+         * Sets the name.
+         * 
+         * @param name the name
+         * @return this
+         */
         public Builder name(String name) {
             command.setName(name);
             return this;
         }
         
+        /**
+         * Sets the description.
+         * 
+         * @param description the description
+         * @return this
+         */
         public Builder description(String description) {
             command.setDescription(description);
             return this;
         }
         
+        /**
+         * Sets the usage.
+         * 
+         * @param usage the usage
+         * @return this
+         */
         public Builder usage(String usage) {
             command.setUsage(usage);
             return this;
         }
         
+        /**
+         * Sets the aliases.
+         * 
+         * @param aliases the aliases
+         * @return this
+         */
         public Builder aliases(List<String> aliases) {
             command.setAliases(aliases);
             return this;
         }
         
+        /**
+         * Sets the {@code MessageTranslation}.
+         * 
+         * @param translation the MessageTranslation
+         * @return this
+         */
         public Builder translation(MessageTranslation translation) {
             command.translation = translation;
             return this;
         }
         
+        /**
+         * Sets the {@code CommandExecutor}.
+         * 
+         * @param executor the CommandExecutor
+         * @return this
+         */
         public Builder executor(CommandExecutor executor) {
             command.executor = executor;
             return this;
         }
         
+        /**
+         * Sets the subcommands.
+         * 
+         * @param subcommands the subcommands
+         * @return this
+         */
         public Builder subcommands(Map<String, Command> subcommands) {
             command.subcommands = subcommands;
             return this;
         }
         
+        /**
+         * Sets the {@code Completion}s.
+         * 
+         * @param completions the completions
+         * @return this
+         */
         public Builder completions(Map<Integer, Completion> completions) {
             command.completions = completions;
             return this;
         }
         
+        /**
+         * Builds the {@code Command}.
+         * 
+         * @return the Command
+         */
         public Command build() {
             return command;
         }
