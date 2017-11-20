@@ -32,7 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
-public class Context {
+public class Context implements Translatable {
     
     private CommandSender sender;
     private Locale locale;
@@ -98,6 +98,7 @@ public class Context {
         return command;
     }
 
+    @Override
     public MessageTranslation getTranslation() {
         return translation;
     }

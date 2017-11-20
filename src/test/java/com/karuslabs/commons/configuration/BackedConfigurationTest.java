@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 
 class BackedConfigurationTest {
     
-    private BackedConfiguration config = new BackedConfiguration("configuration/config.yml");
+    private BackedConfiguration config = new BackedConfiguration(new File(getClass().getClassLoader().getResource("configuration/config.yml").getPath()));
     
     
     @Test

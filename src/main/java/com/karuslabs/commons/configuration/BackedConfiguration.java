@@ -39,10 +39,6 @@ public class BackedConfiguration implements ConfigurationSection {
     FileConfiguration config;
 
     
-    public BackedConfiguration(String embedded) {
-        this(new File(BackedConfiguration.class.getClassLoader().getResource(embedded).getPath()));
-    }
-    
     public BackedConfiguration(File file) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
