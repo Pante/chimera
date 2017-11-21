@@ -114,18 +114,15 @@ class MatcherTest {
     
     
     @Test
-    void exact_ThrowsException() {
-        assertEquals(
-            "Invalid number of matches specified.",
-            assertThrows(IllegalArgumentException.class, () -> matcher.exact(arg -> true, arg -> true)).getMessage()
-        );
+    void exact_InvalidSequence() {
+        assertFalse(matcher.exact(arg -> true, arg -> true));
     }
     
     
     @ParameterizedTest
     @MethodSource("anySequence_parameters")
     void anySequence(Predicate[] matches, boolean expected) {
-        Matcher matcher = new Matcher("1", "2", "3", "4", "5");
+        Matcher matcher = new Matcher("1", "2", "3");
         
         assertEquals(expected, matcher.anySequence(matches));
     }
@@ -133,17 +130,9 @@ class MatcherTest {
     static Stream<Arguments> anySequence_parameters() {
         return Stream.of(
             of(new Predicate[] {arg -> arg.equals("2"), arg -> arg.equals("3")}, true),
-            of(new Predicate[] {arg -> arg.equals("3"), arg -> arg.equals("2")}, false)
+            of(new Predicate[] {arg -> arg.equals("3"), arg -> arg.equals("2")}, false),
+            of(new Predicate[] {arg -> true, arg -> true, arg -> true, arg -> true}, false)
         );
-    }
-    
-    
-    @Test
-    void anySequence_ThrowsException() {
-       assertEquals(
-            "Invalid number of matches specified.",
-            assertThrows(IllegalArgumentException.class, () -> matcher.anySequence(arg -> true, arg -> true, arg -> true, arg -> true, arg -> true)).getMessage()
-       );
     }
     
     
