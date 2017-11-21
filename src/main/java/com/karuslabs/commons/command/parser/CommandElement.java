@@ -36,6 +36,9 @@ import org.bukkit.plugin.Plugin;
 import static com.karuslabs.commons.command.CommandExecutor.NONE;
 
 
+/**
+ * A concrete subclass of {@code Element} which creates {@code Command}s from {@code command} elements in a YAML document.
+ */
 public class CommandElement extends Element<Command> {
     
     private Plugin plugin;
@@ -44,10 +47,29 @@ public class CommandElement extends Element<Command> {
     private Element<Map<Integer, Completion>> completions;
     
     
+    /**
+     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for 
+     * subcommands, translations and completions, and no declarations.
+     * 
+     * @param plugin the Plugin
+     * @param subcommands the Element for subcommands
+     * @param translation the Element for translations
+     * @param completions the Element for completions
+     */
     public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions) {
         this(plugin, subcommands, translation, completions, new HashMap<>());
     }
     
+    /**
+     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for 
+     * subcommands, translations, completions and declarations.
+     * 
+     * @param plugin the Plugin
+     * @param subcommands the Element for subcommands
+     * @param translation the Element for translations
+     * @param completions the Element for completions
+     * @param declarations  the declarations
+     */
     public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions, Map<String, Command> declarations) {
         super(declarations);
         this.plugin = plugin;
@@ -56,7 +78,13 @@ public class CommandElement extends Element<Command> {
         this.completions = completions;
     }
 
-    
+    /**
+     * Checks if the value
+     * 
+     * @param config
+     * @param key
+     * @return 
+     */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isConfigurationSection(key);

@@ -24,8 +24,16 @@
 package com.karuslabs.commons.command.parser;
 
 
+/**
+ * Thrown to indicate that an error has occurred while parsing.
+ */
 public class ParserException extends RuntimeException {
     
+    /**
+     * Constructs a {@code ParserException} with the specified detail message.
+     * 
+     * @param message the detail message
+     */
     public ParserException(String message) {
         super(message);
     }

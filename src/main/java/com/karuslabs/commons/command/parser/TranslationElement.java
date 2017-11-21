@@ -39,16 +39,34 @@ import static java.util.Arrays.copyOf;
 import static java.lang.System.arraycopy;
 
 
+/**
+ * A concrete subclass of {@code Element} which creates {@code MessageTranslation}s from {@code translation} elements in a YAML document.
+ */
 public class TranslationElement extends Element<MessageTranslation> {
     
     private File folder;
     private Provider provider;
     
     
+    /**
+     * Constructs a {@code TranslationElement} with the specified folder which contains the {@code Resource}s, 
+     * no declarations and {@code Provier}.
+     * 
+     * @param folder the folder which contains the Resources
+     * @param provider the Provider
+     */
     public TranslationElement(File folder, Provider provider) {
         this(folder, new HashMap<>(), provider);
     }
     
+    /**
+     * Constructs a {@code TraslationElement} with the specified folder which contains the {@code Resource}s, 
+     * declarations and {@code Provider}.
+     * 
+     * @param folder the folder
+     * @param declarations the declarations
+     * @param provider the provider
+     */
     public TranslationElement(File folder, Map<String, MessageTranslation> declarations, Provider provider) {
         super(declarations);
         this.folder = folder;
@@ -56,11 +74,27 @@ public class TranslationElement extends Element<MessageTranslation> {
     }
 
     
+    /**
+     * Returns an empty MessageTranslation.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return an empty MessageTranslation
+     */
     @Override
     protected @Nonnull MessageTranslation handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
         return NONE;
     }
     
+    /**
+     * Checks if the specified {@code ConfigurationSection} contains a well-formed {@code translation} element.
+     * Returns {@code true} if the {@code translation} contains a {@code bundle} key mapped to a {@code String} value,
+     * and either or both, {@code embedded} and {@code folder} mapped to a list of {@code String}s; else throws a {@code ParserException}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return true if the value contains the keys and associated values; else false
+     */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         config = config.getConfigurationSection(key);
@@ -75,7 +109,15 @@ public class TranslationElement extends Element<MessageTranslation> {
             return true;
         }
     }
-
+    
+    /**
+     * Creates a {@code MessageTranslation} from the {@code translation} element 
+     * associated with the specified key in the {@code ConfigurationSection}.
+     * 
+     * @param config the configurationSection which contains the specified key-value pair
+     * @param key the key
+     * @return a MessageTranslation
+     */
     @Override
     protected @Nonnull MessageTranslation handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection translation = config.getConfigurationSection(key);
