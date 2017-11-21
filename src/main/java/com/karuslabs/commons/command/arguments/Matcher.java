@@ -30,7 +30,7 @@ import static java.util.Arrays.copyOfRange;
 
 
 /**
- * Represents a matcher which provides facilities to match and test the arguments of this {@code Matcher} in a given range.
+ * Represents a matcher which matches and tests a given range of arguments for the {@code Command} which is executed.
  */
 public class Matcher {
     
@@ -39,7 +39,8 @@ public class Matcher {
     
     
     /**
-     * Constructs a {@code Matcher} for the specified arguments.
+     * Constructs a {@code Matcher} for the specified arguments, and sets 
+     * the range of arguments to match and test between the first and last index.
      * 
      * @param arguments the arguments
      */
@@ -51,7 +52,7 @@ public class Matcher {
   
     
     /**
-     * Sets the range between 0 and the length of the arguments, exclusive.
+     * Sets the range of arguments to match and test between the first and last index.
      * 
      * @return this 
      */
@@ -63,7 +64,7 @@ public class Matcher {
     
     
     /**
-     * Sets the range between the specified first index, inclusive, and the length of the arguments, exclusive.
+     * Sets the range of arguments to match and test between the specified first index, inclusive and the last index.
      * 
      * @param first the first index, inclusive
      * @return this
@@ -73,12 +74,13 @@ public class Matcher {
     }
     
     /**
-     * Sets the range between the specified first index, inclusive, and the specified last index, exclusive.
+     * Sets the range of arguments to match and test between the specified index, inclusive 
+     * and the specified last index, exclusive.
      * 
      * @param first the first index, inclusive
-     * @param last the final index, exclusive
+     * @param last the last index, exclusive
      * @return this
-     * @throws IllegalArgumentException if the specified first or last index is out of bounds, or the last index is less than the first index
+     * @throws IllegalArgumentException if either specified index is out of bounds, or the first index is greater than the last index
      */
     public Matcher between(int first, int last) {
         if (0 <= first && first <= last && last <= arguments.length && (arguments.length == 0 || first < arguments.length)) {
@@ -93,20 +95,19 @@ public class Matcher {
 
     
     /**
-     * Returns a {@code Stream} of the arguments for the given range.
+     * Returns a {@code Stream} of the arguments in the given range.
      * 
-     * @return 
+     * @return a Stream of arguments in the given range
      */
     public Stream<String> stream() {
         return Stream.of(copyOfRange(arguments, first, last));
     }
     
     /**
-     * Returns {@code true} if the arguments in the given range matches the specified {@code Predicate} sequence exactly; else {@code false}.
+     * Returns {@code true} if the arguments in the given range exactly matches the specified sequence of {@code Predicate}s; else {@code false}.
      * 
      * @param matches the Predicates to test the given arguments
-     * @return true if the arguments in the given range each matches the specified Predicate; else false
-     * @throws IllegalArgumentException if the range of arguments is not equal to the number of specified Predicates
+     * @return true if the arguments in the given range matches the specified sequence of Predicates; else false
      */
     public boolean exact(Predicate<String>... matches) {
         if (matches.length != length()) {
@@ -123,11 +124,10 @@ public class Matcher {
     }
     
     /**
-     * Returns {@code true} if the arguments in the given range contains a match for the specified {@code Predicate} sequence; else {@code false}.
+     * Returns {@code true} if the arguments in the given range contains the specified sequence of {@code Predicate}s; else {@code false}.
      * 
      * @param matches the Predicates to test the given arguments
-     * @return true if the arguments in the given range contains a match for the specified Predicate sequence; else false
-     * @throws IllegalArgumentException if the range of arguments is less than the length of the specified sequence of Predicates
+     * @return true if the arguments in the given range contains the specified sequence of Predicates; else false
      */
     public boolean anySequence(Predicate<String>... matches) {
         if (matches.length > length()) {
@@ -150,9 +150,8 @@ public class Matcher {
         return false;
     }
     
-    
     /**
-     * Returns Returns {@code true} if the arguments in the given range matches the specified {@code Predicate}; else {@code false}.
+     * Returns {@code true} if the arguments in the given range matches the specified {@code Predicate}; else {@code false}.
      * 
      * @param matcher the Predicate to test the given arguments
      * @return true if the arguments in the given range matches the specified Predicate; else false
@@ -163,9 +162,9 @@ public class Matcher {
     
     
     /**
-     * Returns the range of the arguments to match.
+     * Returns the number of the arguments in the given range.
      * 
-     * @return the range
+     * @return the number of arguments in range
      */
     public int length() {
         return last - first;
@@ -173,7 +172,7 @@ public class Matcher {
     
     
     /**
-     * Sets the arguments of this {@code Matcher}.
+     * Sets the arguments.
      * 
      * @param arguments the arguments
      */

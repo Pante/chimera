@@ -40,7 +40,7 @@ import static java.util.stream.Collectors.toList;
 
 
 /**
- * Represents a {@code Command} for a {@code Plugin}, which either delegates execution of the various tasks upon user input
+ * Represents a {@code Command} for a {@code Plugin}, which either delegates execution upon user input
  * to the {@code CommandExecutor} for this {@code Command}, or a subcommand of this {@code Command}.
  */
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand, Translatable {    
@@ -102,8 +102,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     
     /**
-     * Merges the arguments with spaces, enclosed in quotation marks and 
-     * delegates execution of this {@code Command} to {@link #execute(Context, Arguments)}
+     * Merges the arguments enclosed in quotation marks which contains spaces, and 
+     * delegates execution to {@link #execute(Context, Arguments)}
      * 
      * @param sender the source object which is executing this Command
      * @param label the label of the command used
@@ -116,7 +116,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     /**
-     * Delegates execution to a subcommand with the updated {@code Context} and trimmed {@code Arguments},
+     * Delegates execution to a subcommand with an updated {@code Context} and trimmed {@code Arguments},
      * or the {@code CommandExecutor} for this {@code Command} if no subcommand with 
      * a name equal to the last argument exists.
      * 
@@ -140,8 +140,8 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     
     /**
-     * Merges the arguments with spaces, enclosed in quotation marks and
-     * delegates tab completion of this {@code Command} to {@link #complete(CommandSender, Arguments)}.
+     * Merges the arguments enclosed in quotation marks which contains spaces, and
+     * delegates tab completion to {@link #complete(CommandSender, Arguments)}.
      * 
      * @param sender the source object which is executing this Command
      * @param alias the alias of the command used
@@ -193,7 +193,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
        
     
     /**
-     * Returns the {@code Plugin} which this {@code command} belongs to.
+     * Returns the {@code Plugin} which this {@code Command} belongs to.
      * 
      * @return the Plugin
      */
@@ -229,18 +229,18 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
 
     /**
-     * Returns the subcommands for this {@code Command}.
+     * Returns the names of the subcommands associated with the subcommands.
      * 
-     * @return the subcommands
+     * @return a Map which contains the names and associated subcommands
      */
     public Map<String, Command> getSubcommands() {
         return subcommands;
     }
     
     /**
-     * Returns the {@code Completion}s.
+     * Returns the indexes of arguments associated with the {@code Completion}s.
      * 
-     * @return the Completions
+     * @return a Map which contains the indexes of arguments and associated Completions
      */
     public Map<Integer, Completion> getCompletions() {
         return completions;

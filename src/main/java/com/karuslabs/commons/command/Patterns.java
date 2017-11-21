@@ -37,9 +37,8 @@ public class Patterns {
     private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
     
     /**
-     * Merges the specified arguments with spaces which are enclosed in quotation marks,
+     * Merges the specified arguments enclosed in quotation marks which contains spaces,
      * and removes the enclosing quotation marks thereafter.
-     * 
      * 
      * @param arguments the arguments
      * @return the merged arguments
