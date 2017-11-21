@@ -111,7 +111,7 @@ public class Matcher {
      */
     public boolean exact(Predicate<String>... matches) {
         if (matches.length != length()) {
-            throw new IllegalArgumentException("Invalid number of matches specified.");
+            return false;
         }
         
         for (int i = first; i < last; i++) {
@@ -131,7 +131,7 @@ public class Matcher {
      */
     public boolean anySequence(Predicate<String>... matches) {
         if (matches.length > length()) {
-            throw new IllegalArgumentException("Invalid number of matches specified.");
+            return false;
         }
         
         int i = 0;
