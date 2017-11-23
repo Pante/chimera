@@ -120,11 +120,11 @@ public class Matcher {
         all();
     }
     
-    protected int getFirst() {
+    protected int first() {
         return first;
     }
     
-    protected int getLast() {
+    protected int last() {
         return last;
     }
     

@@ -45,8 +45,8 @@ class MatcherTest {
     
     @Test
     void matcher() {        
-        assertEquals(0, matcher.getFirst());
-        assertEquals(4, matcher.getLast());
+        assertEquals(0, matcher.first());
+        assertEquals(4, matcher.last());
     }
     
     
@@ -55,8 +55,8 @@ class MatcherTest {
         matcher.between(2, 3);
         matcher.all();
         
-        assertEquals(0, matcher.getFirst());
-        assertEquals(4, matcher.getLast());
+        assertEquals(0, matcher.first());
+        assertEquals(4, matcher.last());
     }
     
     
@@ -73,8 +73,8 @@ class MatcherTest {
     void between(int first, int last) {
         matcher.between(first, last);
         
-        assertEquals(first, matcher.getFirst());
-        assertEquals(last, matcher.getLast());
+        assertEquals(first, matcher.first());
+        assertEquals(last, matcher.last());
     }
     
     
@@ -82,8 +82,8 @@ class MatcherTest {
     void between_empty() {
         Matcher matcher = new Matcher().between(0, 0);
         
-        assertEquals(0, matcher.getFirst());
-        assertEquals(0, matcher.getLast());
+        assertEquals(0, matcher.first());
+        assertEquals(0, matcher.last());
     }
     
     

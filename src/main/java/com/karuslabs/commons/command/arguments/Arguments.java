@@ -82,7 +82,7 @@ public class Arguments {
     }
     
     
-    protected @Shared Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
+    protected Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
         if (contains(index)) {
             return function.apply(arguments[index]);
             

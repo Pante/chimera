@@ -31,6 +31,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Collections.EMPTY_LIST;
+import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 
 
@@ -42,8 +43,19 @@ public interface Completion {
     
     public static final Completion NONE = (sender, argument) -> EMPTY_LIST;
     
-    public static final Completion PLAYER_NAMES = (sender, argument) -> 
-            sender.getServer().getOnlinePlayers().stream().map(Player::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    public static final Completion PLAYER_NAMES = (sender, argument) -> {
+        Predicate<Player> predicate;
+        if (sender instanceof Player) {
+            Player source = (Player) sender;
+            predicate = player -> source.canSee(player) && player.getName().startsWith(argument);
+            
+        } else {
+            predicate = player -> player.getName().startsWith(argument);
+        }
+        
+        return sender.getServer().getOnlinePlayers().stream().filter(predicate).map(Player::getName).collect(toList());
+    };
+            
     
     public static final Completion WORLD_NAMES = (sender, argument) -> 
             sender.getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());

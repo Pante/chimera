@@ -32,6 +32,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.command.completion.Completion.*;
 import static java.util.Collections.*;
@@ -51,8 +53,23 @@ class CompletionTest {
     }
     
     
+    @ParameterizedTest
+    @CsvSource({"true, false", "false, true"})
+    void player_names_player(boolean see, boolean empty) {
+        Player source = when(mock(Player.class).canSee(any(Player.class))).thenReturn(see).getMock();
+        
+        Player bob = when(mock(Player.class).getName()).thenReturn("bob").getMock();
+        server.getOnlinePlayers().add(bob);
+        
+        Player bobby = when(mock(Player.class).getName()).thenReturn("bobby").getMock();
+        server.getOnlinePlayers().add(bobby);
+                
+        assertEquals(empty, PLAYER_NAMES.complete(source, "bobb").isEmpty());
+    }
+    
+    
     @Test
-    void player_names() {
+    void player_names_sender() {
         Player bob = when(mock(Player.class).getName()).thenReturn("bob").getMock();
         server.getOnlinePlayers().add(bob);
         
