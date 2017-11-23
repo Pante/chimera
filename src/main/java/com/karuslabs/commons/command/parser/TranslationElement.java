@@ -40,7 +40,7 @@ import static java.lang.System.arraycopy;
 
 
 /**
- * A concrete subclass of {@code Element} which creates {@code MessageTranslation}s from {@code translation} elements in a YAML document.
+ * A concrete subclass of {@code Element} which creates {@code MessageTranslation}s from {@code translation} elements.
  */
 public class TranslationElement extends Element<MessageTranslation> {
     

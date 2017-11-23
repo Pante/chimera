@@ -35,31 +35,70 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 
+/**
+ * A concrete subclass of {@code Element} which creates a map associating 
+ * the command names with the {@code Command}s from YAML elements.
+ */
 public class CommandsElement extends Element<Map<String, Command>> {
 
     private Element<Command> command;
     
     
+    /**
+     * Constructs a {@code CommandsElement} with the specified {@code Element} for
+     * creating {@code Command}s and no declarations.
+     * 
+     * @param command the Element for creating Commands
+     */
     public CommandsElement(@Nullable Element<Command> command) {
         this(command, new HashMap<>());
     }
     
+    /**
+     * Constructs a {@code CommandsElement} with the specified {@code Element} for
+     * creating {@code Command}s and declarations.
+     * 
+     * @param command the Element for creating Commands
+     * @param declarations the declarations
+     */
     public CommandsElement(@Nullable Element<Command> command, Map<String, Map<String, Command>> declarations) {
         super(declarations);
         this.command = command;
     }
     
     
+    /**
+     * Creates an empty map.
+     * 
+     * @param config the ConfigurationSection
+     * @param key th key
+     * @return an empty map
+     */
     @Override
     protected @Nonnull Map<String, Command> handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
         return new HashMap<>(0);
     }
     
+    /**
+     * Checks if the value of the specified key in the {@code ConfigurationSection} is a {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return true if the value is a ConfigurationSection; else false
+     */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isConfigurationSection(key);
     }
-
+    
+    /**
+     * Creates a map which associates the command names with the {@code Command}s from the 
+     * value of the specified key in the {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return a map which associates the command names with the Commands
+     */
     @Override
     protected @Nonnull Map<String, Command> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         ConfigurationSection subcommands = config.getConfigurationSection(key);
@@ -75,10 +114,20 @@ public class CommandsElement extends Element<Map<String, Command>> {
     }
 
     
+    /**
+     * Returns the {@code Element} for creating {@code Command}s.
+     * 
+     * @return the element for creating Commands
+     */
     public @Nullable Element<Command> getCommandElement() {
         return command;
     }
-
+    
+    /**
+     * Sets the {@code Element} for creating {@code Command}s.
+     * 
+     * @param command the element for creating Commands
+     */
     public void setCommandElement(Element<Command> command) {
         this.command = command;
     }

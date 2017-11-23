@@ -33,12 +33,30 @@ import org.bukkit.configuration.ConfigurationSection;
 import static com.karuslabs.commons.command.completion.Completion.*;
 
 
+/**
+ * A concrete subclass of {@code Element} which creates {@code Completion}s from key-value pairs
+ * nested in a {@code ConfigurationSection}.
+ * 
+ * This {@code CompletionElement} contains default declarations, mapping the literal names of the {@code Completion}s
+ * to the {@code Completion}s.
+ * 
+ * The default declarations are as follows: {
+ * 
+ */
 public class CompletionElement extends Element<Completion> {
     
+    /**
+     * Constructs a {@code CompletionElement} with the default declarations.
+     */
     public CompletionElement() {
         this(new HashMap<>());
     }
     
+    /**
+     * Constructs a {@code CompletionElement} with the specified and default declarations.
+     * 
+     * @param declarations the declarations
+     */
     public CompletionElement(Map<String, Completion> declarations) {
         super(declarations);
         declarations.put("NONE", NONE);
@@ -52,11 +70,26 @@ public class CompletionElement extends Element<Completion> {
         return config.getString(key);
     }
     
+    /**
+     * Checks if the value associated with the specified key in the {@code ConfigurationSection}
+     * is a list.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return true if the value associated with the specified key in the ConfigurationSection is a list; else false
+     */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isList(key);
     }
-
+    
+    /**
+     * Creates a {@code CachedCompletion} from key-value pair nested in the specified {@code ConfigurationSection} using the specified key.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return a CachedCompletion
+     */
     @Override
     protected @Nonnull CachedCompletion handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return new CachedCompletion(config.getStringList(key));

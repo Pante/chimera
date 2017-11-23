@@ -37,7 +37,7 @@ import static com.karuslabs.commons.command.CommandExecutor.NONE;
 
 
 /**
- * A concrete subclass of {@code Element} which creates {@code Command}s from {@code command} elements in a YAML document.
+ * A concrete subclass of {@code Element} which creates {@code Command}s from YAML elements.
  */
 public class CommandElement extends Element<Command> {
     
@@ -48,27 +48,27 @@ public class CommandElement extends Element<Command> {
     
     
     /**
-     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for 
-     * subcommands, translations and completions, and no declarations.
+     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for
+     * creating subcommands, translations and {@code Completion}s respectively, and no declarations.
      * 
      * @param plugin the Plugin
-     * @param subcommands the Element for subcommands
-     * @param translation the Element for translations
-     * @param completions the Element for completions
+     * @param subcommands the Element for creating subcommands
+     * @param translation the Element for creating translations
+     * @param completions the Element for creating Completions
      */
     public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions) {
         this(plugin, subcommands, translation, completions, new HashMap<>());
     }
     
     /**
-     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for 
-     * subcommands, translations, completions and declarations.
+     * Constructs a {@code CommandElement} with the specified {@code Plugin}, {@code Element}s for
+     * creating subcommands, translations, {@code Completion}s respectively, and declarations.
      * 
      * @param plugin the Plugin
-     * @param subcommands the Element for subcommands
-     * @param translation the Element for translations
-     * @param completions the Element for completions
-     * @param declarations  the declarations
+     * @param subcommands the Element for creating subcommands
+     * @param translation the Element for creating translations
+     * @param completions the Element for creating Completions
+     * @param declarations the declarations
      */
     public CommandElement(Plugin plugin, Element<Map<String, Command>> subcommands, Element<MessageTranslation> translation, Element<Map<Integer, Completion>> completions, Map<String, Command> declarations) {
         super(declarations);
@@ -79,17 +79,24 @@ public class CommandElement extends Element<Command> {
     }
 
     /**
-     * Checks if the value
+     * Checks if the value of the specified key in the {@code ConfigurationSection} is a {@code ConfigurationSection}.
      * 
-     * @param config
-     * @param key
-     * @return 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return true if the value is a ConfigurationSection; else false
      */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
         return config.isConfigurationSection(key);
     }
-
+    
+    /**
+     * Creates a {@code Command} from the value of the specified key in the {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return a Command
+     */
     @Override
     protected @Nonnull Command handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
         config = config.getConfigurationSection(key);
