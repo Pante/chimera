@@ -57,6 +57,7 @@ class CompletionTest {
     @CsvSource({"true, false", "false, true"})
     void player_names_player(boolean see, boolean empty) {
         Player source = when(mock(Player.class).canSee(any(Player.class))).thenReturn(see).getMock();
+        when(source.getServer()).thenReturn(server);
         
         Player bob = when(mock(Player.class).getName()).thenReturn("bob").getMock();
         server.getOnlinePlayers().add(bob);
