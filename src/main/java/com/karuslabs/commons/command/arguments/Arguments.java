@@ -136,7 +136,7 @@ public class Arguments {
      * @param supplier the supplying function which produces a value
      * @return the Argument produced by the specified Function if this Arguments contains the specified index; else the Argument produced by the specified Supplier
      */
-    protected @Shared Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
+    protected Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
         if (contains(index)) {
             return function.apply(arguments[index]);
             

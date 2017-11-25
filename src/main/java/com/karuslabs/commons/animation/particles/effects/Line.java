@@ -73,7 +73,7 @@ public class Line implements Task<Line> {
         Location location = context.getOrigin().getLocationCopy();
         resolveLink(context);
 
-        double amount = perArc / zigzags;
+        int amount = perArc / zigzags;
         double ratio = link.length() / perArc;
                 
         link.normalize().multiply(ratio);

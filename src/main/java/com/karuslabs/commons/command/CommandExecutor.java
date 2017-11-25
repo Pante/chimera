@@ -27,7 +27,10 @@ import com.karuslabs.commons.command.arguments.Arguments;
 
 import javax.annotation.Nonnull;
 
-import static com.karuslabs.commons.command.ParentExecutor.*;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static org.bukkit.ChatColor.*;
 
 
 /**
@@ -45,25 +48,38 @@ public interface CommandExecutor {
      */
     public boolean execute(@Nonnull Context context, @Nonnull Arguments arguments);
     
-    
+
     /**
      * A {@code CommandExeuctor} which displays the aliases of the parent {@code Command}
      * if the {@code CommandSender} has the necessary permissions and the parent {@code Command} exists.
      */
-    public static final CommandExecutor ALIASES = PARENT_ALIASES;
+    public static final CommandExecutor ALIASES = 
+            (Parent) (command, sender) -> sender.sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
     
     /**
      * A {@code CommandExecutor} which displays the description of the parent {@code Command}
      * if the {@code CommandSender} has the necessary permissions and the parent {@code Command} exists.
      */
-    public static final CommandExecutor DESCRIPTION = PARENT_DESCRIPTION;
-    
+    public static final CommandExecutor DESCRIPTION = 
+            (Parent) (command, sender) -> sender.sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage());
     /**
      * A {@code CommandExecutor} which displays the subcommands of the parent {@code Command} which the
      * {@code CommandSender} has the necessary permissions for, if the {@code CommandSender} has the necessary permission
      * for the parent {@code Command} and the parent {@code Command} exists.
      */
-    public static final CommandExecutor HELP = PARENT_HELP;
+    public static final CommandExecutor HELP = (Parent) (command, sender) -> {
+        List<String> names = command.getSubcommands().values().stream()
+                .filter(subcommand -> sender.hasPermission(subcommand.getPermission()))
+                .map(Command::getName)
+                .collect(toList());
+
+        sender.sendMessage(new String[] {
+            GOLD + "==== Help for: " + command.getName() + " ====",
+            GOLD + "Description: " + RED + command.getDescription(),
+            GOLD + "Usage: " + RED + command.getUsage(),
+            GOLD + "\n==== Subcommands: ====" + "\n" + RED + names
+        });
+    };
     
     /**
      * An empty {@code CommandExecutor} which returns {@code true} on execution.

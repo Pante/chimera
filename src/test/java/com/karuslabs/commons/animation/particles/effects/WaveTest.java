@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import java.util.function.Predicate;
-
 import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.Test;

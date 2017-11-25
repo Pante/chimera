@@ -25,8 +25,12 @@ package com.karuslabs.commons.world;
 
 import org.bukkit.util.Vector;
 
+import static java.lang.Math.abs;
+
 
 public class PathVector extends Vector {
+    
+    private static final double DELTA = 0.000001;
     
     private float yaw;
     private float pitch;
@@ -66,21 +70,21 @@ public class PathVector extends Vector {
         super.divide(vector);
         return this;
     }
+
     
-    
-    public float yaw() {
+    public float getYaw() {
         return yaw;
     }
 
-    public void yaw(float yaw) {
+    public void setYaw(float yaw) {
         this.yaw = yaw;
     }
-
-    public float pitch() {
+    
+    public float getPitch() {
         return pitch;
     }
 
-    public void pitch(float pitch) {
+    public void setPitch(float pitch) {
         this.pitch = pitch;
     }
     
@@ -88,6 +92,38 @@ public class PathVector extends Vector {
     @Override
     public PathVector clone() {
         return (PathVector) super.clone();
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+            
+        } else if (other instanceof PathVector) {
+            return equals((PathVector) other);
+            
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean equals(PathVector other) {
+        return abs(other.x - x) < DELTA && abs(other.y - y) < DELTA && abs(other.z - z) < DELTA 
+            && abs(other.yaw - yaw) < DELTA && abs(other.pitch - pitch) < DELTA;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        hash = 53 * hash + Float.hashCode(yaw);
+        hash = 53 * hash + Float.hashCode(pitch);
+        return hash;
+    }
+    
+    @Override
+    public String toString() {
+        return "PathVector[" + x + ", " + y + ", " + z + ", " + yaw + ", " + pitch + "]"; 
     }
     
 }

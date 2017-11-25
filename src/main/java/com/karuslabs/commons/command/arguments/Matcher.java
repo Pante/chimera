@@ -186,7 +186,7 @@ public class Matcher {
      * 
      * @return the first index
      */
-    protected int getFirst() {
+    protected int first() {
         return first;
     }
     
@@ -195,7 +195,7 @@ public class Matcher {
      * 
      * @return the last index
      */
-    protected int getLast() {
+    protected int last() {
         return last;
     }
     

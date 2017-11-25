@@ -47,6 +47,10 @@ public class TitleBar extends Bar {
     
     public TitleBar(Plugin plugin, Translation translation, Supplier<BiConsumer<Player, TitleContext>> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
+        this.consumer = consumer;
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
     }
 
     

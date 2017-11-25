@@ -77,7 +77,6 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     static final int CANCELLED = 3;
     
     volatile int state;
-    volatile boolean interrupted;
     volatile Throwable thrown;
     CountDownLatch latch;
     
@@ -87,7 +86,6 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
      */
     public ResultTask() {
         state = NEW;
-        interrupted = false;
         thrown = null;
         latch = new CountDownLatch(1);
     }
@@ -137,7 +135,6 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
         if (state < COMPLETED && mayInterruptIfRunning) {
-            interrupted = true;
             finish(CANCELLED);
             return true;
             
@@ -184,8 +181,12 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     @Override
     @Blocking
     public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        latch.await(timeout, unit);
-        return handle();
+        if (latch.await(timeout, unit)) {
+            return handle();
+            
+        } else {
+            throw new TimeoutException();
+        }
     }
     
     /**

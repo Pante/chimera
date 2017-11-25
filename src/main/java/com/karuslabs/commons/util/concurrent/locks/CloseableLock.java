@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  */
 public class CloseableLock extends ReentrantLock {
     
-    private final Janitor janitor;
+    private final transient Janitor janitor;
 
     
     /**

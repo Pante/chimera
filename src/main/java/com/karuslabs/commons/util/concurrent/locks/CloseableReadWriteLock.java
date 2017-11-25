@@ -35,8 +35,8 @@ import javax.annotation.Nonnull;
  */
 public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
-    private final Janitor readJanitor;
-    private final Janitor writeJanitor;
+    private final transient Janitor readJanitor;
+    private final transient Janitor writeJanitor;
     
     
     /**

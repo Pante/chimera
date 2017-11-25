@@ -168,7 +168,7 @@ public class Locales {
      * @return true if the specified country is an ISO 639 alpha-2 country country; else false
      */
     public static boolean isCountry(String country) {
-        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase()) >= 0;
+        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase(ENGLISH)) >= 0;
     }
     
     /**
@@ -178,7 +178,7 @@ public class Locales {
      * @return true if the specified country is an ISO 3166 alpha-2 language; else false
      */
     public static boolean isLanguage(String language) {
-        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase()) >= 0;
+        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase(ENGLISH)) >= 0;
     }
     
 }

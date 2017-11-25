@@ -25,7 +25,6 @@ package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.annotation.Shared;
 import com.karuslabs.commons.graphics.windows.Window;
-import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;

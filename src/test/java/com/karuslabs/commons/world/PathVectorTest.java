@@ -21,48 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation.particles.effects;
+package com.karuslabs.commons.world;
+
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.*;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
-
-class CloudTest extends EffectBase {
-
-    Cloud cloud = spy(new Cloud(PARTICLES, COLOURED).get());
+class PathVectorTest {
+    
+    static PathVector vector = new PathVector(1, 2, 3, 4, 5);
     
     
-    @Test
-    void render() {
-        doNothing().when(cloud).renderCloud(context, location, RANDOM, 50);
-        doNothing().when(cloud).renderDroplets(context, location, RANDOM, 15);
-        
-        cloud.render(context);
-        
-        verify(cloud).renderCloud(context, original.getLocationCopy(), RANDOM, 50);
-        verify(cloud).renderDroplets(context, original.getLocationCopy(), RANDOM, 15);
-    }
-    
-    
-    @Test
-    void renderCloud() {
-        cloud.renderCloud(context, location, random, 1);
-        
-        verify(context).render(PARTICLES, location);
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void equals_Object(Object other, boolean expected) {
+        assertEquals(expected, vector.equals(other));
     }
     
     
     @ParameterizedTest
-    @CsvSource({"0, 2", "1, 0"})
-    void renderDroplets(int number, int expected) {
-        when(random.nextInt(2)).thenReturn(number);
-        
-        cloud.renderDroplets(context, location, random, 1);
-        
-        verify(context, times(expected)).render(COLOURED, location);
+    @MethodSource("parameters")
+    void hashcode(Object other, boolean expected) {
+        assertEquals(expected, vector.hashCode() == other.hashCode());
+    }
+    
+    static Stream<Arguments> parameters() {
+        return Stream.of(
+            of(vector, true),
+            of(new PathVector(1, 2, 3, 4, 5), true),
+            of(new PathVector(2, 1, 3, 5, 4), false),
+            of(new Object(), false)
+        );
+    }
+    
+    @Test
+    void tostring() {
+        assertEquals(
+            "PathVector[" + vector.getX() + ", " + vector.getY() + ", " + vector.getZ() + ", " + vector.getYaw() + ", " + vector.getPitch() + "]", 
+            vector.toString()
+        );
     }
     
 }

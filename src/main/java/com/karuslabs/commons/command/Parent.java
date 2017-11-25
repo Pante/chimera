@@ -25,35 +25,11 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 
-import java.util.List;
-
 import org.bukkit.command.CommandSender;
-
-import static java.util.stream.Collectors.toList;
-import static org.bukkit.ChatColor.*;
 
 
 @FunctionalInterface
-interface ParentExecutor extends CommandExecutor {
-    
-    static final ParentExecutor PARENT_ALIASES = (command, sender) -> sender.sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
-    
-    static final ParentExecutor PARENT_DESCRIPTION = (command, sender) -> sender.sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage());
-    
-    static final ParentExecutor PARENT_HELP = (command, sender) -> {
-        List<String> names = command.getSubcommands().values().stream()
-                .filter(subcommand -> sender.hasPermission(subcommand.getPermission()))
-                .map(Command::getName)
-                .collect(toList());
-
-        sender.sendMessage(new String[] {
-            GOLD + "==== Help for: " + command.getName() + " ====",
-            GOLD + "Description: " + RED + command.getDescription(),
-            GOLD + "Usage: " + RED + command.getUsage(),
-            GOLD + "\n==== Subcommands: ====" + "\n" + RED + names
-        });
-    };
-    
+interface Parent extends CommandExecutor {    
     
     @Override
     public default boolean execute(Context context, Arguments arguments) {

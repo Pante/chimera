@@ -25,7 +25,7 @@ package com.karuslabs.commons.animation.particles.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static java.lang.Math.PI;
+import static java.lang.Math.*;
 import static org.mockito.Mockito.*;
 
 
@@ -36,11 +36,11 @@ class StarTest extends EffectBase {
     
     @Test
     void render() {
-        doNothing().when(star).render(any(), any(), any(), anyDouble());
+        doNothing().when(star).render(any(), any(), any(), anyDouble(), anyDouble());
         
         star.render(context);
         
-        verify(star, times(6)).render(eq(context), eq(RANDOM), eq(location), anyDouble());
+        verify(star, times(6)).render(eq(context), eq(RANDOM), eq(location), anyDouble(), anyDouble());
     }
     
     
@@ -48,10 +48,10 @@ class StarTest extends EffectBase {
     void render_rotation() {
         when(random.nextFloat()).thenReturn(0.5F);
         
-        star.render(context, random, location, PI / 3);
+        star.render(context, random, location, 3 * 0.5 / sqrt(3), PI / 3);
         
         verify(context, times(2)).render(PARTICLES, location, vector);
-        assertVector(from(-0.9485571585149866,-0.12500000000000067, 0.7500000000000001), context.location);
+        assertVector(from(-0.9485571585149866,-0.12500000000000067, 0.5669872981077808), context.location);
     }
     
 }
