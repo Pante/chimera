@@ -54,8 +54,8 @@ public abstract class BoundLocation {
     
     public void addOffset(Vector offset, float yaw, float pitch) {
         this.offset.add(offset);
-        this.offset.yaw(yaw);
-        this.offset.pitch(pitch);
+        this.offset.setYaw(this.offset.getYaw() + yaw);
+        this.offset.setPitch(this.offset.getPitch() + pitch);
         updateOffset();
     }
         
@@ -81,12 +81,12 @@ public abstract class BoundLocation {
 
     public void updateDirection() {
         if (relative) {
-            location.setYaw(location.getYaw() + offset.yaw());
-            location.setPitch(location.getPitch() + offset.pitch());
+            location.setYaw(location.getYaw() + offset.getYaw());
+            location.setPitch(location.getPitch() + offset.getPitch());
             
         } else {
-            location.setYaw(offset.yaw());
-            location.setPitch(offset.pitch());
+            location.setYaw(offset.getYaw());
+            location.setPitch(offset.getPitch());
         }
     }
 

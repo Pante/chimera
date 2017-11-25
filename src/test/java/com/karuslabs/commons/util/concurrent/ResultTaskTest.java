@@ -93,13 +93,11 @@ class ResultTaskTest {
         doNothing().when(result).finish(CANCELLED);
         
         result.state = state;
-        result.interrupted = false;
         
         boolean success = result.cancel(interrupt);
         
         verify(result, times(times)).finish(CANCELLED);
         assertEquals(expected, success);
-        assertEquals(expected, result.interrupted);
     }
     
     
@@ -128,10 +126,17 @@ class ResultTaskTest {
     
     @Test
     void get_Time() throws InterruptedException, ExecutionException, TimeoutException {
-        result.latch = mock(CountDownLatch.class);
+        result.latch = when(mock(CountDownLatch.class).await(anyLong(), any())).thenReturn(true).getMock();
         
         assertEquals("result", result.get(0, TimeUnit.DAYS));
         verify(result.latch).await(0, TimeUnit.DAYS);
+    }
+    
+    @Test
+    void get_Time_ThrowsException() throws InterruptedException, ExecutionException, TimeoutException {
+        result.latch = when(mock(CountDownLatch.class).await(anyLong(), any())).thenReturn(false).getMock();
+        
+        assertThrows(TimeoutException.class, () -> result.get(0, TimeUnit.DAYS));
     }
     
     

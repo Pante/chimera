@@ -66,11 +66,11 @@ public class Star implements Task<Star> {
         double radius = 3 * this.radius / sqrt(3);
         
         for (int i = 0; i < spikeHalf * 2; i++) {
-            render(context, random, location, i * PI / spikeHalf);
+            render(context, random, location, radius, i * PI / spikeHalf);
         }
     }
     
-    void render(Context context, ThreadLocalRandom random, Location location, double rotation) {
+    void render(Context context, ThreadLocalRandom random, Location location, double radius, double rotation) {
         Vector vector = context.getVector();
         for (int x = 0; x < perIteration; x += particles.getAmount()) {
             double angle = 2 * PI * x / perIteration;
@@ -78,7 +78,7 @@ public class Star implements Task<Star> {
             
             vector.setX(cos(angle)).setY(0).setZ(sin(angle));
             vector.multiply((spikeHeight - height) * radius / spikeHeight);
-            vector.setY(radius + height);
+            vector.setY(this.radius + height);
             
             rotateAroundXAxis(vector, rotation);
             context.render(particles, location, vector);

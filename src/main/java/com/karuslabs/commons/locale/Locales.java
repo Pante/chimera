@@ -126,11 +126,11 @@ public class Locales {
     
         
     public static boolean isCountry(String country) {
-        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase()) >= 0;
+        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase(ENGLISH)) >= 0;
     }
     
     public static boolean isLanguage(String language) {
-        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase()) >= 0;
+        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase(ENGLISH)) >= 0;
     }
     
 }
