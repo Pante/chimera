@@ -36,6 +36,10 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
 
+/**
+ * Represents a parser which creates {@code Command}s from a YAML document.
+ * A reference for the YAML document syntax may be found in the GitHub <a href = "https://github.com/Pante/Karus-Commons/commands">wiki</a>/
+ */
 public class Parser {
     
     private Element<Command> command;
@@ -43,6 +47,14 @@ public class Parser {
     private Element<Completion> completion;
     
     
+    /**
+     * Constructs a {@code Parser} which the specified {@code Element}s which creates
+     * {@code Command}s, {@code MessageTranslation}s and {@code Completion}s respectively.
+     * 
+     * @param command the Element which creates Commands
+     * @param translation the Element which creates MessageTranslations
+     * @param completion the Element which creates Completions
+     */
     public Parser(Element<Command> command, Element<MessageTranslation> translation, Element<Completion> completion) {
         this.command = command;
         this.translation = translation;
@@ -50,11 +62,22 @@ public class Parser {
     }
     
     
+    /**
+     * Parses the specified {@code ConfigurationSection} and creates a list of {@code Command}s.
+     * 
+     * @param config the ConfigurationSection
+     * @return a list of Commands
+     */
     public List<Command> parse(ConfigurationSection config) {
         parseDeclarations(config.getConfigurationSection("declare"));
         return parseCommands(config.getConfigurationSection("commands"));
     }
     
+    /**
+     * Parses the declarations in the specified {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     */
     protected void parseDeclarations(@Nullable ConfigurationSection config) {
         if (config != null) {
             parseDeclaration(completion, config.getConfigurationSection("completions"));
@@ -63,12 +86,24 @@ public class Parser {
         }
     }
     
+    /**
+     * Parses the declaration in the {@code ConfigurationSection} using the specified {@code Element}.
+     * 
+     * @param element the Element
+     * @param config the ConfigurationSection
+     */
     protected void parseDeclaration(Element<?> element, ConfigurationSection config) {
         if (config != null) {
             config.getKeys(false).forEach(key -> element.declare(config, key));
         }
     }
     
+    /**
+     * Parses the {@code Command}s in the specified {@code ConfigurationSection} and creates a list of {@code Command}s.
+     * 
+     * @param config the ConfigurationSection
+     * @return a list of Commands
+     */
     protected List<Command> parseCommands(@Nullable ConfigurationSection config) {
         if (config != null) {
             return config.getKeys(false).stream().map(key -> command.parse(config, key)).collect(toList());

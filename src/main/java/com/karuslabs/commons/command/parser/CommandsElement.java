@@ -36,8 +36,7 @@ import static java.util.stream.Collectors.toMap;
 
 
 /**
- * A concrete subclass of {@code Element} which creates a map associating 
- * the command names with the {@code Command}s from YAML elements.
+ * A concrete subclass of {@code Element} which creates a map that associates the command names with their respective {@code Command}s.
  */
 public class CommandsElement extends Element<Map<String, Command>> {
 
@@ -48,17 +47,17 @@ public class CommandsElement extends Element<Map<String, Command>> {
      * Constructs a {@code CommandsElement} with the specified {@code Element} for
      * creating {@code Command}s and no declarations.
      * 
-     * @param command the Element for creating Commands
+     * @param command the Element which creates Commands
      */
     public CommandsElement(@Nullable Element<Command> command) {
         this(command, new HashMap<>());
     }
     
     /**
-     * Constructs a {@code CommandsElement} with the specified {@code Element} for
-     * creating {@code Command}s and declarations.
+     * Constructs a {@code CommandsElement} with the specified {@code Element} which
+     * creates {@code Command}s and declarations.
      * 
-     * @param command the Element for creating Commands
+     * @param command the Element which creates Commands
      * @param declarations the declarations
      */
     public CommandsElement(@Nullable Element<Command> command, Map<String, Map<String, Command>> declarations) {
@@ -71,7 +70,7 @@ public class CommandsElement extends Element<Map<String, Command>> {
      * Creates an empty map.
      * 
      * @param config the ConfigurationSection
-     * @param key th key
+     * @param key the key
      * @return an empty map
      */
     @Override
@@ -80,7 +79,7 @@ public class CommandsElement extends Element<Map<String, Command>> {
     }
     
     /**
-     * Checks if the value of the specified key in the {@code ConfigurationSection} is a {@code ConfigurationSection}.
+     * Checks if the specified key in the {@code ConfigurationSection} is a {@code ConfigurationSection}.
      * 
      * @param config the ConfigurationSection
      * @param key the key
@@ -92,8 +91,8 @@ public class CommandsElement extends Element<Map<String, Command>> {
     }
     
     /**
-     * Creates a map which associates the command names with the {@code Command}s from the 
-     * value of the specified key in the {@code ConfigurationSection}.
+     * Creates a map which associates the command names with their respective {@code Command}s for
+     * the specified key in the {@code ConfigurationSection}.
      * 
      * @param config the ConfigurationSection
      * @param key the key
@@ -115,18 +114,18 @@ public class CommandsElement extends Element<Map<String, Command>> {
 
     
     /**
-     * Returns the {@code Element} for creating {@code Command}s.
+     * Returns the {@code Element} which creates {@code Command}s.
      * 
-     * @return the element for creating Commands
+     * @return the element which creates Commands
      */
     public @Nullable Element<Command> getCommandElement() {
         return command;
     }
     
     /**
-     * Sets the {@code Element} for creating {@code Command}s.
+     * Sets the {@code Element} which creates {@code Command}s.
      * 
-     * @param command the element for creating Commands
+     * @param command the element which creates Commands
      */
     public void setCommandElement(Element<Command> command) {
         this.command = command;

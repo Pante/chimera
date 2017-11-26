@@ -30,10 +30,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 
 /**
- * Represent a key-value pair in an YAMl document which may produce a derived value from the value associated with this {@code Element}.
- * Keys and associated derived values may be declared and stored beforehand for reference further in the YAML document.
+ * Represent an element in an YAMl document which produces a value.
+ * 
+ * Elements may be associated with values and declared beforehand for further reference in the YAMl document.
  *
- * @param <T> the type of the derived value
+ * @param <T> the type of the value
  */
 public abstract class Element<T> {
     
@@ -41,10 +42,9 @@ public abstract class Element<T> {
     
     
     /**
-     * Constructs an {@code Element} with the specified declared values and associated derived values
-     * for reference further in the YAML document.
+     * Constructs an {@code Element} with the specified {@code Map} which contains the declared elements and associated values.
      * 
-     * @param declarations the declared values and associated derived values
+     * @param declarations the declared elements and associated values
      */
     public Element(@Nonnull Map<String, T> declarations) {
         this.declarations = declarations;
@@ -52,9 +52,8 @@ public abstract class Element<T> {
     
     
     /**
-     * Associates the key with the derived value from invoking {@link #parse(ConfigurationSection, String)}
-     * with the specified {@code ConfigurationSection} and key, for reference further in the YAML
-     * document.
+     * Associates the specified key with the value from invoking {@link #parse(ConfigurationSection, String)}
+     * on the specified {@code ConfigurationSection} and key.
      * 
      * @param config the ConfigurationSection
      * @param key the key
@@ -65,17 +64,16 @@ public abstract class Element<T> {
 
     
     /**
-     * Parsers the YAML value associated with the specified key in the specified {@code ConfigurationSection}
-     * and produces a derived value.
-
-     * The default implementation returns the value from invoking {@link #handleNull(ConfigurationSection, String)} if the YAML value is {@code null},
-     * else returns the value from invoking {@link #handleDeclared(ConfigurationSection, String)} if the YAML value is a {@code String},
-     * else returns the value from invoking {@link #handle(ConfigurationSection, String)} if {@link #check(ConfigurationSection, String)} is {@code true},
+     * Parses the specified key in the {@code ConfigurationSection} and produces a value.
+     * 
+     * The default implementation invokes {@link #handleNull(ConfigurationSection, String)} if the key value is {@code null};
+     * else if the key is a {@code String}, invokes {@link #handleDeclared(ConfigurationSection, String)};
+     * else if {@link #check(ConfigurationSection, String)} returns {@code true}, invokes {@link #handle(ConfigurationSection, String)};
      * else throws a {@code ParserException}.
      * 
      * @param config the ConfigurationSection which contains the specified key-value pair
      * @param key the key
-     * @return the derived value
+     * @return the value
      * @throws ParserException if this method fails to produce a derived value for the specified ConfigurationSection and key
      */
     public @Nonnull T parse(ConfigurationSection config, String key) {
@@ -94,14 +92,14 @@ public abstract class Element<T> {
     }
     
     /**
-     * Returns a default value if the specified {@code ConfigurationSection} does not contain a value for the specified key.
-     * This method is invoked internally by {@link #parse(ConfigurationSection, String)}. 
-
+     * Returns a default value if the specified key in the {@code ConfigurationSection} is {@code null}.
+     * This method is invoked by {@link #parse(ConfigurationSection, String)}. 
+     * 
      * The default implementation throws a {@code ParserException}. 
-
+     * 
      * Subclasses may override this method to customise the handling of {@code null} values.
      * 
-     * @param config the ConfigurationSection which contains the specified key-value pair
+     * @param config the ConfigurationSection
      * @param key the key
      * @return a default value
      * @throws ParserException if this method invoked but not overridden
@@ -111,18 +109,18 @@ public abstract class Element<T> {
     }
     
     /**
-     * Returns the derived value associated with the specified key, declared beforehand.
-     * This method is invoked internally by {@link #parse(ConfigurationSection, String)}.
+     * Returns the value associated with the specified key, declared beforehand.
+     * This method is invoked by {@link #parse(ConfigurationSection, String)}.
 
-     * The default implementation returns derived value associated with the key from invoking {@link #getDeclaredKey(ConfigurationSection, String)}
-     * with the specified {@code ConfigurationSection} and key, or throws a {@code ParserException} if this {@code Element} does not contain
-     * a derived value for the key. 
+     * The default implementation returns the value associated with the key from invoking {@link #getDeclaredKey(ConfigurationSection, String)}
+     * on the specified {@code ConfigurationSection} and key, or throws a {@code ParserException} if this {@code Element} does not contain
+     * a value for the key. 
 
      * Subclasses may override this method to customise the handling of declared values.
      * 
-     * @param config the ConfigurationSection which contains the specified key-value pair
+     * @param config the ConfigurationSection
      * @param key the key
-     * @return the derived value
+     * @return the value
      * @throws ParserException if this Element does not contain a mapping for the key
      */
     protected T handleDeclared(ConfigurationSection config, String key) {
@@ -136,14 +134,14 @@ public abstract class Element<T> {
     }
     
     /**
-     * Returns a key which a declared derived value is associated with.
-     * This method is invoked internally by {@link #parse(ConfigurationSection, String)}.
+     * Returns a key to which a declared value is mapped.
+     * This method is invoked by {@link #parse(ConfigurationSection, String)}.
 
      * The default implementation returns the specified key.
 
-     * Subclasses may override this method to customise the handling the production of declared keys.
+     * Subclasses may override this method to customise the handling of declared keys.
      * 
-     * @param config the ConfigurationSection which contains the specified key-value pair
+     * @param config the ConfigurationSection
      * @param key the key
      * @return the declared key
      */
@@ -152,30 +150,28 @@ public abstract class Element<T> {
     }
     
     /**
-     * Checks if the specified {@code ConfigurationSection} contains a valid value for the specified key.
+     * Checks if the specified key in the {@code ConfigurationSection} is valid.
      * 
-     * @param config the ConfigurationSection which contains the specified key-value pair
+     * @param config the ConfigurationSection
      * @param key the key
-     * @return true if the specified Configuration contains a valid value for the specified key; else false
+     * @return true if the specified key is valid; else false
      */
     protected abstract boolean check(@Nonnull ConfigurationSection config, @Nonnull String key);
     
     /**
-     * Creates a derived value from the value associated with the specified key in 
-     * the specified {@code ConfigurationSection}.
+     * Creates a value for the specified key in the {@code ConfigurationSection}.
      * 
      * @param config the ConfigurationSection
-     * @param key the key to which the YAML value is associated
-     * @return the derived value
+     * @param key the key
+     * @return the value
      */
     protected abstract @Nonnull T handle(@Nonnull ConfigurationSection config, @Nonnull String key);
     
     
     /**
-     * Returns a {@code Map} which contains the keys and associated derived values for
-     * reference further in the YAML document.
+     * Returns a {@code Map} which contains the declared elements and their respective values.
      * 
-     * @return the keys and associated derived values
+     * @return the declared elements and their respective values
      */
     public Map<String, T> getDeclarations() {
         return declarations;

@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * A concrete subclass of {@code Element} that creates a {@code Map} which associates 
- * the indexes of arguments with {@code Completion}s from {@code completions} elements.
+ * the argument indexes with the {@code Completion}s.
  */
 public class CompletionsElement extends Element<Map<Integer, Completion>> {
     
@@ -44,20 +44,20 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
     
     
     /**
-     * Constructs a {@code CompletionElmeent} with the specified {@code Element} for
-     * creating {@code Completion}s and no declarations.
+     * Constructs a {@code CompletionElmeent} with the specified {@code Element} which
+     * creates {@code Completion}s and no declarations.
      * 
-     * @param completion the Element for creating Completions
+     * @param completion the Element which creates Completions
      */
     public CompletionsElement(Element<Completion> completion) {
         this(completion, new HashMap<>());
     }
     
     /**
-     * Constructs a {@code CompletionElement} with the specified {@code Element} for
-     * creating {@code Completion}s and declarations.
+     * Constructs a {@code CompletionElement} with the specified {@code Element} which
+     * creates {@code Completion}s and declarations.
      * 
-     * @param completion the Element for creating Completions
+     * @param completion the Element which creates Completions
      * @param declarations the declarations
      */
     public CompletionsElement(Element<Completion> completion, Map<String, Map<Integer, Completion>> declarations) {
@@ -79,12 +79,11 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
     }
     
     /**
-     * Checks if the value of the specified key in the {@code ConfigurationSection}
-     * is a {@code ConfigurationSection}.
+     * Checks if the specified key in the {@code ConfigurationSection} is a {@code ConfigurationSection}.
      * 
      * @param config the ConfigurationSection
      * @param key the key
-     * @return true if the value of the specified key in the ConfigurationSection is a ConfigurationSection; else false
+     * @return true if the specified key in the ConfigurationSection is a ConfigurationSection; else false
      */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
@@ -92,11 +91,11 @@ public class CompletionsElement extends Element<Map<Integer, Completion>> {
     }
     
     /**
-     * Creates a {@code Map} which associates the indexes of arguments with {@code Completions}.
+     * Creates a {@code Map} which associates the argument indexes with the {@code Completion}s.
      * 
-     * @param config
-     * @param key
-     * @return 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return a map which associates the argument indexes with the Completions
      */
     @Override
     protected @Nonnull Map<Integer, Completion> handle(@Nonnull ConfigurationSection config, @Nonnull String key) {

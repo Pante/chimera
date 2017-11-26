@@ -34,14 +34,10 @@ import static com.karuslabs.commons.command.completion.Completion.*;
 
 
 /**
- * A concrete subclass of {@code Element} which creates {@code Completion}s from key-value pairs
- * nested in a {@code ConfigurationSection}.
+ * A concrete subclass of {@code Element} which creates {@code Completion}s.
  * 
- * This {@code CompletionElement} contains default declarations, mapping the literal names of the {@code Completion}s
- * to the {@code Completion}s.
- * 
- * The default declarations are as follows: {
- * 
+ * This {@code CompletionElement} contains default declarations, mapping the literal names of {@link Completion#NONE},
+ * {@link Completion#PLAYER_NAMES} and {@link Completion#WORLD_NAMES} to their respective {@code Completion}s.
  */
 public class CompletionElement extends Element<Completion> {
     
@@ -53,7 +49,7 @@ public class CompletionElement extends Element<Completion> {
     }
     
     /**
-     * Constructs a {@code CompletionElement} with the specified and default declarations.
+     * Constructs a {@code CompletionElement} with the default and specified declarations.
      * 
      * @param declarations the declarations
      */
@@ -65,14 +61,20 @@ public class CompletionElement extends Element<Completion> {
     }
 
     
+    /**
+     * Returns the value associated with the specified key in the {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return the value associated with the specified key
+     */
     @Override
     protected String getDeclaredKey(ConfigurationSection config, String key) {
         return config.getString(key);
     }
     
     /**
-     * Checks if the value associated with the specified key in the {@code ConfigurationSection}
-     * is a list.
+     * Checks if the specified key in the {@code ConfigurationSection} is a list.
      * 
      * @param config the ConfigurationSection
      * @param key the key
@@ -84,7 +86,7 @@ public class CompletionElement extends Element<Completion> {
     }
     
     /**
-     * Creates a {@code CachedCompletion} from key-value pair nested in the specified {@code ConfigurationSection} using the specified key.
+     * Creates a {@code CachedCompletion} for the specified key in the {@code ConfigurationSection}.
      * 
      * @param config the ConfigurationSection
      * @param key the key

@@ -40,7 +40,7 @@ import static java.lang.System.arraycopy;
 
 
 /**
- * A concrete subclass of {@code Element} which creates {@code MessageTranslation}s from {@code translation} elements.
+ * A concrete subclass of {@code Element} which creates {@code MessageTranslation}s.
  */
 public class TranslationElement extends Element<MessageTranslation> {
     
@@ -50,7 +50,7 @@ public class TranslationElement extends Element<MessageTranslation> {
     
     /**
      * Constructs a {@code TranslationElement} with the specified folder which contains the {@code Resource}s, 
-     * no declarations and {@code Provier}.
+     * the locale {@code Provider} and no declarations.
      * 
      * @param folder the folder which contains the Resources
      * @param provider the Provider
@@ -75,7 +75,7 @@ public class TranslationElement extends Element<MessageTranslation> {
 
     
     /**
-     * Returns an empty MessageTranslation.
+     * Returns an empty {@code MessageTranslation}.
      * 
      * @param config the ConfigurationSection
      * @param key the key
@@ -87,13 +87,15 @@ public class TranslationElement extends Element<MessageTranslation> {
     }
     
     /**
-     * Checks if the specified {@code ConfigurationSection} contains a well-formed {@code translation} element.
-     * Returns {@code true} if the {@code translation} contains a {@code bundle} key mapped to a {@code String} value,
-     * and either or both, {@code embedded} and {@code folder} mapped to a list of {@code String}s; else throws a {@code ParserException}.
+     * Checks if the specified key in the {@code ConfigurationSection} is well-formed.
+     * 
+     * Returns {@code true} if the specified key contains a {@code bundle} name, and either or both
+     * {@code embedded} and {@code folder} paths; else throws a {@code ParserException}
      * 
      * @param config the ConfigurationSection
      * @param key the key
-     * @return true if the value contains the keys and associated values; else false
+     * @return true if the specified key in the ConfigurationSeciton is well-formed
+     * @throws ParserException if the specified key in the ConfigurationSection is malformed
      */
     @Override
     protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
@@ -111,10 +113,9 @@ public class TranslationElement extends Element<MessageTranslation> {
     }
     
     /**
-     * Creates a {@code MessageTranslation} from the {@code translation} element 
-     * associated with the specified key in the {@code ConfigurationSection}.
+     * Creates a {@code MessageTranslation} from the specified key in the {@code ConfigurationSection}.
      * 
-     * @param config the configurationSection which contains the specified key-value pair
+     * @param config the configurationSection
      * @param key the key
      * @return a MessageTranslation
      */

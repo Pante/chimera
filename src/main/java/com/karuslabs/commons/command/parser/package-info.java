@@ -21,21 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
-
 
 /**
- * Thrown to indicate that an error has occurred while parsing the document.
+ * Contains a parser which produces {@code Command}s from a YAML document and {@code Element}s which
+ * produces the parts of a {@code Command}.
+ * 
+ * A reference for the YAML document syntax may be found in the GitHub <a href = "https://github.com/Pante/Karus-Commons/commands">wiki</a>
  */
-public class ParserException extends RuntimeException {
-    
-    /**
-     * Constructs a {@code ParserException} with the specified detail message.
-     * 
-     * @param message the detail message
-     */
-    public ParserException(String message) {
-        super(message);
-    }
-    
-}
+package com.karuslabs.commons.command.parser;
