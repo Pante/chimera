@@ -26,6 +26,7 @@ package com.karuslabs.commons.graphics.windows;
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
@@ -49,6 +50,15 @@ class WindowTest {
             return new Point(1, 0);
         }
     });
+    
+    
+    @Test
+    void render_players() {
+        Player player = mock(Player.class);
+        window.setInventory(mock(Inventory.class)).render(asList(player));
+        
+        verify(player).openInventory(window.getInventory());
+    }
     
     
     @ParameterizedTest

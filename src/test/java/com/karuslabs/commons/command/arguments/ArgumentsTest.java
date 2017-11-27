@@ -105,7 +105,7 @@ class ArgumentsTest {
         Arguments arguments = new Arguments(args);
         arguments.trim();
         
-        assertThat(arguments.get(), equalTo(expected));
+        assertThat(arguments.raw(), equalTo(expected));
     }
     
     static Stream<org.junit.jupiter.params.provider.Arguments> trim_parameters() {

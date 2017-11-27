@@ -58,12 +58,12 @@ class CompletionElementTest {
     
     @Test
     void getDeclaredKey() {
-        assertEquals("translation", element.getDeclaredKey(COMMANDS, "commands.brush.translation"));
+        assertEquals("bundle", element.getDeclaredKey(COMMANDS, "commands.brush.translation"));
     }
     
     
     @ParameterizedTest
-    @CsvSource({"true, declare.translations.translation.embedded", "false, declare"})
+    @CsvSource({"true, declare.translations.bundle.embedded", "false, declare"})
     void check(boolean expected, String key) {
         assertEquals(expected, element.check(COMMANDS, key));
     }
@@ -71,7 +71,7 @@ class CompletionElementTest {
     
     @Test
     void handle() {
-        assertEquals(singletonList("path1"), element.handle(COMMANDS, "declare.translations.translation.embedded").getCompletions());
+        assertEquals(singletonList("path1"), element.handle(COMMANDS, "declare.translations.bundle.embedded").getCompletions());
     }
     
 }

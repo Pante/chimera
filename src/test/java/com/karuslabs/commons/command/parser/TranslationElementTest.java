@@ -51,7 +51,7 @@ class TranslationElementTest {
     
     @Test
     void check() {
-       assertTrue(element.check(COMMANDS, "declare.translations.translation"));
+       assertTrue(element.check(COMMANDS, "declare.translations.bundle"));
     }
     
     
@@ -67,7 +67,7 @@ class TranslationElementTest {
     
     @Test
     void handle() {
-        MessageTranslation translation = element.handle(COMMANDS.getConfigurationSection("declare.translations"), "translation");
+        MessageTranslation translation = element.handle(COMMANDS.getConfigurationSection("declare.translations"), "bundle");
         Resource[] resources = ((ExternalControl) translation.getControl()).getResources();
         EmbeddedResource embedded = (EmbeddedResource) resources[0];
         FileResource file = (FileResource) resources[1];

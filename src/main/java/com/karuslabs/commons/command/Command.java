@@ -72,10 +72,10 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     }
     
     public boolean execute(Context context, Arguments arguments) {
-        String argument = arguments.getLast().text();
-        Command subcommand = subcommands.get(argument);
+        String argument;
+        Command subcommand;
         
-        if (subcommand != null) {
+        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.raw()[0])) != null) {
             arguments.trim();
             context.update(argument, subcommand);
             return subcommand.execute(context, arguments);
@@ -96,7 +96,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             return EMPTY_LIST;
         }
 
-        String argument = arguments.get()[0];
+        String argument = arguments.raw()[0];
         
         Command subcommand = subcommands.get(argument);
         if (subcommand != null) {

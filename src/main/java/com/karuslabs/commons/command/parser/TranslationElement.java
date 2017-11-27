@@ -46,10 +46,10 @@ public class TranslationElement extends Element<MessageTranslation> {
     
     
     public TranslationElement(File folder, Provider provider) {
-        this(folder, new HashMap<>(), provider);
+        this(folder, provider, new HashMap<>());
     }
     
-    public TranslationElement(File folder, Map<String, MessageTranslation> declarations, Provider provider) {
+    public TranslationElement(File folder, Provider provider, Map<String, MessageTranslation> declarations) {
         super(declarations);
         this.folder = folder;
         this.provider = provider;
@@ -74,6 +74,11 @@ public class TranslationElement extends Element<MessageTranslation> {
         } else {
             return true;
         }
+    }
+    
+    @Override
+    protected String getDeclaredKey(ConfigurationSection config, String key) {
+        return config.getString(key);
     }
 
     @Override

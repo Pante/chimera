@@ -14,7 +14,7 @@ declare:
         completion: [void]
         
     translations:
-        translation:
+        bundle:
             bundle: Resource
             embedded: [path1]
             folder: [path2]
@@ -34,7 +34,7 @@ commands:
                     0: completion
                     2: [a, b, c]
                     
-        translation: translation
+        translation: bundle
     
     test:
         aliases: [c]
