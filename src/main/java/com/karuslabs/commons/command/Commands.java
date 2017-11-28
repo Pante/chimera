@@ -60,9 +60,13 @@ public class Commands {
         CommandElement command = new CommandElement(plugin, commands, translation, completions);
         commands.setCommandElement(command);
         
-        load(new Parser(command, translation, completion), path);
+        load(loadParser(new Parser(command, translation, completion)), path);
     }
-
+    
+    protected Parser loadParser(Parser parser) {
+        return parser;
+    }
+    
     public void load(Parser parser, String path) {
         map.registerAll(plugin.getName(), parser.parse(from(getClass().getClassLoader().getResourceAsStream(path))));
     }

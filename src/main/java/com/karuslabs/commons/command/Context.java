@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static java.util.Locale.getDefault;
+
 
 public class Context implements Translatable {
     
@@ -45,7 +47,7 @@ public class Context implements Translatable {
     
     
     public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
-        this(sender, sender instanceof Player ? Locales.getOrDefault(((Player) sender).getLocale(), Locale.getDefault()) : Locale.getDefault(), label, parent, command, command.getTranslation());
+        this(sender, sender instanceof Player ? Locales.getOrDefault(((Player) sender).getLocale(), getDefault()) : getDefault(), label, parent, command, command.getTranslation());
     }
     
     public Context(CommandSender sender, Locale locale, String label, @Nullable Command parent, Command command, MessageTranslation translation) {

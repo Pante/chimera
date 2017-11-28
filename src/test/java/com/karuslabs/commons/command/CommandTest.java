@@ -66,7 +66,7 @@ class CommandTest {
     @CsvSource({"a, 1, 0", "b, 0, 1"})
     void execute(String argument, int delegated, int executor) {
         Context context = mock(Context.class);
-        Arguments arguments = spy(new Arguments(argument));
+        Arguments arguments = spy(new Arguments(argument, "argument 2"));
         
         Command subcommand = mock(Command.class);
         command.getSubcommands().put("a", subcommand);

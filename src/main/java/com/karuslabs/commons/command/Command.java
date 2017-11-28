@@ -33,7 +33,6 @@ import javax.annotation.Nonnull;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
-import static com.karuslabs.commons.command.Patterns.preserveQuotes;
 import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
@@ -68,14 +67,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(sender, label, null, this), new Arguments(preserveQuotes(args)));
+        return execute(new Context(sender, label, null, this), new Arguments(Join.quotedSpaces(args)));
     }
     
     public boolean execute(Context context, Arguments arguments) {
         String argument;
         Command subcommand;
         
-        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.raw()[0])) != null) {
+        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.text()[0])) != null) {
             arguments.trim();
             context.update(argument, subcommand);
             return subcommand.execute(context, arguments);
@@ -88,7 +87,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
     
     @Override
     public @Nonnull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return complete(sender, new Arguments(preserveQuotes(args)));
+        return complete(sender, new Arguments(Join.quotedSpaces(args)));
     }
     
     public @Nonnull List<String> complete(CommandSender sender, Arguments arguments) {
@@ -96,14 +95,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             return EMPTY_LIST;
         }
 
-        String argument = arguments.raw()[0];
+        String argument = arguments.text()[0];
         
         Command subcommand = subcommands.get(argument);
         if (subcommand != null) {
             arguments.trim();
             return subcommand.complete(sender, arguments);
 
-        } else if (!subcommands.isEmpty() && arguments.length() == 1) {
+        } else if (arguments.length() == 1 && !completions.containsKey(0)) {
             return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)
@@ -113,7 +112,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
         }
     }
-       
+    
 
     @Override
     public Plugin getPlugin() {

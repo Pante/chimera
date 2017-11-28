@@ -41,6 +41,17 @@ class CommandExecutorTest {
     
     
     @Test
+    void no_permission() {
+        CommandSender sender = when(mock(CommandSender.class).hasPermission((String) any())).thenReturn(false).getMock();
+        Command command = when(mock(Command.class).getPermissionMessage()).thenReturn("invalid permission").getMock();
+        
+        ALIASES.execute(new Context(sender, null, null, command, null, null), null);
+        
+        verify(sender).sendMessage(RED + command.getPermissionMessage());
+    }
+    
+    
+    @Test
     void aliases() {
         ALIASES.execute(context, null);
         verify(sender).sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
@@ -68,7 +79,8 @@ class CommandExecutorTest {
     
     @Test
     void none() {
-        assertTrue(NONE.execute(null, null));
+        assertTrue(NONE.execute(new Context(sender, null, null, null, null, null), null));
+        verify(sender).sendMessage(RED + "No behaviour for this command.");
     }
     
 }

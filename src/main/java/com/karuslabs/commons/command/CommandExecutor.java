@@ -59,6 +59,9 @@ public interface CommandExecutor {
         });
     };
     
-    public static final CommandExecutor NONE = (context, arguments) -> true;
+    public static final CommandExecutor NONE = (context, arguments) -> {
+        context.getSender().sendMessage(RED + "No behaviour for this command.");
+        return true;
+    };
 
 }

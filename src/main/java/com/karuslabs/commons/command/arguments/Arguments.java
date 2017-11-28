@@ -107,7 +107,7 @@ public class Arguments {
     }
     
     
-    public String[] raw() {
+    public String[] text() {
         return arguments;
     }
     

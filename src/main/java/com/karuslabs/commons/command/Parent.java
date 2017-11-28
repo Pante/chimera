@@ -27,6 +27,8 @@ import com.karuslabs.commons.command.arguments.Arguments;
 
 import org.bukkit.command.CommandSender;
 
+import static org.bukkit.ChatColor.RED;
+
 
 @FunctionalInterface
 interface Parent extends CommandExecutor {    
@@ -38,6 +40,8 @@ interface Parent extends CommandExecutor {
         
         if (command != null && sender.hasPermission(command.getPermission())) {
             execute(command, sender);
+        } else {
+            sender.sendMessage(RED + command.getPermissionMessage());
         }
         
         return true;

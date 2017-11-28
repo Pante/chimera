@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.locale.resources;
 
+import com.karuslabs.commons.locale.resources.Resource;
 import java.io.*;
 import javax.annotation.*;
 

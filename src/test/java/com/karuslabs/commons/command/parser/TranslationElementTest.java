@@ -23,6 +23,9 @@
  */
 package com.karuslabs.commons.command.parser;
 
+import com.karuslabs.commons.locale.resources.Resource;
+import com.karuslabs.commons.locale.resources.FileResource;
+import com.karuslabs.commons.locale.resources.EmbeddedResource;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.resources.*;
 
