@@ -82,8 +82,12 @@ public interface CommandExecutor {
     };
     
     /**
-     * An empty {@code CommandExecutor} which returns {@code true} on execution.
+     * A {@code CommandExecutor} which displays a message to the {@code CommandSender} 
+     * and returns {@code true} on executed.
      */
-    public static final CommandExecutor NONE = (context, arguments) -> true;
+    public static final CommandExecutor NONE = (context, arguments) -> {
+        context.getSender().sendMessage(RED + "No behaviour for this command.");
+        return true;
+    };
 
 }

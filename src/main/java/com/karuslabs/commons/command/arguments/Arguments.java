@@ -174,7 +174,7 @@ public class Arguments {
      * 
      * @return the arguments
      */
-    public String[] get() {
+    public String[] text() {
         return arguments;
     }
     

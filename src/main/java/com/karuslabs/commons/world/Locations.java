@@ -28,9 +28,19 @@ import com.karuslabs.commons.annotation.Static;
 import org.bukkit.Location;
 
 
+/**
+ * This class consists exclusively of static methods which operate on and return {@code Location}s.
+ */
 @Static
 public class Locations {
     
+    /**
+     * Copies a {@code Location} from the specified source to the destination {@code Location}.
+     * 
+     * @param source the source
+     * @param destination the destination
+     * @return the destination Location
+     */
     public static Location copy(Location source, Location destination) {
         destination.setWorld(source.getWorld());
         destination.setX(source.getX());

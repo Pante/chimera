@@ -111,6 +111,19 @@ public class Parser {
         } else {
             return EMPTY_LIST;
         }
-    }  
+    }
+    
+    
+    public Element<Command> getCommandElement() {
+        return command;
+    }
+    
+    public Element<MessageTranslation> getTranslationElement() {
+        return translation;
+    }
+    
+    public Element<Completion> getCompletion() {
+        return completion;
+    }
     
 }

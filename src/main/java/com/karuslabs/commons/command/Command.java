@@ -33,7 +33,6 @@ import javax.annotation.Nonnull;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
-import static com.karuslabs.commons.command.Patterns.preserveQuotes;
 import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
@@ -102,8 +101,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     
     /**
-     * Merges the arguments enclosed in quotation marks which contains spaces, and 
-     * delegates execution to {@link #execute(Context, Arguments)}
+     * Joins the arguments in quotation marks with spaces and delegates execution to {@link #execute(Context, Arguments)}
      * 
      * @param sender the source object which is executing this Command
      * @param label the label of the command used
@@ -112,23 +110,23 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
      */
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(sender, label, null, this), new Arguments(preserveQuotes(args)));
+        return execute(new Context(sender, label, null, this), new Arguments(Join.quotedSpaces(args)));
     }
     
     /**
      * Delegates execution to a subcommand with an updated {@code Context} and trimmed {@code Arguments},
      * or the {@code CommandExecutor} for this {@code Command} if no subcommand with 
-     * a name equal to the last argument exists.
+     * a name equal to the first argument exists.
      * 
      * @param context the context which this command is executed in
      * @param arguments the arguments passed to this Command
      * @return true if the command was successful; else false
      */
     public boolean execute(Context context, Arguments arguments) {
-        String argument = arguments.getLast().text();
-        Command subcommand = subcommands.get(argument);
+        String argument;
+        Command subcommand;
         
-        if (subcommand != null) {
+        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.text()[0])) != null) {
             arguments.trim();
             context.update(argument, subcommand);
             return subcommand.execute(context, arguments);
@@ -150,14 +148,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
      */
     @Override
     public @Nonnull List<String> tabComplete(CommandSender sender, String alias, String[] args) {
-        return complete(sender, new Arguments(preserveQuotes(args)));
+        return complete(sender, new Arguments(Join.quotedSpaces(args)));
     }
     
     /**
      * Delegates tab completion to a subcommand with a name equal to the first argument if present,
      * 
-     * else returns a list of subcommands which begin with the last argument 
-     * if this {@code Command} has subcommands and the number of arguments is 1,
+     * else returns a list of subcommands which begin with the last argument
+     * if the number of arguments is 1 and this {@code Command} does not contain a {@code Completion} for the index of the first argument,
      * 
      * else delegates execution to a {@code Completion} with an associated index equal to the index of the last argument if present, or returns a list of
      * {@code Player} names if not present.
@@ -173,14 +171,14 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             return EMPTY_LIST;
         }
 
-        String argument = arguments.get()[0];
+        String argument = arguments.text()[0];
         
         Command subcommand = subcommands.get(argument);
         if (subcommand != null) {
             arguments.trim();
             return subcommand.complete(sender, arguments);
 
-        } else if (!subcommands.isEmpty() && arguments.length() == 1) {
+        } else if (arguments.length() == 1 && !completions.containsKey(0)) {
             return subcommands.values().stream()
                     .filter(command -> sender.hasPermission(command.getPermission()) && command.getName().startsWith(argument))
                     .map(Command::getName)

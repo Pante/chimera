@@ -106,10 +106,12 @@ class MatcherTest {
     @ParameterizedTest
     @CsvSource({"true, true, true", "true, false, false", "false, true, false"})
     void exact(boolean match1, boolean match2, boolean expected) {
+        matcher.between(1, 4);
+        
         Predicate<String> predicate1 = when(mock(Predicate.class).test("1")).thenReturn(match1).getMock();
         Predicate<String> predicate2 = when(mock(Predicate.class).test("2")).thenReturn(match2).getMock();
         
-        assertEquals(expected, matcher.exact(arg -> true, predicate1, predicate2, arg -> true));
+        assertEquals(expected, matcher.exact(predicate1, predicate2, arg -> true));
     }
     
     

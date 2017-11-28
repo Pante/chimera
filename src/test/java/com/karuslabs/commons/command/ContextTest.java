@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.locale.MessageTranslation;
+
 import java.util.Locale;
 import java.util.stream.Stream;
 
@@ -42,9 +44,10 @@ import static org.mockito.Mockito.*;
 class ContextTest {
     
     static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
+    static final Player INVALID = when(mock(Player.class).getLocale()).thenReturn("fuck_standards").getMock();
     static final CommandSender SENDER = mock(CommandSender.class);
     static final Command COMMAND = mock(Command.class);
-  
+    
     
     @Test
     void update() {
@@ -79,7 +82,16 @@ class ContextTest {
     }
     
     static Stream<Arguments> getLocale_parameters() {
-        return Stream.of(of(PLAYER, new Locale("en", "GB")), of(SENDER, getDefault()));
+        return Stream.of(of(PLAYER, new Locale("en", "GB")), of(INVALID, getDefault()), of(SENDER, getDefault()));
+    }
+    
+    
+    @Test
+    void translate() {
+        Context context = new Context(SENDER, null, null, null, COMMAND, MessageTranslation.NONE);
+        context.setLocale(Locale.ITALY);
+        
+        assertEquals("key", context.translate("key"));
     }
     
 }

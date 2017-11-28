@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -114,8 +115,8 @@ public class Matcher {
             return false;
         }
         
-        for (int i = first; i < last; i++) {
-            if (!matches[i].test(arguments[i])) {
+        for (int i = 0, j = first; j < last; i++, j++) {
+            if (!matches[i].test(arguments[j])) {
                 return false;
             }
         }

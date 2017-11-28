@@ -36,15 +36,15 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @TestInstance(PER_CLASS)
-public class PatternsTest {
+public class JoinTest {
     
     @ParameterizedTest
-    @MethodSource("preserveQuotes_parameters")
-    public void preserveQuotes(String[] arguments, String[] expected) {
-        assertThat(Patterns.preserveQuotes(arguments), equalTo(expected));
+    @MethodSource("quotedSpaces_parameters")
+    public void quotedSpaces(String[] arguments, String[] expected) {
+        assertThat(Join.quotedSpaces(arguments), equalTo(expected));
     }
     
-    static Stream<org.junit.jupiter.params.provider.Arguments> preserveQuotes_parameters() {
+    static Stream<org.junit.jupiter.params.provider.Arguments> quotedSpaces_parameters() {
         String[] arguments = new String[] {"1", "2", "3"};
         return Stream.of(of(arguments, arguments), of(new String[] {"\"1", "2\"", "3"}, new String[] {"1 2", "3"}));
     }

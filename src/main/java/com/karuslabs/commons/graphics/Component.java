@@ -28,6 +28,9 @@ import com.karuslabs.commons.graphics.windows.Window;
 import org.bukkit.event.inventory.*;
 
 
+/**
+ * Represents a component in a {@code Window}.
+ */
 @FunctionalInterface
 public interface Component {
     

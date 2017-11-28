@@ -31,6 +31,7 @@ import com.karuslabs.commons.locale.*;
 import java.util.*;
 import javax.annotation.Nullable;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
@@ -39,7 +40,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 
 
-public abstract class Window implements Listener, Translatable, InventoryHolder, Resettable {    
+public abstract class Window implements Listener, Translatable, InventoryHolder, Resettable {
     
     @JDK9
     protected static final @Immutable Set<Integer> INVALID = unmodifiableSet(new HashSet<>(asList(-1, -999)));
@@ -57,6 +58,15 @@ public abstract class Window implements Listener, Translatable, InventoryHolder,
         this.regions = regions;
         this.translation = translation;
         this.reset = reset;
+    }
+    
+    
+    public void render(List<Player> players) {
+        players.forEach(this::render);
+    }
+    
+    public void render(Player player) {
+        player.openInventory(inventory);
     }
     
     
@@ -188,8 +198,9 @@ public abstract class Window implements Listener, Translatable, InventoryHolder,
         return inventory;
     }
     
-    public void setInventory(@Nullable Inventory inventory) {
+    public Window setInventory(@Nullable Inventory inventory) {
         this.inventory = inventory;
+        return this;
     }
     
     @Override

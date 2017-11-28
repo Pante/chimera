@@ -84,7 +84,22 @@ public class Commands {
         CommandElement command = new CommandElement(plugin, commands, translation, completions);
         commands.setCommandElement(command);
         
-        load(new Parser(command, translation, completion), path);
+        load(loadParser(new Parser(command, translation, completion)), path);
+    }
+    
+    /**
+     * Loads the specified {@code Parser}.
+     * This method is invoked by {@link #load(String)}. 
+     * 
+     * The default implementation returns the specified {@code Parser}.
+     * 
+     * Subclasses may override this method to customise the loading of the specified {@code Parser}.
+     * 
+     * @param parser the Parser
+     * @return the parser
+     */
+    protected Parser loadParser(Parser parser) {
+        return parser;
     }
     
     /**

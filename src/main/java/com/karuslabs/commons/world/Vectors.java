@@ -33,20 +33,45 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 
 
+/**
+ * This class consists exclusively of static methods which operate on and return {@code Vector}s.
+ * This class is a derivative of EffectLib's VectorUtils.
+ */
 @Static
 public final class Vectors {
     
+    /**
+     * Copies a {@code Vector} from the specified source to the destination {@code Vector}.
+     * 
+     * @param source the source
+     * @param destination the destination
+     * @return the destination vector
+     */
     public static Vector copy(Vector source, Vector destination) {
         destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
         return destination;
     }
     
+    /**
+     * Copies the x,y and z coordinates from the specified {@code Location} source to the destination {@code Vector}.
+     * 
+     * @param source the Location source
+     * @param destination the destination
+     * @return the destination vector
+     */
     public static Vector copy(Location source, Vector destination) {
         destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
         return destination;
     }
     
     
+    /**
+     * Randomises the X, Y and Z axises of the specified {@code Vector} between -1.0, inclusive and 1.0, exclusive,
+     * and normalises th X, Y and Z axises.
+     * 
+     * @param vector the vector
+     * @return the vector
+     */
     public static Vector random(Vector vector) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         vector.setX(random.nextDouble(-1, 1));
@@ -57,6 +82,12 @@ public final class Vectors {
     }
 
     
+    /**
+     * 
+     * 
+     * @param vector TODO
+     * @return TODO
+     */
     public static Vector randomCircle(Vector vector) {
         double random = ThreadLocalRandom.current().nextDouble(0, 2 * PI);
         vector.setX(cos(random));
@@ -66,15 +97,36 @@ public final class Vectors {
     }
     
     
+    /**
+     * Returns an random radian angle between 0 and 2π.
+     * 
+     * @return the angle
+     */
     public static double randomAngle() {
         return ThreadLocalRandom.current().nextDouble(0, 2 * PI); 
     }
     
-    
+    /**
+     * Returns the specified {@code Vector} rotated about the X, Y and Z axises using the specified radian {@code rotation}.
+     * 
+     * @param vector the vector
+     * @param rotation the rotation
+     * @return the vector
+     */
     public static Vector rotate(Vector vector, Vector rotation) {
         return rotate(vector, rotation.getX(), rotation.getY(), rotation.getZ());
     }
     
+    /**
+     * Returns the specified {@code Vector} rotated about the X, Y and Z axises using the
+     * specified radian angles respectively.
+     * 
+     * @param vector the vector
+     * @param angleX the angle to rotate the Vector about the X axis
+     * @param angleY the angle to rotate the Vector about the Y axis
+     * @param angleZ the angle to rotate the Vector about the Z axis
+     * @return 
+     */
     public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
         rotateAroundXAxis(vector, angleX);
         rotateAroundYAxis(vector, angleY);
@@ -83,11 +135,26 @@ public final class Vectors {
     }
 
     
+    /**
+     * Returns the specified {@code Vector} rotated about the specified {@code Location} using the direction of the {@code Location}.
+     * 
+     * @param vector the vector
+     * @param location the location
+     * @return the vector
+     */
     public static Vector rotate(Vector vector, Location location) {
         return rotate(vector, location.getYaw(), location.getPitch());
     }
 
     
+    /**
+     * Returns the specified {@code Vector} rotated using the specified radian yaw and pitch.
+     * 
+     * @param vector the vector
+     * @param yawDegrees the yaw
+     * @param pitchDegrees the pitch
+     * @return the vector
+     */
     public static Vector rotate(Vector vector, float yawDegrees, float pitchDegrees) {
         double yaw = toRadians(-1 * (yawDegrees + 90));
         double pitch = toRadians(-pitchDegrees);
@@ -116,6 +183,13 @@ public final class Vectors {
     }
 
     
+    /**
+     * Returns the specified {@code Vector} rotated about the X axis using the specified radian angle.
+     * 
+     * @param vector the vector
+     * @param angle the angle
+     * @return the vector
+     */
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
         cos = cos(angle);
@@ -126,6 +200,13 @@ public final class Vectors {
     }
 
     
+    /**
+     * Returns the specified {@code Vector} rotated about the Y axis using the specified radian angle.
+     * 
+     * @param vector the vector
+     * @param angle the angle
+     * @return the vector
+     */
     public static Vector rotateAroundYAxis(Vector vector, double angle) {
         double x, z, cos, sin;
         cos = cos(angle);
@@ -136,6 +217,13 @@ public final class Vectors {
     }
 
     
+    /**
+     * Returns the specified {@code Vector} rotated about the Z axis using the specified radian angle.
+     * 
+     * @param vector the vector
+     * @param angle the angle
+     * @return the vector
+     */
     public static Vector rotateAroundZAxis(Vector vector, double angle) {
         double x, y, cos, sin;
         cos = cos(angle);
@@ -146,6 +234,12 @@ public final class Vectors {
     }
 
     
+    /**
+     * 
+     * 
+     * @param vector TODO
+     * @return TODO
+     */
     public static final double angleToXAxis(Vector vector) {
         return atan2(vector.getX(), vector.getY());
     }

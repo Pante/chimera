@@ -56,18 +56,18 @@ public class TranslationElement extends Element<MessageTranslation> {
      * @param provider the Provider
      */
     public TranslationElement(File folder, Provider provider) {
-        this(folder, new HashMap<>(), provider);
+        this(folder, provider, new HashMap<>());
     }
-    
+
     /**
      * Constructs a {@code TraslationElement} with the specified folder which contains the {@code Resource}s, 
-     * declarations and {@code Provider}.
+     * {@code Provider} and declarations.
      * 
      * @param folder the folder
-     * @param declarations the declarations
      * @param provider the provider
+     * @param declarations the declarations
      */
-    public TranslationElement(File folder, Map<String, MessageTranslation> declarations, Provider provider) {
+    public TranslationElement(File folder, Provider provider, Map<String, MessageTranslation> declarations) {
         super(declarations);
         this.folder = folder;
         this.provider = provider;
@@ -112,6 +112,18 @@ public class TranslationElement extends Element<MessageTranslation> {
         }
     }
     
+    /**
+     * Returns the value associated with the specified key in the {@code ConfigurationSection}.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @return the value associated with the specified key
+     */
+    @Override
+    protected String getDeclaredKey(ConfigurationSection config, String key) {
+        return config.getString(key);
+    }
+
     /**
      * Creates a {@code MessageTranslation} from the specified key in the {@code ConfigurationSection}.
      * 

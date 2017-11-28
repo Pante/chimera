@@ -29,21 +29,21 @@ import java.util.regex.Pattern;
 
 
 /**
- * This class consists exclusively of methods which merge and split arrays of {@code String}s.
+ * This class consists exclusively of methods which rejoins arrays of {@code String}s.
  */
 @Static
-public class Patterns {
+public class Join {
         
     private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
     
     /**
-     * Merges the specified arguments enclosed in quotation marks which contains spaces,
-     * and removes the enclosing quotation marks thereafter.
+     * Joins the specified arguments enclosed in quotation marks with spaces,
+     * and removes the quotation marks thereafter.
      * 
      * @param arguments the arguments
-     * @return the merged arguments
+     * @return the joined arguments
      */
-    public static String[] preserveQuotes(String[] arguments) {
+    public static String[] quotedSpaces(String[] arguments) {
         return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
     }
     

@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static java.util.Locale.getDefault;
+
 
 /**
  * Represents the context in which a {@code Command} is executed.
@@ -38,6 +40,7 @@ import org.bukkit.entity.Player;
 public class Context implements Translatable {
     
     private CommandSender sender;
+    private @Nullable Player player;
     private Locale locale;
     
     private String label;
@@ -55,7 +58,7 @@ public class Context implements Translatable {
      * @param command the Command which is executed
      */
     public Context(CommandSender sender, String label, @Nullable Command parent, Command command) {
-        this(sender, sender instanceof Player ? Locales.get(((Player) sender).getLocale()) : Locale.getDefault(), label, parent, command, command.getTranslation());
+        this(sender, sender instanceof Player ? Locales.getOrDefault(((Player) sender).getLocale(), getDefault()) : getDefault(), label, parent, command, command.getTranslation());
     }
     
     /**
@@ -71,6 +74,7 @@ public class Context implements Translatable {
      */
     public Context(CommandSender sender, Locale locale, String label, @Nullable Command parent, Command command, MessageTranslation translation) {
         this.sender = sender;
+        this.player = sender instanceof Player ? (Player) sender : null;
         this.locale = locale;
         this.label = label;
         this.parent = parent;
@@ -110,7 +114,7 @@ public class Context implements Translatable {
      * @return the Player if the CommandSender is a Player; else null
      */
     public @Nullable Player getPlayer() {
-        return isPlayer() ? (Player) sender : null;
+        return player;
     }
     
     /**
@@ -119,7 +123,7 @@ public class Context implements Translatable {
      * @return true if the CommandSender is a Player; else false
      */
     public boolean isPlayer() {
-        return sender instanceof Player;
+        return player != null;
     }
     
     /**
@@ -165,6 +169,19 @@ public class Context implements Translatable {
      */
     public Command getCommand() {
         return command;
+    }
+    
+    
+    /**
+     * Translates the message associated with the specified key with the specified arguments,
+     * using the {@code MessageTranslation} and locale of the {@code CommandSender}.
+     * 
+     * @param key the key
+     * @param arguments the arguments
+     * @return the translated
+     */
+    public String translate(String key, Object... arguments) {
+        return translation.locale(locale).format(key, arguments);
     }
     
     /**
