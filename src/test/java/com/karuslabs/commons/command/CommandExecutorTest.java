@@ -41,6 +41,13 @@ class CommandExecutorTest {
     
     
     @Test
+    void no_parent() {
+        ALIASES.execute(new Context(sender, null, null, null, null, null), null);
+        verify(sender).sendMessage(RED + "Invalid command");
+    }
+    
+    
+    @Test
     void no_permission() {
         CommandSender sender = when(mock(CommandSender.class).hasPermission((String) any())).thenReturn(false).getMock();
         Command command = when(mock(Command.class).getPermissionMessage()).thenReturn("invalid permission").getMock();

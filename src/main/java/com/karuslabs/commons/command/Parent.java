@@ -38,10 +38,14 @@ interface Parent extends CommandExecutor {
         Command command = context.getParentCommand();
         CommandSender sender = context.getSender();
         
-        if (command != null && sender.hasPermission(command.getPermission())) {
-            execute(command, sender);
-        } else {
+        if (command == null) {
+            sender.sendMessage(RED + "Invalid command");
+            
+        } else if (!sender.hasPermission(command.getPermission())) {
             sender.sendMessage(RED + command.getPermissionMessage());
+            
+        } else {
+            execute(command, sender);
         }
         
         return true;
