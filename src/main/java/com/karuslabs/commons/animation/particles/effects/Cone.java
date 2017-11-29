@@ -71,7 +71,7 @@ public class Cone implements Task<Cone> {
         int count = (int) context.count();
         double pitch = toRadians(location.getPitch() + 90);
         double yaw = toRadians(-location.getYaw());
-        for (int x = 0; x < perIteration; x += particles.getAmount(), count++) {
+        for (int i = 0; i < perIteration; i += particles.getAmount(), count++) {
             if (count > size) {
                 count = 0;
             }

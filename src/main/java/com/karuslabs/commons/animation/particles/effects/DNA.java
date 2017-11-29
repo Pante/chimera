@@ -95,8 +95,8 @@ public class DNA implements Task<DNA> {
     }
     
     void renderBase(Context context, Particles particles, Vector vector, int count, int initial, int total) {
+        double angle = count * radials;
         for (int i = initial; i <= total; i += particles.getAmount()) {
-            double angle = count * radials;
             vector.setX(cos(angle)).setY(0).setZ(sin(angle)).multiply(radius * i / perBase).setY(count * growth);
             render(context, particles, vector);
         }

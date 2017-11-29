@@ -77,8 +77,8 @@ public class AnimatedBall implements Task<AnimatedBall> {
             float s = (float) (2 * PI * t);
 
             vector.setX(factor.getX() * r * cos(s) + offset.getX());
-            vector.setZ(factor.getY() * r * sin(s) + offset.getY());
-            vector.setY(factor.getZ() * size * cos(t) + offset.getZ());
+            vector.setY(factor.getY() * size * cos(t) + offset.getY());
+            vector.setZ(factor.getZ() * r * sin(s) + offset.getZ());
 
             rotate(vector, rotation);
             

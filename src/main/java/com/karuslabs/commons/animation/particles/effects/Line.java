@@ -39,14 +39,13 @@ public class Line implements Task<Line> {
     private Particles particles;
     private int perArc;
     double length;
-    private boolean zigzag;
+    boolean zigzag;
     private int zigzags;
     private Vector offset;
-    private boolean direction;
-    private int step;
+    boolean direction;
+    int step;
     Vector vector;
     Vector link;
-    Vector distance;
     
     
     public Line(Particles particles) {
@@ -64,26 +63,29 @@ public class Line implements Task<Line> {
         step = 0;
         vector = new Vector();
         link = new Vector();
-        distance = new Vector();
     }
     
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocationCopy();
-        resolveLink(context);
-
+        Location location = context.getOrigin().getLocation();
+        resolveLink(context, location);
+        
         int amount = perArc / zigzags;
         double ratio = link.length() / perArc;
-                
+
+        vector = copy(location, vector);
+        link.subtract(vector);
         link.normalize().multiply(ratio);
-        distance.setX(0).setY(0).setZ(0);
+        
+        vector.setX(0).setY(0).setZ(0).subtract(link);
         for (int i = 0; i < perArc; i += particles.getAmount(), step++) {
             if (zigzag) {
                 if (direction) {
-                    distance.add(offset);
+                    vector.add(offset);
+                    
                 } else {
-                    distance.subtract(offset);
+                    vector.subtract(offset);
                 }
             }
             
@@ -91,23 +93,18 @@ public class Line implements Task<Line> {
                 direction = !direction;
                 step = 0;
             }
-
-            context.render(particles, location.add(distance));
+            
+            context.render(particles, location, vector.add(link));
         }
     }
     
-    void resolveLink(Context context) {
-        Location location = context.getOrigin().getLocation();
-        copy(location, vector);
-        
+    void resolveLink(Context context, Location origin) {
         if (length > 0) {
-            copy(location, link).add(location.getDirection().normalize().multiply(length));
+            copy(origin, link).add(origin.getDirection().normalize().multiply(length));
             
         } else {
             copy(context.getTarget().getLocation(), link);
         }
-        
-        link.subtract(vector);
     }
     
 

@@ -55,24 +55,25 @@ public class Arc implements Task<Arc> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation();
+        Location origin = context.getOrigin().getLocation();
         Location target = context.getTarget().getLocation();
 
-        Vector vector = context.getVector();
-        Vector link = target.toVector().subtract(location.toVector());
+        Vector link = target.toVector().subtract(origin.toVector());
 
-        float length = (float) link.length();
-        float pitch = (float) (4 * height / pow(length, 2));
+        double length = link.length();
+        double pitch = 4 * height / pow(length, 2);
         
         link.normalize();
-        
+        Vector offset = context.getVector();
         for (int i = 0; i < total; i += particles.getAmount()) {
-            copy(link, vector).multiply((float) length * i / total);
-            float x = ((float) i / total) * length - length / 2;
-            float y = (float) (-pitch * pow(x, 2) + height);
+            offset = copy(link, offset);
+            offset.multiply((float) length * i / total);
             
-            context.render(particles, location.add(0, y, 0), vector);
-            location.subtract(0, y, 0);
+            double x = ((double) i / total) * length - length / 2;
+            double y = -pitch * pow(x, 2) + height;
+            
+            offset.setY(offset.getY() + y);
+            context.render(particles, origin, offset);
         }
     }
 

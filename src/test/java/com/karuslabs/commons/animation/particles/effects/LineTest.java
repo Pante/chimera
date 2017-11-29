@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -37,19 +38,23 @@ class LineTest extends EffectBase {
     
     @Test
     void render() {
+        line.zigzag = true;
+        line.step  = 1000;
         line.render(context);
         
         verify(context).render(PARTICLES, location);
-        assertVector(from(1, 1, 1), context.location);
+        assertVector(from(1, 0.9, 1), context.location);
+        assertEquals(true, line.direction);
+        assertEquals(1, line.step);
     }
     
     
     @ParameterizedTest
-    @CsvSource({"1, 0.4330127018922192, -0.8660254037844387, -0.25", "0, 1, 1, 1"})
+    @CsvSource({"2, 1.8660254037844384, -0.7320508075688774, 0.5000000000000001", "0, 2, 2, 2"})
     void resolveLink(double length, double x, double y, double z) {
         line.length = length;
         
-        line.resolveLink(context);
+        line.resolveLink(context, location);
         
         assertVector(from(x, y, z), line.link);
     }
