@@ -63,16 +63,17 @@ public class Vortex implements Task<Vortex> {
     public void render(Context context) {
         Location location = context.getOrigin().getLocation();
         Vector vector = context.getVector();
+        long current = context.getCurrent();
         
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
-                double angle = context.getCurrent() * radials + (2 * PI * i / helixes);
+                double angle = current * radials + (2 * PI * i / helixes);
                 vector.setX(cos(angle) * radius);
-                vector.setY(context.getCurrent() * grow);
+                vector.setY(current * grow);
                 vector.setZ(sin(angle) * radius);
 
-                rotateAroundXAxis(vector, (location.getPitch() + 90) * (PI / 180));
-                rotateAroundYAxis(vector, -location.getYaw() * (PI / 180));
+                rotateAroundXAxis(vector, toRadians(location.getPitch() + 90));
+                rotateAroundYAxis(vector, toRadians(-location.getYaw()));
 
                 context.render(particles, location, vector);
             }

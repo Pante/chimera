@@ -65,7 +65,7 @@ public class Tornado implements Task<Tornado> {
     
     @Override
     public void render(Context context) {
-        Location location = context.getOrigin().getLocation().add(0, yOffset, 0);
+        Location location = context.getOrigin().getLocation();
         
         renderCloud(context, ThreadLocalRandom.current(), location);
         renderTornado(context, location.add(0, 0.2, 0));
@@ -75,9 +75,9 @@ public class Tornado implements Task<Tornado> {
     
     void renderCloud(Context context, ThreadLocalRandom random, Location location) {
         Vector vector = context.getVector();
-        for (int i = 0; i < 100 * cloudSize; i++) {
+        for (int i = 0; i < 100 * cloudSize; i += cloud.getAmount()) {
             randomCircle(vector).multiply(random.nextDouble() * cloudSize);
-            context.render(cloud, location, vector);
+            context.render(cloud, location, vector.setY(vector.getY() + yOffset));
         }
     }
     
@@ -85,7 +85,10 @@ public class Tornado implements Task<Tornado> {
         double r = 0.45 * (radius * (2.35 / height));
         for (double y = 0; y < height; y += distance) {
             double fr = r * y;
-            renderTornadoPortion(context, location, fr <= radius ? fr : radius, y);
+            if (fr > radius) {
+                fr = radius;
+            }
+            renderTornadoPortion(context, location, fr, y);
         }
     }
     
@@ -94,7 +97,7 @@ public class Tornado implements Task<Tornado> {
         double amount = radius * 64;
         double inc = 2 * PI / amount;
         
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i += tornado.getAmount()) {
             double angle = i * inc;
             vector.setX(radius * cos(angle)).setZ(radius * sin(angle));
             context.render(tornado, location, vector);

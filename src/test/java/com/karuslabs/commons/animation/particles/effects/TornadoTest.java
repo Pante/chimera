@@ -49,7 +49,7 @@ class TornadoTest extends EffectBase {
     void renderCloud() {
         tornado.renderCloud(context, RANDOM, location);
         
-        verify(context, times(250)).render(COLOURED, location, vector);
+        verify(context, times(3)).render(COLOURED, location, vector);
     }
     
     
@@ -67,8 +67,8 @@ class TornadoTest extends EffectBase {
     void renderTornadoPortion() {
         tornado.renderTornadoPortion(context, location, 1, 2);
         
-        verify(context, times(64)).render(PARTICLES, location);
-        assertVector(from(1.9951847266721967, 3.0, 0.901982859670439), context.location);
+        verify(context).render(PARTICLES, location);
+        assertVector(from(2, 3, 1), context.location);
     }
     
 }
