@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.effect.particles.ColouredParticles;
 import com.karuslabs.commons.animation.Base;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import static org.bukkit.Color.YELLOW;
 import static org.bukkit.Particle.BARRIER;
 
-import static com.karuslabs.commons.animation.particles.ColouredParticles.builder;
+import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 

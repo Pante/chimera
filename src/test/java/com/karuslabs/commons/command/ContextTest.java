@@ -36,6 +36,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.Locale.getDefault;
+import static org.bukkit.ChatColor.RED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
@@ -87,11 +88,14 @@ class ContextTest {
     
     
     @Test
-    void translate() {
-        Context context = new Context(SENDER, null, null, null, COMMAND, MessageTranslation.NONE);
+    void sendSource() {
+        CommandSender sender = mock(CommandSender.class);
+        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
         context.setLocale(Locale.ITALY);
         
-        assertEquals("key", context.translate("key"));
+        context.sendSource("&cKey");
+        
+        verify(sender).sendMessage(RED + "Key");
     }
     
 }

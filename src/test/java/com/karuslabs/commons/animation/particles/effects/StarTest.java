@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import com.karuslabs.commons.effect.effects.Star;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.*;

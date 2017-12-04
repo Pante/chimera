@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import com.karuslabs.commons.effect.effects.Trace;
 import com.karuslabs.commons.world.StaticLocation;
 
 import java.util.stream.Stream;

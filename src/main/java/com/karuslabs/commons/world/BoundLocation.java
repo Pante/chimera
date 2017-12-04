@@ -38,8 +38,6 @@ public abstract class BoundLocation {
     protected PathVector offset;
     protected boolean relative;
     
-    protected Location copy;
-    
     
     public BoundLocation(BoundLocation location) {
         this(location.location.clone(), location.offset.clone(), location.relative);
@@ -93,16 +91,6 @@ public abstract class BoundLocation {
     
     public Location getLocation() {
         return location;
-    }
-    
-    public @Shared Location getLocationCopy() {
-        if (copy == null) {
-            copy = location.clone();
-        } else {
-            copy(location, copy);
-        }
-        
-        return copy;
     }
     
     public PathVector getOffset() {

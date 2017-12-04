@@ -23,8 +23,9 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.effect.particles.Particles;
 import com.karuslabs.commons.animation.Base;
-import com.karuslabs.commons.animation.particles.Particles.Builder;
+import com.karuslabs.commons.effect.particles.Particles.Builder;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;

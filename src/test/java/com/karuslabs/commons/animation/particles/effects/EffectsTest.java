@@ -23,8 +23,18 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import com.karuslabs.commons.effect.effects.Warp;
+import com.karuslabs.commons.effect.effects.Vortex;
+import com.karuslabs.commons.effect.effects.Spiral;
+import com.karuslabs.commons.effect.effects.Sphere;
+import com.karuslabs.commons.effect.effects.Smoke;
+import com.karuslabs.commons.effect.effects.Shield;
+import com.karuslabs.commons.effect.effects.Hill;
+import com.karuslabs.commons.effect.effects.Heart;
+import com.karuslabs.commons.effect.effects.Flame;
+import com.karuslabs.commons.effect.effects.Donut;
+import com.karuslabs.commons.effect.particles.Particles;
 import com.karuslabs.commons.animation.particles.*;
-import com.karuslabs.commons.animation.particles.effect.*;
 
 import java.util.stream.Stream;
 
@@ -34,7 +44,7 @@ import org.bukkit.util.Vector;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static com.karuslabs.commons.animation.particles.effects.Constants.NONE;
+import static com.karuslabs.commons.effect.effects.Constants.NONE;
 import static java.lang.Math.PI;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;

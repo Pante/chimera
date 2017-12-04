@@ -23,13 +23,14 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.effect.particles.MaterialParticles;
 import com.karuslabs.commons.animation.Base;
 
 import org.bukkit.material.MaterialData;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.particles.MaterialParticles.builder;
+import static com.karuslabs.commons.effect.particles.MaterialParticles.builder;
 import static org.bukkit.Material.ACACIA_DOOR;
 import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;

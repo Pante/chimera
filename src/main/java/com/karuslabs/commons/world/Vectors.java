@@ -36,11 +36,6 @@ import static java.lang.Math.*;
 @Static
 public final class Vectors {
     
-    public static Vector copy(Vector source, Vector destination) {
-        destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
-        return destination;
-    }
-    
     public static Vector copy(Location source, Vector destination) {
         destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
         return destination;

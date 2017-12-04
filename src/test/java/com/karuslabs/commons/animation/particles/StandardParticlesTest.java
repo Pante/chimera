@@ -23,11 +23,12 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.effect.particles.StandardParticles;
 import com.karuslabs.commons.animation.Base;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.particles.StandardParticles.builder;
+import static com.karuslabs.commons.effect.particles.StandardParticles.builder;
 import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

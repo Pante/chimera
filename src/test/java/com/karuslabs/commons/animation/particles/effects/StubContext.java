@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
-import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.effect.particles.Particles;
 import com.karuslabs.commons.animation.particles.effect.Context;
 import com.karuslabs.commons.world.BoundLocation;
 

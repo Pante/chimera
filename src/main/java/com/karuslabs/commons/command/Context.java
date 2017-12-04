@@ -32,6 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Locale.getDefault;
+import net.md_5.bungee.api.ChatColor;
 
 
 public class Context implements Translatable {
@@ -103,8 +104,8 @@ public class Context implements Translatable {
     }
     
     
-    public String translate(String key, Object... arguments) {
-        return translation.locale(locale).format(key, arguments);
+    public void sendSource(String key, Object... arguments) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
     }
     
     @Override

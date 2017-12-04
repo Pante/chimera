@@ -23,7 +23,9 @@
  */
 package com.karuslabs.commons.animation.particles.effect;
 
-import com.karuslabs.commons.animation.particles.Particles;
+import com.karuslabs.commons.effect.Effect;
+import com.karuslabs.commons.effect.Task;
+import com.karuslabs.commons.effect.particles.Particles;
 
 import java.util.Set;
 

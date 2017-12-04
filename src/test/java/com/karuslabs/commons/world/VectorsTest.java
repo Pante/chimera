@@ -38,17 +38,7 @@ import static org.mockito.Mockito.*;
 class VectorsTest extends VectorBase {
     
     @Test
-    void copy_Vector() {
-        Vector source = new Vector(0.1, 0.2, 0.3);
-        Vector destination = new Vector();
-        
-        Vectors.copy(source, destination);
-        assertEquals(source, destination);
-    }
-    
-    
-    @Test
-    void copy_Location() {
+    void copy() {
         Location source = new Location(null, 0.1, 0.2, 0.3);
         Vector destination = new Vector();
         

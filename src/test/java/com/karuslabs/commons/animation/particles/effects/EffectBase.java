@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import com.karuslabs.commons.effect.particles.MaterialParticles;
+import com.karuslabs.commons.effect.particles.Particles;
+import com.karuslabs.commons.effect.particles.ColouredParticles;
+import com.karuslabs.commons.effect.particles.StandardParticles;
 import com.karuslabs.commons.animation.particles.*;
 import com.karuslabs.commons.world.*;
 

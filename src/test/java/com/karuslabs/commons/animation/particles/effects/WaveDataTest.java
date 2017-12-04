@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.animation.particles.effects;
 
+import com.karuslabs.commons.effect.effects.WaveData;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;

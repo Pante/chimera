@@ -23,13 +23,14 @@
  */
 package com.karuslabs.commons.animation.particles;
 
+import com.karuslabs.commons.effect.particles.ItemParticles;
 import com.karuslabs.commons.animation.Base;
 
 import org.bukkit.inventory.ItemStack;
 
 import org.junit.jupiter.api.Test;
 
-import static com.karuslabs.commons.animation.particles.ItemParticles.builder;
+import static com.karuslabs.commons.effect.particles.ItemParticles.builder;
 import static org.bukkit.Material.AIR;
 import static org.bukkit.Particle.CLOUD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
