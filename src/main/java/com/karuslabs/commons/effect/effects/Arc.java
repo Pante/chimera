@@ -55,18 +55,18 @@ public class Arc implements Effect {
     
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
-        Vector link = target.toVector().subtract(copy(target, offset));
+        Vector link = target.toVector().subtract(copy(origin, offset));
 
-        float length = (float) link.length();
-        float pitch = (float) (4 * height / pow(length, 2));
+        double length = link.length();
+        double pitch = 4 * height / pow(length, 2);
         
         link.normalize();
         for (int i = 0; i < total; i += particles.getAmount()) {
             offset.copy(link);
             offset.multiply((float) length * i / total);
             
-            float x = (i / total) * length - (length / 2);
-            float y = (float) (-pitch * pow(x, 2) + height);
+            double x = (i / total) * length - (length / 2);
+            double y = -pitch * pow(x, 2) + height;
             
             offset.setY(offset.getY() + y);
             context.render(particles, origin, offset);

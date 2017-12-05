@@ -72,7 +72,7 @@ public class DNA extends ResettableEffect {
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();
         float pitch = (float) toRadians(origin.getPitch() + 90);
-        float yaw = (float) toRadians(origin.getPitch() + 90);
+        float yaw = (float) toRadians(-origin.getYaw());
         
         for (int i = 0; i < perHelix; i += helix.getAmount(), steps++) {
             if (steps * growth > length) {
@@ -106,7 +106,7 @@ public class DNA extends ResettableEffect {
         }
     }
     
-    void render(Context context, Particles particles, Location origin, Vector offset, float pitch , float yaw) {
+    void render(Context context, Particles particles, Location origin, Vector offset, float pitch, float yaw) {
         rotateAroundXAxis(offset, pitch);
         rotateAroundYAxis(offset, yaw);
         

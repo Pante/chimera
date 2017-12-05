@@ -21,18 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.junit.jupiter.api.Test;
 
+import static java.lang.Math.*;
 import static org.mockito.Mockito.*;
 
 
-public abstract class Base {
+class StarTest extends EffectBase {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    Star star = spy(new Star(PARTICLES));
+    
+    
+    @Test
+    void render() {
+        doNothing().when(star).render(any(), any(), any(), any(), anyDouble(), anyDouble());
+        
+        star.render(context, origin, target, offset);
+        
+        verify(star, times(6)).render(eq(context), eq(origin), eq(offset), eq(RANDOM), anyDouble(), anyDouble());
+    }
+    
+    
+    @Test
+    void render_rotation() {
+        when(mockRandom.nextFloat()).thenReturn(0.5F);
+        
+        star.render(context, origin, offset, mockRandom, 3 * 0.5 / sqrt(3), PI / 3);
+        
+        verify(context, times(2)).render(PARTICLES, origin, offset);
+        assertVector(from(-1.9485571585149866, -1.12500000000000067, -0.43301270189221946), context.offset);
+    }
     
 }

@@ -66,24 +66,24 @@ public class Line implements Effect {
     
     
     @Override
-    public void render(Context context, Location origin, Location target, Vector offset) {
+    public void render(Context context, Location origin, Location target, Vector vector) {
         resolveLink(context, origin, target);
         
         int amount = perArc / zigzags;
         double ratio = link.length() / perArc;
 
-        offset = copy(origin, offset);
-        link.subtract(offset);
+        vector = copy(origin, vector);
+        link.subtract(vector);
         link.normalize().multiply(ratio);
         
-        offset.setX(-link.getX()).setY(-link.getY()).setZ(-link.getZ());
+        vector.setX(-link.getX()).setY(-link.getY()).setZ(-link.getZ());
         for (int i = 0; i < perArc; i += particles.getAmount(), step++) {
             if (zigzag) {
                 if (direction) {
-                    offset.add(offset);
+                    vector.add(offset);
                     
                 } else {
-                    offset.subtract(offset);
+                    vector.subtract(offset);
                 }
             }
             
@@ -92,7 +92,7 @@ public class Line implements Effect {
                 step = 0;
             }
             
-            context.render(particles, origin, offset.add(link));
+            context.render(particles, origin, vector.add(link));
         }
     }
     

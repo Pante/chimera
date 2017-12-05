@@ -39,10 +39,21 @@ import static org.mockito.Mockito.*;
 
 class EntityLocationTest extends VectorBase {
     
-    Location raw = new Location(null, 2, 3, 4);
-    Location entityLocation = new Location(null, 1, 2, 3);
-    Entity entity = when(mock(Entity.class).getLocation()).thenReturn(entityLocation).getMock();
-    EntityLocation<Entity> location = spy(builder(entity, raw).nullable(true).update(true).build());
+    Location raw;
+    Location entityLocation;
+    Entity entity;
+    EntityLocation<Entity> location;
+    
+    
+    EntityLocationTest() {
+        raw = new Location(null, 2, 3, 4);
+        entityLocation = new Location(null, 1, 2, 3);
+        
+        entity = when(mock(Entity.class).getLocation()).thenReturn(entityLocation).getMock();
+        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
+        
+        location = spy(builder(entity, raw).nullable(true).update(true).build());
+    }
     
     
     @Test

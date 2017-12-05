@@ -60,12 +60,12 @@ public class Star implements Effect {
     
     
     @Override
-    public void render(Context context, Location location, Location target, Vector offset) {
+    public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         double radius = 3 * this.radius / sqrt(3);
         
         for (int i = 0; i < spikeHalf * 2; i++) {
-            render(context, location, offset, random, radius, i * PI / spikeHalf);
+            render(context, origin, offset, random, radius, i * PI / spikeHalf);
         }
     }
     

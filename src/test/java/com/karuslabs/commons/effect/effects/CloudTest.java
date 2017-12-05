@@ -21,55 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
-
-import com.karuslabs.commons.util.Weak;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
+package com.karuslabs.commons.effect.effects;
 
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class LivingEntityLocationTest {
-    
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
+class CloudTest extends EffectBase {
+
+    Cloud cloud = spy(new Cloud(PARTICLES, COLOURED));
     
     
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
+    @Test
+    void render() {
+        doNothing().when(cloud).renderCloud(context, origin, offset, RANDOM);
+        doNothing().when(cloud).renderDroplets(context, origin, offset, RANDOM);
         
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
+        cloud.render(context, origin, target, offset);
         
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
+        verify(cloud).renderCloud(context, origin, offset, RANDOM);
+        verify(cloud).renderDroplets(context, origin, offset, RANDOM);
     }
     
     
     @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
+    void renderCloud() {
+        cloud.renderCloud(context, origin, offset, mockRandom);
+        
+        verify(context).render(PARTICLES, origin, offset);
     }
     
+    
     @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
+    @CsvSource({"true, 2", "false, 0"})
+    void renderDroplets(boolean render, int expected) {
+        when(mockRandom.nextBoolean()).thenReturn(render);
         
-        location.update();
+        cloud.renderDroplets(context, origin, offset, mockRandom);
         
-        verify(location, times(times)).update(any(Location.class));
+        verify(context, times(expected)).render(COLOURED, origin, offset);
     }
     
 }

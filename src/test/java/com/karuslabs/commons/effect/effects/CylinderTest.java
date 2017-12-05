@@ -21,55 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
-
-import com.karuslabs.commons.util.Weak;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
+package com.karuslabs.commons.effect.effects;
 
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class LivingEntityLocationTest {
+class CylinderTest extends EffectBase {
     
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
+    Cylinder cylinder = spy(new Cylinder(PARTICLES));
     
     
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
+    @ParameterizedTest
+    @CsvSource({"true", "false"})
+    void render(boolean rotate) {
+        doNothing().when(cylinder).renderSurface(any(), any(), any(), any());
+        cylinder.rotate = rotate;
         
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
+        cylinder.render(context, origin, target, offset);
         
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
+        verify(cylinder).renderSurface(context, origin, offset, RANDOM);
     }
     
     
     @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
+    void renderSurface() {
+        cylinder.renderSurface(context, origin, offset, RANDOM);
+        
+        verify(context).render(PARTICLES, origin, offset);
+        verify(context).render(PARTICLES, origin);
     }
     
+    
     @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
+    @CsvSource({"0.1, 2, -1.2, 2", "0.49, 0.49, -3, 0.49", "0.5, 0.5, -3, 0.5"})
+    void calculate(float value, double x, double y, double z) {
+        when(mockRandom.nextFloat()).thenReturn(value);
+        when(mockRandom.nextDouble(-1, 1)).thenReturn(-0.8);
         
-        location.update();
+        offset.setX(1).setY(1).setZ(1);
         
-        verify(location, times(times)).update(any(Location.class));
+        cylinder.calculate(offset, mockRandom, 2);
+
+        assertVector(from(x, y, z), offset, LOW_PRECISION);
     }
     
 }

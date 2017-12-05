@@ -23,12 +23,9 @@
  */
 package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.annotation.Shared;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Locations.copy;
 import static com.karuslabs.commons.world.Vectors.rotate;
 
 

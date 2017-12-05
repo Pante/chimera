@@ -21,18 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 
-public abstract class Base {
+class FountainTest extends EffectBase {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    Fountain fountain = spy(new Fountain(SPAM));
+    
+    
+    @Test
+    void render() {
+        doNothing().when(fountain).renderStrands(context, origin, offset);
+        doNothing().when(fountain).renderSpout(context, origin, offset, RANDOM);
+        
+        fountain.render(context, origin, target, offset);
+        
+        verify(fountain).renderStrands(context, origin, offset);
+        verify(fountain).renderSpout(context, origin, offset, RANDOM);
+    }
+    
+    
+    @Test
+    void renderStrands() {
+        fountain.renderStrands(context, origin, offset);
+        
+        verify(context, times(10)).render(SPAM, origin, offset);
+        assertVector(from(0.02357022661029, 0.062827259650071, 0.02357022661029), context.offset);
+    }
+    
+    
+    @Test
+    void renderSpout() {
+        fountain.renderSpout(context, origin, offset, RANDOM);
+        
+        verify(context).render(SPAM, origin, offset);
+    }
     
 }

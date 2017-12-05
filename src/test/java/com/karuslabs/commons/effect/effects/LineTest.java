@@ -21,55 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
-
-import com.karuslabs.commons.util.Weak;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
+package com.karuslabs.commons.effect.effects;
 
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class LivingEntityLocationTest {
+class LineTest extends EffectBase {
     
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
-    
-    
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
-        
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
-        
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
-    }
+    Line line = spy(new Line(PARTICLES).get());
     
     
     @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
+    void render() {
+        line.zigzag = true;
+        line.step  = 1000;
+        
+        line.render(context, origin, target, offset);
+        
+        verify(context).render(PARTICLES, origin, offset);
+        assertVector(from(0, -0.1, 0), context.offset);
+        assertEquals(true, line.direction);
+        assertEquals(1, line.step);
     }
     
+    
     @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
+    @CsvSource({"2, 1.8660254037844384, -0.7320508075688774, 0.5000000000000001", "0, 2, 2, 2"})
+    void resolveLink(double length, double x, double y, double z) {
+        line.length = length;
         
-        location.update();
+        line.resolveLink(context, origin, target);
         
-        verify(location, times(times)).update(any(Location.class));
+        assertVector(from(x, y, z), line.link);
     }
     
 }

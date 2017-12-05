@@ -41,7 +41,8 @@ public class Trace extends IncrementalEffect {
     private int refresh;
     int max;
     List<Vector> waypoints;
-    Location location;
+    Vector current;
+    WeakReference<World> reference;
     
     
     public Trace(Particles particles) {
@@ -54,32 +55,32 @@ public class Trace extends IncrementalEffect {
         this.refresh = refresh;
         this.max = max;
         waypoints = new ArrayList<>(max);
-        location = new Location(null, 0, 0, 0);
+        current = new Vector();
     }
     
     
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
-        if (location.getWorld() == null) {
-            location.setWorld(origin.getWorld());
-            
-        } else if (origin.getWorld().equals(location.getWorld())) {
-            render(context, origin);
+        if (reference == null) {
+            reference = new WeakReference<>(origin.getWorld());  
+        } 
+        
+        if (origin.getWorld().equals(reference.get())) {
+            render(context, origin, offset);
             
         } else {
             context.cancel();
         }
     }
     
-    void render(Context context, Location origin) {
-        waypoints.add(process(origin));
+    void render(Context context, Location location, Vector offset) {
+        waypoints.add(process(location));
         if ((context.steps() + 1) % refresh == 0) {
             for (Vector position : waypoints) {
-                location.setX(position.getX());
-                location.setY(position.getY());
-                location.setZ(position.getZ());
+                copy(location, current);
+                offset.copy(position).subtract(current);
                 
-                context.render(particles, origin);
+                context.render(particles, location, offset);
             }
         }
     }

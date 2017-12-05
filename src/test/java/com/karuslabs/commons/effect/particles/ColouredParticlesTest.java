@@ -21,55 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
+package com.karuslabs.commons.effect.particles;
 
-import com.karuslabs.commons.util.Weak;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
+import com.karuslabs.commons.effect.particles.ColouredParticles;
+import com.karuslabs.commons.animation.Base;
 
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import static org.bukkit.Color.YELLOW;
+import static org.bukkit.Particle.BARRIER;
 
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
+import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
+import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class LivingEntityLocationTest {
+class ColouredParticlesTest extends Base {
     
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
-    
-    
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
+    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
         
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
+    
+    @Test
+    void render_World() {
+        particles.render(location, OFFSET);
         
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
+        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
     }
     
     
     @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
+    void render_Player_Location() {
+        particles.render(player, location, OFFSET);
+        
+        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
     }
     
-    @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
-        
-        location.update();
-        
-        verify(location, times(times)).update(any(Location.class));
+    
+    @Test
+    void getters() {
+        assertEquals(YELLOW, particles.getColour());
     }
     
 }

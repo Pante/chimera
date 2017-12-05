@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.effect;
 
-import com.karuslabs.commons.effect.Effect;
 import com.karuslabs.commons.util.concurrent.ScheduledResultTask;
 import com.karuslabs.commons.world.BoundLocation;
 
@@ -34,11 +33,11 @@ import org.bukkit.util.Vector;
 public abstract class Task extends ScheduledResultTask<Void> implements Context {
     
     protected Effect effect;
-    private BoundLocation origin;
-    private BoundLocation target;
-    private boolean orientate;
-    private Vector vector;
-    private int steps;
+    BoundLocation origin;
+    BoundLocation target;
+    boolean orientate;
+    Vector vector;
+    int steps;
     
     
     public Task(Effect effect, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
@@ -53,7 +52,7 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
     
     
     @Override
-    protected void process() throws Exception {
+    protected void process() {
         if (origin.validate() && target.validate()) {
             origin.update();
             target.update();

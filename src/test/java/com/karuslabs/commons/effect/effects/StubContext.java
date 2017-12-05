@@ -21,18 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import com.karuslabs.commons.effect.Context;
+import com.karuslabs.commons.effect.particles.Particles;
 
-import static org.mockito.Mockito.*;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import static com.karuslabs.commons.world.Vectors.copy;
 
 
-public abstract class Base {
+public class StubContext implements Context {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    int steps;
+    Vector captured;
+    Vector offset;
+    
+    
+    public StubContext(int steps) {
+        this.steps = steps;
+        captured = new Vector();
+        offset = new Vector();
+    }
+    
+    
+    @Override
+    public void render(Particles particles, Location location) {
+        copy(location, captured);
+    }
+    
+    @Override
+    public void render(Particles particles, Location location, Vector offset) {
+        this.offset.copy(offset);
+    }
+    
+    
+    @Override
+    public void cancel() {
+        
+    }
+    
+    
+    @Override
+    public int steps() {
+        return steps;
+    }
+    
+    @Override
+    public void steps(int steps) {
+        this.steps = steps;
+    }
     
 }

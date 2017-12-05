@@ -21,18 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.junit.jupiter.api.Test;
 
+import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-public abstract class Base {
+class AtomTest extends EffectBase {
+
+    Atom atom = spy(new Atom(PARTICLES, COLOURED, 1, 1, 1, 3, 0.2F, 1, 0, PI / 80));
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    
+    @Test
+    void render() {
+        doNothing().when(atom).renderNucleus(context, origin, offset);
+        doNothing().when(atom).renderOrbitals(context, origin, offset);
+        
+        atom.render(context, origin, target, offset);
+        
+        verify(atom).renderNucleus(context, origin, offset);
+        verify(atom).renderOrbitals(context, origin, offset);
+    }
+    
+    
+    @Test
+    void renderNucleus() {
+        atom.renderNucleus(context, origin, offset);
+        
+        verify(context).render(PARTICLES, origin, offset);
+    }
+    
+    
+    @Test
+    void renderOrbitals() {
+        atom.renderOrbitals(context, origin, offset);
+        
+        verify(context).render(COLOURED, origin, offset);
+        assertVector(from(3, 0, 0), context.offset);
+    }
     
 }

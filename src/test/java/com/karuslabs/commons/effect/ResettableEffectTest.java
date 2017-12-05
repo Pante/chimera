@@ -21,55 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
+package com.karuslabs.commons.effect;
 
-import com.karuslabs.commons.util.Weak;
 import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-class LivingEntityLocationTest {
+@TestInstance(PER_CLASS)
+class ResettableEffectTest {
     
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
+    ResettableEffect effect = new ResettableEffect(100) {
+        @Override
+        public void render(Context context, Location origin, Location target, Vector offset) {
+            
+        }
+    };
     
-    
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
-        
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
-        
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
-    }
-    
-    
-    @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
-    }
     
     @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
-        
-        location.update();
-        
-        verify(location, times(times)).update(any(Location.class));
+    @CsvSource({"100, true", "101, true", "99, false"})
+    void reset(int steps, boolean expected) {
+        assertEquals(expected, effect.reset(steps));
     }
     
 }

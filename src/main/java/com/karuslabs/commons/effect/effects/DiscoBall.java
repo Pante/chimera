@@ -80,7 +80,8 @@ public class DiscoBall implements Effect {
         int max = random.nextInt(2, lines) * 2;
         for (int i = 0; i < max; i++) {
             offset.setX(random.nextInt(-lineLength, lineLength)).setY(-calculateY(random)).setZ(random.nextInt(-lineLength, lineLength));
-            offset.normalize().multiply(offset.length() / lineTotal);
+            double ratio = offset.length() / lineTotal;
+            offset.normalize().multiply(ratio);
             
             double x = offset.getX();
             double y = offset.getY();

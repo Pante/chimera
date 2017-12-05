@@ -24,7 +24,6 @@
 package com.karuslabs.commons.effect;
 
 import com.karuslabs.commons.annotation.Static;
-import com.karuslabs.commons.effect.Effect;
 import com.karuslabs.commons.effect.particles.Particles;
 import com.karuslabs.commons.world.BoundLocation;
 

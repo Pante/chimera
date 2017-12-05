@@ -64,8 +64,8 @@ public class Vortex extends IncrementalEffect {
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();
         float y = steps * grow;
-        float pitch = (float) toRadians(origin.getPitch() + 90);
-        float yaw = (float) toRadians(-origin.getYaw());
+        double pitch = toRadians(origin.getPitch() + 90);
+        double yaw = toRadians(-origin.getYaw());
         
         for (int x = 0; x < circles; x++) {
             for (int i = 0; i < helixes; i++) {
