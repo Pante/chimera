@@ -21,18 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.commons.effect.*;
+import com.karuslabs.commons.effect.particles.Particles;
 
-import static org.mockito.Mockito.*;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-public abstract class Base {
+@Immutable
+public class Flame implements Effect {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    private Particles flame;
+    private int total;
+    
+    
+    public Flame(Particles flame) {
+        this(flame, 10);
+    }
+    
+    public Flame(Particles flame, int total) {
+        this.flame = flame;
+        this.total = total;
+    }
+    
+    
+    @Override
+    public void render(Context context, Location origin, Location target, Vector offset) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        
+        for (int i = 0; i < total; i += flame.getAmount()) {
+            randomCircle(offset).multiply(random.nextDouble(0, 0.6));
+            offset.setY(random.nextFloat() * 1.8);
+
+            context.render(flame, origin, offset);
+        }
+    }
     
 }

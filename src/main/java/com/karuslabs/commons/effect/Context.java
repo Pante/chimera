@@ -21,18 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import com.karuslabs.commons.effect.particles.Particles;
 
-import static org.mockito.Mockito.*;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 
-public abstract class Base {
+public interface Context {
+        
+    public void render(Particles particles, Location location);
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    public void render(Particles particles, Location location, Vector offset);
+    
+    
+    public void cancel();
+    
+    
+    public int steps();
+    
+    public void steps(int steps);
     
 }

@@ -21,18 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import com.karuslabs.commons.annotation.Shared;
 
-import static org.mockito.Mockito.*;
+import java.util.function.Supplier;
+
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 
-public abstract class Base {
+public interface Effect extends Supplier<Effect> {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    public void render(Context context, @Shared Location origin, @Shared Location target, @Shared Vector offset);
+    
+        
+    public default boolean reset(int steps) {
+        return false;
+    }
+    
+    public default boolean isIncremental() {
+        return false;
+    }
+    
+    @Override
+    public default Effect get() {
+        return this;
+    }
     
 }

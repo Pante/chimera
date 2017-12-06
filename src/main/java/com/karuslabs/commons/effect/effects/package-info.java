@@ -21,18 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
-
-import static org.mockito.Mockito.*;
-
-
-public abstract class Base {
-    
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
-    
-}
+/**
+ * Contains classes for different {@code Particles} types.
+ */
+package com.karuslabs.commons.effect.effects;

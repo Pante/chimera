@@ -32,6 +32,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Locale.getDefault;
+import net.md_5.bungee.api.ChatColor;
 
 
 /**
@@ -173,15 +174,14 @@ public class Context implements Translatable {
     
     
     /**
-     * Translates the message associated with the specified key with the specified arguments,
-     * using the {@code MessageTranslation} and locale of the {@code CommandSender}.
+     * Translates and sends the message associated with the specified key with the specified arguments,
+     * using the {@code MessageTranslation} and locale of the {@code CommandSender} to the {@code CommandSender}.
      * 
      * @param key the key
      * @param arguments the arguments
-     * @return the translated
      */
-    public String translate(String key, Object... arguments) {
-        return translation.locale(locale).format(key, arguments);
+    public void sendSource(String key, Object... arguments) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
     }
     
     /**

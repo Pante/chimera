@@ -21,18 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.*;
 
 
-public abstract class Base {
+@TestInstance(PER_CLASS)
+class IncrementalEffectTest {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    IncrementalEffect effect = new IncrementalEffect(100) {
+        @Override
+        public void render(Context context, Location origin, Location target, Vector offset) {
+            
+        }
+    };
+    
+    
+    @Test
+    void isIncremental() {
+        assertTrue(effect.isIncremental());
+    }
     
 }

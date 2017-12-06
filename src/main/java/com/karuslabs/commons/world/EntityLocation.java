@@ -32,13 +32,15 @@ import org.bukkit.entity.*;
 public class EntityLocation<GenericEntity extends Entity> extends BoundLocation {
     
     Weak<GenericEntity> entity;
+    Location current;
     boolean nullable;
     boolean update;
-
+    
     
     public EntityLocation(GenericEntity entity, EntityLocation<GenericEntity> location) {
         super(location);
         this.entity = new Weak<>(entity);
+        this.current = new Location(null, 0, 0, 0);
         nullable = location.nullable;
         update = location.update;
     }
@@ -54,6 +56,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, PathVector offset) {
         super(location, offset, relative);
         this.entity = new Weak<>(entity);
+        this.current = new Location(null, 0, 0, 0);
         this.nullable = nullable;
         this.update = update;
     }
@@ -66,7 +69,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     @Override
     public void update() {
-        entity.ifPreset(entity -> update(entity.getLocation()));
+        entity.ifPreset(entity -> update(entity.getLocation(current)));
     }
     
     protected void update(Location current) {

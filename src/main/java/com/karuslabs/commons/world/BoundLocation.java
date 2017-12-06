@@ -23,12 +23,9 @@
  */
 package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.annotation.Shared;
-
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.world.Locations.copy;
 import static com.karuslabs.commons.world.Vectors.rotate;
 
 
@@ -37,8 +34,6 @@ public abstract class BoundLocation {
     protected Location location;
     protected PathVector offset;
     protected boolean relative;
-    
-    protected Location copy;
     
     
     public BoundLocation(BoundLocation location) {
@@ -93,16 +88,6 @@ public abstract class BoundLocation {
     
     public Location getLocation() {
         return location;
-    }
-    
-    public @Shared Location getLocationCopy() {
-        if (copy == null) {
-            copy = location.clone();
-        } else {
-            copy(location, copy);
-        }
-        
-        return copy;
     }
     
     public PathVector getOffset() {

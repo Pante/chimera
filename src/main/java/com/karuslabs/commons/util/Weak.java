@@ -45,15 +45,13 @@ import static java.util.stream.Stream.*;
  */
 @Immutable
 @ValueBased
-public final class Weak<T> {
+public final class Weak<T> extends WeakReference<T> {
     
     /**
      * An empty instance of {@code Weak}
      */
     public static final Weak<?> EMPTY = new Weak<>(null);
-    
-    
-    private final WeakReference<T> reference;
+
     
     
     /**
@@ -62,7 +60,7 @@ public final class Weak<T> {
      * @param value the value to which this Weak holds a weak reference
      */
     public Weak(T value) {
-        reference = new WeakReference<>(value);
+        super(value);
     }
     
     
@@ -72,8 +70,9 @@ public final class Weak<T> {
      * @return the value held by this Weak if not null
      * @throws NoSuchElementException if the value in this Weak is null
      */
+    @Override
     public T get() {
-        T value = reference.get();
+        T value = super.get();
         if (value != null) {
             return value;
             
@@ -88,7 +87,7 @@ public final class Weak<T> {
      * @return the value held by this Weak
      */
     public @Nullable T getNullable() {
-        return reference.get();
+        return super.get();
     }
     
     
@@ -98,7 +97,7 @@ public final class Weak<T> {
      * @param consumer the Consumer to invoke if the value held by this Weak is non-null
      */
     public void ifPreset(Consumer<? super T> consumer) {
-        T value = reference.get();
+        T value = super.get();
         if (value != null) {
             consumer.accept(value);
         }
@@ -112,7 +111,7 @@ public final class Weak<T> {
      * @param empty the Runnable to execute if the value held by this Weak is null
      */
     public void ifPresentOrElse(Consumer<? super T> consumer, Runnable empty) {
-        T value = reference.get();
+        T value = super.get();
         if (value != null) {
             consumer.accept(value);
             
@@ -127,7 +126,7 @@ public final class Weak<T> {
      * @return true, if the value is non-null; else false
      */
     public boolean isPresent() {
-        return reference.get() != null;
+        return super.get() != null;
     }
     
     
@@ -138,7 +137,7 @@ public final class Weak<T> {
      * @return this, if the value held is non-null; else a Weak produced by the specified Supplier
      */
     public Weak<T> or(Supplier<Weak<T>> supplier) {
-        if (reference.get() != null) {
+        if (super.get() != null) {
             return this;
         } else {
             return supplier.get();
@@ -152,7 +151,7 @@ public final class Weak<T> {
      * @return the value, if non-null; else other
      */
     public T orElse(T other) {
-        return Get.orDefault(reference.get(), other);
+        return Get.orDefault(super.get(), other);
     }
     
     /**
@@ -162,7 +161,7 @@ public final class Weak<T> {
      * @return the value, if non-null; else the value produced by the specified Supplier
      */
     public T orElseGet(Supplier<T> supplier) {
-        return Get.orDefault(reference.get(), supplier);
+        return Get.orDefault(super.get(), supplier);
     }
     
     /**
@@ -174,7 +173,7 @@ public final class Weak<T> {
      * @throws E if the value held by this Weak is null
      */
     public <E extends RuntimeException> T orElseThrow(Supplier<E> supplier) {
-        return Get.orThrow(reference.get(), supplier);
+        return Get.orThrow(super.get(), supplier);
     }
     
     /**
@@ -183,7 +182,7 @@ public final class Weak<T> {
      * @return a singleton stream containing the value held by this Weak if non-null; else an empty stream
      */
     public Stream<T> stream() {
-        T value = reference.get();
+        T value = super.get();
         if (value != null) {
             return of(value);
             
@@ -200,7 +199,7 @@ public final class Weak<T> {
             
         } else if (object instanceof Weak) {
             Weak<?> other = (Weak<?>) object;
-            return Objects.equals(reference.get(), other.reference.get());
+            return Objects.equals(super.get(), other.getNullable());
             
         } else {
             return false;
@@ -209,7 +208,7 @@ public final class Weak<T> {
     
     @Override
     public int hashCode() {
-        T value = reference.get();
+        T value = super.get();
         if (value != null) {
             return value.hashCode();
             
@@ -220,7 +219,7 @@ public final class Weak<T> {
     
     @Override
     public String toString() {
-        T value = reference.get();
+        T value = super.get();
         return value != null ? String.format("Weak[%s]", value) : "Weak.empty";
     }
     

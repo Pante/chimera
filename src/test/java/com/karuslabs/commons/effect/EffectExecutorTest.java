@@ -21,55 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.world;
+package com.karuslabs.commons.effect;
 
-import com.karuslabs.commons.util.Weak;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
-
-import org.junit.jupiter.api.Test;
+import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static com.karuslabs.commons.world.LivingEntityLocation.builder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class LivingEntityLocationTest {
+class EffectExecutorTest {
     
-    Location raw;
-    Location entityLocation;
-    LivingEntity entity;
-    LivingEntityLocation<LivingEntity> location;
-    
-    
-    LivingEntityLocationTest() {
-        raw = new Location(null, 2, 3, 4);
-        entityLocation = new Location(null, 1, 2, 3);
-        
-        entity = when(mock(LivingEntity.class).getEyeLocation()).thenReturn(entityLocation).getMock();
-        when(entity.getLocation(any(Location.class))).thenReturn(entityLocation);
-        
-        location = spy(builder(entity, raw).nullable(true).update(true).build());
-    }
-    
-    
-    @Test
-    void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
-    }
+    Plugin plugin = mock(Plugin.class);
+    EffectExecutor executor = spy(new StubBuilder(plugin).orientate(true).iterations(1).delay(2).period(3).async(true).build());
+  
     
     @ParameterizedTest
-    @CsvSource({"true, 1", "false, 0"})
-    void update(boolean present, int times) {
-        location.entity = present ? location.entity : new Weak<>(null);
-        doNothing().when(location).update(any(Location.class));
+    @CsvSource({"true, 1, 0", "false, 0, 1"})
+    void schedule(boolean async, int asyncTimes, int syncTimes) {
+        executor.async = async;
+        Task task = mock(Task.class);
         
-        location.update();
+        executor.schedule(task);
         
-        verify(location, times(times)).update(any(Location.class));
+        verify(task, times(asyncTimes)).runTaskTimerAsynchronously(plugin, 2, 3);
+        verify(task, times(syncTimes)).runTaskTimer(plugin, 2, 3);
+    }
+    
+    
+    static class StubBuilder extends EffectExecutor.Builder<EffectExecutor, StubBuilder> {
+
+        public StubBuilder(Plugin plugin) {
+            super(new EffectExecutor(plugin, false, 0, 0, 0, false) {});
+        }
+
+        @Override
+        protected StubBuilder getThis() {
+            return this;
+        }
+        
     }
     
 }

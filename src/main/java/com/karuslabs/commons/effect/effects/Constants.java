@@ -21,18 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.animation;
+package com.karuslabs.commons.effect.effects;
 
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
-import static org.mockito.Mockito.*;
+import static java.lang.Math.PI;
 
 
-public abstract class Base {
+class Constants {
     
-    public World world = mock(World.class);
-    public Location location = new Location(world, 1, 2, 3);
-    public Player player = when(mock(Player.class).getLocation()).thenReturn(location).getMock();
+    static final Vector ANGULAR_VELOCITY = new Vector(PI / 200, PI / 170, PI / 155);
+    
+    static final Vector NONE = new Vector();
     
 }

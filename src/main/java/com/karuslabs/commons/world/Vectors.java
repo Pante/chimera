@@ -41,18 +41,6 @@ import static java.lang.Math.*;
 public final class Vectors {
     
     /**
-     * Copies a {@code Vector} from the specified source to the destination {@code Vector}.
-     * 
-     * @param source the source
-     * @param destination the destination
-     * @return the destination vector
-     */
-    public static Vector copy(Vector source, Vector destination) {
-        destination.setX(source.getX()).setY(source.getY()).setZ(source.getZ());
-        return destination;
-    }
-    
-    /**
      * Copies the x,y and z coordinates from the specified {@code Location} source to the destination {@code Vector}.
      * 
      * @param source the Location source
