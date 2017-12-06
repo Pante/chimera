@@ -61,7 +61,7 @@ class EffectsTest extends EffectBase {
             of(new Heart(PARTICLES).get(), from(0, 0, 0)),
             of(new Hill(PARTICLES).get(), from(0, 0, 0)),
             of(new Vortex(PARTICLES, 1, 2, 0.5f, PI / 16, 1, 1).get(), from(1.0000000000000002, 0, 1.7320508075688772)),
-            of(new Warp(PARTICLES, 1, 1, 0.2f, 12).get(), from(1, 0, 0)),
+            of(new Warp(PARTICLES, 12, 1, 1, 0.2f).get(), from(1, 0, 0)),
             of(new Spiral(SINGLE, 1, 1, 10, 10, PI / 4).get(), from(7.071067811865563, 0.0, 7.071067811865387))
         );
     }

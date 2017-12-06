@@ -40,20 +40,18 @@ public class Warp extends IncrementalEffect {
     private float radius;
     private int total;
     private float grow;
-    private int rings;
     
     
     public Warp(Particles particles) {
-        this(particles, 1, 20, 0.2f, 12);
+        this(particles, 12, 1, 20, 0.2f);
     }
 
-    public Warp(Particles particles, float radius, int total, float grow, int rings) {
+    public Warp(Particles particles, int rings, float radius, int total, float grow) {
         super(rings);
         this.particles = particles;
         this.radius = radius;
         this.total = total;
         this.grow = grow;
-        this.rings = rings;
     }
 
     
