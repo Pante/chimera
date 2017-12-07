@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.effect.effects;
 
-import java.lang.ref.WeakReference;
 import java.util.stream.Stream;
 
 import org.bukkit.*;
@@ -47,23 +46,23 @@ class TraceTest extends EffectBase {
     
     @ParameterizedTest
     @MethodSource("render_parameters")
-    void render(WeakReference<World> reference, int rendered, int cancelled) {
+    void render(World world, int rendered, int cancelled) {
         origin = new Location(WORLD, 0, 0, 0);
-        trace.reference = reference;
+        trace.location.setWorld(world);
         
-        doNothing().when(trace).render(context, origin, offset);
+        doNothing().when(trace).render(context, origin);
         
         trace.render(context, origin, target, offset);
         
-        verify(trace, times(rendered)).render(context, origin, offset);
+        verify(trace, times(rendered)).render(context, origin);
         verify(context, times(cancelled)).cancel();
     }
     
     static Stream<Arguments> render_parameters() {
         return Stream.of(
             of(null, 1, 0),
-            of(new WeakReference<>(WORLD), 1, 0),
-            of(new WeakReference<>(mock(World.class)), 0, 1)
+            of(WORLD, 1, 0),
+            of(mock(World.class), 0, 1)
         );
     }
     
@@ -73,10 +72,10 @@ class TraceTest extends EffectBase {
         doReturn(new Vector(3, 3, 3)).when(trace).process(origin);
         context.steps = 4;
         
-        trace.render(context, origin, offset);
+        trace.render(context, origin);
         
-        verify(context).render(PARTICLES, origin, offset);
-        assertVector(from(2, 2, 2), context.offset);
+        verify(context).render(PARTICLES, trace.location);
+        assertVector(from(3, 3, 3), context.captured);
     }
     
     

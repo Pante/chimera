@@ -74,7 +74,7 @@ public class Dragon extends ResettableEffect {
             
             renderArcs(context, origin, offset, step);
         }
-        context.steps(steps);
+        context.steps(step);
     }
     
     void populate(ThreadLocalRandom random) {

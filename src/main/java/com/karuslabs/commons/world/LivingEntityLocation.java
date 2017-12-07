@@ -44,7 +44,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     
     @Override
     public void update() {
-        entity.ifPreset(entity -> update(entity.getLocation(current).add(0, current.getY() + entity.getEyeHeight(), 0)));
+        entity.ifPreset(entity -> update(entity.getLocation(current).add(0, entity.getEyeHeight(), 0)));
     }
     
     

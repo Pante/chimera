@@ -80,7 +80,7 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
         if (effect.reset(steps)) {
             steps = 0;
         }
-        
+
         effect.render(this, origin.getLocation(), target.getLocation(), vector);
         
         if (effect.isIncremental()) {
