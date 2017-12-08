@@ -45,15 +45,15 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         update = location.update;
     }
     
-    public EntityLocation(GenericEntity entity, PathVector offset, boolean relative, boolean nullable, boolean update) {
+    public EntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
         this(entity, entity.getLocation(), relative, nullable, update, offset);
     }
     
-    public EntityLocation(GenericEntity entity, Location location, PathVector offset, boolean relative, boolean nullable, boolean update) {
+    public EntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         this(entity, location, relative, nullable, update, offset.add(location.toVector().subtract(entity.getLocation().toVector())));
     }
     
-    protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, PathVector offset) {
+    protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, Position offset) {
         super(location, offset, relative);
         this.entity = new Weak<>(entity);
         this.current = new Location(null, 0, 0, 0);
@@ -94,11 +94,11 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity) {
-        return new EntityBuilder<>(new EntityLocation<>(entity, new PathVector(), false, false, false));
+        return new EntityBuilder<>(new EntityLocation<>(entity, new Position(), false, false, false));
     }
     
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
-        return new EntityBuilder<>(new EntityLocation<>(entity, location, new PathVector(), false, false, false));
+        return new EntityBuilder<>(new EntityLocation<>(entity, location, new Position(), false, false, false));
     }
     
     public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder<GenericEntity>, EntityLocation<?>> {

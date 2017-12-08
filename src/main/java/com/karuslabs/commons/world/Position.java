@@ -28,7 +28,7 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.abs;
 
 
-public class PathVector extends Vector {
+public class Position extends Vector {
     
     private static final double DELTA = 0.000001;
     
@@ -36,11 +36,11 @@ public class PathVector extends Vector {
     private float pitch;
     
     
-    public PathVector() {
+    public Position() {
         this(0, 0, 0, 0, 0);
     }
     
-    public PathVector(double x, double y, double z, float yaw, float pitch) {
+    public Position(double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -48,19 +48,19 @@ public class PathVector extends Vector {
     
     
     @Override
-    public PathVector add(Vector vector) {
+    public Position add(Vector vector) {
         super.add(vector);
         return this;
     }
     
     @Override
-    public PathVector subtract(Vector vector) {
+    public Position subtract(Vector vector) {
         super.subtract(vector);
         return this;
     }
     
     @Override
-    public PathVector multiply(Vector vector) {
+    public Position multiply(Vector vector) {
         super.multiply(vector);
         return this;
     }
@@ -90,8 +90,8 @@ public class PathVector extends Vector {
     
     
     @Override
-    public PathVector clone() {
-        return (PathVector) super.clone();
+    public Position clone() {
+        return (Position) super.clone();
     }
     
     @Override
@@ -99,15 +99,15 @@ public class PathVector extends Vector {
         if (this == other) {
             return true;
             
-        } else if (other instanceof PathVector) {
-            return equals((PathVector) other);
+        } else if (other instanceof Position) {
+            return equals((Position) other);
             
         } else {
             return false;
         }
     }
     
-    public boolean equals(PathVector other) {
+    public boolean equals(Position other) {
         return abs(other.x - x) < DELTA && abs(other.y - y) < DELTA && abs(other.z - z) < DELTA 
             && abs(other.yaw - yaw) < DELTA && abs(other.pitch - pitch) < DELTA;
     }
@@ -123,7 +123,7 @@ public class PathVector extends Vector {
     
     @Override
     public String toString() {
-        return "PathVector[" + x + ", " + y + ", " + z + ", " + yaw + ", " + pitch + "]"; 
+        return "Position[" + x + ", " + y + ", " + z + ", " + yaw + ", " + pitch + "]"; 
     }
     
 }

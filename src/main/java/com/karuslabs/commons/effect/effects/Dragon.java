@@ -66,15 +66,15 @@ public class Dragon extends ResettableEffect {
     
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
-        int step = context.steps();
-        for (int j = 0; j < stepsPerIteration; j++, step++) {
-            if (step % perArc == 0) {
+        int steps = context.steps();
+        for (int i = 0; i < stepsPerIteration; i++, steps++) {
+            if (steps % perArc == 0) {
                 populate(ThreadLocalRandom.current());
             }
             
-            renderArcs(context, origin, offset, step);
+            renderArcs(context, origin, offset, steps);
         }
-        context.steps(step);
+        context.steps(steps);
     }
     
     void populate(ThreadLocalRandom random) {

@@ -39,7 +39,7 @@ import static org.mockito.Mockito.*;
 class BoundLocationTest {
     
     Location location = spy(new Location(null, 0, 0, 0, 1, 2));
-    PathVector offset = new PathVector(1, 2, 3, 4, 5);
+    Position offset = new Position(1, 2, 3, 4, 5);
     BoundLocation bound = spy(new StubBuilder(new StubLocation(location, null, false)).offset(offset).relative(true).build());
     
     
@@ -47,7 +47,7 @@ class BoundLocationTest {
     void addOffset() {
         bound.addOffset(new Vector(1, 1, 1), 1, 1);
         
-        assertEquals(new PathVector(2, 3, 4, 5, 6), bound.getOffset());
+        assertEquals(new Position(2, 3, 4, 5, 6), bound.getOffset());
         verify(bound).updateOffset();
     }
     
@@ -91,7 +91,7 @@ class BoundLocationTest {
     
     private static class StubLocation extends BoundLocation {
 
-        StubLocation(Location location, PathVector offset, boolean relative) {
+        StubLocation(Location location, Position offset, boolean relative) {
             super(location, offset, relative);
         }
 
