@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.effect.particles;
 
-import com.karuslabs.commons.effect.particles.Particles;
 import com.karuslabs.commons.animation.Base;
 import com.karuslabs.commons.effect.particles.Particles.Builder;
 
@@ -106,10 +105,10 @@ class ParticlesTest extends Base {
     
     
     @Test
-    void render_Players_Offset() {
+    void render_Players_Location_Offset() {
         particles.render(singleton(player), location, OFFSET);
         
-        verify(particles).render(player, location, OFFSET);
+        verify(particles).render(player, 3, 5, 7);
     }
     
     

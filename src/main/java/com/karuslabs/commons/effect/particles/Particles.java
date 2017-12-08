@@ -140,7 +140,10 @@ public abstract class Particles {
      * @param offset the offset
      */
     public void render(Collection<Player> players, Location location, Vector offset) {
-        players.forEach(player -> render(player, location, offset));
+        double x = location.getX() + offset.getX();
+        double y = location.getY() + offset.getY();
+        double z = location.getZ() + offset.getZ();
+        players.forEach(player -> render(player, x, y, z));
     }
     
     /**

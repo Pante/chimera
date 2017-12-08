@@ -65,7 +65,7 @@ public class Arc implements Effect {
             offset.copy(link);
             offset.multiply((float) length * i / total);
             
-            double x = (i / total) * length - (length / 2);
+            double x = ((double) i / total) * length - (length / 2);
             double y = -pitch * pow(x, 2) + height;
             
             offset.setY(offset.getY() + y);

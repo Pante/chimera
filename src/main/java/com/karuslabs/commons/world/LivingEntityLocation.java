@@ -33,27 +33,27 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
         super(entity, location);
     }
     
-    public LivingEntityLocation(GenericEntity entity, PathVector offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Position offset, boolean nullable, boolean relative, boolean update) {
         super(entity, offset, nullable, relative, update);
     }
     
-    public LivingEntityLocation(GenericEntity entity, Location location, PathVector offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean nullable, boolean relative, boolean update) {
         super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
     }
     
     
     @Override
     public void update() {
-        entity.ifPreset(entity -> update(entity.getLocation(current).add(0, current.getY() + entity.getEyeHeight(), 0)));
+        entity.ifPreset(entity -> update(entity.getLocation(current).add(0, entity.getEyeHeight(), 0)));
     }
     
     
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity) {
-        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new PathVector(), false, false, false));
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new Position(), false, false, false));
     }
     
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
-        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new PathVector(), false, false, false));
+        return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new Position(), false, false, false));
     }
     
     public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder<GenericEntity>, LivingEntityLocation<?>> {

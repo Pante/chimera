@@ -32,38 +32,36 @@ import org.junit.jupiter.params.provider.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
-class PathVectorTest {
+class PositionTest {
     
-    static PathVector vector = new PathVector(1, 2, 3, 4, 5);
+    static Position position = new Position(1, 2, 3, 4, 5);
     
     
     @ParameterizedTest
     @MethodSource("parameters")
     void equals_Object(Object other, boolean expected) {
-        assertEquals(expected, vector.equals(other));
+        assertEquals(expected, position.equals(other));
     }
     
     
     @ParameterizedTest
     @MethodSource("parameters")
     void hashcode(Object other, boolean expected) {
-        assertEquals(expected, vector.hashCode() == other.hashCode());
+        assertEquals(expected, position.hashCode() == other.hashCode());
     }
     
     static Stream<Arguments> parameters() {
-        return Stream.of(
-            of(vector, true),
-            of(new PathVector(1, 2, 3, 4, 5), true),
-            of(new PathVector(2, 1, 3, 5, 4), false),
+        return Stream.of(of(position, true),
+            of(new Position(1, 2, 3, 4, 5), true),
+            of(new Position(2, 1, 3, 5, 4), false),
             of(new Object(), false)
         );
     }
     
     @Test
     void tostring() {
-        assertEquals(
-            "PathVector[" + vector.getX() + ", " + vector.getY() + ", " + vector.getZ() + ", " + vector.getYaw() + ", " + vector.getPitch() + "]", 
-            vector.toString()
+        assertEquals("Position[" + position.getX() + ", " + position.getY() + ", " + position.getZ() + ", " + position.getYaw() + ", " + position.getPitch() + "]", 
+            position.toString()
         );
     }
     

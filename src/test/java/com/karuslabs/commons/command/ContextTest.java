@@ -62,6 +62,30 @@ class ContextTest {
         assertEquals(command, context.getParentCommand());
         assertEquals(COMMAND, context.getCommand());
     }
+
+    
+    @Test
+    void sendSource() {
+        CommandSender sender = mock(CommandSender.class);
+        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
+        context.setLocale(Locale.ITALY);
+        
+        context.sendSource("&cKey");
+        
+        verify(sender).sendMessage(RED + "Key");
+    }
+    
+    
+    @Test
+    void sendFormattedSource() {
+        CommandSender sender = mock(CommandSender.class);
+        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
+        context.setLocale(Locale.ITALY);
+        
+        context.sendFormattedSource("&cKey", message -> message + " formatted");
+        
+        verify(sender).sendMessage("&cKey formatted");
+    }
     
     
     @ParameterizedTest
@@ -84,18 +108,6 @@ class ContextTest {
     
     static Stream<Arguments> getLocale_parameters() {
         return Stream.of(of(PLAYER, new Locale("en", "GB")), of(INVALID, getDefault()), of(SENDER, getDefault()));
-    }
-    
-    
-    @Test
-    void sendSource() {
-        CommandSender sender = mock(CommandSender.class);
-        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
-        context.setLocale(Locale.ITALY);
-        
-        context.sendSource("&cKey");
-        
-        verify(sender).sendMessage(RED + "Key");
     }
     
 }

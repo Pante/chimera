@@ -27,7 +27,6 @@ import com.karuslabs.commons.effect.*;
 import com.karuslabs.commons.effect.particles.Particles;
 
 import java.util.*;
-import java.lang.ref.WeakReference;
 
 import org.bukkit.*;
 import org.bukkit.util.Vector;
@@ -41,8 +40,7 @@ public class Trace extends IncrementalEffect {
     private int refresh;
     int max;
     List<Vector> waypoints;
-    Vector current;
-    WeakReference<World> reference;
+    Location location;
     
     
     public Trace(Particles particles) {
@@ -55,32 +53,32 @@ public class Trace extends IncrementalEffect {
         this.refresh = refresh;
         this.max = max;
         waypoints = new ArrayList<>(max);
-        current = new Vector();
+        location = new Location(null, 0, 0, 0);
     }
     
     
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
-        if (reference == null) {
-            reference = new WeakReference<>(origin.getWorld());  
+        if (location.getWorld() == null) {
+            location.setWorld(origin.getWorld());
         } 
         
-        if (origin.getWorld().equals(reference.get())) {
-            render(context, origin, offset);
+        if (origin.getWorld().equals(location.getWorld())) {
+            render(context, origin);
             
         } else {
             context.cancel();
         }
     }
     
-    void render(Context context, Location location, Vector offset) {
-        waypoints.add(process(location));
+    void render(Context context, Location current) {
+        waypoints.add(process(current));
         if ((context.steps() + 1) % refresh == 0) {
             for (Vector position : waypoints) {
-                copy(location, current);
-                offset.copy(position).subtract(current);
-                
-                context.render(particles, location, offset);
+                location.setX(position.getX());
+                location.setY(position.getY());
+                location.setZ(position.getZ());
+                context.render(particles, location);
             }
         }
     }

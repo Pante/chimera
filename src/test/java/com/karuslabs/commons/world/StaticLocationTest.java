@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 class StaticLocationTest {
     
     private Location internal = spy(new Location(null, 0, 0, 0, 1, 2));
-    private PathVector offset = new PathVector(1, 2, 3, 4, 5);
+    private Position offset = new Position(1, 2, 3, 4, 5);
     private StaticLocation location = builder(internal).offset(offset).build();
     
     

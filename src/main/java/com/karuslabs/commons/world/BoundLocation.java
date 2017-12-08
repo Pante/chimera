@@ -32,7 +32,7 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 public abstract class BoundLocation {
     
     protected Location location;
-    protected PathVector offset;
+    protected Position offset;
     protected boolean relative;
     
     
@@ -40,7 +40,7 @@ public abstract class BoundLocation {
         this(location.location.clone(), location.offset.clone(), location.relative);
     }
     
-    public BoundLocation(Location location, PathVector offset, boolean relative) {
+    public BoundLocation(Location location, Position offset, boolean relative) {
         this.location = location;
         this.offset = offset;
         this.relative = relative;
@@ -90,7 +90,7 @@ public abstract class BoundLocation {
         return location;
     }
     
-    public PathVector getOffset() {
+    public Position getOffset() {
         return offset;
     }
     
@@ -113,7 +113,7 @@ public abstract class BoundLocation {
         }
  
         
-        public GenericBuilder offset(PathVector offset) {
+        public GenericBuilder offset(Position offset) {
             location.offset = offset;
             return getThis();
         }

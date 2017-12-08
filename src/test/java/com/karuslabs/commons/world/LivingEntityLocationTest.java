@@ -58,7 +58,7 @@ class LivingEntityLocationTest {
     
     @Test
     void getOffset() {
-        assertEquals(new PathVector(1, 1, 1, 0, 0), location.getOffset());
+        assertEquals(new Position(1, 1, 1, 0, 0), location.getOffset());
     }
     
     @ParameterizedTest
