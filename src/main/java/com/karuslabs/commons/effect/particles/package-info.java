@@ -25,4 +25,4 @@
 /**
  * Contains classes for different {@code Particles} types.
  */
-package com.karuslabs.commons.effect.effects;
+package com.karuslabs.commons.effect.particles;
