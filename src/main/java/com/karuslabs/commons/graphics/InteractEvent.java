@@ -27,10 +27,22 @@ import com.karuslabs.commons.graphics.windows.Window;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 
+/**
+ * Represents an interaction with a {@code Window} or the {@code Component}s which
+ * a {@code Window} contains.
+ */
 public interface InteractEvent {
     
+    /**
+     * Returns the {@code Window}.
+     * 
+     * @return the window
+     */
     public Window getWindow();
     
+    /**
+     * {@inheritDoc}
+     */
     public default MessageTranslation getTranslation() {
         return getWindow().getTranslation();
     }

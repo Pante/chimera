@@ -29,18 +29,48 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
+/**
+ * Represents the context in which an {@code Effect} was executed.
+ */
 public interface Context {
-        
+    
+    /**
+     * Renders the {@code Particles} at the specified {@code Location}.
+     * 
+     * @param particles the particles
+     * @param location the location
+     */
     public void render(Particles particles, Location location);
     
+    /**
+     * Renders the {@code Particles} at the specified {@code Location} with the specified
+     * offset.
+     * 
+     * @param particles the particles
+     * @param location the location
+     * @param offset the offset
+     */
     public void render(Particles particles, Location location, Vector offset);
     
     
+    /**
+     *  Cancels the execution of the {@code Effect}.
+     */
     public void cancel();
     
     
+    /**
+     * Returns the number of steps.
+     * 
+     * @return the steps
+     */
     public int steps();
     
+    /**
+     * Sets the number of steps.
+     * 
+     * @param steps the steps
+     */
     public void steps(int steps);
     
 }

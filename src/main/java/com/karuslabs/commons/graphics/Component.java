@@ -34,17 +34,43 @@ import org.bukkit.event.inventory.*;
 @FunctionalInterface
 public interface Component {
     
+    /**
+     * This method is called whenever this {@code Component} is clicked.
+     * 
+     * @param event the event
+     */
     public void click(ClickEvent event);
     
     
+    /**
+     * This method is called whenever the {@code Window} which contains this {@code Component} is opened.
+     * The default implementation does nothing.
+     * 
+     * @param window the window which contains this component
+     * @param event the event
+     */
     public default void open(Window window, InventoryOpenEvent event) {
         
     }
     
+    /**
+     * This method is called whenever the {@code Window} which contains this {@code Component} is closed.
+     * The default implementation does nothing.
+     * 
+     * @param window the window which contains this component
+     * @param event the event
+     */
     public default void close(Window window, InventoryCloseEvent event) {
         
     }
     
+    /**
+     * This method is called whenever the {@code Window} which contains this {@code Component} is reset.
+     * The default implementation does nothing.
+     * 
+     * @param window the window which contains this component
+     * @param event the event
+     */
     public default void reset(Window window, InventoryCloseEvent event) {
         
     }

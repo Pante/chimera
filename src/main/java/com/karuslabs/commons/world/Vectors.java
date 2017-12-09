@@ -113,7 +113,7 @@ public final class Vectors {
      * @param angleX the angle to rotate the Vector about the X axis
      * @param angleY the angle to rotate the Vector about the Y axis
      * @param angleZ the angle to rotate the Vector about the Z axis
-     * @return 
+     * @return the rotated vector
      */
     public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
         rotateAroundXAxis(vector, angleX);
