@@ -41,7 +41,7 @@ import static java.lang.Math.*;
 public final class Vectors {
     
     /**
-     * Copies the x,y and z coordinates from the specified {@code Location} source to the destination {@code Vector}.
+     * Copies the x, y, and z coordinates from the specified {@code Location} source to the destination {@code Vector}.
      * 
      * @param source the Location source
      * @param destination the destination
@@ -54,8 +54,8 @@ public final class Vectors {
     
     
     /**
-     * Randomises the X, Y and Z axises of the specified {@code Vector} between -1.0, inclusive and 1.0, exclusive,
-     * and normalises th X, Y and Z axises.
+     * Randomises the X, Y, and Z axises of the specified {@code Vector} between -1.0, inclusive and 1.0, exclusive,
+     * and normalises the X, Y, and Z axises.
      * 
      * @param vector the vector
      * @return the vector
@@ -71,10 +71,10 @@ public final class Vectors {
 
     
     /**
+     * Returns the specified {@code Vector} with randomized circular x and y components 
      * 
-     * 
-     * @param vector TODO
-     * @return TODO
+     * @param vector the vector
+     * @return the circular vector
      */
     public static Vector randomCircle(Vector vector) {
         double random = ThreadLocalRandom.current().nextDouble(0, 2 * PI);
@@ -86,7 +86,7 @@ public final class Vectors {
     
     
     /**
-     * Returns an random radian angle between 0 and 2π.
+     * Returns a random radian angle between 0 and 2π.
      * 
      * @return the angle
      */
@@ -124,7 +124,7 @@ public final class Vectors {
 
     
     /**
-     * Returns the specified {@code Vector} rotated about the specified {@code Location} using the direction of the {@code Location}.
+     * Returns the specified {@code Vector} rotated about the specified {@code Location} using the rotation of the {@code Location}.
      * 
      * @param vector the vector
      * @param location the location
@@ -223,10 +223,11 @@ public final class Vectors {
 
     
     /**
+     * Returns the radian angle to the X-Axis.
+     * The returned angle will lie between -π and π.
      * 
-     * 
-     * @param vector TODO
-     * @return TODO
+     * @param vector the vector
+     * @return the angle
      */
     public static final double angleToXAxis(Vector vector) {
         return atan2(vector.getX(), vector.getY());
