@@ -102,7 +102,7 @@ public class Context implements Translatable {
 
     /**
      * Translates and sends the message associated with the specified key with the specified arguments to the {@code CommandSender}, 
-     * translating the colour codes prefixed with '&' and using the {@code MessageTranslation} and locale of the {@code CommandSender}.
+     * translating the colour codes prefixed with '{@literal &}' and using the {@code MessageTranslation} and locale of the {@code CommandSender}.
      * 
      * @param key the key
      * @param arguments the arguments
