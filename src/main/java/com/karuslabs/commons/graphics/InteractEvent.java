@@ -24,14 +24,14 @@
 package com.karuslabs.commons.graphics;
 
 import com.karuslabs.commons.graphics.windows.Window;
-import com.karuslabs.commons.locale.MessageTranslation;
+import com.karuslabs.commons.locale.*;
 
 
 /**
  * Represents an interaction with a {@code Window} or the {@code Component}s which
  * a {@code Window} contains.
  */
-public interface InteractEvent {
+public interface InteractEvent extends Translatable {
     
     /**
      * Returns the {@code Window}.
@@ -43,6 +43,7 @@ public interface InteractEvent {
     /**
      * {@inheritDoc}
      */
+    @Override
     public default MessageTranslation getTranslation() {
         return getWindow().getTranslation();
     }
