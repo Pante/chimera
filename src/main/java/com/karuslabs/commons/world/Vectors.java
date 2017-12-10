@@ -53,7 +53,7 @@ public final class Vectors {
 
     
     public static Vector randomCircle(Vector vector) {
-        double random = ThreadLocalRandom.current().nextDouble(0, 2 * PI);
+        double random = randomAngle();
         vector.setX(cos(random));
         vector.setY(0);
         vector.setZ(sin(random));
