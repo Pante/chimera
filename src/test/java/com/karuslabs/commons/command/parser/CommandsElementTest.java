@@ -26,14 +26,14 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.annotation.JDK9;
 import com.karuslabs.commons.command.Command;
 
-import java.util.Set;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.configuration.Yaml.*;
-import static com.karuslabs.commons.collection.Sets.asSet;
+import static java.util.Arrays.asList;
 import static java.util.Collections.EMPTY_MAP;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -72,7 +72,7 @@ class CommandsElementTest {
     @Test
     void handle() {
         @JDK9("Set.of(...)")
-        Set<String> names = asSet("help", "fill");
+        Set<String> names = new HashSet<>(asList("help", "fill"));
                 
         String path = "commands.brush.subcommands";
         assertEquals(names, element.handle(COMMANDS, path).keySet());
