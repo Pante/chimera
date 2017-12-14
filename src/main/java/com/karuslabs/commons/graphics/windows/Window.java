@@ -119,7 +119,6 @@ public abstract class Window implements Listener, Translatable, InventoryHolder,
             return;
         }
         
-        
         if (disjoint(event.getRawSlots(), INVALID)) {
             onDrag(event);
             DragEvent drag = new DragEvent(this, event);
