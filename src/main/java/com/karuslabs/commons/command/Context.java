@@ -29,11 +29,11 @@ import java.util.Locale;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Locale.getDefault;
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 
 public class Context implements Translatable {
@@ -71,12 +71,16 @@ public class Context implements Translatable {
     }
     
     
-    public void sendSource(String key, Object... arguments) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
+    public void sendColouredSource(String key, Object... arguments) {
+        sender.sendMessage(translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
     }  
     
     public void sendFormattedSource(String key, Function<String, String> format, Object... arguments) {
         sender.sendMessage(format.apply(translation.locale(locale).format(key, arguments)));
+    }
+    
+    public void sendSource(String key, Object... arguments) {
+        sender.sendMessage(translation.locale(locale).format(key, arguments));
     }
     
     

@@ -65,12 +65,12 @@ class ContextTest {
 
     
     @Test
-    void sendSource() {
+    void sendColouredSource() {
         CommandSender sender = mock(CommandSender.class);
         Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
         context.setLocale(Locale.ITALY);
         
-        context.sendSource("&cKey");
+        context.sendColouredSource("&cKey");
         
         verify(sender).sendMessage(RED + "Key");
     }
@@ -85,6 +85,18 @@ class ContextTest {
         context.sendFormattedSource("&cKey", message -> message + " formatted");
         
         verify(sender).sendMessage("&cKey formatted");
+    }
+    
+    
+    @Test
+    void sendSource() {
+        CommandSender sender = mock(CommandSender.class);
+        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
+        context.setLocale(Locale.ITALY);
+        
+        context.sendSource("&cKey");
+        
+        verify(sender).sendMessage("&cKey");
     }
     
     

@@ -51,7 +51,9 @@ public class SharedProgressBar extends AbstractBar {
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         BossBar bar = supplier.get();
-        players.forEach(bar::addPlayer);
+        for (Player player : players) {
+            bar.addPlayer(player);
+        }
         
         return new ScheduledTask(bar, consumer.get(), translation, iterations);
     }

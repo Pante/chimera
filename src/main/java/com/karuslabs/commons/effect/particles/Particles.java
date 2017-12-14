@@ -61,7 +61,9 @@ public abstract class Particles {
     }
     
     public void render(Collection<Player> players, Location location) {
-        players.forEach(player -> render(player, location));
+        for (Player player : players) {
+            render(player, location);
+        }
     }
     
     public void render(Player player, Location location) {
@@ -77,7 +79,10 @@ public abstract class Particles {
         double x = location.getX() + offset.getX();
         double y = location.getY() + offset.getY();
         double z = location.getZ() + offset.getZ();
-        players.forEach(player -> render(player, x, y, z));
+        
+        for (Player player : players) {
+            render(player, x, y, z);
+        }
     }
     
     public void render(Player player, Location location, Vector offset) {

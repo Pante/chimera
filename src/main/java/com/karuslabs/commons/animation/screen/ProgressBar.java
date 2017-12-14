@@ -76,7 +76,9 @@ public class ProgressBar extends AbstractBar {
         
         @Override
         protected void process() {
-            bars.forEach(bar -> consumer.accept(bar, this));
+            for (BossBar bar : bars) {
+                consumer.accept(bar, this);
+            }
         }
         
         @Override
