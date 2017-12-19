@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -49,6 +48,12 @@ public class Matcher {
         return this;
     }
     
+    
+    public Matcher single(int index) {
+        first = index;
+        last = index + 1;
+        return this;
+    }
     
     public Matcher starting(int first) {
         return between(first, arguments.length);
