@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -63,6 +62,17 @@ public class Matcher {
         return this;
     }
     
+    /**
+     * Sets the index of the argument to match and test.
+     * 
+     * @param index the index
+     * @return this
+     */
+    public Matcher single(int index) {
+        first = index;
+        last = index + 1;
+        return this;
+    }
     
     /**
      * Sets the range of arguments to match and test between the specified first index, inclusive and the last index.

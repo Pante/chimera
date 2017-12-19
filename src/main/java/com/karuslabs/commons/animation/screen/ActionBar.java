@@ -73,7 +73,9 @@ public class ActionBar extends Bar {
         
         @Override
         protected void process() {
-            players.forEach(player -> player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this))));
+            for (Player player : players) {
+                player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this)));
+            }
         }
         
     }

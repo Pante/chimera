@@ -27,7 +27,6 @@ import com.karuslabs.commons.annotation.*;
 
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.newSetFromMap;
 
 
@@ -36,12 +35,6 @@ import static java.util.Collections.newSetFromMap;
  */
 @Static
 public class Sets {
-    
-    @Deprecated 
-    @JDK9("Redundant in Java 9, Set.of(...)")
-    public static <T> Set<T> asSet(T... t) {
-        return new HashSet<>(asList(t));
-    }
     
     /**
      * Returns a {@code Set} from the specified collection which holds a weak reference to its elements.

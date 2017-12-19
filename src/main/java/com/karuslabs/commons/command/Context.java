@@ -29,11 +29,11 @@ import java.util.Locale;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Locale.getDefault;
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 
 /**
@@ -99,6 +99,17 @@ public class Context implements Translatable {
         this.translation = command.getTranslation();
     }
     
+    
+    /**
+     * Translates and sends the message associated with the specified key with the specified arguments to the {@code CommandSender}
+     * using the {@code MessageTranslation} and locale of the {@code CommandSender}.
+     * 
+     * @param key the key
+     * @param arguments the arguments
+     */
+    public void sendSource(String key, Object... arguments) {
+        sender.sendMessage(translation.locale(locale).format(key, arguments));
+    }
 
     /**
      * Translates and sends the message associated with the specified key with the specified arguments to the {@code CommandSender}, 
@@ -106,9 +117,9 @@ public class Context implements Translatable {
      * 
      * @param key the key
      * @param arguments the arguments
-     */
-    public void sendSource(String key, Object... arguments) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
+     */    
+    public void sendColouredSource(String key, Object... arguments) {
+        sender.sendMessage(translateAlternateColorCodes('&', translation.locale(locale).format(key, arguments)));
     }  
     
     /**
