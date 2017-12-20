@@ -29,6 +29,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.*;
 
 
+/**
+ * Represents the location of an entity which may be dynamically updated.
+ * 
+ * @param <GenericEntity> the subclass of Entity
+ */
 public class EntityLocation<GenericEntity extends Entity> extends BoundLocation {
     
     Weak<GenericEntity> entity;
@@ -37,6 +42,13 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     boolean update;
     
     
+    /**
+     * Constructs an {@code EntityLocation} for the specified subclass of {@code Entity}, which
+     * copies the specified location.
+     * 
+     * @param entity the entity
+     * @param location the location
+     */
     public EntityLocation(GenericEntity entity, EntityLocation<GenericEntity> location) {
         super(location);
         this.entity = new Weak<>(entity);
@@ -45,14 +57,45 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         update = location.update;
     }
     
+    /**
+     * Constructs an {@code EntityLocation} with the specified entity, offset, offset relativity, entity nullablity and whether to update
+     * the location, using the location of the entity.
+     * 
+     * @param entity the entity
+     * @param offset the offset
+     * @param relative true if the offset is relative to the direction of this location; else false
+     * @param nullable true if the entity may be null; else false
+     * @param update true if the location should be updated to reflect the current location of the entity; else false
+     */
     public EntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
         this(entity, entity.getLocation(), relative, nullable, update, offset);
     }
     
+    /**
+     * Constructs an {@code EntityLocation} with the specified entity, location, offset, offset relativity, entity nullability and
+     * whteher to update to the location.
+     * 
+     * @param entity the entity
+     * @param location the location
+     * @param offset the offset
+     * @param relative true if the offset is relative to the direction of this location; else false
+     * @param nullable true if the entity may be null; else false
+     * @param update true if the location should be updated to reflect the current location of the entity; else false
+     */
     public EntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         this(entity, location, relative, nullable, update, offset.add(location.toVector().subtract(entity.getLocation().toVector())));
     }
     
+    /**
+     * Constructs an {@code EntityLocation} with the specifeid entity, location, 
+     * 
+     * @param entity
+     * @param location
+     * @param relative
+     * @param nullable
+     * @param update
+     * @param offset 
+     */
     protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, Position offset) {
         super(location, offset, relative);
         this.entity = new Weak<>(entity);
