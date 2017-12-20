@@ -28,6 +28,9 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.abs;
 
 
+/**
+ * Represents a mutable vector which additionally consists of the yaw and pitch.
+ */
 public class Position extends Vector {
     
     private static final double DELTA = 0.000001;
@@ -36,10 +39,22 @@ public class Position extends Vector {
     private float pitch;
     
     
+    /**
+     * Constructs an empty {@code Position}.
+     */
     public Position() {
         this(0, 0, 0, 0, 0);
     }
     
+    /**
+     * Constructs a {@code Position} with the specified X, Y and Z coordinates, yaw and pitch.
+     * 
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @param yaw the yaw
+     * @param pitch the pitch 
+     */
     public Position(double x, double y, double z, float yaw, float pitch) {
         super(x, y, z);
         this.yaw = yaw;
@@ -47,24 +62,36 @@ public class Position extends Vector {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Position add(Vector vector) {
         super.add(vector);
         return this;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Position subtract(Vector vector) {
         super.subtract(vector);
         return this;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Position multiply(Vector vector) {
         super.multiply(vector);
         return this;
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector divide(Vector vector) {
         super.divide(vector);
@@ -72,18 +99,38 @@ public class Position extends Vector {
     }
 
     
+    /**
+     * Returns the yaw.
+     * 
+     * @return the yaw
+     */
     public float getYaw() {
         return yaw;
     }
-
+    
+    /**
+     * Sets the yaw.
+     * 
+     * @param yaw the yaw
+     */
     public void setYaw(float yaw) {
         this.yaw = yaw;
     }
     
+    /**
+     * Returns the pitch.
+     * 
+     * @return the pitch
+     */
     public float getPitch() {
         return pitch;
     }
 
+    /**
+     * Sets the pitch.
+     * 
+     * @param pitch the pitch
+     */
     public void setPitch(float pitch) {
         this.pitch = pitch;
     }

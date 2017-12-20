@@ -27,46 +27,110 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 
+/**
+ * A concrete subclass of {@code EntityLocation} which is bound to a {@code LivingEntity} and may be dynamically updated.
+ * 
+ * @param <GenericEntity> the subclass of LivingEntity
+ */
 public class LivingEntityLocation<GenericEntity extends LivingEntity> extends EntityLocation<GenericEntity> {
     
+    /**
+     * Constructs a {@code LivingEntityLocation} for the specified {@code LivingEntity}, which copies the specified
+     * location.
+     * 
+     * @param entity the entity
+     * @param location the location
+     */
     public LivingEntityLocation(GenericEntity entity, LivingEntityLocation<GenericEntity> location) {
         super(entity, location);
     }
     
+    /**
+     * Constructs a {@code LivingEntityLocation} with the specified entity, offset, offset relativity, entity nullability and
+     * whether to update the location.
+     * 
+     * @param entity the entity
+     * @param offset the offset
+     * @param relative true if the offset is relative to the direction of this location; else false
+     * @param nullable true if the entity may be null; else false
+     * @param update true if the location should be updated to reflect the current location of the entity; else false
+     */
     public LivingEntityLocation(GenericEntity entity, Position offset, boolean nullable, boolean relative, boolean update) {
         super(entity, offset, nullable, relative, update);
     }
     
+    /**
+     * Constructs a {@code LivingEntityLocation} with the specified entity, offset, offset relativity, entity nullability and
+     * whether to update the location. Adds the distance between the entity and the location to the offset.
+     * 
+     * @param entity the entity
+     * @param location the location
+     * @param offset the offset
+     * @param relative true if the offset is relative to the direction of this location; else false
+     * @param nullable true if the entity may be null; else false
+     * @param update true if the location should be updated to reflect the current location of the entity; else false
+     */
     public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean nullable, boolean relative, boolean update) {
         super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update() {
         entity.ifPreset(entity -> update(entity.getLocation(current).add(0, entity.getEyeHeight(), 0)));
     }
     
     
+    /**
+     * Creates a {@code LivingEntityLocation} builder for the specified {@code LivingEntity}.
+     * 
+     * @param <GenericEntity> the subclass of LivingEntity
+     * @param entity the entity
+     * @return the builder
+     */
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity) {
         return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, new Position(), false, false, false));
     }
     
+    /**
+     * Creates a {@code LivingEntityLocation} builder for the specified {@code LivingEntity}.
+     * 
+     * @param <GenericEntity> the subclass of LivingEntity
+     * @param entity the entity
+     * @param location the location
+     * @return the builder
+     */
     public static<GenericEntity extends LivingEntity> LivingEntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
         return new LivingEntityBuilder<>(new LivingEntityLocation<>(entity, location, new Position(), false, false, false));
     }
     
+    /**
+     * Represents a builder for {@code LivingEntityLocation}s.
+     * 
+     * @param <GenericEntity> the subclass of LivingEntity
+     */
     public static class LivingEntityBuilder<GenericEntity extends LivingEntity> extends AbstractBuilder<LivingEntityBuilder<GenericEntity>, LivingEntityLocation<?>> {
 
         private LivingEntityBuilder(LivingEntityLocation location) {
             super(location);
         }
         
+        /**
+         * {@inheritDoc} 
+         */
         @Override
         protected LivingEntityBuilder<GenericEntity> getThis() {
             return this;
         }
         
+        /**
+         * Builds the {@code LivingEntityLocation}.
+         * 
+         * @return the LivingEntityLocation
+         */
         @Override
         public LivingEntityLocation<GenericEntity> build() {
             return (LivingEntityLocation<GenericEntity>) location;

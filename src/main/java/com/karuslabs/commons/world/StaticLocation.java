@@ -26,36 +26,71 @@ package com.karuslabs.commons.world;
 import org.bukkit.Location;
 
 
+/**
+ * A subclass of {@code BoundLocation} which is static and may not be dynamically updated.
+ */
 public class StaticLocation extends BoundLocation {
     
+    /**
+     * Constructs a {@code StaticLocation} which copies the specified location.
+     * 
+     * @param location the location
+     */
     public StaticLocation(StaticLocation location) {
         super(location);
     }
     
+    /**
+     * Constructs a {@code StaticLocation} with the specified location, offset and offset relativity.
+     * 
+     * @param location the location
+     * @param offset the offset
+     * @param relative true if the offset is relative to the direction of the location
+     */
     public StaticLocation(Location location, Position offset, boolean relative) {
         super(location, offset, relative);
     }
     
     
+    /**
+     * Returns {@code true}.
+     * 
+     * @return true
+     */
     @Override
     public boolean validate() {
         return true;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update() {}
     
     
+    /**
+     * Creates a {@code StaticLocation} builder with the specified location.
+     * 
+     * @param location the location
+     * @return the builder
+     */
     public static StaticBuilder builder(Location location) {
         return new StaticBuilder(new StaticLocation(location, new Position(), false));
     }
     
+    /**
+     * Represents a builder for {@code StaticLocation}s.
+     */
     public static class StaticBuilder extends Builder<StaticBuilder, StaticLocation> {
 
         private StaticBuilder(StaticLocation location) {
             super(location);
         }
 
+        /**
+         * {@inheritDoc} 
+         */
         @Override
         protected StaticBuilder getThis() {
             return this;

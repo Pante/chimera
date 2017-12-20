@@ -30,7 +30,7 @@ import org.bukkit.entity.*;
 
 
 /**
- * Represents the location of an entity which may be dynamically updated.
+ * A concrete subclass of {@code BoundLocation} which is bound to an entity and may be dynamically updated.
  * 
  * @param <GenericEntity> the subclass of Entity
  */
@@ -43,7 +43,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     
     /**
-     * Constructs an {@code EntityLocation} for the specified subclass of {@code Entity}, which
+     * Constructs an {@code EntityLocation} for the specified {@code Entity}, which
      * copies the specified location.
      * 
      * @param entity the entity
@@ -73,7 +73,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     /**
      * Constructs an {@code EntityLocation} with the specified entity, location, offset, offset relativity, entity nullability and
-     * whteher to update to the location.
+     * whteher to update to the location. Adds the distance between the entity and location to the specified offset.
      * 
      * @param entity the entity
      * @param location the location
@@ -87,14 +87,15 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     /**
-     * Constructs an {@code EntityLocation} with the specifeid entity, location, 
+     * Constructs an {@code EntityLocation} with the specifeid entity, location, offset relativity, offset nullability, whether to update the location
+     * and the offset.
      * 
-     * @param entity
-     * @param location
-     * @param relative
-     * @param nullable
-     * @param update
-     * @param offset 
+     * @param entity the entity
+     * @param location the location
+     * @param relative true if the offset is relative to the direction of this location; else false
+     * @param nullable true if the entity may be null; else false
+     * @param update true if the location should be updated to reflect the current location of the entity; else false
+     * @param offset the offset
      */
     protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, Position offset) {
         super(location, offset, relative);
@@ -105,16 +106,31 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
 
     
+    /**
+     * Returns {@code true}, or {@code false} if the entity may not be {@code null} and the entity
+     * is not present.
+     * 
+     * @return true if the entity may be null or the entity is present; else false
+     */
     @Override
     public boolean validate() {
         return nullable || entity.isPresent();
     }
     
+    /**
+     * Updates this {@code EntityLocation} if {@link #canUpdate()} is {@code true} and the entity 
+     * is present.
+     */
     @Override
     public void update() {
         entity.ifPreset(entity -> update(entity.getLocation(current)));
     }
     
+    /**
+     * Updates this {@code EntityLocation} using the specified current location.
+     * 
+     * @param current the current location
+     */
     protected void update(Location current) {
         if (update) {
             setDirection(current.getDirection());
@@ -127,34 +143,72 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
 
     
+    /**
+     * Returns the entity.
+     * 
+     * @return the entity
+     */
     public Weak<GenericEntity> getEntity() {
         return entity;
     }
 
+    /**
+     * Returns {@code true}, or {@code false} if the location will not update.
+     * 
+     * @return true if the location will update; else false
+     */
     public boolean canUpdate() {
         return update;
     }
     
     
+    /**
+     * Creates an {@code EntityLocation} builder for the specified entity.
+     * 
+     * @param <GenericEntity> the subclass of Entity
+     * @param entity the entity to which the location is bound
+     * @return the builder
+     */
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity) {
         return new EntityBuilder<>(new EntityLocation<>(entity, new Position(), false, false, false));
     }
     
+    /**
+     * Creates an {@code EntityLocation} builder for the specified entity and location.
+     * 
+     * @param <GenericEntity> the subclass of Entity
+     * @param entity the entity to which the location is bound
+     * @param location the location
+     * @return the builder
+     */
     public static<GenericEntity extends Entity> EntityBuilder<GenericEntity> builder(GenericEntity entity, Location location) {
         return new EntityBuilder<>(new EntityLocation<>(entity, location, new Position(), false, false, false));
     }
     
+    /**
+     * Represents a builder for {@code EntityLocation}s.
+     * 
+     * @param <GenericEntity> the subclass of entity
+     */
     public static class EntityBuilder<GenericEntity extends Entity> extends AbstractBuilder<EntityBuilder<GenericEntity>, EntityLocation<?>> {
 
         private EntityBuilder(EntityLocation<GenericEntity> location) {
             super(location);
         }
-
+        
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected EntityBuilder<GenericEntity> getThis() {
             return this;
         }
         
+        /**
+         * Builds the {@code EntityLocation}.
+         * 
+         * @return the EntityLocation
+         */
         @Override
         public EntityLocation<GenericEntity> build() {
             return (EntityLocation<GenericEntity>) location;
@@ -162,17 +216,29 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         
     }
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation<?>> extends Builder<GenericBuilder, GenericLocation> {
+    static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation<?>> extends Builder<GenericBuilder, GenericLocation> {
         
-        public AbstractBuilder(GenericLocation location) {
+        AbstractBuilder(GenericLocation location) {
             super(location);
         }
         
+        /**
+         * Sets the entity nullability.
+         * 
+         * @param nullable true if the entity may be null; else false
+         * @return this
+         */
         public GenericBuilder nullable(boolean nullable) {
             location.nullable = nullable;
             return getThis();
         }
         
+        /**
+         * Sets whether the {@code EntityLocation} will update.
+         * 
+         * @param update true if the EntityLocation will update; else false
+         * @return this
+         */
         public GenericBuilder update(boolean update) {
             location.update = update;
             return getThis();
