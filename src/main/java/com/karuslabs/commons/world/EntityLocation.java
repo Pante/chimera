@@ -119,7 +119,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
         
     }
     
-    public static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation<?>> extends Builder<GenericBuilder, GenericLocation> {
+    static abstract class AbstractBuilder<GenericBuilder extends AbstractBuilder, GenericLocation extends EntityLocation<?>> extends Builder<GenericBuilder, GenericLocation> {
         
         public AbstractBuilder(GenericLocation location) {
             super(location);

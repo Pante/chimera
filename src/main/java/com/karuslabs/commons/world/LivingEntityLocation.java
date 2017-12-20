@@ -33,11 +33,11 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
         super(entity, location);
     }
     
-    public LivingEntityLocation(GenericEntity entity, Position offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
         super(entity, offset, nullable, relative, update);
     }
     
-    public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
     }
     
