@@ -12,7 +12,7 @@ _Java 8/9 artifact:_
 ```XML
     <repository>
       <id>karus-commons</id>
-      <url>http://repo.karuslabs.com/repository/karus-commons/snapshots/</url>
+      <url>https://repo.karuslabs.com/repository/karus-commons/snapshots/</url>
     </repository>
 
     <dependencies>
