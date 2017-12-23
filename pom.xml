@@ -50,7 +50,7 @@
         
         <site>
             <id>karus</id>
-            <url>dav:http://repo.karuslabs.com/repository/karus-commons-project/${version}/</url>
+            <url>dav:https://repo.karuslabs.com/repository/karus-commons-project/${version}/</url>
         </site>
     </distributionManagement>
     
