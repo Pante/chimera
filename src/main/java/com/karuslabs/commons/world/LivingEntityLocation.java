@@ -55,7 +55,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
      * @param nullable true if the entity may be null; else false
      * @param update true if the location should be updated to reflect the current location of the entity; else false
      */
-    public LivingEntityLocation(GenericEntity entity, Position offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
         super(entity, offset, nullable, relative, update);
     }
     
@@ -70,7 +70,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
      * @param nullable true if the entity may be null; else false
      * @param update true if the location should be updated to reflect the current location of the entity; else false
      */
-    public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean nullable, boolean relative, boolean update) {
+    public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
     }
     
