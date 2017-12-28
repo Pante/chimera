@@ -49,6 +49,12 @@ abstract class AbstractBar extends Bar {
         }
         
         
+        /**
+         * Sets the supplier of {@code BossBar}s.
+         * 
+         * @param supplier the supplier of BossBars
+         * @return this
+         */
         public GenericBuilder supplier(Supplier<BossBar> supplier) {
             bar.supplier = supplier;
             return getThis();

@@ -30,8 +30,14 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
+/**
+ * Represents a computation which renders {@code Effect}s.
+ */
 public abstract class Task extends ScheduledResultTask<Void> implements Context {
     
+    /**
+     * The effect to render.
+     */
     protected Effect effect;
     BoundLocation origin;
     BoundLocation target;
@@ -40,6 +46,15 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
     int steps;
     
     
+    /**
+     * Constructs a task with the specified {@code Effect}, origin, target, orientation and iterations.
+     * 
+     * @param effect the effect
+     * @param origin the origin
+     * @param target the target
+     * @param orientate true if the direction of the origin and target will be updated; else false
+     * @param iterations the number of iterations
+     */
     public Task(Effect effect, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
         super(iterations);
         this.effect = effect;
@@ -51,6 +66,9 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
     }
     
     
+    /**
+     * Validates, updates and orientates the origin and target before rendering the {@code Effect}.
+     */
     @Override
     protected void process() {
         if (origin.validate() && target.validate()) {
@@ -66,6 +84,9 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
         }
     }
     
+    /**
+     * Sets the direction of the origin and target.
+     */
     protected void orientate() {
         Location origin = this.origin.getLocation();
         Location target = this.target.getLocation();
@@ -76,6 +97,9 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
         target.setDirection(direction.multiply(-1));
     }
     
+    /**
+     * Renders the {@code Effect}, resetting and incrementing the {@code Effect} if necessary.
+     */
     protected void render() {
         if (effect.reset(steps)) {
             steps = 0;
@@ -87,17 +111,28 @@ public abstract class Task extends ScheduledResultTask<Void> implements Context 
             steps++;
         }
     }
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int steps() {
         return steps;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void steps(int steps) {
         this.steps = steps;
     }
 
+    /**
+     * Returns {@code null}.
+     * 
+     * @return null
+     */
     @Override
     protected Void value() {
         return null;

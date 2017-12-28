@@ -40,18 +40,34 @@ import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
 
+/**
+ * A concrete subclass of {@code Bar} which represents the action bars of {@code Player}s.
+ */
 @RequiresSpigot
 public class ActionBar extends Bar {
     
     private Supplier<BiFunction<Player, Context, String>> supplier;
 
     
+    /**
+     * Constructs a {@code ActionBar} with the specified plugin, translation, supplier, iterations, delay and period.
+     * 
+     * @param plugin the plugin
+     * @param translation the translation
+     * @param supplier the supplier which supplies the BiFunction for rendering on the actionbars
+     * @param iterations the number of iterations
+     * @param delay the ticks to wait before starting to render the bar
+     * @param period the ticks to wait between runs
+     */
     public ActionBar(Plugin plugin, Translation translation, Supplier<BiFunction<Player, Context, String>> supplier, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.supplier = supplier;
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), supplier.get(), translation, iterations);
@@ -81,11 +97,20 @@ public class ActionBar extends Bar {
     }
     
     
+    /**
+     * Creates a {@code ActionBar} builder.
+     * 
+     * @param plugin the plugin
+     * @return the builder
+     */
     public static ActionBarBuilder builder(Plugin plugin) {
         return new ActionBarBuilder(new ActionBar(plugin, NONE, null, 0, 0, 0));
     }
     
     
+    /**
+     * Represents a builder for {@code ActionBar}s.
+     */
     public static class ActionBarBuilder extends Builder<ActionBarBuilder, ActionBar> {
 
         private ActionBarBuilder(ActionBar bar) {
@@ -93,11 +118,20 @@ public class ActionBar extends Bar {
         }
         
         
+        /**
+         * Sets the supplier which supplies the {@code BiFunction} for rendering the actionbar.
+         * 
+         * @param supplier the supplier
+         * @return this
+         */
         public ActionBarBuilder function(Supplier<BiFunction<Player, Context, String>> supplier) {
             bar.supplier = supplier;
             return this;
         }
         
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected @Nonnull ActionBarBuilder getThis() {
             return this;

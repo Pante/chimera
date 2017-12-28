@@ -24,12 +24,30 @@
 package com.karuslabs.commons.animation.screen;
 
 
+/**
+ * Represents the context in which a {@code TitleBar} is rendered.
+ */
 public interface TitleContext extends Context {
     
+    /**
+     * Returns the time in ticks for the title to fade in.
+     * 
+     * @return the time for the title to fade in
+     */
     public int getFadeIn();
     
+    /**
+     * Returns the time in ticks for the title to stay on screen.
+     * 
+     * @return the time for the title to stay on screen
+     */
     public int getStay();
     
+    /**
+     * Returns the time in ticks for the title to fade out.
+     * 
+     * @return the time for the title to fade out
+     */
     public int getFadeOut();
     
 }

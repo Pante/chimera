@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.util.Weak;
+
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
@@ -71,7 +73,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
      * @param update true if the location should be updated to reflect the current location of the entity; else false
      */
     public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
-        super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
+        super(new Weak<>(entity), location, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())), nullable, relative, update);
     }
     
     
@@ -85,7 +87,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     
     
     /**
-     * Creates a {@code LivingEntityLocation} builder for the specified {@code LivingEntity}.
+     * Creates a {@code LivingEntityLocation} builder with the specified {@code LivingEntity}.
      * 
      * @param <GenericEntity> the subclass of LivingEntity
      * @param entity the entity
@@ -96,7 +98,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     }
     
     /**
-     * Creates a {@code LivingEntityLocation} builder for the specified {@code LivingEntity}.
+     * Creates a {@code LivingEntityLocation} builder with the specified {@code LivingEntity} and locations.
      * 
      * @param <GenericEntity> the subclass of LivingEntity
      * @param entity the entity

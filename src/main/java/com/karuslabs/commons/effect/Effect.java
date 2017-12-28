@@ -31,19 +31,48 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
+/**
+ * Represents an {@code Effect} composed of {@code Particles}.
+ */
 public interface Effect extends Supplier<Effect> {
     
     public void render(Context context, @Shared Location origin, @Shared Location target, @Shared Vector offset);
     
-        
+    
+    /**
+     * Returns {@code true}, or {@code false} if this {@code Effect} should not reset.
+     * The default implementation will always return {@code false}.
+     * 
+     * Implementations may override this method to specify the criteria for resetting this {@code Effect}.
+     * 
+     * @param steps the current number of steps
+     * @return true if the effect should reset; else false
+     */
     public default boolean reset(int steps) {
         return false;
     }
     
+    /**
+     * Returns {@code true}, or {@code false} if this {@code Effect} is not incremental.
+     * The default implementation will always return {@code false}.
+     * 
+     * Implementations may override this method to signify that it is incremental.
+     * 
+     * @return true if the effect is incremental; else false
+     */
     public default boolean isIncremental() {
         return false;
     }
     
+    /**
+     * 
+     * Returns a copy of this {@code Effect}.
+     * The default implementation will always return {@code this}.
+     * 
+     * Implementations which are mutable should override this method to customise the copying.
+     * 
+     * @return the Effect 
+     */
     @Override
     public default Effect get() {
         return this;

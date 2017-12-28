@@ -24,16 +24,33 @@
 package com.karuslabs.commons.effect;
 
 
+/**
+ * An implementation of {@code Effect} which may be reset.
+ */
 public abstract class ResettableEffect implements Effect {
     
+    /**
+     * The maximum number of steps before this effect should be reset.
+     */
     protected int steps;
     
     
+    /**
+     * Constructs a {@code ResettablEffect} with the specified maximum number of steps.
+     * 
+     * @param steps the maximum number of steps before this effect should be reset.
+     */
     public ResettableEffect(int steps) {
         this.steps = steps;
     }
     
     
+    /**
+     * Returns {@code true}, or {@code false} if the specified number of steps is less than the maximum number of steps.
+     * 
+     * @param steps the number of steps
+     * @return true if the specified number of steps is greater than or equal to the maximum number of steps; else false
+     */
     @Override
     public boolean reset(int steps) {
         return this.steps <= steps;

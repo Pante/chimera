@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 
 
 /**
- * Represents the context in which an {@code Effect} was executed.
+ * Represents the context in which an {@code Effect} is executed.
  */
 public interface Context {
     

@@ -29,8 +29,16 @@ import com.karuslabs.commons.util.concurrent.Repeatable;
 import java.text.MessageFormat;
 
 
+/**
+ * Represents the context in which a {@code Bar} is rendered.
+ */
 public interface Context extends Translatable, Repeatable {
     
+    /**
+     * Returns the {@code MessageFormat}.
+     * 
+     * @return the format
+     */
     public MessageFormat getFormat();
     
 }

@@ -28,6 +28,9 @@ import com.karuslabs.commons.util.concurrent.*;
 import org.bukkit.plugin.Plugin;
 
 
+/**
+ * Represents a executor for {@code Effect}s.
+ */
 public abstract class EffectExecutor {
     
     protected Plugin plugin;
@@ -38,6 +41,17 @@ public abstract class EffectExecutor {
     protected boolean async;
     
     
+    /**
+     * Constructs an {@code EffectExecutor} with the specified plugin, orientation, number of iterations, delay, period and whether the effect
+     * should be executed asynchronously.
+     * 
+     * @param plugin the plugin
+     * @param orientate true if the direction of the origin and target will be updated; else false
+     * @param iterations the number of iterations
+     * @param delay the number of ticks to wait before executing the effect
+     * @param period the number of ticks to wait between runs
+     * @param async true if the effect is to be executed asynchronously; else false
+     */
     public EffectExecutor(Plugin plugin, boolean orientate, long iterations, long delay, long period, boolean async) {
         this.plugin = plugin;
         this.orientate = orientate;
@@ -47,6 +61,12 @@ public abstract class EffectExecutor {
         this.async = async;
     }
     
+    /**
+     * Schedules the specified {@code Task} to be executed.
+     * 
+     * @param task the task
+     * @return the Result for the specified Task
+     */
     protected Result<Void> schedule(Task task) {
         if (async) {
             task.runTaskTimerAsynchronously(plugin, delay, period);
@@ -59,49 +79,108 @@ public abstract class EffectExecutor {
     }
     
     
+    /**
+     * Represents a builder for {@code GenericExecutor}s.
+     * 
+     * @param <GenericExecutor> the subclass of EffectExecutor
+     * @param <GenericBuilder> the subclass of Builder
+     */
     public static abstract class Builder<GenericExecutor extends EffectExecutor, GenericBuilder extends Builder> {
-
+        
+        /**
+         * The {@code GenericExecutor} to build.
+         */
         protected GenericExecutor executor;
 
         
+        /**
+         * Constructs the {@code Builder} with the specified {@code GenericExecutor}.
+         * 
+         * @param executor the executor
+         */
         public Builder(GenericExecutor executor) {
             this.executor = executor;
         }
         
         
+        /**
+         * Returns a generic version of {@code this}.
+         *
+         * @return this
+         */
         protected abstract GenericBuilder getThis();
         
         
+        /**
+         * Sets whether the direction of the origin and target should be updated.
+         * 
+         * @param orientate true if the direction of the origin and target should be updated; else false
+         * @return this
+         */
         public GenericBuilder orientate(boolean orientate) {
             executor.orientate = orientate;
             return getThis();
         }
         
+        /**
+         * Sets whether the {@code Effect} is to be executed asynchronously.
+         * 
+         * @param async true if the effect is to be executed asynchronously; else false
+         * @return this
+         */
         public GenericBuilder async(boolean async) {
             executor.async = async;
             return getThis();
         }
         
+        /**
+         * Sets the effect to be executed infinitely.
+         * 
+         * @return this
+         */
         public GenericBuilder infinite() {
             executor.iterations = ScheduledResultTask.INFINITE;
             return getThis();
         }
         
+        /**
+         * Sets the number of iterations.
+         * 
+         * @param iterations the number of iterations
+         * @return this
+         */
         public GenericBuilder iterations(long iterations) {
             executor.iterations = iterations;
             return getThis();
         }
         
+        /**
+         * Sets the ticks to wait before executing the {@code Effect}.
+         * 
+         * @param delay the ticks to wait
+         * @return this
+         */
         public GenericBuilder delay(long delay) {
             executor.delay = delay;
             return getThis();
         }
         
+        /**
+         * Sets the ticks to wait between runs.
+         * 
+         * @param period the ticks to wait
+         * @return this
+         */
         public GenericBuilder period(long period) {
             executor.period = period;
             return getThis();
         }
         
+        /**
+         * Builds the {@code GenericExecutor}.
+         * 
+         * @return the executor
+         */
         public GenericExecutor build() {
             return executor;
         }

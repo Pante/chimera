@@ -37,17 +37,55 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.collection.Sets.weakSet;
 
 
+/**
+ * This class consists exclusively of static methods for creating {@code Task}s.
+ */
 @Static
 public class Tasks {
     
+    /**
+     * Creates a {@code Task} with the specified {@code Effect}, origin, target, orientation, iterations
+     * which renders the {@code Effect} globally.
+     * 
+     * @param effect the effect to render
+     * @param origin the origin
+     * @param target the target
+     * @param orientate true if the direction of the origin and target will be updated; else false
+     * @param iterations the number of iterations
+     * @return the task
+     */
     public static Task global(Effect effect, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
         return new GlobalTask(effect, origin, target, orientate, iterations);
     }
     
+    /**
+     * Creates a {@code Task} with the specified {@code Effect}, {@code Player}s, origin, target, orientation, iterations
+     * which renders the {@code Effect} to the {@code Player}s.
+     * 
+     * @param effect the effect to render
+     * @param players the players
+     * @param origin the origin
+     * @param target the target
+     * @param orientate true if the direction of the origin and target will be updated; else false
+     * @param iterations the number of iterations
+     * @return the task
+     */
     public static Task players(Effect effect, Collection<Player> players, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
         return new PlayersTask(effect, players, origin, target, orientate, iterations);
     }
     
+    /**
+     * Creates a {@code Task} with the specified {@code Effect}, {@code Player}, origin, target, orientation, iterations
+     * which renders the {@code Effect} to the {@code Player}.
+     * 
+     * @param effect the effect to render
+     * @param player the player
+     * @param origin the origin
+     * @param target the target
+     * @param orientate true if the direction of the origin and target will be updated; else false
+     * @param iterations the number of iterations
+     * @return the task
+     */
     public static Task player(Effect effect, Player player, BoundLocation origin, BoundLocation target, boolean orientate, long iterations) {
         return new PlayerTask(effect, player, origin, target, orientate, iterations);
     }

@@ -37,17 +37,34 @@ import org.bukkit.plugin.Plugin;
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 
+/**
+ * A concrete subclass of {@code Bar} which represents a shared boss bar for {@code Player}s.
+ */
 public class SharedProgressBar extends AbstractBar {
     
     private Supplier<BiConsumer<BossBar, Context>> consumer;
     
     
+    /**
+     * Constructs a {@code SharedProgressBar} with the specified plugin, translation, {@code BossBar} supplier, {@code BiConsumer} supplier, iterations, delay and period.
+     * 
+     * @param plugin the plugin
+     * @param translation the translation
+     * @param supplier the BossBar supplier
+     * @param consumer the BiConsumer supplier
+     * @param iterations the number of iterations
+     * @param delay the ticks to wait before starting to render the bar
+     * @param period the ticks to wait between runs
+     */
     public SharedProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> consumer, long iterations, long delay, long period) {
         super(plugin, translation, supplier, iterations, delay, period);
         this.consumer = consumer;
     }
     
-
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         BossBar bar = supplier.get();
@@ -85,11 +102,20 @@ public class SharedProgressBar extends AbstractBar {
     }
     
     
+    /**
+     * Creates a {@code SharedProgressBar} builder with the specified plugin.
+     * 
+     * @param plugin the plugin
+     * @return the builder
+     */
     public static SharedProgressBarBuilder builder(Plugin plugin) {
         return new SharedProgressBarBuilder(new SharedProgressBar(plugin, NONE, null, null, 0, 0, 0));
     }
     
     
+    /**
+     * Represents a builder for {@code SharedProgressBar}s.
+     */
     public static class SharedProgressBarBuilder extends AbstractBuilder<SharedProgressBarBuilder, SharedProgressBar> {
 
         private SharedProgressBarBuilder(SharedProgressBar bar) {
@@ -97,12 +123,21 @@ public class SharedProgressBar extends AbstractBar {
         }
         
         
+        /**
+         * Sets the supplier which supplies the {@code BiConsumer} for rendering the boss bar.
+         * 
+         * @param consumer the consumer
+         * @return the builder
+         */
         public SharedProgressBarBuilder consumer(Supplier<BiConsumer<BossBar, Context>> consumer) {
             bar.consumer = consumer;
             return this;
         }
         
         
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected @Nonnull SharedProgressBarBuilder getThis() {
             return this;

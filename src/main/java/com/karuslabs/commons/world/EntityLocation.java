@@ -68,7 +68,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
      * @param update true if the location should be updated to reflect the current location of the entity; else false
      */
     public EntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, entity.getLocation(), relative, nullable, update, offset);
+        this(new Weak<>(entity), entity.getLocation(), offset, relative, nullable, update);
     }
     
     /**
@@ -83,23 +83,22 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
      * @param update true if the location should be updated to reflect the current location of the entity; else false
      */
     public EntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, location, relative, nullable, update, offset.add(location.toVector().subtract(entity.getLocation().toVector())));
+        this(new Weak<>(entity), location, offset.add(location.toVector().subtract(entity.getLocation().toVector())), relative, nullable, update);
     }
     
     /**
-     * Constructs an {@code EntityLocation} with the specifeid entity, location, offset relativity, offset nullability, whether to update the location
-     * and the offset.
+     * Constructs an {@code EntityLocation} with the specifeid entity, location, offset, offset relativity, offset nullability and whether to update the location.
      * 
      * @param entity the entity
      * @param location the location
+     * @param offset the offset
      * @param relative true if the offset is relative to the direction of this location; else false
      * @param nullable true if the entity may be null; else false
      * @param update true if the location should be updated to reflect the current location of the entity; else false
-     * @param offset the offset
      */
-    protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, Position offset) {
+    protected EntityLocation(Weak<GenericEntity> entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         super(location, offset, relative);
-        this.entity = new Weak<>(entity);
+        this.entity = entity;
         this.current = new Location(null, 0, 0, 0);
         this.nullable = nullable;
         this.update = update;
@@ -108,9 +107,9 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     /**
      * Returns {@code true}, or {@code false} if the entity may not be {@code null} and the entity
-     * is not present.
+     * is {@code null}.
      * 
-     * @return true if the entity may be null or the entity is present; else false
+     * @return true if the entity may be null or the entity is non-{@code null}; else false
      */
     @Override
     public boolean validate() {
@@ -118,8 +117,8 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     /**
-     * Updates this {@code EntityLocation} if {@link #canUpdate()} is {@code true} and the entity 
-     * is present.
+     * Updates the location if {@link #canUpdate()} is {@code true} and the entity 
+     * is non-{@code null}.
      */
     @Override
     public void update() {
@@ -127,7 +126,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     /**
-     * Updates this {@code EntityLocation} using the specified current location.
+     * Updates the location using the specified current location.
      * 
      * @param current the current location
      */
@@ -163,7 +162,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     
     
     /**
-     * Creates an {@code EntityLocation} builder for the specified entity.
+     * Creates an {@code EntityLocation} builder with the specified entity.
      * 
      * @param <GenericEntity> the subclass of Entity
      * @param entity the entity to which the location is bound
@@ -174,7 +173,7 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     /**
-     * Creates an {@code EntityLocation} builder for the specified entity and location.
+     * Creates an {@code EntityLocation} builder with the specified entity and location.
      * 
      * @param <GenericEntity> the subclass of Entity
      * @param entity the entity to which the location is bound

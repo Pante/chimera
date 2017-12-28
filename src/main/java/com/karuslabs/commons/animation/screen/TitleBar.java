@@ -37,6 +37,9 @@ import static com.karuslabs.commons.collection.Sets.weakSet;
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 
+/**
+ * A concrete subclass of {@code Bar} with represents the title bars of {@code Player}s.
+ */
 public class TitleBar extends Bar {
     
     private Supplier<BiConsumer<Player, TitleContext>> consumer;
@@ -45,6 +48,19 @@ public class TitleBar extends Bar {
     private int fadeOut;
     
     
+    /**
+     * Constructs a {@code TitleBar} with the specified plugin, translation, supplier, fade-in, stay, fade-out, iterations, delay and period.
+     * 
+     * @param plugin the plugin
+     * @param translation the translation
+     * @param consumer the consumer
+     * @param fadeIn the time in ticks for the title to fade in
+     * @param stay the time in ticks for the title to stay on screen
+     * @param fadeOut the time in ticks for the title to fade out
+     * @param iterations the number of iterations
+     * @param delay the ticks to wait before starting to render the bar
+     * @param period the ticks to wait between runs
+     */
     public TitleBar(Plugin plugin, Translation translation, Supplier<BiConsumer<Player, TitleContext>> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
         this.consumer = consumer;
@@ -54,6 +70,9 @@ public class TitleBar extends Bar {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
         return new ScheduledTask(weakSet(players), consumer.get(), translation, fadeIn, stay, fadeOut, iterations);
@@ -102,37 +121,73 @@ public class TitleBar extends Bar {
     }
     
     
+    /**
+     * Creates a {@code TitleBar} builder with the specified plugin
+     * 
+     * @param plugin the plugin
+     * @return the builder
+     */
     public static TitleBarBuilder builder(Plugin plugin) {
         return new TitleBarBuilder(new TitleBar(plugin, NONE, null, 0, 0, 0, 0, 0, 0));
     }
     
     
+    /**
+     * Represents a builder for {@code TitleBar}s.
+     */
     public static class TitleBarBuilder extends Builder<TitleBarBuilder, TitleBar> {
 
         private TitleBarBuilder(TitleBar bar) {
             super(bar);
         }
-
+        
+        /**
+         * Sets the supplier which supplies the {@code BiConsumer} for rendering the title bar.
+         * 
+         * @param consumer the supplier
+         * @return this
+         */
         public TitleBarBuilder consumer(Supplier<BiConsumer<Player, TitleContext>> consumer) {
             bar.consumer = consumer;
             return this;
         }
         
+        /**
+         * Sets the time in ticks for the title to fade in.
+         * 
+         * @param fadeIn the time in ticks for the title to fade in
+         * @return this
+         */
         public TitleBarBuilder fadeIn(int fadeIn) {
             bar.fadeIn = fadeIn;
             return this;
         }
         
+        /**
+         * Sets the time in ticks for the title to stay on screen.
+         * 
+         * @param stay the time in ticks for the title to stay on screen
+         * @return this
+         */
         public TitleBarBuilder stay(int stay) {
             bar.stay = stay;
             return this;
         }
         
+        /**
+         * Sets the time in ticks for the title to fade out.
+         * 
+         * @param fadeOut the time in ticks for the title to fade out
+         * @return this
+         */
         public TitleBarBuilder fadeOut(int fadeOut) {
             bar.fadeOut = fadeOut;
             return this;
         }
         
+        /**
+         * {@inheritDoc} 
+         */
         @Override
         protected @Nonnull TitleBarBuilder getThis() {
             return this;

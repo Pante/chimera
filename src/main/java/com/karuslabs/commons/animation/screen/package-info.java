@@ -21,32 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect;
-
 
 /**
- * A subclass of {@code Resettable} which is incremental.
+ * Contains classes for rendering different {@code Bar}s.
  */
-public abstract class IncrementalEffect extends ResettableEffect {
-    
-    /**
-     * Constructs a {@code IncrementalEffect} with the specified maximum number of steps.
-     * 
-     * @param steps the maximum number of steps before the effect should be reset
-     */
-    public IncrementalEffect(int steps) {
-        super(steps);
-    }
-    
-    /**
-     * Returns {@code true}, or {@code false} if this effect is not incremental.
-     * This implementation will always return {@code true}.
-     * 
-     * @return true
-     */
-    @Override
-    public boolean isIncremental() {
-        return true;
-    }
-    
-}
+package com.karuslabs.commons.animation.screen;

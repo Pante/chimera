@@ -34,16 +34,16 @@ import static java.lang.Math.*;
 
 
 /**
- * This class consists exclusively of static methods which operate on and return {@code Vector}s.
- * This class is a derivative of EffectLib's VectorUtils.
+ * This class consists exclusively of static methods which operate on and return {@code Vector}s,
+ * derived from EffectLib's VectorUtils.
  */
 @Static
 public final class Vectors {
     
     /**
-     * Copies the x, y, and z coordinates from the specified {@code Location} source to the destination {@code Vector}.
+     * Copies the x, y, and z coordinates from the source {@code Location} to the destination {@code Vector}.
      * 
-     * @param source the Location source
+     * @param source the source
      * @param destination the destination
      * @return the destination vector
      */
@@ -55,7 +55,7 @@ public final class Vectors {
     
     /**
      * Randomises the X, Y, and Z axises of the specified {@code Vector} between -1.0, inclusive and 1.0, exclusive,
-     * and normalises the X, Y, and Z axises.
+     * before normalising the resultant vector.
      * 
      * @param vector the vector
      * @return the vector
@@ -71,7 +71,7 @@ public final class Vectors {
 
     
     /**
-     * Returns the specified {@code Vector} with randomized circular x and y components 
+     * Returns the specified {@code Vector} with randomized circular x and y components.
      * 
      * @param vector the vector
      * @return the circular vector
@@ -95,7 +95,7 @@ public final class Vectors {
     }
     
     /**
-     * Returns the specified {@code Vector} rotated about the X, Y and Z axises using the specified radian {@code rotation}.
+     * Returns the specified {@code Vector} rotated about the X, Y and Z axises using the specified {@code rotation} in radians.
      * 
      * @param vector the vector
      * @param rotation the rotation
@@ -124,7 +124,7 @@ public final class Vectors {
 
     
     /**
-     * Returns the specified {@code Vector} rotated about the specified {@code Location} using the rotation of the {@code Location}.
+     * Returns the specified {@code Vector} rotated about the specified {@code Location} using the yaw and pitch of the {@code Location}.
      * 
      * @param vector the vector
      * @param location the location
@@ -136,7 +136,7 @@ public final class Vectors {
 
     
     /**
-     * Returns the specified {@code Vector} rotated using the specified radian yaw and pitch.
+     * Returns the specified {@code Vector} rotated using the specified yaw and pitch in degrees.
      * 
      * @param vector the vector
      * @param yawDegrees the yaw

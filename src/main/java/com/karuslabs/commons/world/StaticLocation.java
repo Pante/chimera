@@ -27,7 +27,7 @@ import org.bukkit.Location;
 
 
 /**
- * A subclass of {@code BoundLocation} which is static and may not be dynamically updated.
+ * A concrete subclass of {@code BoundLocation} which is static and may not be dynamically updated.
  */
 public class StaticLocation extends BoundLocation {
     
@@ -45,7 +45,7 @@ public class StaticLocation extends BoundLocation {
      * 
      * @param location the location
      * @param offset the offset
-     * @param relative true if the offset is relative to the direction of the location
+     * @param relative true if the offset is relative to the direction of this location
      */
     public StaticLocation(Location location, Position offset, boolean relative) {
         super(location, offset, relative);
@@ -63,7 +63,7 @@ public class StaticLocation extends BoundLocation {
     }
     
     /**
-     * {@inheritDoc}
+     * Does nothing.
      */
     @Override
     public void update() {}

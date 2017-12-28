@@ -106,7 +106,7 @@ public abstract class BoundLocation {
     public abstract boolean validate();
     
     /**
-     * Updates this {@code BoundLocation}.
+     * Updates the location.
      */
     public abstract void update();
     
