@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.world;
 
+import com.karuslabs.commons.util.Weak;
+
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
@@ -38,7 +40,7 @@ public class LivingEntityLocation<GenericEntity extends LivingEntity> extends En
     }
     
     public LivingEntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
-        super(entity, location, nullable, relative, update, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())));
+        super(new Weak<>(entity), location, offset.add(location.toVector().subtract(entity.getEyeLocation().toVector())), nullable, relative, update);
     }
     
     

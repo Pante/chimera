@@ -46,16 +46,16 @@ public class EntityLocation<GenericEntity extends Entity> extends BoundLocation 
     }
     
     public EntityLocation(GenericEntity entity, Position offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, entity.getLocation(), relative, nullable, update, offset);
+        this(new Weak<>(entity), entity.getLocation(), offset, relative, nullable, update);
     }
     
     public EntityLocation(GenericEntity entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
-        this(entity, location, relative, nullable, update, offset.add(location.toVector().subtract(entity.getLocation().toVector())));
+        this(new Weak<>(entity), location, offset.add(location.toVector().subtract(entity.getLocation().toVector())), relative, nullable, update);
     }
     
-    protected EntityLocation(GenericEntity entity, Location location, boolean relative, boolean nullable, boolean update, Position offset) {
+    protected EntityLocation(Weak<GenericEntity> entity, Location location, Position offset, boolean relative, boolean nullable, boolean update) {
         super(location, offset, relative);
-        this.entity = new Weak<>(entity);
+        this.entity = entity;
         this.current = new Location(null, 0, 0, 0);
         this.nullable = nullable;
         this.update = update;
