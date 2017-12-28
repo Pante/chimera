@@ -203,7 +203,7 @@ public abstract class Particles {
     public static abstract class Builder<GenericBuilder extends Builder, GenericParticles extends Particles> {
         
         /**
-         * The {@code Particles} to build.
+         * The {@code GenericParticles} to build.
          */
         protected GenericParticles particles;
         

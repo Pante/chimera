@@ -34,8 +34,17 @@ import static com.karuslabs.commons.world.Vectors.rotate;
  */
 public abstract class BoundLocation {
     
+    /**
+     * The {@code Location} which is updated.
+     */
     protected Location location;
+    /**
+     * The offset which is applied when this {@code BoundLocation} is updated.
+     */
     protected Position offset;
+    /**
+     * The relativity of the offset to the direction of this {@code BoundLocation}.
+     */
     protected boolean relative;
     
     
@@ -77,7 +86,7 @@ public abstract class BoundLocation {
     }
     
     /**
-     * Updates the offset for this {@code BoundLocation}.
+     * Updates the offset.
      */
     public void updateOffset() {
         if (relative) {
@@ -103,7 +112,7 @@ public abstract class BoundLocation {
     
     
     /**
-     * Sets the direction for this {@code BoundLocation}.
+     * Sets the direction .
      * 
      * @param direction the direction
      */
@@ -137,7 +146,7 @@ public abstract class BoundLocation {
     }
     
     /**
-     * Returns the offset for this {@code BoundLocation}.
+     * Returns the offset.
      * 
      * @return the offset
      */
@@ -146,18 +155,18 @@ public abstract class BoundLocation {
     }
     
     /**
-     * Returns {@code true}, or {@code false} if the offset for this {@code BoundLocation} is not relative to its direction.
+     * Returns {@code true}, or {@code false} if the offset is not relative to the direction of this location.
      * 
-     * @return true if the offset for this BoundLocation is relative to its direction; else false
+     * @return true if the offset is relative to the direction of this location; else false
      */
     public boolean isRelative() {
         return relative;
     }
     
     /**
-     * Sets whether the offset for this {@code BoundLocation} is relative to its direction.
+     * Sets whether the offset is relative to the direction of this location.
      * 
-     * @param relative true if the offset is relative to the direction of this BoundLocation; else false
+     * @param relative true if the offset is relative to the direction of this location; else false
      */
     public void setRelative(boolean relative) {
         this.relative = relative;
@@ -165,7 +174,7 @@ public abstract class BoundLocation {
     
     
     /**
-     * Represents a builder for a {@code BoundLocation}.
+     * Represents a builder for {@code BoundLocation}s.
      * 
      * @param <GenericBuilder> the subclass of Builder to return
      * @param <GenericLocation> the subclass of BoundLocation to build
@@ -173,13 +182,13 @@ public abstract class BoundLocation {
     public static abstract class Builder<GenericBuilder extends Builder, GenericLocation extends BoundLocation> {
         
         /**
-         * The subclass of {@code BoundLocation} to build.
+         * The {@code GenericLocation} to build.
          */
         protected GenericLocation location;
         
         
         /**
-         * Constructs a {@code Builder} for the specified subclass of {@code BoundLocation}.
+         * Constructs a {@code Builder} for the specified {@code GenericLocation}.
          * 
          * @param location the location
          */
@@ -219,7 +228,7 @@ public abstract class BoundLocation {
         
         
         /**
-         * Builds the subclass of {@code BoundLocation}.
+         * Builds the {@code GenericLocation}.
          * 
          * @return the location
          */

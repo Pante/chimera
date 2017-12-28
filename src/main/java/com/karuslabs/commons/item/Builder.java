@@ -45,7 +45,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
      */
     protected ItemStack item;
     /**
-     * The {@code ItemMeta} of the {@code ItemStack} to build.
+     * The {@code GenericMeta} of the {@code ItemStack} to build.
      */
     protected GenericMeta meta;
 
@@ -78,10 +78,10 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
 
     /**
-     * Constructs a {@code Builder} for the specified {@code ItemStack} and {@code ItemMeta}.
+     * Constructs a {@code Builder} for the specified {@code ItemStack} and {@code GenericMeta}.
      * 
      * @param item the ItemStack
-     * @param meta the ItemMeta
+     * @param meta the GenericMeta
      */
     protected Builder(ItemStack item, GenericMeta meta) {
         this.item = item;
@@ -204,7 +204,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
      * Builds the {@code ItemStack}.
      * 
      * @return the ItemStack
-     * @throws ClassCastException if the ItemStack built is not compatible with the ItemMeta subclass
+     * @throws ClassCastException if the ItemStack built is not compatible with GenericMeta
      */
     public @Nonnull ItemStack build() {
         item.setItemMeta(meta);
