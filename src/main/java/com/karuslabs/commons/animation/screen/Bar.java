@@ -110,7 +110,7 @@ public abstract class Bar {
     
     /**
      * Creates a {@code ScheduledResultTask} for rendering this {@code Bar} to the specified {@code Player}s.
-     * This method is invoked by {@link #render(Collection)} and {@link #render(org.bukkit.entity.Player)}.
+     * This method is invoked by {@link #render(Collection)} and {@link #render(Player...)}.
      * 
      * Subclasses should implement this method to customise the creation of {@code} ScheduledResultTask}s for rendering
      * this {@code Bar} to the specified {@code Player}s.
