@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes for rendering different {@code Bar}s.
+ * Contains classes for rendering {@code Bar}s.
  */
 package com.karuslabs.commons.animation.screen;

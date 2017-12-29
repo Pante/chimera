@@ -35,7 +35,7 @@ import java.text.MessageFormat;
 public interface Context extends Translatable, Repeatable {
     
     /**
-     * Returns the {@code MessageFormat}.
+     * Returns the {@code MessageFormat} for formatting messages.
      * 
      * @return the format
      */
