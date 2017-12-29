@@ -74,7 +74,7 @@ public class Commands {
     }
     
     
-    public List<Command> registerAnnotated(CommandExecutor executor) {
+    public List<Command> register(CommandExecutor executor) {
         if (executor.getClass().isAnnotationPresent(Registration.class)) {
             return singletonList(register(executor, executor.getClass().getAnnotation(Registration.class).value()));
             

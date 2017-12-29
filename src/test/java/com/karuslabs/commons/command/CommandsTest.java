@@ -92,7 +92,7 @@ class CommandsTest {
         
         doReturn(null).when(commands).register(annotation, "command");
         
-        commands.registerAnnotated(annotation);
+        commands.register(annotation);
         
         verify(commands).register(annotation, "command");
     }
@@ -117,7 +117,7 @@ class CommandsTest {
         
         doReturn(null).when(commands).register(any(), any(String.class));
         
-        commands.registerAnnotated(annotations);
+        commands.register(annotations);
         
         verify(commands).register(annotations, "a");
         verify(commands).register(annotations, "b");
@@ -127,7 +127,7 @@ class CommandsTest {
     @Test
     void register_ThrowsException() {
         assertEquals("CommandExecutor has no registrations", 
-                    assertThrows(IllegalArgumentException.class, () -> commands.registerAnnotated(CommandExecutor.NONE)).getMessage()
+                    assertThrows(IllegalArgumentException.class, () -> commands.register(CommandExecutor.NONE)).getMessage()
         );
     }
     
