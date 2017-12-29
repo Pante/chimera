@@ -90,7 +90,7 @@ class CommandsTest {
     void register_Registration() {
         Annotation annotation = new Annotation();
         
-        doNothing().when(commands).register(annotation, "command");
+        doReturn(null).when(commands).register(annotation, "command");
         
         commands.registerAnnotated(annotation);
         
@@ -115,7 +115,7 @@ class CommandsTest {
     void register_Registrations() {
         Annotations annotations = new Annotations();
         
-        doNothing().when(commands).register(any(), any(String.class));
+        doReturn(null).when(commands).register(any(), any(String.class));
         
         commands.registerAnnotated(annotations);
         

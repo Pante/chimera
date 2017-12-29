@@ -27,10 +27,12 @@ import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import javax.annotation.Nullable;
+import java.util.*;
 
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
+import static java.util.Collections.singletonList;
 
 
 public class Commands {
@@ -72,22 +74,26 @@ public class Commands {
     }
     
     
-    public void registerAnnotated(CommandExecutor executor) {
+    public List<Command> registerAnnotated(CommandExecutor executor) {
         if (executor.getClass().isAnnotationPresent(Registration.class)) {
-            register(executor, executor.getClass().getAnnotation(Registration.class).value());
+            return singletonList(register(executor, executor.getClass().getAnnotation(Registration.class).value()));
             
         } else if (executor.getClass().isAnnotationPresent(Registrations.class)) {
             Registrations registrations = executor.getClass().getAnnotation(Registrations.class);
+            List<Command> commands = new ArrayList<>();
+            
             for (Registration registration : registrations.value()) {
-                register(executor, registration.value());
+                commands.add(register(executor, registration.value()));
             }
+            
+            return commands;
             
         } else {
             throw new IllegalArgumentException("CommandExecutor has no registrations");
         }
     }
     
-    public void register(CommandExecutor executor, String... names) {;
+    public Command register(CommandExecutor executor, String... names) {;
         Command command = map.getCommand(names[0]);
         if (names.length != 1) {
             for (int i = 1; i < names.length; i++) {
@@ -96,6 +102,8 @@ public class Commands {
         }
         
         command.setExecutor(executor);
+
+        return command;
     }
     
     
