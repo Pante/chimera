@@ -72,6 +72,33 @@ public class Commands {
     }
     
     
+    public void registerAnnotated(CommandExecutor executor) {
+        if (executor.getClass().isAnnotationPresent(Registration.class)) {
+            register(executor, executor.getClass().getAnnotation(Registration.class).value());
+            
+        } else if (executor.getClass().isAnnotationPresent(Registrations.class)) {
+            Registrations registrations = executor.getClass().getAnnotation(Registrations.class);
+            for (Registration registration : registrations.value()) {
+                register(executor, registration.value());
+            }
+            
+        } else {
+            throw new IllegalArgumentException("CommandExecutor has no registrations");
+        }
+    }
+    
+    public void register(CommandExecutor executor, String... names) {;
+        Command command = map.getCommand(names[0]);
+        if (names.length != 1) {
+            for (int i = 1; i < names.length; i++) {
+                command = command.getSubcommands().get(names[i]);
+            }
+        }
+        
+        command.setExecutor(executor);
+    }
+    
+    
     public @Nullable Command getCommand(String name) {
         return map.getCommand(name);
     }
