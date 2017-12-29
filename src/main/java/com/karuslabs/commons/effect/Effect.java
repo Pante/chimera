@@ -36,6 +36,14 @@ import org.bukkit.util.Vector;
  */
 public interface Effect extends Supplier<Effect> {
     
+    /**
+     * Renders this {@code Effect} using the specified {@code Context}, origin, target and offset.
+     * 
+     * @param context the context
+     * @param origin the origin
+     * @param target the target
+     * @param offset the offset
+     */
     public void render(Context context, @Shared Location origin, @Shared Location target, @Shared Vector offset);
     
     

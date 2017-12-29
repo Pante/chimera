@@ -34,6 +34,10 @@ import static com.karuslabs.commons.world.Vectors.copy;
 import static java.lang.Math.pow;
 
 
+/**
+ * Represents an arc.
+ * <img src = "https://thumbs.gfycat.com/FalseGargantuanAdmiralbutterfly-size_restricted.gif" alt = "Arc.gif">
+ */
 @Immutable
 public class Arc implements Effect {
 
@@ -42,10 +46,22 @@ public class Arc implements Effect {
     private int total;
     
     
+    /**
+     * Constructs an {@code Arc} with the specified particles, the default height (2) and total (200).
+     * 
+     * @param particles the particles
+     */
     public Arc(Particles particles) {
         this(particles, 2, 100);
     }
     
+    /**
+     * Constructs an {@code Arc} with the specified particles, height and total.
+     * 
+     * @param particles the particles
+     * @param height the height
+     * @param total the total
+     */
     public Arc(Particles particles, float height, int total) {
         this.particles = particles;
         this.height = height;
@@ -53,6 +69,9 @@ public class Arc implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         Vector link = target.toVector().subtract(copy(origin, offset));

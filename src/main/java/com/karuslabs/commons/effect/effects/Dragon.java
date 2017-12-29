@@ -35,6 +35,10 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a dragon's breath.
+ * <img src = "https://thumbs.gfycat.com/GrimNearAcaciarat-size_restricted.gif" alt = "Dragon.gif">
+ */
 public class Dragon extends ResettableEffect {
     
     private Particles particles;
@@ -47,10 +51,28 @@ public class Dragon extends ResettableEffect {
     private int stepsPerIteration;
     
     
+    /**
+     * Constructs a {@code Dragon} with the specified particles, the default total number of steps (200), pitch (0.1), number of arcs (20), 
+     * particles per arc (30), length (4) and steps to increment per iteration (2).
+     * 
+     * @param particles the particles
+     */
     public Dragon(Particles particles) {
         this(particles, 200, 0.1F, 20, 30, 4, 2);
     }
     
+    /**
+     * Constructs a {@code Dragon} with the specified particles, total number of steps, pitch, number of arcs, particles per arc,
+     * length and steps to increment per iteration.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param pitch the pitch in radians
+     * @param arcs the total number of arcs
+     * @param perArc the particles per arc
+     * @param length the length
+     * @param stepsPerIteration the total number of steps to increment per iteration 
+     */
     public Dragon(Particles particles, int steps, float pitch, int arcs, int perArc, float length, int stepsPerIteration) {
         super(steps);
         this.particles = particles;
@@ -64,6 +86,9 @@ public class Dragon extends ResettableEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();

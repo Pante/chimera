@@ -34,6 +34,10 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents an atom.
+ * <img src = "https://thumbs.gfycat.com/FixedForsakenCavy-size_restricted.gif" alt = "Atom.gif">
+ */
 @Immutable
 public class Atom extends ResettableEffect {
     
@@ -48,10 +52,33 @@ public class Atom extends ResettableEffect {
     private double angularVelocity;
     
     
+    /**
+     * Constructs an {@code Atom} with the specified nucleus and orbital particles,
+     * the default steps (200), total nucleus particles (10), total orbital particles (10), 
+     * radius (3), nucleus radius (0.2), orbitals (3), rotation (0), and angular velocity (π / 80).
+     * 
+     * @param nucleus the particles of which the nucleus is composed
+     * @param orbital the particles of which the orbitals are composed
+     */
     public Atom(Particles nucleus, Particles orbital) {
         this(nucleus, orbital, 200, 10, 10, 3, 0.2F, 3, 0, PI / 80);
     }
     
+    /**
+     * Constructs an {@code Atom} with the specified nucleus and orbital particles, steps, total nucleus particles, total orbital particles,
+     * radius, nucleus radius, orbital, rotation and angular velocity.
+     * 
+     * @param nucleus the particles of which the nucleus is composed
+     * @param orbital the particles of which the orbitals are composed
+     * @param steps the total number of steps
+     * @param nucleusTotal the total number of nucleus particles
+     * @param orbitalTotal the total number of orbital particles
+     * @param radius the radius
+     * @param nucleusRadius the radius of the nucleus
+     * @param orbitals the total number of orbitals
+     * @param rotation the rotation in radians
+     * @param angularVelocity the angular velocity in radians
+     */
     public Atom(Particles nucleus, Particles orbital, int steps, int nucleusTotal, int orbitalTotal, float radius, float nucleusRadius, int orbitals, double rotation, double angularVelocity) {
         super(steps);
         this.nucleus = nucleus;
@@ -66,6 +93,9 @@ public class Atom extends ResettableEffect {
     }
 
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         renderNucleus(context, origin, offset);

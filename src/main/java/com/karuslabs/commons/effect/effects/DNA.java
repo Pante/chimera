@@ -34,6 +34,10 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a DNA helix.
+ * <img src = "https://thumbs.gfycat.com/MessyTinyLice-size_restricted.gif" alt = "DNA.gif">
+ */
 @Immutable
 public class DNA extends ResettableEffect {
     
@@ -49,10 +53,35 @@ public class DNA extends ResettableEffect {
     private float interval;
     
     
+    /**
+     * Constructs a {@code DNA} with the specified helix, 1st base and 2nd base particles, the default total number of steps (500), 
+     * radials to turn per step (π / 30), radius (1.5), particles per helix (3), particles per base (15), length (15), growth per iteration (0.2) 
+     * and interval between each base (10).
+     * 
+     * @param helix the particles of which the helix is composed
+     * @param base1 the particles of which the 1st base is composed
+     * @param base2 the particles of which the 2nd base is composed
+     */
     public DNA(Particles helix, Particles base1, Particles base2) {
         this(helix, base1, base2, 500, (float) PI / 30, 1.5F, 3, 15, 15, 0.2F, 10);
     }
     
+    /**
+     * Constructs a {@code DNA} with the specified helix, 1st base and 2nd base particles, total number of steps, radials to turn per step,
+     * radius, particles per helix, particles per base, length, growth per iteration and interval between each base.
+     * 
+     * @param helix the particles of which the helix is composed
+     * @param base1 the particles of which the 1st base is composed
+     * @param base2 the particles of which the 2nd base is composed
+     * @param steps the total number of steps
+     * @param radials the radials to turn per step
+     * @param radius the radius
+     * @param perHelix the total number of particles per helix
+     * @param perBase the total number of particles per base
+     * @param length the length
+     * @param growth the growth per iteration
+     * @param interval the interval between each base
+     */
     public DNA(Particles helix, Particles base1, Particles base2, int steps, float radials, float radius, int perHelix, int perBase, float length, float growth, float interval) {
         super(500);
         this.helix = helix;
@@ -68,6 +97,9 @@ public class DNA extends ResettableEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();

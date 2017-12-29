@@ -27,10 +27,12 @@ import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import javax.annotation.Nullable;
+import java.util.*;
 
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
+import static java.util.Collections.singletonList;
 
 
 /**
@@ -111,6 +113,56 @@ public class Commands {
      */
     public void load(Parser parser, String path) {
         map.registerAll(plugin.getName(), parser.parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+    }
+    
+    
+    /**
+     * Registers the specified {@code CommandExecutor} to the {@code Command}s using its {@link Registration} annotation(s).
+     * 
+     * @param executor the annotated executor
+     * @return a list of commands to which the executor was registered
+     * @throws IllegalArgumentException if the specified CommandExecutor has no @Registration annotations
+     */
+    public List<Command> register(CommandExecutor executor) {
+        if (executor.getClass().isAnnotationPresent(Registration.class)) {
+            return singletonList(register(executor, executor.getClass().getAnnotation(Registration.class).value()));
+            
+        } else if (executor.getClass().isAnnotationPresent(Registrations.class)) {
+            Registrations registrations = executor.getClass().getAnnotation(Registrations.class);
+            List<Command> commands = new ArrayList<>();
+            
+            for (Registration registration : registrations.value()) {
+                commands.add(register(executor, registration.value()));
+            }
+            
+            return commands;
+            
+        } else {
+            throw new IllegalArgumentException("CommandExecutor has no registrations");
+        }
+    }
+    
+    /**
+     * Registers the specified {@code CommandExecutor} to the {@code Command} using the specified names,
+     * 
+     * i.e. {@code register(executor, "parent", "child")} will register the {@code executor} to 
+     * the subcommand, {@code "child"} of the command, {@code "parent"}.
+     * 
+     * @param executor the executor
+     * @param names the names of the commands 
+     * @return the command to which the executor was registered
+     */
+    public Command register(CommandExecutor executor, String... names) {;
+        Command command = map.getCommand(names[0]);
+        if (names.length != 1) {
+            for (int i = 1; i < names.length; i++) {
+                command = command.getSubcommands().get(names[i]);
+            }
+        }
+        
+        command.setExecutor(executor);
+
+        return command;
     }
     
     

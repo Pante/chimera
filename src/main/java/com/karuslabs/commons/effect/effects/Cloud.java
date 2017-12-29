@@ -35,6 +35,10 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
+/**
+ * Represents a cloud.
+ * <img src = "https://thumbs.gfycat.com/SinfulClutteredLeafbird-size_restricted.gif" alt = "Cloud.gif">
+ */
 @Immutable
 public class Cloud implements Effect {
  
@@ -47,10 +51,30 @@ public class Cloud implements Effect {
     private float offsetY;
     
     
+    /**
+     * Constructs a {@code Cloud} with the specified cloud and droplets particles, 
+     * the default total cloud particles (50), total droplet particles (15), size (0.7), radius (0.6)
+     * and Y offset (0.8).
+     * 
+     * @param cloud the particles of which the cloud is composed
+     * @param droplets the particles of which the droplets are composed
+     */
     public Cloud(Particles cloud, Particles droplets) {
         this(cloud, droplets, 50, 15, 0.7F, 0.7F - 0.1F, 0.8F);
     }
     
+    /**
+     * Constructs a {@code Cloud} with the specified cloud and droplets particles, total cloud particles, total droplet particles,
+     * size, radius and Y offset.
+     * 
+     * @param cloud the particles of which the cloud is composed
+     * @param droplets the particles of which the droplets are composed
+     * @param cloudTotal the total number of cloud particles
+     * @param dropletsTotal the total number of droplet particles
+     * @param size the size of the cloud
+     * @param radius the radius of the droplets
+     * @param offsetY the Y offset
+     */
     public Cloud(Particles cloud, Particles droplets, int cloudTotal, int dropletsTotal, float size, float radius, float offsetY) {
         this.cloud = cloud;
         this.droplets = droplets;
@@ -62,6 +86,9 @@ public class Cloud implements Effect {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();

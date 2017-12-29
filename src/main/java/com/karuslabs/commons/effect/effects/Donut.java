@@ -35,6 +35,10 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a torus.
+ * <img src = "https://thumbs.gfycat.com/FakeParallelKangaroo-size_restricted.gif" alt = "Donut.gif">
+ */
 @Immutable
 public class Donut implements Effect {
     
@@ -46,10 +50,27 @@ public class Donut implements Effect {
     private Vector rotation;
     
     
+    /**
+     * Constructs a {@code Donut} with the specified particles, the default particles per circle (10), number of circles (36), total radius of donut (2), 
+     * radius of tube (0.5) and rotation (0, 0, 0).
+     * 
+     * @param particles the particles
+     */
     public Donut(Particles particles) {
         this(particles, 10, 36, 2, 0.5F, NONE);
     }
     
+    /**
+     * Constructs a {@code Donut} with the specified particles, particles per circle, number of circles, total radius of donut, radius of tube
+     * and rotation.
+     * 
+     * @param particles the particles
+     * @param perCircle the total number of particles per per circle
+     * @param circles the total number of circles
+     * @param donutRadius the total radius of the donut
+     * @param tubeRadius the radius of the tube
+     * @param rotation the rotation in radians
+     */
     public Donut(Particles particles, int perCircle, int circles, float donutRadius, float tubeRadius, Vector rotation) {
         this.particles = particles;
         this.perCircle = perCircle;
@@ -60,6 +81,9 @@ public class Donut implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         for (int i = 0; i < circles; i++) {

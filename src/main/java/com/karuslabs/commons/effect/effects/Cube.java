@@ -35,6 +35,10 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.PI;
 
 
+/**
+ * Represents a cube.
+ * <img src = "https://thumbs.gfycat.com/MammothHiddenHeifer-size_restricted.gif" alt = "Cube.gif">
+ */
 @Immutable
 public class Cube extends IncrementalEffect {
     
@@ -47,10 +51,28 @@ public class Cube extends IncrementalEffect {
     boolean solid;
     
     
+    /**
+     * Constructs a {@code Cube} with the specified particles, 
+     * the default total number of steps (200), edge (3), angular velocity (π / 200, π / 170, π / 155), 
+     * particles per row (8), rotation (true), and solidness (true).
+     * 
+     * @param particles the particles
+     */
     public Cube(Particles particles) {
         this(particles, 200, 3, ANGULAR_VELOCITY, 8, true, true);
     }
     
+    /**
+     * Constructs a {@code Cube} with the specified particles, total number of steps, edge, angular velocity, particles per row, rotation, and solidness.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param edge the length of the edges
+     * @param angularVelocity the angular velocity in radians
+     * @param perRow the total number of particles per row
+     * @param rotate true if the cube should rotate; else false
+     * @param solid  true if the cube is solid; else false
+     */
     public Cube(Particles particles, int steps, float edge, Vector angularVelocity, int perRow, boolean rotate, boolean solid) {
         super(steps);
         this.particles = particles;
@@ -63,6 +85,9 @@ public class Cube extends IncrementalEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();

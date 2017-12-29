@@ -35,6 +35,10 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents an animated ball.
+ * <img src = "https://thumbs.gfycat.com/TinyFantasticAuklet-size_restricted.gif" alt = "AnimatedBall.gif">
+ */
 @Immutable
 public class AnimatedBall extends ResettableEffect {
     
@@ -48,10 +52,27 @@ public class AnimatedBall extends ResettableEffect {
     private Vector rotation;
     
     
+    /**
+     * Constructs an {@code AnimatedBall} with the specified particles and 
+     * the default total number of steps (500), total (150), particles per iteration (10), size (1), factor (1, 2, 1) and rotation (0, 0, 0). 
+     * 
+     * @param particles the particles
+     */
     public AnimatedBall(Particles particles) {
         this(particles, 500, 150, 10, 1F, FACTOR, NONE);
     }
     
+    /**
+     * Constructs an {@code AnimatedBall} with the specified particles, total number of steps, total, particles per iteration , size, factor and rotation.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param total the total number of particles
+     * @param perIteration the number of particles per iteration
+     * @param size the size of the animated ball
+     * @param factor the proportions of the animated ball
+     * @param rotation the rotation in radians
+     */
     public AnimatedBall(Particles particles, int steps, int total, int perIteration, float size, Vector factor, Vector rotation) {
         super(steps);
         this.particles = particles;
@@ -63,6 +84,9 @@ public class AnimatedBall extends ResettableEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();

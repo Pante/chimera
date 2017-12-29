@@ -36,6 +36,10 @@ import static com.karuslabs.commons.effect.effects.Constants.*;
 import static com.karuslabs.commons.world.Vectors.*;
 
 
+/**
+ * Represents a cylinder.
+ * <img src = "https://thumbs.gfycat.com/BlaringVariableIndianpangolin-size_restricted.gif" alt = "Cylinder.gif">
+ */
 @Immutable
 public class Cylinder extends ResettableEffect {
     
@@ -50,10 +54,32 @@ public class Cylinder extends ResettableEffect {
     private boolean solid;
     
     
+    /**
+     * Constructs a {@code Cylinder} with the specified particles, the default total number of steps (200), radius (1), height (3), 
+     * ratio of sides to total surface-area (0.4884726437), angular velocity (π / 200, π / 170, π / 155), rotation angle (0, 0, 0), 
+     * particles per row, rotation (true), solidness (false).
+     * 
+     * @param particles the particles
+     */
     public Cylinder(Particles particles) {
         this(particles, 200, 1, 3, 0.4884726437F, ANGULAR_VELOCITY, NONE, 100, true, false);
     }
     
+    /**
+     * Constructs a {@code Cylinder} with the specified particles, total number of steps, radius, height, ratio of sides to total surface-area,
+     * angular velocity, rotation angle, particles per row, rotation, solidness.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param radius the radius
+     * @param height the height
+     * @param ratio the side to surface-area ratio
+     * @param angularVelocity the angular velocity in radians
+     * @param rotation the rotation in radians
+     * @param perRow the number of particles per row
+     * @param rotate true if the cylinder should rotate; else false
+     * @param solid  true if the cylinder is solid; else false
+     */
     public Cylinder(Particles particles, int steps, float radius, float height, float ratio, Vector angularVelocity, Vector rotation, int perRow, boolean rotate, boolean solid) {
         super(steps);
         this.particles = particles;
@@ -68,6 +94,9 @@ public class Cylinder extends ResettableEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();        

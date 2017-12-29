@@ -36,9 +36,16 @@ import static com.karuslabs.commons.effect.effects.DiscoBall.Direction.DOWN;
 import static com.karuslabs.commons.world.Vectors.random;
 
 
+/**
+ * Represents a disco ball.
+ * <img src = "https://thumbs.gfycat.com/MintyGlisteningDog-size_restricted.gif" alt = "Discoball.gif">
+ */
 @Immutable
 public class DiscoBall implements Effect {
     
+    /**
+     * Represents the direction of the lines.
+     */
     public enum Direction {
         UP, DOWN, BOTH;
     }
@@ -52,10 +59,30 @@ public class DiscoBall implements Effect {
     private int lineLength;
     Direction direction;
     
+    /**
+     * Constructs a {@code DiscoBall} with the specified sphere and line particles, the default total number of sphere particles (50), 
+     * total number of line particles (100), radius (0.6), number of lines (7), length of each line (15) and direction of the lines (DOWN).
+     * 
+     * @param sphere the particles of which the sphere is composed
+     * @param line the particles of which the line is composed
+     */
     public DiscoBall(Particles sphere, Particles line) {
         this(sphere, line, 50, 100, 0.6F, 7, 15, DOWN);
     }
     
+    /**
+     * Constructs a {@code DiscoBall} with the specified sphere and line particles, total number of sphere particles, total number of line particles,
+     * radius, number of lines, length of each line and direction of the lines.
+     * 
+     * @param sphere the particles of which the sphere is composed
+     * @param line the particles of which the line is composed
+     * @param sphereTotal the total number of sphere particles
+     * @param lineTotal the total number of line particles
+     * @param radius the radius
+     * @param lines the total number of lines
+     * @param lineLength the length of each line
+     * @param direction  the direction of the lines
+     */
     public DiscoBall(Particles sphere, Particles line, int sphereTotal, int lineTotal, float radius, int lines, int lineLength, Direction direction) {
         this.sphere = sphere;
         this.line = line;
@@ -68,6 +95,9 @@ public class DiscoBall implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();

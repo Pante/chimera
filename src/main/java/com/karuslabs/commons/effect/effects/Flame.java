@@ -35,6 +35,10 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
+/**
+ * Represents a flame.
+ * <img src = "https://thumbs.gfycat.com/SentimentalSphericalHydatidtapeworm-size_restricted.gif" alt = "Flame.gif">
+ */
 @Immutable
 public class Flame implements Effect {
     
@@ -42,16 +46,30 @@ public class Flame implements Effect {
     private int total;
     
     
+    /**
+     * Constructs a {@code Flame} with the specified particles and the default total number of particles (10).
+     * 
+     * @param flame the particles 
+     */
     public Flame(Particles flame) {
         this(flame, 10);
     }
     
+    /**
+     * Constructs a {@code Flame} with the specified particles and total number of particles.
+     * 
+     * @param flame the particles
+     * @param total the total number of particles
+     */
     public Flame(Particles flame, int total) {
         this.flame = flame;
         this.total = total;
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();

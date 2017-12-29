@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.parser.Parser;
 import com.karuslabs.commons.locale.providers.Provider;
 
@@ -34,7 +35,8 @@ import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
 
-import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -70,6 +72,76 @@ class CommandsTest {
         
         verify(parser).parse(any(YamlConfiguration.class));
         verify(commands.getProxiedCommandMap()).registerAll("name", EMPTY_LIST);
+    }
+    
+    
+    @Registration({"command"})
+    private static class Annotation implements CommandExecutor {
+
+        @Override
+        public boolean execute(Context context, Arguments arguments) {
+            return true;
+        }
+        
+    }
+    
+    
+    @Test
+    void register_Registration() {
+        Annotation annotation = new Annotation();
+        
+        doReturn(null).when(commands).register(annotation, "command");
+        
+        commands.register(annotation);
+        
+        verify(commands).register(annotation, "command");
+    }
+    
+    
+    
+    @Registration({"a"})
+    @Registration({"b"})
+    private static class Annotations implements CommandExecutor {
+
+        @Override
+        public boolean execute(Context context, Arguments arguments) {
+            return true;
+        }
+        
+    }
+    
+    
+    @Test
+    void register_Registrations() {
+        Annotations annotations = new Annotations();
+        
+        doReturn(null).when(commands).register(any(), any(String.class));
+        
+        commands.register(annotations);
+        
+        verify(commands).register(annotations, "a");
+        verify(commands).register(annotations, "b");
+    }
+    
+    
+    @Test
+    void register_ThrowsException() {
+        assertEquals("CommandExecutor has no registrations", 
+                    assertThrows(IllegalArgumentException.class, () -> commands.register(CommandExecutor.NONE)).getMessage()
+        );
+    }
+    
+    
+    @Test
+    void register_Names() {
+        Command child = mock(Command.class);
+        Command parent = when(mock(Command.class).getSubcommands()).thenReturn(singletonMap("child", child)).getMock();
+        
+        doReturn(parent).when(commands.map).getCommand("parent");
+        
+        commands.register(CommandExecutor.ALIASES, "parent", "child");
+        
+        verify(child).setExecutor(CommandExecutor.ALIASES);
     }
             
 }
