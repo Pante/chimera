@@ -35,7 +35,7 @@ import static java.lang.Math.*;
 
 
 /**
- * Represents a helix.
+ * Represents a wave.
  * <br>
  * <img src = "https://thumbs.gfycat.com/MildTheseFinwhale-size_restricted.gif" alt = "Wave.gif">
  */
