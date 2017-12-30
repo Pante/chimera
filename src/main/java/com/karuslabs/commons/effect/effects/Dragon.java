@@ -37,6 +37,7 @@ import static java.lang.Math.*;
 
 /**
  * Represents a dragon's breath.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/GrimNearAcaciarat-size_restricted.gif" alt = "Dragon.gif">
  */
 public class Dragon extends ResettableEffect {
@@ -52,8 +53,8 @@ public class Dragon extends ResettableEffect {
     
     
     /**
-     * Constructs a {@code Dragon} with the specified particles, the default total number of steps (200), pitch (0.1), number of arcs (20), 
-     * particles per arc (30), length (4) and steps to increment per iteration (2).
+     * Constructs a {@code Dragon} with the specified particles, the default total number of steps, 200, pitch, 0.1, number of arcs, 20, 
+     * particles per arc, 30, length, 4 and steps to increment per iteration, 2.
      * 
      * @param particles the particles
      */

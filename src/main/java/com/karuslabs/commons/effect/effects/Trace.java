@@ -34,6 +34,11 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.copy;
 
 
+/**
+ * Represents a line traced between the origin and target.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/CourteousInfiniteAsianpiedstarling-size_restricted.gif" alt = "Tornado.gif">
+ */
 public class Trace extends IncrementalEffect {
     
     private Particles particles;
@@ -43,10 +48,24 @@ public class Trace extends IncrementalEffect {
     Location location;
     
     
+    /**
+     * Constructs a {@code Trace} with the specified particles, the default total number of steps, 600, refresh rate, 5 
+     * and maximum number of waypoints, 30.
+     * 
+     * @param particles the particles
+     */
     public Trace(Particles particles) {
         this(particles, 600, 5, 30);
     }
     
+    /**
+     * Constructs a {@code Trace} with the specified particles, total number of steps, refresh rate and maximum number of waypoints.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param refresh the refresh rate
+     * @param max the maximum number of waypoints
+     */
     public Trace(Particles particles, int steps, int refresh, int max) {
         super(steps);
         this.particles = particles;
@@ -57,6 +76,9 @@ public class Trace extends IncrementalEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         if (location.getWorld() == null) {
@@ -94,6 +116,9 @@ public class Trace extends IncrementalEffect {
     }
     
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Trace get() {
         return new Trace(particles, steps, refresh, max);

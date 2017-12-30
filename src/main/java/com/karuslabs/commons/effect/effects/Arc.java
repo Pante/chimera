@@ -36,6 +36,7 @@ import static java.lang.Math.pow;
 
 /**
  * Represents an arc.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/FalseGargantuanAdmiralbutterfly-size_restricted.gif" alt = "Arc.gif">
  */
 @Immutable
@@ -47,7 +48,7 @@ public class Arc implements Effect {
     
     
     /**
-     * Constructs an {@code Arc} with the specified particles, the default height (2) and total (200).
+     * Constructs an {@code Arc} with the specified particles, the default height, 2 and total, 200.
      * 
      * @param particles the particles
      */

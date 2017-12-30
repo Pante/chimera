@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
 
 
+/**
+ * Represents a grid.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/BetterDisfiguredAddax-size_restricted.gif" alt = "Grid.gif">
+ */
 @Immutable
 public class Grid implements Effect {
     
@@ -46,10 +51,29 @@ public class Grid implements Effect {
     private double rotation;
     
     
+    /**
+     * Constructs a {@code Grid} with the specified particles, the default number of rows, 5, number of columns 10, 
+     * width per cell, 1, height per cell, 1, number of particles per width, 4, number of particles per height, 3 and rotation, 0.
+     * 
+     * @param particles the particles
+     */
     public Grid(Particles particles) {
         this(particles, 5, 10, 1, 1, 4, 3, 0);
     }
     
+    /**
+     * Constructs a {@code Grid} with the specified particles, number of rows, number of columns, width per cell, height per cell,
+     * number of particles per width, number of particles per height and rotation.
+     * 
+     * @param particles the particles
+     * @param rows the number of rows
+     * @param columns the number of columns
+     * @param cellWidth the width of each cell
+     * @param cellHeight the height of each cell
+     * @param perWidth the number of particles per width
+     * @param perHeight the number of particles per height
+     * @param rotation  the rotation in radians
+     */
     public Grid(Particles particles, int rows, int columns, float cellWidth, float cellHeight, int perWidth, int perHeight, double rotation) {
         this.particles = particles;
         this.rows = rows;
@@ -62,6 +86,9 @@ public class Grid implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location location, Location target, Vector offset) {
         renderRows(context, location, offset);

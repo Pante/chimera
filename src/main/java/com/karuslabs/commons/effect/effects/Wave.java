@@ -34,6 +34,11 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a helix.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/MildTheseFinwhale-size_restricted.gif" alt = "Wave.gif">
+ */
 public class Wave extends IncrementalEffect {
     
     private static final Vector RISE = new Vector(0.75, 0.5, 0);
@@ -52,10 +57,29 @@ public class Wave extends IncrementalEffect {
     Set<Vector> clouds;
     
     
+    /**
+     * Constructs a {@code Wave} with the specified water and cloud particles, the default total number of steps, 50, 
+     * data for rendering the front and back, number of rows, 20 and width, 5.
+     * 
+     * @param water the particles of which the water is composed
+     * @param cloud the particles of which the cloud is composed
+     */
     public Wave(Particles water, Particles cloud) {
         this(water, cloud, 50, FRONT, BACK, 20, 5);
     }
     
+    /**
+     * Constructs a {@code Wave} with the specified water and cloud particles, total number of steps, data for rendering the front and back,
+     * number of rows and width.
+     * 
+     * @param water the particles of which the water is composed
+     * @param cloud the particles of which the cloud is composed
+     * @param steps the total number of steps
+     * @param front the data for rendering the front
+     * @param back the data for rendering the back
+     * @param rows the number of rows
+     * @param width the width
+     */
     public Wave(Particles water, Particles cloud, int steps, WaveData front, WaveData back, int rows, float width) {
         super(steps);
         this.water = water;
@@ -70,6 +94,9 @@ public class Wave extends IncrementalEffect {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector velocity) {
         if (context.steps() == 0) {
@@ -98,6 +125,9 @@ public class Wave extends IncrementalEffect {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Wave get() {
         return new Wave(water, cloud, steps, front, back, rows, width);

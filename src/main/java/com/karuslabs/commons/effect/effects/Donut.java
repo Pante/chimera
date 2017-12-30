@@ -37,6 +37,7 @@ import static java.lang.Math.*;
 
 /**
  * Represents a torus.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/FakeParallelKangaroo-size_restricted.gif" alt = "Donut.gif">
  */
 @Immutable
@@ -51,8 +52,8 @@ public class Donut implements Effect {
     
     
     /**
-     * Constructs a {@code Donut} with the specified particles, the default particles per circle (10), number of circles (36), total radius of donut (2), 
-     * radius of tube (0.5) and rotation (0, 0, 0).
+     * Constructs a {@code Donut} with the specified particles, the default particles per circle, 10, number of circles, 36, total radius of donut, 2, 
+     * radius of tube, 0.5 and rotation, (0, 0, 0).
      * 
      * @param particles the particles
      */

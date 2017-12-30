@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.copy;
 
 
+/**
+ * Represents a line.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/ImpossibleForkedGreatdane-size_restricted.gif" alt = "Line.gif">
+ */
 public class Line implements Effect {
     
     private static final Vector OFFSET = new Vector(0,0.1,0);
@@ -48,10 +53,27 @@ public class Line implements Effect {
     Vector link;
     
     
+    /**
+     * Constructs a {@code Line} with the specified particles, the default number of particles per arc, 100, 
+     * length, 0, zigzag, false, number of zigzags, 10 and offset, (0, 0, 0).
+     * 
+     * @param particles the particles
+     */
     public Line(Particles particles) {
         this(particles, 100, 0, false, 10, OFFSET);
     }
     
+    /**
+     * Constructs a {@code Line} with the specified particles, particles per arc, length, zigzag, number of zigzags and offset.
+     * Sets the length as the distance between the origin and target if the specified length is 0.
+     * 
+     * @param particles the particles
+     * @param perArc the particles per arc
+     * @param length the length
+     * @param zigzag true if the line should zigzag; else false
+     * @param zigzags the number of zigzags
+     * @param offset the offset
+     */
     public Line(Particles particles, int perArc, double length, boolean zigzag, int zigzags, Vector offset) {
         this.particles = particles;
         this.perArc = perArc;
@@ -65,6 +87,9 @@ public class Line implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector vector) {
         resolveLink(context, origin, target);
@@ -106,6 +131,9 @@ public class Line implements Effect {
     }
     
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Line get() {
         return new Line(particles, perArc, length, zigzag, zigzags, offset);

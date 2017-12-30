@@ -32,6 +32,9 @@ import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
 import static java.lang.Math.pow;
 
 
+/**
+ * Represents the data for rendering the {@code Wave}.
+ */
 public class WaveData {
     
     int count;
@@ -43,6 +46,14 @@ public class WaveData {
     Vector vector;
     
     
+    /**
+     * Constructs a {@code WaveData} with the specified total number of particles, height, rise and end.
+     * 
+     * @param count the total number of particles
+     * @param height the height
+     * @param rise the offset to which the wave is increased
+     * @param end the offset to which the wave is displaced at the end
+     */
     public WaveData(int count, float height, Vector rise, Vector end) {
         this.count = count;
         this.height = height;

@@ -37,6 +37,7 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 /**
  * Represents a flame.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/SentimentalSphericalHydatidtapeworm-size_restricted.gif" alt = "Flame.gif">
  */
 @Immutable
@@ -47,7 +48,7 @@ public class Flame implements Effect {
     
     
     /**
-     * Constructs a {@code Flame} with the specified particles and the default total number of particles (10).
+     * Constructs a {@code Flame} with the specified particles and the default total number of particles, 10.
      * 
      * @param flame the particles 
      */

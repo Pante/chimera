@@ -36,6 +36,7 @@ import static java.lang.Math.*;
 
 /**
  * Represents a cone.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/RegularUnknownFanworms-size_restricted.gif" alt = "Cone.gif">
  */
 @Immutable
@@ -53,8 +54,8 @@ public class Cone implements Effect {
     
     /**
      * Constructs a {@code Cone} with the specified particles, 
-     * the default growth in length (0.5), growth in radius (0.006), angular velocity (π / 60),
-     * size (180), particles per iteration (10), rotation (0.6), randomization (false).
+     * the default growth in length, 0.5, growth in radius, 0.006, angular velocity, π / 60,
+     * size, 180, particles per iteration, 10, rotation, 0.6, randomization, false.
      * 
      * @param particles the particles
      */

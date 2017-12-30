@@ -34,6 +34,11 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a vortex.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/HeftyFrayedAustraliankestrel-size_restricted.gif" alt = "Vortex.gif">
+ */
 @Immutable
 public class Vortex extends IncrementalEffect {
 
@@ -45,10 +50,28 @@ public class Vortex extends IncrementalEffect {
     private int helixes;
     
     
+    /**
+     * Constructs a {@code Vortex} with the specified particles, the default total number of steps, 200, radius, 2, 
+     * Y axis increment per iteration, 0.5, radials per iteration, π / 16, number of circles, 3 and number of helixes, 4.
+     * 
+     * @param particles the particles
+     */
     public Vortex(Particles particles) {
         this(particles, 200, 2, 0.5f, PI / 16, 3, 4);
     }
-
+    
+    /**
+     * Constructs a {@code Vortex} with the specified particles, total number of steps, radius, Y axis increment per iteration, 
+     * radials per iteration, number of circles and number of helixes.
+     * 
+     * @param particles the particles
+     * @param steps the total number of steps
+     * @param radius the radius
+     * @param grow the Y axis increment per iteration
+     * @param radials the radials per iteration
+     * @param circles the number of circles
+     * @param helixes the number of helixes
+     */
     public Vortex(Particles particles, int steps, float radius, float grow, double radials, int circles, int helixes) {
         super(steps);
         this.particles = particles;
@@ -60,6 +83,9 @@ public class Vortex extends IncrementalEffect {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         int steps = context.steps();

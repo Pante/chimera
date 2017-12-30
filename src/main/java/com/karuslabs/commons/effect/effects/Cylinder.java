@@ -38,6 +38,7 @@ import static com.karuslabs.commons.world.Vectors.*;
 
 /**
  * Represents a cylinder.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/BlaringVariableIndianpangolin-size_restricted.gif" alt = "Cylinder.gif">
  */
 @Immutable
@@ -55,9 +56,9 @@ public class Cylinder extends ResettableEffect {
     
     
     /**
-     * Constructs a {@code Cylinder} with the specified particles, the default total number of steps (200), radius (1), height (3), 
-     * ratio of sides to total surface-area (0.4884726437), angular velocity (π / 200, π / 170, π / 155), rotation angle (0, 0, 0), 
-     * particles per row, rotation (true), solidness (false).
+     * Constructs a {@code Cylinder} with the specified particles, the default total number of steps, 200, radius, 1, height, 3, 
+     * ratio of sides to total surface-area, 0.4884726437, angular velocity, (π / 200, π / 170, π / 155), rotation angle, (0, 0, 0), 
+     * particles per row, 100, rotation, true, solidness, false.
      * 
      * @param particles the particles
      */

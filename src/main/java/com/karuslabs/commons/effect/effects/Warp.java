@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a helix.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/MasculineOffensiveAmoeba-size_restricted.gif" alt = "Warp.gif">
+ */
 @Immutable
 public class Warp extends IncrementalEffect {
 
@@ -42,10 +47,25 @@ public class Warp extends IncrementalEffect {
     private float grow;
     
     
+    /**
+     * Constructs a {@code Warp} with the specified particles, the default number of rings, 12, radius, 1, total number of particles, 20 and 
+     * Y axis increment per iteration, 0.2.
+     * 
+     * @param particles the particles
+     */
     public Warp(Particles particles) {
         this(particles, 12, 1, 20, 0.2f);
     }
 
+    /**
+     * Constructs a {@code Warp} with the specified particles, number of rings, radius, total number of particles and Y axis increment per iteration.
+     * 
+     * @param particles the particles
+     * @param rings the number of rings
+     * @param radius the radius
+     * @param total the total number of particles
+     * @param grow the Y axis increment per iteration
+     */
     public Warp(Particles particles, int rings, float radius, int total, float grow) {
         super(rings);
         this.particles = particles;
@@ -55,6 +75,9 @@ public class Warp extends IncrementalEffect {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         offset.setY(context.steps() * grow);

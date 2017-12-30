@@ -36,6 +36,11 @@ import static com.karuslabs.commons.world.Vectors.*;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a star.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/GrimAllJay-size_restricted.gif" alt = "Star.gif">
+ */
 @Immutable
 public class Star implements Effect {
     
@@ -46,10 +51,25 @@ public class Star implements Effect {
     private double radius;
     
     
+    /**
+     * Constructs a {@code Star} with the specified particles, the default number of particles per iteration, 50, 
+     * height of the spikes, 3.5, half the amount of spikes, 3 and radius, 0.5.
+     * 
+     * @param particles the particles
+     */
     public Star(Particles particles) {
         this(particles, 50, 3.5F, 3, 0.5);
     }
     
+    /**
+     * Constructs a {@code Star} with the specified particles, particles per iteration, height of the spikes, half the amount of spikes and radius.
+     * 
+     * @param particles the particles
+     * @param perIteration particles per iteration
+     * @param spikeHeight the height of the spikes 
+     * @param spikeHalf half the amount of spikes
+     * @param radius the radius
+     */
     public Star(Particles particles, int perIteration, float spikeHeight, int spikeHalf, double radius) {
         this.particles = particles;
         this.perIteration = perIteration;
@@ -59,6 +79,9 @@ public class Star implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         ThreadLocalRandom random = ThreadLocalRandom.current();

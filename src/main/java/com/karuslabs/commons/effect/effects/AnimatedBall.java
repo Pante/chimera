@@ -36,7 +36,8 @@ import static java.lang.Math.*;
 
 
 /**
- * Represents an animated ball.
+ * Represents an animated ball. 
+ * <br>
  * <img src = "https://thumbs.gfycat.com/TinyFantasticAuklet-size_restricted.gif" alt = "AnimatedBall.gif">
  */
 @Immutable
@@ -54,7 +55,8 @@ public class AnimatedBall extends ResettableEffect {
     
     /**
      * Constructs an {@code AnimatedBall} with the specified particles and 
-     * the default total number of steps (500), total (150), particles per iteration (10), size (1), factor (1, 2, 1) and rotation (0, 0, 0). 
+     * the default total number of steps, 500, total number of particles, 150, particles per iteration, 10, size, 1, factor, (1, 2, 1)
+     * and rotation, (0, 0, 0). 
      * 
      * @param particles the particles
      */
@@ -63,7 +65,8 @@ public class AnimatedBall extends ResettableEffect {
     }
     
     /**
-     * Constructs an {@code AnimatedBall} with the specified particles, total number of steps, total, particles per iteration , size, factor and rotation.
+     * Constructs an {@code AnimatedBall} with the specified particles, total number of steps, total number of particles, 
+     * particles per iteration, size, factor and rotation.
      * 
      * @param particles the particles
      * @param steps the total number of steps

@@ -37,6 +37,7 @@ import static java.lang.Math.PI;
 
 /**
  * Represents a cube.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/MammothHiddenHeifer-size_restricted.gif" alt = "Cube.gif">
  */
 @Immutable
@@ -53,8 +54,8 @@ public class Cube extends IncrementalEffect {
     
     /**
      * Constructs a {@code Cube} with the specified particles, 
-     * the default total number of steps (200), edge (3), angular velocity (π / 200, π / 170, π / 155), 
-     * particles per row (8), rotation (true), and solidness (true).
+     * the default total number of steps, 200, edge, 3, angular velocity, (π / 200, π / 170, π / 155), 
+     * particles per row, 8, rotation, true, and solidness, true.
      * 
      * @param particles the particles
      */

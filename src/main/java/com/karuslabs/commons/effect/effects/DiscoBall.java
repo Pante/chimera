@@ -38,6 +38,7 @@ import static com.karuslabs.commons.world.Vectors.random;
 
 /**
  * Represents a disco ball.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/MintyGlisteningDog-size_restricted.gif" alt = "Discoball.gif">
  */
 @Immutable
@@ -60,8 +61,8 @@ public class DiscoBall implements Effect {
     Direction direction;
     
     /**
-     * Constructs a {@code DiscoBall} with the specified sphere and line particles, the default total number of sphere particles (50), 
-     * total number of line particles (100), radius (0.6), number of lines (7), length of each line (15) and direction of the lines (DOWN).
+     * Constructs a {@code DiscoBall} with the specified sphere and line particles, the default total number of sphere particles, 50, 
+     * total number of line particles, 100, radius, 0.6, number of lines, 7, length of each line, 15 and direction of the lines, DOWN.
      * 
      * @param sphere the particles of which the sphere is composed
      * @param line the particles of which the line is composed

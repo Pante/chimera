@@ -37,6 +37,7 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 /**
  * Represents a cloud.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/SinfulClutteredLeafbird-size_restricted.gif" alt = "Cloud.gif">
  */
 @Immutable
@@ -53,8 +54,8 @@ public class Cloud implements Effect {
     
     /**
      * Constructs a {@code Cloud} with the specified cloud and droplets particles, 
-     * the default total cloud particles (50), total droplet particles (15), size (0.7), radius (0.6)
-     * and Y offset (0.8).
+     * the default total cloud particles, 50, total droplet particles, 15, size, 0.7, radius, 0.6
+     * and Y offset, 0.8.
      * 
      * @param cloud the particles of which the cloud is composed
      * @param droplets the particles of which the droplets are composed

@@ -35,6 +35,11 @@ import static com.karuslabs.commons.world.Vectors.rotate;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a heart.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/PeriodicChiefAlligatorsnappingturtle-size_restricted.gif" alt = "Heart.gif">
+ */
 @Immutable
 public class Heart implements Effect {
     
@@ -48,10 +53,29 @@ public class Heart implements Effect {
     private float compilation;
     
     
+    /**
+     * Constructs a {@code Heart} with the specified particles, the default number of particles per iteration, 50, rotation, (0, 0, 0), 
+     * stretch/compress factor for the X axis, 1 and Y axis, 1, the spike of the inner line, 0.8, the compression along the Y axis, 2 and compilation, 2.
+     * 
+     * @param particles the particles
+     */
     public Heart(Particles particles) {
         this(particles, 50, NONE, 1, 1, 0.8F, 2, 2F);
     }
     
+    /**
+     * Constructs a {@code Heart} with the specified particles, number of particles per iteration, rotation, 
+     * stretch/compress factor for the X axis and Y axis, the spike of the inner line, the compression along the Y axis and compilation.
+     * 
+     * @param particles the particles
+     * @param perIteration the particles per iteration
+     * @param rotation the rotation in radians
+     * @param xFactor the stretch/compress factor along the X axis
+     * @param yFactor the stretch/compress factor along the Y axis
+     * @param spike the spike of the inner line
+     * @param yFactorCompression the compression along the Y axis
+     * @param compilation the compilation
+     */
     public Heart(Particles particles, int perIteration, Vector rotation, float xFactor, float yFactor, float spike, double yFactorCompression, float compilation) {
         this.particles = particles;
         this.perIteration = perIteration;
@@ -64,6 +88,9 @@ public class Heart implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         for (int i = 0; i < perIteration; i += particles.getAmount()) {

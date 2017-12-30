@@ -34,6 +34,11 @@ import static com.karuslabs.commons.world.Vectors.random;
 import static java.lang.Math.abs;
 
 
+/**
+ * Represents a shield sphere.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/SecretYellowArchaeopteryx-size_restricted.gif" alt = "Shield.gif">
+ */
 @Immutable
 public class Shield implements Effect {
     
@@ -43,10 +48,25 @@ public class Shield implements Effect {
     public boolean sphere;
     
     
+    /**
+     * Constructs a {@code Shield} with the specified particles, the default number of particles per iteration, 50, 
+     * radius, 3 and half-sphere, false.
+     * 
+     * @param particles the particles
+     */
     public Shield(Particles particles) {
         this(particles, 50, 3, false);
     }
     
+    /**
+     * Constructs a {@code Shield} with the specified particles, particles per iteration, radius and whether the shield
+     * is a complete sphere or half-sphere.
+     * 
+     * @param particles the particles
+     * @param perIteration the particles per iteration
+     * @param radius the radius of the sphere
+     * @param sphere true if the shield should be a complete sphere; else false
+     */
     public Shield(Particles particles, int perIteration, int radius, boolean sphere) {
         this.particles = particles;
         this.perIteration = perIteration;
@@ -55,6 +75,9 @@ public class Shield implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         for (int i = 0; i < perIteration; i += particles.getAmount()) {

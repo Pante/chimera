@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 import static com.karuslabs.commons.world.Vectors.random;
 
 
+/**
+ * Represents a sphere.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/DistantEntireEmperorshrimp-size_restricted.gif" alt = "Sphere.gif">
+ */
 @Immutable
 public class Sphere extends IncrementalEffect {
     
@@ -43,10 +48,26 @@ public class Sphere extends IncrementalEffect {
     private double increment;
     
     
+    /**
+     * Constructs a {@code Sphere} with the specified particles, 
+     * the default total number of steps, 500, particles per iteration, 50, radius, 0.6, Y offset, 0 and increment, 0.
+     * 
+     * @param particles the particles
+     */
     public Sphere(Particles particles) {
         this(particles, 500, 50, 0.6, 0, 0);
     }
     
+    /**
+     * Constructs a {@code Sphere} with the specified particles, total number of steps, particles per iteration, radius, Y offset and increment.
+     * 
+     * @param particles the particles
+     * @param steps the number of steps
+     * @param perIteration the particles per iteration
+     * @param radius the radius
+     * @param yOffset the Y offset
+     * @param increment the increment
+     */
     public Sphere(Particles particles, int steps, int perIteration, double radius, double yOffset, double increment) {
         super(steps);
         this.particles = particles;
@@ -57,6 +78,9 @@ public class Sphere extends IncrementalEffect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         double radius = this.radius + context.steps() * increment;

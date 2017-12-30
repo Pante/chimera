@@ -36,6 +36,11 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a fountain spout.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/ShortImpoliteFirecrest-size_restricted.gif" alt = "Fountain.gif">
+ */
 @Immutable
 public class Fountain implements Effect {
     
@@ -50,10 +55,31 @@ public class Fountain implements Effect {
     private double rotation;
     
     
+    /**
+     * Constructs a {@code Fountain} with the specified particles, the default number of strands, 10, particles per strand, 150, 
+     * particles per spout, 200, radius of the strands, 5, radius of the spouts, 0.1, height of the fountain, 3, height of spouts, 7 
+     * and rotation, π / 4.
+     * 
+     * @param particles the particles
+     */
     public Fountain(Particles particles) {
         this(particles, 10, 150, 200, 5, 0.1F, 3, 7, PI / 4);
     }
     
+    /**
+     * Constructs a {@code Fountain} with the specified particles, number of strands, particles per strand, particles per spout, radius of the strands,
+     * radius of the spouts, height of the fountain, height of spouts and rotation.
+     * 
+     * @param particles the particles
+     * @param strands the number of strands
+     * @param perStrand the particles per strand
+     * @param perSpout the particles per spout
+     * @param radius the radius of strands
+     * @param radiusSpout the radius of the spouts
+     * @param height the height of the fountain
+     * @param heightSpout the height of the spout
+     * @param rotation the rotation in radians
+     */
     public Fountain(Particles particles, int strands, int perStrand, int perSpout, float radius, float radiusSpout, float height, float heightSpout, double rotation) {
         this.particles = particles;
         this.strands = strands;
@@ -67,6 +93,9 @@ public class Fountain implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         renderStrands(context, origin, offset);

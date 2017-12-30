@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a spiral.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/ImpossibleForkedGreatdane-size_restricted.gif" alt = "Spiral.gif">
+ */
 @Immutable
 public class Spiral implements Effect {
     
@@ -44,10 +49,26 @@ public class Spiral implements Effect {
     private double rotation;
     
     
+    /**
+     * Constructs a {@code Spiral} with the specified particles, the default number of strands, 8, particles per strand, 80, 
+     * radius, 10, curve, 10 and rotation, π / 4.
+     * 
+     * @param particles the particles
+     */
     public Spiral(Particles particles) {
         this(particles, 8, 80, 10, 10, PI / 4);
     }
     
+    /**
+     * Constructs a {@code Spiral} with the specified particles, number of strands, particles per strand, radius, curve and rotation.
+     * 
+     * @param particles the particles
+     * @param strands the number of strands
+     * @param perStrand the particles per strand
+     * @param radius the radius
+     * @param curve the curve of the spirals; negative value indicates reverse rotation
+     * @param rotation the rotation in radians
+     */
     public Spiral(Particles particles, int strands, int perStrand, float radius, float curve, double rotation) {
         this.particles = particles;
         this.strands = strands;
@@ -58,6 +79,9 @@ public class Spiral implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         for (int i = 1; i <= strands; i++) {

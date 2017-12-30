@@ -36,6 +36,11 @@ import static com.karuslabs.commons.world.Vectors.randomCircle;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a tornado.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/NextMagnificentArrowworm-size_restricted.gif" alt = "Tornado.gif">
+ */
 @Immutable
 public class Tornado implements Effect {
     
@@ -48,10 +53,29 @@ public class Tornado implements Effect {
     private double distance;
     
     
+    /**
+     * Constructs a {@code Tornado} with the specified tornado and cloud particles, 
+     * the default height, 5, radius, 5, cloud size, 2.5, Y offset, 0.8 and distance between each row, 0.375.
+     * 
+     * @param tornado the particles of which the tornado is composed
+     * @param cloud the particles of which the cloud is composed
+     */
     public Tornado(Particles tornado, Particles cloud) {
         this(tornado, cloud, 5F, 5F, 2.5F, 0.8, 0.375);
     }
     
+    /**
+     * Constructs a {@code Tornado} with the specified tornado and cloud particles, height, radius, cloud size, Y offset and distance
+     * between each row.
+     * 
+     * @param tornado the particles of which the tornado is composed
+     * @param cloud the particles of which the cloud is composed
+     * @param height the height
+     * @param radius the radius
+     * @param cloudSize the cloud size
+     * @param yOffset the Y offset
+     * @param distance the distance between each row
+     */
     public Tornado(Particles tornado, Particles cloud, float height, float radius, float cloudSize, double yOffset, double distance) {
         this.tornado = tornado;
         this.cloud = cloud;
@@ -63,6 +87,9 @@ public class Tornado implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         renderCloud(context, origin, offset, ThreadLocalRandom.current());

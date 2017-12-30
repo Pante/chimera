@@ -36,6 +36,7 @@ import static java.lang.Math.*;
 
 /**
  * Represents an atom.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/FixedForsakenCavy-size_restricted.gif" alt = "Atom.gif">
  */
 @Immutable
@@ -54,8 +55,8 @@ public class Atom extends ResettableEffect {
     
     /**
      * Constructs an {@code Atom} with the specified nucleus and orbital particles,
-     * the default steps (200), total nucleus particles (10), total orbital particles (10), 
-     * radius (3), nucleus radius (0.2), orbitals (3), rotation (0), and angular velocity (π / 80).
+     * the default steps, 200, total nucleus particles, 10, total orbital particles, 10, 
+     * radius, 3, nucleus radius, 0.2, orbitals, 3, rotation, 0, and angular velocity, π / 80.
      * 
      * @param nucleus the particles of which the nucleus is composed
      * @param orbital the particles of which the orbitals are composed

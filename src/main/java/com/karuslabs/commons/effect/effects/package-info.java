@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code Effect} implementations.
+ * Contains {@code Effect} implementations derived from EffectLib.
  */
 package com.karuslabs.commons.effect.effects;

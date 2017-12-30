@@ -36,6 +36,7 @@ import static java.lang.Math.*;
 
 /**
  * Represents a DNA helix.
+ * <br>
  * <img src = "https://thumbs.gfycat.com/MessyTinyLice-size_restricted.gif" alt = "DNA.gif">
  */
 @Immutable
@@ -54,9 +55,9 @@ public class DNA extends ResettableEffect {
     
     
     /**
-     * Constructs a {@code DNA} with the specified helix, 1st base and 2nd base particles, the default total number of steps (500), 
-     * radials to turn per step (π / 30), radius (1.5), particles per helix (3), particles per base (15), length (15), growth per iteration (0.2) 
-     * and interval between each base (10).
+     * Constructs a {@code DNA} with the specified helix, 1st base and 2nd base particles, the default total number of steps, 500, 
+     * radials to turn per step, π / 30, radius, 1.5, particles per helix, 3, particles per base, 15, length, 15, growth per iteration, 0.2 
+     * and interval between each base, 10.
      * 
      * @param helix the particles of which the helix is composed
      * @param base1 the particles of which the 1st base is composed

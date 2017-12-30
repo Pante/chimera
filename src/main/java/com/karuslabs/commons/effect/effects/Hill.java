@@ -34,6 +34,11 @@ import static com.karuslabs.commons.world.Vectors.rotateAroundYAxis;
 import static java.lang.Math.*;
 
 
+/**
+ * Represents a hill.
+ * <br>
+ * <img src = "https://thumbs.gfycat.com/QuerulousMarvelousFairyfly-size_restricted.gif" alt = "Hill.gif">
+ */
 @Immutable
 public class Hill implements Effect {
     
@@ -44,10 +49,25 @@ public class Hill implements Effect {
     private float yRotation;
     
     
+    /**
+     * Constructs a {@code Heart} with the specified particles, the default number of particles per row, 30, 
+     * length, 6.5, height, 2.5 and rotation along the Y axis, π / 7.
+     * 
+     * @param particles the particles
+     */
     public Hill(Particles particles) {
         this(particles, 30, 6.5F, 2.5F, (float) PI / 7);
     }
     
+    /**
+     * Constructs a {@code Heart} with the specified particles, particles per row, length, height and rotation along the Y axis.
+     * 
+     * @param particles the particles
+     * @param perRow the particles per row
+     * @param length the length of the edges
+     * @param height the height
+     * @param yRotation the rotation of the hill along the Y axis in radians
+     */
     public Hill(Particles particles, float perRow, float length, float height, float yRotation) {
         this.particles = particles;
         this.perRow = perRow;
@@ -57,6 +77,9 @@ public class Hill implements Effect {
     }
     
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(Context context, Location origin, Location target, Vector offset) {
         for (int x = 0; x <= perRow; x += particles.getAmount()) {
