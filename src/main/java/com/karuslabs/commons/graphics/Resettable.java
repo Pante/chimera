@@ -24,10 +24,23 @@
 package com.karuslabs.commons.graphics;
 
 
+/**
+ * Represents a type which may be reset.
+ */
 public interface Resettable {
     
+    /**
+     * Returns whether this will reset.
+     * 
+     * @return true if this will reset; else false
+     */
     public boolean reset();
     
+    /**
+     * Sets whether this will reset.
+     * 
+     * @param reset true if this will reset; else false
+     */
     public void reset(boolean reset);
     
 }

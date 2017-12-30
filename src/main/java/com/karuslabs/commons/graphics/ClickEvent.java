@@ -31,7 +31,7 @@ import org.bukkit.inventory.*;
 
 
 /**
- * This event is called whenever a {@code Window} is clicked.
+ * Represents the event which is called when a {@code Window} is clicked.
  */
 public class ClickEvent extends InventoryClickEvent implements InteractEvent {
     
@@ -41,10 +41,10 @@ public class ClickEvent extends InventoryClickEvent implements InteractEvent {
     
     
     /**
-     * Constructs a {@code ClickEvent} with the specified {@code Window} and {@code InventoryClickEvent}.
+     * Constructs a {@code ClickEvent} for the {@code Window} with the specified event.
      * 
      * @param window the window which was clicked
-     * @param event the InventoryClickEvent
+     * @param event the event
      */
     public ClickEvent(Window window, InventoryClickEvent event) {
         super(event.getView(), event.getSlotType(), event.getRawSlot(), event.getClick(), event.getAction(), event.getHotbarButton());
@@ -53,12 +53,20 @@ public class ClickEvent extends InventoryClickEvent implements InteractEvent {
     }
         
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Window getWindow() {
         return window;
     }
 
     
+    /**
+     * Returns a {@code Point} which represents the slot which was clicked.
+     * 
+     * @return a Point which represents the slot which was clicked
+     */
     public @Shared Point getClicked() {
         if (clicked == null) {
             clicked = window.at(event.getRawSlot());

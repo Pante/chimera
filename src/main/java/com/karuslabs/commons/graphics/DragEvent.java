@@ -34,6 +34,9 @@ import org.bukkit.inventory.*;
 import static java.util.Collections.EMPTY_MAP;
 
 
+/**
+ * Represents the event which is called when the slots in a {@code Window} are dragged.
+ */
 public class DragEvent extends InventoryDragEvent implements InteractEvent {
     
     private Window window;
@@ -41,19 +44,33 @@ public class DragEvent extends InventoryDragEvent implements InteractEvent {
     private Point[] dragged;
     
     
+    /**
+     * Constructs a {@code DragEvent} for the {@code Window} with the specified event.
+     * 
+     * @param window the window
+     * @param event the event
+     */
     public DragEvent(Window window, InventoryDragEvent event) {
         super(event.getView(), null, event.getOldCursor(), false, EMPTY_MAP);
         this.window = window;
         this.event = event;
     }
     
-        
+    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Window getWindow() {
         return window;
     }
     
     
+    /**
+     * Returns the {@code Point}s which represent the slots which were dragged.
+     * 
+     * @return the Points which represent the slots which were dragged
+     */
     public @Shared Point[] getDragged() {
         if (dragged == null) {
             dragged = event.getRawSlots().stream().map(window::at).toArray(Point[]::new);

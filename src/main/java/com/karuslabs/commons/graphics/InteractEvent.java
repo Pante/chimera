@@ -28,8 +28,7 @@ import com.karuslabs.commons.locale.*;
 
 
 /**
- * Represents an interaction with a {@code Window} or the {@code Component}s which
- * a {@code Window} contains.
+ * Represents an interaction with a {@code Window}.
  */
 public interface InteractEvent extends Translatable {
     

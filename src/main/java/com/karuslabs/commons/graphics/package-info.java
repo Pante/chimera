@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains implementations of {@code Effect} derived from EffectLib.
+ * Contains classes for representing and manipulating {@code Inventories}.
  */
-package com.karuslabs.commons.effect.effects;
+package com.karuslabs.commons.graphics;

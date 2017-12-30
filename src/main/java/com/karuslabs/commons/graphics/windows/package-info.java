@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains implementations of {@code Effect} derived from EffectLib.
+ * Contains implementations of {@code Window}s.
  */
-package com.karuslabs.commons.effect.effects;
+package com.karuslabs.commons.graphics.windows;

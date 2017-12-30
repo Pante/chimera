@@ -26,6 +26,9 @@ package com.karuslabs.commons.graphics;
 import com.karuslabs.commons.annotation.ValueBased;
 
 
+/**
+ * Represent a point along the X and Y axis in a {@code Window} which begins from (0, 0) at the top left corner.
+ */
 @ValueBased
 public class Point implements Comparable<Point> {
     
@@ -35,10 +38,19 @@ public class Point implements Comparable<Point> {
     private int hash;
     
     
+    /**
+     * Constructs an empty {@code Point}.
+     */
     public Point() {
         this(0, 0);
     }
     
+    /**
+     * Constructs a {@code Point} with the specified X and Y coordinates.
+     * 
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     */
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
@@ -47,6 +59,12 @@ public class Point implements Comparable<Point> {
     }
     
     
+    /**
+     * Compares this {@code Point} to the specified {@code Point}.
+     * 
+     * @param other the other point against which this point is compared
+     * @return 1 if this point is larger than the other point; 0 if this point is equal to the other point; else -1
+     */
     @Override
     public int compareTo(Point other) {
         if (area > other.area) {

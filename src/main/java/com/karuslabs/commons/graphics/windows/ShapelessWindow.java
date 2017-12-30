@@ -30,13 +30,26 @@ import com.karuslabs.commons.locale.MessageTranslation;
 import java.util.List;
 
 
+/**
+ * A concrete subclass of {@code Window} which represents a shapeless window.
+ */
 public class ShapelessWindow extends Window {
-
+    
+    /**
+     * Constructs a {@code ShapelessWindow} with the specified regions, translation and reset value.
+     * 
+     * @param regions the regions
+     * @param translation the translation
+     * @param reset true if this window should reset; else false
+     */
     public ShapelessWindow(List<Region> regions, MessageTranslation translation, boolean reset) {
         super(regions, translation, reset);
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Point inside(int slot) {
         return new Point(slot, 0);

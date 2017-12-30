@@ -27,19 +27,55 @@ import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.buttons.Button;
 
 
+/**
+ * Represents a region in a {@code Window}.
+ */
 public interface Region extends Component, Resettable {    
     
+    /**
+     * Returns whether this region contains the specified slot.
+     * 
+     * @param slot the slot
+     * @return true if this region contains the specified slot; else false
+     */
     public boolean contains(int slot);
     
+    /**
+     * Handles the specified event when the slots in the {@code Window} which contains this region are dragged.
+     * 
+     * Implementations should check if this region contains any of the slots which were dragged.
+     * 
+     * @param event the event
+     */
     public void drag(DragEvent event);
     
+    /**
+     * Returns the size of this region.
+     * 
+     * @return the size
+     */
     public int size();
     
     
+    /**
+     * Creates an immutable {@code Region} which contains the specified slot and button only that does not reset.
+     * 
+     * @param slot the slot
+     * @param button the button
+     * @return the singleton Region
+     */
     public static Region singleton(int slot, Button button) {
         return singleton(slot, button, false);
     }
-     
+    
+    /**
+     * Creates an immutable {@code Region} which contains the specified slot, button and reset value only.
+     * 
+     * @param slot the slot
+     * @param button the button
+     * @param reset true if the region should reset; else false
+     * @return the singleton Region
+     */
     public static Region singleton(int slot, Button button, boolean reset) {
         return new Singleton(slot, button, reset);
     }

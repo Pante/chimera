@@ -28,16 +28,34 @@ import com.karuslabs.commons.graphics.windows.Window;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 
+/**
+ * An implementation of {@code Component} which may be reset.
+ */
 public abstract class ResettableComponent implements Component, Resettable {
     
+    /**
+     * Whether this component should reset.
+     */
     protected boolean reset;
     
     
+    /**
+     * Constructs a {@code ResettableComponent} with the specified reset value.
+     * 
+     * @param reset true if this component should reset; else false
+     */
     public ResettableComponent(boolean reset) {
         this.reset = reset;
     }
     
     
+    /**
+     * Delegates the resetting of this component to {@link #onReset(Window, InventoryCloseEvent)}, 
+     * or does nothing if this component should not reset.
+     * 
+     * @param window the window which contains this component
+     * @param event the event
+     */
     @Override
     public void reset(Window window, InventoryCloseEvent event) {
         if (reset) {
@@ -45,16 +63,32 @@ public abstract class ResettableComponent implements Component, Resettable {
         }
     }
     
+    /**
+     * Resets this component.
+     * This method is invoked by {@link #reset(Window, InventoryCloseEvent)} if this component should reset.
+     * The default implementation does nothing.
+     * 
+     * Subclasses should override this method to customise the handling of the specified event.
+     * 
+     * @param window the window which contains this component
+     * @param event the event
+     */
     protected void onReset(Window window, InventoryCloseEvent event) {
         
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean reset() {
         return reset;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset(boolean reset) {
         this.reset = reset;

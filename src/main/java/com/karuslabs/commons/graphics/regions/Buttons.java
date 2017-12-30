@@ -29,21 +29,47 @@ import com.karuslabs.commons.graphics.buttons.Button;
 import java.util.*;
 
 
+/**
+ * A concrete subclass of {@code ProxiedMap} which contains {@code GenericButton}s and
+ * is bound to a {@code Region}.
+ * 
+ * @param <GenericButton> the button type
+ */
 public class Buttons<GenericButton extends Button> extends ProxiedMap<Integer, GenericButton> {
     
     private final Region region;
     
     
+    /**
+     * Constructs a {@code Buttons} for the specified {@code Region} using a backing {@code HashMap}.
+     * 
+     * @param region the region
+     */
     public Buttons(Region region) {
         this(region, new HashMap<>());
     }
     
+    /**
+     * Constructs a {@code Buttons} for the specified {@code Region} using the specified backing map.
+     * 
+     * @param region the region
+     * @param map the backing map
+     */
     public Buttons(Region region, Map<Integer, GenericButton> map) {
         super(map);
         this.region = region;
     }
     
     
+    /**
+     * Associates the specified button with the specified slot if the {@code Region}
+     * to which these {@code Buttons} are bound contains the specified slot.
+     * 
+     * @param slot the slot
+     * @param button the button
+     * @return the previous button associated with the specified slot
+     * @throws IllegalArgumentException if the region to which these buttons are bound does not contain the specified slot
+     */
     @Override
     public GenericButton put(Integer slot, GenericButton button) {
         if (region.contains(slot)) {
@@ -55,6 +81,11 @@ public class Buttons<GenericButton extends Button> extends ProxiedMap<Integer, G
     }
     
     
+    /**
+     * Returns the region to which the buttons are bound.
+     * 
+     * @return the region
+     */
     public Region getRegion() {
         return region;
     }

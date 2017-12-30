@@ -26,9 +26,18 @@ package com.karuslabs.commons.graphics.buttons;
 import com.karuslabs.commons.graphics.*;
 
 
+/**
+ * Represents a button in a {@code Window} or {@code Region}.
+ */
 @FunctionalInterface
 public interface Button extends Component {
     
+    /**
+     * Handles the specified event when the slot to which this button is bound is dragged.
+     * 
+     * @param event the event
+     * @param slot the slot to which this button is bound
+     */
     public default void drag(DragEvent event, int slot) {
         event.setCancelled(true);
     }

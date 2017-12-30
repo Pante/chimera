@@ -30,12 +30,24 @@ import com.karuslabs.commons.locale.MessageTranslation;
 import java.util.List;
 
 
+/**
+ * A concrete subclass of {@code Window} which represents a rectangular window.
+ */
 public class RectangleWindow extends Window {
     
     private int width;
     private int height;
     
     
+    /**
+     * Constructs a {@code RectangleWindow} with the specified regions, translation, reset value, width and height
+     * 
+     * @param regions the regions
+     * @param translation the translation
+     * @param reset true if this window should reset; else false
+     * @param width the width
+     * @param height the height
+     */
     public RectangleWindow(List<Region> regions, MessageTranslation translation, boolean reset, int width, int height) {
         super(regions, translation, reset);
         this.width = width;
@@ -43,6 +55,9 @@ public class RectangleWindow extends Window {
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Point inside(int slot) {
         int x = slot % width;
@@ -51,10 +66,20 @@ public class RectangleWindow extends Window {
     }
     
     
+    /**
+     * Returns the width.
+     * 
+     * @return the width
+     */
     public int getWidth() {
         return width;
     }
     
+    /**
+     * Returns the height.
+     * 
+     * @return the height
+     */
     public int getHeight() {
         return height;
     }

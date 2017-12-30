@@ -24,16 +24,34 @@
 package com.karuslabs.commons.graphics.buttons;
 
 
+/**
+ * An implementation of {@code Button} which contains a single bound state.
+ * 
+ * @param <State> the state type
+ */
 public abstract class BoundButton<State> implements Button {
     
+    /**
+     * The bound state.
+     */
     protected State state;
     
     
+    /**
+     * Constructs a {@code BoundButton} with the specified state.
+     * 
+     * @param state the state
+     */
     public BoundButton(State state) {
         this.state = state;
     }
     
     
+    /**
+     * Returns the bound state.
+     * 
+     * @return the state
+     */
     public State getBound() {
         return state;
     }

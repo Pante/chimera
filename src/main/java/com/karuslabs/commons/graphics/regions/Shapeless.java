@@ -28,26 +28,48 @@ import com.karuslabs.commons.graphics.buttons.Button;
 import java.util.*;
 
 
+/**
+ * An implementation of {@code Region} which represents a shapeless region.
+ * 
+ * @param <GenericButton> the button type
+ */
 public class Shapeless<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
     private Set<Integer> slots;
     
     
+    /**
+     * Constructs a {@code Shapeless} with a backing {@code HashMap} and specified slots.
+     * 
+     * @param slots the slots which this region contains
+     */
     public Shapeless(Set<Integer> slots) {
         this(new HashMap<>(), slots);
     }
     
+    /**
+     * Constructs a {@code Shapeless} with the specified backing {@code HashMap} and slots.
+     * 
+     * @param map the backing map
+     * @param slots the slots which this region contains
+     */
     public Shapeless(Map<Integer, GenericButton> map, Set<Integer> slots) {
         super(map);
         this.slots = slots;
     }
 
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public boolean contains(int slot) {
         return slots.contains(slot);
     }
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public int size() {
         return slots.size();

@@ -35,7 +35,7 @@ import org.bukkit.event.inventory.*;
 public interface Component {
     
     /**
-     * This method is called whenever this {@code Component} is clicked.
+     * Handles the specified event when this component is clicked.
      * 
      * @param event the event
      */
@@ -43,8 +43,10 @@ public interface Component {
     
     
     /**
-     * This method is called whenever the {@code Window} which contains this {@code Component} is opened.
+     * Handles the specified event when the {@code Window} which contains this component is opened.
      * The default implementation does nothing.
+     * 
+     * Implementations should override this method to cusotmise the handling of the specified event.
      * 
      * @param window the window which contains this component
      * @param event the event
@@ -54,8 +56,10 @@ public interface Component {
     }
     
     /**
-     * This method is called whenever the {@code Window} which contains this {@code Component} is closed.
+     * Handles the specified event when the {@code Window} which contains this component is closed.
      * The default implementation does nothing.
+     * 
+     * Implementations should override this method to cusotmise the handling of the specified event.
      * 
      * @param window the window which contains this component
      * @param event the event
@@ -65,8 +69,10 @@ public interface Component {
     }
     
     /**
-     * This method is called whenever the {@code Window} which contains this {@code Component} is reset.
+     * Handles the specified event when the {@code Window} which contains this component is reset.
      * The default implementation does nothing.
+     * 
+     * Implementations should override this method to cusotmise the handling of the specified event.
      * 
      * @param window the window which contains this component
      * @param event the event

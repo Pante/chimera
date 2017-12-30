@@ -29,6 +29,11 @@ import com.karuslabs.commons.graphics.*;
 import java.util.*;
 
 
+/**
+ * An implementation of {@code Region} which represents a rectangular region.
+ * 
+ * @param <GenericButton> the button type
+ */
 public class Rectangle<GenericButton extends Button> extends AbstractRegion<GenericButton> {
     
     private Point min;
@@ -39,10 +44,28 @@ public class Rectangle<GenericButton extends Button> extends AbstractRegion<Gene
     private int width;
         
     
+    /**
+     * Constructs a {@code Rectangle} with a backing {@code HashMap} and the specified minimum point and slot, 
+     * and the maximum point and slot.
+     * 
+     * @param min the minimum point
+     * @param minSlot the minimum slot
+     * @param max the maximum slot
+     * @param maxSlot the maximum slot
+     */
     public Rectangle(Point min, int minSlot, Point max, int maxSlot) {
         this(new HashMap<>(), min, minSlot, max, maxSlot);
     }
     
+    /**
+     * Constructs a {@code Rectangle} with the specified backing map, minimum point and slot and, maximum point and slot.
+     * 
+     * @param map the backing map
+     * @param min the minimum point
+     * @param minSlot the minimum slot
+     * @param max the maximum slot
+     * @param maxSlot the maximum slot
+     */
     public Rectangle(Map<Integer, GenericButton> map, Point min, int minSlot, Point max, int maxSlot) {
         super(map);
         this.min = min;
@@ -55,32 +78,58 @@ public class Rectangle<GenericButton extends Button> extends AbstractRegion<Gene
         this.width = (maxSlot - minSlot - width + 1) / (height - 1);
     }
     
-    
+   
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public boolean contains(int slot) {
         int x = slot % width;
         int y = slot / width;
         return (min.x <= x && x <= max.x) && (min.y <= y && y <= max.y);
     }
-    
+   
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public int size() {
         return size;
     }
     
     
+    /**
+     * Returns the minimum point of this region.
+     * 
+     * @return the minimum point
+     */
     public Point getMin() {
         return min;
     }
     
+    /**
+     * Returns the maximum point of this region.
+     * 
+     * @return the maximum point
+     */
     public Point getMax() {
         return max;
     }
     
+    /**
+     * Returns the minimum slot of this region.
+     * 
+     * @return the minimum slot
+     */
     public int getMinSlot() {
         return minSlot;
     }
     
+    /**
+     * Returns the maximum slot of this region.
+     * 
+     * @return the maximum slot
+     */
     public int getMaxSlot() {
         return maxSlot;
     }
