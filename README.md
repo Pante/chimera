@@ -8,8 +8,6 @@
 [![Documented Source Code](https://img.shields.io/badge/Documentation-Source%20Code-blue.svg)](https://github.com/Pante/Karus-Commons/tree/Documentation)
 [![Javadoc](https://img.shields.io/badge/Javadoc-3.0.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.0.0-SNAPSHOT/apidocs/overview-summary.html)
 
-<a href = "https://github.com/Pante/Karus-Commons/tree/Documentation">Documented Source Code</a> | 
-
 ***
 _Java 8/9 artifact:_
 ```XML
