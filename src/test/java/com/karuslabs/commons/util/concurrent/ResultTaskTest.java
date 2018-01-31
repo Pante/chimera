@@ -57,11 +57,11 @@ class ResultTaskTest {
     @Test
     void run_ThrowsException() throws Exception {
         doNothing().when(result).done();
-        doThrow(Exception.class).when(runnable).run();
+        doThrow(RuntimeException.class).when(runnable).run();
         
         result.run();
         
-        assertEquals(Exception.class, result.thrown.getClass());
+        assertEquals(RuntimeException.class, result.thrown.getClass());
         verify(result).process();
         verify(result).done();
     }

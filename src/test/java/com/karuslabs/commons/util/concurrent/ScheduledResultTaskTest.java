@@ -53,12 +53,12 @@ class ScheduledResultTaskTest {
     
     @Test
     void run_ThrowsException() {
-        doThrow(Exception.class).when(runnable).run();
+        doThrow(RuntimeException.class).when(runnable).run();
         
         task.run();
         
         verify(task).callback();
-        assertEquals(Exception.class, task.thrown.getClass());
+        assertEquals(RuntimeException.class, task.thrown.getClass());
         assertTrue(task.isDone());
     }
     
