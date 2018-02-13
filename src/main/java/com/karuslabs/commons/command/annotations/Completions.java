@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,52 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.annotations;
 
-import com.karuslabs.commons.util.Get;
+import java.lang.annotation.*;
 
-import java.util.function.*;
-import javax.annotation.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class Argument {
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Completions {
     
-    private String argument;
-    
-    
-    public Argument() {
-        this("");
-    }
-    
-    public Argument(String argument) {
-        this.argument = argument;
-    }
-    
-    
-    public boolean match(Predicate<String> match) {
-        return match.test(argument);
-    }
-    
-    
-    public String asText() {
-        return argument;
-    }
-    
-    public @Nullable <T> T as(Function<String, T> type) {
-        return type.apply(argument);
-    }
-    
-    public <T> T asOrDefault(Function<String, T> type, T value) {
-        return Get.orDefault(type.apply(argument), value);
-    }
-    
-    public <T, E extends RuntimeException> @Nonnull T asOrThrow(Function<String, T> type, Supplier<E> exception) {
-        return Get.orThrow(type.apply(argument), exception);
-    }
-    
-    
-    public void set(String argument) {
-        this.argument = argument;
-    }
+    Completion[] value() default {};
     
 }

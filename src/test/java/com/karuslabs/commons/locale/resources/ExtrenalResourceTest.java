@@ -21,52 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.locale.resources;
 
-import com.karuslabs.commons.util.Get;
+import java.io.*;
 
-import java.util.function.*;
-import javax.annotation.*;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-public class Argument {
-    
-    private String argument;
-    
-    
-    public Argument() {
-        this("");
-    }
-    
-    public Argument(String argument) {
-        this.argument = argument;
-    }
+@TestInstance(PER_CLASS)
+class ExtrenalResourceTest {
+
+    ExternalResource resource = new ExternalResource(new File(getClass().getClassLoader().getResource("locale/resources/Resource.yml").getPath()).getParentFile());
     
     
-    public boolean match(Predicate<String> match) {
-        return match.test(argument);
+    @Test
+    void load() {
+        assertNotNull(resource.load("Resource.yml"));
     }
     
     
-    public String asText() {
-        return argument;
+    @Test
+    void exists() {
+        assertTrue(resource.exists("Resource.yml"));
     }
-    
-    public @Nullable <T> T as(Function<String, T> type) {
-        return type.apply(argument);
-    }
-    
-    public <T> T asOrDefault(Function<String, T> type, T value) {
-        return Get.orDefault(type.apply(argument), value);
-    }
-    
-    public <T, E extends RuntimeException> @Nonnull T asOrThrow(Function<String, T> type, Supplier<E> exception) {
-        return Get.orThrow(type.apply(argument), exception);
-    }
-    
-    
-    public void set(String argument) {
-        this.argument = argument;
-    }
-    
+       
 }

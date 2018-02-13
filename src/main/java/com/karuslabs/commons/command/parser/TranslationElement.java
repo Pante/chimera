@@ -86,7 +86,7 @@ public class TranslationElement extends Element<MessageTranslation> {
         ConfigurationSection translation = config.getConfigurationSection(key);
         
         Resource[] embedded = translation.getStringList("embedded").stream().map(EmbeddedResource::new).toArray(Resource[]::new);
-        Resource[] folders = translation.getStringList("folder").stream().map(path -> new FileResource(new File(folder, path))).toArray(Resource[]::new);
+        Resource[] folders = translation.getStringList("folder").stream().map(path -> new ExternalResource(new File(folder, path))).toArray(Resource[]::new);
         
         Resource[] resources = copyOf(embedded, embedded.length + folders.length);
         arraycopy(folders, 0, resources, embedded.length, folders.length);

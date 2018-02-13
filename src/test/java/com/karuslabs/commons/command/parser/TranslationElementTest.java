@@ -23,9 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.locale.resources.Resource;
-import com.karuslabs.commons.locale.resources.FileResource;
-import com.karuslabs.commons.locale.resources.EmbeddedResource;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.resources.*;
 
@@ -73,7 +70,7 @@ class TranslationElementTest {
         MessageTranslation translation = element.handle(COMMANDS.getConfigurationSection("declare.translations"), "bundle");
         Resource[] resources = ((ExternalControl) translation.getControl()).getResources();
         EmbeddedResource embedded = (EmbeddedResource) resources[0];
-        FileResource file = (FileResource) resources[1];
+        ExternalResource file = (ExternalResource) resources[1];
         
         assertSame(DETECTED, translation.getProvider());
         assertEquals("Resource", translation.getBundleName());

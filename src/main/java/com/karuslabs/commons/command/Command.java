@@ -74,7 +74,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         String argument;
         Command subcommand;
         
-        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.text()[0])) != null) {
+        if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.raw()[0])) != null) {
             arguments.trim();
             context.update(argument, subcommand);
             return subcommand.execute(context, arguments);
@@ -95,7 +95,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
             return EMPTY_LIST;
         }
 
-        String argument = arguments.text()[0];
+        String argument = arguments.raw()[0];
         
         Command subcommand = subcommands.get(argument);
         if (subcommand != null) {
@@ -109,7 +109,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
                     .collect(toList());
 
         } else {
-            return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.getLast().text());
+            return completions.getOrDefault(arguments.length() - 1, PLAYER_NAMES).complete(sender, arguments.last().asText());
         }
     }
     

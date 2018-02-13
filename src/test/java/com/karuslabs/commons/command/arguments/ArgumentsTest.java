@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import java.util.function.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -61,41 +60,29 @@ class ArgumentsTest {
     @ParameterizedTest
     @CsvSource({"0, 0", "-1, ''"})
     void get(int index, String expected) {
-        assertEquals(expected, arguments.get(index).text());
+        assertEquals(expected, arguments.at(index).asText());
     }
     
     
     @Test
-    void getLast() {
-        arguments.getLast();
+    void last() {
+        arguments.last();
         
-        verify(arguments).get(1);
-    }
-    
-    
-    @Test
-    void getImmutable() {
-        assertFalse(arguments.getCopy(0) == arguments.getCopy(0));
-    }
-    
-    @Test
-    void getLastImmutable() {
-        assertFalse(arguments.getLastCopy() == arguments.getLastCopy());
+        verify(arguments).at(1);
     }
     
     
     @ParameterizedTest
-    @CsvSource({"true, 1, 0", "false, 0, 1"})
-    void getOr(boolean contains, int functionTimes, int supplierTimes) {
+    @CsvSource({"true, 0", "false, ''"})
+    void copyOf(boolean contains, String expected) {
         doReturn(contains).when(arguments).contains(anyInt());
         
-        Function<String, Argument> function = mock(Function.class);
-        Supplier<Argument> supplier = mock(Supplier.class);
-        
-        arguments.getOr(0, function, supplier);
-        
-        verify(function, times(functionTimes)).apply(anyString());
-        verify(supplier, times(supplierTimes)).get();
+        assertEquals(expected, arguments.copyOf(0).asText());
+    }
+    
+    @Test
+    void copyOfLast() {
+        assertFalse(arguments.copyOfLast() == arguments.copyOfLast());
     }
     
     
@@ -105,7 +92,7 @@ class ArgumentsTest {
         Arguments arguments = new Arguments(args);
         arguments.trim();
         
-        assertThat(arguments.text(), equalTo(expected));
+        assertThat(arguments.raw(), equalTo(expected));
     }
     
     static Stream<org.junit.jupiter.params.provider.Arguments> trim_parameters() {

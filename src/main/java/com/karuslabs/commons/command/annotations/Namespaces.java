@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.command.annotations;
 
-import java.io.*;
+import java.lang.annotation.*;
 
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@TestInstance(PER_CLASS)
-class FileResourceTest {
-
-    FileResource resource = new FileResource(new File(getClass().getClassLoader().getResource("locale/resources/Resource.yml").getPath()).getParentFile());
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Namespaces {
     
+    Namespace[] value() default {};
     
-    @Test
-    void load() {
-        assertNotNull(resource.load("Resource.yml"));
-    }
-    
-    
-    @Test
-    void exists() {
-        assertTrue(resource.exists("Resource.yml"));
-    }
-       
 }

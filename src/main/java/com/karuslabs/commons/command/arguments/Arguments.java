@@ -25,7 +25,6 @@ package com.karuslabs.commons.command.arguments;
 
 import com.karuslabs.commons.annotation.*;
 
-import java.util.function.*;
 
 import static java.util.Arrays.copyOfRange;
 
@@ -63,32 +62,27 @@ public class Arguments {
     }
     
     
-    public @Shared Argument get(int index) {
+    public @Shared Argument at(int index) {
         mutable.set(contains(index) ? arguments[index] : "");
         return mutable;
     }
     
-    public @Shared Argument getLast() {
-        return get(arguments.length - 1);
+    public @Shared Argument last() {
+        return at(arguments.length - 1);
     }
     
     
-    public Argument getCopy(int index) {
-        return getOr(index, Argument::new, Argument::new);
-    }
-    
-    public Argument getLastCopy() {
-        return getOr(arguments.length - 1, Argument::new, Argument::new);
-    }
-    
-    
-    protected Argument getOr(int index, Function<String, Argument> function, Supplier<Argument> supplier) {
+    public Argument copyOf(int index) {
         if (contains(index)) {
-            return function.apply(arguments[index]);
+            return new Argument(arguments[index]);
             
         } else {
-            return supplier.get();
+            return new Argument();
         }
+    }
+    
+    public Argument copyOfLast() {
+        return copyOf(arguments.length - 1);
     }
     
         
@@ -107,7 +101,7 @@ public class Arguments {
     }
     
     
-    public String[] text() {
+    public String[] raw() {
         return arguments;
     }
     

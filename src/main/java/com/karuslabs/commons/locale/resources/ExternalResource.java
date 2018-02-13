@@ -28,12 +28,12 @@ import java.io.*;
 import javax.annotation.*;
 
 
-public class FileResource implements Resource {
+public class ExternalResource implements Resource {
     
     private File folder;
     
     
-    public FileResource(File folder) {
+    public ExternalResource(File folder) {
         this.folder = folder;
     }
     
