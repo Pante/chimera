@@ -32,8 +32,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
-public @interface Completions {
+public @interface Literals {
     
-    Completion[] value() default {};
+    Literal[] value() default {};
     
 }

@@ -28,7 +28,8 @@ import com.karuslabs.commons.command.annotations.*;
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-import javax.tools.Diagnostic;
+
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({"com.karuslabs.commons.command.annotations.Namespace", "com.karuslabs.commons.command.annotations.Namespaces"})
@@ -66,7 +67,7 @@ public class NamespaceChecker extends AbstractProcessor {
             namespaces.put(name, type);
 
         } else {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Conflicting namespaces between: " + type + " and " + other, element);
+            processingEnv.getMessager().printMessage(ERROR, "Conflicting namespaces: " + type + " and " + other + ", namespaces must be unique", element);
         }
     }
 

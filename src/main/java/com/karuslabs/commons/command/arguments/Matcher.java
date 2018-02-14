@@ -89,7 +89,7 @@ public class Matcher {
         return true;
     }
     
-    public boolean anySequence(Predicate<String>... matches) {
+    public boolean any(Predicate<String>... matches) {
         if (matches.length > length()) {
             return false;
         }

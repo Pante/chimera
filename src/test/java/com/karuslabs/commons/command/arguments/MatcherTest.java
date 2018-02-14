@@ -126,7 +126,7 @@ class MatcherTest {
     void anySequence(Predicate[] matches, boolean expected) {
         Matcher matcher = new Matcher("1", "2", "3");
         
-        assertEquals(expected, matcher.anySequence(matches));
+        assertEquals(expected, matcher.any(matches));
     }
     
     static Stream<Arguments> anySequence_parameters() {

@@ -23,57 +23,74 @@
  */
 package com.karuslabs.commons.command.annotations.checkers;
 
-import com.karuslabs.commons.command.CommandExecutor;
 import com.karuslabs.commons.command.annotations.*;
 
-import java.util.Set;
+import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-import javax.lang.model.type.*;
 
 import static com.karuslabs.commons.annotation.checker.Elements.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.command.annotations.Information", 
     "com.karuslabs.commons.command.annotations.Literal", "com.karuslabs.commons.command.annotations.Literals",
-    "com.karuslabs.commons.command.annotations.Namespace", "com.karuslabs.commons.command.annotations.Namespaces",
     "com.karuslabs.commons.command.annotations.Registered", "com.karuslabs.commons.command.annotations.Registrations"
 })
-public class CommandChecker extends AbstractProcessor {
+public class CompletionChecker extends AbstractProcessor {
     
-    private TypeMirror expected;
-    private Messager messager;
+    private Set<Integer> indexes;
     
     
-    @Override
-    public synchronized void init(ProcessingEnvironment enviroment) {
-        super.init(enviroment);
-        expected = enviroment.getElementUtils().getTypeElement(CommandExecutor.class.getName()).asType();
-        messager = enviroment.getMessager();
+    public CompletionChecker() {
+        indexes = new HashSet<>();
     }
     
-    
+        
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment enviroment) {
-        for (Element element : annotated(annotations, enviroment))  {
-            checkAssignability(element);
-            checkNamespace(element);
+        for (Element element : annotated(annotations, enviroment)) {
+            checkLiterals(element);
+            checkRegistrations(element);
         }
         
         return false;
     }
     
-    protected void checkAssignability(Element element) {
-        if (!processingEnv.getTypeUtils().isAssignable(element.asType(), expected)) {
-            messager.printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
+    protected void checkLiterals(Element element) {
+        Literals literals = element.getAnnotation(Literals.class);
+        if (literals != null) {
+            for (Literal literal : literals.value()) {
+                check(element, literal.index());
+            }
+        }
+            
+        Literal literal = element.getAnnotation(Literal.class);
+        if (literal != null) {
+            check(element, literal.index());
         }
     }
     
-    protected void checkNamespace(Element element) {
-        if (element.getAnnotation(Namespace.class) == null && element.getAnnotation(Namespaces.class) == null) {
-            messager.printMessage(ERROR, "Missing namespace(s): " + element.asType().toString() + ", command must be declared with a namespace", element);
+    protected void checkRegistrations(Element element) {
+        Registrations registrations = element.getAnnotation(Registrations.class);
+        if (registrations != null) {
+            for (Registered registered : registrations.value()) {
+                check(element, registered.index());
+            }
+        }
+        
+        Registered registered = element.getAnnotation(Registered.class);
+        if (registered != null) {
+            check(element, registered.index());
+        }
+    }
+    
+    protected void check(Element element, int index) {
+        if (index < 0) {
+            processingEnv.getMessager().printMessage(ERROR, "Index out of bounds: " + index + ", index must be equal to or greater than 0", element);
+                    
+        } else if (!indexes.add(index)) {
+            processingEnv.getMessager().printMessage(ERROR, "Conflicting indexes: " + index + ", indexes must be unique", element);
         }
     }
     
