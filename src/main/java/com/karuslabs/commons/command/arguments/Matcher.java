@@ -50,9 +50,7 @@ public class Matcher {
     
     
     public Matcher single(int index) {
-        first = index;
-        last = index + 1;
-        return this;
+        return between(index, index + 1);
     }
     
     public Matcher starting(int first) {
@@ -60,7 +58,7 @@ public class Matcher {
     }
 
     public Matcher between(int first, int last) {
-        if (0 <= first && first <= last && last <= arguments.length && (arguments.length == 0 || first < arguments.length)) {
+        if (0 <= first && first <= last && last <= arguments.length) {
             this.first = first;
             this.last = last;
             return this;

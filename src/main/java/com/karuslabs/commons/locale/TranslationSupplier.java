@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,49 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.resources;
+package com.karuslabs.commons.locale;
 
-import java.io.*;
-import javax.annotation.*;
+import com.karuslabs.commons.locale.providers.Provider;
+
+import java.util.ResourceBundle.Control;
 
 
-public class ExternalResource implements Resource {
+@FunctionalInterface
+public interface TranslationSupplier<GenericTranslation extends Translation> {
     
-    private File folder;
-    
-    
-    public ExternalResource(File folder) {
-        this.folder = folder;
-    }
-    
-    
-    @Override
-    public @Nullable InputStream load(@Nonnull String name) {
-        File file = new File(folder, name);
-        if (!exists(file)) {
-            return null;
-        }
-            
-        try {
-            return new BufferedInputStream(new FileInputStream(file));
-
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean exists(@Nonnull String name) {
-        return exists(new File(folder, name));
-    }
-    
-    private boolean exists(File file) {
-        return file.isFile() && file.canRead();
-    }
-    
-    
-    public String getPath() {
-        return folder.getPath();
-    }
+    public GenericTranslation get(String bundle, Control control, Provider provider);
     
 }

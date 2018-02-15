@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import static com.google.common.cache.CacheBuilder.newBuilder;
-import static java.util.Arrays.binarySearch;
+import static java.util.Arrays.*;
 import static java.util.Locale.*;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -45,8 +45,8 @@ public class Locales {
     private static final Map<String, Locale> CONSTANTS = new HashMap<>();
     private static final Cache<String, Locale> CACHE = newBuilder().expireAfterAccess(5, MINUTES).build();
     
-    private static final String[] COUNTRIES = getISOCountries();
-    private static final String[] LANGUAGES = getISOLanguages();
+    private static final Set<String> COUNTRIES = new HashSet<>(asList(getISOCountries()));
+    private static final Set<String> LANGUAGES = new HashSet<>(asList(getISOLanguages()));
     
     
     static {
@@ -126,11 +126,11 @@ public class Locales {
     
         
     public static boolean isCountry(String country) {
-        return country.length() == 2 && binarySearch(COUNTRIES, country.toUpperCase(ENGLISH)) >= 0;
+        return country.length() == 2 && COUNTRIES.contains(country.toUpperCase(ENGLISH));
     }
     
     public static boolean isLanguage(String language) {
-        return language.length() == 2 && binarySearch(LANGUAGES, language.toLowerCase(ENGLISH)) >= 0;
+        return language.length() == 2 && LANGUAGES.contains(language.toLowerCase(ENGLISH));
     }
     
 }
