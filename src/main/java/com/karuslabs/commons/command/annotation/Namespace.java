@@ -21,16 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.command.annotation;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import java.lang.annotation.*;
 
-import java.util.ResourceBundle.Control;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@FunctionalInterface
-public interface TranslationSupplier<GenericTranslation extends Translation> {
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+@Repeatable(Namespaces.class)
+public @interface Namespace {
     
-    public GenericTranslation get(String bundle, Control control, Provider provider);
+    String[] value();
     
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.locale.builders;
 
-import com.karuslabs.commons.command.arguments.Arguments;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.locale.providers.Provider;
 
-import org.bukkit.command.CommandSender;
-
-import static org.bukkit.ChatColor.RED;
+import java.util.ResourceBundle.Control;
 
 
 @FunctionalInterface
-interface Parent extends CommandExecutor {    
+public interface TranslationSupplier<GenericTranslation extends Translation> {
     
-    @Override
-    public default boolean execute(Context context, Arguments arguments) {
-        Command command = context.getParentCommand();
-        CommandSender sender = context.getSender();
-        
-        if (command == null) {
-            sender.sendMessage(RED + "Invalid command");
-            
-        } else if (!sender.hasPermission(command.getPermission())) {
-            sender.sendMessage(RED + command.getPermissionMessage());
-            
-        } else {
-            execute(command, sender);
-        }
-        
-        return true;
-    }
-    
-    void execute(Command parent, CommandSender sender);
+    public GenericTranslation get(String bundle, Control control, Provider provider);
     
 }

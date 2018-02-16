@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.annotation.checkers;
 
-import javax.annotation.Nullable;
+import com.karuslabs.commons.command.annotation.checkers.CommandChecker;
+import javax.annotation.processing.SupportedAnnotationTypes;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class Context {
-
-    private String label;
-    private @Nullable Command parent;
-    private Command command;
-
+class CommandCheckerTest {
     
-    public Context(String label, @Nullable Command parent, Command command) {
-        this.label = label;
-        this.parent = parent;
-        this.command = command;
-    }
-    
-    
-    public void update(String label, Command command) {
-        this.label = label;
-        this.parent = this.command;
-        this.command = command;
-    }
-    
-    
-    public String getLabel() {
-        return label;
-    }
-    
-    public @Nullable Command getParentCommand() {
-        return parent;
-    }
-    
-    public Command getCommand() {
-        return command;
+    @Test
+    void annotations() throws ClassNotFoundException {
+        for (String supported: CommandChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
+            assertTrue(Class.forName(supported).isAnnotation());
+        }
     }
     
 }

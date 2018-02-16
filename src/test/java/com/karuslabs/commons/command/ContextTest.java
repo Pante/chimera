@@ -23,30 +23,13 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.locale.MessageTranslation;
-
-import java.util.Locale;
-import java.util.stream.Stream;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import static java.util.Locale.getDefault;
-import static org.bukkit.ChatColor.RED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 class ContextTest {
     
-    static final Player PLAYER = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
-    static final Player INVALID = when(mock(Player.class).getLocale()).thenReturn("fuck_standards").getMock();
-    static final CommandSender SENDER = mock(CommandSender.class);
     static final Command COMMAND = mock(Command.class);
     
     
@@ -55,7 +38,7 @@ class ContextTest {
         Command parent = mock(Command.class);
         Command command = mock(Command.class);
         
-        Context context = new Context(null, null, parent, command);
+        Context context = new Context(null, parent, command);
         context.update("label", COMMAND);
         
         assertEquals("label", context.getLabel());
@@ -63,63 +46,5 @@ class ContextTest {
         assertEquals(COMMAND, context.getCommand());
     }
 
-    
-    @Test
-    void sendColouredSource() {
-        CommandSender sender = mock(CommandSender.class);
-        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
-        context.setLocale(Locale.ITALY);
-        
-        context.sendColouredSource("&cKey");
-        
-        verify(sender).sendMessage(RED + "Key");
-    }
-    
-    
-    @Test
-    void sendFormattedSource() {
-        CommandSender sender = mock(CommandSender.class);
-        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
-        context.setLocale(Locale.ITALY);
-        
-        context.sendFormattedSource("&cKey", message -> message + " formatted");
-        
-        verify(sender).sendMessage("&cKey formatted");
-    }
-    
-    
-    @Test
-    void sendSource() {
-        CommandSender sender = mock(CommandSender.class);
-        Context context = new Context(sender, null, null, null, COMMAND, MessageTranslation.NONE);
-        context.setLocale(Locale.ITALY);
-        
-        context.sendSource("&cKey");
-        
-        verify(sender).sendMessage("&cKey");
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("getPlayer_parameters")
-    void getPlayer(CommandSender sender, Player expected) {
-        assertEquals(expected, new Context(sender, null, null, COMMAND).getPlayer());
-    }
-    
-    static Stream<Arguments> getPlayer_parameters() {
-        return Stream.of(of(SENDER, null), of(PLAYER, PLAYER));
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("getLocale_parameters")
-    void getLocale(CommandSender sender, Locale expected) {
-        Context context = new Context(sender, null, null, COMMAND);
-        assertEquals(expected, context.getLocale());
-    }
-    
-    static Stream<Arguments> getLocale_parameters() {
-        return Stream.of(of(PLAYER, new Locale("en", "GB")), of(INVALID, getDefault()), of(SENDER, getDefault()));
-    }
     
 }

@@ -54,33 +54,36 @@ class CommandTest {
     
     @Test
     void execute_unwrapped() {
-        doReturn(true).when(command).execute(any(Context.class), any(Arguments.class));
+        doReturn(true).when(command).execute(any(CommandSource.class), any(Context.class), any(Arguments.class));
         
         command.execute(sender, "", new String[] {});
         
-        verify(command).execute(any(Context.class), any(Arguments.class));
+        verify(command).execute(any(CommandSource.class), any(Context.class), any(Arguments.class));
     }
     
     
     @ParameterizedTest
     @CsvSource({"a, 1, 0", "b, 0, 1"})
     void execute(String argument, int delegated, int executor) {
+        CommandSource source = mock(CommandSource.class);
         Context context = mock(Context.class);
         Arguments arguments = spy(new Arguments(argument, "argument 2"));
         
-        Command subcommand = mock(Command.class);
+        Command subcommand = when(mock(Command.class).getTranslation()).thenReturn(NONE).getMock();
         command.getSubcommands().put("a", subcommand);
         
         CommandExecutor stub = mock(CommandExecutor.class);
         command.setExecutor(stub);
         
-        command.execute(context, arguments);
+        command.execute(source, context, arguments);
         
-        verify(arguments, times(delegated)).trim();
+        verify(source, times(delegated)).setTranslation(NONE);
         verify(context, times(delegated)).update("a", subcommand);
-        verify(subcommand, times(delegated)).execute(context, arguments);
+        verify(arguments, times(delegated)).trim();
         
-        verify(stub, times(executor)).execute(context, arguments);
+        verify(subcommand, times(delegated)).execute(source, context, arguments);
+        
+        verify(stub, times(executor)).execute(source, context, arguments);
     }
     
     

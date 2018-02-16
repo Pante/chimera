@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.checkers;
+package com.karuslabs.commons.command.annotation.checkers;
 
+import com.karuslabs.commons.command.annotation.Namespace;
+import com.karuslabs.commons.command.annotation.Namespaces;
 import com.karuslabs.commons.command.CommandExecutor;
-import com.karuslabs.commons.command.annotations.*;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -36,10 +37,10 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.command.annotations.Information", 
-    "com.karuslabs.commons.command.annotations.Literal", "com.karuslabs.commons.command.annotations.Literals",
-    "com.karuslabs.commons.command.annotations.Namespace", "com.karuslabs.commons.command.annotations.Namespaces",
-    "com.karuslabs.commons.command.annotations.Registered", "com.karuslabs.commons.command.annotations.Registrations"
+    "com.karuslabs.commons.command.annotation.Information", 
+    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
+    "com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces",
+    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
 })
 public class CommandChecker extends AbstractProcessor {
     

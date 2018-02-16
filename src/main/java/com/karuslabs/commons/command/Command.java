@@ -67,20 +67,22 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        return execute(new Context(sender, label, null, this), new Arguments(Join.quotedSpaces(args)));
+        return execute(new CommandSource(sender, translation), new Context(label, null, this), new Arguments(Join.quotedSpaces(args)));
     }
     
-    public boolean execute(Context context, Arguments arguments) {
+    public boolean execute(CommandSource source, Context context, Arguments arguments) {
         String argument;
         Command subcommand;
         
         if (arguments.length() > 0 && (subcommand = subcommands.get(argument = arguments.raw()[0])) != null) {
-            arguments.trim();
+            source.setTranslation(subcommand.getTranslation());
             context.update(argument, subcommand);
-            return subcommand.execute(context, arguments);
+            arguments.trim();
+            
+            return subcommand.execute(source, context, arguments);
             
         } else {
-            return executor.execute(context, arguments);
+            return executor.execute(source, context, arguments);
         }
     }
     

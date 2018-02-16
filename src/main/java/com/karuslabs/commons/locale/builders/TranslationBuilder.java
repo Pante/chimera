@@ -21,20 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.locale.builders;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static com.karuslabs.commons.locale.CachedControl.NONE;
 
 
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-@Repeatable(Namespaces.class)
-public @interface Namespace {
+public class TranslationBuilder<GenericTranslation extends Translation> extends Builder<TranslationBuilder, GenericTranslation> {
+
+    public TranslationBuilder(TranslationSupplier supplier, String bundle, Provider provider) {
+        super(supplier, bundle, provider);
+    }
     
-    String[] value();
+    
+    public CachedBuilder<GenericTranslation> cached() {
+        return new CachedBuilder<>(supplier, bundle, provider);
+    }
+    
+    public ExternalBuilder<GenericTranslation> external() {
+        return new ExternalBuilder<>(supplier, bundle, provider);
+    }
+
+    
+    @Override
+    public GenericTranslation build() {
+        return supplier.get(bundle, NONE, provider);
+    }
+
+    @Override
+    protected TranslationBuilder getThis() {
+        return this;
+    }
     
 }

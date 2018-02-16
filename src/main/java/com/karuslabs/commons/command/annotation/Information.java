@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.annotation;
 
 import java.lang.annotation.*;
 
@@ -32,11 +32,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
-@Repeatable(Literals.class)
-public @interface Literal {
+public @interface Information {
     
-    int index();
+    String[] aliases() default {};
     
-    String[] completions();
+    String description() default "";
+    
+    String permission() default "";
+    
+    String message() default "";
+    
+    String usage() default "";
     
 }

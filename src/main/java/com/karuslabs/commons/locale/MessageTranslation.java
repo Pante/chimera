@@ -24,6 +24,7 @@
 package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.annotation.Ignored;
+import com.karuslabs.commons.locale.builders.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.text.MessageFormat;
@@ -91,6 +92,19 @@ public class MessageTranslation extends Translation {
         format.setLocale(locale);
         bundle = null;
         return this;
+    }
+    
+    
+    public static TranslationBuilder<MessageTranslation> builder() {
+        return new TranslationBuilder<>(Translation::new, "", Provider.DETECTED);
+    }
+    
+    public static CachedBuilder<MessageTranslation> cachedBuilder() {
+        return new CachedBuilder<>(Translation::new, "", Provider.DETECTED);
+    }
+    
+    public static ExternalBuilder<MessageTranslation> externalBuilder() {
+        return new ExternalBuilder<>(Translation::new, "", Provider.DETECTED);
     }
     
 }

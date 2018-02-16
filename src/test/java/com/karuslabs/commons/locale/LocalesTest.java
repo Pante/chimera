@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
@@ -50,9 +50,16 @@ class LocalesTest {
     }
     
     
+    @Test
+    void getOrDefault() {
+        assertEquals(Locale.UK, Locales.getOrDefault("en_GB"));
+        assertEquals(Locale.getDefault(), Locales.getOrDefault("ZZ"));
+    }
+    
+    
     @ParameterizedTest
     @CsvSource({"en_US, true", "US_en, false", "US, true", "en, true", "ZZ, false"})
-    void getOrDefault(String locale, boolean expected) {
+    void getOrDefault_Default(String locale, boolean expected) {
         assertEquals(expected, Locales.getOrDefault(locale, (Locale) null) != null);
     }
     

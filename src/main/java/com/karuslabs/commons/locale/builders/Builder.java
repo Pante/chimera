@@ -21,19 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.locale.builders;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.karuslabs.commons.locale.Translation;
+import com.karuslabs.commons.locale.providers.Provider;
 
 
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface Namespaces {
+public abstract class Builder<GenericBuilder extends Builder, GenericTranslation extends Translation> {
+
+    protected TranslationSupplier<GenericTranslation> supplier;
+    protected String bundle;
+    protected Provider provider;
+
     
-    Namespace[] value() default {};
+    public Builder(TranslationSupplier supplier, String bundle, Provider provider) {
+        this.supplier = supplier;
+        this.bundle = bundle;
+        this.provider = provider;
+    }
+
     
+    public GenericBuilder bundle(String bundle) {
+        this.bundle = bundle;
+        return getThis();
+    }
+
+    public GenericBuilder provider(Provider provider) {
+        this.provider = provider;
+        return getThis();
+    }
+
+    public abstract GenericTranslation build();
+
+    protected abstract GenericBuilder getThis();
+
 }

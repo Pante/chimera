@@ -21,19 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.locale.builders;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.*;
+import java.util.concurrent.*;
 
 
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface Literals {
+public class CachedBuilder<GenericTranslation extends Translation> extends Builder<CachedBuilder, GenericTranslation> {
+
+    private ConcurrentMap<Locale, ResourceBundle> messages;
+
     
-    Literal[] value() default {};
+    public CachedBuilder(TranslationSupplier supplier, String bundle, Provider provider) {
+        super(supplier, bundle, provider);
+        messages = new ConcurrentHashMap<>();
+    }
+
+    public CachedBuilder locale(Locale locale, ResourceBundle bundle) {
+        messages.put(locale, bundle);
+        return this;
+    }
+
     
+    @Override
+    public GenericTranslation build() {
+        return supplier.get(bundle, new CachedControl(messages), provider);
+    }
+
+    @Override
+    protected CachedBuilder getThis() {
+        return this;
+    }
+
 }

@@ -23,71 +23,22 @@
  */
 package com.karuslabs.commons.command;
 
-import org.bukkit.command.CommandSender;
-
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.command.CommandExecutor.*;
-import static org.bukkit.ChatColor.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
 class CommandExecutorTest {
     
-    CommandSender sender = when(mock(CommandSender.class).hasPermission("")).thenReturn(true).getMock();
-    Command command = when(mock(Command.class).getPermission()).thenReturn("").getMock();
-    Context context = new Context(sender, null, null, command, null, null);
-    
-    
-    @Test
-    void no_parent() {
-        ALIASES.execute(new Context(sender, null, null, null, null, null), null);
-        verify(sender).sendMessage(RED + "Invalid command");
-    }
-    
-    
-    @Test
-    void no_permission() {
-        CommandSender sender = when(mock(CommandSender.class).hasPermission((String) any())).thenReturn(false).getMock();
-        Command command = when(mock(Command.class).getPermissionMessage()).thenReturn("invalid permission").getMock();
-        
-        ALIASES.execute(new Context(sender, null, null, command, null, null), null);
-        
-        verify(sender).sendMessage(RED + command.getPermissionMessage());
-    }
-    
-    
-    @Test
-    void aliases() {
-        ALIASES.execute(context, null);
-        verify(sender).sendMessage(GOLD + "Aliases: " + RED + command.getAliases().toString());
-    }
-    
-    
-    @Test
-    void description() {
-        DESCRIPTION.execute(context, null);
-        verify(sender).sendMessage(GOLD  + "Description: " + RED + command.getDescription() + GOLD  +"\nUsage: " + RED + command.getUsage());
-    }
-    
-    
-    @Test
-    void help() {
-        Command subcommand = when(mock(Command.class).getName()).thenReturn("subcommand").getMock();
-        when(subcommand.getPermission()).thenReturn("");
-        command.getSubcommands().put("subcommand", subcommand);
-        
-        HELP.execute(context, null);
-        
-        verify(sender).sendMessage(any(String[].class));
-    }
+    CommandSource source = mock(CommandSource.class);
     
     
     @Test
     void none() {
-        assertTrue(NONE.execute(new Context(sender, null, null, null, null, null), null));
-        verify(sender).sendMessage(RED + "No behaviour for this command.");
+        assertTrue(NONE.execute(source, null, null));
+        verify(source).sendColouredTranslation("Empty command");
     }
     
 }

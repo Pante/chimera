@@ -21,27 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.locale.builders;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.locale.resources.*;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.io.File;
+import java.util.*;
 
 
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface Information {
+public class ExternalBuilder<GenericTranslation extends Translation> extends Builder<ExternalBuilder, GenericTranslation> {
+
+    private static final Resource[] EMPTY = new Resource[] {};
     
-    String[] aliases() default {};
     
-    String description() default "";
+    private List<Resource> resources;
+
     
-    String permission() default "";
+    public ExternalBuilder(TranslationSupplier supplier, String bundle, Provider provider) {
+        super(supplier, bundle, provider);
+        resources = new ArrayList<>();
+    }
+
     
-    String message() default "";
+    public ExternalBuilder embedded(String folder) {
+        resources.add(new EmbeddedResource(folder));
+        return this;
+    }
+
+    public ExternalBuilder external(String folder) {
+        resources.add(new ExternalResource(new File(folder)));
+        return this;
+    }
+
     
-    String usage() default "";
-    
+    @Override
+    public GenericTranslation build() {
+        return supplier.get(bundle, new ExternalControl(resources.toArray(EMPTY)), provider);
+    }
+
+    @Override
+    protected ExternalBuilder getThis() {
+        return this;
+    }
+
 }

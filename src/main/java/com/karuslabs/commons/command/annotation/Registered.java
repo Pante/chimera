@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.annotations;
+package com.karuslabs.commons.command.annotation;
 
 import java.lang.annotation.*;
 
@@ -32,8 +32,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
-public @interface EmbeddedResources {
- 
-    String[] value() default {};
-        
+@Repeatable(Registrations.class)
+public @interface Registered {
+    
+    int index();
+    
+    String completion();
+    
 }

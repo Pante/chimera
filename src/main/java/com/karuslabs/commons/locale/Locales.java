@@ -116,6 +116,10 @@ public class Locales {
     }
     
     
+    public static Locale getOrDefault(String locale) {
+        return Get.orDefault(get(locale), getDefault());
+    }
+    
     public static Locale getOrDefault(String locale, Locale value) {
         return Get.orDefault(get(locale), value);
     }

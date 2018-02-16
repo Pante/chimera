@@ -21,18 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation.processor;
+package com.karuslabs.commons.command.annotation;
 
-import java.util.Set;
-import javax.annotation.processing.*;
-import javax.lang.model.element.TypeElement;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public abstract class TargetProcessor extends AbstractProcessor {
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment enviroment) {
-        return false;
-    }
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+@Repeatable(Literals.class)
+public @interface Literal {
+    
+    int index();
+    
+    String[] completions();
     
 }

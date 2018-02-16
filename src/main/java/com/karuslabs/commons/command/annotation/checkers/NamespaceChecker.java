@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.checkers;
+package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.annotations.*;
+import com.karuslabs.commons.command.annotation.Namespace;
+import com.karuslabs.commons.command.annotation.Namespaces;
 
 import java.util.*;
 import javax.annotation.processing.*;
@@ -32,7 +33,7 @@ import javax.lang.model.element.*;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-@SupportedAnnotationTypes({"com.karuslabs.commons.command.annotations.Namespace", "com.karuslabs.commons.command.annotations.Namespaces"})
+@SupportedAnnotationTypes({"com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces"})
 public class NamespaceChecker extends AbstractProcessor {
     
     private Map<String, String> namespaces;
