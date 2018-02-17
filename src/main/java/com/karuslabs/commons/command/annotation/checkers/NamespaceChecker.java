@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.annotation.Namespace;
-import com.karuslabs.commons.command.annotation.Namespaces;
+import com.karuslabs.commons.command.annotation.*;
 
 import java.util.*;
 import javax.annotation.processing.*;
@@ -60,7 +59,12 @@ public class NamespaceChecker extends AbstractProcessor {
     }
     
     protected void check(Element element, Namespace namespace) {
-        String name = String.join(" ", namespace.value());
+        if (namespace.value().length == 0) {
+            processingEnv.getMessager().printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
+            return;
+        }
+        
+        String name = String.join(".", namespace.value());
         String type = element.asType().toString();
         
         String other = namespaces.get(name);

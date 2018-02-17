@@ -21,19 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation;
+package com.karuslabs.commons.annotation.checkers;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.annotation.Static;
+
+import java.util.*;
+
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.*;
+
+import static java.util.stream.Collectors.toSet;
+
+
+@Static
+public class Elements {
     
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface Namespaces {
-    
-    Namespace[] value() default {};
+    public static Set<? extends Element> annotated(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        return annotations.stream().map(environment::getElementsAnnotatedWith).flatMap(Collection::stream).collect(toSet());
+    }
     
 }

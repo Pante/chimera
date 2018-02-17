@@ -21,23 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation.checker;
+package com.karuslabs.commons.command.annotation;
 
-import com.karuslabs.commons.annotation.Static;
+import java.lang.annotation.*;
 
-import java.util.*;
-
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-
-import static java.util.stream.Collectors.toSet;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@Static
-public class Elements {
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+@Repeatable(Completions.class)
+public @interface Completion {
     
-    public static Set<? extends Element> annotated(Set<? extends TypeElement> annotations, RoundEnvironment enviroment) {
-        return annotations.stream().map(enviroment::getElementsAnnotatedWith).flatMap(Collection::stream).collect(toSet());
-    }
+    int index();
+    
+    String completion();
     
 }

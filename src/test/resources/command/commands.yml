@@ -1,0 +1,40 @@
+declare:
+    commands:
+        help:
+            aliases: [a, b, c]
+            description: Displays information about the command
+            permission: help.permission
+            permission-message: message
+            usage: usage
+            completions:
+                0: [a]
+                2: [b]
+            
+    completions:
+        completion: [void]
+        
+    translations:
+        bundle:
+            bundle: Resource
+            embedded: [path1]
+            folder: [path2]
+        
+commands:
+    brush:
+        aliases: [b]
+        description: selects the brush tool
+        permission: brush.permission
+        permission-message: You do not have permission to use this command.
+        usage: /brush [option]
+        subcommands:
+            help: declared
+            fill:
+                aliases: [f]
+                completions:
+                    0: completion
+                    2: [a, b, c]
+                    
+        translation: bundle
+    
+    test:
+        aliases: [c]

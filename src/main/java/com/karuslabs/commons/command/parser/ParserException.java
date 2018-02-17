@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2017 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package com.karuslabs.commons.command.parser;
 
 
-@Documented
-@Target({TYPE})
-@Retention(RUNTIME)
-@Repeatable(Registrations.class)
-public @interface Registered {
+public class ParserException extends RuntimeException {
     
-    int index();
-    
-    String completion();
+    public ParserException(String message) {
+        super(message);
+    }
     
 }

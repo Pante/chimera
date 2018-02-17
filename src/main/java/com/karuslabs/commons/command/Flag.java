@@ -29,7 +29,6 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 
-
 @FunctionalInterface
 public interface Flag extends CommandExecutor {    
     

@@ -23,22 +23,21 @@
  */
 package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.annotation.Literal;
-import com.karuslabs.commons.command.annotation.Literals;
-import com.karuslabs.commons.command.annotation.Registered;
-import com.karuslabs.commons.command.annotation.Registrations;
+import com.karuslabs.commons.command.annotation.*;
+import com.karuslabs.commons.command.annotation.Completion;
+import com.karuslabs.commons.command.annotation.Completions;
 
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.commons.annotation.checker.Elements.annotated;
+import static com.karuslabs.commons.annotation.checkers.Elements.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
-    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
+    "com.karuslabs.commons.command.annotation.Completion", "com.karuslabs.commons.command.annotation.Completions",
+    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals"
 })
 public class CompletionChecker extends AbstractProcessor {
     
@@ -51,8 +50,8 @@ public class CompletionChecker extends AbstractProcessor {
     
         
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment enviroment) {
-        for (Element element : annotated(annotations, enviroment)) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        for (Element element : annotated(annotations, environment)) {
             checkLiterals(element);
             checkRegistrations(element);
         }
@@ -75,14 +74,14 @@ public class CompletionChecker extends AbstractProcessor {
     }
     
     protected void checkRegistrations(Element element) {
-        Registrations registrations = element.getAnnotation(Registrations.class);
+        Completions registrations = element.getAnnotation(Completions.class);
         if (registrations != null) {
-            for (Registered registered : registrations.value()) {
+            for (Completion registered : registrations.value()) {
                 check(element, registered.index());
             }
         }
         
-        Registered registered = element.getAnnotation(Registered.class);
+        Completion registered = element.getAnnotation(Completion.class);
         if (registered != null) {
             check(element, registered.index());
         }
