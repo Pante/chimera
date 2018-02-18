@@ -28,7 +28,6 @@ import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.*;
-import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
@@ -58,12 +57,12 @@ public class CommandElement extends Element<Command> {
 
     
     @Override
-    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected boolean check(ConfigurationSection config, String key) {
         return config.isConfigurationSection(key);
     }
 
     @Override
-    protected @Nonnull Command handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected Command handle(ConfigurationSection config, String key) {
         config = config.getConfigurationSection(key);
         Command command = new Command(
             config.getName(), plugin, translation.parse(config, "translation"),

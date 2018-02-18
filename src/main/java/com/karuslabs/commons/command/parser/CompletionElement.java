@@ -26,7 +26,6 @@ package com.karuslabs.commons.command.parser;
 import com.karuslabs.commons.command.completion.*;
 
 import java.util.*;
-import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -53,12 +52,12 @@ public class CompletionElement extends Element<Completion> {
     }
     
     @Override
-    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected boolean check(ConfigurationSection config, String key) {
         return config.isList(key);
     }
 
     @Override
-    protected @Nonnull CachedCompletion handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected CachedCompletion handle(ConfigurationSection config, String key) {
         return new CachedCompletion(config.getStringList(key));
     }
     

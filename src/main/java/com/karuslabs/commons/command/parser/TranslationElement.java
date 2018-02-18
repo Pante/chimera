@@ -30,7 +30,6 @@ import com.karuslabs.commons.locale.resources.*;
 
 import java.io.File;
 import java.util.*;
-import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -57,12 +56,12 @@ public class TranslationElement extends Element<MessageTranslation> {
 
     
     @Override
-    protected @Nonnull MessageTranslation handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
+    protected MessageTranslation handleNull(@Ignored ConfigurationSection config, @Ignored String key) {
         return NONE;
     }
     
     @Override
-    protected boolean check(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected boolean check(ConfigurationSection config, String key) {
         config = config.getConfigurationSection(key);
         if (!config.isString("bundle")) {
             throw new ParserException("Missing/invalid value: " + config.getCurrentPath() + ".bundle");
@@ -82,7 +81,7 @@ public class TranslationElement extends Element<MessageTranslation> {
     }
 
     @Override
-    protected @Nonnull MessageTranslation handle(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected MessageTranslation handle(ConfigurationSection config, String key) {
         ConfigurationSection translation = config.getConfigurationSection(key);
         
         Resource[] embedded = translation.getStringList("embedded").stream().map(EmbeddedResource::new).toArray(Resource[]::new);
