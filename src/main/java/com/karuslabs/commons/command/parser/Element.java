@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command.parser;
 
 import java.util.Map;
-import javax.annotation.Nonnull;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -34,7 +33,7 @@ public abstract class Element<T> {
     private final Map<String, T> declarations;
     
     
-    public Element(@Nonnull Map<String, T> declarations) {
+    public Element(Map<String, T> declarations) {
         this.declarations = declarations;
     }
     
@@ -44,7 +43,7 @@ public abstract class Element<T> {
     }
 
     
-    public @Nonnull T parse(ConfigurationSection config, String key) {
+    public T parse(ConfigurationSection config, String key) {
         if (config.get(key) == null) {
             return handleNull(config, key);
             
@@ -59,7 +58,7 @@ public abstract class Element<T> {
         }
     }
     
-    protected @Nonnull T handleNull(@Nonnull ConfigurationSection config, @Nonnull String key) {
+    protected T handleNull(ConfigurationSection config, String key) {
         throw new ParserException("Missing key: " + config.getCurrentPath() + "." + key);
     }
     
@@ -77,9 +76,9 @@ public abstract class Element<T> {
         return key;
     }
     
-    protected abstract boolean check(@Nonnull ConfigurationSection config, @Nonnull String key);
+    protected abstract boolean check(ConfigurationSection config, String key);
     
-    protected abstract @Nonnull T handle(@Nonnull ConfigurationSection config, @Nonnull String key);
+    protected abstract T handle(ConfigurationSection config, String key);
     
     
     public Map<String, T> getDeclarations() {

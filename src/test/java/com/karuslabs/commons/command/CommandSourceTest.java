@@ -23,8 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
-
 import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.bukkit.command.CommandSender;
@@ -51,6 +51,23 @@ class CommandSourceTest {
     
     CommandSender sender = mock(CommandSender.class);
     CommandSource source = new CommandSource(sender, NONE);
+    
+    
+    @ParameterizedTest
+    @CsvSource({"true, 1, 0", "false, 0, 1"})
+    void ifPlayerOrElse(boolean isPlayer, int playerTimes, int senderTimes) {
+        source = new CommandSource(isPlayer ? PLAYER : SENDER, NONE);
+        
+        Consumer<Player> player = mock(Consumer.class);
+        source.ifPlayer(player);
+        verify(player, times(playerTimes)).accept(PLAYER);
+        
+        Consumer<CommandSource> sender = mock(Consumer.class);
+        source.orElse(sender);
+        verify(sender, times(senderTimes)).accept(source);
+    }
+    
+    
     
     
     @Test

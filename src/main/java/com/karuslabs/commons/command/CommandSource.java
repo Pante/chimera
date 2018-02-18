@@ -26,7 +26,7 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.locale.*;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 import javax.annotation.Nullable;
 
 import org.bukkit.Server;
@@ -51,6 +51,21 @@ public class CommandSource implements CommandSender, Translatable {
         this.translation = translation;
         this.player = (sender instanceof Player) ? (Player) sender : null;
         this.locale = Locales.getOrDefault(player != null ? player.getLocale() : "123");
+    }
+    
+    
+    public CommandSource ifPlayer(Consumer<Player> consumer) {
+        if (player != null) {
+            consumer.accept(player);
+        }
+        
+        return this;
+    }
+    
+    public void orElse(Consumer<CommandSource> consumer) {
+        if (player == null) {
+            consumer.accept(this);
+        }
     }
     
     
