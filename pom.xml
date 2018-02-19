@@ -20,7 +20,7 @@
     
     <modules>
         <module>commons</module>
-        <module>Commons-Maven-Plugin</module>
+        <module>commands-maven-plugin</module>
     </modules>
   
         
