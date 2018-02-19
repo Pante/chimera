@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.karuslabs</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>library</artifactId>
     <version>3.1.0-SNAPSHOT</version>
-    <packaging>jar</packaging> 
+    <packaging>pom</packaging> 
     
     
-    <name>Karus-Commons</name>
-    <description>Karus Lab's commons library</description>
-    
+    <name>Karus-Library</name>
+    <description>A collection of Karus Lab's tools and libraries</description>
+  
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,34 +18,12 @@
     </properties>
     
     
-    <distributionManagement>
-        <repository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/releases</url>
-        </repository>
-        
-        <snapshotRepository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-     
-     
+    <modules>
+        <module>commons</module>
+    </modules>
+    
+    
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-                
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.6-jre</version>
-            <scope>compile</scope>
-        </dependency>
-        
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -96,99 +74,11 @@
         </dependency>
     </dependencies>
     
-    
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
-    
-    
-    <build>
-        <defaultGoal>clean package install</defaultGoal>
-        <plugins>  
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
-                </configuration>
-            </plugin>
-           
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.3</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.3</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
     
 </project>
