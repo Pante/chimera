@@ -38,6 +38,16 @@ import static java.util.Collections.unmodifiableList;
 
 public class ExternalControl extends Control {
     
+    public static final ExternalControl NONE = new ExternalControl() {
+        
+        @Override
+        public @Nonnull ResourceBundle newBundle(@Ignored String name, @Ignored Locale locale, @Ignored String format, @Ignored ClassLoader loader, @Ignored boolean reload) {
+            return CachedResourceBundle.NONE;
+        }
+        
+    };
+    
+    
     @JDK9("UPDATE TO List.of(...) when updating to Java 9")
     private static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
     

@@ -46,12 +46,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
-/Commands/target/
-/Core/target/
-/Items/target/
 
 # JetBrains .gitignore
 .idea/
 /nbproject/
 /commons/target/
-/Commons-Maven-Plugin/target/
+/commands-maven-plugin/target/
+commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar
+commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar
+commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar

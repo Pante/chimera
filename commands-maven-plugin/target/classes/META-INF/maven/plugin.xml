@@ -6,9 +6,9 @@
   <name>Commands-Maven-Plugin</name>
   <description>Karus Lab&apos;s maven plugin for commands</description>
   <groupId>com.karuslabs</groupId>
-  <artifactId>Commands-Maven-Plugin</artifactId>
+  <artifactId>commands-maven-plugin</artifactId>
   <version>3.1.0-SNAPSHOT</version>
-  <goalPrefix>Commands-Maven-Plugin</goalPrefix>
+  <goalPrefix>commands</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
   <mojos>

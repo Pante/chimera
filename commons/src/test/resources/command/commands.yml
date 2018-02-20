@@ -27,7 +27,7 @@ commands:
         permission-message: You do not have permission to use this command.
         usage: /brush [option]
         subcommands:
-            help: declared
+            help: 
             fill:
                 aliases: [f]
                 completions:

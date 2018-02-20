@@ -23,7 +23,13 @@
  */
 package com.karuslabs.commands.maven.plugin;
 
-import com.karuslabs.commons.command.parser.*;
+import com.karuslabs.commons.command.old.CompletionsElement;
+import com.karuslabs.commons.command.old.TranslationElement;
+import com.karuslabs.commons.command.old.CommandElement;
+import com.karuslabs.commons.command.old.CommandsElement;
+import com.karuslabs.commons.command.old.Parser;
+import com.karuslabs.commons.command.parser.ParserException;
+import com.karuslabs.commons.command.old.CompletionElement;
 import com.karuslabs.commons.configuration.Configurations;
 import com.karuslabs.commons.locale.providers.Provider;
 

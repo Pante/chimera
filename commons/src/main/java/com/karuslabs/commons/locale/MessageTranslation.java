@@ -24,7 +24,6 @@
 package com.karuslabs.commons.locale;
 
 import com.karuslabs.commons.annotation.Ignored;
-import com.karuslabs.commons.locale.builders.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.text.MessageFormat;
@@ -37,7 +36,7 @@ import org.bukkit.entity.Player;
 
 public class MessageTranslation extends Translation {
     
-    public static final MessageTranslation NONE = new MessageTranslation("", CachedControl.NONE, Provider.NONE) {
+    public static final MessageTranslation NONE = new MessageTranslation("", ExternalControl.NONE, Provider.NONE) {
         
         @Override
         public @Nonnull ResourceBundle get(@Ignored Locale locale) {
@@ -95,16 +94,8 @@ public class MessageTranslation extends Translation {
     }
     
     
-    public static TranslationBuilder<MessageTranslation> builder() {
-        return new TranslationBuilder<>(Translation::new, "", Provider.DETECTED);
-    }
-    
-    public static CachedBuilder<MessageTranslation> cachedBuilder() {
-        return new CachedBuilder<>(Translation::new, "", Provider.DETECTED);
-    }
-    
-    public static ExternalBuilder<MessageTranslation> externalBuilder() {
-        return new ExternalBuilder<>(Translation::new, "", Provider.DETECTED);
+    public static Builder<MessageTranslation> builder() {
+        return new Builder<>(MessageTranslation::new, "", Provider.DETECTED);
     }
     
 }

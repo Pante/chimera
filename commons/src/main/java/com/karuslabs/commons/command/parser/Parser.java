@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,8 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.Command;
-import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.List;
-import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -38,57 +35,22 @@ import static java.util.stream.Collectors.toList;
 
 public class Parser {
     
-    private Element<Command> command;
-    private Element<MessageTranslation> translation;
-    private Element<Completion> completion;
+    private Token<Command> command;
     
     
-    public Parser(Element<Command> command, Element<MessageTranslation> translation, Element<Completion> completion) {
+    public Parser(Token<Command> command) {
         this.command = command;
-        this.translation = translation;
-        this.completion = completion;
     }
     
     
     public List<Command> parse(ConfigurationSection config) {
-        parseDeclarations(config.getConfigurationSection("declare"));
-        return parseCommands(config.getConfigurationSection("commands"));
-    }
-    
-    protected void parseDeclarations(@Nullable ConfigurationSection config) {
-        if (config != null) {
-            parseDeclaration(completion, config.getConfigurationSection("completions"));
-            parseDeclaration(translation, config.getConfigurationSection("translations"));
-            parseDeclaration(command, config.getConfigurationSection("commands"));
-        }
-    }
-    
-    protected void parseDeclaration(Element<?> element, ConfigurationSection config) {
-        if (config != null) {
-            config.getKeys(false).forEach(key -> element.declare(config, key));
-        }
-    }
-    
-    protected List<Command> parseCommands(@Nullable ConfigurationSection config) {
-        if (config != null) {
-            return config.getKeys(false).stream().map(key -> command.parse(config, key)).collect(toList());
+        ConfigurationSection commands = config.getConfigurationSection("commands");
+        if (commands != null) {
+            return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
             
         } else {
             return EMPTY_LIST;
         }
-    }
-    
-    
-    public Element<Command> getCommandElement() {
-        return command;
-    }
-    
-    public Element<MessageTranslation> getTranslationElement() {
-        return translation;
-    }
-    
-    public Element<Completion> getCompletion() {
-        return completion;
     }
     
 }

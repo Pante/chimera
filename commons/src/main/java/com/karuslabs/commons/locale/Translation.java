@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.locale.builders.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.util.*;
@@ -76,16 +75,8 @@ public class Translation {
     }
     
     
-    public static TranslationBuilder<? extends Translation> builder() {
-        return new TranslationBuilder<>(Translation::new, "", Provider.DETECTED);
-    }
-    
-    public static CachedBuilder<? extends Translation> cachedBuilder() {
-        return new CachedBuilder<>(Translation::new, "", Provider.DETECTED);
-    }
-    
-    public static ExternalBuilder<? extends Translation> externalBuilder() {
-        return new ExternalBuilder<>(Translation::new, "", Provider.DETECTED);
+    public static Builder<? extends Translation> builder() {
+        return new Builder<>(Translation::new, "", Provider.DETECTED);
     }
     
 }
