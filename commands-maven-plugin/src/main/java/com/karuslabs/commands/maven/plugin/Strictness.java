@@ -21,18 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
-
-import org.bukkit.configuration.ConfigurationSection;
+package com.karuslabs.commands.maven.plugin;
 
 
-@FunctionalInterface
-public interface ReferenceHandle {
+public enum Strictness {
     
-    public ReferenceHandle EXCEPTION = (config, key, value) -> {
-        throw new ParserException("Invalid reference: " + value + " at: " + config.getCurrentPath() + "." + key + ", reference must either be registered or point to a assignable key");
-    };
+    LENIENT("unresolvable references ignored"), WARNING("warnings issued for unresolvable references"), STRICT("exceptions raised for unresolvable references");
     
-    public void handle(ConfigurationSection config, String key, String value);
+    
+    private final String description;
+    
+    private Strictness(String description) {
+        this.description = description;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
     
 }

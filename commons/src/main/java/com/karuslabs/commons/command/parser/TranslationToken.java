@@ -32,6 +32,7 @@ import java.io.File;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.copyOf;
 
@@ -47,7 +48,12 @@ public class TranslationToken extends ReferableToken<MessageTranslation> {
         this.folder = folder;
         this.provider = provider;
     }
-
+    
+    
+    @Override
+    protected MessageTranslation getNull(ConfigurationSection config, String key) {
+        return NONE;
+    }
     
     @Override
     protected MessageTranslation getReference(String key) {
@@ -77,6 +83,11 @@ public class TranslationToken extends ReferableToken<MessageTranslation> {
         arraycopy(folders, 0, resources, embedded.length, folders.length);
         
         return new MessageTranslation(translation.getString("bundle"), new ExternalControl(resources), provider);
+    }
+
+    @Override
+    protected MessageTranslation getDefaultReference() {
+        return MessageTranslation.NONE;
     }
     
 }

@@ -4,7 +4,7 @@
 
 <plugin>
   <name>Commands-Maven-Plugin</name>
-  <description>Karus Lab&apos;s maven plugin for commands</description>
+  <description>Karus Lab&apos;s commands.yml validation maven-plugin</description>
   <groupId>com.karuslabs</groupId>
   <artifactId>commands-maven-plugin</artifactId>
   <version>3.1.0-SNAPSHOT</version>
@@ -28,15 +28,44 @@
       <threadSafe>false</threadSafe>
       <parameters>
         <parameter>
+          <name>commands</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>completions</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
           <name>file</name>
           <type>java.io.File</type>
           <required>false</required>
           <editable>false</editable>
           <description></description>
         </parameter>
+        <parameter>
+          <name>strictness</name>
+          <type>com.karuslabs.commands.maven.plugin.Strictness</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>translations</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
       </parameters>
       <configuration>
         <file implementation="java.io.File" default-value="${project.basedir}/src/main/resources/commands.yml"/>
+        <strictness implementation="com.karuslabs.commands.maven.plugin.Strictness" default-value="WARNING">${parser.strictness}</strictness>
       </configuration>
     </mojo>
   </mojos>
@@ -87,7 +116,7 @@
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
       <type>jar</type>
-      <version>1.12.2-R0.1-20180218.225457-116</version>
+      <version>1.12.2-R0.1-20180220.020734-118</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -117,7 +146,7 @@
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-chat</artifactId>
       <type>jar</type>
-      <version>1.12-20180207.072740-67</version>
+      <version>1.12-20180219.004910-68</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

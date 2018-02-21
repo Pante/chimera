@@ -24,9 +24,7 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.annotation.JDK9;
-import com.karuslabs.commons.command.Command;
-import static com.karuslabs.commons.command.CommandExecutor.NONE;
-import com.karuslabs.commons.command.References;
+import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
@@ -36,13 +34,14 @@ import javax.annotation.Nullable;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
+import static com.karuslabs.commons.command.CommandExecutor.NONE;
 import static java.util.Arrays.asList;
 
 
 public class CommandToken extends ReferableToken<Command> {
     
     @JDK9("Set.of(...)")
-    private static final Set<String> KEYS = new HashSet<>(asList("aliases", "description", "permission", "permission-message", "usage", "completions", "subcommands"));
+    private static final Set<String> KEYS = new HashSet<>(asList("aliases", "description", "permission", "permission-message", "usage", "completions", "subcommands", "translation"));
             
     private Plugin plugin;
     private @Nullable Token<Map<String, Command>> subcommands;
@@ -100,6 +99,11 @@ public class CommandToken extends ReferableToken<Command> {
     
     public void setCommandsToken(Token<Map<String, Command>> subcommands) {
         this.subcommands = subcommands;
+    }
+
+    @Override
+    protected Command getDefaultReference() {
+        return Command.NONE;
     }
     
 }

@@ -1,40 +1,37 @@
-declare:
-    commands:
-        help:
-            aliases: [a, b, c]
-            description: Displays information about the command
-            permission: help.permission
-            permission-message: message
-            usage: usage
-            completions:
-                0: [a]
-                2: [b]
-            
+help:
+    aliases: [a, b, c]
+    description: Displays information about the command
+    permission: help.permission
+    permission-message: message
+    usage: usage
     completions:
-        completion: [void]
-        
-    translations:
-        bundle:
-            bundle: Resource
-            embedded: [path1]
-            folder: [path2]
-        
+        0: [a]
+        2: [b]
+    translation:
+        bundle: Resource
+        embedded: [path1]
+        folder: [path2]
+            
+completions:
+    completion: [void]
+    
 commands:
     brush:
         aliases: [b]
         description: selects the brush tool
         permission: brush.permission
-        permission-message: You do not have permission to use this command.
+        permission-message: No permission
         usage: /brush [option]
         subcommands:
-            help: 
+            help: help
             fill:
                 aliases: [f]
                 completions:
-                    0: completion
+                    0: completions.completion
                     2: [a, b, c]
                     
-        translation: bundle
+        translation: help.translation
     
     test:
         aliases: [c]
+        translation: TEST-TRANSLATION

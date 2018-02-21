@@ -23,14 +23,11 @@
  */
 package com.karuslabs.commands.maven.plugin;
 
-import com.karuslabs.commons.command.old.CompletionsElement;
-import com.karuslabs.commons.command.old.TranslationElement;
-import com.karuslabs.commons.command.old.CommandElement;
-import com.karuslabs.commons.command.old.CommandsElement;
-import com.karuslabs.commons.command.old.Parser;
-import com.karuslabs.commons.command.parser.ParserException;
-import com.karuslabs.commons.command.old.CompletionElement;
+import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.configuration.Configurations;
+import com.karuslabs.commons.locale.MessageTranslation;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.io.*;
@@ -49,13 +46,32 @@ public class CommandsMojo extends AbstractMojo {
     
     @Parameter(defaultValue = "${project.basedir}/src/main/resources/commands.yml", readonly = true)
     protected File file;
+        
+    @Parameter(property = "parser.strictness", defaultValue = "WARNING", readonly = true)
+    protected Strictness strictness;
+        
+    @Parameter
+    protected String[] commands = new String[] {};
+    
+    @Parameter
+    protected String[] completions = new String[] {};
+    
+    @Parameter
+    protected String[] translations = new String[] {};
     
     
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        getLog().info("Loading configuration file:" + file.getPath());
         ConfigurationSection config = loadConfiguration();
+       
+        getLog().info("Loading specified references");
+        Parser parser = loadParser(loadReferences());
+        
         try {
-            loadParser().parse(config);
+            getLog().info("Analyzing configuration file with " + strictness.getDescription());
+            parser.parse(config);
+            getLog().info("Analyzed configuration file with no errors");
             
         } catch (ParserException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -70,16 +86,38 @@ public class CommandsMojo extends AbstractMojo {
             throw new MojoExecutionException("Invalid file specified:" + file.getPath() + ", file must be a YAML file.");
         }
     }
-    
-    protected Parser loadParser() {
-        TranslationElement translation = new TranslationElement(null, Provider.NONE);
-        CompletionElement completion = new CompletionElement();
-        CompletionsElement completions = new CompletionsElement(completion);
-        CommandsElement commands = new CommandsElement(null);
-        CommandElement command = new CommandElement(null, commands, translation, completions);
-        commands.setCommandElement(command);
         
-        return new Parser(command, translation, completion);
+    protected References loadReferences() {
+        References references = new References();
+        for (String command : commands) {
+            references.command(command, Command.NONE);
+        }
+        
+        for (String completion : completions) {
+            references.completion(completion, Completion.NONE);
+        }
+        
+        for (String translation : translations) {
+            references.translation(translation, MessageTranslation.NONE);
+        }
+        
+        return references;
+    }
+    
+    protected Parser loadParser(References references) {
+        switch (strictness) {
+            case LENIENT:
+                return Parsers.newParser(null, null, references, (config, key, value) -> {}, Provider.NONE);
+                
+            case WARNING:
+                return Parsers.newParser(null, null, references, (config, key, value) -> getLog().warn("Unresolvable reference: " + value + " at: " + config.getCurrentPath() + "." + key), Provider.NONE);
+                
+            case STRICT:
+                return Parsers.newParser(null, null, references, ReferenceHandle.EXCEPTION, Provider.NONE);
+                
+            default:
+                throw new IllegalArgumentException("I fucked up.");
+        }
     }
     
 }

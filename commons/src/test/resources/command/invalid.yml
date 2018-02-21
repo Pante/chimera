@@ -1,5 +1,34 @@
-translation:
-    bundle: Resource
 
+
+negative:
+    -1: [a]
+
+string:
+    integer: [b]
+
+
+    
+translation:
+    bundle: a
+    embedded: [b]
+    folder: [c]
+    
 empty:
     empty: true
+    
+bundle:
+    bundle: [hurdur]
+    folder: [a]
+    
+fail:
+    bundle: Resource
+
+embedded:
+    bundle: a
+    embedded: b
+    folder: [c]
+
+folder:
+    bundle: a
+    embedded: [b]
+    folder: c

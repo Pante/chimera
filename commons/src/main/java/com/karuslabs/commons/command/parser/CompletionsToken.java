@@ -57,7 +57,7 @@ public class CompletionsToken extends Token<Map<Integer, Completion>> {
         for (String index : config.getKeys(false)) {
             Integer i = Ints.tryParse(index);
             if (i == null || i < 0) {
-                throw new ParserException("Invalid completion index: " + index + " at: " + config.getCurrentPath() + ", index must be a non-negative integer");
+                throw new ParserException("Invalid completion index: " + index + " at: " + config.getCurrentPath() + "." + index + ", index must be a non-negative integer");
             }
         }
         

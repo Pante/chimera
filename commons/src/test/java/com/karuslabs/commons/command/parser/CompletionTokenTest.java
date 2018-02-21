@@ -23,36 +23,40 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import org.bukkit.configuration.ConfigurationSection;
+import com.karuslabs.commons.command.completion.*;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-public abstract class Token<T> {
+@TestInstance(PER_CLASS)
+class CompletionTokenTest {
     
-    public T from(ConfigurationSection config, String key) {
-        if (config.get(key) == null) {
-            return getNull(config, key);
-            
-        } else if (isAssignable(config, key)) {
-            return get(config, key);
-            
-        } else if (config.isString(key)) {            
-            return getReference(config, key, config.getString(key));
-            
-        } else {
-            throw new ParserException("Invalid value for key: " + config.getCurrentPath() + key);
-        }
+    CompletionToken token = new CompletionToken(null, null);
+
+    
+    @ParameterizedTest
+    @CsvSource({"true, completions.completion", "false, help"})
+    void isAssignable(boolean expected, String key) {
+        assertEquals(expected, token.isAssignable(COMMANDS, key));
     }
     
-    protected T getNull(ConfigurationSection config, String key) {
-        throw new ParserException("Missing key: " + config.getCurrentPath() + key + ", key cannot be non-existent");
+    
+    @Test
+    void get() {
+        assertEquals(singletonList("void"), ((CachedCompletion) token.from(COMMANDS, "completions.completion")).getCompletions());
     }
+        
     
-    protected T getReference(ConfigurationSection config, String key, String value) {
-        throw new ParserException("Illegal reference: " + value + " at: " + config.getCurrentPath() + "." + key + ", reference not allowed here");
+    @Test
+    void getDefaultReference() {
+        assertSame(Completion.NONE, token.getDefaultReference());
     }
-    
-    public abstract boolean isAssignable(ConfigurationSection config, String key);
-    
-    protected abstract T get(ConfigurationSection config, String key);
     
 }

@@ -27,21 +27,19 @@ import com.karuslabs.commons.annotation.Static;
 import com.karuslabs.commons.command.References;
 import com.karuslabs.commons.locale.providers.Provider;
 
+import java.io.File;
+
 import org.bukkit.plugin.Plugin;
 
 
 @Static
 public class Parsers {
     
-    public static Parser simple(Plugin plugin, References references, Provider provider) {
-        return simple(plugin, references, ReferenceHandle.EXCEPTION, provider);
-    }
-    
-    public static Parser simple(Plugin plugin, References references, ReferenceHandle handle, Provider provider) {
-        TranslationToken translation = new TranslationToken(references, handle, plugin.getDataFolder(), provider);
+    public static Parser newParser(Plugin plugin, File folder, References references, ReferenceHandle handle, Provider provider) {
+        TranslationToken translation = new TranslationToken(references, handle, folder, provider);
         CompletionsToken completions = new CompletionsToken(new CompletionToken(references, handle));
-        CommandsToken commands = new CommandsToken(null);
-        CommandToken command = new CommandToken(references, handle, plugin, commands, translation, completions);
+        CommandToken command = new CommandToken(references, handle, plugin, null, translation, completions);
+        CommandsToken commands = new CommandsToken(command);
         command.setCommandsToken(commands);
         
         return new Parser(command);

@@ -23,36 +23,34 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import org.bukkit.configuration.ConfigurationSection;
+import com.karuslabs.commons.command.Command;
+
+import org.junit.jupiter.api.Test;
+
+import static com.karuslabs.commons.configuration.Yaml.*;
+import static java.util.Collections.EMPTY_LIST;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.*;
 
 
-public abstract class Token<T> {
+class ParserTest {
     
-    public T from(ConfigurationSection config, String key) {
-        if (config.get(key) == null) {
-            return getNull(config, key);
-            
-        } else if (isAssignable(config, key)) {
-            return get(config, key);
-            
-        } else if (config.isString(key)) {            
-            return getReference(config, key, config.getString(key));
-            
-        } else {
-            throw new ParserException("Invalid value for key: " + config.getCurrentPath() + key);
-        }
+    Token<Command> token = mock(Token.class);
+    
+    
+    @Test
+    void parse() {
+        new Parser(token).parse(COMMANDS);
+        
+        verify(token).from(COMMANDS.getConfigurationSection("commands"), "brush");
+        verify(token).from(COMMANDS.getConfigurationSection("commands"), "test");
     }
     
-    protected T getNull(ConfigurationSection config, String key) {
-        throw new ParserException("Missing key: " + config.getCurrentPath() + key + ", key cannot be non-existent");
+    
+    @Test
+    void parse_EMPTY_LIST() {
+        assertSame(EMPTY_LIST, new Parser(token).parse(INVALID));
+        verify(token, never()).from(any(), any());
     }
-    
-    protected T getReference(ConfigurationSection config, String key, String value) {
-        throw new ParserException("Illegal reference: " + value + " at: " + config.getCurrentPath() + "." + key + ", reference not allowed here");
-    }
-    
-    public abstract boolean isAssignable(ConfigurationSection config, String key);
-    
-    protected abstract T get(ConfigurationSection config, String key);
     
 }

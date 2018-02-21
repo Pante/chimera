@@ -4,7 +4,7 @@
 
 <plugin>
   <name>Commands-Maven-Plugin</name>
-  <description>Karus Lab&apos;s maven plugin for commands</description>
+  <description>Karus Lab&apos;s commands.yml validation maven-plugin</description>
   <groupId>com.karuslabs</groupId>
   <artifactId>commands-maven-plugin</artifactId>
   <version>3.1.0-SNAPSHOT</version>
@@ -24,7 +24,29 @@
       <instantiationStrategy>per-lookup</instantiationStrategy>
       <executionStrategy>once-per-session</executionStrategy>
       <threadSafe>false</threadSafe>
-      <parameters/>
+      <parameters>
+        <parameter>
+          <name>commands</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>completions</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>translations</name>
+          <type>java.lang.String[]</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+      </parameters>
     </mojo>
   </mojos>
 </plugin>

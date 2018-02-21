@@ -40,6 +40,9 @@ import static java.util.stream.Collectors.toList;
 
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand, Translatable {    
     
+    public static final Command NONE = new Command("", null);
+    
+    
     private Plugin plugin;
     private MessageTranslation translation;
     private CommandExecutor executor;

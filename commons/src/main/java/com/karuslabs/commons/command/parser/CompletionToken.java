@@ -56,5 +56,10 @@ public class CompletionToken extends ReferableToken<Completion> {
     protected Completion get(ConfigurationSection config, String key) {
         return new CachedCompletion(config.getStringList(key));
     }
+
+    @Override
+    protected Completion getDefaultReference() {
+        return Completion.NONE;
+    }
     
 }

@@ -58,6 +58,5 @@ public class CommandsToken extends Token<Map<String, Command>> {
         ConfigurationSection subcommands = config.getConfigurationSection(key);
         return subcommands.getKeys(false).stream().collect(toMap(identity(), aKey -> command.from(subcommands, aKey)));
     }
-
     
 }

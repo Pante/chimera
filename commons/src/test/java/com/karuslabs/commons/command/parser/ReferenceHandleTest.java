@@ -23,49 +23,20 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.command.References;
+import org.junit.jupiter.api.Test;
 
-import javax.annotation.Nullable;
+import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.bukkit.configuration.ConfigurationSection;
 
-
-public abstract class ReferableToken<T> extends Token<T> {
-        
-    protected References references;
-    protected ReferenceHandle handle;
+class ReferenceHandleTest {
     
-    
-    public ReferableToken(References references, ReferenceHandle handler) {
-        this.references = references;
-        this.handle = handler;
-    }
-
-    
-    @Override
-    protected @Nullable T getReference(ConfigurationSection config, String key, String value) {
-        T reference = getReference(value);
-        if (reference != null) {
-            return reference;
-            
-        } else if (isAssignable(config.getRoot(), value)) {
-            return register(value, get(config.getRoot(), value));
-            
-        } else {
-            handle.handle(config, key, value);
-            return getDefaultReference();
-        }
-    }
-    
-    protected abstract T getReference(String key);
-    
-    protected abstract T register(String key, T reference);
-    
-    protected abstract T getDefaultReference();
-    
-    
-    public References getReferences() {
-        return references;
+    @Test
+    void exception() {
+        assertEquals(
+            "Invalid reference: value at: .help, reference must either be registered or point to a assignable key", 
+            assertThrows(ParserException.class, () -> ReferenceHandle.EXCEPTION.handle(COMMANDS, "help", "value")).getMessage()
+        );
     }
     
 }
