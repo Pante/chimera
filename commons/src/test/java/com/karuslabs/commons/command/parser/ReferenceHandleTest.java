@@ -35,7 +35,7 @@ class ReferenceHandleTest {
     void exception() {
         assertEquals(
             "Invalid reference: value at: .help, reference must either be registered or point to a assignable key", 
-            assertThrows(ParserException.class, () -> ReferenceHandle.EXCEPTION.handle(COMMANDS, "help", "value")).getMessage()
+            assertThrows(ParserException.class, () -> NullHandle.EXCEPTION.handle(COMMANDS, "help", "value")).getMessage()
         );
     }
     

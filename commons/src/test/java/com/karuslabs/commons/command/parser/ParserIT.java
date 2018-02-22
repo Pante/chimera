@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParserIT {
     
-    Parser parser = Parsers.newParser(null, null, new References().translation("TEST-TRANSLATION", NONE), ReferenceHandle.EXCEPTION, Provider.NONE);
+    Parser parser = Parsers.newParser(null, null, new References().translation("TEST-TRANSLATION", NONE), NullHandle.EXCEPTION, Provider.NONE);
     
     
     @Test

@@ -20,7 +20,7 @@
     
     <modules>
         <module>commons</module>
-        <module>commands-maven-plugin</module>
+        <module>configuration-validator-maven-plugin</module>
     </modules>
   
         

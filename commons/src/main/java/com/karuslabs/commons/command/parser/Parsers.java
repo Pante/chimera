@@ -35,7 +35,7 @@ import org.bukkit.plugin.Plugin;
 @Static
 public class Parsers {
     
-    public static Parser newParser(Plugin plugin, File folder, References references, ReferenceHandle handle, Provider provider) {
+    public static Parser newParser(Plugin plugin, File folder, References references, NullHandle handle, Provider provider) {
         TranslationToken translation = new TranslationToken(references, handle, folder, provider);
         CompletionsToken completions = new CompletionsToken(new CompletionToken(references, handle));
         CommandToken command = new CommandToken(references, handle, plugin, null, translation, completions);

@@ -43,7 +43,7 @@ public class TranslationToken extends ReferableToken<MessageTranslation> {
     private Provider provider;
     
     
-    public TranslationToken(References references, ReferenceHandle handler, File folder, Provider provider) {
+    public TranslationToken(References references, NullHandle handler, File folder, Provider provider) {
         super(references, handler);
         this.folder = folder;
         this.provider = provider;

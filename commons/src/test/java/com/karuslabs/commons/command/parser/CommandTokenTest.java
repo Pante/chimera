@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 class CommandTokenTest {
     
     References references = mock(References.class);
-    ReferenceHandle handle = mock(ReferenceHandle.class);
+    NullHandle handle = mock(NullHandle.class);
     Plugin plugin = mock(Plugin.class);
     CommandsToken commands = when(mock(CommandsToken.class).from(any(), any())).thenReturn(new HashMap<>()).getMock();
     TranslationToken translation = when(mock(TranslationToken.class).from(any(), any())).thenReturn(MessageTranslation.NONE).getMock();

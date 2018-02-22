@@ -33,12 +33,12 @@ import org.bukkit.configuration.ConfigurationSection;
 public abstract class ReferableToken<T> extends Token<T> {
         
     protected References references;
-    protected ReferenceHandle handle;
+    protected NullHandle reporter;
     
     
-    public ReferableToken(References references, ReferenceHandle handler) {
+    public ReferableToken(References references, NullHandle handler) {
         this.references = references;
-        this.handle = handler;
+        this.reporter = handler;
     }
 
     
@@ -52,7 +52,7 @@ public abstract class ReferableToken<T> extends Token<T> {
             return register(value, get(config.getRoot(), value));
             
         } else {
-            handle.handle(config, key, value);
+            reporter.handle(config, key, value);
             return getDefaultReference();
         }
     }

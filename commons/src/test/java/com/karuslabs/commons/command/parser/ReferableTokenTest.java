@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class ReferableTokenTest {
     
     References references = new References();
-    ReferenceHandle handle = mock(ReferenceHandle.class);
+    NullHandle handle = mock(NullHandle.class);
     
     @JDK9("Diamond reference...")
     ReferableToken<?> token = spy(new ReferableToken<Object>(references, handle) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commands.maven.plugin;
+package com.karuslabs.configuration.validator.maven.plugin;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.completion.Completion;
@@ -41,15 +41,15 @@ import org.bukkit.configuration.ConfigurationSection;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
-@Mojo(name = "commands", defaultPhase = COMPILE, threadSafe = false)
-public class CommandsMojo extends AbstractMojo {
+@Mojo(name = "validate", defaultPhase = COMPILE, threadSafe = false)
+public class ValidatorMojo extends AbstractMojo {
     
-    @Parameter(defaultValue = "${project.basedir}/src/main/resources/commands.yml", readonly = true)
+    @Parameter(defaultValue = "${project.basedir}/src/main/resources/commands.yml")
     protected File file;
-        
-    @Parameter(property = "parser.strictness", defaultValue = "WARNING", readonly = true)
-    protected Strictness strictness;
-        
+    
+    @Parameter(defaultValue = "WARNING", property = "parser.validation")
+    protected Validation validation;
+    
     @Parameter
     protected String[] commands = new String[] {};
     
@@ -65,28 +65,31 @@ public class CommandsMojo extends AbstractMojo {
         getLog().info("Loading configuration file:" + file.getPath());
         ConfigurationSection config = loadConfiguration();
        
-        getLog().info("Loading specified references");
-        Parser parser = loadParser(loadReferences());
+        getLog().info("Loading references specified in project pom.xml");
+        References references = loadReferences();
+        Parser parser = loadParser(references);
         
         try {
-            getLog().info("Analyzing configuration file with " + strictness.getDescription());
+            getLog().info("Validating configuration file, " + validation.getDescription());
             parser.parse(config);
-            getLog().info("Analyzed configuration file with no errors");
+            getLog().info("Found no errors in configuration file");
             
         } catch (ParserException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }
     
+    
     protected ConfigurationSection loadConfiguration() throws MojoExecutionException {
         try {
             return Configurations.from(new BufferedInputStream(new FileInputStream(file)));
             
         } catch (FileNotFoundException | IllegalArgumentException | UncheckedIOException e) {
-            throw new MojoExecutionException("Invalid file specified:" + file.getPath() + ", file must be a YAML file.");
+            throw new MojoExecutionException("Invalid file specified: \"" + file.getPath() + "\", file must be a YAML file.");
         }
     }
-        
+    
+    
     protected References loadReferences() {
         References references = new References();
         for (String command : commands) {
@@ -104,19 +107,23 @@ public class CommandsMojo extends AbstractMojo {
         return references;
     }
     
+    
     protected Parser loadParser(References references) {
-        switch (strictness) {
+        switch (validation) {
             case LENIENT:
-                return Parsers.newParser(null, null, references, (config, key, value) -> {}, Provider.NONE);
+                return Parsers.newParser(null, null, references, NullHandle.NONE, Provider.NONE);
                 
             case WARNING:
-                return Parsers.newParser(null, null, references, (config, key, value) -> getLog().warn("Unresolvable reference: " + value + " at: " + config.getCurrentPath() + "." + key), Provider.NONE);
-                
-            case STRICT:
-                return Parsers.newParser(null, null, references, ReferenceHandle.EXCEPTION, Provider.NONE);
+                return Parsers.newParser(null, null, references, (config, key, value) -> 
+                    getLog().warn("Unresolvable reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\"")
+                , Provider.NONE);
                 
             default:
-                throw new IllegalArgumentException("I fucked up.");
+                return Parsers.newParser(null, null, references, (config, key, value) -> {
+                    String message = "Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable key";
+                    getLog().error(message);
+                    throw new ParserException(message);
+                }, Provider.NONE);
         }
     }
     

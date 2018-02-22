@@ -49,7 +49,7 @@ public class CommandToken extends ReferableToken<Command> {
     private Token<Map<Integer, Completion>> completions;
     
     
-    public CommandToken(References references, ReferenceHandle handler, Plugin plugin, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
+    public CommandToken(References references, NullHandle handler, Plugin plugin, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
         super(references, handler);
         this.plugin = plugin;
         this.subcommands = subcommands;

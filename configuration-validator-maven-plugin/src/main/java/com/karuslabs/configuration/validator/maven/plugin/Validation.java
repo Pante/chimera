@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commands.maven.plugin;
+package com.karuslabs.configuration.validator.maven.plugin;
 
 
-public enum Strictness {
+public enum Validation {
     
-    LENIENT("unresolvable references ignored"), WARNING("warnings issued for unresolvable references"), STRICT("exceptions raised for unresolvable references");
+    LENIENT("unresolvable references will be ignored"), WARNING("warning will be issued for unresolvable references"), STRICT("errors will be raised for unresolvable references");
     
     
     private final String description;
     
-    private Strictness(String description) {
+    private Validation(String description) {
         this.description = description;
     }
     
