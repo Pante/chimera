@@ -51,7 +51,4 @@ Temporary Items
 .idea/
 /nbproject/
 /commons/target/
-/commands-maven-plugin/target/
-commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar
-commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar
-commands-maven-plugin/target/Commands-Maven-Plugin-3.1.0-SNAPSHOT-shaded.jar
+commands-maven-plugin/target/
