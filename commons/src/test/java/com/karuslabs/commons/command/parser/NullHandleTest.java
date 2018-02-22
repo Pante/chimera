@@ -29,12 +29,12 @@ import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ReferenceHandleTest {
+class NullHandleTest {
     
     @Test
     void exception() {
         assertEquals(
-            "Invalid reference: value at: .help, reference must either be registered or point to a assignable key", 
+            "Invalid reference: \"value\" at: \".help\", reference must either be registered or point to a assignable key", 
             assertThrows(ParserException.class, () -> NullHandle.EXCEPTION.handle(COMMANDS, "help", "value")).getMessage()
         );
     }
