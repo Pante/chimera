@@ -21,40 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.Command;
-
-import java.util.List;
-
-import org.bukkit.configuration.ConfigurationSection;
-
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
+import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.*;
+import com.karuslabs.commons.command.completion.*;
 
 
-public class Parser {
-    
-    private Token<Command> command;
-    
-    
-    public Parser(Token<Command> command) {
-        this.command = command;
-    }
-    
-    
-    public List<Command> parse(ConfigurationSection config) {
-        ConfigurationSection commands = config.getConfigurationSection("commands");
-        if (commands != null) {
-            return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
+public class LiteralProcessor implements Processor {
+
+    @Override
+    public void process(Command command, CommandExecutor executor) {
+        Literals literals = executor.getClass().getAnnotation(Literals.class);
+        if (literals != null) {
+            for (Literal literal : literals.value()) {
+                process(command, executor, literal);
+            }
             
         } else {
-            return EMPTY_LIST;
+            process(command, executor, executor.getClass().getAnnotation(Literal.class));
         }
     }
     
-    public Token<Command> getToken() {
-        return command;
+    protected void process(Command command, CommandExecutor executor, Literal literal) {
+        Completion completion = new CachedCompletion(literal.completions());
+        command.getCompletions().put(literal.index(), completion);
+    }
+
+    @Override
+    public boolean hasAnnotations(CommandExecutor executor) {
+        Class<? extends CommandExecutor> type = executor.getClass();
+        return type.getAnnotation(Literal.class) != null || type.getAnnotation(Literals.class) != null;
     }
     
 }

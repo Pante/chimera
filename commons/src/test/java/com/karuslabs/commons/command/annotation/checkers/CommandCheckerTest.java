@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.annotation.checkers.CommandChecker;
 import javax.annotation.processing.SupportedAnnotationTypes;
 
 import org.junit.jupiter.api.Test;

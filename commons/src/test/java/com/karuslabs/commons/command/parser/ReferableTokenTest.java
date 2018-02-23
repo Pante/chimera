@@ -84,6 +84,7 @@ class ReferableTokenTest {
     
     @Test
     void getters() {
+        assertSame(handle, token.getHandle());
         assertSame(references, token.getReferences());
     }
     

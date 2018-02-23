@@ -21,40 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.configuration.validator.maven.plugin;
 
-import com.karuslabs.commons.command.Command;
+import java.util.stream.Stream;
 
-import java.util.List;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import org.bukkit.configuration.ConfigurationSection;
+import static com.karuslabs.configuration.validator.maven.plugin.Validation.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
 
-
-public class Parser {
+class ValidationTest {
     
-    private Token<Command> command;
-    
-    
-    public Parser(Token<Command> command) {
-        this.command = command;
+    @ParameterizedTest
+    @MethodSource({"description_parameters"})
+    void getDescription(Validation validation, String expected) {
+        assertEquals(expected, validation.getDescription());
     }
     
-    
-    public List<Command> parse(ConfigurationSection config) {
-        ConfigurationSection commands = config.getConfigurationSection("commands");
-        if (commands != null) {
-            return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
-            
-        } else {
-            return EMPTY_LIST;
-        }
-    }
-    
-    public Token<Command> getToken() {
-        return command;
+    static Stream<Arguments> description_parameters() {
+        return Stream.of(
+            of(LENIENT, "unresolvable references will be ignored"),
+            of(WARNING, "warnings will be issued for unresolvable references"),
+            of(STRICT, "exceptions will be thrown for unresolvable references")
+        );
     }
     
 }

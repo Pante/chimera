@@ -37,9 +37,9 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 @SupportedAnnotationTypes({
     "com.karuslabs.commons.command.annotation.Information",
-    "com.karuslabs.commons.command.annotation.Completion", "com.karuslabs.commons.command.annotation.Completions",
     "com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces",
-    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals"
+    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
+    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
 })
 public class CommandChecker extends AbstractProcessor {
     

@@ -26,7 +26,7 @@ package com.karuslabs.configuration.validator.maven.plugin;
 
 public enum Validation {
     
-    LENIENT("unresolvable references will be ignored"), WARNING("warning will be issued for unresolvable references"), STRICT("errors will be raised for unresolvable references");
+    LENIENT("unresolvable references will be ignored"), WARNING("warnings will be issued for unresolvable references"), STRICT("exceptions will be thrown for unresolvable references");
     
     
     private final String description;

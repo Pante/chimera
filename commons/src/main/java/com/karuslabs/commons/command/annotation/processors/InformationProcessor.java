@@ -21,40 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.Command;
+import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.Information;
 
-import java.util.List;
-
-import org.bukkit.configuration.ConfigurationSection;
-
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
+import static java.util.Arrays.asList;
 
 
-public class Parser {
-    
-    private Token<Command> command;
-    
-    
-    public Parser(Token<Command> command) {
-        this.command = command;
+public class InformationProcessor implements Processor {
+
+    @Override
+    public void process(Command command, CommandExecutor executor) {
+        Information annotation = executor.getClass().getAnnotation(Information.class);
+        
+        command.setAliases(asList(annotation.aliases()));
+        command.setDescription(annotation.description());
+        command.setPermission(annotation.permission());
+        command.setPermissionMessage(annotation.message());
+        command.setUsage(annotation.usage());
     }
-    
-    
-    public List<Command> parse(ConfigurationSection config) {
-        ConfigurationSection commands = config.getConfigurationSection("commands");
-        if (commands != null) {
-            return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
-            
-        } else {
-            return EMPTY_LIST;
-        }
-    }
-    
-    public Token<Command> getToken() {
-        return command;
+
+    @Override
+    public boolean hasAnnotations(CommandExecutor executor) {
+        return executor.getClass().getAnnotation(Information.class) != null;
     }
     
 }

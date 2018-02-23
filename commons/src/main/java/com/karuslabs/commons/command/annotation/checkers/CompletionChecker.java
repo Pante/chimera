@@ -24,8 +24,6 @@
 package com.karuslabs.commons.command.annotation.checkers;
 
 import com.karuslabs.commons.command.annotation.*;
-import com.karuslabs.commons.command.annotation.Completion;
-import com.karuslabs.commons.command.annotation.Completions;
 
 import java.util.*;
 import javax.annotation.processing.*;
@@ -33,6 +31,8 @@ import javax.lang.model.element.*;
 
 import static com.karuslabs.commons.annotation.checkers.Elements.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
+import com.karuslabs.commons.command.annotation.Registered;
+import com.karuslabs.commons.command.annotation.Registrations;
 
 
 @SupportedAnnotationTypes({
@@ -74,14 +74,14 @@ public class CompletionChecker extends AbstractProcessor {
     }
     
     protected void checkRegistrations(Element element) {
-        Completions registrations = element.getAnnotation(Completions.class);
+        Registrations registrations = element.getAnnotation(Registrations.class);
         if (registrations != null) {
-            for (Completion registered : registrations.value()) {
+            for (Registered registered : registrations.value()) {
                 check(element, registered.index());
             }
         }
         
-        Completion registered = element.getAnnotation(Completion.class);
+        Registered registered = element.getAnnotation(Registered.class);
         if (registered != null) {
             check(element, registered.index());
         }

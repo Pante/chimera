@@ -36,11 +36,11 @@ import static org.mockito.Mockito.*;
 class ParserTest {
     
     Token<Command> token = mock(Token.class);
-    
+    Parser parser = new Parser(token);
     
     @Test
     void parse() {
-        new Parser(token).parse(COMMANDS);
+        parser.parse(COMMANDS);
         
         verify(token).from(COMMANDS.getConfigurationSection("commands"), "brush");
         verify(token).from(COMMANDS.getConfigurationSection("commands"), "test");
@@ -49,8 +49,14 @@ class ParserTest {
     
     @Test
     void parse_EMPTY_LIST() {
-        assertSame(EMPTY_LIST, new Parser(token).parse(INVALID));
+        assertSame(EMPTY_LIST, parser.parse(INVALID));
         verify(token, never()).from(any(), any());
+    }
+    
+    
+    @Test
+    void getCommand() {
+        assertSame(token, parser.getToken());
     }
     
 }

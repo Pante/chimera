@@ -32,8 +32,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({TYPE})
 @Retention(RUNTIME)
-@Repeatable(Completions.class)
-public @interface Completion {
+@Repeatable(Registrations.class)
+public @interface Registered {
     
     int index();
     

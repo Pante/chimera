@@ -30,7 +30,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public interface NullHandle {
     
     public NullHandle EXCEPTION = (config, key, value) -> {
-        throw new ParserException("Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable key");
+        throw new ParserException("Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable value");
     };
     
     public NullHandle NONE = (config, key, value) -> {};

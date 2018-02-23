@@ -21,40 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parser;
+package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.Command;
-
-import java.util.List;
-
-import org.bukkit.configuration.ConfigurationSection;
-
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
+import com.karuslabs.commons.command.*;
 
 
-public class Parser {
+public interface Processor {
     
-    private Token<Command> command;
+    public void process(Command command, CommandExecutor executor);
     
-    
-    public Parser(Token<Command> command) {
-        this.command = command;
-    }
-    
-    
-    public List<Command> parse(ConfigurationSection config) {
-        ConfigurationSection commands = config.getConfigurationSection("commands");
-        if (commands != null) {
-            return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
-            
-        } else {
-            return EMPTY_LIST;
-        }
-    }
-    
-    public Token<Command> getToken() {
-        return command;
-    }
+    public boolean hasAnnotations(CommandExecutor executor);
     
 }

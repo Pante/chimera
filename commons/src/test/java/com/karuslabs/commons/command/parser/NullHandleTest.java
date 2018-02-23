@@ -34,7 +34,7 @@ class NullHandleTest {
     @Test
     void exception() {
         assertEquals(
-            "Invalid reference: \"value\" at: \".help\", reference must either be registered or point to a assignable key", 
+            "Invalid reference: \"value\" at: \".help\", reference must either be registered or point to a assignable value", 
             assertThrows(ParserException.class, () -> NullHandle.EXCEPTION.handle(COMMANDS, "help", "value")).getMessage()
         );
     }

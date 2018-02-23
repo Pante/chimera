@@ -58,11 +58,11 @@ public class ValidatorMojo extends AbstractMojo {
     
     @Parameter
     protected String[] translations = new String[] {};
-    
+  
     
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().info("Loading configuration file:" + file.getPath());
+        getLog().info("Loading configuration file: " + file.getPath());
         ConfigurationSection config = loadConfiguration();
        
         getLog().info("Loading references specified in project pom.xml");
@@ -84,7 +84,7 @@ public class ValidatorMojo extends AbstractMojo {
         try {
             return Configurations.from(new BufferedInputStream(new FileInputStream(file)));
             
-        } catch (FileNotFoundException | IllegalArgumentException | UncheckedIOException e) {
+        } catch (FileNotFoundException | IllegalArgumentException | NullPointerException | UncheckedIOException e) {
             throw new MojoExecutionException("Invalid file specified: \"" + file.getPath() + "\", file must be a YAML file.");
         }
     }
@@ -120,7 +120,7 @@ public class ValidatorMojo extends AbstractMojo {
                 
             default:
                 return Parsers.newParser(null, null, references, (config, key, value) -> {
-                    String message = "Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable key";
+                    String message = "Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable value";
                     getLog().error(message);
                     throw new ParserException(message);
                 }, Provider.NONE);
