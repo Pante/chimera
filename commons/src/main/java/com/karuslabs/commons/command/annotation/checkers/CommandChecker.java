@@ -59,7 +59,7 @@ public class CommandChecker extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         for (Element element : annotated(annotations, environment))  {
             checkAssignability(element);
-            checkInformation(element);
+            checkNamespace(element);
         }
         
         return false;
@@ -71,7 +71,7 @@ public class CommandChecker extends AbstractProcessor {
         }
     }
     
-    protected void checkInformation(Element element) {
+    protected void checkNamespace(Element element) {
         if (element.getAnnotation(Namespace.class) == null) {
             messager.printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
         }

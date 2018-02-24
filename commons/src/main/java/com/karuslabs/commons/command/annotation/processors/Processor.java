@@ -25,10 +25,12 @@ package com.karuslabs.commons.command.annotation.processors;
 
 import com.karuslabs.commons.command.*;
 
+import java.util.List;
+
 
 public interface Processor {
     
-    public void process(Command command, CommandExecutor executor);
+    public void process(List<Command> commands, CommandExecutor executor);
     
     public boolean hasAnnotations(CommandExecutor executor);
     

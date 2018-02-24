@@ -25,9 +25,13 @@ package com.karuslabs.commons.command.annotation.processors;
 
 import com.karuslabs.commons.command.*;
 
+import java.util.List;
+
 
 public interface Resolver {
     
-    public Command resolve(ProxiedCommandMap map, CommandExecutor executor);
+    public List<Command> resolve(ProxiedCommandMap map, CommandExecutor executor);
+    
+    public boolean isResolvable(CommandExecutor executor);
     
 }

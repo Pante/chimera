@@ -27,6 +27,8 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.Completion;
 
+import java.util.List;
+
 
 public class RegisteredProcessor implements Processor {
     
@@ -38,22 +40,24 @@ public class RegisteredProcessor implements Processor {
     }
 
     @Override
-    public void process(Command command, CommandExecutor executor) {
+    public void process(List<Command> commands, CommandExecutor executor) {
         Registrations registrations = executor.getClass().getAnnotation(Registrations.class);
         if (registrations != null) {
             for (Registered registered : registrations.value()) {
-                process(command, executor, registered);
+                process(commands, executor, registered);
             }
             
         } else {
-            process(command, executor, executor.getClass().getAnnotation(Registered.class));
+            process(commands, executor, executor.getClass().getAnnotation(Registered.class));
         }
     }
     
-    protected void process(Command command, CommandExecutor executor, Registered registered) {
+    protected void process(List<Command> commands, CommandExecutor executor, Registered registered) {
         Completion completion = references.getCompletion(registered.completion());
         if (completion != null) {
-            command.getCompletions().put(registered.index(), completion);
+            for (Command command : commands) {
+                command.getCompletions().put(registered.index(), completion);
+            }
             
         } else {
             throw new IllegalArgumentException("Unresolvable reference: " + registered.completion() + " for: " + executor.getClass());

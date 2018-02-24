@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.command.*;
 
-
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.plugin.Plugin;
-
-import static org.mockito.Mockito.*;
+import java.util.*;
 
 
-class CommandsTest {
+public class CommandProcessor {
     
-    private Commands commands;
-    private Plugin plugin;
+    private Set<Processor> processors;
+    private Resolver resolver;
     
     
-    CommandsTest() {
-        plugin = when(mock(Plugin.class).getServer()).thenReturn(new StubServer(mock(SimpleCommandMap.class))).getMock();
-        when(plugin.getName()).thenReturn("name");
-        commands = spy(new Commands(plugin, Provider.NONE, null, null));
-        commands.map = spy(commands.map);
-    }  
+    public CommandProcessor(Set<Processor> processors, Resolver resolver) {
+        this.processors = processors;
+        this.resolver = resolver;
+    }
+    
+    
+    public void process(ProxiedCommandMap map, CommandExecutor executor) {
+        if (!resolver.isResolvable(executor)) {
+            throw new IllegalArgumentException("unresolvable CommandExecutor:" + executor.getClass());
+        }
+        
+        List<Command> commands = resolver.resolve(map, executor);
+        for (Processor processor : processors) {
+            if (processor.hasAnnotations(executor)) {
+                processor.process(commands, executor);
+            }
+        }
+    }
+
+    
+    public Set<Processor> getProcessors() {
+        return processors;
+    }
+
+    public Resolver getResolver() {
+        return resolver;
+    }
+    
 }

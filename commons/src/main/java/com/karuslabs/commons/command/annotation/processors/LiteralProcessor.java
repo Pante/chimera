@@ -27,25 +27,29 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.*;
 
+import java.util.List;
+
 
 public class LiteralProcessor implements Processor {
 
     @Override
-    public void process(Command command, CommandExecutor executor) {
+    public void process(List<Command> commands, CommandExecutor executor) {
         Literals literals = executor.getClass().getAnnotation(Literals.class);
         if (literals != null) {
             for (Literal literal : literals.value()) {
-                process(command, executor, literal);
+                process(commands, executor, literal);
             }
             
         } else {
-            process(command, executor, executor.getClass().getAnnotation(Literal.class));
+            process(commands, executor, executor.getClass().getAnnotation(Literal.class));
         }
     }
     
-    protected void process(Command command, CommandExecutor executor, Literal literal) {
+    protected void process(List<Command> commands, CommandExecutor executor, Literal literal) {
         Completion completion = new CachedCompletion(literal.completions());
-        command.getCompletions().put(literal.index(), completion);
+        for (Command command : commands) {
+            command.getCompletions().put(literal.index(), completion);
+        }
     }
 
     @Override

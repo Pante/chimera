@@ -26,20 +26,25 @@ package com.karuslabs.commons.command.annotation.processors;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Information;
 
+import java.util.List;
+
 import static java.util.Arrays.asList;
 
 
 public class InformationProcessor implements Processor {
 
     @Override
-    public void process(Command command, CommandExecutor executor) {
+    public void process(List<Command> commands, CommandExecutor executor) {
         Information annotation = executor.getClass().getAnnotation(Information.class);
+        List<String> aliases = asList(annotation.aliases());
         
-        command.setAliases(asList(annotation.aliases()));
-        command.setDescription(annotation.description());
-        command.setPermission(annotation.permission());
-        command.setPermissionMessage(annotation.message());
-        command.setUsage(annotation.usage());
+        for (Command command : commands) {
+            command.setAliases(aliases);
+            command.setDescription(annotation.description());
+            command.setPermission(annotation.permission());
+            command.setPermissionMessage(annotation.message());
+            command.setUsage(annotation.usage());
+        }
     }
 
     @Override
