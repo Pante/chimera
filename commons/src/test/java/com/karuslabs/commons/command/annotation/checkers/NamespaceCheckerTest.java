@@ -23,16 +23,14 @@
  */
 package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.CommandExecutor;
-import com.karuslabs.commons.command.annotation.*;
-
+import com.karuslabs.commons.command.annotation.Namespace;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,46 +43,19 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class CommandCheckerTest {
+class NamespaceCheckerTest {
     
-    CommandChecker checker;
-    TypeElement element;
-    Elements elements;
-    Types types;
-    Messager messager;
-    ProcessingEnvironment environment;
-    
-    
-    CommandCheckerTest() {
-        checker = spy(new CommandChecker());
-        environment = mock(ProcessingEnvironment.class);
-        element = mock(TypeElement.class);
-        elements = mock(Elements.class);
-        types = mock(Types.class);
-        messager = mock(Messager.class);
-        
-        when(element.asType()).thenReturn(mock(TypeMirror.class));
-        when(elements.getTypeElement(CommandExecutor.class.getName())).thenReturn(element);
-        when(environment.getElementUtils()).thenReturn(elements);
-        when(environment.getTypeUtils()).thenReturn(types);
-        when(environment.getMessager()).thenReturn(messager);
-    }
+    NamespaceChecker checker = spy(new NamespaceChecker());
+    TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(mock(TypeMirror.class)).getMock();
+    Messager messager = mock(Messager.class);
+    ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     
     
     @Test
     void annotations() throws ClassNotFoundException {
-        for (String supported: CommandChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
+        for (String supported: NamespaceChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
             assertTrue(Class.forName(supported).isAnnotation());
         }
-    }
-    
-    
-    @Test
-    void init() {
-        checker.init(environment);
-        
-        assertSame(element.asType(), checker.getExpected());
-        assertSame(messager, checker.getMessager());
     }
     
     
@@ -117,45 +88,11 @@ class CommandCheckerTest {
                 return set;
             }
         };
-        doNothing().when(checker).checkAssignability(any());
-        doNothing().when(checker).checkNamespace(any());
         
-        boolean processed = checker.process(set, environment);
-        
-        verify(checker).checkAssignability(any());
-        verify(checker).checkNamespace(any());
-        assertFalse(processed);
-    }
-    
-    
-    @ParameterizedTest
-    @CsvSource({"true, 0", "false, 1"})
-    void checkAssignability(boolean assignable, int times) {
-        when(types.isAssignable(any(), any())).thenReturn(assignable);
-        
-        checker.init(environment);
-        checker.checkAssignability(element);
-        
-        verify(messager, times(times)).printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("checkNamespace_parameters")
-    void checkNamespace(Namespace[] namespaces, int times) {
-        when(element.getAnnotationsByType(Namespace.class)).thenReturn(namespaces);
-        
-        checker.init(environment);
-        checker.checkNamespace(element);
-        
-        verify(messager, times(times)).printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
-    }
-    
-    static Stream<Arguments> checkNamespace_parameters() {
         Namespace namespace = new Namespace() {
             @Override
             public String[] value() {
-                return null;
+                return new String[] {};
             }
 
             @Override
@@ -164,7 +101,38 @@ class CommandCheckerTest {
             }
         };
         
-        return Stream.of(of(new Namespace[] {namespace}, 0), of(new Namespace[] {}, 1));
+        doNothing().when(checker).check(any(), any());
+        when(element.getAnnotationsByType(Namespace.class)).thenReturn(new Namespace[] {namespace});
+        
+        checker.process(set, environment);
+        
+        verify(checker).check(any(), any());
+    }
+    
+    
+    @Test
+    void check_empty() {
+        checker.init(environment);
+        checker.check(element, new String[] {});
+        
+        verify(messager).printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("check_parameters")
+    void check(String[] namespace, int times, int size) {
+        checker.init(environment);
+        checker.namespaces.put("other.element", "other");
+        
+        checker.check(element, namespace);
+        
+        verify(messager, times(times)).printMessage(ERROR, "Conflicting namespaces: " + element.asType().toString() + " and other, namespaces must be unique", element);
+        assertEquals(size, checker.namespaces.size());
+    }
+    
+    static Stream<Arguments> check_parameters() {
+        return Stream.of(of(new String[] {"other", "element"}, 1, 1), of(new String[] {"aye"}, 0, 2));
     }
     
 }

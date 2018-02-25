@@ -39,13 +39,11 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-class ParserIT {
-    
-    Parser parser = Parsers.newParser(null, null, new References().translation("TEST-TRANSLATION", NONE), NullHandle.EXCEPTION, Provider.NONE);
-    
-    
+class ParsersTest {
+
     @Test
     void parse() {
+        Parser parser = Parsers.newParser(null, null, new References().translation("TEST-TRANSLATION", NONE), NullHandle.EXCEPTION, Provider.NONE);
         List<Command> commands = parser.parse(COMMANDS);
         assertEquals(2, commands.size());
         

@@ -23,16 +23,14 @@
  */
 package com.karuslabs.commons.command.annotation.checkers;
 
-import com.karuslabs.commons.command.CommandExecutor;
 import com.karuslabs.commons.command.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,46 +43,19 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class CommandCheckerTest {
+class CompletionCheckerTest {
     
-    CommandChecker checker;
-    TypeElement element;
-    Elements elements;
-    Types types;
-    Messager messager;
-    ProcessingEnvironment environment;
-    
-    
-    CommandCheckerTest() {
-        checker = spy(new CommandChecker());
-        environment = mock(ProcessingEnvironment.class);
-        element = mock(TypeElement.class);
-        elements = mock(Elements.class);
-        types = mock(Types.class);
-        messager = mock(Messager.class);
-        
-        when(element.asType()).thenReturn(mock(TypeMirror.class));
-        when(elements.getTypeElement(CommandExecutor.class.getName())).thenReturn(element);
-        when(environment.getElementUtils()).thenReturn(elements);
-        when(environment.getTypeUtils()).thenReturn(types);
-        when(environment.getMessager()).thenReturn(messager);
-    }
+    CompletionChecker checker = spy(new CompletionChecker());
+    TypeElement element = mock(TypeElement.class);
+    Messager messager = mock(Messager.class);
+    ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     
     
     @Test
     void annotations() throws ClassNotFoundException {
-        for (String supported: CommandChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
+        for (String supported: CompletionChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
             assertTrue(Class.forName(supported).isAnnotation());
         }
-    }
-    
-    
-    @Test
-    void init() {
-        checker.init(environment);
-        
-        assertSame(element.asType(), checker.getExpected());
-        assertSame(messager, checker.getMessager());
     }
     
     
@@ -117,54 +88,96 @@ class CommandCheckerTest {
                 return set;
             }
         };
-        doNothing().when(checker).checkAssignability(any());
-        doNothing().when(checker).checkNamespace(any());
+        doNothing().when(checker).checkLiterals(any());
+        doNothing().when(checker).checkRegistrations(any());
+        checker.indexes.add(10);
         
-        boolean processed = checker.process(set, environment);
+        boolean process = checker.process(set, environment);
         
-        verify(checker).checkAssignability(any());
-        verify(checker).checkNamespace(any());
-        assertFalse(processed);
-    }
+        verify(checker).checkLiterals(element);
+        verify(checker).checkRegistrations(element);
+        
+        assertTrue(checker.indexes.isEmpty());
+        assertFalse(process);
+    } 
     
     
     @ParameterizedTest
-    @CsvSource({"true, 0", "false, 1"})
-    void checkAssignability(boolean assignable, int times) {
-        when(types.isAssignable(any(), any())).thenReturn(assignable);
+    @MethodSource("checkLiterals_parameters")
+    void checkLiterals(Literal[] literals, int times) {
+        doNothing().when(checker).check(any(), anyInt());
+        when(element.getAnnotationsByType(Literal.class)).thenReturn(literals);
         
-        checker.init(environment);
-        checker.checkAssignability(element);
+        checker.checkLiterals(element);
         
-        verify(messager, times(times)).printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
+        verify(checker, times(times)).check(any(), anyInt());
     }
     
-    
-    @ParameterizedTest
-    @MethodSource("checkNamespace_parameters")
-    void checkNamespace(Namespace[] namespaces, int times) {
-        when(element.getAnnotationsByType(Namespace.class)).thenReturn(namespaces);
-        
-        checker.init(environment);
-        checker.checkNamespace(element);
-        
-        verify(messager, times(times)).printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
-    }
-    
-    static Stream<Arguments> checkNamespace_parameters() {
-        Namespace namespace = new Namespace() {
+    static Stream<Arguments> checkLiterals_parameters() {
+        Literal literal = new Literal() {
             @Override
-            public String[] value() {
-                return null;
+            public int index() {
+                return 0;
+            }
+
+            @Override
+            public String[] completions() {
+                return new String[] {};
             }
 
             @Override
             public Class<? extends Annotation> annotationType() {
-                return Namespace.class;
+                return Literal.class;
             }
         };
         
-        return Stream.of(of(new Namespace[] {namespace}, 0), of(new Namespace[] {}, 1));
+        return Stream.of(of(new Literal[] {literal}, 1), of(new Literal[] {}, 0));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("checkRegistrations_parameters")
+    void checkRegistrations(Registered[] registrations, int times) {
+        doNothing().when(checker).check(any(), anyInt());
+        when(element.getAnnotationsByType(Registered.class)).thenReturn(registrations);
+        
+        checker.checkRegistrations(element);
+        
+        verify(checker, times(times)).check(any(), anyInt());
+    }
+    
+    static Stream<Arguments> checkRegistrations_parameters() {
+        Registered registered = new Registered() {
+            @Override
+            public int index() {
+                return 0;
+            }
+
+            @Override
+            public String completion() {
+                return "";
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Registered.class;
+            }
+        };
+        
+        return Stream.of(of(new Registered[] {registered}, 1), of(new Registered[] {}, 0));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"-1, 1, 0", "1, 0, 1", "0, 0, 0"})
+    void check(int index, int boundTimes, int duplicateTimes) {
+        checker.init(environment);
+        checker.indexes.add(1);
+        
+        checker.check(element, index);
+        
+        verify(messager, times(boundTimes)).printMessage(ERROR, "Index out of bounds: " + index + ", index must be equal to or greater than 0", element);
+        verify(messager, times(duplicateTimes)).printMessage(ERROR, "Conflicting indexes: " + index + ", indexes must be unique", element);
     }
     
 }

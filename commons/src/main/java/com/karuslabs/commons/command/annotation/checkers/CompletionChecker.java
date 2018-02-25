@@ -32,16 +32,15 @@ import javax.lang.model.element.*;
 import static com.karuslabs.commons.annotation.checkers.Elements.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import com.karuslabs.commons.command.annotation.Registered;
-import com.karuslabs.commons.command.annotation.Registrations;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.command.annotation.Completion", "com.karuslabs.commons.command.annotation.Completions",
-    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals"
+    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
+    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
 })
 public class CompletionChecker extends AbstractProcessor {
     
-    private Set<Integer> indexes;
+    Set<Integer> indexes;
     
     
     public CompletionChecker() {
@@ -54,35 +53,20 @@ public class CompletionChecker extends AbstractProcessor {
         for (Element element : annotated(annotations, environment)) {
             checkLiterals(element);
             checkRegistrations(element);
+            indexes.clear();
         }
         
         return false;
     }
     
     protected void checkLiterals(Element element) {
-        Literals literals = element.getAnnotation(Literals.class);
-        if (literals != null) {
-            for (Literal literal : literals.value()) {
-                check(element, literal.index());
-            }
-        }
-            
-        Literal literal = element.getAnnotation(Literal.class);
-        if (literal != null) {
+        for (Literal literal : element.getAnnotationsByType(Literal.class)) {
             check(element, literal.index());
         }
     }
     
     protected void checkRegistrations(Element element) {
-        Registrations registrations = element.getAnnotation(Registrations.class);
-        if (registrations != null) {
-            for (Registered registered : registrations.value()) {
-                check(element, registered.index());
-            }
-        }
-        
-        Registered registered = element.getAnnotation(Registered.class);
-        if (registered != null) {
+        for (Registered registered : element.getAnnotationsByType(Registered.class)) {
             check(element, registered.index());
         }
     }

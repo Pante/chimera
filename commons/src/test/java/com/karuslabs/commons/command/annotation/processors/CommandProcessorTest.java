@@ -25,32 +25,45 @@ package com.karuslabs.commons.command.annotation.processors;
 
 import com.karuslabs.commons.command.*;
 
-import java.util.*;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import static java.util.Collections.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class CommandProcessor {
+class CommandProcessorTest {
     
-    private Set<Processor> processors;
-    private Resolver resolver;
+    Resolver resolver = mock(Resolver.class);
+    LiteralProcessor literal = mock(LiteralProcessor.class);
+    CommandProcessor processor = new CommandProcessor(singleton(literal), resolver);
+    ProxiedCommandMap map = mock(ProxiedCommandMap.class);
+    Command command = mock(Command.class);
     
     
-    public CommandProcessor(Set<Processor> processors, Resolver resolver) {
-        this.processors = processors;
-        this.resolver = resolver;
+    @Test
+    void process() {
+        List<Command> commands = singletonList(command);
+        when(resolver.isResolvable(any())).thenReturn(true);
+        when(resolver.resolve(map, CommandExecutor.NONE)).thenReturn(commands);
+        when(literal.hasAnnotations(any())).thenReturn(true);
+        
+        processor.process(map, CommandExecutor.NONE);
+        
+        verify(literal).process(commands, CommandExecutor.NONE);
     }
     
     
-    public void process(ProxiedCommandMap map, CommandExecutor executor) {
-        if (!resolver.isResolvable(executor)) {
-            throw new IllegalArgumentException("unresolvable CommandExecutor: " + executor.getClass().getName());
-        }
+    @Test
+    void process_ThrowsException() {
+        when(resolver.isResolvable(any())).thenReturn(false);
         
-        List<Command> commands = resolver.resolve(map, executor);
-        for (Processor processor : processors) {
-            if (processor.hasAnnotations(executor)) {
-                processor.process(commands, executor);
-            }
-        }
+        assertEquals(
+            "unresolvable CommandExecutor: " + CommandExecutor.NONE.getClass().getName(),
+            assertThrows(IllegalArgumentException.class, () -> processor.process(map, CommandExecutor.NONE)).getMessage()
+        );
     }
     
 }

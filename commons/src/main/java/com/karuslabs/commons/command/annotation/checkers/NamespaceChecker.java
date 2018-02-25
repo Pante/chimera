@@ -29,13 +29,14 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
+import static com.karuslabs.commons.annotation.checkers.Elements.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({"com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces"})
 public class NamespaceChecker extends AbstractProcessor {
     
-    private Map<String, String> namespaces;
+    Map<String, String> namespaces;
     
     
     public NamespaceChecker() {
@@ -44,27 +45,23 @@ public class NamespaceChecker extends AbstractProcessor {
     
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment enviroment) {
-        Set<? extends Element> elements = enviroment.getElementsAnnotatedWith(Namespace.class);
-        elements.forEach(element -> check(element, element.getAnnotation(Namespace.class)));
-        
-        elements = enviroment.getElementsAnnotatedWith(Namespaces.class);
-        elements.forEach(element -> {
-            for (Namespace namespace : element.getAnnotation(Namespaces.class).value()) {
-                check(element, namespace);
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        for (Element element : annotated(annotations, environment))  {
+            for (Namespace namespace : element.getAnnotationsByType(Namespace.class)) {
+                check(element, namespace.value());
             }
-        });
+        }
         
         return false;
     }
     
-    protected void check(Element element, Namespace namespace) {
-        if (namespace.value().length == 0) {
+    protected void check(Element element, String[] namespace) {
+        if (namespace.length == 0) {
             processingEnv.getMessager().printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
             return;
         }
         
-        String name = String.join(".", namespace.value());
+        String name = String.join(".", namespace);
         String type = element.asType().toString();
         
         String other = namespaces.get(name);

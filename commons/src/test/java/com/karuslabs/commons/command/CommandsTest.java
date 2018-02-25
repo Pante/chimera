@@ -23,25 +23,40 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.annotation.processors.CommandProcessor;
 import com.karuslabs.commons.locale.providers.Provider;
-
 
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
+
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
 
 class CommandsTest {
     
-    private Commands commands;
-    private Plugin plugin;
+    Commands commands;
+    CommandProcessor processor;
+    Plugin plugin;
     
     
     CommandsTest() {
         plugin = when(mock(Plugin.class).getServer()).thenReturn(new StubServer(mock(SimpleCommandMap.class))).getMock();
         when(plugin.getName()).thenReturn("name");
-        commands = spy(new Commands(plugin, Provider.NONE, null, null));
+        processor = mock(CommandProcessor.class);
+        commands = spy(Commands.simple(plugin, Provider.NONE));
         commands.map = spy(commands.map);
-    }  
+        commands.processor = processor;
+    }
+    
+    
+    @Test
+    void register() {
+        commands.register(CommandExecutor.NONE);
+        
+        verify(processor).process(commands.map, CommandExecutor.NONE);
+    }
+    
+    
 }

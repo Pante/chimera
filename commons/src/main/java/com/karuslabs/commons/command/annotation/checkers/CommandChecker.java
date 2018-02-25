@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.annotation.checkers;
 
 import com.karuslabs.commons.command.CommandExecutor;
-import com.karuslabs.commons.command.annotation.Namespace;
+import com.karuslabs.commons.command.annotation.*;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -72,9 +72,18 @@ public class CommandChecker extends AbstractProcessor {
     }
     
     protected void checkNamespace(Element element) {
-        if (element.getAnnotation(Namespace.class) == null) {
+        if (element.getAnnotationsByType(Namespace.class).length == 0) {
             messager.printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
         }
+    }
+    
+    
+    public TypeMirror getExpected() {
+        return expected;
+    }
+    
+    public Messager getMessager() {
+        return messager;
     }
     
 }
