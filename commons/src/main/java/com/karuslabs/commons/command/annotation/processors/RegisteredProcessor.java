@@ -39,16 +39,11 @@ public class RegisteredProcessor implements Processor {
         this.references = references;
     }
 
+    
     @Override
     public void process(List<Command> commands, CommandExecutor executor) {
-        Registrations registrations = executor.getClass().getAnnotation(Registrations.class);
-        if (registrations != null) {
-            for (Registered registered : registrations.value()) {
-                process(commands, executor, registered);
-            }
-            
-        } else {
-            process(commands, executor, executor.getClass().getAnnotation(Registered.class));
+        for (Registered registered : executor.getClass().getAnnotationsByType(Registered.class)) {
+            process(commands, executor, registered);
         }
     }
     
@@ -60,15 +55,14 @@ public class RegisteredProcessor implements Processor {
             }
             
         } else {
-            throw new IllegalArgumentException("Unresolvable reference: " + registered.completion() + " for: " + executor.getClass());
+            throw new IllegalArgumentException("Unresolvable reference: \"" + registered.completion() + "\" for: " + executor.getClass().getName());
         }
     }
     
 
     @Override
     public boolean hasAnnotations(CommandExecutor executor) {
-        Class<? extends CommandExecutor> type = executor.getClass();
-        return type.getAnnotation(Registered.class) != null || type.getAnnotation(Registrations.class) != null;
+        return executor.getClass().getAnnotationsByType(Registered.class).length != 0;
     }
     
 }

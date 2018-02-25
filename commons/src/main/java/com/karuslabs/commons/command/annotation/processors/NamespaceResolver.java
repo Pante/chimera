@@ -29,7 +29,6 @@ import com.karuslabs.commons.command.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 
@@ -37,25 +36,21 @@ public class NamespaceResolver implements Resolver {
 
     @Override
     public List<Command> resolve(ProxiedCommandMap map, CommandExecutor executor) {
-        Namespaces namespaces = executor.getClass().getAnnotation(Namespaces.class);
-        if (namespaces != null) {
-            return Stream.of(namespaces.value()).map(namespace -> resolve(map , executor, namespace)).collect(toList());
-            
-        } else {
-            return asList(resolve(map , executor, executor.getClass().getAnnotation(Namespace.class)));
-        }
+        return Stream.of(executor.getClass().getAnnotationsByType(Namespace.class)).map(namespace -> resolve(map , executor, namespace)).collect(toList());
     } 
     
     protected Command resolve(ProxiedCommandMap map, CommandExecutor executor, Namespace namespace) {
         String[] names = namespace.value();
         if (names.length == 0) {
-            throw new IllegalArgumentException("Invalid namespace for: " + executor.getClass() + ", namespace cannot be empty");
+            throw new IllegalArgumentException("Invalid namespace for: " + executor.getClass().getName() + ", namespace cannot be empty");
         }
         
         Command command = map.getCommand(names[0]);
+        check(command, executor, names, names[0]);
+        
         for (int i = 1; i < names.length; i++) {
-            check(command, executor, names, names[i]);
             command = command.getSubcommands().get(names[i]);
+            check(command, executor, names, names[i]);
         }
         
         return command;
@@ -63,15 +58,14 @@ public class NamespaceResolver implements Resolver {
     
     protected void check(Command command, CommandExecutor executor, String[] names, String name) {
         if (command == null) {
-            throw new IllegalArgumentException("Unresolvable name: \"" + name + "\" in namespace: \"" + String.join(", ", names) + "\" for " + executor.getClass());
+            throw new IllegalArgumentException("Unresolvable name: \"" + name + "\" in namespace: \"" + String.join(".", names) + "\" for " + executor.getClass().getName());
         }
     } 
 
     
     @Override
     public boolean isResolvable(CommandExecutor executor) {
-        Class<? extends CommandExecutor> type = executor.getClass();
-        return type.getAnnotation(Namespace.class) != null || type.getAnnotation(Namespaces.class) != null;
+        return executor.getClass().getAnnotationsByType(Namespace.class).length != 0;
     }
     
 }

@@ -34,14 +34,8 @@ public class LiteralProcessor implements Processor {
 
     @Override
     public void process(List<Command> commands, CommandExecutor executor) {
-        Literals literals = executor.getClass().getAnnotation(Literals.class);
-        if (literals != null) {
-            for (Literal literal : literals.value()) {
-                process(commands, executor, literal);
-            }
-            
-        } else {
-            process(commands, executor, executor.getClass().getAnnotation(Literal.class));
+        for (Literal literal : executor.getClass().getAnnotationsByType(Literal.class)) {
+            process(commands, executor, literal);
         }
     }
     
@@ -55,7 +49,7 @@ public class LiteralProcessor implements Processor {
     @Override
     public boolean hasAnnotations(CommandExecutor executor) {
         Class<? extends CommandExecutor> type = executor.getClass();
-        return type.getAnnotation(Literal.class) != null || type.getAnnotation(Literals.class) != null;
+        return type.getAnnotationsByType(Literal.class).length != 0;
     }
     
 }
