@@ -21,17 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.spigot.plugin.descriptor;
+package com.karuslabs.spigot.plugin.descriptor.descriptors;
+
+import com.karuslabs.spigot.plugin.descriptor.DescriptorException;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 
-public class UncheckedMojoFailureException extends RuntimeException {
+@FunctionalInterface
+public interface Descriptor {
     
-    public UncheckedMojoFailureException(String message) {
-        super(message);
-    }
+    public void execute(ConfigurationSection config, String key);
     
-    public UncheckedMojoFailureException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    
+    public static final Descriptor BOOLEAN = (config, key) -> {
+        if (!config.isBoolean(key)) {
+            throw new DescriptorException(config, key, "boolean");
+        }
+    };
+    
+    public static final Descriptor STRING = (config, key) -> {
+        if (!config.isString(key)) {
+            throw new DescriptorException(config, key, "String");
+        }
+    };
+    
+    public static final Descriptor STRING_LIST = (config, key) -> {
+        if (!config.isList(key)) {
+            throw new DescriptorException(config, key, "list of strings");
+        }
+    };
+    
+    public static final Descriptor NONE = (config, key) -> {};
     
 }

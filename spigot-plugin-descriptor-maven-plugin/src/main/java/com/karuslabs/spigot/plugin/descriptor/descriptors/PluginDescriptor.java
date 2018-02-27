@@ -23,54 +23,80 @@
  */
 package com.karuslabs.spigot.plugin.descriptor.descriptors;
 
-import com.karuslabs.spigot.plugin.descriptor.UncheckedMojoFailureException;
+import com.karuslabs.spigot.plugin.descriptor.DescriptorException;
 
-import java.io.File;
+import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.annotation.Nullable;
 
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.plugin.*;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugin.logging.Log;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import org.reflections.Reflections;
 
+import static java.util.stream.Collectors.toSet;
 
-public class PluginDescriptor {
+
+public class PluginDescriptor implements Descriptor {
     
-    private MavenProject project;
-    private @Nullable String main;
+    private Log log;
+    private List<String> elements;
+    private boolean override;
     
     
-    public PluginDescriptor(MavenProject project, String main) {
-        this.project = project;
-        this.main = main;
+    public PluginDescriptor(Log log, List<String> elements, boolean override) {
+        this.log = log;
+        this.elements = elements;
+        this.override = override;
     }
     
     
-    public void execute(ConfigurationSection config) throws MojoExecutionException, DependencyResolutionRequiredException {
-        Reflections reflections = main == null ? detect() : resolve(main);
+    @Override
+    public void execute(ConfigurationSection config, String key) { 
+        String main = config.getString("main");
+        Set<String> detected = load();
+        
+        if (main != null && detected.contains(main)) {
+            return;
+        }
+        
+        if (main == null || override) {
+            setMain(config, detected);
+            
+        } else {
+            throw new IllegalArgumentException("Invalid main class specified: " + main + ", main must be a subclass of JavaPlugin");
+        }
     }
     
-    protected Reflections detect() throws DependencyResolutionRequiredException {
-        List<String> elements = project.getCompileClasspathElements();
+    protected Set<String> load() {
         URL[] urls = elements.stream().map(element -> {
             try {
                 return new File(element).toURI().toURL();
-
+                
             } catch (MalformedURLException e) {
-                throw new UncheckedMojoFailureException("Unable to resolve classpath element to URL", e);
+                throw new UncheckedIOException(e);
             }
         }).toArray(URL[]::new);
-
-        return new Reflections(URLClassLoader.newInstance(urls, Thread.currentThread().getContextClassLoader()));
+        
+        Reflections reflections = new Reflections(URLClassLoader.newInstance(urls, getClass().getClassLoader()));
+        return reflections.getSubTypesOf(JavaPlugin.class).stream().map(Class::getName).collect(toSet());
     }
-    
-    protected Reflections resolve(String main) {
-        return new Reflections();
+        
+    protected void setMain(ConfigurationSection config, Set<String> detected) {
+        if (detected.size() == 1) {
+            String main = detected.toArray(new String[0])[0];
+            log.info("Detected and setting main to: " + main);
+            
+            config.set("main", main);
+                
+        } else if (detected.size() > 1) {
+            throw new DescriptorException("Multiple JavaPlugin subclasses detected, main class must be specified manually");
+            
+        } else {
+            throw new DescriptorException("No JavaPlugin subclass detected, main class must be specified manually");
+        }   
     }
     
 }

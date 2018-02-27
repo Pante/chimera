@@ -23,41 +23,37 @@
  */
 package com.karuslabs.spigot.plugin.descriptor;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
 import javax.annotation.Nullable;
+
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.*;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
-import org.bukkit.plugin.Plugin;
-import org.reflections.Reflections;
 
 
 @Mojo(name = "descriptor", defaultPhase = COMPILE, threadSafe = false)
 public class DescriptorMojo extends AbstractMojo {
 
-    @Parameter(name = "directory", defaultValue = "${project}", readonly = true, required = true)
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
     
-    @Parameter(name = "plugin-yaml", defaultValue = "${project.basedir}/src/main/resources/plugin.yml")
+    @Parameter(defaultValue = "${project.basedir}/src/main/resources/plugin.yml")
     protected File file;
+    
+    @Parameter(defaultValue = "${project.name}", required = true)
+    protected String name;
+        
+    @Parameter(defaultValue = "${project.version}", required = true)
+    protected String version;
     
     @Parameter
     protected @Nullable String main;
-    
-    @Parameter(defaultValue = "${project.version}", required = true)
-    protected String version;
     
     @Parameter(defaultValue = "true", required = true)
     protected boolean override;
@@ -65,44 +61,40 @@ public class DescriptorMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        getLog().info("Loading plugin.yml: " + file.getPath());
+        YamlConfiguration config = loadConfiguration();
+        
+        getLog().info("Loading descriptors");
+        Descriptors descriptors = descriptors();
+        
+        getLog().info("Validating plugin.yml");
+        descriptors.execute(config);
+        getLog().info("Found no errors in plugin.yml");
+        
         try {
-            Set<URL> urls = new HashSet<>();
-            List<String> elements  = project.getCompileClasspathElements();
-            for (String element : elements) {
-                urls.add(new File(element).toURI().toURL());
-            }
-            ClassLoader loader = URLClassLoader.newInstance(urls.toArray(new URL[0]), Thread.currentThread().getContextClassLoader());
+            config.save(file);
             
-            Reflections reflections = new Reflections(loader);
-            
-            getLog().info(reflections.getSubTypesOf(Plugin.class).toString());
-            
-        } catch (DependencyResolutionRequiredException e) {
-            throw new MojoExecutionException("Error while determining the classpath elements", e);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(DescriptorMojo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
-
     
-    public MavenProject getProject() {
-        return project;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public String getMain() {
-        return main;
-    }
-
-    public String getVersion() {
-        return version;
+    protected YamlConfiguration loadConfiguration() throws MojoExecutionException {
+        try {
+            return YamlConfiguration.loadConfiguration(file);
+            
+        } catch (IllegalArgumentException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
     }
     
-    public boolean isOverriding() {
-        return override;
+    protected Descriptors descriptors() throws MojoFailureException {
+        try {
+            return Descriptors.simple(getLog(), name, project.getCompileClasspathElements(), version, override);
+            
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
     }
     
 }
