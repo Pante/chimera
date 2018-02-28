@@ -40,6 +40,15 @@
         </snapshotRepository>
     </distributionManagement>
     
+        
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+    
+    
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -90,12 +99,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
     
 </project>
