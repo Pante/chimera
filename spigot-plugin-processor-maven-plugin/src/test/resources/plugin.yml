@@ -1,0 +1,10 @@
+invalid-keys:
+    loadbefore: [a, b]
+    loadafter: uhhh
+    
+invalid-value:
+    description: 1
+    
+plugin:
+    description: "A description"
+    website: "https://repo.karuslabs.com"
