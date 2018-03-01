@@ -12,7 +12,26 @@
         
     <name>Configuration-Validator</name>
     <description>A maven-plugin which validates a configuration file that contains commands</description>
-     
+    
+    
+    <distributionManagement>
+        <repository>
+            <id>karus</id>
+            <url>https://repo.karuslabs.com/repository/karus-commons/releases</url>
+        </repository>
+        
+        <snapshotRepository>
+            <id>karus</id>
+            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
+        </snapshotRepository>
+        
+        <site>
+            <id>karus</id>
+            <url>dav:https://repo.karuslabs.com/repository/karus-commons-project/${project.version}/</url>
+        </site>
+    </distributionManagement>
+    
+    
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -195,7 +214,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.6</version>
+                <version>3.7</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>

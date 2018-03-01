@@ -49,24 +49,6 @@
         <module>configuration-validator-maven-plugin</module>
         <module>spigot-plugin-processor-maven-plugin</module>
     </modules>
-  
-        
-    <distributionManagement>
-        <repository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/releases</url>
-        </repository>
-        
-        <snapshotRepository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
-        </snapshotRepository>
-        
-        <site>
-            <id>karus</id>
-            <url>dav:https://repo.karuslabs.com/repository/karus-commons-project/${project.version}/</url>
-        </site>
-    </distributionManagement>
     
             
     <repositories>
