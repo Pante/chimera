@@ -46,10 +46,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
-/Commands/target/
-/Core/target/
-/Items/target/
 
 # JetBrains .gitignore
 .idea/
 /nbproject/
+/commons/target/
+/configuration-validator-maven-plugin/target/
+/spigot-plugin-processor-maven-plugin/target/
