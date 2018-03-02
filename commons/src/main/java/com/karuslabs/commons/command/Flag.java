@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
+
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;

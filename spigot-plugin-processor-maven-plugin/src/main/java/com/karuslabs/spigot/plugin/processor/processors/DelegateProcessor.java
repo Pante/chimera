@@ -31,8 +31,8 @@ public class DelegateProcessor extends ConfigurationProcessor {
     private Processor processor;
     
     
-    public DelegateProcessor(Processor descriptor) {
-        this.processor = descriptor;
+    public DelegateProcessor(Processor processor) {
+        this.processor = processor;
     }
     
     

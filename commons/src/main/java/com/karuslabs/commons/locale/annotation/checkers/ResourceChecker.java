@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.checkers;
+package com.karuslabs.commons.locale.annotation.checkers;
 
-import com.karuslabs.commons.command.annotation.*;
+import com.karuslabs.commons.locale.annotation.*;
 
-import java.util.*;
+import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
@@ -34,48 +34,29 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
-    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
+    "com.karuslabs.commons.locale.annotation.EmbeddedResources", "com.karuslabs.commons.locale.annotation.ExternalResources"
 })
-public class CompletionChecker extends AbstractProcessor {
+public class ResourceChecker extends AbstractProcessor {
     
-    Set<Integer> indexes;
-    
-    
-    public CompletionChecker() {
-        indexes = new HashSet<>();
-    }
-    
-        
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         for (Element element : annotated(annotations, environment)) {
-            checkLiterals(element);
-            checkRegistrations(element);
-            indexes.clear();
+            check(element, element.getAnnotation(EmbeddedResources.class).value());
+            check(element, element.getAnnotation(ExternalResources.class).value());
         }
-        
+
         return false;
     }
     
-    protected void checkLiterals(Element element) {
-        for (Literal literal : element.getAnnotationsByType(Literal.class)) {
-            check(element, literal.index());
-        }
-    }
-    
-    protected void checkRegistrations(Element element) {
-        for (Registered registered : element.getAnnotationsByType(Registered.class)) {
-            check(element, registered.index());
-        }
-    }
-    
-    protected void check(Element element, int index) {
-        if (index < 0) {
-            processingEnv.getMessager().printMessage(ERROR, "Index out of bounds: " + index + ", index must be equal to or greater than 0", element);
-                    
-        } else if (!indexes.add(index)) {
-            processingEnv.getMessager().printMessage(ERROR, "Conflicting indexes: " + index + ", indexes must be unique", element);
+    protected void check(Element element, String[] values) {
+        for (int i = 0; i < values.length; i++) {
+            for (int j = i + 1; i < values.length; i++) {
+                String first = values[i];
+                String second = values[j];
+                if (i != j &&  first != null && first.equals(second)) {
+                    processingEnv.getMessager().printMessage(ERROR, "Duplicate resources: " + first + ", resources must be unique", element);
+                }
+            }
         }
     }
     

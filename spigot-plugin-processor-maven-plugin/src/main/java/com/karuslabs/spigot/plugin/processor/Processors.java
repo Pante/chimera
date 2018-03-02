@@ -48,7 +48,7 @@ public class Processors {
     
     
     public void execute(ConfigurationSection config) throws MojoExecutionException {
-        required.forEach((key, descriptor) -> descriptor.execute(config, key));
+        required.forEach((key, processor) -> processor.execute(config, key));
         
         Set<String> keys = config.getKeys(false);
         if (processors.keySet().containsAll(keys)) {

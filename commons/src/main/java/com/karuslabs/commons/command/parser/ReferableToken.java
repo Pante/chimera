@@ -36,9 +36,9 @@ public abstract class ReferableToken<T> extends Token<T> {
     protected NullHandle handle;
     
     
-    public ReferableToken(References references, NullHandle handler) {
+    public ReferableToken(References references, NullHandle handle) {
         this.references = references;
-        this.handle = handler;
+        this.handle = handle;
     }
 
     

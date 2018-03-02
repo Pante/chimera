@@ -27,7 +27,7 @@ package com.karuslabs.commons.util.concurrent;
 public abstract class ScheduledResultTask<T> extends ResultTask<T> implements Repeatable {
     
     public static <T> ScheduledResultTask<T> of(Runnable runnable, T value, long iterations) {
-        return new ScheduledPromiseRunnable<>(runnable, value, iterations);
+        return new ScheduledRunnableResultTask<>(runnable, value, iterations);
     }
     
     
@@ -73,12 +73,12 @@ public abstract class ScheduledResultTask<T> extends ResultTask<T> implements Re
     }
     
     
-    static class ScheduledPromiseRunnable<T> extends ScheduledResultTask<T> {
+    static class ScheduledRunnableResultTask<T> extends ScheduledResultTask<T> {
         
         private final Runnable runnable;
         private final T value;
         
-        ScheduledPromiseRunnable(Runnable runnable, T value, long iterations) {
+        ScheduledRunnableResultTask(Runnable runnable, T value, long iterations) {
             super(iterations);
             this.runnable = runnable;
             this.value = value;

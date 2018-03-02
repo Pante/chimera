@@ -31,8 +31,8 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class CompletionToken extends ReferableToken<Completion> {
 
-    public CompletionToken(References references, NullHandle handler) {
-        super(references, handler);
+    public CompletionToken(References references, NullHandle handle) {
+        super(references, handle);
     }
 
     

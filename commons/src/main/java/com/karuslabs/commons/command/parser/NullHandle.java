@@ -29,12 +29,13 @@ import org.bukkit.configuration.ConfigurationSection;
 @FunctionalInterface
 public interface NullHandle {
     
+    public void handle(ConfigurationSection config, String key, String value);
+    
+        
     public NullHandle EXCEPTION = (config, key, value) -> {
         throw new ParserException("Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable value");
     };
     
     public NullHandle NONE = (config, key, value) -> {};
-    
-    public void handle(ConfigurationSection config, String key, String value);
     
 }

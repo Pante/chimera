@@ -33,11 +33,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> {
     
     public static <T> ResultTask<T> of(Runnable runnable, T result) {
-        return new PromiseRunnable<>(runnable, result);
+        return new RunnableResultTask<>(runnable, result);
     }
     
     public static <T> ResultTask<T> of(Callable<T> callable) {
-        return new PromiseCallable<>(callable);
+        return new CallableResultTask<>(callable);
     }
     
     
@@ -156,12 +156,12 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
     }
     
     
-    static class PromiseRunnable<T> extends ResultTask<T> {
+    static class RunnableResultTask<T> extends ResultTask<T> {
         
         private final Runnable runnable;
         private final T value;
         
-        PromiseRunnable(Runnable runnable, T value) {
+        RunnableResultTask(Runnable runnable, T value) {
             this.runnable = runnable;
             this.value = value;
         }
@@ -178,12 +178,12 @@ public abstract class ResultTask<T> extends BukkitRunnable implements Result<T> 
         
     }
     
-    static class PromiseCallable<T> extends ResultTask<T> {
+    static class CallableResultTask<T> extends ResultTask<T> {
         
         private final Callable<T> callable;
         private T value;
         
-        PromiseCallable(Callable<T> callable) {
+        CallableResultTask(Callable<T> callable) {
             this.callable = callable;
         }
         

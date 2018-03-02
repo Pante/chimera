@@ -34,10 +34,10 @@ public class Builder<GenericTranslation extends Translation> {
     
     private static final Resource[] EMPTY = new Resource[] {};
     
-    protected TranslationSupplier<GenericTranslation> supplier;
-    protected String bundle;
-    protected Provider provider;
-    protected List<Resource> resources;
+    private TranslationSupplier<GenericTranslation> supplier;
+    private String bundle;
+    private Provider provider;
+    private List<Resource> resources;
     
     
     public Builder(TranslationSupplier<GenericTranslation> supplier, String bundle, Provider provider) {
