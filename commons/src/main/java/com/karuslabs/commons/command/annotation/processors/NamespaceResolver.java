@@ -29,11 +29,21 @@ import com.karuslabs.commons.command.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.bukkit.plugin.Plugin;
+
 import static java.util.stream.Collectors.toList;
 
 
 public class NamespaceResolver implements Resolver {
-
+    
+    private Plugin plugin;
+    
+    
+    public NamespaceResolver(Plugin plugin) {
+        this.plugin = plugin;
+    }
+    
+    
     @Override
     public List<Command> resolve(ProxiedCommandMap map, CommandExecutor executor) {
         return Stream.of(executor.getClass().getAnnotationsByType(Namespace.class)).map(namespace -> resolve(map , executor, namespace)).collect(toList());
@@ -46,20 +56,24 @@ public class NamespaceResolver implements Resolver {
         }
         
         Command command = map.getCommand(names[0]);
-        check(command, executor, names, names[0]);
+        if (command == null) {
+            map.register(names[0], command = new Command(names[0], plugin));
+        }
         
         for (int i = 1; i < names.length; i++) {
-            command = command.getSubcommands().get(names[i]);
-            check(command, executor, names, names[i]);
+            command = append(command, names[i]);
         }
         
         return command;
     }
     
-    protected void check(Command command, CommandExecutor executor, String[] names, String name) {
+    protected Command append(Command parent, String name) {
+        Command command = parent.getSubcommands().get(name);
         if (command == null) {
-            throw new IllegalArgumentException("Unresolvable name: \"" + name + "\" in namespace: \"" + String.join(".", names) + "\" for " + executor.getClass().getName());
+            parent.getSubcommands().put(name, command = new Command(name, plugin));
         }
+        
+        return command;
     } 
 
     

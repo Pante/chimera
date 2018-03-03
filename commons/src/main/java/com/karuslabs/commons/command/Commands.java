@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.annotation.processors.ResourceProcessor;
 import com.karuslabs.commons.command.annotation.processors.*;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
@@ -92,7 +93,7 @@ public class Commands {
     public static Commands simple(Plugin plugin, Provider provider) {
         References references = new References();
         CommandProcessor processor = new CommandProcessor(
-            new HashSet<>(asList(new InformationProcessor(), new LiteralProcessor(), new RegisteredProcessor(references))), new NamespaceResolver()
+            new HashSet<>(asList(new InformationProcessor(), new LiteralProcessor(), new RegisteredProcessor(references), new ResourceProcessor())), new NamespaceResolver(plugin)
         );
         
         return new Commands(plugin, provider, references, processor);

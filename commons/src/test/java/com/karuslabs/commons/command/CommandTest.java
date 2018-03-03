@@ -25,6 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.ExternalControl;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static com.karuslabs.commons.command.Command.builder;
+import static com.karuslabs.commons.command.Command.*;
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
@@ -49,7 +50,13 @@ class CommandTest {
     Command command = spy(
        builder(null).name("name").description("description").usage("usage").aliases(new ArrayList<>()).translation(NONE).executor(CommandExecutor.NONE).subcommands(new HashMap<>()).completions(new HashMap<>()).build()
     );
-    CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();
+    CommandSender sender = when(mock(CommandSender.class).hasPermission("permission")).thenReturn(true).getMock();  
+    
+    @Test
+    void translation() {
+        assertEquals(DEFAULT_BUNDLE, DEFAULT_TRANSLATION.getBundleName());
+        assertEquals(DEFAULT_RESOURCE, ((ExternalControl) DEFAULT_TRANSLATION.getControl()).getResources()[0]);
+    }
     
     
     @Test

@@ -29,9 +29,9 @@ commands:
                 completions:
                     0: completions.completion
                     2: [a, b, c]
-                    
+
         translation: help.translation
-    
+
     test:
         aliases: [c]
         translation: TEST-TRANSLATION

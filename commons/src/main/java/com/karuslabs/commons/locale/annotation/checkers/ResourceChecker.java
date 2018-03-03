@@ -34,6 +34,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
+    "com.karuslabs.commons.locale.annotation.Bundle",
     "com.karuslabs.commons.locale.annotation.EmbeddedResources", "com.karuslabs.commons.locale.annotation.ExternalResources"
 })
 public class ResourceChecker extends AbstractProcessor {
@@ -41,23 +42,39 @@ public class ResourceChecker extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         for (Element element : annotated(annotations, environment)) {
-            check(element, element.getAnnotation(EmbeddedResources.class).value());
-            check(element, element.getAnnotation(ExternalResources.class).value());
+            if (element.getAnnotation(Bundle.class) == null) {
+                processingEnv.getMessager().printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
+            }
+            
+            if (element.getAnnotation(EmbeddedResources.class) != null) {
+                check(element, element.getAnnotation(EmbeddedResources.class).value());
+            }
+            
+            if (element.getAnnotation(ExternalResources.class) != null) {
+                check(element, element.getAnnotation(ExternalResources.class).value());
+            }
         }
 
         return false;
     }
     
     protected void check(Element element, String[] values) {
-        for (int i = 0; i < values.length; i++) {
-            for (int j = i + 1; i < values.length; i++) {
-                String first = values[i];
-                String second = values[j];
-                if (i != j &&  first != null && first.equals(second)) {
-                    processingEnv.getMessager().printMessage(ERROR, "Duplicate resources: " + first + ", resources must be unique", element);
+        if (values.length > 1) {
+            for (int i = 0; i < values.length; i++) {
+                for (int j = i + 1; j < values.length; j++) {           
+                    String first = values[i];
+                    String second = values[j];
+                    if (i != j && first != null && first.equals(second)) {
+                        processingEnv.getMessager().printMessage(ERROR, "Duplicate resources: " + first + ", resources must be unique", element);
+                    }
                 }
             }
+            
+        } else if (values.length == 0) {
+            processingEnv.getMessager().printMessage(ERROR, "Resources is empty, resources cannot be empty", element);
         }
+        
+        
     }
     
 }

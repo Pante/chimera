@@ -28,7 +28,7 @@ import com.karuslabs.commons.command.arguments.Arguments;
 
 @FunctionalInterface
 public interface CommandExecutor {
-
+    
     public boolean execute(CommandSource source, Context context, Arguments arguments);
 
     

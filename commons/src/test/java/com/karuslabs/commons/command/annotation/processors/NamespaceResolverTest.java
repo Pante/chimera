@@ -63,7 +63,7 @@ class NamespaceResolverTest {
     }
     
     
-    NamespaceResolver resolver = new NamespaceResolver();
+    NamespaceResolver resolver = new NamespaceResolver(null);
     ProxiedCommandMap map = mock(ProxiedCommandMap.class);
     Command a = mock(Command.class);
     Command b = mock(Command.class);
@@ -92,11 +92,11 @@ class NamespaceResolverTest {
     
     
     @Test
-    void check_ThrowsException() {
-        assertEquals(
-            "Unresolvable name: \"b\" in namespace: \"a.b\" for " + CommandExecutor.NONE.getClass().getName(),
-            assertThrows(IllegalArgumentException.class, () -> resolver.check(null, CommandExecutor.NONE, new String[] {"a", "b"}, "b")).getMessage()
-        );
+    void append() {
+        Command parent = new Command("", null);
+        resolver.append(parent, "a");
+        
+        assertTrue(parent.getSubcommands().containsKey("a"));
     }
     
     

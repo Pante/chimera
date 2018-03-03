@@ -23,8 +23,9 @@
     
     <modules>
         <module>commons</module>
-        <module>configuration-validator-maven-plugin</module>
-        <module>spigot-plugin-processor-maven-plugin</module>
+        <module>command-validator-maven-plugin</module>
+        <module>plugin-annotations-maven-plugin</module>
+        <module>plugin-validator-maven-plugin</module>
     </modules>
   
         

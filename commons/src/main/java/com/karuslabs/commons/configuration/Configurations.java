@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.*;
 
 @Static
 public class Configurations {
-        
+    
     public static Map<String, Object> flatten(ConfigurationSection config) {
         return stream(config).collect(toMap(identity(), config::get));
     }
