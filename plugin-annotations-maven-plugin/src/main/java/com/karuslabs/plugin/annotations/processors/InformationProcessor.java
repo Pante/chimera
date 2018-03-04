@@ -49,7 +49,7 @@ public class InformationProcessor implements Processor {
     
     
     @Override
-    public void execute(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Information information = plugin.getAnnotation(Information.class);
         
         description(information, config);
@@ -88,7 +88,7 @@ public class InformationProcessor implements Processor {
             config.set("website", project.getUrl());
             
         } else {
-            config.set("website", project.getUrl());
+            config.set("website", information.website());
         }
     }
 

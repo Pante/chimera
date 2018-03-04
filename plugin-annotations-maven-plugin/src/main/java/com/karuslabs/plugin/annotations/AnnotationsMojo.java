@@ -53,7 +53,7 @@ public class AnnotationsMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         YamlConfiguration config = loadConfiguration();
         Processors processors = processors();
-        processors.execute(getLog(), config);
+        processors.process(getLog(), config);
 
         try {
             config.save(file);

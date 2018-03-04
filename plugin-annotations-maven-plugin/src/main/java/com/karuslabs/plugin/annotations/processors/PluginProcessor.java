@@ -42,7 +42,7 @@ public class PluginProcessor implements Processor {
 
     
     @Override
-    public void execute(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Plugin annotation = plugin.getAnnotation(Plugin.class);
         processName(annotation, config);
         processMain(plugin, config);

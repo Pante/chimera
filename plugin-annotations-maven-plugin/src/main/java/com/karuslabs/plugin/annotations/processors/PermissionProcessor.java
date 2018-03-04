@@ -43,17 +43,18 @@ public class PermissionProcessor implements Processor {
 
     
     @Override
-    public void execute(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Permission[] permissions = plugin.getAnnotationsByType(Permission.class);
         if (permissions.length != 0) {
             config = config.createSection("permissions");
             for (Permission permission : permissions) {
-                if (names.add(permission.name())) {
-                    process(permission, config);
-
-                } else {
+                if (!names.add(permission.name())) {
                     throw new ProcessorException("Conflicting permissions: " + permission.name() + ", permissions must be unique");
                 }
+            }
+            
+            for (Permission permission : permissions) {
+                process(permission, config);
             }
         }
     }
@@ -71,11 +72,15 @@ public class PermissionProcessor implements Processor {
     }
     
     protected void process(Child[] annotations, ConfigurationSection config) {
-        Set<String> names = new HashSet<>();
+        Set<String> children = new HashSet<>();
         if (annotations.length != 0) {
             config = config.createSection("children");
             for (Child child : annotations) {
-                if (names.add(child.name())) {
+                if (!names.contains(child.name())) {
+                    throw new ProcessorException("Invalid child permission: " + child.name() + ", child permission must refer to a valid permission");
+                }
+                
+                if (children.add(child.name())) {
                     config.set(child.name(), child.value());
                     
                 } else {

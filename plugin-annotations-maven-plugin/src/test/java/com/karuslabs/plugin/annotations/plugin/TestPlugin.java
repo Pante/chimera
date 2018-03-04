@@ -21,18 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.plugin;
 
-
-import org.bukkit.configuration.ConfigurationSection;
+import com.karuslabs.plugin.annotations.annotations.Plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public interface Processor {
-    
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config);
-    
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin);
+@Plugin(version = "test version")
+public class TestPlugin extends JavaPlugin {
     
 }

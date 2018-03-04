@@ -46,13 +46,14 @@ public class Processors {
     }
     
     
-    public void execute(Log log, ConfigurationSection config) {
-        log.info("Resolving main class");
+    public void process(Log log, ConfigurationSection config) {      
         Class<? extends JavaPlugin> plugin = resolver.resolve();
         
         log.info("Main class found, processing annotations");
         for (Processor processor : processors) {
-            processor.execute(plugin, config);
+            if (processor.isAnnotated(plugin)) {
+                processor.process(plugin, config);
+            }
         }
     }
     

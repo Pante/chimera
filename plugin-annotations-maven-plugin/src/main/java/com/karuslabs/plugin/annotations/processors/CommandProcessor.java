@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CommandProcessor implements Processor {
 
     @Override
-    public void execute(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Set<String> names = new HashSet<>();
         Command[] commands = plugin.getAnnotationsByType(Command.class);
         if (commands.length != 0) {
@@ -56,7 +56,7 @@ public class CommandProcessor implements Processor {
         config.set("aliases", Null.ifEmpty(command.aliases()));
         config.set("description", Null.ifEmpty(command.description()));
         config.set("permission", Null.ifEmpty(command.permission()));
-        config.set("message", Null.ifEmpty(command.message()));
+        config.set("permission-message", Null.ifEmpty(command.message()));
         config.set("usage", Null.ifEmpty(command.usage()));
     }
 

@@ -52,10 +52,10 @@ public class Resolver {
             return plugins.toArray(new Class[] {})[0];
             
         } else if (plugins.isEmpty()) {
-            throw new ProcessorException("Failed to find main class which is annotated with @Plugin");
+            throw new ProcessorException("Failed to find JavaPlugin subclass annotated with @Plugin");
             
         } else {
-            throw new ProcessorException("Conflicting main classes, project must contain only 1 main class which is annotated with @Plugin");
+            throw new ProcessorException("Conflicting main classes, project must contain only 1 JavaPlugin subclass annotated with @Plugin");
         }
     }
     
