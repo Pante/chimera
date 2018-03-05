@@ -29,6 +29,8 @@ import com.karuslabs.commons.command.annotation.*;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.bukkit.plugin.Plugin;
+
 import static java.util.stream.Collectors.toList;
 
 
@@ -36,7 +38,20 @@ import static java.util.stream.Collectors.toList;
  * Represents a resolver for {@code CommandExecutor} with {@code Namespace} annotationss.
  */
 public class NamespaceResolver implements Resolver {
-
+    
+    private Plugin plugin;
+    
+    
+    /**
+     * Constructs a {@code NamespaceResolver} with the specified plugin.
+     * 
+     * @param plugin the plugin
+     */
+    public NamespaceResolver(Plugin plugin) {
+        this.plugin = plugin;
+    }
+    
+    
     /**
      * Resolves the {@code Namespace} annotations for the {@code CommandExecutor} using the specified {@code ProxiedCommandMap} and returns 
      * a list of commands to which the executor will be registered to.
@@ -66,29 +81,32 @@ public class NamespaceResolver implements Resolver {
         }
         
         Command command = map.getCommand(names[0]);
-        check(command, executor, names, names[0]);
+        if (command == null) {
+            map.register(names[0], command = new Command(names[0], plugin));
+        }
         
         for (int i = 1; i < names.length; i++) {
-            command = command.getSubcommands().get(names[i]);
-            check(command, executor, names, names[i]);
+            command = append(command, names[i]);
         }
         
         return command;
     }
     
     /**
-     * Checks if the specified command is {@code null}.
+     * Creates a subcommand for the parent command if a subcommand with the specified name 
+     * for the parent {@code Command} does not exist and returns the {@code Command}.
      * 
-     * @param command the command
-     * @param executor the executor
-     * @param names the namespace
+     * @param parent the parent command
      * @param name the name
-     * @throws IllegalArgumentException if the specified command is null
+     * @return the command
      */
-    protected void check(Command command, CommandExecutor executor, String[] names, String name) {
+    protected Command append(Command parent, String name) {
+        Command command = parent.getSubcommands().get(name);
         if (command == null) {
-            throw new IllegalArgumentException("Unresolvable name: \"" + name + "\" in namespace: \"" + String.join(".", names) + "\" for " + executor.getClass().getName());
+            parent.getSubcommands().put(name, command = new Command(name, plugin));
         }
+        
+        return command;
     } 
 
     

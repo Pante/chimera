@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains annotation checkers for annotations in {@code com.karuslabs.commons.command.annotation.checkers}.
+ * Contains annotation checkers for annotations in {@code com.karuslabs.commons.command.annotation}.
  */
 package com.karuslabs.commons.command.annotation.checkers;

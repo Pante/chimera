@@ -26,6 +26,8 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.command.arguments.Arguments;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.*;
+import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.locale.resources.EmbeddedResource;
 
 import java.util.*;
 import javax.annotation.Nonnull;
@@ -45,9 +47,24 @@ import static java.util.stream.Collectors.toList;
 public class Command extends org.bukkit.command.Command implements PluginIdentifiableCommand, Translatable {    
     
     /**
-     * Represents an empty {@code Command}.
+     * Am empty {@code Command}.
      */
     public static final Command NONE = new Command("", null);
+    
+    /**
+     * Default bundle-name for commands.
+     */
+    public static final String DEFAULT_BUNDLE = "common-commands.yml";
+    
+    /**
+     * Default resource for commands.
+     */
+    public static final EmbeddedResource DEFAULT_RESOURCE = new EmbeddedResource(Flag.class.getClassLoader().getResource("commands").getPath());
+    
+    /**
+     * Default {@code MessageTranslation} for commands.
+     */
+    public static final MessageTranslation DEFAULT_TRANSLATION = new MessageTranslation(DEFAULT_BUNDLE, new ExternalControl(DEFAULT_RESOURCE), Provider.DETECTED);
     
     
     private Plugin plugin;
@@ -79,7 +96,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
      * @param executor the CommandExecutor
      */
     public Command(String name, Plugin plugin, String description, String usage, List<String> aliases, CommandExecutor executor) {
-        this(name, plugin, MessageTranslation.NONE, description, usage, aliases, executor, new HashMap<>(), new HashMap<>());
+        this(name, plugin, DEFAULT_TRANSLATION, description, usage, aliases, executor, new HashMap<>(), new HashMap<>());
     }
     
     /**
@@ -217,6 +234,17 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         return translation;
     }
     
+
+    /**
+     * Sets the {@code MessageTranslation}.
+     * 
+     * @param translation the translation
+     */
+    public void setTranslation(MessageTranslation translation) {
+        this.translation = translation;
+    }
+    
+    
     /**
      * Returns the {@code CommandExecutor} for this {@code Command}.
      * 
@@ -261,7 +289,7 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
      * @return the builder
      */
     public static Builder builder(Plugin plugin) {
-        return new Builder(new Command("", plugin, MessageTranslation.NONE, "", "", new ArrayList<>(), CommandExecutor.NONE, new HashMap<>(), new HashMap<>()));
+        return new Builder(new Command("", plugin, DEFAULT_TRANSLATION, "", "", new ArrayList<>(), CommandExecutor.NONE, new HashMap<>(), new HashMap<>()));
     }
     
     

@@ -66,6 +66,10 @@ public class CommandProcessor {
                 processor.process(commands, executor);
             }
         }
+        
+        for (Command command : commands) {
+            command.setExecutor(executor);
+        }
     }
     
 }

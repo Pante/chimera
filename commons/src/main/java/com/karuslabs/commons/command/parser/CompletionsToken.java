@@ -24,13 +24,14 @@
 package com.karuslabs.commons.command.parser;
 
 import com.google.common.primitives.Ints;
+
 import com.karuslabs.commons.command.completion.Completion;
 
 import java.util.*;
-import static java.util.stream.Collectors.toMap;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static java.util.stream.Collectors.toMap;
 
 /**
  * A concrete subclass of {@code Token} that creates a {@code Map} which associates 

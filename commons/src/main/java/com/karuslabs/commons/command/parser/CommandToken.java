@@ -63,7 +63,7 @@ public class CommandToken extends ReferableToken<Command> {
      * @param translation the Element which creates translations
      * @param completions the Element which creates Completions
      */
-    public CommandToken(References references, NullHandle handle, Plugin plugin,Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
+    public CommandToken(References references, NullHandle handle, Plugin plugin, Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
         super(references, handle);
         this.plugin = plugin;
         this.subcommands = subcommands;

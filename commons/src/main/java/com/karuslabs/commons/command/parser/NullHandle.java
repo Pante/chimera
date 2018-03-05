@@ -31,7 +31,17 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 @FunctionalInterface
 public interface NullHandle {
+
+    /**
+     * Handles a {@code null} reference.
+     * 
+     * @param config the ConfigurationSection
+     * @param key the key
+     * @param value the value
+     */
+    public void handle(ConfigurationSection config, String key, String value);
     
+        
     /**
      * A {@code NullHandle} which throws a {@code ParserException}.
      */
@@ -43,15 +53,5 @@ public interface NullHandle {
      * An empty {@code NullHandle} which does nothing.
      */
     public NullHandle NONE = (config, key, value) -> {};
-    
-    
-    /**
-     * Handles a {@code null} reference.
-     * 
-     * @param config the ConfigurationSection
-     * @param key the key
-     * @param value the value
-     */
-    public void handle(ConfigurationSection config, String key, String value);
-    
+
 }

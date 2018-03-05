@@ -51,5 +51,6 @@ Temporary Items
 .idea/
 /nbproject/
 /commons/target/
-/configuration-validator-maven-plugin/target/
-/spigot-plugin-processor-maven-plugin/target/
+/command-validator-maven-plugin/target/
+/plugin-annotations-maven-plugin/target/
+/plugin-validator-maven-plugin/target/

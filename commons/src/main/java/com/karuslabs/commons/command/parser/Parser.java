@@ -63,7 +63,7 @@ public class Parser {
         ConfigurationSection commands = config.getConfigurationSection("commands");
         if (commands != null) {
             return commands.getKeys(false).stream().map(key -> command.from(commands, key)).collect(toList());
-            
+
         } else {
             return EMPTY_LIST;
         }
