@@ -9,7 +9,7 @@
     
     
     <name>Karus-Library</name>
-    <description>A collection of Karus Lab's tools and libraries</description>
+    <description>A collection of Karus Lab's libraries and build-tools</description>
   
     
     <properties>
