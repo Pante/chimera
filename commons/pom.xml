@@ -67,7 +67,7 @@
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.3</version>
+                        <version>1.1.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -80,7 +80,7 @@
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.3</version>
+                        <version>1.1.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
