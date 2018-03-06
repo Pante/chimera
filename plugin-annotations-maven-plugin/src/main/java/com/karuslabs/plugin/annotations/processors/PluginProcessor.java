@@ -31,16 +31,30 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
+/**
+ * Represents a processor for {@code @Plugin} annotations.
+ */
 public class PluginProcessor implements Processor {
     
     private MavenProject project;
     
     
+    /**
+     * Constructs a {@code PluginProcessor} with the specified project.
+     * 
+     * @param project the project
+     */
     public PluginProcessor(MavenProject project) {
         this.project = project;
     }
 
     
+    /**
+     * Processes the {@code @Plugin} annotation for the specified subclass of JavaPlugin and saves the results to the {@code ConfigurationSection}.
+     * 
+     * @param plugin the class
+     * @param config the Configuration
+     */
     @Override
     public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Plugin annotation = plugin.getAnnotation(Plugin.class);
@@ -49,6 +63,12 @@ public class PluginProcessor implements Processor {
         processVersion(annotation, config);
     }
     
+    /**
+     * Processes the name of the specified {@code @Plugin} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param annotation the Plugin annotation
+     * @param config the ConfigurationSection
+     */
     protected void processName(Plugin annotation, ConfigurationSection config) {
         if (annotation.name().equals("${project.name}")) {
             config.set("name", project.getName());
@@ -58,10 +78,22 @@ public class PluginProcessor implements Processor {
         }
     }
     
+    /**
+     * Processes the subclass of JavaPlugin and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param plugin the subclass of JavaPlugin
+     * @param config the ConfigurationSection
+     */
     protected void processMain(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         config.set("main", plugin.getName());
     }
     
+    /**
+     * Processes the version of the specified {@code @Plugin} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param annotation the Plugin annotation
+     * @param config the ConfigurationSection
+     */
     protected void processVersion(Plugin annotation, ConfigurationSection config) {
         if (annotation.version().equals("${project.version}")) {
             config.set("version", project.getVersion());
@@ -72,6 +104,12 @@ public class PluginProcessor implements Processor {
     }
 
     
+    /**
+     * Checks if the specified class is annotated with {@code @Plugin}.
+     * 
+     * @param plugin the plugin
+     * @return true if the specified class is annotated with @Plugin
+     */
     @Override
     public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotation(Plugin.class) != null;

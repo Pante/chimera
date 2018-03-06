@@ -32,8 +32,18 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
+/**
+ * Represents a processor for {@code Command} annotations.
+ */
 public class CommandProcessor implements Processor {
 
+    /**
+     * Processes the {@code @Command} annotation for the specified subclass of JavaPlugin and saves the results to the {@code ConfigurationSection}.
+     * 
+     * @param plugin the class
+     * @param config the Configuration
+     * @throws ProcessorException if there are conflicting commands
+     */
     @Override
     public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Set<String> names = new HashSet<>();
@@ -51,6 +61,12 @@ public class CommandProcessor implements Processor {
         }
     }
     
+     /**
+     * Processes the information for the specified {@code @Command} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param command the Command annotation
+     * @param config the ConfigurationSection
+     */
     protected void process(Command command, ConfigurationSection config) {
         config = config.createSection(command.name());
         config.set("aliases", Null.ifEmpty(command.aliases()));
@@ -60,6 +76,12 @@ public class CommandProcessor implements Processor {
         config.set("usage", Null.ifEmpty(command.usage()));
     }
 
+    /**
+     * Checks if the specified class is annotated with {@code @Comand}.
+     * 
+     * @param plugin the plugin
+     * @return true if the specified class is annotated with @Command; else false
+     */
     @Override
     public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotationsByType(Command.class).length != 0;

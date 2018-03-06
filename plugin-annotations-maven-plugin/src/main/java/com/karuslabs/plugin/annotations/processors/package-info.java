@@ -21,35 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
-
-
-import org.bukkit.configuration.ConfigurationSection;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
 
 /**
- * Represents a processor for an annotation.
+ * Contains processors for annotations.
  */
-public interface Processor {
-    
-    /**
-     * Processes the annotations for the specified subclass of JavaPlugin and outputs the results to the {@code ConfigurationSection}.
-     * 
-     * This method expects the specified class to contain the specified annotations.
-     * 
-     * @param plugin the class
-     * @param config the Configuration
-     */
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config);
-
-    /**
-     * Checks if the specified class has annotations which are supported by this {@code Processor}.
-     * 
-     * @param plugin the plugin
-     * @return true if the specified class has supported annotations; else false
-     */
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin);
-    
-}
+package com.karuslabs.plugin.annotations.processors;

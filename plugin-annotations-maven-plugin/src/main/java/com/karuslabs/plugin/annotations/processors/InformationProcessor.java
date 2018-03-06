@@ -38,16 +38,30 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 
+/**
+ * Represents a processor for {@code Information} annotations.
+ */
 public class InformationProcessor implements Processor {
     
     private MavenProject project;
     
     
+    /**
+     * Constructs a {@code InformationProcessor} with the specified project.
+     * 
+     * @param project the project
+     */
     public InformationProcessor(MavenProject project) {
         this.project = project;
     }
     
     
+    /**
+     * Processes the {@code @Information} annotation for the specified subclass of JavaPlugin and saves the results to the {@code ConfigurationSection}.
+     * 
+     * @param plugin the class
+     * @param config the Configuration
+     */
     @Override
     public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Information information = plugin.getAnnotation(Information.class);
@@ -64,6 +78,12 @@ public class InformationProcessor implements Processor {
         config.set("load", information.load().getName());
     }
     
+    /**
+     * Processes the description of the specified {@code @Information} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param information the Information annotation
+     * @param config the ConfigurationSection
+     */
     protected void description(Information information, ConfigurationSection config) {
         if (information.description().equals("${project.description}")) {
             config.set("description", project.getDescription());
@@ -73,6 +93,12 @@ public class InformationProcessor implements Processor {
         }
     }
     
+    /**
+     * Processes the authors for the specified {@code @Information} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param information the Information annotation
+     * @param config the ConfigurationSection
+     */
     protected void authors(Information information, ConfigurationSection config) {
         if (information.authors().length == 1 && information.authors()[0].equals("${project.developers}")) {
             List<Developer> developers = project.getDevelopers();
@@ -83,6 +109,12 @@ public class InformationProcessor implements Processor {
         }
     }
     
+    /**
+     * Processes the website for the specified {@code Information} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param information the Information annotation
+     * @param config the ConfigurationSection
+     */
     protected void website(Information information, ConfigurationSection config) {
         if (information.website().equals("${project.url}")) {
             config.set("website", project.getUrl());
@@ -93,6 +125,12 @@ public class InformationProcessor implements Processor {
     }
 
     
+    /**
+     * Checks if the specified class is annotated with {@code @Information}.
+     * 
+     * @param plugin the plugin
+     * @return true if the specified class is annotated with @Information; else false
+     */
     @Override
     public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotation(Information.class) != null;

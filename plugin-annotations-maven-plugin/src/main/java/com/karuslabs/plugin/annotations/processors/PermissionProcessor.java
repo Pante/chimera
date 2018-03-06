@@ -32,16 +32,29 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
+/**
+ * Represents a processor for {@code Permission} annotations.
+ */
 public class PermissionProcessor implements Processor {
     
     Set<String> names;
     
     
+    /**
+     * Constructs a {@code PermissionProcessor}.
+     */
     public PermissionProcessor() {
         names = new HashSet<>();
     }
 
     
+    /**
+     * Processes the {@code Permission} annotation for the specified class and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param plugin the class
+     * @param config the ConfigurationSection
+     * @throws ProcessorException if there are conflicting permissions or unresolvable permission references
+     */
     @Override
     public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Permission[] permissions = plugin.getAnnotationsByType(Permission.class);
@@ -59,6 +72,12 @@ public class PermissionProcessor implements Processor {
         }
     }
     
+    /**
+     * Processes the information for the specified {@code Permission} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param permission the Plugin annotation
+     * @param config the ConfigurationSection
+     */
     protected void process(Permission permission, ConfigurationSection config) {
         if (!permission.description().isEmpty() || permission.children().length != 0) {
             config = config.createSection(permission.name());
@@ -71,6 +90,13 @@ public class PermissionProcessor implements Processor {
         }
     }
     
+    /**
+     * Processes the nested {@code @Child} annotations of the specified {@code Permission} annotation and outputs the results to the {@code ConfigurationSection}.
+     * 
+     * @param annotations the children annotations
+     * @param config the ConfigurationSection
+     * @throws ProcessorException if the child permission references an unresolvable permission or if there are conflicting child permissions
+     */
     protected void process(Child[] annotations, ConfigurationSection config) {
         Set<String> children = new HashSet<>();
         if (annotations.length != 0) {
@@ -91,6 +117,12 @@ public class PermissionProcessor implements Processor {
     }
     
     
+    /**
+     * Checks if the specified class has any {@code Permission} annotations.
+     * 
+     * @param plugin the class
+     * @return true if the specified class has Permission annotations; else false
+     */
     @Override
     public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotationsByType(Permission.class).length != 0;

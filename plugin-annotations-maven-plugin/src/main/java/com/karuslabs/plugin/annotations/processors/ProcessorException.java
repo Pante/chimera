@@ -24,8 +24,16 @@
 package com.karuslabs.plugin.annotations.processors;
 
 
+/**
+ * Thrown to indicate an error while processing an annotation.
+ */
 public class ProcessorException extends RuntimeException {
     
+    /**
+     * Constructs a {@code ProcessorException} with the specified detail message.
+     * 
+     * @param message the detail message
+     */
     public ProcessorException(String message) {
         super(message);
     }

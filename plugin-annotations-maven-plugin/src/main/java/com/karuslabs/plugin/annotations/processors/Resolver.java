@@ -36,16 +36,30 @@ import org.reflections.Reflections;
 import static java.util.stream.Collectors.toSet;
 
 
+/**
+ * Represents a resolver for subclasses of JavaPlugin annotated with {@code @Plugin}.
+ */
 public class Resolver {
     
     private List<String> elements;
     
     
+    /**
+     * Constructs a {@code Resolver} with the specified classpath elements.
+     * 
+     * @param elements the elements
+     */
     public Resolver(List<String> elements) {
         this.elements = elements;
     }
     
     
+    /**
+     * Scans the classpath elements for subclasses of JavaPlugin annotated with {@code @Plugin}.
+     * 
+     * @return the subclass of JavaPlguin annotated with @Plugin
+     * @throws ProcessorException if no or several of JavaPlugin annotated with @Plugin exists
+     */
     public Class<? extends JavaPlugin> resolve() {
         Set<Class<? extends JavaPlugin>> plugins = load();
         if (plugins.size() == 1) {
@@ -59,6 +73,11 @@ public class Resolver {
         }
     }
     
+    /**
+     * Scans the classpath elements for subclasses of JavaPlugin annotated with {@code Plugin}.
+     * 
+     * @return the subclasses of JavaPlugin annotated with @Plugin
+     */
     protected Set<Class<? extends JavaPlugin>> load() {
         URL[] urls = elements.stream().map(element -> {
             try {
