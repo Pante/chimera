@@ -41,18 +41,18 @@ import static com.karuslabs.plugin.validator.validators.Validator.*;
 public class Validators {
     
     Map<String, Validator> required;
-    Map<String, Validator> processors;
+    Map<String, Validator> validators;
     
     
     /**
      * Constructs a {@code Validators} with the specified required {@code Processor}s and other {@code Validator}s.
      * 
      * @param required the required validators
-     * @param processors the validators
+     * @param validators the validators
      */
-    public Validators(Map<String, Validator> required, Map<String, Validator> processors) {
+    public Validators(Map<String, Validator> required, Map<String, Validator> validators) {
         this.required = required;
-        this.processors = processors;
+        this.validators = validators;
     }
     
     
@@ -68,10 +68,10 @@ public class Validators {
         required.forEach((key, processor) -> processor.validate(config, key));
         
         Set<String> keys = config.getKeys(false);
-        if (processors.keySet().containsAll(keys)) {
+        if (validators.keySet().containsAll(keys)) {
             try {
                 keys.forEach(key -> {
-                    Validator descriptor = processors.get(key);
+                    Validator descriptor = validators.get(key);
                     if (descriptor != null) {
                         descriptor.validate(config, key);
                     }
@@ -82,8 +82,8 @@ public class Validators {
             }
             
         } else{
-            keys.removeAll(processors.keySet());
-            throw new MojoExecutionException("Invalid keys: " + keys.toString() + " in plugin.yml, key must be valid: " + processors.keySet());
+            keys.removeAll(validators.keySet());
+            throw new MojoExecutionException("Invalid keys: " + keys.toString() + " in plugin.yml, key must be valid: " + validators.keySet());
         }
     }
 

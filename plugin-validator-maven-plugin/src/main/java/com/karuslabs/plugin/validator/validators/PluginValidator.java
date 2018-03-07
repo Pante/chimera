@@ -23,8 +23,6 @@
  */
 package com.karuslabs.plugin.validator.validators;
 
-import com.karuslabs.plugin.validator.ValidationException;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;

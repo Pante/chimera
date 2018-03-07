@@ -23,8 +23,6 @@
  */
 package com.karuslabs.plugin.validator.validators;
 
-import com.karuslabs.plugin.validator.ValidationException;
-
 import org.bukkit.configuration.ConfigurationSection;
 
 
