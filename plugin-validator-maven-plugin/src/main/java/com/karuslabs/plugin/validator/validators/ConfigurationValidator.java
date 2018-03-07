@@ -28,12 +28,11 @@ import com.karuslabs.plugin.validator.ValidationException;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/ConfigurationProcessor.java
 /**
- * Represents a {@code Processor} implementation which checks if a value in the 
+ * Represents a {@code Validator} implementation which checks if a value in the 
  * {@code ConfigurationSection} is a {@code ConfigurationSection}.
  */
-public abstract class ConfigurationProcessor implements Processor {
+public abstract class ConfigurationValidator implements Validator {
     
     /**
      * Checks if the value associated with the specified key is a {@code ConfigurationSection}.
@@ -41,10 +40,6 @@ public abstract class ConfigurationProcessor implements Processor {
      * @param config the ConfigurationSection
      * @param key the key
      */
-=======
-public abstract class ConfigurationValidator implements Validator {
-
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/ConfigurationValidator.java
     @Override
     public void validate(ConfigurationSection config, String key) {
         if (config.isConfigurationSection(key)) {
@@ -55,17 +50,13 @@ public abstract class ConfigurationValidator implements Validator {
         }
     }
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/ConfigurationProcessor.java
     /**
      * Checks if the values in the {@code ConfigurationSection} are valid.
      * 
      * @param config the ConfigurationSection
      * @param key the key
      */
-    protected abstract void executeConfiguration(ConfigurationSection config, String key);
-=======
     protected abstract void validateConfigurationSection(ConfigurationSection config, String key);
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/ConfigurationValidator.java
     
     /**
      * Handles a value which is not a {@code ConfigurationSection}.
@@ -74,9 +65,9 @@ public abstract class ConfigurationValidator implements Validator {
      * 
      * Subclasses should override this method to customise the handling of values which are not {@code ConfigurationSection}s.
      * 
-     * @param config the config
+     * @param config the ConfigurationSection
      * @param key the key
-     * @throws ProcessorException of this method is not overriden
+     * @throws ValidationException of this method is not overriden
      */
     protected void orElse(ConfigurationSection config, String key) {
         throw new ValidationException(config, key, "ConfigurationSection");

@@ -93,7 +93,7 @@ public class PermissionProcessor implements Processor {
     /**
      * Processes the nested {@code @Child} annotations of the specified {@code Permission} annotation and outputs the results to the {@code ConfigurationSection}.
      * 
-     * @param annotations the children annotations
+     * @param annotations the child annotations
      * @param config the ConfigurationSection
      * @throws ProcessorException if the child permission references an unresolvable permission or if there are conflicting child permissions
      */

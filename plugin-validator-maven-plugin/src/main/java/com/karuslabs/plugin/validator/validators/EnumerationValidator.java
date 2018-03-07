@@ -32,28 +32,20 @@ import org.bukkit.configuration.ConfigurationSection;
 import static java.util.Arrays.asList;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/EnumProcessor.java
 /**
- * A {@code Processor} implementation which checks if a value is an enumeration value.
+ * A {@code Validator} implementation which checks if a value is an enumeration value.
  */
-public class EnumProcessor implements Processor {
-=======
 public class EnumerationValidator implements Validator {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/EnumerationValidator.java
-    
+
     Set<String> values;
     
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/EnumProcessor.java
     /**
-     * Constructs a {@code EnumProcessor} with the specified enumeration values.
+     * Constructs a {@code EnumerationValidator} with the specified enumeration values.
      * 
      * @param values the values
      */
-    public EnumProcessor(String... values) {
-=======
     public EnumerationValidator(String... values) {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/EnumerationValidator.java
         this.values = new HashSet<>(asList(values));
     }
     
@@ -62,7 +54,7 @@ public class EnumerationValidator implements Validator {
      * 
      * @param config the ConfigurationSection
      * @param key the key
-     * @throws ProcessorException if the value is not a enumeration value
+     * @throws ValidationException if the value is not a enumeration value
      */
     @Override
     public void validate(ConfigurationSection config, String key) {

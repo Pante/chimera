@@ -55,7 +55,7 @@ public class AnnotationsMojo extends AbstractMojo {
     protected List<String> elements;
     
     /**
-     * The location of the plugin.yml which defaults to ${project.basedir}/src/main/resources/plugin.yml
+     * The location of the plugin.yml which defaults to {@literal ${project.basedir}/src/main/resources/plugin.yml}.
      */
     @Parameter(defaultValue = "${project.basedir}/src/main/resources/plugin.yml")
     protected File file;
@@ -83,10 +83,10 @@ public class AnnotationsMojo extends AbstractMojo {
     }
     
     /**
-     * Loads the plugin.yml specified in the pom.xml
+     * Loads the plugin.yml specified in the pom.xml.
      * 
      * @return the plugin.yml
-     * @throws MojoExecutionException if theplugin.yml could not be loaded
+     * @throws MojoExecutionException if the plugin.yml could not be loaded
      */
     protected YamlConfiguration loadConfiguration() throws MojoExecutionException {
         try {

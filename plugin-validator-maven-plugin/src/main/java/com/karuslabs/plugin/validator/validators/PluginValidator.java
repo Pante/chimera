@@ -39,42 +39,33 @@ import org.reflections.Reflections;
 import static java.util.stream.Collectors.toSet;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/PluginProcessor.java
 /**
- * A {@code Processor} implementation which processes value for main in a plugin.yml.
+ * A {@code Validator} implementation which processes value for main in plugin.ymls.
  */
-public class PluginProcessor implements Processor {
-=======
 public class PluginValidator implements Validator {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/PluginValidator.java
     
     private Log log;
     private List<String> elements;
     
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/PluginProcessor.java
     /**
-     * Constructs a {@code PluginProcessor} with the specified log, elements and override.
+     * Constructs a {@code PluginValidator} with the specified log and classpath elements.
      * 
      * @param log the log
      * @param elements the elements
-     * @param override the override
      */
-    public PluginProcessor(Log log, List<String> elements, boolean override) {
-=======
     public PluginValidator(Log log, List<String> elements) {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/PluginValidator.java
         this.log = log;
         this.elements = elements;
     }
     
     
     /**
-     * Sets the main class if no main class was specified is null or overriding is allowed.
+     * Checks if the value is the name of a subclass of JavaPlugin.
      * 
      * @param config the ConfigurationSection
      * @param key the key
-     * @throws ProcessorException if the main class was specified but could not be found and overriding is not allowed
+     * @throws ValidationException if the main class was not specified or invalid
      */
     @Override
     public void validate(ConfigurationSection config, String key) { 
@@ -104,31 +95,5 @@ public class PluginValidator implements Validator {
         Reflections reflections = new Reflections(URLClassLoader.newInstance(urls, getClass().getClassLoader()));
         return reflections.getSubTypesOf(JavaPlugin.class).stream().map(Class::getName).collect(toSet());
     }
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/PluginProcessor.java
-        
-    /**
-     * Sets the main class if only one JavaPlugin subclass was detected else
-     * throws a {@code ProcessorException}.
-     * 
-     * @param config the config
-     * @param detected the detected subclasses of JavaPlugin
-     * @throws ProcessorException if the detected classes is not equal to 1
-     */
-    protected void setMain(ConfigurationSection config, Set<String> detected) {
-        if (detected.size() == 1) {
-            String main = detected.toArray(new String[0])[0];
-            log.info("Detected and setting main to: " + main);
-            
-            config.set("main", main);
-                
-        } else if (detected.size() > 1) {
-            throw new ProcessorException("Multiple JavaPlugin subclasses detected, main class must be specified manually");
-            
-        } else {
-            throw new ProcessorException("No JavaPlugin subclass detected, main class must be specified manually");
-        }   
-    }
-=======
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/PluginValidator.java
     
 }

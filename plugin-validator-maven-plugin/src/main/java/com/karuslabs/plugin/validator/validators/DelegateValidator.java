@@ -26,36 +26,27 @@ package com.karuslabs.plugin.validator.validators;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/DelegateProcessor.java
 /**
  * A concrete subclass of {@code ConfigurationProcessor} which delegates checking of 
  * each value in a {@code ConfigurationSection} to a {@code Processor}.
  */
-public class DelegateProcessor extends ConfigurationProcessor {
-=======
 public class DelegateValidator extends ConfigurationValidator {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/DelegateValidator.java
     
     private Validator processor;
     
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/DelegateProcessor.java
     /**
-     * Constructs a {@code DelegateProcesor} with the specified processor.
+     * Constructs a {@code DelegateValidator} with the specified validator.
      * 
-     * @param descriptor the processor to which processing is delegated
+     * @param processor the validator to which processing is delegated
      */
-    public DelegateProcessor(Processor descriptor) {
-        this.processor = descriptor;
-=======
     public DelegateValidator(Validator processor) {
         this.processor = processor;
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/DelegateValidator.java
     }
     
     
     /**
-     * Delegates checking of each individual key in a {@code ConfigurationSection} to a {@code Processor}.
+     * Delegates checking of each individual key in a {@code ConfigurationSection} to a {@code Validator}.
      * 
      * @param config the ConfigurationSection
      * @param key the key

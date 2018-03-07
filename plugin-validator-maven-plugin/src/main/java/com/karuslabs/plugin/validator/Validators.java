@@ -35,50 +35,37 @@ import org.bukkit.configuration.ConfigurationSection;
 import static com.karuslabs.plugin.validator.validators.Validator.*;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/Processors.java
 /**
- * Represents the processors for a plugin.yml
+ * Represents the validators for a plugin.yml
  */
-public class Processors {
-=======
 public class Validators {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/Validators.java
     
     Map<String, Validator> required;
     Map<String, Validator> processors;
     
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/Processors.java
     /**
-     * Constructs a {@code Processors} with the specified required {@code Processor}s and other {@code Processor}s.
+     * Constructs a {@code Validators} with the specified required {@code Processor}s and other {@code Validator}s.
      * 
-     * @param required the required processors
-     * @param processors the processors
+     * @param required the required validators
+     * @param processors the validators
      */
-    public Processors(Map<String, Processor> required, Map<String, Processor> processors) {
-=======
     public Validators(Map<String, Validator> required, Map<String, Validator> processors) {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/Validators.java
         this.required = required;
         this.processors = processors;
     }
     
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/Processors.java
     /**
-     * Delegates processing to the required and other {@code Processor}s.
+     * Delegates validation to the required and other {@code Validators}s.
      * 
      * Required processors are ran regardless whether they are present in the plugin.yml.
      * 
      * @param config the COnfigurationSection
      * @throws MojoExecutionException if the ConfigurationSection contains invalid keys or values
      */
-    public void execute(ConfigurationSection config) throws MojoExecutionException {
-        required.forEach((key, descriptor) -> descriptor.execute(config, key));
-=======
     public void validate(ConfigurationSection config) throws MojoExecutionException {
         required.forEach((key, processor) -> processor.validate(config, key));
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/Validators.java
         
         Set<String> keys = config.getKeys(false);
         if (processors.keySet().containsAll(keys)) {
@@ -99,33 +86,21 @@ public class Validators {
             throw new MojoExecutionException("Invalid keys: " + keys.toString() + " in plugin.yml, key must be valid: " + processors.keySet());
         }
     }
-    
-    
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/Processors.java
+
     /**
-     * Creates a {@code Processors} for processing a plugin.yml which follows the 
+     * Creates a {@code Validators} for validating a plugin.yml which follows the 
      * <a href = "https://bukkit.gamepedia.com/Plugin_YAML">Bukkit specifications</a>.
      * 
      * @param log the log
-     * @param name the name
      * @param elements the classpath elements
-     * @param version the verison
-     * @param override the override
-     * @return a Processors
+     * @return a Validators
      */
-    public static Processors simple(Log log, String name, List<String> elements, String version, boolean override) {
-        Map<String, Processor> required = new HashMap<>();
-        required.put("name", new NameProcessor(name, override));
-        required.put("version", new VersionProcessor(log, version, override));
-        required.put("main", new PluginProcessor(log, elements, override));
-=======
     public static Validators simple(Log log, List<String> elements) {
         Map<String, Validator> required = new HashMap<>();
         required.put("name", STRING);
         required.put("version", STRING);
         required.put("main", STRING);
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/Validators.java
-        
+
         Map<String, Validator> validators = new HashMap<>();
         validators.put("name", NONE);
         validators.put("version", NONE);

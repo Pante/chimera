@@ -35,16 +35,31 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
+/**
+ * 
+ */
 @Mojo(name = "validator", defaultPhase = COMPILE, threadSafe = false)
 public class ValidatorMojo extends AbstractMojo {
-
+    
+    /**
+     * The classpath elements which defaults to {@literal ${project.compileClasspathElements}}.
+     */
     @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
     protected List<String> elements;
     
+    /**
+     * The location of the plugin.yml which defaults to {@literal ${project.basedir}/src/main/resources/plugin.yml}.
+     */
     @Parameter(defaultValue = "${project.basedir}/src/main/resources/plugin.yml")
     protected File file;
     
-
+    
+    /**
+     * Executes this {@code ValidatorMojo}.
+     * 
+     * @throws MojoExecutionException if this ValidatorMojo fails to validate the plugin.yml
+     * @throws MojoFailureException if an internal exception occurs
+     */
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Loading plugin.yml: " + file.getPath());
@@ -58,6 +73,12 @@ public class ValidatorMojo extends AbstractMojo {
         getLog().info("Found no errors in plugin.yml");
     }
     
+    /**
+     * Loads the plugin.yml specified in the pom.xml.
+     * 
+     * @return the plugin.yml
+     * @throws MojoExecutionException if the plugin.yml could not be loaded
+     */
     protected YamlConfiguration loadConfiguration() throws MojoExecutionException {
         try {
             return YamlConfiguration.loadConfiguration(file);
@@ -67,6 +88,11 @@ public class ValidatorMojo extends AbstractMojo {
         }
     }
     
+    /**
+     * Creates a {@code Validators}.
+     * 
+     * @return a Validators
+     */
     protected Validators validators() {
         return Validators.simple(getLog(), elements);
     }

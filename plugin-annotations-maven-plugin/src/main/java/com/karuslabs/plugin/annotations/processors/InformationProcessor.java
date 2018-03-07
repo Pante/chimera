@@ -60,7 +60,7 @@ public class InformationProcessor implements Processor {
      * Processes the {@code @Information} annotation for the specified subclass of JavaPlugin and saves the results to the {@code ConfigurationSection}.
      * 
      * @param plugin the class
-     * @param config the Configuration
+     * @param config the ConfigurationSection
      */
     @Override
     public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {

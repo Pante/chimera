@@ -41,7 +41,7 @@ public class CommandProcessor implements Processor {
      * Processes the {@code @Command} annotation for the specified subclass of JavaPlugin and saves the results to the {@code ConfigurationSection}.
      * 
      * @param plugin the class
-     * @param config the Configuration
+     * @param config the ConfigurationSection
      * @throws ProcessorException if there are conflicting commands
      */
     @Override

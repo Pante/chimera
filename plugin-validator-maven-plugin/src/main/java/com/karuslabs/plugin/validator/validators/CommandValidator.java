@@ -30,14 +30,10 @@ import java.util.*;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/CommandProcessor.java
 /**
- * A concrete subclass of {@code ConfigurationProcessor} which checks if a value is a {@code Command}.
+ * A concrete subclass of {@code ConfigurationValidator} which checks if a value is a {@code Command}.
  */
-public class CommandProcessor extends ConfigurationProcessor {
-=======
 public class CommandValidator extends ConfigurationValidator {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/CommandValidator.java
 
     static final Map<String, Validator> KEYS = new HashMap<>(5);
     

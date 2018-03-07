@@ -21,35 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.validator;
-
-import org.bukkit.configuration.ConfigurationSection;
-
 
 /**
- * Thrown to indicate that an error has occurred while validating the document.
+ * Contains the validators for plugin.ymls.
  */
-
-public class ValidationException extends RuntimeException {
-    
-    /**
-     * Constructs a {@code ValidationException} with the specified message.
-     * 
-     * @param message the message
-     */
-    public ValidationException(String message) {
-        super(message);
-    }
-        
-    /**
-     * Constructs a {@code ValidationException} with the specified {@code ConfigurationSection}, key and expected type.
-     * 
-     * @param config the ConfigurationSection
-     * @param key the key
-     * @param type the expected type
-     */
-    public ValidationException(ConfigurationSection config, String key, String type) {
-        super("Invalid type for: " + config.getCurrentPath() + "." + key + ", value must be a " + type);
-    }
-    
-}
+package com.karuslabs.plugin.validator.validators;

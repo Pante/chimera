@@ -30,14 +30,10 @@ import java.util.*;
 import org.bukkit.configuration.ConfigurationSection;
 
 
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/PermissionProcessor.java
 /**
- * A concrete subclass of {@code ConfigurationProcessor} which checks if the value is a permission.
+ * A concrete subclass of {@code ConfigurationValidator} which checks if the value is a permission.
  */
-public class PermissionProcessor extends ConfigurationProcessor {
-=======
 public class PermissionValidator extends ConfigurationValidator {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/PermissionValidator.java
     
     static final Map<String, Validator> KEYS = new HashMap<>();
     
@@ -53,7 +49,7 @@ public class PermissionValidator extends ConfigurationValidator {
      * 
      * @param config the ConfigurationSection
      * @param key the key
-     * @throws ProcessorException if the value contains an invalid key or value
+     * @throws ValidationException if the value contains an invalid key or value
      */
     @Override    
     protected void validateConfigurationSection(ConfigurationSection config, String key) {
@@ -84,19 +80,15 @@ public class PermissionValidator extends ConfigurationValidator {
         BOOLEAN.validate(config, key);
     }
     
-<<<<<<< HEAD:spigot-plugin-processor-maven-plugin/src/main/java/com/karuslabs/spigot/plugin/processor/processors/PermissionProcessor.java
     /**
      * Checks if the child permissions are resolvable.
      * 
      * @param permissions the permissions
      * @param config the config
      * @param key the key
-     * @throws ProcessorException if the value is not a ConfigurationSection or the child permission is not resolvable
+     * @throws ValidationException if the value is not a ConfigurationSection or the child permission is not resolvable
      */
-    protected void executeChildren(Set<String> permissions, ConfigurationSection config, String key) {
-=======
     protected void validateChildren(Set<String> permissions, ConfigurationSection config, String key) {
->>>>>>> refs/remotes/origin/master:plugin-validator-maven-plugin/src/main/java/com/karuslabs/plugin/validator/validators/PermissionValidator.java
         if (!config.isConfigurationSection(key)) {
             throw new ValidationException(config, key, "ConfigurationSection");
         }
