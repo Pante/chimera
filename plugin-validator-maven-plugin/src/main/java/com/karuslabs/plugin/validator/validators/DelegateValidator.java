@@ -28,11 +28,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class DelegateValidator extends ConfigurationValidator {
     
-    private Validator processor;
+    private Validator validator;
     
     
-    public DelegateValidator(Validator processor) {
-        this.processor = processor;
+    public DelegateValidator(Validator validator) {
+        this.validator = validator;
     }
     
     
@@ -40,7 +40,7 @@ public class DelegateValidator extends ConfigurationValidator {
     protected void validateConfigurationSection(ConfigurationSection config, String key) {
         ConfigurationSection section = config.getConfigurationSection(key);
         section.getKeys(false).forEach(aKey -> {
-            processor.validate(section, aKey);
+            validator.validate(section, aKey);
         });
     }
     

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.plugin.validator.validators;
 
-import com.karuslabs.plugin.validator.ValidationException;
 
 import org.apache.maven.plugin.logging.Log;
 

@@ -24,7 +24,7 @@
 package com.karuslabs.plugin.validator;
 
 import com.karuslabs.plugin.validator.Validators;
-import com.karuslabs.plugin.validator.ValidationException;
+import com.karuslabs.plugin.validator.validators.ValidationException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 
@@ -56,7 +56,7 @@ class ValidatorsTest {
         
     @Test
     void validate_Key_ThrowsException() {
-        assertEquals("Invalid keys: [loadafter] in plugin.yml, key must be valid: " + validators.processors.keySet(),
+        assertEquals("Invalid keys: [loadafter] in plugin.yml, key must be valid: " + validators.validators.keySet(),
             assertThrows(MojoExecutionException.class, () -> validators.validate(PLUGIN.getConfigurationSection("invalid-keys"))).getMessage()
         );
     }
