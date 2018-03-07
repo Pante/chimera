@@ -163,6 +163,7 @@
                 <configuration>
                     <docfilessubdirs>true</docfilessubdirs>
                     <links>
+                        <link>https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/commons/apidocs/</link>
                         <link>https://hub.spigotmc.org/javadocs/spigot/</link>
                         <link>https://docs.oracle.com/javase/8/docs/api/</link>
                     </links>

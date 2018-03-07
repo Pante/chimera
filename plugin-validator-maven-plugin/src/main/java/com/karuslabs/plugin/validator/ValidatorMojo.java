@@ -36,7 +36,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
 /**
- * 
+ * Represents a validator for plugin.ymls.
  */
 @Mojo(name = "validator", defaultPhase = COMPILE, threadSafe = false)
 public class ValidatorMojo extends AbstractMojo {

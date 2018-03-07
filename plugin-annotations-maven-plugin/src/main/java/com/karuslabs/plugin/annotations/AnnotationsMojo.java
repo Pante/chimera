@@ -37,7 +37,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
 /**
- * Represents a maven-plugin which generates a plugin.yml from annotations.
+ * Represents a maven-plugin which processes annotations and outputs a plugin.yml.
  */
 @Mojo(name = "annotations", defaultPhase = COMPILE, threadSafe = false)
 public class AnnotationsMojo extends AbstractMojo {
