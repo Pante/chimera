@@ -24,7 +24,7 @@ A collection of open source libraries & tools devloped by Karus Labs. This libar
   <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>commons</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.1.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
