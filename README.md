@@ -12,7 +12,7 @@ A collection of open source libraries & tools devloped by Karus Labs. This libar
 ***
 #### Karus-Commons
 [![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a88b3526c0bd0b389)
-[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/commons/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons)
+[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/commons/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a1c4a6d7ac5b49f2a)
 [![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/commons/apidocs/overview-summary.html)
 ```XML
 <repository>
@@ -31,23 +31,15 @@ A collection of open source libraries & tools devloped by Karus Labs. This libar
 
 _Annotation checkers_
 ```XML
-<plugin>
-  <artifactId>maven-compiler-plugin</artifactId>
-  <version>3.7.0</version>
-  <configuration>
-      <source>1.8</source>
-      <target>1.8</target>
-      <annotationProcessors>
-          <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CommandChecker</annotationProcessor>
-          <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CompletionChecker</annotationProcessor>
-          <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.NamespaceChecker</annotationProcessor>
-      </annotationProcessors>
-  </configuration>
-</plugin>
+<annotationProcessors>
+    <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CommandChecker</annotationProcessor>
+    <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CompletionChecker</annotationProcessor>
+    <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.NamespaceChecker</annotationProcessor>
+</annotationProcessors>
 ```
 
 ***
-#### Command-Validator Maven plugin
+#### Command-Validator Maven Plugin
 [![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a8fbfc620d67748ba)
 [![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/command-validator-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a8fbfc620d67748ba)
 [![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/command-validator-maven-plugin/apidocs/index.html)
