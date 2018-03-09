@@ -29,12 +29,13 @@ A collection of open source libraries & tools devloped by Karus Labs. This libar
 </dependencies>
 ```
 
-_Annotation checkers_
+_Annotation checkers_:
 ```XML
 <annotationProcessors>
     <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CommandChecker</annotationProcessor>
     <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.CompletionChecker</annotationProcessor>
     <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.NamespaceChecker</annotationProcessor>
+    <annotationProcessor>com.karuslabs.commons.locale.annotation.checkers.ResourceChecker</annotationProcessor>
 </annotationProcessors>
 ```
 
