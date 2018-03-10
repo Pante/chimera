@@ -95,7 +95,7 @@ _Annotation checkers_:
         <execution>
             <phase>compile</phase>
             <goals>
-                <goal>avalidator</goal>
+                <goal>validator</goal>
             </goals>
         </execution>
     </executions>
