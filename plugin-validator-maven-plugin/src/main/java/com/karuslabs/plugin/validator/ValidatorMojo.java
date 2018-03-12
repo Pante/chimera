@@ -35,7 +35,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
-@Mojo(name = "validator", defaultPhase = COMPILE, threadSafe = false)
+@Mojo(name = "validate-plugin", defaultPhase = COMPILE, threadSafe = false)
 public class ValidatorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
