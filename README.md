@@ -6,6 +6,7 @@
 A collection of open source libraries & tools devloped by Karus Labs. This libary consists of the commons library, the plugin-annotations maven plugin which processes the annotated plugin and generates a plugin.yml, the commands-validator maven plugin which validates a command.yml and the plugin-validator maven plugin which validates a plugin.yml.
 
 [![Travis-CI](https://travis-ci.org/Pante/Karus-Commons.svg?branch=master)](https://travis-ci.org/Pante/Karus-Commons)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
 [![Codecov](https://codecov.io/gh/Pante/Karus-Commons/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/Karus-Commons)
 [![Documented Source Code](https://img.shields.io/badge/documented-source-brightgreen.svg)](https://github.com/Pante/Karus-Commons/tree/Documentation)
 
