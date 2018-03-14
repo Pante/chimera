@@ -72,7 +72,7 @@ public class TokenMap<V> extends ProxiedMap<Key<? extends V>, V> {
     
     @Immutable
     @ValueBased
-    public static class Key<T> {
+    public static final class Key<T> {
         
         private final String name;
         private final Class<T> type;

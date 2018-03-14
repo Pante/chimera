@@ -49,4 +49,6 @@ public class Matches {
     
     public static final Predicate<String> WORLD = argument -> Bukkit.getWorld(argument) != null;
     
+    public static final Predicate<String> UUID = argument -> argument.split("-").length == 5;
+    
 }

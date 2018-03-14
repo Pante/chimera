@@ -33,7 +33,7 @@ public class Join {
         
     private static final Pattern PATTERN = Pattern.compile("\"?( |$)(?=(([^\"]*\"){2})*[^\"]*$)\"?");
     
-    public static String[] quotedSpaces(String[] arguments) {
+    public static String[] quotedSpaces(String... arguments) {
         return PATTERN.split(String.join(" ", arguments).replaceAll("^\"", ""));
     }
     

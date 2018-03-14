@@ -36,7 +36,7 @@ import static org.bukkit.SoundCategory.MASTER;
 
 @Immutable
 @ValueBased
-public class Audio {
+public final class Audio {
     
     private Sound sound;
     private SoundCategory category;

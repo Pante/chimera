@@ -29,6 +29,7 @@ import java.util.*;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
+import javax.lang.model.type.TypeKind;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -38,6 +39,26 @@ public class Elements {
     
     public static Set<? extends Element> annotated(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         return annotations.stream().map(environment::getElementsAnnotatedWith).flatMap(Collection::stream).collect(toSet());
+    }
+    
+    
+    public static boolean expect(ExecutableElement method, String name, TypeKind value, String... parameters) {
+        return method.getSimpleName().contentEquals(name) && expect(method, value, parameters);
+    }
+    
+    public static boolean expect(ExecutableElement method, TypeKind value, String... parameters) {
+        List<? extends VariableElement> arguments = method.getParameters();
+        if (arguments.size() != parameters.length) {
+            return false;
+        }
+        
+        for (int i = 0; i < parameters.length; i++) {
+            if (!arguments.get(i).getSimpleName().contentEquals(parameters[i])) {
+                return false;
+            }
+        }
+        
+        return method.getReturnType().getKind() == value;
     }
     
 }

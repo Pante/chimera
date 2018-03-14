@@ -27,7 +27,7 @@ import com.karuslabs.commons.annotation.ValueBased;
 
 
 @ValueBased
-public class Point implements Comparable<Point> {
+public final class Point implements Comparable<Point> {
     
     public final int x;
     public final int y;
