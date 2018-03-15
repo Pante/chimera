@@ -86,7 +86,7 @@ class ElementsTest {
     @JDK9
     void annotated() {
         Set<TypeElement> elements = new HashSet<>(asList(namespace, namespaces));
-        assertThat(Elements.annotated(elements, environment), equalTo(new HashSet<>(asList(single, multiple))));
+        assertThat(Checkers.annotated(elements, environment), equalTo(new HashSet<>(asList(single, multiple))));
     }
     
 }

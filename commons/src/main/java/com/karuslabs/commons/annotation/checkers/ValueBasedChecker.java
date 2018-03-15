@@ -29,7 +29,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.type.TypeKind;
 
-import static com.karuslabs.commons.annotation.checkers.Elements.*;
+import static com.karuslabs.commons.annotation.checkers.Checkers.*;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.*;
@@ -70,23 +70,25 @@ public class ValueBasedChecker extends AbstractProcessor {
     }
     
     protected void checkEquals(Element element) {
-        check(element, "equals", "boolean equals(Object)", method -> 
-            method.getReturnType().getKind() == BOOLEAN && method.getParameters().size() == 1 && method.getParameters().get(0)..getSimpleName().contentEquals("Object")
-        );
+//        check(element, "equals", "boolean equals(Object)", method -> 
+//            method.getReturnType().getKind() == BOOLEAN && method.getParameters().size() == 1 && method.getParameters().get(0)..getSimpleName().contentEquals("Object")
+//        );
     }
     
     protected void checkHashCode(Element element) {
-        check(element, "hashCode", "int hashCode()", method -> method.getReturnType().getKind() == INT && method.getParameters().isEmpty());
+        check(element, "int hashCode()", "hashCode", INT);
     }
     
-    protected void checkToString(Element element)
+    protected void checkToString(Element element) {
+//        check(element, "string toString()", "toString", STRING);
+    }
     
     protected void check(Element element, String missing, String name, TypeKind value, String... parameters) {
-        for (ExecutableElement method : methods) {
-            if (expect(method, name, BYTE, parameters)) {
-                return;
-            }
-        }
+//        for (ExecutableElement method : methods) {
+//            if (expect(method, name, BYTE, parameters)) {
+//                return;
+//            }
+//        }
         
         processingEnv.getMessager().printMessage(ERROR, "Missing method: " + missing + ", class must override method", element);
     }

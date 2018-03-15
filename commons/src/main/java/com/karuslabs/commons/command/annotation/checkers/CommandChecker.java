@@ -31,7 +31,7 @@ import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
-import static com.karuslabs.commons.annotation.checkers.Elements.annotated;
+import static com.karuslabs.commons.annotation.checkers.Checkers.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
