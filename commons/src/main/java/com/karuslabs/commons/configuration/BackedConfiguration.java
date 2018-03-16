@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,11 @@ package com.karuslabs.commons.configuration;
 
 import java.io.*;
 import java.util.*;
-
+    
 import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -42,7 +43,7 @@ public class BackedConfiguration implements ConfigurationSection {
     public BackedConfiguration(File file) {
         this.file = file;
         this.config = YamlConfiguration.loadConfiguration(file);
-    }
+}
     
     
     public void save() {
@@ -89,6 +90,16 @@ public class BackedConfiguration implements ConfigurationSection {
     @Override
     public String getName() {
         return config.getName();
+    }
+    
+    @Override
+    public <T extends ConfigurationSerializable> T getSerializable​(String path, Class<T> type) {
+        return config.getSerializable(path, type);
+    }
+    
+    @Override
+    public <T extends ConfigurationSerializable> T getSerializable​(String path, Class<T> type, T value) {
+        return config.getSerializable(path, type, value);
     }
 
     @Override
