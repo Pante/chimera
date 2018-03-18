@@ -21,49 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation.checkers.signatures;
+package com.karuslabs.commons.annotation.signature.signatures;
+
+import com.karuslabs.commons.annotation.signature.*;
 
 import java.util.Set;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 
 
-public abstract class Signature<T extends Element> {
+public abstract class CovariantSignature<T extends Element> implements Signature<T> {
     
-    protected String name;
     protected Set<Modifier> modifiers;
-    protected TypeMirror type;
+    protected String name;
+    protected Type type;
     
     
-    public Signature(String name, Set<Modifier> modifiers, TypeMirror type) {
+    public CovariantSignature(Set<Modifier> modifiers, String name, Type type) {
         this.modifiers = modifiers;
+        this.name = name;
         this.type = type;
     }
     
-            
-    public abstract boolean exact(ProcessingEnvironment environment, T element);
     
-    
-    public boolean hasName(T element) {
-        return element.getSimpleName().contentEquals(name);
-    }
-    
-    public boolean hasModifiers(T element) {
-        return modifiers.equals(element.getModifiers());
-    }
-    
-    
-    public String getName() {
-        return name;
-    }
-    
-    public Set<Modifier> getModifiers() {
-        return modifiers;
-    }
-        
-    public TypeMirror getType() {
-        return type;
-    }
+    public abstract boolean covariant(T element);
     
 }
