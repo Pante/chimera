@@ -33,11 +33,11 @@ import javax.lang.model.element.Modifier;
 public abstract class CovariantSignature<T extends Element> implements Signature<T> {
     
     protected Set<Modifier> modifiers;
-    protected String name;
+    protected Expression name;
     protected Type type;
     
     
-    public CovariantSignature(Set<Modifier> modifiers, String name, Type type) {
+    public CovariantSignature(Set<Modifier> modifiers, Expression name, Type type) {
         this.modifiers = modifiers;
         this.name = name;
         this.type = type;
