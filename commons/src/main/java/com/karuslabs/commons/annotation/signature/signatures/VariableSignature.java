@@ -21,24 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation.signature;
+package com.karuslabs.commons.annotation.signature.signatures;
 
+import com.karuslabs.commons.annotation.signature.*;
+
+import java.util.Set;
 import java.util.function.BiPredicate;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 
 
-public abstract class Signature<S extends Signature, T extends Element> {
+public class VariableSignature extends TypeSignature<VariableSignature, VariableElement> {
+
+    public VariableSignature(Set<Modifier> modifiers, Type type, Expression expression) {
+        super(modifiers, type, expression);
+    }
+
     
-    protected Expression expression;
-    
-    
-    public Signature(Expression expression) {
-        this.expression = expression;
+    @Override
+    public boolean exact(VariableElement element) {
+        return modifiers.containsAll(element.getModifiers()) && type.exact(element.asType()) && expression.matches(element.getSimpleName());
     }
     
-    
-    public abstract boolean exact(T element);
-    
-    public abstract boolean is(BiPredicate<S, T> predicate, T element);
+    @Override
+    public boolean is(BiPredicate<VariableSignature, VariableElement> predicate, VariableElement element) {
+        return predicate.test(this, element);
+    }
     
 }

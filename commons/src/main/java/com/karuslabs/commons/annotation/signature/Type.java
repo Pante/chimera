@@ -38,12 +38,12 @@ public class Type {
         }
 
         @Override
-        public boolean from(TypeMirror type) {
+        public boolean isAssignableFrom(TypeMirror type) {
             return true;
         }
 
         @Override
-        public boolean to(TypeMirror type) {
+        public boolean isAssignableTo(TypeMirror type) {
             return true;
         }
         
@@ -68,11 +68,11 @@ public class Type {
         return types.isSameType(type, expected);
     }
 
-    public boolean from(TypeMirror type) {
+    public boolean isAssignableFrom(TypeMirror type) {
         return types.isAssignable(type, expected);
     }
     
-    public boolean to(TypeMirror type) {
+    public boolean isAssignableTo(TypeMirror type) {
         return types.isAssignable(expected, type);
     }
     
