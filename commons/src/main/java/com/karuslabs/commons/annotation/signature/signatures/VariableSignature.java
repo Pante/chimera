@@ -42,6 +42,14 @@ public class VariableSignature extends TypeSignature<VariableSignature, Variable
         return modifiers.containsAll(element.getModifiers()) && type.exact(element.asType()) && expression.matches(element.getSimpleName());
     }
     
+    public boolean isAssignableFrom(VariableElement element) {
+        return modifiers.containsAll(element.getModifiers()) && type.isAssignableFrom(element.asType()) && expression.matches(element.getSimpleName());
+    }
+    
+    public boolean isAssignableTo(VariableElement element) {
+        return modifiers.containsAll(element.getModifiers()) && type.isAssignableTo(element.asType()) && expression.matches(element.getSimpleName());
+    }
+    
     @Override
     public boolean is(BiPredicate<VariableSignature, VariableElement> predicate, VariableElement element) {
         return predicate.test(this, element);
