@@ -26,7 +26,6 @@ package com.karuslabs.commons.annotation.signature.signatures;
 import com.karuslabs.commons.annotation.signature.*;
 
 import java.util.Set;
-import java.util.function.BiPredicate;
 import javax.lang.model.element.*;
 
 
@@ -49,10 +48,10 @@ public class VariableSignature extends TypeSignature<VariableSignature, Variable
     public boolean isAssignableTo(VariableElement element) {
         return modifiers.containsAll(element.getModifiers()) && type.isAssignableTo(element.asType()) && expression.matches(element.getSimpleName());
     }
-    
+
     @Override
-    public boolean is(BiPredicate<VariableSignature, VariableElement> predicate, VariableElement element) {
-        return predicate.test(this, element);
+    protected VariableSignature getThis() {
+        return this;
     }
     
 }
