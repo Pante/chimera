@@ -45,7 +45,7 @@ public abstract class TypeSignature<T extends Element> implements Signature<T> {
     
     
     protected boolean matchesType(T element) {
-        
+        return true;
     }
     
 }

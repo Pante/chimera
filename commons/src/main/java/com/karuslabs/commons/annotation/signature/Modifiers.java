@@ -34,9 +34,8 @@ public interface Modifiers extends BiPredicate<Set<Modifier>, Set<Modifier>> {
     public boolean test(Set<Modifier> expected, Set<Modifier> actual);
     
     
-    public static final Modifiers ANY = (expected, actual) -> true;
         
-    public static final Modifiers ANY_OF = (expected, actual) -> !Collections.disjoint(expected, actual);
+    public static final Modifiers ANY = (expected, actual) -> !Collections.disjoint(expected, actual);
      
     public static final Modifiers EXACT = (expected, actual) -> expected.equals(actual);
     
