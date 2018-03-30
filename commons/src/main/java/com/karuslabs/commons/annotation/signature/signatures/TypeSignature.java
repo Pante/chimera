@@ -33,6 +33,7 @@ import javax.lang.model.type.TypeMirror;
 public abstract class TypeSignature<T extends Element> implements Signature<T> {
     
     protected Set<Modifier> modifiers;
+    protected Modifiers matcher;
     protected TypeMirror type;
     protected Expression expression;
     
