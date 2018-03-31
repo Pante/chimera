@@ -24,23 +24,33 @@
 package com.karuslabs.commons.annotation.signature;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import javax.lang.model.element.Modifier;
 
 
-public interface Modifiers extends BiPredicate<Set<Modifier>, Set<Modifier>> {
+@FunctionalInterface
+public interface Modifiers {
     
-    @Override
-    public boolean test(Set<Modifier> expected, Set<Modifier> actual);
+    public boolean matches(Collection<Modifier> actual);
     
     
-        
-    public static final Modifiers ANY = (expected, actual) -> !Collections.disjoint(expected, actual);
-     
-    public static final Modifiers EXACT = (expected, actual) -> expected.equals(actual);
+    public static Modifiers any() {
+        return actual -> true;
+    }
     
-    public static final Modifiers ONLY = (expected, actual) -> expected.containsAll(actual);
+    public static Modifiers exactly(Collection<Modifier> expected) {
+        return actual -> Collections.disjoint(expected, actual);
+    }
     
-    public static final Modifiers EXCEPT = Collections::disjoint;
+    public static Modifiers only(Collection<Modifier> expected) {
+        return actual -> expected.containsAll(actual);
+    }
+    
+    public static Modifiers except(Collection<Modifier> expected) {
+        return actual -> Collections.disjoint(expected, actual);
+    }
+    
+    public static Modifiers none() {
+        return Collection::isEmpty;
+    }
     
 }

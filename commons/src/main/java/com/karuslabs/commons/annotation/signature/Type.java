@@ -21,29 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.annotation.signature.signatures;
+package com.karuslabs.commons.annotation.signature;
 
-import com.karuslabs.commons.annotation.signature.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.Types;
 
-import javax.lang.model.element.*;
 
-
-public abstract class TypeSignature<T extends Element> implements Signature<T> {
+@FunctionalInterface
+public interface Type { 
     
-    protected Modifiers modifiers;
-    protected Type type;
-    protected Expression expression;
+    public boolean matches(TypeMirror type);
     
     
-    public TypeSignature(Modifiers modifiers, Type type, Expression expression) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.expression = expression;
+    public static Type any() {
+        return type -> true;
     }
     
+    public static Type exactly(Types types, TypeMirror expected) {
+        return type -> types.isSameType(expected, type);
+    }
     
-    protected boolean match(T element) {
-        return modifiers.matches(element.getModifiers()) && expression.matches(element.getSimpleName());
+    public static Type from(Types types, TypeMirror expected) {
+        return type -> types.isAssignable(expected, type);
+    }
+    
+    public static Type to(Types types, TypeMirror expected) {
+        return type -> types.isAssignable(type, expected);
+    }
+    
+    public static Type none() {
+        return type -> type.getKind() == TypeKind.NONE;
     }
     
 }

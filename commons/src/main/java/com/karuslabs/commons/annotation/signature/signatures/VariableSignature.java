@@ -25,25 +25,18 @@ package com.karuslabs.commons.annotation.signature.signatures;
 
 import com.karuslabs.commons.annotation.signature.*;
 
-import javax.lang.model.element.*;
+import javax.lang.model.element.VariableElement;
 
 
-public abstract class TypeSignature<T extends Element> implements Signature<T> {
-    
-    protected Modifiers modifiers;
-    protected Type type;
-    protected Expression expression;
-    
-    
-    public TypeSignature(Modifiers modifiers, Type type, Expression expression) {
-        this.modifiers = modifiers;
-        this.type = type;
-        this.expression = expression;
+public class VariableSignature extends TypeSignature<VariableElement> {
+
+    public VariableSignature(Modifiers modifiers, Type type, Expression expression) {
+        super(modifiers, type, expression);
     }
-    
-    
-    protected boolean match(T element) {
-        return modifiers.matches(element.getModifiers()) && expression.matches(element.getSimpleName());
+
+    @Override
+    public boolean matches(VariableElement element) {
+        return match(element) && type.matches(element.asType());
     }
     
 }
