@@ -23,41 +23,10 @@
  */
 package com.karuslabs.commons.annotation.signature;
 
-import com.karuslabs.commons.annotation.JDK9;
-
-import java.util.*;
-import javax.lang.model.element.Modifier;
-
-
-@FunctionalInterface
-public interface Modifiers {
-    
-    @JDK9("Will be made private one compiling agaisnt JDK 9")
-    static final Modifiers ANY = actual -> true;
-    
-    
-    
-    public boolean matches(Collection<Modifier> actual);
-    
-    
-    public static Modifiers any() {
-        return ANY;
-    }
-    
-    public static Modifiers exactly(Collection<Modifier> expected) {
-        return actual -> Collections.disjoint(expected, actual);
-    }
-    
-    public static Modifiers only(Collection<Modifier> expected) {
-        return actual -> expected.containsAll(actual);
-    }
-    
-    public static Modifiers except(Collection<Modifier> expected) {
-        return actual -> Collections.disjoint(expected, actual);
-    }
-    
-    public static Modifiers none() {
-        return Collection::isEmpty;
-    }
+/**
+ *
+ * @author Karus Labs
+ */
+public class TypeParameters {
     
 }

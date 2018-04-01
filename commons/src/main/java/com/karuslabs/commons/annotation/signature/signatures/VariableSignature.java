@@ -34,9 +34,13 @@ public class VariableSignature extends TypeSignature<VariableElement> {
         super(modifiers, type, expression);
     }
 
+    
     @Override
     public boolean matches(VariableElement element) {
         return match(element) && type.matches(element.asType());
     }
     
 }
+
+
+
