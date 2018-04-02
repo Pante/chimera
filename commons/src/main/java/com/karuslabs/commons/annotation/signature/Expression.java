@@ -25,19 +25,18 @@ package com.karuslabs.commons.annotation.signature;
 
 
 @FunctionalInterface
-public interface Expression {
+public interface Expression extends Matcher<CharSequence> {
     
-    public boolean matches(CharSequence name);
+    public static Expression any() {
+        return name -> true;
+    }
     
-    
-    public static final Expression ANY = name -> true;
-    
-    public static Expression exact(String expression) {
+    public static Expression exactly(String expression) {
         return name -> expression.equals(name);
     }
     
-    public static Expression regex(String expression) {
+    public static Expression matches(String expression) {
         return new RegularExpression(expression);
     }
-    
+            
 }

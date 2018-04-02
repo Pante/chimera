@@ -23,38 +23,51 @@
  */
 package com.karuslabs.commons.annotation.signature;
 
-import com.karuslabs.commons.annotation.JDK9;
-
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
+import static java.util.Arrays.asList;
+
 
 @FunctionalInterface
-public interface Modifiers {
-    
-    @JDK9("Will be made private one compiling agaisnt JDK 9")
-    static final Modifiers ANY = actual -> true;
-    
-    
-    
-    public boolean matches(Collection<Modifier> actual);
-    
+public interface Modifiers extends Matcher<Collection<Modifier>> {    
     
     public static Modifiers any() {
-        return ANY;
+        return actual -> true;
+    }
+    
+    public static Modifiers exactly(Modifier... expected) {
+        Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+        modifiers.addAll(asList(expected));
+        return exactly(modifiers);
     }
     
     public static Modifiers exactly(Collection<Modifier> expected) {
         return actual -> Collections.disjoint(expected, actual);
     }
     
+    
+    public static Modifiers only(Modifier... expected) {
+        Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+        modifiers.addAll(asList(expected));
+        return only(modifiers);
+    }
+    
     public static Modifiers only(Collection<Modifier> expected) {
         return actual -> expected.containsAll(actual);
+    }
+    
+    
+    public static Modifiers except(Modifier... expected) {
+        Set<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
+        modifiers.addAll(asList(expected));
+        return except(modifiers);
     }
     
     public static Modifiers except(Collection<Modifier> expected) {
         return actual -> Collections.disjoint(expected, actual);
     }
+    
     
     public static Modifiers none() {
         return Collection::isEmpty;

@@ -27,8 +27,6 @@ import javax.lang.model.element.Element;
 
 
 @FunctionalInterface
-public interface Signature<T extends Element> {
-    
-    public boolean matches(T element);
+public interface Signature<T extends Element> extends Matcher<T> {
     
 }

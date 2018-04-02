@@ -23,31 +23,10 @@
  */
 package com.karuslabs.commons.annotation.signature;
 
-import javax.lang.model.type.*;
-import javax.lang.model.util.Types;
-
 
 @FunctionalInterface
-public interface Type extends Matcher<TypeMirror> { 
+public interface Matcher<T> {
     
-    public static Type any() {
-        return type -> true;
-    }
-    
-    public static Type exactly(Types types, TypeMirror expected) {
-        return type -> types.isSameType(expected, type);
-    }
-    
-    public static Type from(Types types, TypeMirror expected) {
-        return type -> types.isAssignable(expected, type);
-    }
-    
-    public static Type to(Types types, TypeMirror expected) {
-        return type -> types.isAssignable(type, expected);
-    }
-    
-    public static Type none() {
-        return type -> type.getKind() == TypeKind.NONE;
-    }
+    public boolean matches(T actual);
     
 }

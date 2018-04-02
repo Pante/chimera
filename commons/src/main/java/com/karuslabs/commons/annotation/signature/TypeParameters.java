@@ -23,10 +23,10 @@
  */
 package com.karuslabs.commons.annotation.signature;
 
-/**
- *
- * @author Karus Labs
- */
-public class TypeParameters {
+import javax.lang.model.type.TypeMirror;
+
+
+@FunctionalInterface
+public interface TypeParameters extends Matcher<TypeMirror> {
     
 }
