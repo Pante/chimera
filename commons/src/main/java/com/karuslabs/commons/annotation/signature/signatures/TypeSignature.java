@@ -32,11 +32,11 @@ public abstract class TypeSignature<T extends Element> implements Signature<T> {
     
     protected Modifiers modifiers;
     protected Type type;
-    protected TypeParameters generics;
+    protected TypeParameter generics;
     protected Expression expression;
     
     
-    public TypeSignature(Modifiers modifiers, Type type, TypeParameters generics, Expression expression) {
+    public TypeSignature(Modifiers modifiers, Type type, TypeParameter generics, Expression expression) {
         this.modifiers = modifiers;
         this.type = type;
         this.generics = generics;

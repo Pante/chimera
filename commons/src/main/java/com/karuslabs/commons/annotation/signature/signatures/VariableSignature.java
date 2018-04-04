@@ -30,7 +30,7 @@ import javax.lang.model.element.VariableElement;
 
 public class VariableSignature extends TypeSignature<VariableElement> {
     
-    public VariableSignature(Modifiers modifiers, Type type, TypeParameters generics, Expression expression) {
+    public VariableSignature(Modifiers modifiers, Type type, TypeParameter generics, Expression expression) {
         super(modifiers, type, generics, expression);
     }
 

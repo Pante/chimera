@@ -27,9 +27,9 @@ import javax.lang.model.type.TypeMirror;
 
 
 @FunctionalInterface
-public interface TypeParameters extends Matcher<TypeMirror> {
+public interface TypeParameter extends Matcher<TypeMirror> {
     
-    public static TypeParameters any() {
+    public static TypeParameter any() {
         return parameters -> true;
     }
     
