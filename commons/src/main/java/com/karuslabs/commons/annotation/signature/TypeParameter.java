@@ -23,14 +23,18 @@
  */
 package com.karuslabs.commons.annotation.signature;
 
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 
 
 @FunctionalInterface
 public interface TypeParameter extends Matcher<TypeMirror> {
     
     public static TypeParameter any() {
-        return parameters -> true;
+        return parameter -> true;
+    }
+    
+    public static TypeParameter none() {
+        return parameter -> parameter.getKind() == TypeKind.NONE;
     }
     
 }
