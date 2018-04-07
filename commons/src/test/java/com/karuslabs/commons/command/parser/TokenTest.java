@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.annotations.JDK9;
 
 import org.bukkit.configuration.ConfigurationSection;
 

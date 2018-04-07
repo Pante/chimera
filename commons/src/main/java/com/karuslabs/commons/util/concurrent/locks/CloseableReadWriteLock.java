@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.annotation.Shared;
+import com.karuslabs.annotations.Shared;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Ignored;
+import com.karuslabs.annotations.Ignored;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import java.text.MessageFormat;

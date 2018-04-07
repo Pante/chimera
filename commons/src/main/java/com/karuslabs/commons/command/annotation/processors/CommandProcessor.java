@@ -23,38 +23,67 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.CommandExecutor;
+import com.karuslabs.commons.command.annotation.*;
 
-import java.util.*;
+import java.util.Set;
+import javax.annotation.processing.*;
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+
+import static com.karuslabs.annotations.processors.Processors.annotated;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class CommandProcessor {
+@SupportedAnnotationTypes({
+    "com.karuslabs.commons.command.annotation.Information",
+    "com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces",
+    "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
+    "com.karuslabs.commons.command.annotation.Registered", "com.karuslabs.commons.command.annotation.Registrations"
+})
+public class CommandProcessor extends AbstractProcessor {
     
-    private Set<Processor> processors;
-    private Resolver resolver;
+    private TypeMirror expected;
+    private Messager messager;
     
     
-    public CommandProcessor(Set<Processor> processors, Resolver resolver) {
-        this.processors = processors;
-        this.resolver = resolver;
+    @Override
+    public synchronized void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        expected = environment.getElementUtils().getTypeElement(CommandExecutor.class.getName()).asType();
+        messager = environment.getMessager();
     }
     
     
-    public void process(ProxiedCommandMap map, CommandExecutor executor) {
-        if (!resolver.isResolvable(executor)) {
-            throw new IllegalArgumentException("unresolvable CommandExecutor: " + executor.getClass().getName());
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        for (Element element : annotated(annotations, environment))  {
+            checkAssignability(element);
+            checkNamespace(element);
         }
         
-        List<Command> commands = resolver.resolve(map, executor);
-        for (Processor processor : processors) {
-            if (processor.hasAnnotations(executor)) {
-                processor.process(commands, executor);
-            }
+        return false;
+    }
+    
+    protected void checkAssignability(Element element) {
+        if (!processingEnv.getTypeUtils().isAssignable(element.asType(), expected)) {
+            messager.printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
         }
-        
-        for (Command command : commands) {
-            command.setExecutor(executor);
+    }
+    
+    protected void checkNamespace(Element element) {
+        if (element.getAnnotationsByType(Namespace.class).length == 0) {
+            messager.printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
         }
+    }
+    
+    
+    public TypeMirror getExpected() {
+        return expected;
+    }
+    
+    public Messager getMessager() {
+        return messager;
     }
     
 }

@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.annotation.*;
-
+import com.karuslabs.annotations.Shared;
 
 import static java.util.Arrays.copyOfRange;
 

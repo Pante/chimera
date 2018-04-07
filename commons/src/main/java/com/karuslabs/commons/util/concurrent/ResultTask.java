@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.commons.annotation.Blocking;
+import com.karuslabs.annotations.Blocking;
 
 import java.util.concurrent.*;
 

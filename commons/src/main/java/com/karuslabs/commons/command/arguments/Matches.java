@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.arguments;
 
 import com.google.common.primitives.*;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 
 import java.util.function.Predicate;
 

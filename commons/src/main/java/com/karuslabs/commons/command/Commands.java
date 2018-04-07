@@ -23,8 +23,12 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotation.processors.ResourceProcessor;
-import com.karuslabs.commons.command.annotation.processors.*;
+import com.karuslabs.commons.command.annotation.providers.NamespaceProvider;
+import com.karuslabs.commons.command.annotation.providers.InformationProvider;
+import com.karuslabs.commons.command.annotation.providers.CommandResolver;
+import com.karuslabs.commons.command.annotation.providers.LiteralProvider;
+import com.karuslabs.commons.command.annotation.providers.RegisteredProvider;
+import com.karuslabs.commons.command.annotation.providers.ResourceProvider;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
@@ -43,14 +47,14 @@ public class Commands {
     ProxiedCommandMap map;
     Provider provider;
     References references;
-    CommandProcessor processor;
+    CommandResolver processor;
     
     
-    public Commands(Plugin plugin, Provider provider, References references, CommandProcessor processor) {
+    public Commands(Plugin plugin, Provider provider, References references, CommandResolver processor) {
         this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, processor);
     }
     
-    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References references, CommandProcessor processor) {
+    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References references, CommandResolver processor) {
         this.plugin = plugin;
         this.map = map;
         this.provider = provider;
@@ -69,7 +73,7 @@ public class Commands {
     
     
     public void register(CommandExecutor executor) {
-        processor.process(map, executor);
+        processor.resolve(map, executor);
     }
     
     
@@ -85,15 +89,15 @@ public class Commands {
         return references;
     }
     
-    public CommandProcessor getProcessor() {
+    public CommandResolver getProcessor() {
         return processor;
     }
     
     
     public static Commands simple(Plugin plugin, Provider provider) {
         References references = new References();
-        CommandProcessor processor = new CommandProcessor(
-            new HashSet<>(asList(new InformationProcessor(), new LiteralProcessor(), new RegisteredProcessor(references), new ResourceProcessor())), new NamespaceResolver(plugin)
+        CommandResolver processor = new CommandResolver(
+            new HashSet<>(asList(new InformationProvider(), new LiteralProvider(), new RegisteredProvider(references), new ResourceProvider())), new NamespaceProvider(plugin)
         );
         
         return new Commands(plugin, provider, references, processor);

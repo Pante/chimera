@@ -15,6 +15,13 @@
      
     <dependencies>
         <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.1.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
@@ -40,7 +47,7 @@
                     <target>${target}</target>
                 </configuration>
             </plugin>
-            
+    
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -53,13 +60,13 @@
                         </goals>
                     </execution>
                 </executions>
-                
+
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>shaded</shadedClassifierName>
                 </configuration>
             </plugin>
-           
+    
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>

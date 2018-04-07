@@ -23,47 +23,149 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.processors.CommandProcessor;
+import com.karuslabs.commons.command.CommandExecutor;
+import com.karuslabs.commons.command.annotation.*;
 
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.util.Set;
+import java.util.stream.Stream;
+import javax.annotation.processing.*;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singleton;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 class CommandProcessorTest {
     
-    Resolver resolver = mock(Resolver.class);
-    LiteralProcessor literal = mock(LiteralProcessor.class);
-    CommandProcessor processor = new CommandProcessor(singleton(literal), resolver);
-    ProxiedCommandMap map = mock(ProxiedCommandMap.class);
-    Command command = mock(Command.class);
+    CommandProcessor checker;
+    TypeElement element;
+    Elements elements;
+    Types types;
+    Messager messager;
+    ProcessingEnvironment environment;
     
     
-    @Test
-    void process() {
-        List<Command> commands = singletonList(command);
-        when(resolver.isResolvable(any())).thenReturn(true);
-        when(resolver.resolve(map, CommandExecutor.NONE)).thenReturn(commands);
-        when(literal.hasAnnotations(any())).thenReturn(true);
+    CommandProcessorTest() {
+        checker = spy(new CommandProcessor());
+        environment = mock(ProcessingEnvironment.class);
+        element = mock(TypeElement.class);
+        elements = mock(Elements.class);
+        types = mock(Types.class);
+        messager = mock(Messager.class);
         
-        processor.process(map, CommandExecutor.NONE);
-        
-        verify(literal).process(commands, CommandExecutor.NONE);
+        when(element.asType()).thenReturn(mock(TypeMirror.class));
+        when(elements.getTypeElement(CommandExecutor.class.getName())).thenReturn(element);
+        when(environment.getElementUtils()).thenReturn(elements);
+        when(environment.getTypeUtils()).thenReturn(types);
+        when(environment.getMessager()).thenReturn(messager);
     }
     
     
     @Test
-    void process_ThrowsException() {
-        when(resolver.isResolvable(any())).thenReturn(false);
+    void annotations() throws ClassNotFoundException {
+        for (String supported: CommandProcessor.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
+            assertTrue(Class.forName(supported).isAnnotation());
+        }
+    }
+    
+    
+    @Test
+    void init() {
+        checker.init(environment);
         
-        assertEquals(
-            "unresolvable CommandExecutor: " + CommandExecutor.NONE.getClass().getName(),
-            assertThrows(IllegalArgumentException.class, () -> processor.process(map, CommandExecutor.NONE)).getMessage()
-        );
+        assertSame(element.asType(), checker.getExpected());
+        assertSame(messager, checker.getMessager());
+    }
+    
+    
+    @Test
+    void process() {
+        Set<TypeElement> set = singleton(element);
+        RoundEnvironment environment = new RoundEnvironment() {
+            @Override
+            public boolean processingOver() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public boolean errorRaised() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Set<? extends Element> getRootElements() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Set<? extends Element> getElementsAnnotatedWith(TypeElement a) {
+                return set;
+            }
+
+            @Override
+            public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
+                return set;
+            }
+        };
+        doNothing().when(checker).checkAssignability(any());
+        doNothing().when(checker).checkNamespace(any());
+        
+        boolean processed = checker.process(set, environment);
+        
+        verify(checker).checkAssignability(any());
+        verify(checker).checkNamespace(any());
+        assertFalse(processed);
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"true, 0", "false, 1"})
+    void checkAssignability(boolean assignable, int times) {
+        when(types.isAssignable(any(), any())).thenReturn(assignable);
+        
+        checker.init(environment);
+        checker.checkAssignability(element);
+        
+        verify(messager, times(times)).printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("checkNamespace_parameters")
+    void checkNamespace(Namespace[] namespaces, int times) {
+        when(element.getAnnotationsByType(Namespace.class)).thenReturn(namespaces);
+        
+        checker.init(environment);
+        checker.checkNamespace(element);
+        
+        verify(messager, times(times)).printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
+    }
+    
+    static Stream<Arguments> checkNamespace_parameters() {
+        Namespace namespace = new Namespace() {
+            @Override
+            public String[] value() {
+                return null;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Namespace.class;
+            }
+        };
+        
+        return Stream.of(of(new Namespace[] {namespace}, 0), of(new Namespace[] {}, 1));
     }
     
 }

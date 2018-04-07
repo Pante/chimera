@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.annotations.Immutable;
 
 import java.util.function.Supplier;
 import javax.annotation.Nonnull;

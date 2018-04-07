@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.effect;
 
-import com.karuslabs.commons.annotation.Shared;
+import com.karuslabs.annotations.Shared;
 
 import java.util.function.Supplier;
 

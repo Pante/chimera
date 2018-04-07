@@ -23,13 +23,11 @@
  */
 package com.karuslabs.plugin.validator;
 
-import com.karuslabs.commons.annotation.Static;
 import com.karuslabs.commons.configuration.Configurations;
 
 import org.bukkit.configuration.ConfigurationSection;
 
 
-@Static
 public class Yaml {
     
     public static final ConfigurationSection PLUGIN = Configurations.from(Yaml.class.getClassLoader().getResourceAsStream("plugin.yml"));

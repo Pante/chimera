@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.annotations.JDK9;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

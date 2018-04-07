@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.ValueBased;
+import com.karuslabs.annotations.ValueBased;
 
 
 @ValueBased

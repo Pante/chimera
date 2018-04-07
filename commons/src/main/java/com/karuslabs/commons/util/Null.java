@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 
 import java.util.List;
 import javax.annotation.Nullable;

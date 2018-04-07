@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.graphics.windows;
 
-import com.karuslabs.commons.annotation.*;
+import com.karuslabs.annotations.*;
 import com.karuslabs.commons.graphics.*;
 import com.karuslabs.commons.graphics.regions.Region;
 import com.karuslabs.commons.locale.*;

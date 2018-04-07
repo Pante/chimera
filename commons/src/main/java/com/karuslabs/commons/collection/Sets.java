@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.collection;
 
-import com.karuslabs.commons.annotation.*;
+import com.karuslabs.annotations.Static;
 
 import java.util.*;
 

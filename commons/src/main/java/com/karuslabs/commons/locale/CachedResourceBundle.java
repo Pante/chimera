@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.annotations.Immutable;
 
 import java.util.*;
 import java.util.concurrent.*;

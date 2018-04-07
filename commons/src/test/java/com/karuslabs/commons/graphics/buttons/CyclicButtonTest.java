@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.commons.annotation.JDK9;
+import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.graphics.ClickEvent;
 import com.karuslabs.commons.graphics.windows.Window;
 

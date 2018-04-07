@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.configuration;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 
 import java.io.*;
 import java.util.Map;

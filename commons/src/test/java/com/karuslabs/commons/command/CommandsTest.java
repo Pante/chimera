@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotation.processors.CommandProcessor;
+import com.karuslabs.commons.command.annotation.providers.CommandResolver;
 import com.karuslabs.commons.locale.providers.Provider;
 
 import org.bukkit.command.SimpleCommandMap;
@@ -37,14 +37,14 @@ import static org.mockito.Mockito.*;
 class CommandsTest {
     
     Commands commands;
-    CommandProcessor processor;
+    CommandResolver processor;
     Plugin plugin;
     
     
     CommandsTest() {
         plugin = when(mock(Plugin.class).getServer()).thenReturn(new StubServer(mock(SimpleCommandMap.class))).getMock();
         when(plugin.getName()).thenReturn("name");
-        processor = mock(CommandProcessor.class);
+        processor = mock(CommandResolver.class);
         commands = spy(Commands.simple(plugin, Provider.NONE));
         commands.map = spy(commands.map);
         commands.processor = processor;
@@ -55,7 +55,7 @@ class CommandsTest {
     void register() {
         commands.register(CommandExecutor.NONE);
         
-        verify(processor).process(commands.map, CommandExecutor.NONE);
+        verify(processor).resolve(commands.map, CommandExecutor.NONE);
     }
     
     

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.world;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 
 import java.util.concurrent.ThreadLocalRandom;
 

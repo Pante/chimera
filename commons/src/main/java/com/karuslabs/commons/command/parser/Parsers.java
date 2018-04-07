@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 import com.karuslabs.commons.command.References;
 import com.karuslabs.commons.locale.providers.Provider;
 

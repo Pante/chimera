@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.graphics;
 
-import com.karuslabs.commons.annotation.Shared;
+import com.karuslabs.annotations.Shared;
 import com.karuslabs.commons.graphics.windows.Window;
 
 import org.bukkit.event.inventory.*;

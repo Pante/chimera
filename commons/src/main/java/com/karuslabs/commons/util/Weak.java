@@ -23,7 +23,8 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.commons.annotation.*;
+import com.karuslabs.annotations.ValueBased;
+import com.karuslabs.annotations.Immutable;
 
 import java.lang.ref.WeakReference;
 import java.util.*;

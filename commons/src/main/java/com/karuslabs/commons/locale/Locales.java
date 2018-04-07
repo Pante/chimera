@@ -25,7 +25,7 @@ package com.karuslabs.commons.locale;
 
 import com.google.common.cache.Cache;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 import com.karuslabs.commons.util.Get;
 
 import java.lang.reflect.Field;

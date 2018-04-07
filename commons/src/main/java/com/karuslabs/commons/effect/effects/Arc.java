@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.effect.effects;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.annotations.Immutable;
 import com.karuslabs.commons.effect.*;
 import com.karuslabs.commons.effect.particles.Particles;
 

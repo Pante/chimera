@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation;
 
-import com.karuslabs.commons.annotation.*;
+import com.karuslabs.annotations.*;
 
 import java.util.*;
 

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.effect.particles;
 
-import com.karuslabs.commons.annotation.Immutable;
+import com.karuslabs.annotations.Immutable;
 
 import org.bukkit.*;
 

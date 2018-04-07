@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.annotation.Static;
+import com.karuslabs.annotations.Static;
 
 import java.util.regex.Pattern;
 
