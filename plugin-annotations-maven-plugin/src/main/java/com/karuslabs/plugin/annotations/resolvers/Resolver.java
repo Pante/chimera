@@ -21,17 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
-
-import com.karuslabs.commons.command.*;
-
-import java.util.List;
+package com.karuslabs.plugin.annotations.resolvers;
 
 
-public interface Provider {
+import org.bukkit.configuration.ConfigurationSection;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+
+public interface Resolver {
     
-    public void process(List<Command> commands, CommandExecutor executor);
+    public void resolve(Class<? extends JavaPlugin> plugin, ConfigurationSection config);
     
-    public boolean hasAnnotations(CommandExecutor executor);
+    public boolean isResolvable(Class<? extends JavaPlugin> plugin);
     
 }

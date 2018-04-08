@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.commons.command.annotation.providers.InformationProvider;
 import com.karuslabs.commons.command.*;
-import com.karuslabs.commons.command.annotation.Information;
+import com.karuslabs.commons.command.annotation.Literal;
+import com.karuslabs.commons.command.completion.CachedCompletion;
 
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
@@ -41,9 +42,9 @@ import static org.mockito.Mockito.*;
 
 
 @TestInstance(PER_CLASS)
-class InformationProviderTest {
+class LiteralResolverTest {
     
-    @Information(aliases = {"a", "b"}, description = "a description", permission = "a.permission", message = "a message", usage = "a usage")
+    @Literal(index = 0, completions = {"a", "b"})
     static class A implements CommandExecutor {
 
         @Override
@@ -53,8 +54,10 @@ class InformationProviderTest {
         
     }
     
+    @Literal(index = 1, completions = {"c", "d"})
+    @Literal(index = 2, completions = {"e", "f"})
     static class B implements CommandExecutor {
-
+        
         @Override
         public boolean execute(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -63,30 +66,29 @@ class InformationProviderTest {
     }
     
     
-    InformationProvider processor = new InformationProvider();
-    Command command = mock(Command.class);
+    LiteralResolver resolver = new LiteralResolver();
+    Command command = when(mock(Command.class).getCompletions()).thenReturn(new HashMap<>()).getMock();
     
     
     @Test
-    void process() {
-        processor.process(asList(command), new A());
+    void resolve() {
+        resolver.resolve(asList(command), new B());
         
-        command.setAliases(asList("a", "b"));
-        command.setDescription("a description");
-        command.setPermission("a.permission");
-        command.setPermissionMessage("a message");
-        command.setUsage("a usage");
+        assertEquals(2, command.getCompletions().size());
+        assertEquals(asList("c", "d"), ((CachedCompletion) command.getCompletions().get(1)).getCompletions());
+        assertEquals(asList("e", "f"), ((CachedCompletion) command.getCompletions().get(2)).getCompletions());
     }
     
     
     @ParameterizedTest
-    @MethodSource("hasAnnotations_parameters")
-    void hasAnnotations(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, processor.hasAnnotations(executor));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(CommandExecutor executor, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(executor));
     }
     
-    static Stream<Arguments> hasAnnotations_parameters() {
-        return Stream.of(of(new A(), true), of(new B(), false));
+    static Stream<Arguments> isResolvable_parameters() {
+        CommandExecutor executor = (source, context, arguments) -> true;
+        return Stream.of(of(new A(), true), of(new B(), true), of(executor, false));
     }
     
 }

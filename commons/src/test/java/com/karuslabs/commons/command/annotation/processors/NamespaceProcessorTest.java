@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 
 class NamespaceProcessorTest {
     
-    NamespaceProcessor checker = spy(new NamespaceProcessor());
+    NamespaceProcessor processor = spy(new NamespaceProcessor());
     TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(mock(TypeMirror.class)).getMock();
     Messager messager = mock(Messager.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
@@ -102,19 +102,19 @@ class NamespaceProcessorTest {
             }
         };
         
-        doNothing().when(checker).check(any(), any());
+        doNothing().when(processor).check(any(), any());
         when(element.getAnnotationsByType(Namespace.class)).thenReturn(new Namespace[] {namespace});
         
-        checker.process(set, environment);
+        processor.process(set, environment);
         
-        verify(checker).check(any(), any());
+        verify(processor).check(any(), any());
     }
     
     
     @Test
     void check_empty() {
-        checker.init(environment);
-        checker.check(element, new String[] {});
+        processor.init(environment);
+        processor.check(element, new String[] {});
         
         verify(messager).printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
     }
@@ -123,13 +123,13 @@ class NamespaceProcessorTest {
     @ParameterizedTest
     @MethodSource("check_parameters")
     void check(String[] namespace, int times, int size) {
-        checker.init(environment);
-        checker.namespaces.put("other.element", "other");
+        processor.init(environment);
+        processor.namespaces.put("other.element", "other");
         
-        checker.check(element, namespace);
+        processor.check(element, namespace);
         
         verify(messager, times(times)).printMessage(ERROR, "Conflicting namespaces: " + element.asType().toString() + " and other, namespaces must be unique", element);
-        assertEquals(size, checker.namespaces.size());
+        assertEquals(size, processor.namespaces.size());
     }
     
     static Stream<Arguments> check_parameters() {

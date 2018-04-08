@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.commons.command.annotation.providers.ResourceProvider;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.annotation.*;
@@ -42,7 +41,7 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class ResourceProviderTest {
+class ResourceResolverTest {
     
     @Bundle("name")
     @EmbeddedResources({"a"})
@@ -87,17 +86,17 @@ class ResourceProviderTest {
     }
     
     
-    ResourceProvider processor = spy(new ResourceProvider());
+    ResourceResolver resolver = spy(new ResourceResolver());
     
     
     @Test
-    void process() {
+    void resolve() {
         List<Command> commands = singletonList(new Command("", null));
         MessageTranslation translation = mock(MessageTranslation.class);
         
-        doReturn(translation).when(processor).translation(CommandExecutor.NONE);
+        doReturn(translation).when(resolver).translation(CommandExecutor.NONE);
         
-        processor.process(commands, CommandExecutor.NONE);
+        resolver.resolve(commands, CommandExecutor.NONE);
         
         assertEquals(translation, commands.get(0).getTranslation());
     }
@@ -105,7 +104,7 @@ class ResourceProviderTest {
     
     @Test
     void translation() {
-        MessageTranslation translation = processor.translation(new A());
+        MessageTranslation translation = resolver.translation(new A());
         ExternalControl control = (ExternalControl) translation.getControl();
         EmbeddedResource embedded = (EmbeddedResource) control.getResources()[0];
         ExternalResource external = (ExternalResource) control.getResources()[1];
@@ -117,12 +116,12 @@ class ResourceProviderTest {
     
     
     @ParameterizedTest
-    @MethodSource("hasAnnotations_parameters")
-    void hasAnnotations(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, processor.hasAnnotations(executor));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(CommandExecutor executor, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(executor));
     }
     
-    static Stream<Arguments> hasAnnotations_parameters() {
+    static Stream<Arguments> isResolvable_parameters() {
         return Stream.of(of(new A(), true), of(new B(), true), of(new C(), false), of(new D(), false));
     }
     

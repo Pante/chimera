@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Information;
@@ -31,10 +31,10 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 
-public class InformationProvider implements Provider {
+public class InformationResolver implements Resolver {
 
     @Override
-    public void process(List<Command> commands, CommandExecutor executor) {
+    public void resolve(List<Command> commands, CommandExecutor executor) {
         Information annotation = executor.getClass().getAnnotation(Information.class);
         List<String> aliases = asList(annotation.aliases());
         
@@ -48,7 +48,7 @@ public class InformationProvider implements Provider {
     }
 
     @Override
-    public boolean hasAnnotations(CommandExecutor executor) {
+    public boolean isResolvable(CommandExecutor executor) {
         return executor.getClass().getAnnotation(Information.class) != null;
     }
     

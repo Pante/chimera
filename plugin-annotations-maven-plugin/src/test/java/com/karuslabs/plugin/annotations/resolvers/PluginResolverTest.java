@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.configuration.Configurations;
-import com.karuslabs.plugin.annotations.annotations.Information;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -42,44 +41,54 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
+import com.karuslabs.plugin.annotations.annotations.Plugin;
+import com.karuslabs.plugin.annotations.plugin.TestPlugin;
+import org.junit.jupiter.api.Test;
 
 
-class InformationProcessorTest {
+class PluginResolverTest {
     
     List<Developer> developers = asList(new Developer());
     MavenProject project = mock(MavenProject.class);
-    InformationProcessor processor = spy(new InformationProcessor(project));
+    PluginResolver resolver = spy(new PluginResolver(project));
     ConfigurationSection config = Configurations.from(getClass().getClassLoader().getResourceAsStream("annotations.yml"));
+    ConfigurationSection mock = mock(ConfigurationSection.class);
     
     
-    @Information
+    @Plugin
     static class Default extends JavaPlugin {
         
     }
     
-    
-    @Information(description = "specified description", authors = {"Pante"}, website = "https://repo.karuslabs.com")
+    @Plugin(
+        name = "specified name", version = "specified version", 
+        description = "specified description", authors = {"Pante"}, website = "https://repo.karuslabs.com"
+    )
     static class Specified extends JavaPlugin {
         
     }
     
     
     @ParameterizedTest
-    @MethodSource("process_parameters")
-    void process(Class<? extends JavaPlugin> type, String description, List<String> names, String website) {
+    @MethodSource("resolve_parameters")
+    void resolve(Class<? extends JavaPlugin> type, String description, List<String> names, String website) {
         developers.get(0).setName("random dude");
         when(project.getDescription()).thenReturn("default description");
         when(project.getDevelopers()).thenReturn(developers);
         when(project.getUrl()).thenReturn("default website");
         
-        processor.process(type, config);
+        resolver.resolve(type, config);
+        
+        verify(resolver).name(type.getAnnotation(Plugin.class), config);
+        verify(resolver).main(type, config);
+        verify(resolver).version(type.getAnnotation(Plugin.class), config);
         
         assertEquals(description, config.getString("description"));
         assertEquals(names, config.getStringList("authors"));
         assertEquals(website, config.getString("website"));
     }
     
-    static Stream<Arguments> process_parameters() {
+    static Stream<Arguments> resolve_parameters() {
         return Stream.of(
             of(Default.class, "default description", asList("random dude"), "default website"),
             of(Specified.class, "specified description", asList("Pante"), "https://repo.karuslabs.com")
@@ -88,12 +97,52 @@ class InformationProcessorTest {
     
     
     @ParameterizedTest
-    @MethodSource("isAnnotated_parameters")
-    void isAnnotated(Class<? extends JavaPlugin> type, boolean expected) {
-        assertEquals(expected, processor.isAnnotated(type));
+    @CsvSource({"default, default name", "specified, specified name"})
+    void name(String type, String expected) {
+        when(project.getName()).thenReturn("default name");
+        
+        resolver.name(from(type), mock);
+        
+        verify(mock).set("name", expected);
     }
     
-    static Stream<Arguments> isAnnotated_parameters() {
+    
+    @Test
+    void main() {
+        resolver.main(TestPlugin.class, mock);
+        
+        verify(mock).set("main", TestPlugin.class.getName());
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"default, default version", "specified, specified version"})
+    void version(String type, String expected) {
+        when(project.getVersion()).thenReturn("default version");
+        
+        resolver.version(from(type), mock);
+        
+        verify(mock).set("version", expected);
+    }
+    
+    
+    static Plugin from(String name) {
+        if (name.equals("default")) {
+            return Default.class.getAnnotation(Plugin.class);
+            
+        } else {
+            return Specified.class.getAnnotation(Plugin.class);
+        }
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(Class<? extends JavaPlugin> type, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(type));
+    }
+    
+    static Stream<Arguments> isResolvable_parameters() {
         return Stream.of(of(Default.class, true), of(Specified.class, true), of(JavaPlugin.class, false));
     }
     

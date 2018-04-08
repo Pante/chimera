@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.annotation.processors.CompletionProcessor;
 import com.karuslabs.commons.command.annotation.*;
 
 import java.lang.annotation.Annotation;
@@ -46,7 +45,7 @@ import static org.mockito.Mockito.*;
 
 class CompletionProcessorTest {
     
-    CompletionProcessor checker = spy(new CompletionProcessor());
+    CompletionProcessor processor = spy(new CompletionProcessor());
     TypeElement element = mock(TypeElement.class);
     Messager messager = mock(Messager.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
@@ -89,16 +88,16 @@ class CompletionProcessorTest {
                 return set;
             }
         };
-        doNothing().when(checker).checkLiterals(any());
-        doNothing().when(checker).checkRegistrations(any());
-        checker.indexes.add(10);
+        doNothing().when(processor).checkLiterals(any());
+        doNothing().when(processor).checkRegistrations(any());
+        processor.indexes.add(10);
         
-        boolean process = checker.process(set, environment);
+        boolean process = processor.process(set, environment);
         
-        verify(checker).checkLiterals(element);
-        verify(checker).checkRegistrations(element);
+        verify(processor).checkLiterals(element);
+        verify(processor).checkRegistrations(element);
         
-        assertTrue(checker.indexes.isEmpty());
+        assertTrue(processor.indexes.isEmpty());
         assertFalse(process);
     } 
     
@@ -106,12 +105,12 @@ class CompletionProcessorTest {
     @ParameterizedTest
     @MethodSource("checkLiterals_parameters")
     void checkLiterals(Literal[] literals, int times) {
-        doNothing().when(checker).check(any(), anyInt());
+        doNothing().when(processor).check(any(), anyInt());
         when(element.getAnnotationsByType(Literal.class)).thenReturn(literals);
         
-        checker.checkLiterals(element);
+        processor.checkLiterals(element);
         
-        verify(checker, times(times)).check(any(), anyInt());
+        verify(processor, times(times)).check(any(), anyInt());
     }
     
     static Stream<Arguments> checkLiterals_parameters() {
@@ -139,12 +138,12 @@ class CompletionProcessorTest {
     @ParameterizedTest
     @MethodSource("checkRegistrations_parameters")
     void checkRegistrations(Registered[] registrations, int times) {
-        doNothing().when(checker).check(any(), anyInt());
+        doNothing().when(processor).check(any(), anyInt());
         when(element.getAnnotationsByType(Registered.class)).thenReturn(registrations);
         
-        checker.checkRegistrations(element);
+        processor.checkRegistrations(element);
         
-        verify(checker, times(times)).check(any(), anyInt());
+        verify(processor, times(times)).check(any(), anyInt());
     }
     
     static Stream<Arguments> checkRegistrations_parameters() {
@@ -172,10 +171,10 @@ class CompletionProcessorTest {
     @ParameterizedTest
     @CsvSource({"-1, 1, 0", "1, 0, 1", "0, 0, 0"})
     void check(int index, int boundTimes, int duplicateTimes) {
-        checker.init(environment);
-        checker.indexes.add(1);
+        processor.init(environment);
+        processor.indexes.add(1);
         
-        checker.check(element, index);
+        processor.check(element, index);
         
         verify(messager, times(boundTimes)).printMessage(ERROR, "Index out of bounds: " + index + ", index must be equal to or greater than 0", element);
         verify(messager, times(duplicateTimes)).printMessage(ERROR, "Conflicting indexes: " + index + ", indexes must be unique", element);

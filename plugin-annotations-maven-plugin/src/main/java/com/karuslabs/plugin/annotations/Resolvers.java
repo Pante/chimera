@@ -23,7 +23,7 @@
  */
 package com.karuslabs.plugin.annotations;
 
-import com.karuslabs.plugin.annotations.processors.*;
+import com.karuslabs.plugin.annotations.resolvers.*;
 
 import java.util.*;
 
@@ -34,38 +34,37 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class Processors {
+public class Resolvers {
     
-    private Resolver resolver;
-    private Set<Processor> processors;
+    private Provider provider;
+    private Set<Resolver> resolvers;
     
     
-    public Processors(Resolver resolver, Set<Processor> processors) {
-        this.resolver = resolver;
-        this.processors = processors;
+    public Resolvers(Provider provider, Set<Resolver> resolvers) {
+        this.provider = provider;
+        this.resolvers = resolvers;
     }
     
     
-    public void process(Log log, ConfigurationSection config) {      
-        Class<? extends JavaPlugin> plugin = resolver.resolve();
+    public void resolve(Log log, ConfigurationSection config) {      
+        Class<? extends JavaPlugin> plugin = provider.provide();
         
         log.info("Main class found, processing annotations");
-        for (Processor processor : processors) {
-            if (processor.isAnnotated(plugin)) {
-                processor.process(plugin, config);
+        for (Resolver resolver : resolvers) {
+            if (resolver.isResolvable(plugin)) {
+                resolver.resolve(plugin, config);
             }
         }
     }
     
     
-    public static Processors simple(MavenProject project, List<String> elements) {
-        Set<Processor> processors = new HashSet<>();
-        processors.add(new PluginProcessor(project));
-        processors.add(new InformationProcessor(project));
-        processors.add(new CommandProcessor());
-        processors.add(new PermissionProcessor());
+    public static Resolvers simple(MavenProject project, List<String> elements) {
+        Set<Resolver> resolvers = new HashSet<>(3);
+        resolvers.add(new PluginResolver(project));
+        resolvers.add(new CommandResolver());
+        resolvers.add(new PermissionResolver());
         
-        return new Processors(new Resolver(elements), processors);
+        return new Resolvers(new Provider(elements), resolvers);
     }
     
 }

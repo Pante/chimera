@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.configuration.Configurations;
 import com.karuslabs.plugin.annotations.annotations.Command;
@@ -41,9 +41,9 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class CommandProcessorTest {
+class CommandResolverTest {
     
-    CommandProcessor processor = spy(new CommandProcessor());
+    CommandResolver resolver = spy(new CommandResolver());
     ConfigurationSection config = Configurations.from(getClass().getClassLoader().getResourceAsStream("annotations.yml"));
     
     
@@ -61,8 +61,8 @@ class CommandProcessorTest {
     
     
     @Test
-    void process() {
-        processor.process(Valid.class, config);
+    void resolve() {
+        resolver.resolve(Valid.class, config);
         
         assertTrue(config.isConfigurationSection("commands.a"));
         assertEquals(asList("b", "c"), config.getStringList("commands.a.aliases"));
@@ -74,21 +74,20 @@ class CommandProcessorTest {
     
     
     @Test
-    void process_ThrowsException() {
-        assertEquals(
-            "Conflicting command names: b, command names must be unique",
-            assertThrows(ProcessorException.class, () -> processor.process(Invalid.class, config)).getMessage()
+    void resolve_ThrowsException() {
+        assertEquals("Conflicting command names: b, command names must be unique",
+            assertThrows(ResolutionException.class, () -> resolver.resolve(Invalid.class, config)).getMessage()
         );
     }
     
     
     @ParameterizedTest
-    @MethodSource("isAnnotated_parameters")
-    void isAnnotated(Class<? extends JavaPlugin> type, boolean expected) {
-        assertEquals(expected, processor.isAnnotated(type));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(Class<? extends JavaPlugin> type, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(type));
     }
     
-    static Stream<Arguments> isAnnotated_parameters() {
+    static Stream<Arguments> isResolvable_parameters() {
         return Stream.of(of(Valid.class, true), of(Invalid.class, true), of(JavaPlugin.class, false));
     }
     

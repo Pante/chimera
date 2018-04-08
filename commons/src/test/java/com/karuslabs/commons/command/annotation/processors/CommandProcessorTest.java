@@ -23,13 +23,10 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.annotation.processors.CommandProcessor;
 import com.karuslabs.commons.command.CommandExecutor;
-import com.karuslabs.commons.command.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
-import java.util.stream.Stream;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
@@ -42,13 +39,12 @@ import org.junit.jupiter.params.provider.*;
 import static java.util.Collections.singleton;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 class CommandProcessorTest {
     
-    CommandProcessor checker;
+    CommandProcessor processor;
     TypeElement element;
     Elements elements;
     Types types;
@@ -57,7 +53,7 @@ class CommandProcessorTest {
     
     
     CommandProcessorTest() {
-        checker = spy(new CommandProcessor());
+        processor = spy(new CommandProcessor());
         environment = mock(ProcessingEnvironment.class);
         element = mock(TypeElement.class);
         elements = mock(Elements.class);
@@ -82,10 +78,10 @@ class CommandProcessorTest {
     
     @Test
     void init() {
-        checker.init(environment);
+        processor.init(environment);
         
-        assertSame(element.asType(), checker.getExpected());
-        assertSame(messager, checker.getMessager());
+        assertSame(element.asType(), processor.getExpected());
+        assertSame(messager, processor.getMessager());
     }
     
     
@@ -118,13 +114,11 @@ class CommandProcessorTest {
                 return set;
             }
         };
-        doNothing().when(checker).checkAssignability(any());
-        doNothing().when(checker).checkNamespace(any());
+        doNothing().when(processor).checkAssignability(any());
         
-        boolean processed = checker.process(set, environment);
+        boolean processed = processor.process(set, environment);
         
-        verify(checker).checkAssignability(any());
-        verify(checker).checkNamespace(any());
+        verify(processor).checkAssignability(any());
         assertFalse(processed);
     }
     
@@ -134,38 +128,10 @@ class CommandProcessorTest {
     void checkAssignability(boolean assignable, int times) {
         when(types.isAssignable(any(), any())).thenReturn(assignable);
         
-        checker.init(environment);
-        checker.checkAssignability(element);
+        processor.init(environment);
+        processor.checkAssignability(element);
         
         verify(messager, times(times)).printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
     }
-    
-    
-    @ParameterizedTest
-    @MethodSource("checkNamespace_parameters")
-    void checkNamespace(Namespace[] namespaces, int times) {
-        when(element.getAnnotationsByType(Namespace.class)).thenReturn(namespaces);
-        
-        checker.init(environment);
-        checker.checkNamespace(element);
-        
-        verify(messager, times(times)).printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
-    }
-    
-    static Stream<Arguments> checkNamespace_parameters() {
-        Namespace namespace = new Namespace() {
-            @Override
-            public String[] value() {
-                return null;
-            }
 
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return Namespace.class;
-            }
-        };
-        
-        return Stream.of(of(new Namespace[] {namespace}, 0), of(new Namespace[] {}, 1));
-    }
-    
 }

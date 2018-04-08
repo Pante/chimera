@@ -21,48 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
-import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.command.completion.*;
 
 import java.util.List;
 
 
-public class RegisteredProvider implements Provider {
-    
-    private References references;
-    
-    
-    public RegisteredProvider(References references) {
-        this.references = references;
-    }
+public class LiteralResolver implements Resolver {
 
-    
     @Override
-    public void process(List<Command> commands, CommandExecutor executor) {
-        for (Registered registered : executor.getClass().getAnnotationsByType(Registered.class)) {
-            process(commands, executor, registered);
+    public void resolve(List<Command> commands, CommandExecutor executor) {
+        for (Literal literal : executor.getClass().getAnnotationsByType(Literal.class)) {
+            resolve(commands, executor, literal);
         }
     }
     
-    protected void process(List<Command> commands, CommandExecutor executor, Registered registered) {
-        Completion completion = references.getCompletion(registered.completion());
-        if (completion != null) {
-            for (Command command : commands) {
-                command.getCompletions().put(registered.index(), completion);
-            }
-            
-        } else {
-            throw new IllegalArgumentException("Unresolvable reference: \"" + registered.completion() + "\" for: " + executor.getClass().getName());
+    protected void resolve(List<Command> commands, CommandExecutor executor, Literal literal) {
+        Completion completion = new CachedCompletion(literal.completions());
+        for (Command command : commands) {
+            command.getCompletions().put(literal.index(), completion);
         }
     }
-    
 
     @Override
-    public boolean hasAnnotations(CommandExecutor executor) {
-        return executor.getClass().getAnnotationsByType(Registered.class).length != 0;
+    public boolean isResolvable(CommandExecutor executor) {
+        Class<? extends CommandExecutor> type = executor.getClass();
+        return type.getAnnotationsByType(Literal.class).length != 0;
     }
     
 }

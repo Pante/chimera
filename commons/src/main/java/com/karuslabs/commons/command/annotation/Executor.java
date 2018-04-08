@@ -21,37 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.annotation;
 
-import com.karuslabs.commons.command.completion.Completion;
-import com.karuslabs.commons.locale.MessageTranslation;
-import org.junit.jupiter.api.*;
+import java.lang.annotation.*;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@TestInstance(PER_CLASS)
-class ReferencesTest {
+@Documented
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Executor {
     
-    References references = new References();
-
-    
-    @Test
-    void command() {
-        assertSame(Command.NONE, references.command("a", Command.NONE).getCommand("a"));
-    }
-    
-    
-    @Test
-    void completion() {
-        assertSame(Completion.NONE, references.completion("b", Completion.NONE).getCompletion("b"));
-    }
-    
-    
-    @Test
-    void translation() {
-        assertSame(MessageTranslation.NONE, references.translation("c", MessageTranslation.NONE).getTranslation("c"));
-    }
+    String value();
     
 }

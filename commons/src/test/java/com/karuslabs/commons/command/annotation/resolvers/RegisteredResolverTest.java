@@ -21,31 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.commons.command.annotation.providers.LiteralProvider;
 import com.karuslabs.commons.command.*;
-import com.karuslabs.commons.command.annotation.Literal;
-import com.karuslabs.commons.command.completion.CachedCompletion;
+import com.karuslabs.commons.command.annotation.Registered;
+import com.karuslabs.commons.command.completion.Completion;
 
 import java.util.HashMap;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@TestInstance(PER_CLASS)
-class LiteralProviderTest {
+class RegisteredResolverTest {
     
-    @Literal(index = 0, completions = {"a", "b"})
+    @Registered(index = 0, completion = "completion")
     static class A implements CommandExecutor {
 
         @Override
@@ -55,10 +52,10 @@ class LiteralProviderTest {
         
     }
     
-    @Literal(index = 1, completions = {"c", "d"})
-    @Literal(index = 2, completions = {"e", "f"})
+    @Registered(index = 0, completion = "a")
+    @Registered(index = 1, completion = "b")
     static class B implements CommandExecutor {
-        
+
         @Override
         public boolean execute(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
             throw new UnsupportedOperationException("Not supported yet.");
@@ -67,29 +64,36 @@ class LiteralProviderTest {
     }
     
     
-    LiteralProvider processor = new LiteralProvider();
+    RegisteredResolver resolver = new RegisteredResolver(new References().completion("completion", Completion.NONE));
     Command command = when(mock(Command.class).getCompletions()).thenReturn(new HashMap<>()).getMock();
     
     
     @Test
-    void process() {
-        processor.process(asList(command), new B());
+    void resolve() {
+        resolver.resolve(asList(command), new A());
         
-        assertEquals(2, command.getCompletions().size());
-        assertEquals(asList("c", "d"), ((CachedCompletion) command.getCompletions().get(1)).getCompletions());
-        assertEquals(asList("e", "f"), ((CachedCompletion) command.getCompletions().get(2)).getCompletions());
+        assertSame(Completion.NONE, command.getCompletions().get(0));
+    }
+    
+    
+    @Test
+    void resolve_ThrowsException() {
+        assertEquals("Unresolvable reference: \"a\" for: " + B.class.getName(), 
+            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(asList(command), new B())).getMessage()
+        );
     }
     
     
     @ParameterizedTest
-    @MethodSource("hasAnnotations_parameters")
-    void hasAnnotations(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, processor.hasAnnotations(executor));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(CommandExecutor executor, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(executor));
     }
     
-    static Stream<Arguments> hasAnnotations_parameters() {
+    static Stream<Arguments> isResolvable_parameters() {
         CommandExecutor executor = (source, context, arguments) -> true;
         return Stream.of(of(new A(), true), of(new B(), true), of(executor, false));
     }
+    
     
 }

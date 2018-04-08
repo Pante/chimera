@@ -23,22 +23,15 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotation.providers.NamespaceProvider;
-import com.karuslabs.commons.command.annotation.providers.InformationProvider;
-import com.karuslabs.commons.command.annotation.providers.CommandResolver;
-import com.karuslabs.commons.command.annotation.providers.LiteralProvider;
-import com.karuslabs.commons.command.annotation.providers.RegisteredProvider;
-import com.karuslabs.commons.command.annotation.providers.ResourceProvider;
+import com.karuslabs.commons.command.annotation.resolvers.*;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
 
-import java.util.HashSet;
 import javax.annotation.Nullable;
 
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.configuration.Configurations.from;
-import static java.util.Arrays.asList;
 
 
 public class Commands {
@@ -47,24 +40,33 @@ public class Commands {
     ProxiedCommandMap map;
     Provider provider;
     References references;
-    CommandResolver processor;
+    CommandResolver resolver;
     
     
-    public Commands(Plugin plugin, Provider provider, References references, CommandResolver processor) {
-        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, processor);
+    public Commands(Plugin plugin, References references) {
+        this(plugin, Provider.DETECTED, references);
     }
     
-    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References references, CommandResolver processor) {
+    public Commands(Plugin plugin, Provider provider, References register) {
+        this(plugin, provider, register, CommandResolver.simple(plugin, register));
+    }
+    
+    public Commands(Plugin plugin, Provider provider, References references, CommandResolver register) {
+        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, register);
+    }
+    
+    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References register, CommandResolver resolver) {
         this.plugin = plugin;
         this.map = map;
         this.provider = provider;
-        this.references = references;
-        this.processor = processor;
+        this.references = register;
+        this.resolver = resolver;
     }
     
     
-    public void load(String path) {
+    public Commands load(String path) {
         map.registerAll(plugin.getName(), loadParser().parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+        return this;
     }
     
     protected Parser loadParser() {
@@ -72,8 +74,14 @@ public class Commands {
     }
     
     
-    public void register(CommandExecutor executor) {
-        processor.resolve(map, executor);
+    public Commands register(CommandExecutor executor) {
+        resolver.resolve(map, executor);
+        return this;
+    }
+    
+    public Commands register(CommandExecutor executor, String... namespace) {
+        resolver.resolve(map, executor, namespace);
+        return this;
     }
     
     
@@ -89,18 +97,8 @@ public class Commands {
         return references;
     }
     
-    public CommandResolver getProcessor() {
-        return processor;
-    }
-    
-    
-    public static Commands simple(Plugin plugin, Provider provider) {
-        References references = new References();
-        CommandResolver processor = new CommandResolver(
-            new HashSet<>(asList(new InformationProvider(), new LiteralProvider(), new RegisteredProvider(references), new ResourceProvider())), new NamespaceProvider(plugin)
-        );
-        
-        return new Commands(plugin, provider, references, processor);
+    public CommandResolver getResolver() {
+        return resolver;
     }
     
 }

@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command.annotation.processors;
 
 import com.karuslabs.commons.command.CommandExecutor;
-import com.karuslabs.commons.command.annotation.*;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -59,7 +58,6 @@ public class CommandProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         for (Element element : annotated(annotations, environment))  {
             checkAssignability(element);
-            checkNamespace(element);
         }
         
         return false;
@@ -68,12 +66,6 @@ public class CommandProcessor extends AbstractProcessor {
     protected void checkAssignability(Element element) {
         if (!processingEnv.getTypeUtils().isAssignable(element.asType(), expected)) {
             messager.printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
-        }
-    }
-    
-    protected void checkNamespace(Element element) {
-        if (element.getAnnotationsByType(Namespace.class).length == 0) {
-            messager.printMessage(ERROR, "Missing namespace: " + element.asType().toString() + ", command must be declared with a namespace", element);
         }
     }
     

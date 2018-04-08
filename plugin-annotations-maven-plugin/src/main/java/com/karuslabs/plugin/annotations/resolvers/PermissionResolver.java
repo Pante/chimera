@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.util.Null;
 import com.karuslabs.plugin.annotations.annotations.*;
@@ -32,59 +32,59 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class PermissionProcessor implements Processor {
+public class PermissionResolver implements Resolver {
     
     Set<String> names;
     
     
-    public PermissionProcessor() {
+    public PermissionResolver() {
         names = new HashSet<>();
     }
 
     
     @Override
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void resolve(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Permission[] permissions = plugin.getAnnotationsByType(Permission.class);
         if (permissions.length != 0) {
             config = config.createSection("permissions");
             for (Permission permission : permissions) {
                 if (!names.add(permission.name())) {
-                    throw new ProcessorException("Conflicting permissions: " + permission.name() + ", permissions must be unique");
+                    throw new ResolutionException("Conflicting permissions: " + permission.name() + ", permissions must be unique");
                 }
             }
             
             for (Permission permission : permissions) {
-                process(permission, config);
+                PermissionResolver.this.resolve(permission, config);
             }
         }
     }
     
-    protected void process(Permission permission, ConfigurationSection config) {
+    protected void resolve(Permission permission, ConfigurationSection config) {
         if (!permission.description().isEmpty() || permission.children().length != 0) {
             config = config.createSection(permission.name());
             config.set("description", Null.ifEmpty(permission.description()));
             config.set("default", permission.value().getName());
-            process(permission.children(), config);
+            resolve(permission.children(), config);
             
         } else {
             config.set(permission.name(), permission.value().getName());
         }
     }
     
-    protected void process(Child[] annotations, ConfigurationSection config) {
+    protected void resolve(Child[] annotations, ConfigurationSection config) {
         Set<String> children = new HashSet<>();
         if (annotations.length != 0) {
             config = config.createSection("children");
             for (Child child : annotations) {
                 if (!names.contains(child.name())) {
-                    throw new ProcessorException("Invalid child permission: " + child.name() + ", child permission must refer to a valid permission");
+                    throw new ResolutionException("Invalid child permission: " + child.name() + ", child permission must refer to a valid permission");
                 }
                 
                 if (children.add(child.name())) {
                     config.set(child.name(), child.value());
                     
                 } else {
-                    throw new ProcessorException("Conflicting child permissions: " + child.name() + ", children must be unique");
+                    throw new ResolutionException("Conflicting child permissions: " + child.name() + ", children must be unique");
                 }
             }
         }
@@ -92,7 +92,7 @@ public class PermissionProcessor implements Processor {
     
     
     @Override
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
+    public boolean isResolvable(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotationsByType(Permission.class).length != 0;
     }
     

@@ -21,18 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.commons.command;
+
+import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.locale.MessageTranslation;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
-import org.bukkit.configuration.ConfigurationSection;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
-
-public interface Processor {
+@TestInstance(PER_CLASS)
+class RegisterTest {
     
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config);
+    References register = new References();
+
     
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin);
+    @Test
+    void command() {
+        assertSame(Command.NONE, register.command("a", Command.NONE).getCommand("a"));
+    }
+    
+    
+    @Test
+    void completion() {
+        assertSame(Completion.NONE, register.completion("b", Completion.NONE).getCompletion("b"));
+    }
+    
+    
+    @Test
+    void translation() {
+        assertSame(MessageTranslation.NONE, register.translation("c", MessageTranslation.NONE).getTranslation("c"));
+    }
     
 }

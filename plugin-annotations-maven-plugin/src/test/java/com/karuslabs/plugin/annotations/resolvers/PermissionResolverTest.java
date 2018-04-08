@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.configuration.Configurations;
 import com.karuslabs.plugin.annotations.annotations.*;
@@ -40,9 +40,9 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class PermissionProcessorTest {
+class PermissionResolverTest {
     
-    PermissionProcessor processor = spy(new PermissionProcessor());
+    PermissionResolver resolver = spy(new PermissionResolver());
     ConfigurationSection config = Configurations.from(getClass().getClassLoader().getResourceAsStream("annotations.yml"));
     
     
@@ -63,8 +63,8 @@ class PermissionProcessorTest {
     
     
     @Test
-    void process() {
-        processor.process(Valid.class, config);
+    void resolve() {
+        resolver.resolve(Valid.class, config);
         
         assertEquals("a description", config.getString("permissions.a.description"));
         assertEquals(true, config.getBoolean("permissions.a.children.b"));
@@ -73,15 +73,14 @@ class PermissionProcessorTest {
     
     
     @ParameterizedTest
-    @MethodSource("process_ThrowsException_parameters")
-    void process_ThrowsExceptions(Class<? extends JavaPlugin> type, String message) {
-        assertEquals(
-            message,
-            assertThrows(ProcessorException.class, () -> processor.process(type, config)).getMessage()
+    @MethodSource("resolve_ThrowsException_parameters")
+    void resolve_ThrowsExceptions(Class<? extends JavaPlugin> type, String message) {
+        assertEquals(message,
+            assertThrows(ResolutionException.class, () -> resolver.resolve(type, config)).getMessage()
         );
     }
     
-    static Stream<Arguments> process_ThrowsException_parameters() {
+    static Stream<Arguments> resolve_ThrowsException_parameters() {
         return Stream.of(
             of(Conflicting_Permissions.class, "Conflicting permissions: a, permissions must be unique"),
             of(Invalid_Child.class, "Invalid child permission: b, child permission must refer to a valid permission"),
@@ -91,12 +90,12 @@ class PermissionProcessorTest {
     
     
     @ParameterizedTest
-    @MethodSource("isAnnotated_parameters")
-    void isAnnotated(Class<? extends JavaPlugin> type, boolean expected) {
-        assertEquals(expected, processor.isAnnotated(type));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(Class<? extends JavaPlugin> type, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(type));
     }
     
-    static Stream<Arguments> isAnnotated_parameters() {
+    static Stream<Arguments> isResolvable_parameters() {
         return Stream.of(of(Valid.class, true), of(Conflicting_Permissions.class, true), of(JavaPlugin.class, false));
     }
     

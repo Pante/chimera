@@ -41,7 +41,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
-@Mojo(name = "validate-commands", defaultPhase = COMPILE)
+@Mojo(name = "validate-commands-yml", defaultPhase = COMPILE)
 public class ValidatorMojo extends AbstractMojo {
     
     @Parameter(defaultValue = "${project.basedir}/src/main/resources/commands.yml")

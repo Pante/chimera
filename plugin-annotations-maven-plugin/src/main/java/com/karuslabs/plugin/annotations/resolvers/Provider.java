@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.plugin.annotations.annotations.Plugin;
 
@@ -36,26 +36,26 @@ import org.reflections.Reflections;
 import static java.util.stream.Collectors.toSet;
 
 
-public class Resolver {
+public class Provider {
     
     private List<String> elements;
     
     
-    public Resolver(List<String> elements) {
+    public Provider(List<String> elements) {
         this.elements = elements;
     }
     
     
-    public Class<? extends JavaPlugin> resolve() {
+    public Class<? extends JavaPlugin> provide() {
         Set<Class<? extends JavaPlugin>> plugins = load();
         if (plugins.size() == 1) {
             return plugins.toArray(new Class[] {})[0];
             
         } else if (plugins.isEmpty()) {
-            throw new ProcessorException("Failed to find JavaPlugin subclass annotated with @Plugin");
+            throw new ResolutionException("Failed to find JavaPlugin subclass annotated with @Plugin");
             
         } else {
-            throw new ProcessorException("Conflicting main classes, project must contain only 1 JavaPlugin subclass annotated with @Plugin");
+            throw new ResolutionException("Conflicting main classes, project must contain only 1 JavaPlugin subclass annotated with @Plugin");
         }
     }
     

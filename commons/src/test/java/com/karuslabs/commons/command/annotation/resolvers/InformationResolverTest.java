@@ -21,29 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.commons.command.annotation.providers.RegisteredProvider;
 import com.karuslabs.commons.command.*;
-import com.karuslabs.commons.command.annotation.Registered;
-import com.karuslabs.commons.command.completion.Completion;
+import com.karuslabs.commons.command.annotation.Information;
 
-import java.util.HashMap;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class RegisteredProviderTest {
+@TestInstance(PER_CLASS)
+class InformationResolverTest {
     
-    @Registered(index = 0, completion = "completion")
+    @Information(aliases = {"a", "b"}, description = "a description", permission = "a.permission", message = "a message", usage = "a usage")
     static class A implements CommandExecutor {
 
         @Override
@@ -53,8 +52,6 @@ class RegisteredProviderTest {
         
     }
     
-    @Registered(index = 0, completion = "a")
-    @Registered(index = 1, completion = "b")
     static class B implements CommandExecutor {
 
         @Override
@@ -65,37 +62,30 @@ class RegisteredProviderTest {
     }
     
     
-    RegisteredProvider processor = new RegisteredProvider(new References().completion("completion", Completion.NONE));
-    Command command = when(mock(Command.class).getCompletions()).thenReturn(new HashMap<>()).getMock();
+    InformationResolver resolver = new InformationResolver();
+    Command command = mock(Command.class);
     
     
     @Test
-    void process() {
-        processor.process(asList(command), new A());
+    void resolve() {
+        resolver.resolve(asList(command), new A());
         
-        assertSame(Completion.NONE, command.getCompletions().get(0));
-    }
-    
-    
-    @Test
-    void process_ThrowsException() {
-        assertEquals(
-            "Unresolvable reference: \"a\" for: " + B.class.getName(), 
-            assertThrows(IllegalArgumentException.class, () -> processor.process(asList(command), new B())).getMessage()
-        );
+        command.setAliases(asList("a", "b"));
+        command.setDescription("a description");
+        command.setPermission("a.permission");
+        command.setPermissionMessage("a message");
+        command.setUsage("a usage");
     }
     
     
     @ParameterizedTest
-    @MethodSource("hasAnnotations_parameters")
-    void hasAnnotations(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, processor.hasAnnotations(executor));
+    @MethodSource("isResolvable_parameters")
+    void isResolvable(CommandExecutor executor, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(executor));
     }
     
-    static Stream<Arguments> hasAnnotations_parameters() {
-        CommandExecutor executor = (source, context, arguments) -> true;
-        return Stream.of(of(new A(), true), of(new B(), true), of(executor, false));
+    static Stream<Arguments> isResolvable_parameters() {
+        return Stream.of(of(new A(), true), of(new B(), false));
     }
-    
     
 }

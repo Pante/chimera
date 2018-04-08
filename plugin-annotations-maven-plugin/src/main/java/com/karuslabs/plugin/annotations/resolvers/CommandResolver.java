@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.util.Null;
 import com.karuslabs.plugin.annotations.annotations.Command;
@@ -32,26 +32,26 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public class CommandProcessor implements Processor {
+public class CommandResolver implements Resolver {
 
     @Override
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+    public void resolve(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
         Set<String> names = new HashSet<>();
         Command[] commands = plugin.getAnnotationsByType(Command.class);
         if (commands.length != 0) {
             config = config.createSection("commands");
             for (Command command : commands) {
                 if (names.add(command.name())) {
-                    process(command, config);
+                    resolve(command, config);
 
                 } else {
-                    throw new ProcessorException("Conflicting command names: " + command.name() + ", command names must be unique");
+                    throw new ResolutionException("Conflicting command names: " + command.name() + ", command names must be unique");
                 }
             }
         }
     }
     
-    protected void process(Command command, ConfigurationSection config) {
+    protected void resolve(Command command, ConfigurationSection config) {
         config = config.createSection(command.name());
         config.set("aliases", Null.ifEmpty(command.aliases()));
         config.set("description", Null.ifEmpty(command.description()));
@@ -61,7 +61,7 @@ public class CommandProcessor implements Processor {
     }
 
     @Override
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
+    public boolean isResolvable(Class<? extends JavaPlugin> plugin) {
         return plugin.getAnnotationsByType(Command.class).length != 0;
     }
     

@@ -21,40 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 
-import java.util.*;
+import java.util.List;
 
 
-public class CommandResolver {
+public interface Resolver {
     
-    private Set<Provider> processors;
-    private Resolver resolver;
+    public void resolve(List<Command> commands, CommandExecutor executor);
     
-    
-    public CommandResolver(Set<Provider> processors, Resolver resolver) {
-        this.processors = processors;
-        this.resolver = resolver;
-    }
-    
-    
-    public void resolve(ProxiedCommandMap map, CommandExecutor executor) {
-        if (!resolver.isResolvable(executor)) {
-            throw new IllegalArgumentException("unresolvable CommandExecutor: " + executor.getClass().getName());
-        }
-        
-        List<Command> commands = resolver.resolve(map, executor);
-        for (Provider processor : processors) {
-            if (processor.hasAnnotations(executor)) {
-                processor.process(commands, executor);
-            }
-        }
-        
-        for (Command command : commands) {
-            command.setExecutor(executor);
-        }
-    }
+    public boolean isResolvable(CommandExecutor executor);
     
 }

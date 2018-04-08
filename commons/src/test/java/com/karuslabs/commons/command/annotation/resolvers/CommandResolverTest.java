@@ -21,26 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.commons.command.annotation.providers.NamespaceProvider;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Namespace;
 
-import java.util.HashMap;
-import java.util.stream.Stream;
+import java.util.*;
+
+import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.mockito.ArgumentCaptor;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-class NamespaceProviderTest {
+class CommandResolverTest {
+    
+    static CommandExecutor A = new A();
     
     @Namespace({})
     static class A implements CommandExecutor {
@@ -51,6 +52,8 @@ class NamespaceProviderTest {
         }
         
     }
+    
+    static CommandExecutor B = new B();
     
     @Namespace({"a", "b"})
     @Namespace({"c"})
@@ -64,30 +67,62 @@ class NamespaceProviderTest {
     }
     
     
-    NamespaceProvider resolver = new NamespaceProvider(null);
+    LiteralResolver literal = mock(LiteralResolver.class);
+    CommandResolver resolver = spy(new CommandResolver(null, singleton(literal)));
     ProxiedCommandMap map = mock(ProxiedCommandMap.class);
+    Command command = mock(Command.class);
     Command a = mock(Command.class);
     Command b = mock(Command.class);
     Command c = mock(Command.class);
     
     
     @Test
-    void resolve() {
+    void resolve_Annotation() {
+        List<Command> commands = singletonList(command);
+        doReturn(commands).when(resolver).find(map, A);
+        when(literal.isResolvable(any())).thenReturn(true);
+        
+        resolver.resolve(map, A);
+        
+        verify(literal).resolve(commands, A);
+        verify(command).setExecutor(A);
+    }
+    
+    
+    @Test
+    void resolve_Annotation_ThrowsException() {
+        assertEquals("Unresolvable CommandExecutor: " + CommandExecutor.NONE.getClass().getName(),
+            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, CommandExecutor.NONE)).getMessage()
+        );
+    }
+    
+    
+    @Test
+    void resolve_Varargs() {
+        ArgumentCaptor<Command> captor = ArgumentCaptor.forClass(Command.class);
+        resolver.resolve(map, A, "command name");
+        
+        verify(map).register(eq("command name"), captor.capture());
+        assertEquals(A, captor.getValue().getExecutor());
+    }
+    
+    
+    @Test
+    void find_Annotation() {
         when(map.getCommand("a")).thenReturn(a);
         when(a.getSubcommands()).thenReturn(new HashMap<>(1));
         a.getSubcommands().put("b", b);
         
         when(map.getCommand("c")).thenReturn(c);
         
-        assertEquals(asList(b, c), resolver.resolve(map, new B()));
+        assertEquals(asList(b, c), resolver.find(map, new B()));
     }
     
     
     @Test
-    void resolve_empty_ThrowsException() {
-        assertEquals(
-            "Invalid namespace for: " + A.class.getName() + ", namespace cannot be empty",
-            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, new A())).getMessage()
+    void find_Annotation_ThrowsException() {
+        assertEquals("Invalid namespace for: " + A.class.getName() + ", namespace cannot be empty",
+            assertThrows(IllegalArgumentException.class, () -> resolver.find(map, new A())).getMessage()
         );
     }
     
@@ -101,15 +136,12 @@ class NamespaceProviderTest {
     }
     
     
-    @ParameterizedTest
-    @MethodSource("isResolvable_parameters")
-    void isResolvable(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, resolver.isResolvable(executor));
-    }
-    
-    static Stream<Arguments> isResolvable_parameters() {
-        CommandExecutor executor = (source, context, arguments) -> true;
-        return Stream.of(of(new A(), true), of(new B(), true), of(executor, false));
+    @Test
+    void simple() {
+        Plugin plugin = mock(Plugin.class);
+        resolver = CommandResolver.simple(plugin, new References());
+        
+        assertEquals(4, resolver.resolvers.size());
     }
     
 }

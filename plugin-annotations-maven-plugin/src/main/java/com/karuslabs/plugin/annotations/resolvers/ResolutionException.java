@@ -21,17 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
-
-import com.karuslabs.commons.command.*;
-
-import java.util.List;
+package com.karuslabs.plugin.annotations.resolvers;
 
 
-public interface Resolver {
+public class ResolutionException extends RuntimeException {
     
-    public List<Command> resolve(ProxiedCommandMap map, CommandExecutor executor);
-    
-    public boolean isResolvable(CommandExecutor executor);
+    public ResolutionException(String message) {
+        super(message);
+    }
     
 }
+

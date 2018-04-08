@@ -25,6 +25,7 @@ package com.karuslabs.plugin.annotations.annotations;
 
 import java.lang.annotation.*;
 
+import static com.karuslabs.plugin.annotations.annotations.Load.POSTWORLD;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -37,5 +38,25 @@ public @interface Plugin {
     String name() default "${project.name}";
     
     String version() default "${project.version}";
+    
+    String description() default "${project.description}";
+    
+    String author() default "";
+    
+    String[] authors() default {"${project.developers}"};
+    
+    String prefix() default "";
+    
+    String website() default "${project.url}";
+    
+    boolean database() default false;
+    
+    String[] depend() default {};
+    
+    String[] softdepend() default {};
+    
+    String[] loadbefore() default {};
+    
+    Load load() default POSTWORLD;
     
 }

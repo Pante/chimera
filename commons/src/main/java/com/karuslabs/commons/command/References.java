@@ -34,6 +34,7 @@ public class References {
     private Map<String, Command> commands;
     private Map<String, Completion> completions;
     private Map<String, MessageTranslation> translations;
+    private Map<String, CommandExecutor> executors;
     
     
     public References() {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation.providers;
+package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.locale.*;
@@ -30,10 +30,10 @@ import com.karuslabs.commons.locale.annotation.*;
 import java.util.List;
 
 
-public class ResourceProvider implements Provider {
+public class ResourceResolver implements Resolver {
 
     @Override
-    public void process(List<Command> commands, CommandExecutor executor) {
+    public void resolve(List<Command> commands, CommandExecutor executor) {
         MessageTranslation translation = translation(executor);
         for (Command command : commands) {
             command.setTranslation(translation);
@@ -62,7 +62,7 @@ public class ResourceProvider implements Provider {
     }
 
     @Override
-    public boolean hasAnnotations(CommandExecutor executor) {
+    public boolean isResolvable(CommandExecutor executor) {
         Class<? extends CommandExecutor> type = executor.getClass();
         return type.getAnnotation(Bundle.class) != null && (type.getAnnotation(EmbeddedResources.class) != null || type.getAnnotation(ExternalResources.class) != null);
     }

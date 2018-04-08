@@ -37,7 +37,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
     "com.karuslabs.commons.locale.annotation.Bundle",
     "com.karuslabs.commons.locale.annotation.EmbeddedResources", "com.karuslabs.commons.locale.annotation.ExternalResources"
 })
-public class ResourceChecker extends AbstractProcessor {
+public class ResourceProcessor extends AbstractProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
@@ -47,18 +47,18 @@ public class ResourceChecker extends AbstractProcessor {
             }
             
             if (element.getAnnotation(EmbeddedResources.class) != null) {
-                check(element, element.getAnnotation(EmbeddedResources.class).value());
+                process(element, element.getAnnotation(EmbeddedResources.class).value());
             }
             
             if (element.getAnnotation(ExternalResources.class) != null) {
-                check(element, element.getAnnotation(ExternalResources.class).value());
+                process(element, element.getAnnotation(ExternalResources.class).value());
             }
         }
 
         return false;
     }
     
-    protected void check(Element element, String[] values) {
+    protected void process(Element element, String[] values) {
         if (values.length > 1) {
             for (int i = 0; i < values.length; i++) {
                 for (int j = i + 1; j < values.length; j++) {           

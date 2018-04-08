@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.commons.util.Null;
-import com.karuslabs.plugin.annotations.annotations.Information;
+import com.karuslabs.plugin.annotations.annotations.Plugin;
 
 import java.util.List;
 
@@ -38,33 +38,58 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 
-public class InformationProcessor implements Processor {
+public class PluginResolver implements Resolver {
     
     private MavenProject project;
     
     
-    public InformationProcessor(MavenProject project) {
+    public PluginResolver(MavenProject project) {
         this.project = project;
     }
     
     
     @Override
-    public void process(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
-        Information information = plugin.getAnnotation(Information.class);
+    public void resolve(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+        Plugin annotation = plugin.getAnnotation(Plugin.class);
+        name(annotation, config);
+        main(plugin, config);
+        version(annotation, config);
         
-        description(information, config);
-        config.set("author", Null.ifEmpty(information.author()));
-        authors(information, config);
-        config.set("prefix", Null.ifEmpty(information.prefix()));
-        website(information, config);
-        config.set("database", Null.ifEquals(information.database(), false));
-        config.set("depend", Null.ifEmpty(information.depend()));
-        config.set("softdepend", Null.ifEmpty(information.softdepend()));
-        config.set("loadbefore", Null.ifEmpty(information.loadbefore()));
-        config.set("load", information.load().getName());
+        description(annotation, config);
+        config.set("author", Null.ifEmpty(annotation.author()));
+        authors(annotation, config);
+        config.set("prefix", Null.ifEmpty(annotation.prefix()));
+        website(annotation, config);
+        config.set("database", Null.ifEquals(annotation.database(), false));
+        config.set("depend", Null.ifEmpty(annotation.depend()));
+        config.set("softdepend", Null.ifEmpty(annotation.softdepend()));
+        config.set("loadbefore", Null.ifEmpty(annotation.loadbefore()));
+        config.set("load", annotation.load().getName());
     }
     
-    protected void description(Information information, ConfigurationSection config) {
+    protected void name(Plugin annotation, ConfigurationSection config) {
+        if (annotation.name().equals("${project.name}")) {
+            config.set("name", project.getName());
+            
+        } else {
+            config.set("name", annotation.name());
+        }
+    }
+    
+    protected void main(Class<? extends JavaPlugin> plugin, ConfigurationSection config) {
+        config.set("main", plugin.getName());
+    }
+    
+    protected void version(Plugin annotation, ConfigurationSection config) {
+        if (annotation.version().equals("${project.version}")) {
+            config.set("version", project.getVersion());
+            
+        } else {
+            config.set("version", annotation.version());
+        }
+    }
+    
+    protected void description(Plugin information, ConfigurationSection config) {
         if (information.description().equals("${project.description}")) {
             config.set("description", project.getDescription());
             
@@ -73,7 +98,7 @@ public class InformationProcessor implements Processor {
         }
     }
     
-    protected void authors(Information information, ConfigurationSection config) {
+    protected void authors(Plugin information, ConfigurationSection config) {
         if (information.authors().length == 1 && information.authors()[0].equals("${project.developers}")) {
             List<Developer> developers = project.getDevelopers();
             config.set("authors", developers.stream().map(Developer::getName).collect(toList()));
@@ -83,7 +108,7 @@ public class InformationProcessor implements Processor {
         }
     }
     
-    protected void website(Information information, ConfigurationSection config) {
+    protected void website(Plugin information, ConfigurationSection config) {
         if (information.website().equals("${project.url}")) {
             config.set("website", project.getUrl());
             
@@ -94,8 +119,8 @@ public class InformationProcessor implements Processor {
 
     
     @Override
-    public boolean isAnnotated(Class<? extends JavaPlugin> plugin) {
-        return plugin.getAnnotation(Information.class) != null;
+    public boolean isResolvable(Class<? extends JavaPlugin> plugin) {
+        return plugin.getAnnotation(Plugin.class) != null;
     }
     
 }

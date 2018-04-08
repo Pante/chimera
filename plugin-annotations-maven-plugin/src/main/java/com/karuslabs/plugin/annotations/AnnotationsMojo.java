@@ -52,8 +52,7 @@ public class AnnotationsMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         YamlConfiguration config = loadConfiguration();
-        Processors processors = processors();
-        processors.process(getLog(), config);
+        resolvers().resolve(getLog(), config);
 
         try {
             config.save(file);
@@ -73,8 +72,8 @@ public class AnnotationsMojo extends AbstractMojo {
         }
     }
     
-    protected Processors processors() {
-        return Processors.simple(project, elements);
+    protected Resolvers resolvers() {
+        return Resolvers.simple(project, elements);
     }
     
 }

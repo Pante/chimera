@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.locale.annotation.processors;
 
-import com.karuslabs.commons.locale.annotation.processors.ResourceChecker;
 import com.karuslabs.commons.locale.annotation.*;
 
 import java.lang.annotation.Annotation;
@@ -46,7 +45,7 @@ import static org.mockito.Mockito.*;
 
 class ResourceProcessorTest {
     
-    ResourceChecker checker = spy(new ResourceChecker());
+    ResourceProcessor processor = spy(new ResourceProcessor());
     Messager messager = mock(Messager.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     TypeMirror mirror = mock(TypeMirror.class);
@@ -82,7 +81,7 @@ class ResourceProcessorTest {
     
     @Test
     void annotations() throws ClassNotFoundException {
-        for (String supported: ResourceChecker.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
+        for (String supported: ResourceProcessor.class.getAnnotation(SupportedAnnotationTypes.class).value()) {
             assertTrue(Class.forName(supported).isAnnotation());
         }
     }
@@ -114,24 +113,24 @@ class ResourceProcessorTest {
             }
         });
         
-        checker.init(environment);
+        processor.init(environment);
         
-        assertFalse(checker.process(singleton(element), round));
+        assertFalse(processor.process(singleton(element), round));
         verify(messager).printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
-        verify(checker, times(2)).check(eq(element), any());
+        verify(processor, times(2)).process(eq(element), any());
     }
     
     
     @ParameterizedTest
-    @MethodSource("check_parameters")
-    void check(String[] values, int times) {
-        checker.init(environment);
+    @MethodSource("process_parameters")
+    void process(String[] values, int times) {
+        processor.init(environment);
         
-        checker.check(element, values);
+        processor.process(element, values);
         verify(messager, times(times)).printMessage(eq(ERROR), any(String.class), eq(element));
     }
     
-    static Stream<Arguments> check_parameters() {
+    static Stream<Arguments> process_parameters() {
         return Stream.of(
             of(new String[] {}, 1),
             of(new String[] {"hey", "there", "hey"}, 1),

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.plugin.annotations.processors;
+package com.karuslabs.plugin.annotations.resolvers;
 
 import com.karuslabs.plugin.annotations.plugin.TestPlugin;
 
@@ -37,47 +37,45 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class ResolverTest {
+class ProviderTest {
     
-    Resolver resolver = spy(new Resolver(asList(TestPlugin.class.getResource("").getPath())));
+    Provider provider = spy(new Provider(asList(TestPlugin.class.getResource("").getPath())));
     
     
     @Test
-    void resolve() {
-        doReturn(singleton(TestPlugin.class)).when(resolver).load();
+    void provide() {
+        doReturn(singleton(TestPlugin.class)).when(provider).load();
         
-        assertEquals(TestPlugin.class, resolver.resolve());
+        assertEquals(TestPlugin.class, provider.provide());
     }
     
     @Test
-    void resolve_empty_ThrowsException() {
-        doReturn(EMPTY_SET).when(resolver).load();
+    void provide_empty_ThrowsException() {
+        doReturn(EMPTY_SET).when(provider).load();
         
-        assertEquals(
-            "Failed to find JavaPlugin subclass annotated with @Plugin",
-            assertThrows(ProcessorException.class, resolver::resolve).getMessage()
+        assertEquals("Failed to find JavaPlugin subclass annotated with @Plugin",
+            assertThrows(ResolutionException.class, provider::provide).getMessage()
         );
     }
     
     
     @Test
-    void resolve_multiple_ThrowsException() {
+    void provide_multiple_ThrowsException() {
         Set<Class<? extends JavaPlugin>> classes = new HashSet<>();
         classes.add(JavaPlugin.class);
         classes.add(TestPlugin.class);
         
-        doReturn(classes).when(resolver).load();
+        doReturn(classes).when(provider).load();
         
-        assertEquals(
-            "Conflicting main classes, project must contain only 1 JavaPlugin subclass annotated with @Plugin",
-            assertThrows(ProcessorException.class, resolver::resolve).getMessage()
+        assertEquals("Conflicting main classes, project must contain only 1 JavaPlugin subclass annotated with @Plugin",
+            assertThrows(ResolutionException.class, provider::provide).getMessage()
         );
     }
     
     
     @Test
     void load() {
-        Set<Class<? extends JavaPlugin>> classes = resolver.load();
+        Set<Class<? extends JavaPlugin>> classes = provider.load();
         
         assertEquals(1, classes.size());
         assertEquals(TestPlugin.class, classes.toArray(new Class[0])[0]);
