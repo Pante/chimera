@@ -33,8 +33,9 @@ import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -78,13 +79,12 @@ class CommandResolverTest {
     
     @Test
     void resolve_Annotation() {
-        List<Command> commands = singletonList(command);
-        doReturn(commands).when(resolver).find(map, A);
+        doReturn(new Command[] {command}).when(resolver).find(map, A);
         when(literal.isResolvable(any())).thenReturn(true);
         
         resolver.resolve(map, A);
         
-        verify(literal).resolve(commands, A);
+        verify(literal).resolve(A, command);
         verify(command).setExecutor(A);
     }
     
@@ -115,7 +115,7 @@ class CommandResolverTest {
         
         when(map.getCommand("c")).thenReturn(c);
         
-        assertEquals(asList(b, c), resolver.find(map, new B()));
+        assertThat(resolver.find(map, new B()), equalTo(new Command[] {b, c}));
     }
     
     

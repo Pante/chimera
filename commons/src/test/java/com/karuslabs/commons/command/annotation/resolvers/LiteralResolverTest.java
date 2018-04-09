@@ -72,7 +72,7 @@ class LiteralResolverTest {
     
     @Test
     void resolve() {
-        resolver.resolve(asList(command), new B());
+        resolver.resolve(new B(), command);
         
         assertEquals(2, command.getCompletions().size());
         assertEquals(asList("c", "d"), ((CachedCompletion) command.getCompletions().get(1)).getCompletions());

@@ -25,6 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
+
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -32,26 +33,32 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
 @TestInstance(PER_CLASS)
-class RegisterTest {
+class ReferencesTest {
     
-    References register = new References();
+    References references = new References();
 
     
     @Test
     void command() {
-        assertSame(Command.NONE, register.command("a", Command.NONE).getCommand("a"));
+        assertSame(Command.NONE, references.command("a", Command.NONE).getCommand("a"));
     }
     
     
     @Test
     void completion() {
-        assertSame(Completion.NONE, register.completion("b", Completion.NONE).getCompletion("b"));
+        assertSame(Completion.NONE, references.completion("b", Completion.NONE).getCompletion("b"));
+    }
+    
+    
+    @Test
+    void executor() {
+        assertSame(CommandExecutor.NONE, references.executor("b", CommandExecutor.NONE).getExecutor("b"));
     }
     
     
     @Test
     void translation() {
-        assertSame(MessageTranslation.NONE, register.translation("c", MessageTranslation.NONE).getTranslation("c"));
+        assertSame(MessageTranslation.NONE, references.translation("c", MessageTranslation.NONE).getTranslation("c"));
     }
     
 }

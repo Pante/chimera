@@ -34,7 +34,7 @@ import static java.util.Arrays.asList;
 public class InformationResolver implements Resolver {
 
     @Override
-    public void resolve(List<Command> commands, CommandExecutor executor) {
+    public void resolve(CommandExecutor executor, Command... commands) {
         Information annotation = executor.getClass().getAnnotation(Information.class);
         List<String> aliases = asList(annotation.aliases());
         

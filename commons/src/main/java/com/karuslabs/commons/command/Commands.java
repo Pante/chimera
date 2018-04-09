@@ -47,19 +47,19 @@ public class Commands {
         this(plugin, Provider.DETECTED, references);
     }
     
-    public Commands(Plugin plugin, Provider provider, References register) {
-        this(plugin, provider, register, CommandResolver.simple(plugin, register));
+    public Commands(Plugin plugin, Provider provider, References references) {
+        this(plugin, provider, references, CommandResolver.simple(plugin, references));
     }
     
-    public Commands(Plugin plugin, Provider provider, References references, CommandResolver register) {
-        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, register);
+    public Commands(Plugin plugin, Provider provider, References references, CommandResolver resolver) {
+        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, resolver);
     }
     
-    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References register, CommandResolver resolver) {
+    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References references, CommandResolver resolver) {
         this.plugin = plugin;
         this.map = map;
         this.provider = provider;
-        this.references = register;
+        this.references = references;
         this.resolver = resolver;
     }
     

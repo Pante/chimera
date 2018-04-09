@@ -36,6 +36,7 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.command.completion.Completion.PLAYER_NAMES;
+import static java.util.Arrays.asList;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 
@@ -126,7 +127,10 @@ public class Command extends org.bukkit.command.Command implements PluginIdentif
         }
     }
     
-
+    public void setAliases(String... aliases) {
+        setAliases(asList(aliases));
+    }
+    
     @Override
     public Plugin getPlugin() {
         return plugin;

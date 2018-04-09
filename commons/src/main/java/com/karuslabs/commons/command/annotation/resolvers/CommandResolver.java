@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.annotation.resolvers;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Namespace;
 
@@ -31,9 +30,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import org.bukkit.plugin.Plugin;
-
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 
 
 public class CommandResolver {
@@ -50,7 +46,7 @@ public class CommandResolver {
     
     public void resolve(ProxiedCommandMap map, CommandExecutor executor) {
         if (executor.getClass().getAnnotationsByType(Namespace.class).length > 0) {
-            resolve(find(map, executor), executor);
+            resolve(executor, find(map, executor));
             
         } else {
             throw new IllegalArgumentException("Unresolvable CommandExecutor: " + executor.getClass().getName());
@@ -58,14 +54,13 @@ public class CommandResolver {
     }
     
     public void resolve(ProxiedCommandMap map, CommandExecutor executor, String... namespace) {
-        resolve(asList(find(map, executor, namespace)), executor);
+        resolve(executor, find(map, executor, namespace));
     }
-    
-    
-    public void resolve(List<Command> commands, CommandExecutor executor) {
+
+    public void resolve(CommandExecutor executor, Command... commands) {
         for (Resolver resolver : resolvers) {
             if (resolver.isResolvable(executor)) {
-                resolver.resolve(commands, executor);
+                resolver.resolve(executor, commands);
             }
         }
 
@@ -75,8 +70,8 @@ public class CommandResolver {
     }
     
     
-    protected List<Command> find(ProxiedCommandMap map, CommandExecutor executor) {
-        return Stream.of(executor.getClass().getAnnotationsByType(Namespace.class)).map(namespace -> find(map , executor, namespace)).collect(toList());
+    protected Command[] find(ProxiedCommandMap map, CommandExecutor executor) {
+        return Stream.of(executor.getClass().getAnnotationsByType(Namespace.class)).map(namespace -> find(map , executor, namespace)).toArray(Command[]::new);
     } 
     
     protected Command find(ProxiedCommandMap map, CommandExecutor executor, Namespace namespace) {
@@ -112,13 +107,8 @@ public class CommandResolver {
     } 
     
     
-    @JDK9
     public static CommandResolver simple(Plugin plugin, References register) {
-        Set<Resolver> resolvers = new HashSet<>(4);
-        resolvers.add(new InformationResolver());
-        resolvers.add(new LiteralResolver());
-        resolvers.add(new RegisteredResolver(register));
-        resolvers.add(new ResourceResolver());
+        Set<Resolver> resolvers = Set.of(new InformationResolver(), new LiteralResolver(), new RegisteredResolver(register), new ResourceResolver());
         return new CommandResolver(plugin, resolvers);
     }
     

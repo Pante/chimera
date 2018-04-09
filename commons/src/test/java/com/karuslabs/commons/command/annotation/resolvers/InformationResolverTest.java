@@ -68,9 +68,9 @@ class InformationResolverTest {
     
     @Test
     void resolve() {
-        resolver.resolve(asList(command), new A());
+        resolver.resolve(new A(), command);
         
-        command.setAliases(asList("a", "b"));
+        command.setAliases("a", "b");
         command.setDescription("a description");
         command.setPermission("a.permission");
         command.setPermissionMessage("a message");

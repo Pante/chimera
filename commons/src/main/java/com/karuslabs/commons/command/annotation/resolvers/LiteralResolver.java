@@ -27,19 +27,17 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.*;
 
-import java.util.List;
-
 
 public class LiteralResolver implements Resolver {
 
     @Override
-    public void resolve(List<Command> commands, CommandExecutor executor) {
+    public void resolve(CommandExecutor executor, Command... commands) {
         for (Literal literal : executor.getClass().getAnnotationsByType(Literal.class)) {
             resolve(commands, executor, literal);
         }
     }
     
-    protected void resolve(List<Command> commands, CommandExecutor executor, Literal literal) {
+    protected void resolve(Command[] commands, CommandExecutor executor, Literal literal) {
         Completion completion = new CachedCompletion(literal.completions());
         for (Command command : commands) {
             command.getCompletions().put(literal.index(), completion);

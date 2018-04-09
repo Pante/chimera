@@ -38,13 +38,14 @@ public class References {
     
     
     public References() {
-        this(new HashMap<>(), new HashMap<>(), new HashMap<>());
+        this(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
     
-    public References(Map<String, Command> commands, Map<String, Completion> completions, Map<String, MessageTranslation> translations) {
+    public References(Map<String, Command> commands, Map<String, Completion> completions, Map<String, MessageTranslation> translations, Map<String, CommandExecutor> executors) {
         this.commands = commands;
         this.completions = completions;
         this.translations = translations;
+        this.executors = executors;
     }
 
     
@@ -55,6 +56,11 @@ public class References {
     
     public References completion(String key, Completion completion) {
         completions.put(key, completion);
+        return this;
+    }
+    
+    public References executor(String key, CommandExecutor executor) {
+        executors.put(key, executor);
         return this;
     }
     
@@ -70,6 +76,10 @@ public class References {
 
     public Completion getCompletion(String key) {
         return completions.get(key);
+    }
+    
+    public CommandExecutor getExecutor(String key) {
+        return executors.get(key);
     }
 
     public MessageTranslation getTranslation(String key) {

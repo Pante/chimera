@@ -25,12 +25,10 @@ package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 
-import java.util.List;
-
 
 public interface Resolver {
     
-    public void resolve(List<Command> commands, CommandExecutor executor);
+    public void resolve(CommandExecutor executor, Command... commands);
     
     public boolean isResolvable(CommandExecutor executor);
     

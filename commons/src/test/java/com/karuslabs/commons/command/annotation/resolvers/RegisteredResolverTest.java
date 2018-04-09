@@ -70,7 +70,7 @@ class RegisteredResolverTest {
     
     @Test
     void resolve() {
-        resolver.resolve(asList(command), new A());
+        resolver.resolve(new A(), command);
         
         assertSame(Completion.NONE, command.getCompletions().get(0));
     }
@@ -79,7 +79,7 @@ class RegisteredResolverTest {
     @Test
     void resolve_ThrowsException() {
         assertEquals("Unresolvable reference: \"a\" for: " + B.class.getName(), 
-            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(asList(command), new B())).getMessage()
+            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(new B(), command)).getMessage()
         );
     }
     

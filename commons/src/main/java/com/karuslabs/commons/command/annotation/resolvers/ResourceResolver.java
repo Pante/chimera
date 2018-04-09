@@ -27,13 +27,11 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.annotation.*;
 
-import java.util.List;
-
 
 public class ResourceResolver implements Resolver {
 
     @Override
-    public void resolve(List<Command> commands, CommandExecutor executor) {
+    public void resolve(CommandExecutor executor, Command... commands) {
         MessageTranslation translation = translation(executor);
         for (Command command : commands) {
             command.setTranslation(translation);

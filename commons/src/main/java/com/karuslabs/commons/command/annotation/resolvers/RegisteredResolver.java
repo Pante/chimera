@@ -27,8 +27,6 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.Completion;
 
-import java.util.List;
-
 
 public class RegisteredResolver implements Resolver {
     
@@ -41,13 +39,13 @@ public class RegisteredResolver implements Resolver {
 
     
     @Override
-    public void resolve(List<Command> commands, CommandExecutor executor) {
+    public void resolve(CommandExecutor executor, Command... commands) {
         for (Registered registered : executor.getClass().getAnnotationsByType(Registered.class)) {
             resolve(commands, executor, registered);
         }
     }
     
-    protected void resolve(List<Command> commands, CommandExecutor executor, Registered registered) {
+    protected void resolve(Command[] commands, CommandExecutor executor, Registered registered) {
         Completion completion = references.getCompletion(registered.completion());
         if (completion != null) {
             for (Command command : commands) {

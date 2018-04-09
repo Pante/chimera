@@ -91,14 +91,14 @@ class ResourceResolverTest {
     
     @Test
     void resolve() {
-        List<Command> commands = singletonList(new Command("", null));
+        Command command = new Command("", null);
         MessageTranslation translation = mock(MessageTranslation.class);
         
         doReturn(translation).when(resolver).translation(CommandExecutor.NONE);
         
-        resolver.resolve(commands, CommandExecutor.NONE);
+        resolver.resolve(CommandExecutor.NONE, command);
         
-        assertEquals(translation, commands.get(0).getTranslation());
+        assertEquals(translation, command.getTranslation());
     }
     
     
