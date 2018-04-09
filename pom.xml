@@ -22,7 +22,6 @@
     
     
     <modules>
-        <module>annotations</module>
         <module>commons</module>
         <module>command-validator-maven-plugin</module>
         <module>plugin-annotations-maven-plugin</module>
