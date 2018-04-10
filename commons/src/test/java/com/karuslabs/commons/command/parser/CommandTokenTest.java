@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import java.util.HashMap;
@@ -48,10 +49,12 @@ class CommandTokenTest {
     References references = mock(References.class);
     NullHandle handle = mock(NullHandle.class);
     Plugin plugin = mock(Plugin.class);
+    CommandResolver resolver = spy(new CommandResolver(null, EMPTY_SET));
+    ExecutorToken executor = mock(ExecutorToken.class);
     CommandsToken commands = when(mock(CommandsToken.class).from(any(), any())).thenReturn(new HashMap<>()).getMock();
     TranslationToken translation = when(mock(TranslationToken.class).from(any(), any())).thenReturn(MessageTranslation.NONE).getMock();
     CompletionsToken completions = when(mock(CompletionsToken.class).from(any(), any())).thenReturn(new HashMap<>()).getMock();
-    CommandToken token = new CommandToken(references, handle, plugin, commands, translation, completions);
+    CommandToken token = new CommandToken(references, handle, plugin, resolver, executor, commands, translation, completions);
     
     
     @ParameterizedTest
@@ -64,6 +67,7 @@ class CommandTokenTest {
     @Test
     void get() {
         ConfigurationSection config = COMMANDS.getConfigurationSection("commands.brush");
+        when(executor.get(any(), eq("executor"))).thenReturn(Flag.ALIASES);
         
         Command command = token.get(COMMANDS, "commands.brush");
         assertEquals("brush", command.getName());
@@ -71,7 +75,7 @@ class CommandTokenTest {
         assertEquals("/brush [option]", command.getUsage());
         assertEquals(singletonList("b"), command.getAliases());
         assertSame(plugin, command.getPlugin());
-        assertSame(CommandExecutor.NONE, command.getExecutor());
+        assertSame(Flag.ALIASES, command.getExecutor());
         assertEquals(MessageTranslation.NONE, command.getTranslation());
         assertEquals(EMPTY_MAP, command.getSubcommands());
         assertEquals(EMPTY_MAP, command.getCompletions());
@@ -79,6 +83,7 @@ class CommandTokenTest {
         verify(commands).from(config, "subcommands");
         verify(translation).from(config, "translation");
         verify(completions).from(config, "completions");
+        verify(resolver).resolve(Flag.ALIASES, command);
     }
     
     

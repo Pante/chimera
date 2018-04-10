@@ -23,28 +23,52 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.command.References;
-import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.configuration.Yaml;
 
-import java.io.File;
+import org.junit.jupiter.api.Test;
 
-import org.bukkit.plugin.Plugin;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-@Static
-public class Parsers {
+class ExecutorTokenTest {
     
-    public static Parser newParser(Plugin plugin, CommandResolver resolver, File folder, References references, NullHandle handle, Provider provider) {
-        TranslationToken translation = new TranslationToken(references, handle, folder, provider);
-        CompletionsToken completions = new CompletionsToken(new CompletionToken(references, handle));
-        ExecutorToken executor = new ExecutorToken(references, handle);
-        CommandToken command = new CommandToken(references, handle, plugin, resolver, executor, null, translation, completions);
-        CommandsToken commands = new CommandsToken(command);
-        command.setCommandsToken(commands);
+    References references = mock(References.class);
+    ExecutorToken token = new ExecutorToken(references, NullHandle.NONE);
+    
+    
+    @Test
+    void getReference() {
+        token.getReference("key");
         
-        return new Parser(command);
+        verify(references).getExecutor("key");
+    }
+    
+    
+    @Test
+    void register() {
+        assertSame(CommandExecutor.NONE, token.register("key", CommandExecutor.NONE));
+        verify(references).executor("key", CommandExecutor.NONE);
+    }
+    
+    
+    @Test
+    void getDefaultReference() {
+        assertSame(CommandExecutor.NONE, token.getDefaultReference());
+    }
+    
+    
+    @Test
+    void isAssignable() {
+        assertTrue(token.isAssignable(Yaml.COMMANDS.getConfigurationSection("commands.brush"), "executor"));
+    }
+    
+    
+    @Test
+    void getExecutor() {
+        token.getReference("key");
+        verify(references).getExecutor("key");
     }
     
 }

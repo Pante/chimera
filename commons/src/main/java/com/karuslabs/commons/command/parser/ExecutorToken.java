@@ -23,28 +23,43 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.command.References;
-import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.command.*;
 
-import java.io.File;
-
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.ConfigurationSection;
 
 
-@Static
-public class Parsers {
+public class ExecutorToken extends ReferableToken<CommandExecutor> {
+
     
-    public static Parser newParser(Plugin plugin, CommandResolver resolver, File folder, References references, NullHandle handle, Provider provider) {
-        TranslationToken translation = new TranslationToken(references, handle, folder, provider);
-        CompletionsToken completions = new CompletionsToken(new CompletionToken(references, handle));
-        ExecutorToken executor = new ExecutorToken(references, handle);
-        CommandToken command = new CommandToken(references, handle, plugin, resolver, executor, null, translation, completions);
-        CommandsToken commands = new CommandsToken(command);
-        command.setCommandsToken(commands);
-        
-        return new Parser(command);
+    public ExecutorToken(References references, NullHandle handle) {
+        super(references, handle);
+    }
+
+    
+    @Override
+    protected CommandExecutor getReference(String key) {
+        return references.getExecutor(key);
+    }
+
+    @Override
+    protected CommandExecutor register(String key, CommandExecutor executor) {
+        references.executor(key, executor);
+        return executor;
+    }
+
+    @Override
+    protected CommandExecutor getDefaultReference() {
+        return CommandExecutor.NONE;
+    }
+
+    @Override
+    public boolean isAssignable(ConfigurationSection config, String key) {
+        return config.isString(key);
+    }
+
+    @Override
+    protected CommandExecutor get(ConfigurationSection config, String key) {
+        return references.getExecutor(config.getString(key));
     }
     
 }

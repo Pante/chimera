@@ -23,8 +23,8 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
@@ -35,23 +35,25 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.command.CommandExecutor.NONE;
-import static java.util.Arrays.asList;
 
 
 public class CommandToken extends ReferableToken<Command> {
     
-    @JDK9("Set.of(...)")
-    private static final Set<String> KEYS = new HashSet<>(asList("aliases", "description", "permission", "permission-message", "usage", "completions", "subcommands", "translation"));
+    private static final Set<String> KEYS = Set.of("aliases", "description", "executor", "permission", "permission-message", "usage", "completions", "subcommands", "translation");
             
     private Plugin plugin;
+    private CommandResolver resolver;
+    private Token<CommandExecutor> executor;
     private @Nullable Token<Map<String, Command>> subcommands;
     private Token<MessageTranslation> translation;
     private Token<Map<Integer, Completion>> completions;
     
     
-    public CommandToken(References references, NullHandle handle, Plugin plugin, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
+    public CommandToken(References references, NullHandle handle, Plugin plugin, CommandResolver resolver, Token<CommandExecutor> executor, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
         super(references, handle);
         this.plugin = plugin;
+        this.resolver = resolver;
+        this.executor = executor;
         this.subcommands = subcommands;
         this.translation = translation;
         this.completions = completions;
@@ -78,7 +80,9 @@ public class CommandToken extends ReferableToken<Command> {
     protected Command get(ConfigurationSection config, String key) {
         config = config.getConfigurationSection(key);
         Command command = new Command(
-            config.getName(), plugin, translation.from(config, "translation"),
+            config.getName(), 
+            plugin, 
+            translation.from(config, "translation"),
             config.getString("description", ""),
             config.getString("usage", ""),
             config.getStringList("aliases"),
@@ -88,6 +92,8 @@ public class CommandToken extends ReferableToken<Command> {
         );
         command.setPermission(config.getString("permission", ""));
         command.setPermissionMessage(config.getString("permission-message", ""));
+        
+        resolver.resolve(executor.get(config, "executor"), command);
         
         return command;
     }

@@ -78,8 +78,8 @@ public class ExternalControl extends Control {
     protected @Nullable ResourceBundle load(@Nonnull String format, @Nullable InputStream stream) {
         switch (format) {
             case "properties":
-                try (InputStream aStream = stream) {
-                    return new PropertyResourceBundle(aStream);
+                try (stream) {
+                    return new PropertyResourceBundle(stream);
 
                 } catch (IOException e) {
                     return null;

@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
 import com.karuslabs.commons.command.completion.*;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.providers.Provider;
@@ -36,14 +37,15 @@ import org.junit.jupiter.api.Test;
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
 import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.util.Collections.EMPTY_SET;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class ParsersTest {
 
     @Test
     void parse() {
-        Parser parser = Parsers.newParser(null, null, new References().translation("TEST-TRANSLATION", NONE), NullHandle.EXCEPTION, Provider.NONE);
+        Parser parser = Parsers.newParser(null, new CommandResolver(null, EMPTY_SET), null, new References().translation("TEST-TRANSLATION", NONE).executor("brush", Flag.ALIASES), NullHandle.EXCEPTION, Provider.NONE);
         List<Command> commands = parser.parse(COMMANDS);
         assertEquals(2, commands.size());
         
@@ -53,6 +55,7 @@ class ParsersTest {
         assertEquals("brush.permission", brush.getPermission());
         assertEquals("No permission", brush.getPermissionMessage());
         assertEquals("/brush [option]", brush.getUsage());
+        assertSame(Flag.ALIASES, brush.getExecutor());
         
         Command help  = brush.getSubcommands().get("help");
         assertEquals("help", help.getName());

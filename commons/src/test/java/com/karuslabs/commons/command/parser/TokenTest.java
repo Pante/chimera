@@ -65,7 +65,7 @@ class TokenTest {
     @CsvSource({
         "idk, 'Missing key: idk, key cannot be non-existent'", 
         "help.usage, 'Illegal reference: usage at: .help.usage, reference not allowed here'",
-        "help.translation, 'Invalid value for key: help.translation'"
+        "help.translation, 'Invalid value for key: .help.translation'"
     })
     void from_ThrowsException(String key, String message) {
         assertEquals(

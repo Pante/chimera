@@ -39,7 +39,7 @@ public abstract class Token<T> {
             return getReference(config, key, config.getString(key));
             
         } else {
-            throw new ParserException("Invalid value for key: " + config.getCurrentPath() + key);
+            throw new ParserException("Invalid value for key: " + config.getCurrentPath() + "." + key);
         }
     }
     

@@ -70,7 +70,7 @@ public class Commands {
     }
     
     protected Parser loadParser() {
-        return Parsers.newParser(plugin, plugin.getDataFolder(), references, NullHandle.NONE, provider);
+        return Parsers.newParser(plugin, resolver, plugin.getDataFolder(), references, NullHandle.NONE, provider);
     }
     
     
