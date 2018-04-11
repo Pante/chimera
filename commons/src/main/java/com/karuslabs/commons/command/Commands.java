@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.annotation.resolvers.*;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
@@ -64,8 +65,12 @@ public class Commands {
     }
     
     
+    @JDK9
     public Commands load(String path) {
-        map.registerAll(plugin.getName(), loadParser().parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+        try (References ref = references) {
+            map.registerAll(plugin.getName(), loadParser().parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+        }
+        
         return this;
     }
     

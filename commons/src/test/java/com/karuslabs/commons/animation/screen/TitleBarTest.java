@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 class TitleBarTest {
     
     BiConsumer<Player, TitleContext> consumer = mock(BiConsumer.class);
-    TitleBar bar = TitleBar.builder(null).consumer(() -> consumer).fadeIn(1).stay(2).fadeOut(3).build();
+    TitleBar bar = TitleBar.builder(null).format(() -> consumer).fadeIn(1).stay(2).fadeOut(3).build();
     Player player = mock(Player.class);
     
     
@@ -52,6 +52,20 @@ class TitleBarTest {
         assertEquals(1, task.getFadeIn());
         assertEquals(2, task.getStay());
         assertEquals(3, task.getFadeOut());
+    }
+    
+    
+    @Test
+    void setters() {
+        ScheduledTask task = (ScheduledTask) bar.newTask(singleton(player));
+        
+        task.setFadeIn(4);
+        task.setStay(5);
+        task.setFadeOut(6);
+        
+        assertEquals(4, task.getFadeIn());
+        assertEquals(5, task.getStay());
+        assertEquals(6, task.getFadeOut());
     }
     
     

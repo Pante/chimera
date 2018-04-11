@@ -33,7 +33,6 @@ import javax.annotation.*;
 
 import static com.karuslabs.commons.configuration.Configurations.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.unmodifiableList;
 
 
 public class ExternalControl extends Control {
@@ -48,8 +47,8 @@ public class ExternalControl extends Control {
     };
     
     
-    @JDK9("UPDATE TO List.of(...) when updating to Java 9")
-    private static final @Immutable List<String> FORMATS = unmodifiableList(asList("properties", "yml", "yaml"));
+
+    private static final @Immutable List<String> FORMATS = List.of("properties", "yml", "yaml");
     
     
     private Resource[] resources;
@@ -78,8 +77,8 @@ public class ExternalControl extends Control {
     protected @Nullable ResourceBundle load(@Nonnull String format, @Nullable InputStream stream) {
         switch (format) {
             case "properties":
-                try (stream) {
-                    return new PropertyResourceBundle(stream);
+                try (InputStream aStream = stream) {
+                    return new PropertyResourceBundle(aStream);
 
                 } catch (IOException e) {
                     return null;

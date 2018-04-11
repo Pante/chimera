@@ -23,12 +23,13 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 
@@ -36,7 +37,24 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 class ReferencesTest {
     
     References references = new References();
-
+    
+    
+    @Test
+    @JDK9
+    void close() {
+        references.command("key", Command.NONE).completion("key", Completion.NONE)
+                  .executor("key", CommandExecutor.NONE).translation("key", MessageTranslation.NONE);
+        
+        try (References ref = references) {
+            
+        }
+        
+        assertNull(references.getCommand("key"));
+        assertSame(Completion.NONE, references.getCompletion("key"));
+        assertNull(references.getExecutor("key"));
+        assertNull(references.getTranslation("key"));
+    }
+    
     
     @Test
     void command() {

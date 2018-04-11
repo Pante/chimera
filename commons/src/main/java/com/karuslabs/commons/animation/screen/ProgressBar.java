@@ -40,12 +40,12 @@ import static java.util.stream.Collectors.toList;
 
 public class ProgressBar extends AbstractBar {
     
-    private Supplier<BiConsumer<BossBar, Context>> consumer;
+    private Supplier<BiConsumer<BossBar, Context>> format;
 
     
-    public ProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> consumer, long iterations, long delay, long period) {
+    public ProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> format, long iterations, long delay, long period) {
         super(plugin, translation, supplier, iterations, delay, period);
-        this.consumer = consumer;
+        this.format = format;
     }
 
     
@@ -57,27 +57,27 @@ public class ProgressBar extends AbstractBar {
             return bar;
         }).collect(toList());
         
-        return new ScheduledTask(bars, consumer.get(), translation, iterations);
+        return new ScheduledTask(bars, format.get(), translation, iterations);
     }
     
     
     static class ScheduledTask extends Task {
         
         private List<BossBar> bars;
-        private BiConsumer<BossBar, Context> consumer;
+        private BiConsumer<BossBar, Context> format;
         
         
-        ScheduledTask(List<BossBar> bars, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations) {
+        ScheduledTask(List<BossBar> bars, BiConsumer<BossBar, Context> format, Translation translation, long iterations) {
             super(translation, iterations);
             this.bars = bars;
-            this.consumer = consumer;
+            this.format = format;
         }
 
         
         @Override
         protected void process() {
             for (BossBar bar : bars) {
-                consumer.accept(bar, this);
+                format.accept(bar, this);
             }
         }
         
@@ -101,8 +101,8 @@ public class ProgressBar extends AbstractBar {
         }
 
         
-        public ProgressBarBuilder consumer(Supplier<BiConsumer<BossBar, Context>> consumer) {
-            bar.consumer = consumer;
+        public ProgressBarBuilder format(Supplier<BiConsumer<BossBar, Context>> format) {
+            bar.format = format;
             return this;
         }
         

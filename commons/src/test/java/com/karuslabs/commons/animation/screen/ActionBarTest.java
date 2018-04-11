@@ -39,8 +39,8 @@ import static org.mockito.Mockito.*;
 
 class ActionBarTest {
     
-    BiFunction<Player, Context, String> function = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
-    ActionBar bar = builder(null).function(() -> function).build();
+    BiFunction<Player, Context, String> format = when(mock(BiFunction.class).apply(any(), any())).thenReturn("value").getMock();
+    ActionBar bar = builder(null).format(() -> format).build();
     StubSpigot spigot = new StubSpigot();
     Player player = when(mock(Player.class).spigot()).thenReturn(spigot).getMock();
     
@@ -51,7 +51,7 @@ class ActionBarTest {
         
         task.process();
 
-        verify(function).apply(player, task);
+        verify(format).apply(player, task);
         assertEquals("value", spigot.values[0].toPlainText());
     }
     

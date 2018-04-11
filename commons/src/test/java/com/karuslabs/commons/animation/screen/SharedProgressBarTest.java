@@ -41,8 +41,8 @@ class SharedProgressBarTest {
     
     Player player = mock(Player.class);
     BossBar boss = mock(BossBar.class);
-    BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
-    SharedProgressBar bar = builder(null).supplier(() -> boss).consumer(() -> consumer).build();
+    BiConsumer<BossBar, Context> format = mock(BiConsumer.class);
+    SharedProgressBar bar = builder(null).supplier(() -> boss).format(() -> format).build();
     
     
     @Test
@@ -52,7 +52,7 @@ class SharedProgressBarTest {
         task.process();
         
         verify(boss).addPlayer(player);
-        verify(consumer).accept(boss, task);
+        verify(format).accept(boss, task);
     }
     
     @Test

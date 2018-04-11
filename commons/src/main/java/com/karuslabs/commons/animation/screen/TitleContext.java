@@ -28,8 +28,16 @@ public interface TitleContext extends Context {
     
     public int getFadeIn();
     
+    public void setFadeIn(int in);
+    
+    
     public int getStay();
     
+    public void setStay(int stay);
+    
+    
     public int getFadeOut();
+    
+    public void setFadeOut(int out);
     
 }

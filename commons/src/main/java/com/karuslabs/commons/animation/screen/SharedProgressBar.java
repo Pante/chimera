@@ -39,12 +39,12 @@ import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 public class SharedProgressBar extends AbstractBar {
     
-    private Supplier<BiConsumer<BossBar, Context>> consumer;
+    private Supplier<BiConsumer<BossBar, Context>> format;
     
     
-    public SharedProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> consumer, long iterations, long delay, long period) {
+    public SharedProgressBar(Plugin plugin, Translation translation, Supplier<BossBar> supplier, Supplier<BiConsumer<BossBar, Context>> format, long iterations, long delay, long period) {
         super(plugin, translation, supplier, iterations, delay, period);
-        this.consumer = consumer;
+        this.format = format;
     }
     
 
@@ -55,26 +55,26 @@ public class SharedProgressBar extends AbstractBar {
             bar.addPlayer(player);
         }
         
-        return new ScheduledTask(bar, consumer.get(), translation, iterations);
+        return new ScheduledTask(bar, format.get(), translation, iterations);
     }
     
     
     static class ScheduledTask extends Task {
         
         private BossBar bar;
-        private BiConsumer<BossBar, Context> consumer;
+        private BiConsumer<BossBar, Context> format;
         
         
-        ScheduledTask(BossBar bar, BiConsumer<BossBar, Context> consumer, Translation translation, long iterations) {
+        ScheduledTask(BossBar bar, BiConsumer<BossBar, Context> format, Translation translation, long iterations) {
             super(translation, iterations);
             this.bar = bar;
-            this.consumer = consumer;
+            this.format = format;
         }
 
         
         @Override
         protected void process() {
-            consumer.accept(bar, this);
+            format.accept(bar, this);
         }
         
         @Override
@@ -97,8 +97,8 @@ public class SharedProgressBar extends AbstractBar {
         }
         
         
-        public SharedProgressBarBuilder consumer(Supplier<BiConsumer<BossBar, Context>> consumer) {
-            bar.consumer = consumer;
+        public SharedProgressBarBuilder format(Supplier<BiConsumer<BossBar, Context>> format) {
+            bar.format = format;
             return this;
         }
         

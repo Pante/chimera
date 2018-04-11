@@ -24,6 +24,7 @@
 package com.karuslabs.command.validator;
 
 import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.configuration.Configurations;
@@ -38,6 +39,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import static java.util.Collections.EMPTY_SET;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
@@ -109,22 +111,26 @@ public class ValidatorMojo extends AbstractMojo {
     
     
     protected Parser loadParser(References references) {
+        NullHandle handle;
         switch (validation) {
             case LENIENT:
-                return Parsers.newParser(null, null, references, NullHandle.NONE, Provider.NONE);
+                handle = NullHandle.NONE;
+                break;
                 
             case WARNING:
-                return Parsers.newParser(null, null, references, (config, key, value) -> 
-                    getLog().warn("Unresolvable reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\"")
-                , Provider.NONE);
+                handle = (config, key, value) -> getLog().warn("Unresolvable reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\"");
+                break;
                 
             default:
-                return Parsers.newParser(null, null, references, (config, key, value) -> {
+                handle = (config, key, value) -> {
                     String message = "Invalid reference: \"" + value + "\" at: \"" + config.getCurrentPath() + "." + key + "\", reference must either be registered or point to a assignable value";
                     getLog().error(message);
                     throw new ParserException(message);
-                }, Provider.NONE);
+                };
+                break;
         }
+        
+        return Parsers.newParser(null, new CommandResolver(null, EMPTY_SET), null, references, handle, Provider.NONE);
     }
     
 }

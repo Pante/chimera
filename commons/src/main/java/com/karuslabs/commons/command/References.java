@@ -29,7 +29,7 @@ import com.karuslabs.commons.locale.MessageTranslation;
 import java.util.*;
 
 
-public class References {
+public class References implements AutoCloseable {
     
     private Map<String, Command> commands;
     private Map<String, Completion> completions;
@@ -84,6 +84,14 @@ public class References {
 
     public MessageTranslation getTranslation(String key) {
         return translations.get(key);
+    }
+
+    
+    @Override
+    public void close() {
+        commands.clear();
+        executors.clear();
+        translations.clear();
     }
     
 }

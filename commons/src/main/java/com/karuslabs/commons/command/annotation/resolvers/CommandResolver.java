@@ -107,8 +107,8 @@ public class CommandResolver {
     } 
     
     
-    public static CommandResolver simple(Plugin plugin, References register) {
-        Set<Resolver> resolvers = Set.of(new InformationResolver(), new LiteralResolver(), new RegisteredResolver(register), new ResourceResolver());
+    public static CommandResolver simple(Plugin plugin, References references) {
+        Set<Resolver> resolvers = Set.of(new InformationResolver(), new LiteralResolver(), new RegisteredResolver(references), new ResourceResolver());
         return new CommandResolver(plugin, resolvers);
     }
     

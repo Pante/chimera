@@ -43,38 +43,38 @@ import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 @RequiresSpigot
 public class ActionBar extends Bar {
     
-    private Supplier<BiFunction<Player, Context, String>> supplier;
+    private Supplier<BiFunction<Player, Context, String>> format;
 
     
-    public ActionBar(Plugin plugin, Translation translation, Supplier<BiFunction<Player, Context, String>> supplier, long iterations, long delay, long period) {
+    public ActionBar(Plugin plugin, Translation translation, Supplier<BiFunction<Player, Context, String>> format, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
-        this.supplier = supplier;
+        this.format = format;
     }
 
     
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
-        return new ScheduledTask(weakSet(players), supplier.get(), translation, iterations);
+        return new ScheduledTask(weakSet(players), format.get(), translation, iterations);
     }
     
     
     static class ScheduledTask extends Task {
         
         private Set<Player> players;
-        private BiFunction<Player, Context, String> function;
+        private BiFunction<Player, Context, String> format;
         
         
-        public ScheduledTask(Set<Player> players, BiFunction<Player, Context, String> function, Translation translation, long iterations) {
+        public ScheduledTask(Set<Player> players, BiFunction<Player, Context, String> format, Translation translation, long iterations) {
             super(translation, iterations);
             this.players = players;
-            this.function = function;
+            this.format = format;
         }
         
         
         @Override
         protected void process() {
             for (Player player : players) {
-                player.spigot().sendMessage(ACTION_BAR, fromLegacyText(function.apply(player, this)));
+                player.spigot().sendMessage(ACTION_BAR, fromLegacyText(format.apply(player, this)));
             }
         }
         
@@ -93,8 +93,8 @@ public class ActionBar extends Bar {
         }
         
         
-        public ActionBarBuilder function(Supplier<BiFunction<Player, Context, String>> supplier) {
-            bar.supplier = supplier;
+        public ActionBarBuilder format(Supplier<BiFunction<Player, Context, String>> format) {
+            bar.format = format;
             return this;
         }
         

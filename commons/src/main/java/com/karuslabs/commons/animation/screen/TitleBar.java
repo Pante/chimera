@@ -39,15 +39,15 @@ import static com.karuslabs.commons.locale.MessageTranslation.NONE;
 
 public class TitleBar extends Bar {
     
-    private Supplier<BiConsumer<Player, TitleContext>> consumer;
+    private Supplier<BiConsumer<Player, TitleContext>> supplier;
     private int fadeIn;
     private int stay;
     private int fadeOut;
     
     
-    public TitleBar(Plugin plugin, Translation translation, Supplier<BiConsumer<Player, TitleContext>> consumer, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
+    public TitleBar(Plugin plugin, Translation translation, Supplier<BiConsumer<Player, TitleContext>> supplier, int fadeIn, int stay, int fadeOut, long iterations, long delay, long period) {
         super(plugin, translation, iterations, delay, period);
-        this.consumer = consumer;
+        this.supplier = supplier;
         this.fadeIn = fadeIn;
         this.stay = stay;
         this.fadeOut = fadeOut;
@@ -56,23 +56,23 @@ public class TitleBar extends Bar {
     
     @Override
     protected @Nonnull ScheduledResultTask<Void> newTask(Collection<Player> players) {
-        return new ScheduledTask(weakSet(players), consumer.get(), translation, fadeIn, stay, fadeOut, iterations);
+        return new ScheduledTask(weakSet(players), supplier.get(), translation, fadeIn, stay, fadeOut, iterations);
     }
     
     
     static class ScheduledTask extends Task implements TitleContext {
         
         private Set<Player> players;
-        private BiConsumer<Player, TitleContext> consumer;
+        private BiConsumer<Player, TitleContext> format;
         private int fadeIn;
         private int stay;
         private int fadeOut;
         
         
-        ScheduledTask(Set<Player> players, BiConsumer<Player, TitleContext> consumer, Translation translation, int fadeIn, int stay, int fadeOut, long iterations) {
+        ScheduledTask(Set<Player> players, BiConsumer<Player, TitleContext> format, Translation translation, int fadeIn, int stay, int fadeOut, long iterations) {
             super(translation, iterations);
             this.players = players;
-            this.consumer = consumer;
+            this.format = format;
             this.fadeIn = fadeIn;
             this.stay = stay;
             this.fadeOut = fadeOut;
@@ -81,22 +81,37 @@ public class TitleBar extends Bar {
         
         @Override
         protected void process() {
-            players.forEach(player -> consumer.accept(player, this));
+            players.forEach(player -> format.accept(player, this));
         }
 
         @Override
         public int getFadeIn() {
             return fadeIn;
         }
+        
+        @Override
+        public void setFadeIn(int in) {
+            this.fadeIn = in;
+        }
 
         @Override
         public int getStay() {
             return stay;
         }
+        
+        @Override
+        public void setStay(int stay) {
+            this.stay = stay;
+        }
 
         @Override
         public int getFadeOut() {
             return fadeOut;
+        }  
+
+        @Override
+        public void setFadeOut(int out) {
+            this.fadeOut = out;
         }
         
     }
@@ -113,8 +128,8 @@ public class TitleBar extends Bar {
             super(bar);
         }
 
-        public TitleBarBuilder consumer(Supplier<BiConsumer<Player, TitleContext>> consumer) {
-            bar.consumer = consumer;
+        public TitleBarBuilder format(Supplier<BiConsumer<Player, TitleContext>> format) {
+            bar.supplier = format;
             return this;
         }
         

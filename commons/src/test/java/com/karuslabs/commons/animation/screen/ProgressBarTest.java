@@ -40,8 +40,8 @@ class ProgressBarTest {
     
     Player player = mock(Player.class);
     BossBar boss = mock(BossBar.class);
-    BiConsumer<BossBar, Context> consumer = mock(BiConsumer.class);
-    ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).consumer(() -> consumer).build();
+    BiConsumer<BossBar, Context> format = mock(BiConsumer.class);
+    ProgressBar bar = ProgressBar.builder(null).supplier(() -> boss).format(() -> format).build();
     
     
     @Test
@@ -51,7 +51,7 @@ class ProgressBarTest {
         task.process();
         
         verify(boss).addPlayer(player);
-        verify(consumer).accept(boss, task);
+        verify(format).accept(boss, task);
         
     }
     
