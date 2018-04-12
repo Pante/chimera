@@ -30,6 +30,7 @@ import javax.lang.model.util.ElementFilter;
 import javax.lang.model.type.TypeKind;
 
 import static com.karuslabs.annotations.processors.Processors.*;
+import com.sun.source.util.Trees;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 import static javax.lang.model.element.Modifier.*;
@@ -43,7 +44,6 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 public class ValueBasedProcessor extends AbstractProcessor {
     
     protected List<ExecutableElement> methods;
-//    protected Trees trees;
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {

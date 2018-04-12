@@ -24,7 +24,6 @@
 package com.karuslabs.commons.animation.screen;
 
 import com.karuslabs.commons.locale.Translation;
-import com.karuslabs.commons.util.concurrent.Result;
 
 import java.util.function.Supplier;
 
