@@ -23,46 +23,58 @@
  */
 package com.karuslabs.annotations.processors;
 
-import java.util.Set;
+import com.sun.source.tree.*;
+
+import java.util.List;
+
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.annotations.processors.Processors.annotated;
-import static javax.lang.model.element.ElementKind.*;
 import static javax.lang.model.element.Modifier.*;
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.annotation.Static"
+    "com.karuslabs.annotations.Static"
 })
-public class StaticProcessor extends AbstractProcessor {
+public class StaticProcessor extends TreeProcessor {
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (Element element : annotated(annotations, environment)) {
-            process(element);
+    protected void process(Element element) {
+        ClassTree tree = (ClassTree) trees.getTree(element);
+        for (Tree member : tree.getMembers()) {
+            if (member instanceof MethodTree) {
+                checkMethod((MethodTree) member);
+                
+            } else if (member instanceof VariableTree) {
+                checkField((VariableTree) member);
+            }
+        }
+    }
+    
+    protected void checkMethod(MethodTree member) {
+        if (member.getName().contentEquals("<init>") && (!member.getModifiers().getFlags().contains(PRIVATE) && !isEmpty(member))) {
+            error(member, "Invalid constructor modifier, constructor must either be private or undeclared");
+        }
+    }
+    
+    protected boolean isEmpty(MethodTree tree) {
+        List<StatementTree> statements = (List<StatementTree>) tree.getBody().getStatements();
+        if (statements.size() > 1 || !tree.getParameters().isEmpty()) {
+            return false;
         }
         
-        return false;
-    }
-    
-    protected void process(Element element) {
-        for (Element member : element.getEnclosedElements()) {
-            checkConstructor(member);
-            checkMembers(member);
+        ExpressionStatementTree statement = (ExpressionStatementTree) statements.get(0);
+        if (statement.getExpression() instanceof MethodInvocationTree) {
+            return ((MethodInvocationTree) statement.getExpression()).getArguments().isEmpty();
+            
+        } else {
+            return false;
         }
     }
     
-    protected void checkConstructor(Element member) {
-        if (member.getKind() == CONSTRUCTOR && member.getModifiers().contains(PRIVATE)) {
-            processingEnv.getMessager().printMessage(ERROR, "Invalid constructor modifier, constructor must either be private or undeclared", member);
-        }
-    }
-    
-    protected void checkMembers(Element member) {
-        if (!member.getModifiers().contains(STATIC)) {
-            processingEnv.getMessager().printMessage(ERROR, "Invalid class member, member must be declared static", member);
+    protected void checkField(VariableTree field) {
+        if (!field.getModifiers().getFlags().contains(STATIC)) {
+            error(field, "Invalid field, field must be declared static");
         }
     }
     

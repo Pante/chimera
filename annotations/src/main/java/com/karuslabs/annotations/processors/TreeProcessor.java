@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.annotations.processors;
 
-import com.karuslabs.annotations.Static;
+import com.sun.source.tree.*;
+import com.sun.source.util.Trees;
 
-import java.util.function.*;
-import javax.annotation.*;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.tools.Diagnostic;
 
 
-@Static
-public class Get {
+public abstract class TreeProcessor extends AnnotationProcessor {
     
-    public static <T> T orDefault(@Nullable T object, T value) {
-        return object != null ? object : value;
+    protected Trees trees;
+    protected CompilationUnitTree compilation;
+    
+    
+    @Override
+    protected void preprocess(Element element) {
+        compilation = trees.getPath(element).getCompilationUnit();
     }
     
-    public static <T> T orDefault(@Nullable T object, Supplier<T> supplier) {
-        return object != null ? object : supplier.get();
+    @Override
+    protected void load(ProcessingEnvironment environment) {
+        trees = Trees.instance(environment);
     }
     
-    public static <T, E extends RuntimeException> @Nonnull T orThrow(@Nullable T object, Supplier<E> exception) {
-        if (object != null) {
-            return object;
-            
-        } else {
-            throw exception.get();
-        }
+    
+    protected void error(Tree tree, String message) {
+        trees.printMessage(Diagnostic.Kind.ERROR, message, tree, compilation);
     }
- 
+    
 }

@@ -23,18 +23,18 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
+import com.karuslabs.annotations.processors.AnnotationProcessor;
 import com.karuslabs.commons.command.annotation.*;
 
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.annotations.processors.Processors.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({"com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces"})
-public class NamespaceProcessor extends AbstractProcessor {
+public class NamespaceProcessor extends AnnotationProcessor {
     
     Map<String, String> namespaces;
     
@@ -45,19 +45,15 @@ public class NamespaceProcessor extends AbstractProcessor {
     
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (Element element : annotated(annotations, environment))  {
-            for (Namespace namespace : element.getAnnotationsByType(Namespace.class)) {
-                check(element, namespace.value());
-            }
+    protected void process(Element element) {
+        for (Namespace namespace : element.getAnnotationsByType(Namespace.class)) {
+            check(element, namespace.value());
         }
-        
-        return false;
     }
     
     protected void check(Element element, String[] namespace) {
         if (namespace.length == 0) {
-            processingEnv.getMessager().printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
+            messager.printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
             return;
         }
         
@@ -69,7 +65,7 @@ public class NamespaceProcessor extends AbstractProcessor {
             namespaces.put(name, type);
 
         } else {
-            processingEnv.getMessager().printMessage(ERROR, "Conflicting namespaces: " + type + " and " + other + ", namespaces must be unique", element);
+            messager.printMessage(ERROR, "Conflicting namespaces: " + type + " and " + other + ", namespaces must be unique", element);
         }
     }
 

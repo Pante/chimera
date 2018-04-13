@@ -23,22 +23,46 @@
  */
 package com.karuslabs.annotations.processors;
 
-import com.karuslabs.annotations.Static;
-
-import java.util.*;
-
+import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-
-import static java.util.stream.Collectors.toSet;
-
+import javax.lang.model.util.Types;
 
 
-@Static
-public class Processors {
+public abstract class AnnotationProcessor extends AbstractProcessor {
     
-    public static Set<? extends Element> annotated(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        return annotations.stream().map(environment::getElementsAnnotatedWith).flatMap(Collection::stream).collect(toSet());
+    private static final TypeElement[] ARRAY = new TypeElement[0];
+    
+    protected Messager messager;
+    protected Types types;
+    
+    
+    @Override
+    public synchronized void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        messager = environment.getMessager();
+        types = environment.getTypeUtils();
+        load(environment);
     }
+    
+    protected void load(ProcessingEnvironment environment) {
+        
+    }
+    
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        for (Element element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
+            preprocess(element);
+            process(element);
+        }
+        
+        return false;
+    }
+    
+    protected void preprocess(Element element) {
+        
+    }
+    
+    protected abstract void process(Element element);
     
 }

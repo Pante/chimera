@@ -23,74 +23,32 @@
  */
 package com.karuslabs.annotations.processors;
 
+import com.sun.source.util.Trees;
+
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-import javax.lang.model.util.ElementFilter;
-import javax.lang.model.type.TypeKind;
-
-import static com.karuslabs.annotations.processors.Processors.*;
-import com.sun.source.util.Trees;
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.stream.Collectors.toList;
-import static javax.lang.model.element.Modifier.*;
-import static javax.lang.model.type.TypeKind.*;
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.commons.annotation.ValueBased"
+    "com.karuslabs.annotations.ValueBased"
 })
 public class ValueBasedProcessor extends AbstractProcessor {
     
-    protected List<ExecutableElement> methods;
+    private Trees trees;
+    
+    
+    @Override
+    public synchronized void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        trees = Trees.instance(environment);
+        
+    }
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (Element element : annotated(annotations, environment)) {
-            process(element);
-        }
-        
-        return false;
-    }
-    
-    protected void process(Element element) {
-        methods = ElementFilter.methodsIn(element.getEnclosedElements()).stream().filter(method -> !method.getModifiers().contains(STATIC)).collect(toList());
-        
-        checkClass(element);
-        checkEquals(element);
-        
-        methods = EMPTY_LIST;
-    }
-    
-    protected void checkClass(Element element) {
-        if (!element.getModifiers().contains(FINAL)) {
-            processingEnv.getMessager().printMessage(ERROR, "Invalid class declaration, class must be declared final", element);
-        }
-    }
-    
-    protected void checkEquals(Element element) {
-//        check(element, "equals", "boolean equals(Object)", method -> 
-//            method.getReturnType().getKind() == BOOLEAN && method.getParameters().size() == 1 && method.getParameters().get(0)..getSimpleName().contentEquals("Object")
-//        );
-    }
-    
-    protected void checkHashCode(Element element) {
-        check(element, "int hashCode()", "hashCode", INT);
-    }
-    
-    protected void checkToString(Element element) {
-//        check(element, "string toString()", "toString", STRING);
-    }
-    
-    protected void check(Element element, String missing, String name, TypeKind value, String... parameters) {
-//        for (ExecutableElement method : methods) {
-//            if (expect(method, name, BYTE, parameters)) {
-//                return;
-//            }
-//        }
-        
-        processingEnv.getMessager().printMessage(ERROR, "Missing method: " + missing + ", class must override method", element);
+//        trees.getPath(e)
+return false;
     }
     
 }

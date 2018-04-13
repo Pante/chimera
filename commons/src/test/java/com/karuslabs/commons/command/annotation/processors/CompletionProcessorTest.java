@@ -26,17 +26,14 @@ package com.karuslabs.commons.command.annotation.processors;
 import com.karuslabs.commons.command.annotation.*;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.processing.*;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.singleton;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
@@ -61,44 +58,16 @@ class CompletionProcessorTest {
     
     @Test
     void process() {
-        Set<TypeElement> set = singleton(element);
-        RoundEnvironment environment = new RoundEnvironment() {
-            @Override
-            public boolean processingOver() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public boolean errorRaised() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getRootElements() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(TypeElement a) {
-                return set;
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
-                return set;
-            }
-        };
         doNothing().when(processor).checkLiterals(any());
         doNothing().when(processor).checkRegistrations(any());
         processor.indexes.add(10);
         
-        boolean process = processor.process(set, environment);
+        processor.process(element);
         
         verify(processor).checkLiterals(element);
         verify(processor).checkRegistrations(element);
         
         assertTrue(processor.indexes.isEmpty());
-        assertFalse(process);
     } 
     
     

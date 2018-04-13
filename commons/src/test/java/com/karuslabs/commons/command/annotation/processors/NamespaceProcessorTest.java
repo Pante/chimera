@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.annotation.processors;
 
-import com.karuslabs.commons.command.annotation.processors.NamespaceProcessor;
 import com.karuslabs.commons.command.annotation.Namespace;
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -62,34 +61,6 @@ class NamespaceProcessorTest {
     
     @Test
     void process() {
-        Set<TypeElement> set = singleton(element);
-        RoundEnvironment environment = new RoundEnvironment() {
-            @Override
-            public boolean processingOver() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public boolean errorRaised() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getRootElements() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(TypeElement a) {
-                return set;
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
-                return set;
-            }
-        };
-        
         Namespace namespace = new Namespace() {
             @Override
             public String[] value() {
@@ -105,7 +76,7 @@ class NamespaceProcessorTest {
         doNothing().when(processor).check(any(), any());
         when(element.getAnnotationsByType(Namespace.class)).thenReturn(new Namespace[] {namespace});
         
-        processor.process(set, environment);
+        processor.process(element);
         
         verify(processor).check(any(), any());
     }

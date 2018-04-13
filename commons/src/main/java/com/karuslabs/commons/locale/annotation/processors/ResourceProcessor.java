@@ -23,13 +23,12 @@
  */
 package com.karuslabs.commons.locale.annotation.processors;
 
+import com.karuslabs.annotations.processors.AnnotationProcessor;
 import com.karuslabs.commons.locale.annotation.*;
 
-import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.annotations.processors.Processors.annotated;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
@@ -37,31 +36,27 @@ import static javax.tools.Diagnostic.Kind.ERROR;
     "com.karuslabs.commons.locale.annotation.Bundle",
     "com.karuslabs.commons.locale.annotation.EmbeddedResources", "com.karuslabs.commons.locale.annotation.ExternalResources"
 })
-public class ResourceProcessor extends AbstractProcessor {
-    
+public class ResourceProcessor extends AnnotationProcessor {
+
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (Element element : annotated(annotations, environment)) {
-            if (element.getAnnotation(Bundle.class) == null) {
-                processingEnv.getMessager().printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
-            }
-            
-            if (element.getAnnotation(EmbeddedResources.class) != null) {
-                process(element, element.getAnnotation(EmbeddedResources.class).value());
-            }
-            
-            if (element.getAnnotation(ExternalResources.class) != null) {
-                process(element, element.getAnnotation(ExternalResources.class).value());
-            }
+    protected void process(Element element) {
+        if (element.getAnnotation(Bundle.class) == null) {
+            messager.printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
         }
 
-        return false;
+        if (element.getAnnotation(EmbeddedResources.class) != null) {
+            process(element, element.getAnnotation(EmbeddedResources.class).value());
+        }
+
+        if (element.getAnnotation(ExternalResources.class) != null) {
+            process(element, element.getAnnotation(ExternalResources.class).value());
+        }
     }
-    
+
     protected void process(Element element, String[] values) {
         if (values.length > 1) {
             for (int i = 0; i < values.length; i++) {
-                for (int j = i + 1; j < values.length; j++) {           
+                for (int j = i + 1; j < values.length; j++) {
                     String first = values[i];
                     String second = values[j];
                     if (i != j && first != null && first.equals(second)) {
@@ -69,12 +64,11 @@ public class ResourceProcessor extends AbstractProcessor {
                     }
                 }
             }
-            
+
         } else if (values.length == 0) {
             processingEnv.getMessager().printMessage(ERROR, "Resources is empty, resources cannot be empty", element);
         }
-        
-        
+
     }
-    
+
 }

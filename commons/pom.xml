@@ -45,6 +45,9 @@
                 <configuration>
                     <source>${source}</source>
                     <target>${target}</target>
+                    <annotationProcessors>
+                        <annotationProcessor>com.karuslabs.annotations.processors.StaticProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
             </plugin>
     

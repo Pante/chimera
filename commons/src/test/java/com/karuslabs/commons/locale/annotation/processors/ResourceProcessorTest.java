@@ -50,33 +50,6 @@ class ResourceProcessorTest {
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     TypeMirror mirror = mock(TypeMirror.class);
     TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(mirror).getMock();
-    RoundEnvironment round = new RoundEnvironment() {
-        @Override
-        public boolean processingOver() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public boolean errorRaised() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public Set<? extends Element> getRootElements() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public Set<? extends Element> getElementsAnnotatedWith(TypeElement a) {
-            return singleton(element);
-        }
-
-        @Override
-        public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
-            return singleton(element);
-        }
-            
-    };
     
     
     @Test
@@ -114,8 +87,8 @@ class ResourceProcessorTest {
         });
         
         processor.init(environment);
+        processor.process(element);
         
-        assertFalse(processor.process(singleton(element), round));
         verify(messager).printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
         verify(processor, times(2)).process(eq(element), any());
     }

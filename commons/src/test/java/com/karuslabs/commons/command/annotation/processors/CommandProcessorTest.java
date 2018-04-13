@@ -25,8 +25,6 @@ package com.karuslabs.commons.command.annotation.processors;
 
 import com.karuslabs.commons.command.CommandExecutor;
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
@@ -36,7 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.singleton;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,59 +74,20 @@ class CommandProcessorTest {
     
     
     @Test
-    void init() {
-        processor.init(environment);
-        
-        assertSame(element.asType(), processor.getExpected());
-        assertSame(messager, processor.getMessager());
-    }
-    
-    
-    @Test
-    void process() {
-        Set<TypeElement> set = singleton(element);
-        RoundEnvironment environment = new RoundEnvironment() {
-            @Override
-            public boolean processingOver() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public boolean errorRaised() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getRootElements() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(TypeElement a) {
-                return set;
-            }
-
-            @Override
-            public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
-                return set;
-            }
-        };
-        doNothing().when(processor).checkAssignability(any());
-        
-        boolean processed = processor.process(set, environment);
-        
-        verify(processor).checkAssignability(any());
-        assertFalse(processed);
+    void load() {
+        processor.load(environment);
+  
+        assertNotNull(processor.expected);
     }
     
     
     @ParameterizedTest
     @CsvSource({"true, 0", "false, 1"})
-    void checkAssignability(boolean assignable, int times) {
+    void process(boolean assignable, int times) {
         when(types.isAssignable(any(), any())).thenReturn(assignable);
         
         processor.init(environment);
-        processor.checkAssignability(element);
+        processor.process(element);
         
         verify(messager, times(times)).printMessage(ERROR, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName() , element);
     }
