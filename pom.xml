@@ -27,6 +27,7 @@
         <module>command-validator-maven-plugin</module>
         <module>plugin-annotations-maven-plugin</module>
         <module>plugin-validator-maven-plugin</module>
+        <module>Report</module>
     </modules>
   
         
@@ -101,5 +102,24 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>
