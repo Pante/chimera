@@ -47,6 +47,7 @@
                     <target>${target}</target>
                     <annotationProcessors>
                         <annotationProcessor>com.karuslabs.annotations.processors.StaticProcessor</annotationProcessor>
+                        <annotationProcessor>com.karuslabs.annotations.processors.ValueBasedProcessor</annotationProcessor>
                     </annotationProcessors>
                 </configuration>
             </plugin>

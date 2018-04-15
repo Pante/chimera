@@ -74,8 +74,8 @@ class CommandProcessorTest {
     
     
     @Test
-    void load() {
-        processor.load(environment);
+    void initialise() {
+        processor.initialise(environment);
   
         assertNotNull(processor.expected);
     }

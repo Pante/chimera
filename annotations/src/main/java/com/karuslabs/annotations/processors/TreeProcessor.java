@@ -26,30 +26,46 @@ package com.karuslabs.annotations.processors;
 import com.sun.source.tree.*;
 import com.sun.source.util.Trees;
 
-import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
-import javax.tools.Diagnostic;
+
+import static javax.tools.Diagnostic.Kind.*;
 
 
-public abstract class TreeProcessor extends AnnotationProcessor {
+public abstract class TreeProcessor<T extends Tree> extends CompilationProcessor<T> {
     
     protected Trees trees;
-    protected CompilationUnitTree compilation;
+    protected CompilationUnitTree root;
     
     
     @Override
-    protected void preprocess(Element element) {
-        compilation = trees.getPath(element).getCompilationUnit();
-    }
-    
-    @Override
-    protected void load(ProcessingEnvironment environment) {
+    public synchronized void init(ProcessingEnvironment environment) {
+        super.init(environment);
         trees = Trees.instance(environment);
+        initialise(environment);
     }
     
     
+    @Override
+    protected T from(Element element) {
+        root = trees.getPath(element).getCompilationUnit();
+        return (T) trees.getTree(element);
+    }
+    
+    
+    @Override
     protected void error(Tree tree, String message) {
-        trees.printMessage(Diagnostic.Kind.ERROR, message, tree, compilation);
+        trees.printMessage(ERROR, message, tree, root);
+    }
+    
+    @Override
+    protected void warning(Tree tree, String message) {
+        trees.printMessage(WARNING, message, tree, root);
+    }
+    
+    @Override
+    protected void note(Tree tree, String message) {
+        trees.printMessage(NOTE, message, tree, root);
     }
     
 }

@@ -26,9 +26,7 @@ package com.karuslabs.annotations.processors;
 import com.sun.source.tree.*;
 
 import java.util.List;
-
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
 
 import static javax.lang.model.element.Modifier.*;
 
@@ -36,30 +34,35 @@ import static javax.lang.model.element.Modifier.*;
 @SupportedAnnotationTypes({
     "com.karuslabs.annotations.Static"
 })
-public class StaticProcessor extends TreeProcessor {
+public class StaticProcessor extends TreeProcessor<ClassTree> {
     
     @Override
-    protected void process(Element element) {
-        ClassTree tree = (ClassTree) trees.getTree(element);
+    protected void process(ClassTree tree) {
         for (Tree member : tree.getMembers()) {
             if (member instanceof MethodTree) {
-                checkMethod((MethodTree) member);
+                MethodTree method = (MethodTree) member;
+                checkConstructor(method);
+                checkMethod(method);
                 
             } else if (member instanceof VariableTree) {
-                checkField((VariableTree) member);
+                checkStatic(((VariableTree) member).getModifiers(), "field");
+                
+                
+            } else if (member instanceof ClassTree) {
+                checkStatic(((ClassTree) member).getModifiers(), "class/interface");
             }
         }
     }
     
-    protected void checkMethod(MethodTree member) {
-        if (member.getName().contentEquals("<init>") && (!member.getModifiers().getFlags().contains(PRIVATE) && !isEmpty(member))) {
-            error(member, "Invalid constructor modifier, constructor must either be private or undeclared");
+    protected void checkConstructor(MethodTree method) {
+        if (method.getName().contentEquals("<init>") && !isEmpty(method)) {
+            error(method, "Invalid constructor, constructor must have no parameters and be empty");
         }
     }
     
     protected boolean isEmpty(MethodTree tree) {
         List<StatementTree> statements = (List<StatementTree>) tree.getBody().getStatements();
-        if (statements.size() > 1 || !tree.getParameters().isEmpty()) {
+        if (!tree.getParameters().isEmpty() || statements.size() > 1 || !(statements.get(0) instanceof ExpressionStatementTree)) {
             return false;
         }
         
@@ -72,9 +75,15 @@ public class StaticProcessor extends TreeProcessor {
         }
     }
     
-    protected void checkField(VariableTree field) {
-        if (!field.getModifiers().getFlags().contains(STATIC)) {
-            error(field, "Invalid field, field must be declared static");
+    protected void checkMethod(MethodTree method) {
+        if (!method.getName().contentEquals("<init>") && !method.getModifiers().getFlags().contains(STATIC)) {
+            error(method, "Invalid method modifier, method must be declared static");
+        }
+    }
+        
+    protected void checkStatic(ModifiersTree modifiers, String type) {
+        if (!modifiers.getFlags().contains(STATIC)) {
+            error(modifiers, "Invalid " + type + ", " + type + " must be declared static");
         }
     }
     

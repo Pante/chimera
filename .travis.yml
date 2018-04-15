@@ -7,19 +7,8 @@ branches:
   - master
   - documentation
 
-
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-  
 script: 
   - mvn --settings travis-settings.xml deploy
 
-after_script:
-  - cp report/target/site/jacoco/jacoco.xml report/src/main/java/jacoco.xml
-  - cd src/main/java/
-  - ../../../cc-test-reporter after-build -t jacoco --exit-code $TRAVIS_TEST_RESULT
-  
 after_success:
   - bash <(curl -s https://codecov.io/bash)

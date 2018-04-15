@@ -27,7 +27,6 @@
         <module>command-validator-maven-plugin</module>
         <module>plugin-annotations-maven-plugin</module>
         <module>plugin-validator-maven-plugin</module>
-        <module>report</module>
     </modules>
   
         

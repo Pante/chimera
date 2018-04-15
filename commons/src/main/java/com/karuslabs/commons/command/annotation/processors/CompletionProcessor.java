@@ -30,8 +30,6 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
-
 
 @SupportedAnnotationTypes({
     "com.karuslabs.commons.command.annotation.Literal", "com.karuslabs.commons.command.annotation.Literals",
@@ -68,10 +66,10 @@ public class CompletionProcessor extends AnnotationProcessor {
     
     protected void check(Element element, int index) {
         if (index < 0) {
-            processingEnv.getMessager().printMessage(ERROR, "Index out of bounds: " + index + ", index must be equal to or greater than 0", element);
+            error(element, "Index out of bounds: " + index + ", index must be equal to or greater than 0");
                     
         } else if (!indexes.add(index)) {
-            processingEnv.getMessager().printMessage(ERROR, "Conflicting indexes: " + index + ", indexes must be unique", element);
+            error(element, "Conflicting indexes: " + index + ", indexes must be unique");
         }
     }
     

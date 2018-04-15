@@ -23,15 +23,14 @@
  */
 package com.karuslabs.annotations.processors;
 
-import java.util.Set;
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
 
+import static javax.tools.Diagnostic.Kind.*;
 
-public abstract class AnnotationProcessor extends AbstractProcessor {
-    
-    private static final TypeElement[] ARRAY = new TypeElement[0];
+
+public abstract class AnnotationProcessor extends CompilationProcessor<Element> {
     
     protected Messager messager;
     protected Types types;
@@ -42,27 +41,29 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         super.init(environment);
         messager = environment.getMessager();
         types = environment.getTypeUtils();
-        load(environment);
+        initialise(environment);
     }
     
-    protected void load(ProcessingEnvironment environment) {
-        
+    
+    @Override
+    protected Element from(Element element) {
+        return element;
+    }
+    
+    
+    @Override
+    protected void error(Element element, String message) {
+        messager.printMessage(ERROR, message, element);
     }
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (Element element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
-            preprocess(element);
-            process(element);
-        }
-        
-        return false;
+    protected void warning(Element element, String message) {
+        messager.printMessage(WARNING, message, element);
     }
     
-    protected void preprocess(Element element) {
-        
+    @Override
+    protected void note(Element element, String message) {
+        messager.printMessage(NOTE, message, element);
     }
-    
-    protected abstract void process(Element element);
     
 }

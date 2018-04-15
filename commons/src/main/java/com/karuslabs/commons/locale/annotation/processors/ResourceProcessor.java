@@ -29,8 +29,6 @@ import com.karuslabs.commons.locale.annotation.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
-
 
 @SupportedAnnotationTypes({
     "com.karuslabs.commons.locale.annotation.Bundle",
@@ -41,7 +39,7 @@ public class ResourceProcessor extends AnnotationProcessor {
     @Override
     protected void process(Element element) {
         if (element.getAnnotation(Bundle.class) == null) {
-            messager.printMessage(ERROR, "Missing bundle name for: " + element.asType().toString(), element);
+           error(element, "Missing bundle name for: " + element.asType().toString());
         }
 
         if (element.getAnnotation(EmbeddedResources.class) != null) {
@@ -60,13 +58,13 @@ public class ResourceProcessor extends AnnotationProcessor {
                     String first = values[i];
                     String second = values[j];
                     if (i != j && first != null && first.equals(second)) {
-                        processingEnv.getMessager().printMessage(ERROR, "Duplicate resources: " + first + ", resources must be unique", element);
+                        error(element, "Duplicate resources: " + first + ", resources must be unique");
                     }
                 }
             }
 
         } else if (values.length == 0) {
-            processingEnv.getMessager().printMessage(ERROR, "Resources is empty, resources cannot be empty", element);
+            error(element, "Resources is empty, resources cannot be empty");
         }
 
     }

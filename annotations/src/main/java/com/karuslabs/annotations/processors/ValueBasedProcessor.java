@@ -23,32 +23,34 @@
  */
 package com.karuslabs.annotations.processors;
 
-import com.sun.source.util.Trees;
+import com.sun.source.tree.*;
+import static com.sun.source.tree.Tree.Kind.PARAMETERIZED_TYPE;
 
-import java.util.*;
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.annotations.ValueBased"
+    "com.karuslabs.annotations.AAA"
 })
-public class ValueBasedProcessor extends AbstractProcessor {
-    
-    private Trees trees;
-    
-    
+public class ValueBasedProcessor extends TreeProcessor<ClassTree> {
+
     @Override
-    public synchronized void init(ProcessingEnvironment environment) {
-        super.init(environment);
-        trees = Trees.instance(environment);
-        
+    protected void process(ClassTree tree) {
+        error(tree, "KIND: " + tree.getTypeParameters().get(0).getBounds().get(0).getKind());
+        for (Tree member : tree.getMembers()) {
+            if (member instanceof VariableTree) {
+                VariableTree field = (VariableTree) member;
+                if (field.getType().getKind() == PARAMETERIZED_TYPE) {
+                    ParameterizedTypeTree parameterized = (ParameterizedTypeTree) field.getType();
+                    error(parameterized, "Parameterized: type: " + parameterized.getType().getKind());
+                    error(parameterized, "Parameterized: arguments: " + parameterized.getTypeArguments().get(0).getKind());
+                    
+                } else {
+                    error(field, "Field: " + field.getName() + " type: " + field.getType().getKind());
+                }
+
+            }
+        }
     }
-    
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-//        trees.getPath(e)
-return false;
-    }
-    
+
 }

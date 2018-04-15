@@ -24,7 +24,6 @@
 package com.karuslabs.commons.util;
 
 import com.karuslabs.annotations.ValueBased;
-import com.karuslabs.annotations.Immutable;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -35,7 +34,6 @@ import javax.annotation.Nullable;
 import static java.util.stream.Stream.*;
 
 
-@Immutable
 @ValueBased
 public final class Weak<T> extends WeakReference<T> {
     

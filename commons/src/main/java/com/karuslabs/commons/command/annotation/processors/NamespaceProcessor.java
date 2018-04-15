@@ -30,8 +30,6 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
-
 
 @SupportedAnnotationTypes({"com.karuslabs.commons.command.annotation.Namespace", "com.karuslabs.commons.command.annotation.Namespaces"})
 public class NamespaceProcessor extends AnnotationProcessor {
@@ -53,7 +51,7 @@ public class NamespaceProcessor extends AnnotationProcessor {
     
     protected void check(Element element, String[] namespace) {
         if (namespace.length == 0) {
-            messager.printMessage(ERROR, "Invalid namespace, namespace cannot be empty", element);
+            error(element, "Invalid namespace, namespace cannot be empty");
             return;
         }
         
@@ -65,7 +63,7 @@ public class NamespaceProcessor extends AnnotationProcessor {
             namespaces.put(name, type);
 
         } else {
-            messager.printMessage(ERROR, "Conflicting namespaces: " + type + " and " + other + ", namespaces must be unique", element);
+            error(element, "Conflicting namespaces: " + type + " and " + other + ", namespaces must be unique");
         }
     }
 
