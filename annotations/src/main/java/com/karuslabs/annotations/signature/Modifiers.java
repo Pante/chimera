@@ -25,12 +25,31 @@ package com.karuslabs.annotations.signature;
 
 import java.util.Set;
 import javax.lang.model.element.Modifier;
-        
+
+import static java.util.Collections.disjoint;
+
 
 @FunctionalInterface
 public interface Modifiers {
     
-    public boolean match(Set<Modifier> expected, Set<Modifier> actual);
+    public boolean match(Set<Modifier> modifiers);
+  
+    
+    public static Modifiers any() {
+        return modifiers -> true;
+    }
+    
+    public static Modifiers any(Set<Modifier> expected) {
+        return modifiers -> !disjoint(modifiers, expected);
+    }
+    
+    public static Modifiers exact(Set<Modifier> expected) {
+        return expected::equals;
+    }
+    
+    public static Modifiers except(Set<Modifier> expected) {
+        return modifiers -> disjoint(modifiers, expected);
+    }
     
 }
 
