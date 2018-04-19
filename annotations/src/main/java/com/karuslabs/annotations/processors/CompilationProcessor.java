@@ -27,12 +27,23 @@ import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Types;
 
 
 public abstract class CompilationProcessor<Unit> extends AbstractProcessor {
     
     protected static final TypeElement[] ARRAY = new TypeElement[0];
     
+    
+    protected Types types;
+    
+    
+    @Override
+    public synchronized void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        types = environment.getTypeUtils();
+        initialise(environment);
+    }
     
     protected void initialise(ProcessingEnvironment environment) {
         

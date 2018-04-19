@@ -30,7 +30,7 @@ import javax.annotation.processing.*;
 
 
 @SupportedAnnotationTypes({
-    "com.karuslabs.annotations.AAA"
+    "com.karuslabs.annotations.ValueBased"
 })
 public class ValueBasedProcessor extends TreeProcessor<ClassTree> {
 

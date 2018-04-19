@@ -25,7 +25,6 @@ package com.karuslabs.annotations.processors;
 
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
-import javax.lang.model.util.Types;
 
 import static javax.tools.Diagnostic.Kind.*;
 
@@ -33,14 +32,12 @@ import static javax.tools.Diagnostic.Kind.*;
 public abstract class AnnotationProcessor extends CompilationProcessor<Element> {
     
     protected Messager messager;
-    protected Types types;
-    
+
     
     @Override
     public synchronized void init(ProcessingEnvironment environment) {
         super.init(environment);
         messager = environment.getMessager();
-        types = environment.getTypeUtils();
         initialise(environment);
     }
     

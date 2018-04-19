@@ -23,7 +23,7 @@
  */
 package com.karuslabs.annotations.signature;
 
-import java.util.Set;
+import java.util.*;
 import javax.lang.model.element.Modifier;
 
 import static java.util.Collections.disjoint;
@@ -39,15 +39,18 @@ public interface Modifiers {
         return modifiers -> true;
     }
     
-    public static Modifiers any(Set<Modifier> expected) {
+    public static Modifiers any(Modifier first, Modifier... rest) {
+        Set<Modifier> expected = EnumSet.of(first, rest);
         return modifiers -> !disjoint(modifiers, expected);
     }
     
-    public static Modifiers exact(Set<Modifier> expected) {
+    public static Modifiers exact(Modifier first, Modifier... rest) {
+        Set<Modifier> expected = EnumSet.of(first, rest);
         return expected::equals;
     }
     
-    public static Modifiers except(Set<Modifier> expected) {
+    public static Modifiers except(Modifier first, Modifier... rest) {
+        Set<Modifier> expected = EnumSet.of(first, rest);
         return modifiers -> disjoint(modifiers, expected);
     }
     
