@@ -23,23 +23,17 @@
  */
 package com.karuslabs.annotations.signature;
 
-import java.util.*;
-import javax.lang.model.element.Modifier;
-
-import static java.util.Collections.disjoint;
+import com.sun.source.tree.*;
 
 
 @FunctionalInterface
-public interface Modifiers {
+public interface ParameterizedType extends Type {
     
-    public boolean match(Set<Modifier> expected, Set<Modifier> actual);
-  
+    @Override
+    public default boolean match(Tree tree) {
+        return tree instanceof ParameterizedTypeTree ? match((ParameterizedTypeTree) tree) : false;
+    }
     
-    public static final Modifiers ANY = (expected, actual) -> !disjoint(expected, actual);
-    
-    public static final Modifiers EXACTLY = Set<Modifier>::equals;
-
-    public static final Modifiers EXCEPT = Collections::disjoint;
+    public boolean match(ParameterizedTypeTree tree);
     
 }
-
