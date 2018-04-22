@@ -70,4 +70,9 @@ public abstract class CompilationProcessor<Unit> extends AbstractProcessor {
     
     protected abstract void note(Unit unit, String message);
     
+    
+    public Types getTypes() {
+        return types;
+    }
+    
 }

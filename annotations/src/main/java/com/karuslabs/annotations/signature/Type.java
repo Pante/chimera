@@ -24,12 +24,46 @@
 package com.karuslabs.annotations.signature;
 
 
-import com.sun.source.tree.Tree;
+import com.karuslabs.annotations.processors.TreeProcessor;
+
+import com.sun.source.tree.*;
+import com.sun.source.util.Trees;
+
+import javax.lang.model.type.*;
 
 
 @FunctionalInterface
 public interface Type {
+
+    public boolean test(Tree identifier);
     
-    public boolean match(Tree identifier);
     
+    public static Type any() {
+        return tree -> true;
+    }
+    
+    public static Type exactly(String name) {
+        return tree -> tree instanceof IdentifierTree && ((IdentifierTree) tree).getName().contentEquals(name);
+    }
+    
+    public static Type exactly(TypeKind kind) {
+        return tree -> tree instanceof PrimitiveTypeTree && ((PrimitiveTypeTree) tree).getPrimitiveTypeKind() == kind;
+    }
+    
+    
+    public static Type from(TreeProcessor<?> processor, TypeMirror type) {
+        return tree -> {
+            Trees trees = processor.getTrees();
+            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
+            return processor.getTypes().isAssignable(type, actual);
+        };
+    }
+    
+    public static Type to(TreeProcessor<?> processor, TypeMirror type) {
+        return tree -> {
+            Trees trees = processor.getTrees();
+            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
+            return processor.getTypes().isAssignable(actual, type);
+        };
+    }
 }

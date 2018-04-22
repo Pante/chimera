@@ -23,23 +23,43 @@
  */
 package com.karuslabs.annotations.signature;
 
-import java.util.*;
+import com.sun.source.tree.Tree;
+
+import java.util.Set;
+import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
-import static java.util.Collections.disjoint;
 
+public abstract class TypeSignature<T extends Tree> extends Signature<T> {
     
-@FunctionalInterface
-public interface Modifiers {
-    
-    public boolean match(Set<Modifier> expected, Set<Modifier> actual);
+    protected Type type;
+    protected @Nullable String name;
     
     
-    public static final Modifiers ANY = (expected, actual) -> !disjoint(expected, actual);
+    public TypeSignature(Set<Modifier> modifiers, Modifiers condition, Type type, String name) {
+        super(modifiers, condition);
+        this.type = type;
+        this.name = name;
+    }
     
-    public static final Modifiers EXACTLY = Set<Modifier>::equals;
-
-    public static final Modifiers EXCEPT = Collections::disjoint;
+    
+    public static abstract class TypeBuilder<GenericBuilder extends TypeBuilder, GenericSignature extends TypeSignature<?>> extends Builder<GenericBuilder, GenericSignature> {
+        
+        public TypeBuilder(GenericSignature signature) {
+            super(signature);
+        }
+        
+        
+        public GenericBuilder type(Type type) {
+            signature.type = type;
+            return getThis();
+        }
+        
+        public GenericBuilder name(String name) {
+            signature.name = name;
+            return getThis();
+        }
+        
+    }
     
 }
-    

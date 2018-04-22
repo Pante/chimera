@@ -67,5 +67,14 @@ public abstract class TreeProcessor<T extends Tree> extends CompilationProcessor
     protected void note(Tree tree, String message) {
         trees.printMessage(NOTE, message, tree, root);
     }
+
+    
+    public Trees getTrees() {
+        return trees;
+    }
+
+    public CompilationUnitTree getRoot() {
+        return root;
+    }
     
 }

@@ -23,10 +23,60 @@
  */
 package com.karuslabs.annotations.signature;
 
+import com.sun.source.tree.Tree;
 
-public class Signature {
+import java.util.*;
+import javax.lang.model.element.Modifier;
+
+
+public abstract class Signature<T extends Tree> {
     
-    private Modifiers modifiers;
-    private String name;
+    protected Set<Modifier> modifiers;
+    protected Modifiers condition;
+    
+    
+    public Signature(Set<Modifier> modifiers, Modifiers condition) {
+        this.modifiers = modifiers;
+        this.condition = condition;
+    }
+    
+    
+    public abstract boolean test(T tree);
+    
+    
+    public static abstract class Builder<GenericBuilder extends Builder, GenericSignature extends Signature<?>> {
+        
+        protected GenericSignature signature;
+        
+        
+        public Builder(GenericSignature signature) {
+            this.signature = signature;
+        }     
+        
+        
+        public GenericBuilder modifiers(Modifiers condition, Modifier first, Modifier... rest) {
+            signature.condition = condition;
+            signature.modifiers = EnumSet.of(first, rest);
+            return getThis();
+        }
+        
+        public GenericBuilder modifiers(Modifier first, Modifier... rest) {
+            signature.modifiers = EnumSet.of(first, rest);
+            return getThis();
+        }
+        
+        public GenericBuilder contains(Modifiers condition) {
+            signature.condition = condition;
+            return getThis();
+        }
+        
+        public GenericSignature build() {
+            return signature;
+        }
+        
+        
+        protected abstract GenericBuilder getThis(); 
+        
+    }
     
 }

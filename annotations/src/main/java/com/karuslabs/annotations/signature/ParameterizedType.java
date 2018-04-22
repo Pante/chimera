@@ -25,15 +25,40 @@ package com.karuslabs.annotations.signature;
 
 import com.sun.source.tree.*;
 
+import java.util.List;
+
 
 @FunctionalInterface
 public interface ParameterizedType extends Type {
     
     @Override
-    public default boolean match(Tree tree) {
-        return tree instanceof ParameterizedTypeTree ? match((ParameterizedTypeTree) tree) : false;
+    public default boolean test(Tree tree) {
+        return tree instanceof ParameterizedTypeTree ? test((ParameterizedTypeTree) tree) : false;
     }
     
-    public boolean match(ParameterizedTypeTree tree);
+    public boolean test(ParameterizedTypeTree tree);
+    
+    
+    public static ParameterizedType exactly(String name) {
+        return tree -> ((IdentifierTree) tree.getType()).getName().contentEquals(name);
+    }
+
+    public static ParameterizedType exactly(String name, Type... arguments) {
+        return tree -> {
+            List<? extends Tree> generics = tree.getTypeArguments();
+            
+            if (((IdentifierTree) tree.getType()).getName().contentEquals(name) && arguments.length == generics.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < arguments.length; i++) {
+                if (!arguments[i].test(generics.get(i))) {
+                    return false;
+                }
+            }
+            
+            return true;
+        };
+    }
     
 }

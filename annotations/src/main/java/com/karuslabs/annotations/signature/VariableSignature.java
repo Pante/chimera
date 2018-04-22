@@ -23,23 +23,43 @@
  */
 package com.karuslabs.annotations.signature;
 
-import java.util.*;
+import com.sun.source.tree.VariableTree;
+
+import java.util.Set;
+import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
-import static java.util.Collections.disjoint;
+import static java.util.Collections.EMPTY_SET;
 
-    
-@FunctionalInterface
-public interface Modifiers {
-    
-    public boolean match(Set<Modifier> expected, Set<Modifier> actual);
-    
-    
-    public static final Modifiers ANY = (expected, actual) -> !disjoint(expected, actual);
-    
-    public static final Modifiers EXACTLY = Set<Modifier>::equals;
 
-    public static final Modifiers EXCEPT = Collections::disjoint;
+public class VariableSignature extends TypeSignature<VariableTree> {
+
+    public VariableSignature(Set<Modifier> modifiers, Modifiers condition, Type type, @Nullable String name) {
+        super(modifiers, condition, type, name);
+    }
+
+    @Override
+    public boolean test(VariableTree tree) {
+        return condition.match(modifiers, tree.getModifiers().getFlags()) && type.test(tree.getType()) && name == null ? true : tree.getName().contentEquals(name);
+    }
+    
+    
+    
+    public static VariableBuilder builder() {
+        return new VariableBuilder(new VariableSignature(EMPTY_SET, Modifiers.ANY, Type.any(), null));
+    }
+    
+    public static class VariableBuilder extends TypeBuilder<VariableBuilder, VariableSignature> {
+
+        private VariableBuilder(VariableSignature signature) {
+            super(signature);
+        }
+
+        @Override
+        protected VariableBuilder getThis() {
+            return this;
+        }
+        
+    }
     
 }
-    
