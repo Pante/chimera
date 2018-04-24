@@ -24,9 +24,10 @@
 package com.karuslabs.annotations.processors;
 
 import com.sun.source.tree.*;
-import static com.sun.source.tree.Tree.Kind.PARAMETERIZED_TYPE;
 
 import javax.annotation.processing.*;
+
+import static com.sun.source.tree.Tree.Kind.PARAMETERIZED_TYPE;
 
 
 @SupportedAnnotationTypes({

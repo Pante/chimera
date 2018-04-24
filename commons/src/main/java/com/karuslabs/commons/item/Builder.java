@@ -89,7 +89,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
 
     public GenericBuilder lore(String lore) {
         if (!meta.hasLore()) {
-            meta.setLore(new ArrayList<>());
+            meta.setLore(new ArrayList<>(1));
         }
         meta.getLore().add(lore);
         
