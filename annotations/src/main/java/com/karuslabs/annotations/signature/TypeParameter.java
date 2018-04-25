@@ -31,4 +31,9 @@ public interface TypeParameter {
     
     public boolean test(TypeParameterTree tree);
     
+    
+    public static TypeParameter exactly() {
+        return null;
+    }
+    
 }
