@@ -23,17 +23,17 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.sun.source.tree.TypeParameterTree;
+import com.sun.source.tree.*;
 
 
 @FunctionalInterface
-public interface TypeParameter {
+public interface TypeParameter extends Type {
+    
+    @Override
+    public default boolean test(Tree tree) {
+        return tree instanceof TypeParameterTree ? test((TypeParameterTree) tree) : false;
+    }
     
     public boolean test(TypeParameterTree tree);
-    
-    
-    public static TypeParameter exactly() {
-        return null;
-    }
     
 }
