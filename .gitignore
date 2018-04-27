@@ -56,3 +56,5 @@ Temporary Items
 /plugin-validator-maven-plugin/target/
 /annotations/target/
 /Report/target/
+/command-lint-maven-plugin/target/
+/plugin-lint-maven-plugin/target/
