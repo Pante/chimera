@@ -43,16 +43,16 @@ public interface ParameterizedType extends Type {
         return tree -> ((IdentifierTree) tree.getType()).getName().contentEquals(name);
     }
 
-    public static ParameterizedType exactly(String name, Type... arguments) {
+    public static ParameterizedType exactly(String name, Type... expected) {
         return tree -> {
-            List<? extends Tree> generics = tree.getTypeArguments();
+            List<? extends Tree> parameters = tree.getTypeArguments();
             
-            if (((IdentifierTree) tree.getType()).getName().contentEquals(name) && arguments.length == generics.size()) {
+            if (((IdentifierTree) tree.getType()).getName().contentEquals(name) && expected.length == parameters.size()) {
                 return false;
             }
 
-            for (int i = 0; i < arguments.length; i++) {
-                if (!arguments[i].test(generics.get(i))) {
+            for (int i = 0; i < expected.length; i++) {
+                if (!expected[i].test(parameters.get(i))) {
                     return false;
                 }
             }

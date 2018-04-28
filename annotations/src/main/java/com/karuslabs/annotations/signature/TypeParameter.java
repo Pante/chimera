@@ -24,6 +24,7 @@
 package com.karuslabs.annotations.signature;
 
 import com.sun.source.tree.*;
+import java.util.List;
 
 
 @FunctionalInterface
@@ -35,5 +36,28 @@ public interface TypeParameter extends Type {
     }
     
     public boolean test(TypeParameterTree tree);
+    
+    
+    public static TypeParameter exactly(String name) {
+        return tree -> tree.getName().contentEquals(name);
+    }
+
+    public static TypeParameter exactly(String name, Type... expected) {
+        return tree -> {
+            List<? extends Tree> bounds = tree.getBounds();
+            
+            if (tree.getName().contentEquals(name) && expected.length == bounds.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < expected.length; i++) {
+                if (!expected[i].test(bounds.get(i))) {
+                    return false;
+                }
+            }
+            
+            return true;
+        };
+    }
     
 }
