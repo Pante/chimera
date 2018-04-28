@@ -64,6 +64,6 @@ class PluginLintTest {
         String[] classes = lint.load().toArray(new String[] {});
         
         assertEquals(1, classes.length);
-        assertEquals("com.karuslabs.plugin.validator.validators.TestPlugin", classes[0]);
+        assertEquals("com.karuslabs.plugin.lint.lints.TestPlugin", classes[0]);
     }
 }
