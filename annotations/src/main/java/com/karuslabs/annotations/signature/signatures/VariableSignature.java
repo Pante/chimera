@@ -21,43 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature;
+package com.karuslabs.annotations.signature.signatures;
 
-import com.sun.source.tree.Tree;
+import com.karuslabs.annotations.signature.Modifiers;
+import com.karuslabs.annotations.signature.Type;
+import com.sun.source.tree.VariableTree;
 
 import java.util.Set;
 import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
+import static java.util.Collections.EMPTY_SET;
 
-public abstract class TypeSignature<T extends Tree> extends Signature<T> {
-    
-    protected Type type;
-    protected @Nullable String name;
-    
-    
-    public TypeSignature(Set<Modifier> modifiers, Modifiers condition, Type type, String name) {
-        super(modifiers, condition);
-        this.type = type;
-        this.name = name;
+
+public class VariableSignature extends TypeSignature<VariableTree> {
+
+    public VariableSignature(Set<Modifier> modifiers, Modifiers condition, Type type, @Nullable String name) {
+        super(modifiers, condition, type, name);
+    }
+
+    @Override
+    public boolean test(VariableTree tree) {
+        return condition.match(modifiers, tree.getModifiers().getFlags()) && type.test(tree.getType()) && name == null ? true : tree.getName().contentEquals(name);
     }
     
     
-    public static abstract class TypeBuilder<GenericBuilder extends TypeBuilder, GenericSignature extends TypeSignature<?>> extends Builder<GenericBuilder, GenericSignature> {
-        
-        public TypeBuilder(GenericSignature signature) {
+    
+    public static VariableBuilder builder() {
+        return new VariableBuilder(new VariableSignature(EMPTY_SET, Modifiers.ANY, Type.any(), null));
+    }
+    
+    public static class VariableBuilder extends TypeBuilder<VariableBuilder, VariableSignature> {
+
+        private VariableBuilder(VariableSignature signature) {
             super(signature);
         }
-        
-        
-        public GenericBuilder type(Type type) {
-            signature.type = type;
-            return getThis();
-        }
-        
-        public GenericBuilder name(String name) {
-            signature.name = name;
-            return getThis();
+
+        @Override
+        protected VariableBuilder getThis() {
+            return this;
         }
         
     }

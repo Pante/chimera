@@ -29,13 +29,12 @@ import com.karuslabs.annotations.processors.TreeProcessor;
 import com.sun.source.tree.*;
 import com.sun.source.util.Trees;
 
+import java.util.function.Predicate;
 import javax.lang.model.type.*;
 
 
 @FunctionalInterface
-public interface Type {
-
-    public boolean test(Tree identifier);
+public interface Type extends Predicate<Tree> {
     
     
     public static Type any() {

@@ -21,15 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature;
+package com.karuslabs.annotations.signature.signatures;
 
+import com.karuslabs.annotations.signature.Modifiers;
 import com.sun.source.tree.Tree;
 
 import java.util.*;
+import java.util.function.Predicate;
 import javax.lang.model.element.Modifier;
 
 
-public abstract class Signature<T extends Tree> {
+public abstract class Signature<T extends Tree> implements Predicate<T> {
     
     protected Set<Modifier> modifiers;
     protected Modifiers condition;
@@ -39,9 +41,6 @@ public abstract class Signature<T extends Tree> {
         this.modifiers = modifiers;
         this.condition = condition;
     }
-    
-    
-    public abstract boolean test(T tree);
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericSignature extends Signature<?>> {
