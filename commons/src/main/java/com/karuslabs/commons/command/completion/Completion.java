@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.completion;
 
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import org.bukkit.*;
@@ -31,7 +32,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static java.util.Collections.EMPTY_LIST;
-import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 
 

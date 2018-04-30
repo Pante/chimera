@@ -23,8 +23,8 @@
  */
 package com.karuslabs.annotations.signature.signatures;
 
-import com.karuslabs.annotations.signature.Modifiers;
-import com.karuslabs.annotations.signature.Type;
+import com.karuslabs.annotations.signature.*;
+
 import com.sun.source.tree.VariableTree;
 
 import java.util.Set;
