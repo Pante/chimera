@@ -24,26 +24,17 @@
 package com.karuslabs.annotations.signature;
 
 import com.sun.source.tree.*;
-
 import java.util.List;
 
 
 @FunctionalInterface
-public interface ParameterizedType extends Type {
-    
-    @Override
-    public default boolean test(Tree tree) {
-        return tree instanceof ParameterizedTypeTree ? test((ParameterizedTypeTree) tree) : false;
-    }
-    
-    public boolean test(ParameterizedTypeTree tree);
-    
+public interface ParameterizedType extends Reference<ParameterizedTypeTree> {
     
     public static ParameterizedType exactly(String name) {
         return tree -> ((IdentifierTree) tree.getType()).getName().contentEquals(name);
     }
-
-    public static ParameterizedType exactly(String name, Type... expected) {
+    
+    public static ParameterizedType exactly(String name, Reference... expected) {
         return tree -> {
             List<? extends Tree> parameters = tree.getTypeArguments();
             

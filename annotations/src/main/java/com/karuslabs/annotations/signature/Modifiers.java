@@ -42,4 +42,3 @@ public interface Modifiers {
     public static final Modifiers EXCEPT = Collections::disjoint;
     
 }
-    

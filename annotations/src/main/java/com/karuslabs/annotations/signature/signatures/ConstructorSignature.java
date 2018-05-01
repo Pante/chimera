@@ -24,24 +24,25 @@
 package com.karuslabs.annotations.signature.signatures;
 
 import com.karuslabs.annotations.signature.*;
-    
+
 import com.sun.source.tree.*;
 
-import java.util.*;
+import java.util.Set;
 import javax.lang.model.element.Modifier;
+
 
 import static java.util.Collections.EMPTY_SET;
 
 
-public class MethodSignature extends TypeSignature<MethodTree> {
+public class ConstructorSignature extends Signature<MethodTree> {
     
     private Expectations<TypeParameterTree> generics;
     private Expectations<VariableTree> parameters;
     private Expectations<Tree> exceptions;
     
     
-    public MethodSignature(Set<Modifier> modifiers, Modifiers condition, Expectations<TypeParameterTree> generics, Type type, String name, Expectations<VariableTree> parameters, Expectations<Tree> exceptions) {
-        super(modifiers, condition, type, name);
+    public ConstructorSignature(Set<Modifier> modifiers, Modifiers condition, Expectations<TypeParameterTree> generics, Expectations<VariableTree> parameters, Expectations<Tree> exceptions) {
+        super(modifiers, condition);
         this.generics = generics;
         this.parameters = parameters;
         this.exceptions = exceptions;
@@ -50,45 +51,44 @@ public class MethodSignature extends TypeSignature<MethodTree> {
     
     @Override
     public boolean test(MethodTree tree) {
-        return condition.match(modifiers, tree.getModifiers().getFlags()) && type.test(tree.getReturnType()) 
-            && tree.getName().contentEquals(name) && generics.check(tree.getTypeParameters()) 
+        return condition.match(modifiers, tree.getModifiers().getFlags()) && tree.getReturnType() == null 
+            && tree.getName().contentEquals("<init>") && generics.check(tree.getTypeParameters())
             && parameters.check(tree.getParameters()) && exceptions.check(tree.getThrows());
     }
     
     
-    public static MethodBuilder builder() {
-        return new MethodBuilder(new MethodSignature(EMPTY_SET, Modifiers.ANY, Expectations.any(), Type.any(), "", Expectations.any(), Expectations.any()));
+    public static ConstructorBuilder builder() {
+        return new ConstructorBuilder(new ConstructorSignature(EMPTY_SET, Modifiers.ANY, Expectations.any(), Expectations.any(), Expectations.any()));
     }
     
-    
-    public static class MethodBuilder extends TypeBuilder<MethodBuilder, MethodSignature> {
+    public static class ConstructorBuilder extends Builder<ConstructorBuilder, ConstructorSignature> {
 
-        private MethodBuilder(MethodSignature signature) {
+        private ConstructorBuilder(ConstructorSignature signature) {
             super(signature);
         }
         
         
-        public MethodBuilder generics(Expectations<TypeParameterTree> generics) {
+        public ConstructorBuilder generics(Expectations<TypeParameterTree> generics) {
             signature.generics = generics;
             return this;
         }
         
-        public MethodBuilder parameters(Expectations<VariableTree> parameters) {
+        public ConstructorBuilder parameters(Expectations<VariableTree> parameters) {
             signature.parameters = parameters;
             return this;
         }
         
-        public MethodBuilder raise(Expectations<Tree> exceptions) {
+        public ConstructorBuilder raise(Expectations<Tree> exceptions) {
             signature.exceptions = exceptions;
             return this;
         }
         
-
+        
         @Override
-        protected MethodBuilder getThis() {
+        protected ConstructorBuilder getThis() {
             return this;
         }
-        
+    
     }
     
 }

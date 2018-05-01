@@ -21,47 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature.signatures;
+package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.signature.*;
+import com.karuslabs.annotations.processors.TreeProcessor;
 
-import com.sun.source.tree.Tree;
-    
-import java.util.Set;
-import javax.annotation.Nullable;
-import javax.lang.model.element.Modifier;
+import com.sun.source.tree.*;
+import com.sun.source.util.Trees;
+
+import javax.lang.model.type.TypeMirror;
 
 
-public abstract class TypeSignature<T extends Tree> extends Signature<T> {
+@FunctionalInterface
+public interface Reference<T extends Tree> extends Type<T> {
     
-    protected Type type;
-    protected @Nullable String name;
+    public static Reference<IdentifierTree> exactly(String name) {
+        return tree -> tree.getName().contentEquals(name);
+    }
     
+    public static Reference<IdentifierTree> from(TreeProcessor<?> processor, TypeMirror type) {
+        return tree -> {
+            Trees trees = processor.getTrees();
+            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
+            return processor.getTypes().isAssignable(type, actual);
+        };
+    }
     
-    public TypeSignature(Set<Modifier> modifiers, Modifiers condition, Type type, String name) {
-        super(modifiers, condition);
-        this.type = type;
-        this.name = name;
-}
-    
-    
-    public static abstract class TypeBuilder<GenericBuilder extends TypeBuilder, GenericSignature extends TypeSignature<?>> extends Builder<GenericBuilder, GenericSignature> {
-        
-        public TypeBuilder(GenericSignature signature) {
-            super(signature);
-        }
-        
-        
-        public GenericBuilder type(Type type) {
-            signature.type = type;
-            return getThis();
-        }
-        
-        public GenericBuilder name(String name) {
-            signature.name = name;
-            return getThis();
-        }
-        
+    public static Reference<IdentifierTree> to(TreeProcessor<?> processor, TypeMirror type) {
+        return tree -> {
+            Trees trees = processor.getTrees();
+            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
+            return processor.getTypes().isAssignable(actual, type);
+        };
     }
     
 }

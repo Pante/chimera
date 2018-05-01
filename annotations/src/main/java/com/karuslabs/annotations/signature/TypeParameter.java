@@ -29,30 +29,22 @@ import java.util.List;
 
 
 @FunctionalInterface
-public interface TypeParameter extends Type {
-    
-    @Override
-    public default boolean test(Tree tree) {
-        return tree instanceof TypeParameterTree ? test((TypeParameterTree) tree) : false;
-    }
-    
-    public boolean test(TypeParameterTree tree);
-    
+public interface TypeParameter extends Reference<TypeParameterTree> {
     
     public static TypeParameter exactly(String name) {
         return tree -> tree.getName().contentEquals(name);
     }
-
-    public static TypeParameter exactly(String name, Type... expected) {
+    
+    public static TypeParameter exactly(String name, Reference... expected) {
         return tree -> {
-            List<? extends Tree> bounds = tree.getBounds();
+            List<? extends Tree> parameters = tree.getBounds();
             
-            if (tree.getName().contentEquals(name) && expected.length == bounds.size()) {
+            if (tree.getName().contentEquals(name) && expected.length == parameters.size()) {
                 return false;
             }
 
             for (int i = 0; i < expected.length; i++) {
-                if (!expected[i].test(bounds.get(i))) {
+                if (!expected[i].test(parameters.get(i))) {
                     return false;
                 }
             }

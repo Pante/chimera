@@ -25,7 +25,7 @@ package com.karuslabs.annotations.signature.signatures;
 
 import com.karuslabs.annotations.signature.Modifiers;
 import com.sun.source.tree.Tree;
-
+    
 import java.util.*;
 import java.util.function.Predicate;
 import javax.lang.model.element.Modifier;
@@ -40,7 +40,7 @@ public abstract class Signature<T extends Tree> implements Predicate<T> {
     public Signature(Set<Modifier> modifiers, Modifiers condition) {
         this.modifiers = modifiers;
         this.condition = condition;
-    }
+}
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericSignature extends Signature<?>> {

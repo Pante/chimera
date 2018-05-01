@@ -24,7 +24,7 @@
 package com.karuslabs.annotations.signature.signatures;
 
 import com.karuslabs.annotations.signature.*;
-
+    
 import com.sun.source.tree.VariableTree;
 
 import java.util.Set;

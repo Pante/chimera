@@ -21,47 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature.signatures;
+package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.signature.*;
+import com.sun.source.tree.*;
 
-import com.sun.source.tree.Tree;
-    
-import java.util.Set;
-import javax.annotation.Nullable;
-import javax.lang.model.element.Modifier;
+import javax.lang.model.type.TypeKind;
 
 
-public abstract class TypeSignature<T extends Tree> extends Signature<T> {
-    
-    protected Type type;
-    protected @Nullable String name;
+@FunctionalInterface
+public interface Primitive extends Type<PrimitiveTypeTree> {
     
     
-    public TypeSignature(Set<Modifier> modifiers, Modifiers condition, Type type, String name) {
-        super(modifiers, condition);
-        this.type = type;
-        this.name = name;
-}
-    
-    
-    public static abstract class TypeBuilder<GenericBuilder extends TypeBuilder, GenericSignature extends TypeSignature<?>> extends Builder<GenericBuilder, GenericSignature> {
-        
-        public TypeBuilder(GenericSignature signature) {
-            super(signature);
-        }
-        
-        
-        public GenericBuilder type(Type type) {
-            signature.type = type;
-            return getThis();
-        }
-        
-        public GenericBuilder name(String name) {
-            signature.name = name;
-            return getThis();
-        }
-        
+    public static Primitive exactly(TypeKind kind) {
+        return tree -> tree.getPrimitiveTypeKind() == kind;
     }
     
 }
