@@ -34,7 +34,7 @@ import java.util.function.Predicate;
 
 public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T>> {
     
-    private static final @Immutable Expectations<?> ANY = new Any();
+    private static final @Immutable Expectations<? extends Tree> ANY = new Any();
     
     
     public static <T extends Tree> Expectations<T> any() {
