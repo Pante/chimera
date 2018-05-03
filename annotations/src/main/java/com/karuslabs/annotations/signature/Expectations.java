@@ -28,18 +28,15 @@ import com.karuslabs.annotations.Immutable;
 import com.sun.source.tree.Tree;
 
 import java.util.*;
-import static java.util.List.of;
 import java.util.function.Predicate;
+
+import static java.util.List.of;
 
 
 public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T>> {
     
-    private static final @Immutable Expectations<? extends Tree> ANY = new Any();
-    
-    
-    public static <T extends Tree> Expectations<T> any() {
-        return (Expectations<T>) ANY;
-    }
+    @SuppressWarnings("unchecked")
+    public static final @Immutable Expectations ANY = new Any();
     
     
     public static <T extends Tree> Expectations<T> contains(Predicate<T>... expectations) {

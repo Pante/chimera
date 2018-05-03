@@ -58,7 +58,7 @@ public class ConstructorSignature extends Signature<MethodTree> {
     
     
     public static ConstructorBuilder builder() {
-        return new ConstructorBuilder(new ConstructorSignature(EMPTY_SET, Modifiers.ANY, Expectations.any(), Expectations.any(), Expectations.any()));
+        return new ConstructorBuilder(new ConstructorSignature(EMPTY_SET, Modifiers.ANY, Expectations.ANY, Expectations.ANY, Expectations.ANY));
     }
     
     public static class ConstructorBuilder extends Builder<ConstructorBuilder, ConstructorSignature> {

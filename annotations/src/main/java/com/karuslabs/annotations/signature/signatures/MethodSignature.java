@@ -57,7 +57,7 @@ public class MethodSignature extends TypeSignature<MethodTree> {
     
     
     public static MethodBuilder builder() {
-        return new MethodBuilder(new MethodSignature(EMPTY_SET, Modifiers.ANY, Expectations.any(), Type.any(), "", Expectations.any(), Expectations.any()));
+        return new MethodBuilder(new MethodSignature(EMPTY_SET, Modifiers.ANY, Expectations.ANY, Type.any(), "", Expectations.ANY, Expectations.ANY));
     }
     
     
