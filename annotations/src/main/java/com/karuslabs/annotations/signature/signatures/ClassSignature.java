@@ -34,7 +34,7 @@ import javax.lang.model.element.Modifier;
 public class ClassSignature extends Signature<ClassTree> {
     
     private String name;
-    private Tree parent;
+    private Type parent;
     private Expectations<Tree> implementations;
     private Expectations<TypeParameterTree> generics;
     private Expectations<VariableTree> fields;
@@ -42,7 +42,7 @@ public class ClassSignature extends Signature<ClassTree> {
     private Expectations<MethodTree> methods;
     
     
-    public ClassSignature(Set<Modifier> modifiers, Modifiers condition, String name, Tree parent, Expectations<Tree> implementations, 
+    public ClassSignature(Set<Modifier> modifiers, Modifiers condition, String name, Type parent, Expectations<Tree> implementations, 
             Expectations<TypeParameterTree> generics, Expectations<VariableTree> fields, Expectations<MethodTree> constructors, Expectations<MethodTree> methods) {
         super(modifiers, condition);
         this.name = name;
@@ -57,7 +57,9 @@ public class ClassSignature extends Signature<ClassTree> {
     
     @Override
     public boolean test(ClassTree tree) {
-        return false;
+        return condition.match(modifiers, tree.getModifiers().getFlags()) && tree.getSimpleName().contentEquals(name) 
+            && parent.test(tree.getExtendsClause()) && implementations.check(tree.getImplementsClause())
+            && generics.check(tree.getTypeParameters());
     }
     
 }

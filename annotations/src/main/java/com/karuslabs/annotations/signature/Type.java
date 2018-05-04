@@ -35,4 +35,8 @@ public interface Type<T extends Tree> extends Predicate<T> {
         return tree -> true;
     }
     
+    public static Type<?> none() {
+        return tree -> tree == null;
+    }
+    
 }
