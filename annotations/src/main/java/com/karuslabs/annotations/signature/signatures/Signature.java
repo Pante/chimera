@@ -40,7 +40,7 @@ public abstract class Signature<T extends Tree> implements Predicate<T> {
     public Signature(Set<Modifier> modifiers, Modifiers condition) {
         this.modifiers = modifiers;
         this.condition = condition;
-}
+    }
     
     
     public static abstract class Builder<GenericBuilder extends Builder, GenericSignature extends Signature<?>> {

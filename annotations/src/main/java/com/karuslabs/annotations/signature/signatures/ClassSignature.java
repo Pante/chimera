@@ -27,7 +27,7 @@ import com.karuslabs.annotations.signature.*;
 
 import com.sun.source.tree.*;
 
-import java.util.Set;
+import java.util.*;
 import javax.lang.model.element.Modifier;
 
 
@@ -43,7 +43,7 @@ public class ClassSignature extends Signature<ClassTree> {
     
     
     public ClassSignature(Set<Modifier> modifiers, Modifiers condition, String name, Type parent, Expectations<Tree> implementations, 
-            Expectations<TypeParameterTree> generics, Expectations<VariableTree> fields, Expectations<MethodTree> constructors, Expectations<MethodTree> methods) {
+                          Expectations<TypeParameterTree> generics, Expectations<VariableTree> fields, Expectations<MethodTree> constructors, Expectations<MethodTree> methods) {
         super(modifiers, condition);
         this.name = name;
         this.parent = parent;
@@ -59,7 +59,27 @@ public class ClassSignature extends Signature<ClassTree> {
     public boolean test(ClassTree tree) {
         return condition.match(modifiers, tree.getModifiers().getFlags()) && tree.getSimpleName().contentEquals(name) 
             && parent.test(tree.getExtendsClause()) && implementations.check(tree.getImplementsClause())
-            && generics.check(tree.getTypeParameters());
+            && generics.check(tree.getTypeParameters()) && test(tree.getMembers());
+    }
+    
+    protected boolean test(List<? extends Tree> members) {
+        List<VariableTree> fields = null;
+        List<MethodTree> constructors = null;
+        List<MethodTree> methods = null;
+        
+        for (Tree member : members) {
+            if (member instanceof VariableTree) {
+                
+            } else if (member instanceof MethodTree) {
+                MethodTree method = (MethodTree) member;
+                if (method.getName().contentEquals("<init>")) {
+                    constructors.add(method);
+                    
+                } else {
+                    
+                }
+            }
+        }
     }
     
 }

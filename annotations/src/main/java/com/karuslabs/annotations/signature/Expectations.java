@@ -29,6 +29,7 @@ import com.sun.source.tree.Tree;
 
 import java.util.*;
 import java.util.function.Predicate;
+import javax.annotation.Nullable;
 
 import static java.util.List.of;
 
@@ -58,7 +59,7 @@ public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T
     }
 
     
-    public abstract boolean check(List<? extends T> actual);
+    public abstract boolean check(@Nullable List<? extends T> actual);
 
     
     protected boolean test(List<? extends T> actual) {
@@ -80,7 +81,7 @@ public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T
         }
         
         @Override
-        public boolean check(List<? extends T> actual) {
+        public boolean check(@Nullable List<? extends T> actual) {
             return true;
         }
 
@@ -100,8 +101,8 @@ public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T
         }
 
         @Override
-        public boolean check(List<? extends T> actual) {
-            return actual.size() >= size() && test(actual);
+        public boolean check(@Nullable List<? extends T> actual) {
+            return actual != null && actual.size() >= size() && test(actual);
         }
 
         @Override
@@ -121,8 +122,8 @@ public abstract class Expectations<T extends Tree> extends ArrayList<Predicate<T
 
         
         @Override
-        public boolean check(List<? extends T> actual) {
-            return actual.size() == size() && test(actual);
+        public boolean check(@Nullable List<? extends T> actual) {
+            return actual != null && actual.size() == size() && test(actual);
         }
 
         @Override

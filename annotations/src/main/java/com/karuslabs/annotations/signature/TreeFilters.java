@@ -21,47 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature.signatures;
+package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.signature.*;
+import com.karuslabs.annotations.Static;
 
-import com.sun.source.tree.Tree;
-    
-import java.util.Set;
-import javax.annotation.Nullable;
-import javax.lang.model.element.Modifier;
+import com.sun.source.tree.*;
+
+import java.util.List;
 
 
-public abstract class TypeSignature<T extends Tree> extends Signature<T> {
+@Static
+public class TreeFilters {
     
-    protected Type type;
-    protected @Nullable String name;
-    
-    
-    public TypeSignature(Set<Modifier> modifiers, Modifiers condition, Type type, String name) {
-        super(modifiers, condition);
-        this.type = type;
-        this.name = name;
-    }
-    
-    
-    public static abstract class TypeBuilder<GenericBuilder extends TypeBuilder, GenericSignature extends TypeSignature<?>> extends Builder<GenericBuilder, GenericSignature> {
-        
-        public TypeBuilder(GenericSignature signature) {
-            super(signature);
-        }
-        
-        
-        public GenericBuilder type(Type type) {
-            signature.type = type;
-            return getThis();
-        }
-        
-        public GenericBuilder name(String name) {
-            signature.name = name;
-            return getThis();
-        }
-        
+    public static List<VariableTree> fields(List<? extends Tree> members) {
+        return members.stream().filter(members)
     }
     
 }
