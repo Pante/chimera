@@ -40,10 +40,11 @@ public class ClassSignature extends Signature<ClassTree> {
     private Expectations<VariableTree> fields;
     private Expectations<MethodTree> constructors;
     private Expectations<MethodTree> methods;
+    private Expectations<ClassTree> nested;
     
     
-    public ClassSignature(Set<Modifier> modifiers, Modifiers condition, String name, Type parent, Expectations<Tree> implementations, 
-                          Expectations<TypeParameterTree> generics, Expectations<VariableTree> fields, Expectations<MethodTree> constructors, Expectations<MethodTree> methods) {
+    public ClassSignature(Set<Modifier> modifiers, Modifiers condition, String name, Type parent, Expectations<Tree> implementations, Expectations<TypeParameterTree> generics, 
+                          Expectations<VariableTree> fields, Expectations<MethodTree> constructors, Expectations<MethodTree> methods, Expectations<ClassTree> nested) {
         super(modifiers, condition);
         this.name = name;
         this.parent = parent;
@@ -52,6 +53,7 @@ public class ClassSignature extends Signature<ClassTree> {
         this.fields = fields;
         this.constructors = constructors;
         this.methods = methods;
+        this.nested = nested;
     }
 
     
@@ -66,6 +68,7 @@ public class ClassSignature extends Signature<ClassTree> {
         List<VariableTree> fields = null;
         List<MethodTree> constructors = null;
         List<MethodTree> methods = null;
+        List<ClassTree> nested =  null;
         
         for (Tree member : members) {
             if (member instanceof VariableTree) {
@@ -76,8 +79,10 @@ public class ClassSignature extends Signature<ClassTree> {
                     constructors.add(method);
                     
                 } else {
-                    
+                    methods.add(method);
                 }
+            } else {
+                
             }
         }
     }
