@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.6-jre</version>
+            <version>25.0-jre</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -69,12 +69,12 @@
     
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.21.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.1.0</version>
+                        <version>1.2.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -82,12 +82,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.21.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.1.0</version>
+                        <version>1.2.0</version>
                     </dependency>
                 </dependencies>
                 <executions>
