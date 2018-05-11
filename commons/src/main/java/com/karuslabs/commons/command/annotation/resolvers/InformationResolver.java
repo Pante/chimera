@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.annotation.resolvers;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Information;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -34,8 +35,8 @@ import static java.util.Arrays.asList;
 public class InformationResolver implements Resolver {
 
     @Override
-    public void resolve(CommandExecutor executor, Command... commands) {
-        Information annotation = executor.getClass().getAnnotation(Information.class);
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
+        Information annotation = element.getAnnotation(Information.class);
         List<String> aliases = asList(annotation.aliases());
         
         for (Command command : commands) {
@@ -48,8 +49,8 @@ public class InformationResolver implements Resolver {
     }
 
     @Override
-    public boolean isResolvable(CommandExecutor executor) {
-        return executor.getClass().getAnnotation(Information.class) != null;
+    public boolean isResolvable(AnnotatedElement element) {
+        return element.getAnnotation(Information.class) != null;
     }
     
 }

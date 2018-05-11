@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 @Documented
-@Target({TYPE})
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Repeatable(Namespaces.class)
 public @interface Namespace {

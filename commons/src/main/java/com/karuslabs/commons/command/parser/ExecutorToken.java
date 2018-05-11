@@ -25,11 +25,17 @@ package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.*;
 
+import java.lang.reflect.AnnotatedElement;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+
 import org.bukkit.configuration.ConfigurationSection;
 
 
-public class ExecutorToken extends ReferableToken<CommandExecutor> {
-
+public class ExecutorToken extends ReferableToken<Entry<AnnotatedElement, CommandExecutor>> {
+    
+    private static final Entry<AnnotatedElement, CommandExecutor> NONE = new SimpleEntry<>(CommandExecutor.class, CommandExecutor.NONE);
+    
     
     public ExecutorToken(References references, NullHandle handle) {
         super(references, handle);
@@ -37,19 +43,19 @@ public class ExecutorToken extends ReferableToken<CommandExecutor> {
 
     
     @Override
-    protected CommandExecutor getReference(String key) {
+    protected Entry<AnnotatedElement, CommandExecutor> getReference(String key) {
         return references.getExecutor(key);
     }
 
     @Override
-    protected CommandExecutor register(String key, CommandExecutor executor) {
+    protected Entry<AnnotatedElement, CommandExecutor> register(String key, Entry<AnnotatedElement, CommandExecutor> executor) {
         references.executor(key, executor);
         return executor;
     }
 
     @Override
-    protected CommandExecutor getDefaultReference() {
-        return CommandExecutor.NONE;
+    protected Entry<AnnotatedElement, CommandExecutor> getDefaultReference() {
+        return NONE;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class ExecutorToken extends ReferableToken<CommandExecutor> {
     }
 
     @Override
-    protected CommandExecutor get(ConfigurationSection config, String key) {
+    protected Entry<AnnotatedElement, CommandExecutor> get(ConfigurationSection config, String key) {
         return references.getExecutor(config.getString(key));
     }
     

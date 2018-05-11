@@ -26,7 +26,10 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 
 public class References implements AutoCloseable {
@@ -34,14 +37,14 @@ public class References implements AutoCloseable {
     private Map<String, Command> commands;
     private Map<String, Completion> completions;
     private Map<String, MessageTranslation> translations;
-    private Map<String, CommandExecutor> executors;
+    private Map<String, Entry<AnnotatedElement, CommandExecutor>> executors;
     
     
     public References() {
         this(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
     
-    public References(Map<String, Command> commands, Map<String, Completion> completions, Map<String, MessageTranslation> translations, Map<String, CommandExecutor> executors) {
+    public References(Map<String, Command> commands, Map<String, Completion> completions, Map<String, MessageTranslation> translations, Map<String, Entry<AnnotatedElement, CommandExecutor>> executors) {
         this.commands = commands;
         this.completions = completions;
         this.translations = translations;
@@ -59,10 +62,20 @@ public class References implements AutoCloseable {
         return this;
     }
     
+    
     public References executor(String key, CommandExecutor executor) {
+        return executor(key, executor.getClass(), executor);
+    }
+    
+    public References executor(String key, AnnotatedElement element, CommandExecutor executor) {
+        return executor(key, new SimpleEntry<>(element, executor));
+    }
+    
+    public References executor(String key, Entry<AnnotatedElement, CommandExecutor> executor) {
         executors.put(key, executor);
         return this;
     }
+    
     
     public References translation(String key, MessageTranslation translation) {
         translations.put(key, translation);
@@ -78,7 +91,7 @@ public class References implements AutoCloseable {
         return completions.get(key);
     }
     
-    public CommandExecutor getExecutor(String key) {
+    public Entry<AnnotatedElement, CommandExecutor> getExecutor(String key) {
         return executors.get(key);
     }
 

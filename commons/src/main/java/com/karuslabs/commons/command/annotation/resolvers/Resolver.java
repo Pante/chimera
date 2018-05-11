@@ -25,11 +25,13 @@ package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 
+import java.lang.reflect.AnnotatedElement;
+
 
 public interface Resolver {
     
-    public void resolve(CommandExecutor executor, Command... commands);
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands);
     
-    public boolean isResolvable(CommandExecutor executor);
+    public boolean isResolvable(AnnotatedElement element);
     
 }

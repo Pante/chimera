@@ -25,42 +25,80 @@ package com.karuslabs.commons.command.annotation.resolvers;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Namespace;
+import com.karuslabs.commons.command.arguments.Arguments;
 
+import java.lang.invoke.*;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Stream;
 
 import org.bukkit.plugin.Plugin;
 
+import static java.lang.invoke.MethodType.methodType;
+
 
 public class CommandResolver {
     
+    static final Class<?>[] PARAMETERS = new Class<?>[] {CommandSource.class, Context.class, Arguments.class};
+    
+    
     Plugin plugin;
     Set<Resolver> resolvers;
+    Lookup lookup;
     
     
     public CommandResolver(Plugin plugin, Set<Resolver> resolvers) {
         this.plugin = plugin;
         this.resolvers = resolvers;
+        this.lookup = MethodHandles.lookup();
     }
     
     
-    public void resolve(ProxiedCommandMap map, CommandExecutor executor) {
-        if (executor.getClass().getAnnotationsByType(Namespace.class).length > 0) {
-            resolve(executor, find(map, executor));
+    public void resolve(ProxiedCommandMap map, CommandExecutors executors) {
+        for (Method method : executors.getClass().getDeclaredMethods()) {
+            if (method.getAnnotationsByType(Namespace.class).length == 0) {
+                continue;
+            }
             
-        } else {
-            throw new IllegalArgumentException("Unresolvable CommandExecutor: " + executor.getClass().getName());
+            if (method.getReturnType() == boolean.class && Arrays.equals(method.getParameterTypes(), PARAMETERS)) {
+                resolve(map, method, generate(executors, method));
+                
+            } else {
+                throw new IllegalArgumentException("Invalid parameters for method: " + method.getName() + " in " + executors.getClass().getSimpleName() + ", method must match " + CommandExecutor.class.getSimpleName());
+            }
         }
     }
     
-    public void resolve(ProxiedCommandMap map, CommandExecutor executor, String... namespace) {
-        resolve(executor, find(map, executor, namespace));
+    protected CommandExecutor generate(CommandExecutors executors, Method reference) {
+        try {
+            MethodHandle method = lookup.unreflect(reference);
+            CallSite lambda = LambdaMetafactory.metafactory(lookup, "execute", methodType(CommandExecutor.class), method.type(), method, method.type());
+            return (CommandExecutor) lambda.getTarget().invokeExact();
+            
+        } catch (Throwable e) {
+            throw new IllegalArgumentException("Failed to generate CommandExecutor from method: " + reference.getName() + " in " + executors.getClass().getSimpleName(), e);
+        }
+    }
+    
+    
+    public void resolve(ProxiedCommandMap map, AnnotatedElement element, CommandExecutor executor) {
+        if (element.getAnnotationsByType(Namespace.class).length > 0) {
+            resolve(element, executor, find(map, element, executor));
+            
+        } else {
+            throw new IllegalArgumentException("Unresolvable annotations for CommandExecutor: " + element + ", CommandExecutor must contain at least one namespace");
+        }
+    }
+    
+    public void resolve(ProxiedCommandMap map, AnnotatedElement element, CommandExecutor executor, String... namespace) {
+        resolve(element, executor, find(map, executor, namespace));
     }
 
-    public void resolve(CommandExecutor executor, Command... commands) {
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
         for (Resolver resolver : resolvers) {
-            if (resolver.isResolvable(executor)) {
-                resolver.resolve(executor, commands);
+            if (resolver.isResolvable(element)) {
+                resolver.resolve(element, executor, commands);
             }
         }
 
@@ -70,17 +108,18 @@ public class CommandResolver {
     }
     
     
-    protected Command[] find(ProxiedCommandMap map, CommandExecutor executor) {
-        return Stream.of(executor.getClass().getAnnotationsByType(Namespace.class)).map(namespace -> find(map , executor, namespace)).toArray(Command[]::new);
+    protected Command[] find(ProxiedCommandMap map,  AnnotatedElement element, CommandExecutor executor) {
+        Namespace[] namespaces = element.getAnnotationsByType(Namespace.class);
+        return Stream.of(namespaces).map(namespace -> find(map , element, executor, namespace)).toArray(Command[]::new);
     } 
     
-    protected Command find(ProxiedCommandMap map, CommandExecutor executor, Namespace namespace) {
+    protected Command find(ProxiedCommandMap map,  AnnotatedElement element, CommandExecutor executor, Namespace namespace) {
         String[] names = namespace.value();
         if (names.length > 0) {
             return find(map, executor, names);
             
         } else {
-            throw new IllegalArgumentException("Invalid namespace for: " + executor.getClass().getName() + ", namespace cannot be empty");
+            throw new IllegalArgumentException("Invalid namespace for: " + element + ", namespace cannot be empty");
         }
     }
     

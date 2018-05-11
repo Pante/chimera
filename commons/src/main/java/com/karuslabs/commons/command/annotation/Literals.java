@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 @Documented
-@Target({TYPE})
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 public @interface Literals {
     

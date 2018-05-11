@@ -27,6 +27,8 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.Completion;
 
+import java.lang.reflect.AnnotatedElement;
+
 
 public class RegisteredResolver implements Resolver {
     
@@ -39,8 +41,8 @@ public class RegisteredResolver implements Resolver {
 
     
     @Override
-    public void resolve(CommandExecutor executor, Command... commands) {
-        for (Registered registered : executor.getClass().getAnnotationsByType(Registered.class)) {
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
+        for (Registered registered : element.getAnnotationsByType(Registered.class)) {
             resolve(commands, executor, registered);
         }
     }
@@ -59,8 +61,8 @@ public class RegisteredResolver implements Resolver {
     
 
     @Override
-    public boolean isResolvable(CommandExecutor executor) {
-        return executor.getClass().getAnnotationsByType(Registered.class).length != 0;
+    public boolean isResolvable(AnnotatedElement element) {
+        return element.getAnnotationsByType(Registered.class).length != 0;
     }
     
 }

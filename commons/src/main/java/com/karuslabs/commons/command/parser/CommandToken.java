@@ -28,6 +28,8 @@ import com.karuslabs.commons.command.annotation.resolvers.CommandResolver;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
+import java.lang.reflect.AnnotatedElement;
+import java.util.Map.Entry;
 import java.util.*;
 import javax.annotation.Nullable;
 
@@ -43,13 +45,13 @@ public class CommandToken extends ReferableToken<Command> {
             
     private Plugin plugin;
     private CommandResolver resolver;
-    private Token<CommandExecutor> executor;
+    private Token<Entry<AnnotatedElement, CommandExecutor>> executor;
     private @Nullable Token<Map<String, Command>> subcommands;
     private Token<MessageTranslation> translation;
     private Token<Map<Integer, Completion>> completions;
     
     
-    public CommandToken(References references, NullHandle handle, Plugin plugin, CommandResolver resolver, Token<CommandExecutor> executor, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
+    public CommandToken(References references, NullHandle handle, Plugin plugin, CommandResolver resolver, Token<Entry<AnnotatedElement, CommandExecutor>> executor, @Nullable Token<Map<String, Command>> subcommands, Token<MessageTranslation> translation, Token<Map<Integer, Completion>> completions) {
         super(references, handle);
         this.plugin = plugin;
         this.resolver = resolver;
@@ -93,7 +95,8 @@ public class CommandToken extends ReferableToken<Command> {
         command.setPermission(config.getString("permission", ""));
         command.setPermissionMessage(config.getString("permission-message", ""));
         
-        resolver.resolve(executor.get(config, "executor"), command);
+        Entry<AnnotatedElement, CommandExecutor> entry = executor.get(config, "executor");
+        resolver.resolve(entry.getKey(), entry.getValue(), command);
         
         return command;
     }

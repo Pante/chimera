@@ -21,27 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotation;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package com.karuslabs.commons.command;
 
 
-@Documented
-@Target({TYPE, METHOD})
-@Retention(RUNTIME)
-public @interface Information {
-    
-    String[] aliases() default {};
-    
-    String description() default "";
-    
-    String permission() default "";
-    
-    String message() default "";
-    
-    String usage() default "";
+public interface CommandExecutors {
     
 }

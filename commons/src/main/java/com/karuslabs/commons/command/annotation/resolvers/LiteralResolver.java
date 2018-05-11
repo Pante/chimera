@@ -27,12 +27,14 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.*;
 import com.karuslabs.commons.command.completion.*;
 
+import java.lang.reflect.AnnotatedElement;
+
 
 public class LiteralResolver implements Resolver {
 
     @Override
-    public void resolve(CommandExecutor executor, Command... commands) {
-        for (Literal literal : executor.getClass().getAnnotationsByType(Literal.class)) {
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
+        for (Literal literal : element.getAnnotationsByType(Literal.class)) {
             resolve(commands, executor, literal);
         }
     }
@@ -45,9 +47,8 @@ public class LiteralResolver implements Resolver {
     }
 
     @Override
-    public boolean isResolvable(CommandExecutor executor) {
-        Class<? extends CommandExecutor> type = executor.getClass();
-        return type.getAnnotationsByType(Literal.class).length != 0;
+    public boolean isResolvable(AnnotatedElement element) {
+        return element.getAnnotationsByType(Literal.class).length != 0;
     }
     
 }

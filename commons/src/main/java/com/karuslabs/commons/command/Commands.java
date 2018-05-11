@@ -79,13 +79,18 @@ public class Commands {
     }
     
     
+    public Commands register(CommandExecutors executors) {
+        resolver.resolve(map, executors);
+        return this;
+    }
+    
     public Commands register(CommandExecutor executor) {
-        resolver.resolve(map, executor);
+        resolver.resolve(map, executor.getClass(), executor);
         return this;
     }
     
     public Commands register(CommandExecutor executor, String... namespace) {
-        resolver.resolve(map, executor, namespace);
+        resolver.resolve(map, executor.getClass(), executor, namespace);
         return this;
     }
     

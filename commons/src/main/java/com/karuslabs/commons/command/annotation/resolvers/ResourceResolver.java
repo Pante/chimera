@@ -27,11 +27,13 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.annotation.*;
 
+import java.lang.reflect.AnnotatedElement;
+
 
 public class ResourceResolver implements Resolver {
 
     @Override
-    public void resolve(CommandExecutor executor, Command... commands) {
+    public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
         MessageTranslation translation = translation(executor);
         for (Command command : commands) {
             command.setTranslation(translation);
@@ -60,9 +62,8 @@ public class ResourceResolver implements Resolver {
     }
 
     @Override
-    public boolean isResolvable(CommandExecutor executor) {
-        Class<? extends CommandExecutor> type = executor.getClass();
-        return type.getAnnotation(Bundle.class) != null && (type.getAnnotation(EmbeddedResources.class) != null || type.getAnnotation(ExternalResources.class) != null);
+    public boolean isResolvable(AnnotatedElement element) {
+        return element.getAnnotation(Bundle.class) != null && (element.getAnnotation(EmbeddedResources.class) != null || element.getAnnotation(ExternalResources.class) != null);
     }
     
 }
