@@ -25,6 +25,10 @@ package com.karuslabs.commons.command.parser;
 
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.configuration.Yaml;
+import java.lang.reflect.AnnotatedElement;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,14 +52,16 @@ class ExecutorTokenTest {
     
     @Test
     void register() {
-        assertSame(CommandExecutor.NONE, token.register("key", CommandExecutor.NONE));
-        verify(references).executor("key", CommandExecutor.NONE);
+        Map.Entry<AnnotatedElement, CommandExecutor> entry = token.register("key", new SimpleEntry<>(CommandExecutor.class, CommandExecutor.NONE));
+        assertSame(CommandExecutor.class, entry.getKey());
+        assertSame(CommandExecutor.NONE, entry.getValue());
+        verify(references).executor("key", entry);
     }
     
     
     @Test
     void getDefaultReference() {
-        assertSame(CommandExecutor.NONE, token.getDefaultReference());
+        assertEquals(new SimpleEntry<>(CommandExecutor.class, CommandExecutor.NONE), token.getDefaultReference());
     }
     
     

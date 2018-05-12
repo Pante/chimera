@@ -27,6 +27,8 @@ import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
+import java.util.AbstractMap.SimpleEntry;
+
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -70,7 +72,7 @@ class ReferencesTest {
     
     @Test
     void executor() {
-        assertSame(CommandExecutor.NONE, references.executor("b", CommandExecutor.NONE).getExecutor("b"));
+        assertEquals(new SimpleEntry<>(CommandExecutor.NONE.getClass(), CommandExecutor.NONE), references.executor("b", CommandExecutor.NONE).getExecutor("b"));
     }
     
     

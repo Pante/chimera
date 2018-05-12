@@ -37,6 +37,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.configuration.Yaml.COMMANDS;
+import java.util.AbstractMap.SimpleEntry;
 import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -67,7 +68,7 @@ class CommandTokenTest {
     @Test
     void get() {
         ConfigurationSection config = COMMANDS.getConfigurationSection("commands.brush");
-        when(executor.get(any(), eq("executor"))).thenReturn(Flag.ALIASES);
+        when(executor.get(any(), eq("executor"))).thenReturn(new SimpleEntry<>(Flag.ALIASES.getClass(), Flag.ALIASES));
         
         Command command = token.get(COMMANDS, "commands.brush");
         assertEquals("brush", command.getName());
@@ -83,7 +84,7 @@ class CommandTokenTest {
         verify(commands).from(config, "subcommands");
         verify(translation).from(config, "translation");
         verify(completions).from(config, "completions");
-        verify(resolver).resolve(Flag.ALIASES, command);
+        verify(resolver).resolve(Flag.ALIASES.getClass(), Flag.ALIASES, command);
     }
     
     

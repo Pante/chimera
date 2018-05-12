@@ -34,18 +34,17 @@ public class ResourceResolver implements Resolver {
 
     @Override
     public void resolve(AnnotatedElement element, CommandExecutor executor, Command... commands) {
-        MessageTranslation translation = translation(executor);
+        MessageTranslation translation = translation(element, executor);
         for (Command command : commands) {
             command.setTranslation(translation);
         }
     }
     
-    protected MessageTranslation translation(CommandExecutor executor) {
-        Class<? extends CommandExecutor> type = executor.getClass();
-        EmbeddedResources embedded = type.getAnnotation(EmbeddedResources.class);
-        ExternalResources external = type.getAnnotation(ExternalResources.class);
+    protected MessageTranslation translation(AnnotatedElement element, CommandExecutor executor) {
+        EmbeddedResources embedded = element.getAnnotation(EmbeddedResources.class);
+        ExternalResources external = element.getAnnotation(ExternalResources.class);
         
-        Builder<MessageTranslation> builder = MessageTranslation.builder().bundle(type.getAnnotation(Bundle.class).value());
+        Builder<MessageTranslation> builder = MessageTranslation.builder().bundle(element.getAnnotation(Bundle.class).value());
         if (embedded != null) {
             for (String resource : embedded.value()) {
                 builder.embedded(resource);

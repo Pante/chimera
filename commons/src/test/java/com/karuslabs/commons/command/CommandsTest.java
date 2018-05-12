@@ -51,10 +51,20 @@ class CommandsTest {
     
     
     @Test
-    void register() {
+    void register_CommandExecutors() {
+       CommandExecutors executors = new CommandExecutors() {};
+       
+       resolver.resolve(commands.map, executors);
+       
+       verify(resolver).resolve(commands.map, executors);
+    }
+    
+    
+    @Test
+    void register_CommandExecutor() {
         commands.register(CommandExecutor.NONE);
         
-        verify(resolver).resolve(commands.map, CommandExecutor.NONE);
+        verify(resolver).resolve(commands.map, CommandExecutor.NONE.getClass(), CommandExecutor.NONE);
     }
     
     
@@ -62,7 +72,7 @@ class CommandsTest {
     void register_Namespace() {
         commands.register(CommandExecutor.NONE, "namespace");
         
-        verify(resolver).resolve(commands.map, CommandExecutor.NONE, "namespace");
+        verify(resolver).resolve(commands.map, CommandExecutor.NONE.getClass(), CommandExecutor.NONE, "namespace");
     }
     
     

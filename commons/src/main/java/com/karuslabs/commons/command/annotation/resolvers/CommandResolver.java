@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 
 import org.bukkit.plugin.Plugin;
 
-import static java.lang.invoke.MethodType.methodType;
 
 
 public class CommandResolver {
@@ -56,7 +55,7 @@ public class CommandResolver {
     
     
     public void resolve(ProxiedCommandMap map, CommandExecutors executors) {
-        for (Method method : executors.getClass().getDeclaredMethods()) {
+        for (Method method : executors.getClass().getMethods()) {
             if (method.getAnnotationsByType(Namespace.class).length == 0) {
                 continue;
             }
@@ -65,19 +64,22 @@ public class CommandResolver {
                 resolve(map, method, generate(executors, method));
                 
             } else {
-                throw new IllegalArgumentException("Invalid parameters for method: " + method.getName() + " in " + executors.getClass().getSimpleName() + ", method must match " + CommandExecutor.class.getSimpleName());
+                throw new IllegalArgumentException("Invalid signature for method: " + method.getName() + " in " + executors.getClass().getSimpleName() + ", method must match " + CommandExecutor.class.getSimpleName());
             }
         }
     }
     
-    protected CommandExecutor generate(CommandExecutors executors, Method reference) {
+    protected CommandExecutor generate(CommandExecutors executors, Method reflective) {
         try {
-            MethodHandle method = lookup.unreflect(reference);
-            CallSite lambda = LambdaMetafactory.metafactory(lookup, "execute", methodType(CommandExecutor.class), method.type(), method, method.type());
-            return (CommandExecutor) lambda.getTarget().invokeExact();
+            MethodHandle method = lookup.unreflect(reflective);
+            MethodType type = MethodType.methodType(CommandExecutor.class, executors.getClass());
+            MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", type, method.type(), method, method.type()).getTarget();
+            lambda.bindTo(executors);
+            
+            return (CommandExecutor) lambda.invokeExact(executors);
             
         } catch (Throwable e) {
-            throw new IllegalArgumentException("Failed to generate CommandExecutor from method: " + reference.getName() + " in " + executors.getClass().getSimpleName(), e);
+            throw new IllegalArgumentException("Failed to generate CommandExecutor from method: " + reflective.getName() + " in " + executors.getClass().getSimpleName(), e);
         }
     }
     

@@ -27,6 +27,7 @@ import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Literal;
 import com.karuslabs.commons.command.completion.CachedCompletion;
 
+import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -54,11 +55,11 @@ class LiteralResolverTest {
         
     }
     
-    @Literal(index = 1, completions = {"c", "d"})
-    @Literal(index = 2, completions = {"e", "f"})
-    static class B implements CommandExecutor {
+    
+    static class B {
         
-        @Override
+        @Literal(index = 1, completions = {"c", "d"})
+        @Literal(index = 2, completions = {"e", "f"})
         public boolean execute(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -71,8 +72,9 @@ class LiteralResolverTest {
     
     
     @Test
-    void resolve() {
-        resolver.resolve(new B(), command);
+    void resolve() throws ReflectiveOperationException {
+        Method method = B.class.getMethod("execute", CommandSource.class, Context.class, com.karuslabs.commons.command.arguments.Arguments.class);
+        resolver.resolve(method, new B()::execute, command);
         
         assertEquals(2, command.getCompletions().size());
         assertEquals(asList("c", "d"), ((CachedCompletion) command.getCompletions().get(1)).getCompletions());
@@ -82,13 +84,13 @@ class LiteralResolverTest {
     
     @ParameterizedTest
     @MethodSource("isResolvable_parameters")
-    void isResolvable(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, resolver.isResolvable(executor));
+    void isResolvable(AnnotatedElement element, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(element));
     }
     
-    static Stream<Arguments> isResolvable_parameters() {
-        CommandExecutor executor = (source, context, arguments) -> true;
-        return Stream.of(of(new A(), true), of(new B(), true), of(executor, false));
+    static Stream<Arguments> isResolvable_parameters() throws ReflectiveOperationException {
+        Method method = B.class.getDeclaredMethod("execute", CommandSource.class, Context.class, com.karuslabs.commons.command.arguments.Arguments.class);
+        return Stream.of(of(A.class, true), of(method, true), of(CommandExecutor.class, false));
     }
     
 }

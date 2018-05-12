@@ -26,13 +26,13 @@ package com.karuslabs.commons.command.annotation.resolvers;
 import com.karuslabs.commons.command.*;
 import com.karuslabs.commons.command.annotation.Information;
 
+import java.lang.reflect.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
@@ -42,10 +42,10 @@ import static org.mockito.Mockito.*;
 @TestInstance(PER_CLASS)
 class InformationResolverTest {
     
-    @Information(aliases = {"a", "b"}, description = "a description", permission = "a.permission", message = "a message", usage = "a usage")
-    static class A implements CommandExecutor {
+    
+    static class A {
 
-        @Override
+        @Information(aliases = {"a", "b"}, description = "a description", permission = "a.permission", message = "a message", usage = "a usage")
         public boolean execute(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -67,8 +67,9 @@ class InformationResolverTest {
     
     
     @Test
-    void resolve() {
-        resolver.resolve(new A(), command);
+    void resolve() throws ReflectiveOperationException {
+        Method method = A.class.getDeclaredMethod("execute", CommandSource.class, Context.class, com.karuslabs.commons.command.arguments.Arguments.class);
+        resolver.resolve(method, new A()::execute, command);
         
         command.setAliases("a", "b");
         command.setDescription("a description");
@@ -80,12 +81,13 @@ class InformationResolverTest {
     
     @ParameterizedTest
     @MethodSource("isResolvable_parameters")
-    void isResolvable(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, resolver.isResolvable(executor));
+    void isResolvable(AnnotatedElement element, boolean expected) {
+        assertEquals(expected, resolver.isResolvable(element));
     }
     
-    static Stream<Arguments> isResolvable_parameters() {
-        return Stream.of(of(new A(), true), of(new B(), false));
+    static Stream<Arguments> isResolvable_parameters() throws ReflectiveOperationException {
+        Method method = A.class.getDeclaredMethod("execute", CommandSource.class, Context.class, com.karuslabs.commons.command.arguments.Arguments.class);
+        return Stream.of(of(method, true), of(B.class, false));
     }
     
 }

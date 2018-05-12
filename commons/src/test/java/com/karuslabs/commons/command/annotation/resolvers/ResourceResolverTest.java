@@ -28,14 +28,13 @@ import com.karuslabs.commons.locale.*;
 import com.karuslabs.commons.locale.annotation.*;
 import com.karuslabs.commons.locale.resources.*;
 
-import java.util.List;
+import java.lang.reflect.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
@@ -55,11 +54,11 @@ class ResourceResolverTest {
         
     }
     
-    @Bundle("name")
-    @EmbeddedResources({"a"})
-    static class B implements CommandExecutor {
+    
+    static class B {
 
-        @Override
+        @Bundle("name")
+        @EmbeddedResources({"a"})
         public boolean execute(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
@@ -94,9 +93,9 @@ class ResourceResolverTest {
         Command command = new Command("", null);
         MessageTranslation translation = mock(MessageTranslation.class);
         
-        doReturn(translation).when(resolver).translation(CommandExecutor.NONE);
+        doReturn(translation).when(resolver).translation(CommandExecutor.class, CommandExecutor.NONE);
         
-        resolver.resolve(CommandExecutor.NONE, command);
+        resolver.resolve(CommandExecutor.class, CommandExecutor.NONE, command);
         
         assertEquals(translation, command.getTranslation());
     }
@@ -104,7 +103,7 @@ class ResourceResolverTest {
     
     @Test
     void translation() {
-        MessageTranslation translation = resolver.translation(new A());
+        MessageTranslation translation = resolver.translation(A.class, new A());
         ExternalControl control = (ExternalControl) translation.getControl();
         EmbeddedResource embedded = (EmbeddedResource) control.getResources()[0];
         ExternalResource external = (ExternalResource) control.getResources()[1];
@@ -117,12 +116,13 @@ class ResourceResolverTest {
     
     @ParameterizedTest
     @MethodSource("isResolvable_parameters")
-    void isResolvable(CommandExecutor executor, boolean expected) {
-        assertEquals(expected, resolver.isResolvable(executor));
+    void isResolvable(AnnotatedElement element,  boolean expected) {
+        assertEquals(expected, resolver.isResolvable(element));
     }
     
-    static Stream<Arguments> isResolvable_parameters() {
-        return Stream.of(of(new A(), true), of(new B(), true), of(new C(), false), of(new D(), false));
+    static Stream<Arguments> isResolvable_parameters() throws ReflectiveOperationException {
+        Method method = B.class.getDeclaredMethod("execute", CommandSource.class, Context.class, com.karuslabs.commons.command.arguments.Arguments.class);
+        return Stream.of(of(A.class, true), of(method, true), of(C.class, false), of(D.class, false));
     }
     
 }
