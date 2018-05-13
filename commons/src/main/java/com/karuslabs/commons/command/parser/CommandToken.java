@@ -96,7 +96,12 @@ public class CommandToken extends ReferableToken<Command> {
         command.setPermissionMessage(config.getString("permission-message", ""));
         
         Entry<AnnotatedElement, CommandExecutor> entry = executor.get(config, "executor");
-        resolver.resolve(entry.getKey(), entry.getValue(), command);
+        if (entry != null) {
+            resolver.resolve(entry.getKey(), entry.getValue(), command);
+            
+        } else {
+            command.setExecutor(NONE);
+        }
         
         return command;
     }

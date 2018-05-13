@@ -73,10 +73,10 @@ public class CommandResolver {
         try {
             MethodHandle method = lookup.unreflect(reflective);
             MethodType type = MethodType.methodType(CommandExecutor.class, executors.getClass());
-            MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", type, method.type(), method, method.type()).getTarget();
-            lambda.bindTo(executors);
+            MethodType signature = MethodType.methodType(reflective.getReturnType(), reflective.getParameterTypes());
+            MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", type, signature, method, signature).getTarget();
             
-            return (CommandExecutor) lambda.invokeExact(executors);
+            return (CommandExecutor) lambda.invoke(executors);
             
         } catch (Throwable e) {
             throw new IllegalArgumentException("Failed to generate CommandExecutor from method: " + reflective.getName() + " in " + executors.getClass().getSimpleName(), e);

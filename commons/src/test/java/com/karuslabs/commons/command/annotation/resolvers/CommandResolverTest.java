@@ -101,7 +101,6 @@ class CommandResolverTest {
     }
     
     
-    
     LiteralResolver literal = mock(LiteralResolver.class);
     CommandResolver resolver = spy(new CommandResolver(null, singleton(literal)));
     ProxiedCommandMap map = mock(ProxiedCommandMap.class);
@@ -110,37 +109,25 @@ class CommandResolverTest {
     Command b = mock(Command.class);
     Command c = mock(Command.class);
     
-//    
-//    @Test
-//    void resolve_CommandExecutors() {
-//        doNothing().when(resolver).resolve(eq(map), any(AnnotatedElement.class), any(CommandExecutor.class));
-//        
-//        resolver.resolve(map, new C());
-//        
-//        verify(resolver).resolve(eq(map), any(AnnotatedElement.class), any(CommandExecutor.class));
-//    }
+
+    @Test
+    void resolve_CommandExecutors() {
+        doNothing().when(resolver).resolve(eq(map), any(AnnotatedElement.class), any(CommandExecutor.class));
+        
+        resolver.resolve(map, new C());
+        
+        verify(resolver).resolve(eq(map), any(AnnotatedElement.class), any(CommandExecutor.class));
+    }
     
     
-//    @Test
-//    void resolve_CommandExecutors_ThrosException() {
-//        assertEquals(
-//            "Invalid signature for method: test in " + Invalid.class.getSimpleName() + ", method must match " + CommandExecutor.class.getSimpleName(),
-//            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, new Invalid())).getMessage()
-//        );
-//    }
-//    
-//    
-//    @Test
-//    void example() throws NoSuchMethodException, IllegalAccessException, LambdaConversionException {
-//        Lookup lookup = MethodHandles.lookup();
-//        MethodType returnable = MethodType.methodType(boolean.class);
-//        MethodHandle method = lookup.findVirtual(C.class, "test", returnable);
-//        MethodHandle method = lookup.unreflect(reflective);
-//        MethodType type = MethodType.methodType(CommandExecutor.class, C.class);
-//        MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", type, returnable, method, returnable).getTarget();
-//        lambda.bindTo(new C());
-//    }
-//    
+    @Test
+    void resolve_CommandExecutors_ThrosException() {
+        assertEquals(
+            "Invalid signature for method: test in " + Invalid.class.getSimpleName() + ", method must match " + CommandExecutor.class.getSimpleName(),
+            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, new Invalid())).getMessage()
+        );
+    }
+    
     
     @Test
     void generate() throws ReflectiveOperationException {
@@ -150,85 +137,86 @@ class CommandResolverTest {
         
         assertFalse(executor.execute(null, null, null));
     }
+
     
-//    
-//    @Test
-//    void generate_ThrowsException() {
-//        C c = new C();
-//        Method method = mock(Method.class);
-//        
-//        assertEquals(
-//            "Failed to generate CommandExecutor from method: " + method.getName() + " in " + c.getClass().getSimpleName(),
-//            assertThrows(IllegalArgumentException.class, () -> resolver.generate(c, method)).getMessage()
-//        );
-//    }
-//    
-//    
-//    @Test
-//    void resolve_Annotation() {
-//        doReturn(new Command[] {command}).when(resolver).find(map, A.class, A);
-//        when(literal.isResolvable(any())).thenReturn(true);
-//        
-//        resolver.resolve(map, A.class, A);
-//        
-//        verify(literal).resolve(A.class, A, command);
-//        verify(command).setExecutor(A);
-//    }
-//    
-//    
-//    @Test
-//    void resolve_Annotation_ThrowsException() {
-//        assertEquals("Unresolvable annotations for CommandExecutor: class " + CommandExecutor.NONE.getClass().getName() + ", CommandExecutor must contain at least one namespace",
-//            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, CommandExecutor.NONE.getClass(), CommandExecutor.NONE)).getMessage()
-//        );
-//    }
-//    
-//    
-//    @Test
-//    void resolve_Varargs() {
-//        ArgumentCaptor<Command> captor = ArgumentCaptor.forClass(Command.class);
-//        resolver.resolve(map, A.class, A, "command name");
-//        
-//        verify(map).register(eq("command name"), captor.capture());
-//        assertEquals(A, captor.getValue().getExecutor());
-//    }
-//    
-//    
-//    @Test
-//    void find_Annotation() {
-//        when(map.getCommand("a")).thenReturn(a);
-//        when(a.getSubcommands()).thenReturn(new HashMap<>(1));
-//        a.getSubcommands().put("b", b);
-//        
-//        when(map.getCommand("c")).thenReturn(c);
-//        
-//        assertThat(resolver.find(map, B.class, new B()), equalTo(new Command[] {b, c}));
-//    }
-//    
-//    
-//    @Test
-//    void find_Annotation_ThrowsException() {
-//        assertEquals("Invalid namespace for: class " + A.class.getName() + ", namespace cannot be empty",
-//            assertThrows(IllegalArgumentException.class, () -> resolver.find(map, A.class, new A())).getMessage()
-//        );
-//    }
-//    
-//    
-//    @Test
-//    void append() {
-//        Command parent = new Command("", null);
-//        resolver.append(parent, "a");
-//        
-//        assertTrue(parent.getSubcommands().containsKey("a"));
-//    }
-//    
-//    
-//    @Test
-//    void simple() {
-//        Plugin plugin = mock(Plugin.class);
-//        resolver = CommandResolver.simple(plugin, new References());
-//        
-//        assertEquals(4, resolver.resolvers.size());
-//    }
+    
+    @Test
+    void generate_ThrowsException() throws NoSuchMethodException {
+        C c = new C();
+        Method method = Invalid.class.getMethod("test");
+        
+        assertEquals(
+            "Failed to generate CommandExecutor from method: " + method.getName() + " in " + c.getClass().getSimpleName(),
+            assertThrows(IllegalArgumentException.class, () -> resolver.generate(c, method)).getMessage()
+        );
+    }
+    
+    
+    @Test
+    void resolve_Annotation() {
+        doReturn(new Command[] {command}).when(resolver).find(map, A.class, A);
+        when(literal.isResolvable(any())).thenReturn(true);
+        
+        resolver.resolve(map, A.class, A);
+        
+        verify(literal).resolve(A.class, A, command);
+        verify(command).setExecutor(A);
+    }
+    
+    
+    @Test
+    void resolve_Annotation_ThrowsException() {
+        assertEquals("Unresolvable annotations for CommandExecutor: class " + CommandExecutor.NONE.getClass().getName() + ", CommandExecutor must contain at least one namespace",
+            assertThrows(IllegalArgumentException.class, () -> resolver.resolve(map, CommandExecutor.NONE.getClass(), CommandExecutor.NONE)).getMessage()
+        );
+    }
+    
+    
+    @Test
+    void resolve_Varargs() {
+        ArgumentCaptor<Command> captor = ArgumentCaptor.forClass(Command.class);
+        resolver.resolve(map, A.class, A, "command name");
+        
+        verify(map).register(eq("command name"), captor.capture());
+        assertEquals(A, captor.getValue().getExecutor());
+    }
+    
+    
+    @Test
+    void find_Annotation() {
+        when(map.getCommand("a")).thenReturn(a);
+        when(a.getSubcommands()).thenReturn(new HashMap<>(1));
+        a.getSubcommands().put("b", b);
+        
+        when(map.getCommand("c")).thenReturn(c);
+        
+        assertThat(resolver.find(map, B.class, new B()), equalTo(new Command[] {b, c}));
+    }
+    
+    
+    @Test
+    void find_Annotation_ThrowsException() {
+        assertEquals("Invalid namespace for: class " + A.class.getName() + ", namespace cannot be empty",
+            assertThrows(IllegalArgumentException.class, () -> resolver.find(map, A.class, new A())).getMessage()
+        );
+    }
+    
+    
+    @Test
+    void append() {
+        Command parent = new Command("", null);
+        resolver.append(parent, "a");
+        
+        assertTrue(parent.getSubcommands().containsKey("a"));
+    }
+    
+    
+    @Test
+    void simple() {
+        Plugin plugin = mock(Plugin.class);
+        resolver = CommandResolver.simple(plugin, new References());
+        
+        assertEquals(4, resolver.resolvers.size());
+    }
     
 }
