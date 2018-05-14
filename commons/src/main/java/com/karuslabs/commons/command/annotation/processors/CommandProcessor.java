@@ -30,6 +30,8 @@ import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
+import static java.lang.annotation.ElementType.METHOD;
+
 
 @SupportedAnnotationTypes({
     "com.karuslabs.commons.command.annotation.Information",
@@ -49,7 +51,7 @@ public class CommandProcessor extends AnnotationProcessor {
 
     
     @Override
-    protected void process(Element element) {
+    protected void process(Element element) { 
         if (!types.isAssignable(element.asType(), expected)) {
             error(element, "Invalid annotated type: " + element.asType().toString() + ", type must implement " + CommandExecutor.class.getName());
         }

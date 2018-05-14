@@ -23,41 +23,63 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.processors.TreeProcessor;
+import com.sun.source.tree.Tree;
 
-import com.sun.source.tree.*;
-import com.sun.source.util.Trees;
-
+import java.util.*;
 import java.util.function.Predicate;
-import javax.lang.model.type.TypeMirror;
+import javax.annotation.Nullable;
 
 
-@FunctionalInterface
-public interface Type<T extends Tree> extends Predicate<T> {
+public abstract class Expectations<T extends Tree> {
     
-    public static final Predicate<? extends Tree> ANY = tree -> true;
-    
-    public static final Predicate<? extends Tree> NONE = tree -> tree == null;     
+    public static final Expectations ANY = new Any();
     
     
-    public static <T extends IdentifierTree> Type<T> exactly(String name) {
-        return tree -> tree.getName().contentEquals(name);
+    protected final Predicate<T>[] predicates;
+    private @Nullable List<T> actual;
+    
+    
+    public Expectations(Predicate<T>... predicates) {
+        this.predicates = predicates;
     }
     
-    public static <T extends IdentifierTree> Type<T> from(TreeProcessor<?> processor, TypeMirror type) {
-        return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(type, actual);
-        };
+    
+    public abstract boolean check(List<? extends T> trees);
+    
+    public abstract boolean check();
+    
+    
+    public Expectations include(T tree) {
+        lazy().add(tree);
+        return this;
+    }
+    
+    protected List<T> lazy() {
+        if (actual == null) {
+            actual = new ArrayList<>();
+        }
+        
+        return actual;
+    }
+    
+}
+
+
+class Any<T extends Tree> extends Expectations<T> {    
+    
+    @Override
+    public boolean check(List<? extends T> trees) {
+        return true;
     }
 
-    public static <T extends IdentifierTree> Type<T> to(TreeProcessor<?> processor, TypeMirror type) {
-        return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(actual, type);
-        };
+    @Override
+    public boolean check() {
+        return true;
+    }
+    
+    @Override
+    public Expectations include(T tree) {
+        return this;
     }
     
 }

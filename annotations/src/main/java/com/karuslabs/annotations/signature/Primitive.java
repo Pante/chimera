@@ -23,41 +23,17 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.processors.TreeProcessor;
-
-import com.sun.source.tree.*;
-import com.sun.source.util.Trees;
+import com.sun.source.tree.PrimitiveTypeTree;
 
 import java.util.function.Predicate;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeKind;
 
 
 @FunctionalInterface
-public interface Type<T extends Tree> extends Predicate<T> {
+public interface Primitive extends Predicate<PrimitiveTypeTree> {
     
-    public static final Predicate<? extends Tree> ANY = tree -> true;
-    
-    public static final Predicate<? extends Tree> NONE = tree -> tree == null;     
-    
-    
-    public static <T extends IdentifierTree> Type<T> exactly(String name) {
-        return tree -> tree.getName().contentEquals(name);
-    }
-    
-    public static <T extends IdentifierTree> Type<T> from(TreeProcessor<?> processor, TypeMirror type) {
-        return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(type, actual);
-        };
-    }
-
-    public static <T extends IdentifierTree> Type<T> to(TreeProcessor<?> processor, TypeMirror type) {
-        return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(actual, type);
-        };
+    public static Primitive exactly(TypeKind kind) {
+        return tree -> tree.getPrimitiveTypeKind() == kind;
     }
     
 }

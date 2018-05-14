@@ -23,40 +23,33 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.processors.TreeProcessor;
-
 import com.sun.source.tree.*;
-import com.sun.source.util.Trees;
 
-import java.util.function.Predicate;
-import javax.lang.model.type.TypeMirror;
+import java.util.List;
 
 
 @FunctionalInterface
-public interface Type<T extends Tree> extends Predicate<T> {
+public interface TypeParameter extends Type<TypeParameterTree> {
     
-    public static final Predicate<? extends Tree> ANY = tree -> true;
-    
-    public static final Predicate<? extends Tree> NONE = tree -> tree == null;     
-    
-    
-    public static <T extends IdentifierTree> Type<T> exactly(String name) {
+    public static TypeParameter exactly(String name) {
         return tree -> tree.getName().contentEquals(name);
     }
-    
-    public static <T extends IdentifierTree> Type<T> from(TreeProcessor<?> processor, TypeMirror type) {
-        return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(type, actual);
-        };
-    }
 
-    public static <T extends IdentifierTree> Type<T> to(TreeProcessor<?> processor, TypeMirror type) {
+    public static TypeParameter exactly(String name, Type<Tree>... expected) {
         return tree -> {
-            Trees trees = processor.getTrees();
-            TypeMirror actual = trees.getTypeMirror(trees.getPath(processor.getRoot(), tree));
-            return processor.getTypes().isAssignable(actual, type);
+            List<? extends Tree> parameters = tree.getBounds();
+
+            if (tree.getName().contentEquals(name) && expected.length == parameters.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < expected.length; i++) {
+                if (!expected[i].test(parameters.get(i))) {
+                    return false;
+                }
+            }
+
+            return true;
         };
     }
     
