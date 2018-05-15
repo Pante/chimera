@@ -34,6 +34,10 @@ public abstract class Expectations<T extends Tree> {
     
     public static final Expectations ANY = new Any();
     
+    public static <T extends Tree> Expectations<T> exactly(Predicate<T>... predicates) {
+        return new Exact(predicates);
+    }
+     
     
     protected final Predicate<T>[] predicates;
     private @Nullable List<T> actual;
@@ -80,6 +84,38 @@ class Any<T extends Tree> extends Expectations<T> {
     @Override
     public Expectations include(T tree) {
         return this;
+    }
+    
+}
+
+
+class Exact<T extends Tree> extends Expectations<T> {
+    
+    Exact(Predicate<T>... predicates) {
+        super(predicates);
+    }
+    
+    
+    @Override
+    public boolean check(List<? extends T> trees) {
+        if (trees.size() != predicates.length) {
+            return false;
+        }
+        
+        for (int i = 0; i < predicates.length; i++) {
+            if (!predicates[i].test(trees.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean check() {
+        boolean checked = check(lazy());
+        lazy().clear();
+        return checked;
     }
     
 }
