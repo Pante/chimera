@@ -50,7 +50,11 @@ public abstract class Expectations<T extends Tree> {
     
     public abstract boolean check(List<? extends T> trees);
     
-    public abstract boolean check();
+    public boolean check() {
+        boolean checked = check(lazy());
+        lazy().clear();
+        return checked;
+    }
     
     
     public Expectations include(T tree) {
@@ -109,13 +113,6 @@ class Exact<T extends Tree> extends Expectations<T> {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean check() {
-        boolean checked = check(lazy());
-        lazy().clear();
-        return checked;
     }
     
 }
