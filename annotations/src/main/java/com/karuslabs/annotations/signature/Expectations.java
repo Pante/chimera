@@ -116,3 +116,7 @@ class Exact<T extends Tree> extends Expectations<T> {
     }
     
 }
+
+class Contain<T extends Tree> extends Expectations<T> {
+    
+}
