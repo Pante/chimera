@@ -117,6 +117,30 @@ class Exact<T extends Tree> extends Expectations<T> {
     
 }
 
-class Contain<T extends Tree> extends Expectations<T> {
+class Sequence<T extends Tree> extends Expectations<T> {
+    
+    Sequence(Predicate<T>... predicates) {
+        super(predicates);
+    }
+
+    @Override
+    public boolean check(List<? extends T> trees) {
+        int size = trees.size();
+        if (trees.size() > predicates.length) {
+            return false;
+        }
+        
+        int j = 0;
+        for (int i = 0; i < predicates.length && j < size; i++) {
+            if (predicates[i].test(trees.get(j))) {
+                j++;
+                
+            } else {
+                j = 0;
+            }
+        }
+        
+        return j == size;
+    }
     
 }
