@@ -37,6 +37,10 @@ public abstract class Expectations<T extends Tree> {
     public static <T extends Tree> Expectations<T> exactly(Predicate<T>... predicates) {
         return new Exact(predicates);
     }
+    
+    public static <T extends Tree> Expectations<T> sequence(Predicate<T>... predicates) {
+        return new Sequence(predicates);
+    }
      
     
     protected final Predicate<T>[] predicates;
