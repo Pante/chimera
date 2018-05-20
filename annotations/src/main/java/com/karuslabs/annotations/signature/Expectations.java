@@ -68,7 +68,7 @@ public abstract class Expectations<T extends Tree> {
     
     protected List<T> lazy() {
         if (actual == null) {
-            actual = new ArrayList<>();
+            actual = new ArrayList<>(0);
         }
         
         return actual;
