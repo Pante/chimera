@@ -34,7 +34,7 @@ public abstract class Expectations<T extends Tree> {
     
     public static final Expectations ANY = new Any();
     
-    public static <T extends Tree> Expectations<T> exactly(Predicate<T>... predicates) {
+    public static <T extends Tree> Expectations<T> exact(Predicate<T>... predicates) {
         return new Exact(predicates);
     }
     
