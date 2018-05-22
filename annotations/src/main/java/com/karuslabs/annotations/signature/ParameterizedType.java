@@ -30,7 +30,7 @@ import java.util.List;
 @FunctionalInterface
 public interface ParameterizedType extends Type<ParameterizedTypeTree> {
     
-    public static ParameterizedType exactly(String name) {
+    public static ParameterizedType exact(String name) {
         return tree -> ((IdentifierTree) tree.getType()).getName().contentEquals(name);
     }
 
