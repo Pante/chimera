@@ -27,6 +27,6 @@ package com.karuslabs.annotations.signature;
  *
  * @author Karus Labs
  */
-public class Type {
+public interface Type {
     
 }
