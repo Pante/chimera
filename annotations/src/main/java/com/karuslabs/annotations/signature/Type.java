@@ -23,10 +23,11 @@
  */
 package com.karuslabs.annotations.signature;
 
-/**
- *
- * @author Karus Labs
- */
-public interface Type {
+import com.sun.source.tree.Tree;
+import java.util.function.Predicate;
+
+
+@FunctionalInterface
+public interface Type<T extends Tree>  extends Predicate<T> {
     
 }
