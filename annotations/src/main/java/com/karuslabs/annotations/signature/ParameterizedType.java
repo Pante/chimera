@@ -27,6 +27,6 @@ import com.sun.source.tree.ParameterizedTypeTree;
 
 
 @FunctionalInterface
-public interface ParameterizedType<T extends ParameterizedTypeTree> extends Type<T> {
+public interface ParameterizedType extends Type<ParameterizedTypeTree> {
     
 }
