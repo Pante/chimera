@@ -25,8 +25,10 @@ package com.karuslabs.annotations.signature;
 
 import com.sun.source.tree.Tree;
 
+import java.util.function.Predicate;
+
 
 @FunctionalInterface
-public interface Type<T extends Tree> extends Identifier<T> {
+public interface Type<T extends Tree> extends Predicate<T> {
     
 }
