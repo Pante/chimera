@@ -44,42 +44,27 @@ public interface Type<T extends Tree> extends Predicate<T> {
         return tree -> tree.getName().contentEquals(name);
     }
     
-    public static Type<IdentifierTree> from() {
-        
-    }
-            
-    public static Type<IdentifierTree> to() {
-        
-    }
-    
     
     public static TypeKind map(Class<?> primitive) {
-        if (primitive == boolean.class) {
-            return BOOLEAN;
-            
-        } else if (primitive == byte.class) {
-            return BYTE;
-            
-        } else if (primitive == short.class) {
-            return SHORT;
-            
-        } else if (primitive == int.class) {
-            return INT;
-            
-        } else if (primitive == long.class) {
-            return LONG;
-            
-        } else if (primitive == char.class) {
-            return CHAR;
-            
-        } else if (primitive == float.class) {
-            return FLOAT;
-            
-        } else if (primitive == double.class) {
-            return DOUBLE;
-            
-        } else {
-            throw new IllegalArgumentException("Invalid class, class must be a primitive");
+        switch (primitive.getName()) {
+            case "boolean":
+                return BOOLEAN;
+            case "byte":
+                return BYTE;
+            case "short":
+                return SHORT;
+            case "int":
+                return INT;
+            case "long":
+                return LONG;
+            case "char":
+                return CHAR;
+            case "float":
+                return FLOAT;
+            case "double":
+                return DOUBLE;
+            default:
+                throw new IllegalArgumentException("Invalid class, class must be a primitive");
         }
     }
     

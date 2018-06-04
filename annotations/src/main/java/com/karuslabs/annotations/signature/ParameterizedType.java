@@ -29,16 +29,16 @@ import com.sun.source.tree.ParameterizedTypeTree;
 @FunctionalInterface
 public interface ParameterizedType extends Type<ParameterizedTypeTree> {
     
-    public static ParameterizedType of() {
-        
-    }
-    
-    public static ParameterizedType from() {
-        
-    }
-    
-    public static ParameterizedType to() {
-        
-    }
+//    public static ParameterizedType of() {
+//        
+//    }
+//    
+//    public static ParameterizedType from() {
+//        
+//    }
+//    
+//    public static ParameterizedType to() {
+//        
+//    }
 
 }

@@ -29,15 +29,15 @@ import com.sun.source.tree.TypeParameterTree;
 @FunctionalInterface
 public interface TypeParameter extends Type<TypeParameterTree> {
     
-    public static TypeParameter of() {
-        
-    }
-    
-    public static TypeParameter from() {
-        
-    }
-    
-    public static TypeParameter to() {
-        
-    }
+//    public static TypeParameter of() {
+//        
+//    }
+//    
+//    public static TypeParameter from() {
+//        
+//    }
+//    
+//    public static TypeParameter to() {
+//        
+//    }
 }
