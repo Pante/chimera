@@ -24,7 +24,7 @@
 package com.karuslabs.annotations.processors;
 
 import com.sun.source.tree.*;
-import com.sun.source.util.Trees;
+import com.sun.source.util.*;
 
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
@@ -48,8 +48,9 @@ public abstract class TreeProcessor<T extends Tree> extends CompilationProcessor
     
     @Override
     protected T from(Element element) {
-        root = trees.getPath(element).getCompilationUnit();
-        return (T) trees.getTree(element);
+        TreePath path = trees.getPath(element);
+        root = path.getCompilationUnit();
+        return (T) path.getLeaf();
     }
     
     

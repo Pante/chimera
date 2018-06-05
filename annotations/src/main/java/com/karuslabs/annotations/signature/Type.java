@@ -26,7 +26,7 @@ package com.karuslabs.annotations.signature;
 import com.sun.source.tree.*;
 
 import java.util.function.Predicate;
-import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.*;
 
 import static javax.lang.model.type.TypeKind.*;
 
