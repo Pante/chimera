@@ -44,6 +44,32 @@ public interface Type<T extends Tree> extends Predicate<T> {
         return tree -> tree.getName().contentEquals(name);
     }
     
+    public static Type<IdentifierTree> from(Class<?> type) {
+        return tree -> {
+            try {
+                Class<?> actual = Class.forName(tree.getName().toString());
+                return actual.isAssignableFrom(type);
+                
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        };       
+    }
+    
+    public static Type<IdentifierTree> to(Class<?> type) {
+        return tree -> {
+            try {
+                Class<?> actual = Class.forName(tree.getName().toString());
+                return type.isAssignableFrom(actual);
+                
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        };
+                
+    }
+    
+    
     
     public static TypeKind map(Class<?> primitive) {
         switch (primitive.getName()) {
