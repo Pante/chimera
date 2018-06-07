@@ -23,21 +23,28 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.sun.source.tree.TypeParameterTree;
+import com.sun.source.tree.*;
+import java.util.stream.Stream;
 
 
 @FunctionalInterface
 public interface TypeParameter extends Type<TypeParameterTree> {
     
-//    public static TypeParameter of() {
-//        
-//    }
-//    
-//    public static TypeParameter from() {
-//        
-//    }
-//    
-//    public static TypeParameter to() {
-//        
-//    }
+    public static TypeParameter of(Class<?> type, Type<Tree>... parameters) {
+        String expected = type.getName();
+        return tree -> {
+            if (!tree.getName().contentEquals(expected) || parameters.length != tree.getBounds().size()) {
+                return false;
+            }
+            
+            for (int i = 0; i < parameters.length; i++) {
+                if (!parameters[i].test(tree.getBounds().get(i))) {
+                    return false;
+                }
+            }
+            
+            return true;
+        };
+    }
+    
 }
