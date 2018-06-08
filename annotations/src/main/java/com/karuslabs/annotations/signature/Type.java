@@ -65,8 +65,7 @@ public interface Type<T extends Tree> extends Predicate<T> {
             } catch (ClassNotFoundException e) {
                 return false;
             }
-        };
-                
+        };     
     }
     
     
