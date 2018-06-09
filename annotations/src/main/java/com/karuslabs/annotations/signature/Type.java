@@ -24,53 +24,35 @@
 package com.karuslabs.annotations.signature;
 
 import com.sun.source.tree.*;
+import com.sun.source.util.SimpleTreeVisitor;
 
-import java.util.function.Predicate;
-import javax.lang.model.type.*;
+import javax.annotation.Nullable;
+import javax.lang.model.type.TypeKind;
 
 import static javax.lang.model.type.TypeKind.*;
 
 
-@FunctionalInterface
-public interface Type<T extends Tree> extends Predicate<T> {
+public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
     
-    public static Type<PrimitiveTypeTree> primitive(Class<?> type) {
-        TypeKind expected = map(type);
-        return tree -> tree.getPrimitiveTypeKind() == expected;
+    private static final Type of = new Of();
+    private static final Type from = new From();
+    private static final Type to = new To();
+
+    
+    public static Type Of() {
+        return of;
     }
     
-    public static Type<IdentifierTree> of(Class<?> type) {
-        String name = type.getName();
-        return tree -> tree.getName().contentEquals(name);
+    public static Type from() {
+        return from;
     }
     
-    public static Type<IdentifierTree> from(Class<?> type) {
-        return tree -> {
-            try {
-                Class<?> actual = Class.forName(tree.getName().toString());
-                return actual.isAssignableFrom(type);
-                
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        };       
-    }
-    
-    public static Type<IdentifierTree> to(Class<?> type) {
-        return tree -> {
-            try {
-                Class<?> actual = Class.forName(tree.getName().toString());
-                return type.isAssignableFrom(actual);
-                
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        };     
+    public static Type to() {
+        return to;
     }
     
     
-    
-    public static TypeKind map(Class<?> primitive) {
+    public @Nullable static TypeKind map(Class<?> primitive) {
         switch (primitive.getName()) {
             case "boolean":
                 return BOOLEAN;
@@ -89,7 +71,55 @@ public interface Type<T extends Tree> extends Predicate<T> {
             case "double":
                 return DOUBLE;
             default:
-                throw new IllegalArgumentException("Invalid class, class must be a primitive");
+                return null;
+        }
+    }
+    
+    
+    @Override
+    protected Boolean defaultAction(Tree tree, Class<?> expected) {
+        return false;
+    }
+    
+}
+
+class Of extends Type {
+    
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        return tree.getName().contentEquals(expected.getName());
+    }
+    
+    @Override
+    public Boolean visitPrimitiveType(PrimitiveTypeTree tree, Class<?> expected) {
+        return tree.getPrimitiveTypeKind() == map(expected);
+    }
+    
+}
+
+class From extends Type {
+    
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        try {
+            return Class.forName(tree.getName().toString()).isAssignableFrom(expected);
+
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+    
+}
+
+class To extends Type {
+    
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        try {
+            return expected.isAssignableFrom(Class.forName(tree.getName().toString()));
+
+        } catch (ClassNotFoundException e) {
+            return false;
         }
     }
     
