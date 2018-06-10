@@ -33,22 +33,17 @@ import static javax.lang.model.type.TypeKind.*;
 
 
 public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
-    
-    private static final Type of = new Of();
-    private static final Type from = new From();
-    private static final Type to = new To();
 
-    
-    public static Type Of() {
-        return of;
+    public static Type of() {
+        return Exact.TYPE;
     }
     
     public static Type from() {
-        return from;
+        return AssignableFrom.TYPE;
     }
     
     public static Type to() {
-        return to;
+        return AssignableTo.INSTANCE;
     }
     
     
@@ -76,50 +71,48 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
     }
     
     
-    @Override
-    protected Boolean defaultAction(Tree tree, Class<?> expected) {
-        return false;
-    }
-    
-}
+    static class Exact extends Type {
 
-class Of extends Type {
-    
-    @Override
-    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-        return tree.getName().contentEquals(expected.getName());
-    }
-    
-    @Override
-    public Boolean visitPrimitiveType(PrimitiveTypeTree tree, Class<?> expected) {
-        return tree.getPrimitiveTypeKind() == map(expected);
-    }
-    
-}
+        static final Exact TYPE = new Exact();
 
-class From extends Type {
-    
-    @Override
-    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-        try {
-            return Class.forName(tree.getName().toString()).isAssignableFrom(expected);
+        @Override
+        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+            return tree.getName().contentEquals(expected.getName());
+        }
 
-        } catch (ClassNotFoundException e) {
-            return false;
+        @Override
+        public Boolean visitPrimitiveType(PrimitiveTypeTree tree, Class<?> expected) {
+            return tree.getPrimitiveTypeKind() == map(expected);
         }
     }
-    
-}
 
-class To extends Type {
-    
-    @Override
-    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-        try {
-            return expected.isAssignableFrom(Class.forName(tree.getName().toString()));
+    static class AssignableFrom extends Type {
 
-        } catch (ClassNotFoundException e) {
-            return false;
+        static final AssignableFrom TYPE = new AssignableFrom();
+
+        @Override
+        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+            try {
+                return Class.forName(tree.getName().toString()).isAssignableFrom(expected);
+
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
+        }
+    }
+
+    static class AssignableTo extends Type {
+
+        static final AssignableTo INSTANCE = new AssignableTo();
+
+        @Override
+        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+            try {
+                return expected.isAssignableFrom(Class.forName(tree.getName().toString()));
+
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
         }
     }
     
