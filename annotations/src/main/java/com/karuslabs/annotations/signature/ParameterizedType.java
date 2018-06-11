@@ -70,17 +70,13 @@ public abstract class ParameterizedType extends Type implements Parameterized {
         
         @Override
         public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-            return types.length == tree.getBounds().size()
-        }
+            return types.length == tree.getTypeArguments().size() && tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
+        };
         
         @Override
         public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-            
+            return types.length == tree.getBounds().size() && tree.getName().contentEquals(expected.getName()) && parameters(tree.getBounds());
         }
-            if (!tree.getName().contentEquals(expected) || ) {
-                    return false;
-                }
-
 
     }
     
