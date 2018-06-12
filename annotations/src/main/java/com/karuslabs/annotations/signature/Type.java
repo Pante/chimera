@@ -27,6 +27,7 @@ import com.sun.source.tree.*;
 import com.sun.source.util.SimpleTreeVisitor;
 
 import javax.annotation.Nullable;
+import javax.lang.model.element.Name;
 import javax.lang.model.type.TypeKind;
 
 import static javax.lang.model.type.TypeKind.*;
@@ -86,33 +87,46 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
         }
     }
 
+    
     static class AssignableFrom extends Type {
 
         static final AssignableFrom TYPE = new AssignableFrom();
 
         @Override
         public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-            try {
-                return Class.forName(tree.getName().toString()).isAssignableFrom(expected);
+            return from(tree.getName(), expected);
+        }
 
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
+    }
+    
+    static boolean from(Name name, Class<?> expected) {
+        try {
+            return Class.forName(name.toString()).isAssignableFrom(expected);
+
+        } catch (ClassNotFoundException e) {
+            return false;
         }
     }
 
+    
     static class AssignableTo extends Type {
 
         static final AssignableTo INSTANCE = new AssignableTo();
 
         @Override
         public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-            try {
-                return expected.isAssignableFrom(Class.forName(tree.getName().toString()));
+            return to(tree.getName(), expected);
+        }
+        
+        
+    }
+    
+    static boolean to(Name name, Class<?> expected) {
+        try {
+            return expected.isAssignableFrom(Class.forName(name.toString()));
 
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
+        } catch (ClassNotFoundException e) {
+            return false;
         }
     }
     

@@ -45,6 +45,10 @@ public abstract class ParameterizedType extends Type implements Parameterized {
     
     
     protected boolean parameters(List<? extends Tree> parameters) {
+        if (types.length != parameters.size()) {
+            return false;
+        }
+        
         for (int i = 0; i < types.length; i++) {
             if (parameters.get(i).accept(types[i], classes[i])) {
                 return false;
@@ -61,23 +65,59 @@ public abstract class ParameterizedType extends Type implements Parameterized {
     }
     
     
-    class Exact extends ParameterizedType {
+    static class Exact extends ParameterizedType {
 
-        public Exact(Type[] types, Class<?>[] classes) {
+        Exact(Type[] types, Class<?>[] classes) {
             super(types, classes);
         }
         
         
         @Override
         public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-            return types.length == tree.getTypeArguments().size() && tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
+            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
         };
         
         @Override
         public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-            return types.length == tree.getBounds().size() && tree.getName().contentEquals(expected.getName()) && parameters(tree.getBounds());
+            return tree.getName().contentEquals(expected.getName()) && parameters(tree.getBounds());
         }
 
+    }
+    
+    static class AssignableFrom extends ParameterizedType {
+        
+        AssignableFrom(Type[] types, Class<?>[] classes) {
+            super(types, classes);
+        }
+        
+        @Override
+        public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
+        }
+        
+        @Override
+        public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+            return Type.from(tree.getName(), expected) && parameters(tree.getBounds());
+        }
+        
+    }
+    
+    static class AssignableTo extends ParameterizedType {
+        
+        AssignableTo(Type[] types, Class<?>[] classes) {
+            super(types, classes);
+        }
+        
+        @Override
+        public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
+        }
+        
+        @Override
+        public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+            return Type.to(tree.getName(), expected) && parameters(tree.getBounds());
+        }
+        
     }
     
 }
