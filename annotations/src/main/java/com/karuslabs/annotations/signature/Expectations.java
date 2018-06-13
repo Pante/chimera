@@ -23,10 +23,12 @@
  */
 package com.karuslabs.annotations.signature;
 
+import com.sun.tools.javac.code.Types.SimpleVisitor;
 
-@FunctionalInterface
-public interface Parameterized {
+
+public class Expectations<T> {
     
-    public Type and(Class<?>... classes);
+    private SimpleVisitor<Boolean, T>[] visitors;
+    private T[] arguments;
     
 }

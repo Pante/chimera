@@ -34,15 +34,38 @@ public abstract class ParameterizedType extends Type implements Parameterized {
     static final Class<?>[] CLASSES = new Class<?>[] {};
     
     
+    public static Parameterized of(Type... types) {
+        return new ExactParameterizedType(types, CLASSES);
+    }
+    
+    public static Parameterized from(Type... types) {
+        return new AssignableFromParameterizedType(types, CLASSES);
+    }
+    
+    public static Parameterized to(Type... types) {
+        return new AssignableToParameterizedType(types, CLASSES);
+    }
+    
+    
     protected Type[] types;
     protected Class<?>[] classes;
-    
+
     
     public ParameterizedType(Type[] types, Class<?>[] classes) {
         this.types = types;
         this.classes = classes;
     }
-    
+
+        
+    @Override
+    public ParameterizedType and(Class<?>... classes) {
+        if (types.length != classes.length) {
+            throw new IllegalArgumentException("Invalid number of classes specified, number of types and classes must be the same");
+        }
+        
+        this.classes = classes;
+        return this;
+    }
     
     protected boolean parameters(List<? extends Tree> parameters) {
         if (types.length != parameters.size()) {
@@ -58,69 +81,59 @@ public abstract class ParameterizedType extends Type implements Parameterized {
         return true;
     }
     
-    @Override
-    public ParameterizedType and(Class<?>... classes) {
-        this.classes = classes;
-        return this;
-    }
-    
-    
-    static class Exact extends ParameterizedType {
-
-        Exact(Type[] types, Class<?>[] classes) {
-            super(types, classes);
-        }
-        
-        
-        @Override
-        public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
-        };
-        
-        @Override
-        public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-            return tree.getName().contentEquals(expected.getName()) && parameters(tree.getBounds());
-        }
-
-    }
-    
-    static class AssignableFrom extends ParameterizedType {
-        
-        AssignableFrom(Type[] types, Class<?>[] classes) {
-            super(types, classes);
-        }
-        
-        @Override
-        public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
-        }
-        
-        @Override
-        public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-            return Type.from(tree.getName(), expected) && parameters(tree.getBounds());
-        }
-        
-    }
-    
-    static class AssignableTo extends ParameterizedType {
-        
-        AssignableTo(Type[] types, Class<?>[] classes) {
-            super(types, classes);
-        }
-        
-        @Override
-        public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-            return tree.getType().accept(Type.Exact.TYPE, expected) && parameters(tree.getTypeArguments());
-        }
-        
-        @Override
-        public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-            return Type.to(tree.getName(), expected) && parameters(tree.getBounds());
-        }
-        
-    }
-    
 }
 
 
+class ExactParameterizedType extends ParameterizedType {
 
+    ExactParameterizedType(Type[] types, Class<?>[] classes) {
+        super(types, classes);
+    }
+
+    @Override
+    public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+        return tree.getType().accept(Type.EXACT, expected) && parameters(tree.getTypeArguments());
+    }
+
+    @Override
+    public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+        return tree.getName().contentEquals(expected.getName()) && parameters(tree.getBounds());
+    }
+
+}
+
+class AssignableFromParameterizedType extends ParameterizedType {
+
+    AssignableFromParameterizedType(Type[] types, Class<?>[] classes) {
+        super(types, classes);
+    }
+
+    @Override
+    public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+        return tree.getType().accept(Type.FROM, expected) && parameters(tree.getTypeArguments());
+    }
+
+    @Override
+    public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+        return AssignableToType.check(tree.getName(), expected) && parameters(tree.getBounds());
+    }
+
+}
+    
+class AssignableToParameterizedType extends ParameterizedType {
+
+    AssignableToParameterizedType(Type[] types, Class<?>[] classes) {
+        super(types, classes);
+    }
+
+    @Override
+    public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+        return tree.getType().accept(Type.TO, expected) && parameters(tree.getTypeArguments());
+    }
+
+    @Override
+    public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+        return AssignableToType.check(tree.getName(), expected) && parameters(tree.getBounds());
+    }
+
+}

@@ -34,17 +34,36 @@ import static javax.lang.model.type.TypeKind.*;
 
 
 public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
-
+    
+    static final Type ANY = new Type(true) {};
+    static final Type EXACT = new ExactType();
+    static final Type FROM = new AssignableFromType();
+    static final Type TO = new AssignableToType();
+    
+    
+    public static Type any() {
+        return ANY;
+    }
+    
     public static Type of() {
-        return Exact.TYPE;
+        return EXACT;
     }
     
     public static Type from() {
-        return AssignableFrom.TYPE;
+        return FROM;
     }
     
     public static Type to() {
-        return AssignableTo.INSTANCE;
+        return TO;
+    }
+    
+    
+    public Type() {
+        this(false);
+    }
+    
+    public Type(boolean value) {
+        super(value);
     }
     
     
@@ -70,36 +89,30 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
                 return null;
         }
     }
-    
-    
-    static class Exact extends Type {
 
-        static final Exact TYPE = new Exact();
+}
 
-        @Override
-        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-            return tree.getName().contentEquals(expected.getName());
-        }
+class ExactType extends Type {
 
-        @Override
-        public Boolean visitPrimitiveType(PrimitiveTypeTree tree, Class<?> expected) {
-            return tree.getPrimitiveTypeKind() == map(expected);
-        }
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        return tree.getName().contentEquals(expected.getName());
     }
 
-    
-    static class AssignableFrom extends Type {
+    @Override
+    public Boolean visitPrimitiveType(PrimitiveTypeTree tree, Class<?> expected) {
+        return tree.getPrimitiveTypeKind() == map(expected);
+    }
+}
 
-        static final AssignableFrom TYPE = new AssignableFrom();
+class AssignableFromType extends Type {
 
-        @Override
-        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-            return from(tree.getName(), expected);
-        }
-
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        return check(tree.getName(), expected);
     }
     
-    static boolean from(Name name, Class<?> expected) {
+    static boolean check(Name name, Class<?> expected) {
         try {
             return Class.forName(name.toString()).isAssignableFrom(expected);
 
@@ -108,20 +121,17 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
         }
     }
 
-    
-    static class AssignableTo extends Type {
+}
 
-        static final AssignableTo INSTANCE = new AssignableTo();
+class AssignableToType extends Type {
 
-        @Override
-        public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-            return to(tree.getName(), expected);
-        }
-        
-        
+    @Override
+    public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
+        ParameterizedType.of(Type.EXACT);
+        return check(tree.getName(), expected);
     }
-    
-    static boolean to(Name name, Class<?> expected) {
+
+    static boolean check(Name name, Class<?> expected) {
         try {
             return expected.isAssignableFrom(Class.forName(name.toString()));
 
@@ -129,5 +139,5 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
             return false;
         }
     }
-    
+
 }
