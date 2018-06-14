@@ -21,14 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.signature;
-
-import com.sun.tools.javac.code.Types.SimpleVisitor;
+package com.karuslabs.annotations;
 
 
-public class Expectations<T> {
-    
-    private SimpleVisitor<Boolean, T>[] visitors;
-    private T[] arguments;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
+@Documented
+@Target({METHOD})
+@Retention(RUNTIME)
+public @interface ResourceHandle {
     
 }
