@@ -37,8 +37,8 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
     
     static final Type ANY = new Type(true) {};
     static final Type EXACT = new ExactType();
-    static final Type FROM = new AssignableFromType();
-    static final Type TO = new AssignableToType();
+    static final Type FROM = new ParentType();
+    static final Type TO = new SubclassType();
     
     
     public static Type any() {
@@ -49,11 +49,11 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
         return EXACT;
     }
     
-    public static Type from() {
+    public static Type parentOf() {
         return FROM;
     }
     
-    public static Type to() {
+    public static Type subclassOf() {
         return TO;
     }
     
@@ -105,16 +105,16 @@ class ExactType extends Type {
     }
 }
 
-class AssignableFromType extends Type {
+class ParentType extends Type {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
         return check(tree.getName(), expected);
     }
     
-    static boolean check(Name name, Class<?> expected) {
+    static boolean check(Name actual, Class<?> expected) {
         try {
-            return Class.forName(name.toString()).isAssignableFrom(expected);
+            return Class.forName(actual.toString()).isAssignableFrom(expected);
 
         } catch (ClassNotFoundException e) {
             return false;
@@ -123,7 +123,7 @@ class AssignableFromType extends Type {
 
 }
 
-class AssignableToType extends Type {
+class SubclassType extends Type {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
@@ -131,9 +131,9 @@ class AssignableToType extends Type {
         return check(tree.getName(), expected);
     }
 
-    static boolean check(Name name, Class<?> expected) {
+    static boolean check(Name actual, Class<?> expected) {
         try {
-            return expected.isAssignableFrom(Class.forName(name.toString()));
+            return expected.isAssignableFrom(Class.forName(actual.toString()));
 
         } catch (ClassNotFoundException e) {
             return false;

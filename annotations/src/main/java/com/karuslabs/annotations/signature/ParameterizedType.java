@@ -38,12 +38,12 @@ public abstract class ParameterizedType extends Type implements Parameterized {
         return new ExactParameterizedType(types, CLASSES);
     }
     
-    public static Parameterized from(Type... types) {
-        return new AssignableFromParameterizedType(types, CLASSES);
+    public static Parameterized parentOf(Type... types) {
+        return new ParentParameterizedType(types, CLASSES);
     }
     
-    public static Parameterized to(Type... types) {
-        return new AssignableToParameterizedType(types, CLASSES);
+    public static Parameterized subclassOf(Type... types) {
+        return new SubclassParameterizedType(types, CLASSES);
     }
     
     
@@ -102,27 +102,27 @@ class ExactParameterizedType extends ParameterizedType {
 
 }
 
-class AssignableFromParameterizedType extends ParameterizedType {
+class ParentParameterizedType extends ParameterizedType {
 
-    AssignableFromParameterizedType(Type[] types, Class<?>[] classes) {
+    ParentParameterizedType(Type[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
     @Override
-    public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-        return tree.getType().accept(Type.FROM, expected) && parameters(tree.getTypeArguments());
+    public Boolean visitParameterizedType(ParameterizedTypeTree actual, Class<?> expected) {
+        return actual.getType().accept(Type.FROM, expected) && parameters(actual.getTypeArguments());
     }
 
     @Override
-    public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-        return AssignableToType.check(tree.getName(), expected) && parameters(tree.getBounds());
+    public Boolean visitTypeParameter(TypeParameterTree actual, Class<?> expected) {
+        return ParentType.check(actual.getName(), expected) && parameters(actual.getBounds());
     }
 
 }
     
-class AssignableToParameterizedType extends ParameterizedType {
+class SubclassParameterizedType extends ParameterizedType {
 
-    AssignableToParameterizedType(Type[] types, Class<?>[] classes) {
+    SubclassParameterizedType(Type[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
@@ -133,7 +133,7 @@ class AssignableToParameterizedType extends ParameterizedType {
 
     @Override
     public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-        return AssignableToType.check(tree.getName(), expected) && parameters(tree.getBounds());
+        return SubclassType.check(tree.getName(), expected) && parameters(tree.getBounds());
     }
 
 }
