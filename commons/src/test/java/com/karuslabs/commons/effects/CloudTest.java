@@ -21,45 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class CloudTest extends EffectBase {
+
+    Cloud cloud = spy(new Cloud(PARTICLES, COLOURED));
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(cloud).renderCloud(context, origin, offset, RANDOM);
+        doNothing().when(cloud).renderDroplets(context, origin, offset, RANDOM);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        cloud.render(context, origin, target, offset);
+        
+        verify(cloud).renderCloud(context, origin, offset, RANDOM);
+        verify(cloud).renderDroplets(context, origin, offset, RANDOM);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderCloud() {
+        cloud.renderCloud(context, origin, offset, mockRandom);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        verify(context).render(PARTICLES, origin, offset);
     }
     
     
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    @ParameterizedTest
+    @CsvSource({"true, 2", "false, 0"})
+    void renderDroplets(boolean render, int expected) {
+        when(mockRandom.nextBoolean()).thenReturn(render);
+        
+        cloud.renderDroplets(context, origin, offset, mockRandom);
+        
+        verify(context, times(expected)).render(COLOURED, origin, offset);
     }
     
 }

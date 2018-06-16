@@ -26,7 +26,6 @@ package com.karuslabs.commons.locale.annotation.processors;
 import com.karuslabs.commons.locale.annotation.*;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
@@ -36,7 +35,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static java.util.Collections.singleton;
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;

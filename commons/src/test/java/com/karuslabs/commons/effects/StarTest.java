@@ -21,45 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.lang.Math.*;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class StarTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Star star = spy(new Star(PARTICLES));
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(star).render(any(), any(), any(), any(), anyDouble(), anyDouble());
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        star.render(context, origin, target, offset);
+        
+        verify(star, times(6)).render(eq(context), eq(origin), eq(offset), eq(RANDOM), anyDouble(), anyDouble());
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void render_rotation() {
+        when(mockRandom.nextFloat()).thenReturn(0.5F);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+        star.render(context, origin, offset, mockRandom, 3 * 0.5 / sqrt(3), PI / 3);
+        
+        verify(context, times(2)).render(PARTICLES, origin, offset);
+        assertVector(from(-1.9485571585149866, -1.12500000000000067, -0.43301270189221946), context.offset);
     }
     
 }

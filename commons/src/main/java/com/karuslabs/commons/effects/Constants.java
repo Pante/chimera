@@ -21,45 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
+package com.karuslabs.commons.effects;
 
-import com.karuslabs.commons.animation.Base;
+import org.bukkit.util.Vector;
 
-import org.junit.jupiter.api.Test;
-
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static java.lang.Math.PI;
 
 
-class ColouredParticlesTest extends Base {
+class Constants {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    static final Vector ANGULAR_VELOCITY = new Vector(PI / 200, PI / 170, PI / 155);
     
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
-        
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
-        
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
-    }
+    static final Vector NONE = new Vector();
     
 }

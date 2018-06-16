@@ -21,45 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
+package com.karuslabs.commons.effects;
 
-import com.karuslabs.commons.animation.Base;
+import com.karuslabs.commons.effect.Context;
+import com.karuslabs.commons.effect.particles.Particles;
 
-import org.junit.jupiter.api.Test;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static com.karuslabs.commons.world.Vectors.copy;
 
 
-class ColouredParticlesTest extends Base {
+public class StubContext implements Context {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    int steps;
+    Vector captured;
+    Vector offset;
     
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
-        
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+    
+    public StubContext(int steps) {
+        this.steps = steps;
+        captured = new Vector();
+        offset = new Vector();
     }
     
     
-    @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
-        
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+    @Override
+    public void render(Particles particles, Location location) {
+        copy(location, captured);
+    }
+    
+    @Override
+    public void render(Particles particles, Location location, Vector offset) {
+        this.offset.copy(offset);
     }
     
     
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    @Override
+    public void cancel() {
+        
+    }
+    
+    
+    @Override
+    public int steps() {
+        return steps;
+    }
+    
+    @Override
+    public void steps(int steps) {
+        this.steps = steps;
     }
     
 }

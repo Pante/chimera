@@ -21,45 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
+package com.karuslabs.commons.effects;
 
-import com.karuslabs.commons.animation.Base;
+import com.karuslabs.annotations.Immutable;
+import com.karuslabs.commons.effect.*;
+import com.karuslabs.commons.effect.particles.Particles;
 
-import org.junit.jupiter.api.Test;
+import java.util.concurrent.ThreadLocalRandom;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static com.karuslabs.commons.world.Vectors.randomCircle;
 
 
-class ColouredParticlesTest extends Base {
+@Immutable
+public class Flame implements Effect {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    private Particles flame;
+    private int total;
     
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
-        
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+    
+    public Flame(Particles flame) {
+        this(flame, 10);
+    }
+    
+    public Flame(Particles flame, int total) {
+        this.flame = flame;
+        this.total = total;
     }
     
     
-    @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    @Override
+    public void render(Context context, Location origin, Location target, Vector offset) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+        for (int i = 0; i < total; i += flame.getAmount()) {
+            randomCircle(offset).multiply(random.nextDouble(0, 0.6));
+            offset.setY(random.nextFloat() * 1.8);
+
+            context.render(flame, origin, offset);
+        }
     }
     
 }

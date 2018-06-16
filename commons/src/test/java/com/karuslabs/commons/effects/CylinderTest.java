@@ -21,45 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class CylinderTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Cylinder cylinder = spy(new Cylinder(PARTICLES));
     
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    
+    @ParameterizedTest
+    @CsvSource({"true", "false"})
+    void render(boolean rotate) {
+        doNothing().when(cylinder).renderSurface(any(), any(), any(), any());
+        cylinder.rotate = rotate;
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        cylinder.render(context, origin, target, offset);
+        
+        verify(cylinder).renderSurface(context, origin, offset, RANDOM);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderSurface() {
+        cylinder.renderSurface(context, origin, offset, RANDOM);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        verify(context).render(PARTICLES, origin, offset);
+        verify(context).render(PARTICLES, origin);
     }
     
     
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    @ParameterizedTest
+    @CsvSource({"0.1, 2, -1.2, 2", "0.49, 0.49, -3, 0.49", "0.5, 0.5, -3, 0.5"})
+    void calculate(float value, double x, double y, double z) {
+        when(mockRandom.nextFloat()).thenReturn(value);
+        when(mockRandom.nextDouble(-1, 1)).thenReturn(-0.8);
+        
+        offset.setX(1).setY(1).setZ(1);
+        
+        cylinder.calculate(offset, mockRandom, 2);
+
+        assertVector(from(x, y, z), offset, LOW_PRECISION);
     }
     
 }

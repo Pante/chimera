@@ -21,45 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class LineTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Line line = spy(new Line(PARTICLES).get());
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        line.zigzag = true;
+        line.step  = 1000;
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        line.render(context, origin, target, offset);
+        
+        verify(context).render(PARTICLES, origin, offset);
+        assertVector(from(0, -0.1, 0), context.offset);
+        assertEquals(true, line.direction);
+        assertEquals(1, line.step);
     }
     
     
-    @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    @ParameterizedTest
+    @CsvSource({"2, 1.8660254037844384, -0.7320508075688774, 0.5000000000000001", "0, 2, 2, 2"})
+    void resolveLink(double length, double x, double y, double z) {
+        line.length = length;
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+        line.resolveLink(context, origin, target);
+        
+        assertVector(from(x, y, z), line.link);
     }
     
 }

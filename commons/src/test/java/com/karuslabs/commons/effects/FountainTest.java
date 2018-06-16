@@ -21,45 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class FountainTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Fountain fountain = spy(new Fountain(SPAM));
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(fountain).renderStrands(context, origin, offset);
+        doNothing().when(fountain).renderSpout(context, origin, offset, RANDOM);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        fountain.render(context, origin, target, offset);
+        
+        verify(fountain).renderStrands(context, origin, offset);
+        verify(fountain).renderSpout(context, origin, offset, RANDOM);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderStrands() {
+        fountain.renderStrands(context, origin, offset);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        verify(context, times(10)).render(SPAM, origin, offset);
+        assertVector(from(0.02357022661029, 0.062827259650071, 0.02357022661029), context.offset);
     }
     
     
     @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    void renderSpout() {
+        fountain.renderSpout(context, origin, offset, RANDOM);
+        
+        verify(context).render(SPAM, origin, offset);
     }
     
 }

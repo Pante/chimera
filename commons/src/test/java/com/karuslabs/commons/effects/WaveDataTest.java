@@ -21,45 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
+package com.karuslabs.commons.effects;
 
-import com.karuslabs.commons.animation.Base;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-class ColouredParticlesTest extends Base {
+class WaveDataTest {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    WaveData data = new WaveData(10, 1, new Vector(0.75, 0.5, 0), new Vector(-1.5, 0, 0));
+    Set<Vector> waters = new HashSet<>();
+    Set<Vector> clouds = new HashSet<>();
+    Vector vector = new Vector();
     
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    
+    @ParameterizedTest
+    @MethodSource("parameters")
+    void process(Predicate<Integer> range, int watersSize, int cloudsSize) {
+        data.process(waters, clouds, range, 1, 0, 0);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        assertEquals(watersSize, waters.size());
+        assertEquals(cloudsSize, clouds.size());
+    }
+    
+    static Stream<Arguments> parameters() {
+        return Stream.of(of(wrap(i -> i == 0 || i == 9), 8, 2), of(wrap(i -> i == 0), 9, 1));
+    }
+    
+    static Object wrap(Predicate<Integer> predicate) {
+        return predicate;
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void processRows() {
+        data.processRows(waters, vector, 3, 10, 10);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+        assertEquals(3, waters.size());
     }
     
 }

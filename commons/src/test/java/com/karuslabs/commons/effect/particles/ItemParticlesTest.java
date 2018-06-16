@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.effect.particles;
 
-import com.karuslabs.commons.effect.particles.ItemParticles;
 import com.karuslabs.commons.animation.Base;
 
 import org.bukkit.inventory.ItemStack;

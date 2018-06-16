@@ -21,45 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class DragonTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Dragon dragon = spy(new Dragon(PARTICLES));
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(dragon).renderArcs(context, origin, offset, 0);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        dragon.render(context, origin, target, offset);
+        
+        verify(dragon).populate(RANDOM);
+        verify(dragon).renderArcs(context, origin, offset, 0);
+        verify(dragon).renderArcs(context, origin, offset, 1);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderArcs() {
+        dragon.renderArcs(context, origin, offset, 1);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+        verify(context, times(20)).render(PARTICLES, origin, offset);
+        assertVector(from(0.05619543332824477, 0.10088888827899783, 0.06666667549644664), context.offset);
     }
     
 }

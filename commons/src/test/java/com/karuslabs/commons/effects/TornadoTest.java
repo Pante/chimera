@@ -21,45 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class TornadoTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Tornado tornado = spy(new Tornado(PARTICLES, COLOURED));
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(tornado).renderCloud(context, origin, offset, RANDOM);
+        doNothing().when(tornado).renderTornado(context, origin, offset);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        tornado.render(context, origin, target, offset);
+        
+        verify(tornado).renderCloud(context, origin, offset, RANDOM);
+        verify(tornado).renderTornado(context, origin, offset);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderCloud() {
+        tornado.renderCloud(context, origin, offset, RANDOM);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        verify(context, times(3)).render(COLOURED, origin, offset);
     }
     
     
     @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    void renderTornado() {
+        doNothing().when(tornado).renderTornadoPortion(any(), any(), any(), anyDouble(), anyDouble());
+        
+        tornado.renderTornado(context, origin, offset);
+        
+        verify(tornado, times(14)).renderTornadoPortion(any(), any(), any(), anyDouble(), anyDouble());
+    }
+    
+    
+    @Test
+    void renderTornadoPortion() {
+        tornado.renderTornadoPortion(context, origin, offset, 1, 2);
+        
+        verify(context).render(PARTICLES, origin, offset);
+        assertVector(from(1, 2.2, 0), context.offset);
     }
     
 }

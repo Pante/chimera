@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
+package com.karuslabs.annotations.signature;
 
-import com.karuslabs.commons.animation.Base;
+import com.sun.source.tree.*;
 
-import org.junit.jupiter.api.Test;
-
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import java.util.List;
 
 
-class ColouredParticlesTest extends Base {
+@FunctionalInterface
+public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
-    
-    @Test
-    void render_World() {
-        particles.render(location, OFFSET);
-        
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+    public static <T extends TreeVisitor<Boolean, V>, V> And<V, Sequence> of(T... visitors) {
+        return null;
     }
     
     
-    @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
-        
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
-    }
-    
-    
-    @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
-    }
-    
+    public boolean match(List<? extends Tree> trees);
+}
+
+
+abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<V, Sequence> {
+
 }

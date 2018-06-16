@@ -21,45 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class GridTest extends EffectBase {
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
+    Grid grid = spy(new Grid(PARTICLES));
+    
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(grid).renderRows(context, origin, offset);
+        doNothing().when(grid).renderColumns(context, origin, offset);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        grid.render(context, origin, target, offset);
+        
+        verify(grid).renderRows(context, origin, offset);
+        verify(grid).renderColumns(context, origin, offset);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderRows() {
+        doNothing().when(grid).renderParticles(context, origin, offset);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        grid.renderRows(context, origin, offset);
+        
+        verify(grid, times(7)).renderParticles(context, origin, offset);
+        assertVector(from(0, 6, 0), offset);
     }
     
     
     @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    void renderColumns() {
+        doNothing().when(grid).renderParticles(context, origin, offset);
+        
+        grid.renderColumns(context, origin, offset);
+        
+        verify(grid, times(18)).renderParticles(context, origin, offset);
+        assertVector(from(0, 5.666666507720947, 0), offset);
+    }
+    
+    
+    @Test
+    void renderParticles() {
+        grid.renderParticles(context, origin, offset);
+        
+        verify(context).render(PARTICLES, origin, offset);
+        assertVector(from(1, 1, 1), origin);
     }
     
 }

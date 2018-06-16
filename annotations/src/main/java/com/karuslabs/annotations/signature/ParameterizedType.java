@@ -28,22 +28,27 @@ import com.sun.source.tree.*;
 import java.util.List;
 
 
-public abstract class ParameterizedType extends Type implements Parameterized {
+public abstract class ParameterizedType extends Type implements And<Class<?>, Type> {
     
     static final Type[] TYPES = new Type[] {};
     static final Class<?>[] CLASSES = new Class<?>[] {};
+    static final Type RAW = new RawType();
     
     
-    public static Parameterized of(Type... types) {
+    public static And<Class<?>, Type> of(Type... types) {
         return new ExactParameterizedType(types, CLASSES);
     }
     
-    public static Parameterized parentOf(Type... types) {
+    public static And<Class<?>, Type> parentOf(Type... types) {
         return new ParentParameterizedType(types, CLASSES);
     }
     
-    public static Parameterized subclassOf(Type... types) {
+    public static And<Class<?>, Type> subclassOf(Type... types) {
         return new SubclassParameterizedType(types, CLASSES);
+    }
+    
+    public static Type raw() {
+        return RAW;
     }
     
     
@@ -58,7 +63,7 @@ public abstract class ParameterizedType extends Type implements Parameterized {
 
         
     @Override
-    public ParameterizedType and(Class<?>... classes) {
+    public Type and(Class<?>... classes) {
         if (types.length != classes.length) {
             throw new IllegalArgumentException("Invalid number of classes specified, number of types and classes must be the same");
         }
@@ -134,6 +139,24 @@ class SubclassParameterizedType extends ParameterizedType {
     @Override
     public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
         return SubclassType.check(tree.getName(), expected) && parameters(tree.getBounds());
+    }
+
+}
+
+class RawType extends ParameterizedType {
+
+    public RawType() {
+        super(TYPES, CLASSES);
+    }
+
+    @Override
+    public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
+        return tree.getType().accept(Type.EXACT, expected) && tree.getTypeArguments().isEmpty();
+    }
+
+    @Override
+    public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
+        return tree.getName().contentEquals(expected.getName()) && tree.getBounds().isEmpty();
     }
 
 }

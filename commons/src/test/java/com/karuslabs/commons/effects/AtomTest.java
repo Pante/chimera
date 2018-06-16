@@ -21,45 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.effect.particles;
-
-import com.karuslabs.commons.animation.Base;
+package com.karuslabs.commons.effects;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Color.YELLOW;
-import static org.bukkit.Particle.BARRIER;
-
-import static com.karuslabs.commons.effect.particles.ColouredParticles.builder;
-import static com.karuslabs.commons.effect.particles.ParticlesTest.OFFSET;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static java.lang.Math.PI;
 import static org.mockito.Mockito.*;
 
 
-class ColouredParticlesTest extends Base {
+class AtomTest extends EffectBase {
+
+    Atom atom = spy(new Atom(PARTICLES, COLOURED, 1, 1, 1, 3, 0.2F, 1, 0, PI / 80));
     
-    ColouredParticles particles = builder().particle(BARRIER).colour(YELLOW).build();
-        
     
     @Test
-    void render_World() {
-        particles.render(location, OFFSET);
+    void render() {
+        doNothing().when(atom).renderNucleus(context, origin, offset);
+        doNothing().when(atom).renderOrbitals(context, origin, offset);
         
-        verify(world).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        atom.render(context, origin, target, offset);
+        
+        verify(atom).renderNucleus(context, origin, offset);
+        verify(atom).renderOrbitals(context, origin, offset);
     }
     
     
     @Test
-    void render_Player_Location() {
-        particles.render(player, location, OFFSET);
+    void renderNucleus() {
+        atom.renderNucleus(context, origin, offset);
         
-        verify(player).spawnParticle(BARRIER, 3, 5, 7, 0, 1, 1, 0, 1);
+        verify(context).render(PARTICLES, origin, offset);
     }
     
     
     @Test
-    void getters() {
-        assertEquals(YELLOW, particles.getColour());
+    void renderOrbitals() {
+        atom.renderOrbitals(context, origin, offset);
+        
+        verify(context).render(COLOURED, origin, offset);
+        assertVector(from(3, 0, 0), context.offset);
     }
     
 }

@@ -30,7 +30,6 @@ import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
-import static java.lang.annotation.ElementType.METHOD;
 
 
 @SupportedAnnotationTypes({
