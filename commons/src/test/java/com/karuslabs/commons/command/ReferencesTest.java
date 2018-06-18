@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.completion.Completion;
 import com.karuslabs.commons.locale.MessageTranslation;
 
@@ -42,7 +41,6 @@ class ReferencesTest {
     
     
     @Test
-    @JDK9
     void close() {
         references.command("key", Command.NONE).completion("key", Completion.NONE)
                   .executor("key", CommandExecutor.NONE).translation("key", MessageTranslation.NONE);

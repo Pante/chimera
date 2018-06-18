@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.annotations.JDK9;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -48,7 +47,6 @@ class CloseableReadWriteLockTest {
     
     @ParameterizedTest
     @MethodSource("acquire_parameters")
-    @JDK9
     void acquire(Supplier<Janitor> closeableLock, Supplier<Integer> count) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, (int) count.get());
@@ -72,7 +70,6 @@ class CloseableReadWriteLockTest {
 
    
     @Test
-    @JDK9
     void acquireReadLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireReadLockInterruptibly();
         
@@ -88,7 +85,6 @@ class CloseableReadWriteLockTest {
     
     
     @Test
-    @JDK9
     void acquireWriteLockInterruptibly() throws InterruptedException {
         doThrow(InterruptedException.class).when(interrupted).acquireWriteLockInterruptibly();
         

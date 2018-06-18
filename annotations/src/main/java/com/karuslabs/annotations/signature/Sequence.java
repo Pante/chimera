@@ -31,19 +31,20 @@ import java.util.List;
 @FunctionalInterface
 public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
     
-    public static <T extends TreeVisitor<Boolean, V>, V> And<V, Sequence> of(T... visitors) {
+    public static <T extends TreeVisitor<Boolean, V>, V> And<Sequence, V> of(T... visitors) {
         return null;
     }
     
-    public static <T extends TreeVisitor<Boolean, V>, V> And<V, Sequence> contains(T... visitors) {
+    public static <T extends TreeVisitor<Boolean, V>, V> And<Sequence, V> contains(T... visitors) {
         return null;
     }
     
     
     public boolean match(List<? extends Tree> trees);
+    
 }
 
 
-abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<V, Sequence> {
+abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<Sequence, V> {
     
 }

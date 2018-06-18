@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.JDK9;
-
 import org.bukkit.configuration.ConfigurationSection;
 
 import org.junit.jupiter.api.Test;
@@ -38,7 +36,6 @@ import static org.mockito.Mockito.*;
 
 class TokenTest {
     
-    @JDK9("Diamond reference")
     Token<?> token = spy(new Token<Object>() {
         
         @Override

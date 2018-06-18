@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.annotations.JDK9;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -45,7 +44,6 @@ class CloseableLockTest {
     
     @ParameterizedTest
     @MethodSource("acquire_parameters")
-    @JDK9
     void acquire(Supplier<Janitor> closeableLock) {
         try (Janitor janitor = closeableLock.get()) {
             assertEquals(1, lock.getHoldCount());
@@ -60,12 +58,11 @@ class CloseableLockTest {
     
     
     @Test
-    @JDK9
     void acquireInterruptibly() throws InterruptedException {
-        CloseableLock aLock = spy(new CloseableLock());
-        doThrow(InterruptedException.class).when(aLock).acquireInterruptibly();
+        lock = spy(new CloseableLock());
+        doThrow(InterruptedException.class).when(lock).acquireInterruptibly();
         
-        try (Janitor janitor = aLock.acquireInterruptibly()) {
+        try (Janitor janitor = lock.acquireInterruptibly()) {
             fail("lock was still acquired");
             
         } catch (InterruptedException e) {

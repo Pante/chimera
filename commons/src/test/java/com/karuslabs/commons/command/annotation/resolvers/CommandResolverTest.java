@@ -68,7 +68,7 @@ class CommandResolverTest {
         
     }
     
-    static class C implements CommandExecutors {
+    static class C {
 
         @Namespace({"c", "d"})
         public boolean test(CommandSource source, Context context, com.karuslabs.commons.command.arguments.Arguments arguments) {
@@ -81,7 +81,7 @@ class CommandResolverTest {
         
     }
     
-    static class Invalid implements CommandExecutors {
+    static class Invalid {
         
         public void valid() {
             

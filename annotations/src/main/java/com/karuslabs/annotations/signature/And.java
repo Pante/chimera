@@ -25,7 +25,7 @@ package com.karuslabs.annotations.signature;
 
 
 @FunctionalInterface
-public interface And<T, R> {
+public interface And<R, T> {
     
     public R and(T... others);
     

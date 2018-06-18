@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.Command;
 
 import java.util.*;
@@ -69,8 +68,7 @@ class CommandsTokenTest {
     
     @Test
     void get() {
-        @JDK9("Set.of(...)")
-        Set<String> names = new HashSet<>(asList("help", "fill"));
+        Set<String> names = Set.of("help", "fill");
                 
         String path = "commands.brush.subcommands";
         assertEquals(names, token.from(COMMANDS, path).keySet());

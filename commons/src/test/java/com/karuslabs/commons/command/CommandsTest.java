@@ -52,7 +52,7 @@ class CommandsTest {
     
     @Test
     void register_CommandExecutors() {
-       CommandExecutors executors = new CommandExecutors() {};
+       Object executors = new Object();
        
        resolver.resolve(commands.map, executors);
        

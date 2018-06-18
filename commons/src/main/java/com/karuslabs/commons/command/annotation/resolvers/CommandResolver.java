@@ -54,7 +54,7 @@ public class CommandResolver {
     }
     
     
-    public void resolve(ProxiedCommandMap map, CommandExecutors executors) {
+    public void resolve(ProxiedCommandMap map, Object executors) {
         for (Method method : executors.getClass().getMethods()) {
             if (method.getAnnotationsByType(Namespace.class).length == 0) {
                 continue;
@@ -69,12 +69,12 @@ public class CommandResolver {
         }
     }
     
-    protected CommandExecutor generate(CommandExecutors executors, Method reflective) {
+    protected CommandExecutor generate(Object executors, Method reflective) {
         try {
             MethodHandle method = lookup.unreflect(reflective);
-            MethodType type = MethodType.methodType(CommandExecutor.class, executors.getClass());
+            MethodType conversion = MethodType.methodType(CommandExecutor.class, executors.getClass());
             MethodType signature = MethodType.methodType(reflective.getReturnType(), reflective.getParameterTypes());
-            MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", type, signature, method, signature).getTarget();
+            MethodHandle lambda = LambdaMetafactory.metafactory(lookup, "execute", conversion, signature, method, signature).getTarget();
             
             return (CommandExecutor) lambda.invoke(executors);
             

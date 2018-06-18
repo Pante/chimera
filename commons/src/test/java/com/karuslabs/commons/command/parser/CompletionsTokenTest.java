@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.completion.Completion;
 
 import java.util.*;
@@ -71,10 +70,7 @@ class CompletionsTokenTest {
     
     @Test
     void get() {
-        @JDK9("Replace with Map.of(...)")
-        Map<Integer, Completion> completions = new HashMap<>();
-        completions.put(0, PLAYER_NAMES);
-        completions.put(2, PLAYER_NAMES);
+        Map<Integer, Completion> completions = Map.of(0, PLAYER_NAMES, 2, PLAYER_NAMES);
         
         assertEquals(completions, token.from(COMMANDS, "help.completions"));
         

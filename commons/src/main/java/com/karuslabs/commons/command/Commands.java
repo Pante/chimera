@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.annotation.resolvers.*;
 import com.karuslabs.commons.command.parser.*;
 import com.karuslabs.commons.locale.providers.Provider;
@@ -40,8 +39,8 @@ public class Commands {
     Plugin plugin;
     ProxiedCommandMap map;
     Provider provider;
-    References references;
     CommandResolver resolver;
+    final References references;
     
     
     public Commands(Plugin plugin, References references) {
@@ -65,9 +64,8 @@ public class Commands {
     }
     
     
-    @JDK9
     public Commands load(String path) {
-        try (References ref = references) {
+        try (references) {
             map.registerAll(plugin.getName(), loadParser().parse(from(getClass().getClassLoader().getResourceAsStream(path))));
         }
         
@@ -79,7 +77,7 @@ public class Commands {
     }
     
     
-    public Commands register(CommandExecutors executors) {
+    public Commands register(Object executors) {
         resolver.resolve(map, executors);
         return this;
     }

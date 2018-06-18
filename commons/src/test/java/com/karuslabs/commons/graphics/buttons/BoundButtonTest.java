@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.graphics.ClickEvent;
 
 import org.junit.jupiter.api.Test;
@@ -33,8 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoundButtonTest {
     
-    @JDK9
-    BoundButton<String> button = new BoundButton<String>("state") {
+    BoundButton<String> button = new BoundButton<>("state") {
         @Override
         public void click(ClickEvent event) {
             

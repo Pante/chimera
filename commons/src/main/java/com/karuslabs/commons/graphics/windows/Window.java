@@ -36,14 +36,12 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.*;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 
 
 public abstract class Window implements Listener, Translatable, InventoryHolder, Resettable {
     
-    @JDK9
-    protected static final @Immutable Set<Integer> INVALID = unmodifiableSet(new HashSet<>(asList(-1, -999)));
+    protected static final @Immutable Set<Integer> INVALID = Set.of(-1, -999);
     
     protected static final Point OUTLINE = new Point(-1, 0);
     protected static final Point OUTSIDE = new Point(-999, 0);

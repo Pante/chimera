@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.graphics.buttons;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.graphics.ClickEvent;
 import com.karuslabs.commons.graphics.windows.Window;
 
@@ -39,7 +38,6 @@ import static org.mockito.Mockito.*;
 
 class CyclicButtonTest {
     
-    @JDK9
     CyclicButton<String> button = spy(new CyclicButton<String>("a", "b", "c") {
         @Override
         protected void onReset(Window window, InventoryCloseEvent event) {

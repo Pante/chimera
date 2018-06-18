@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.parser;
 
-import com.karuslabs.annotations.JDK9;
 import com.karuslabs.commons.command.References;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,7 +41,6 @@ class ReferableTokenTest {
     References references = new References();
     NullHandle handle = mock(NullHandle.class);
     
-    @JDK9("Diamond reference...")
     ReferableToken<?> token = spy(new ReferableToken<Object>(references, handle) {
         @Override
         protected Object getReference(String key) {

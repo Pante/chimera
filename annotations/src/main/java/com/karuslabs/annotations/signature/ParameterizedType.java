@@ -28,22 +28,22 @@ import com.sun.source.tree.*;
 import java.util.List;
 
 
-public abstract class ParameterizedType extends Type implements And<Class<?>, Type> {
+public abstract class ParameterizedType extends Type implements And<Type, Class<?>> {
     
     static final Type[] TYPES = new Type[] {};
     static final Class<?>[] CLASSES = new Class<?>[] {};
     static final Type RAW = new RawType();
     
     
-    public static And<Class<?>, Type> of(Type... types) {
+    public static And<Type, Class<?>> of(Type... types) {
         return new ExactParameterizedType(types, CLASSES);
     }
     
-    public static And<Class<?>, Type> parentOf(Type... types) {
+    public static And<Type, Class<?>> parentOf(Type... types) {
         return new ParentParameterizedType(types, CLASSES);
     }
     
-    public static And<Class<?>, Type> subclassOf(Type... types) {
+    public static And<Type, Class<?>> subclassOf(Type... types) {
         return new SubclassParameterizedType(types, CLASSES);
     }
     
