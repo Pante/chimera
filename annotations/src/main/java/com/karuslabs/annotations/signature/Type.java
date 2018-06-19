@@ -46,7 +46,7 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
         return ANY;
     }
     
-    public static Type of() {
+    public static Type exact() {
         return EXACT;
     }
     

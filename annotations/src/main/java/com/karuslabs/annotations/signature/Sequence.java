@@ -47,4 +47,7 @@ public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
 
 abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<Sequence, V> {
     
+    protected T[] visitors;
+    protected V[] values;
+    
 }
