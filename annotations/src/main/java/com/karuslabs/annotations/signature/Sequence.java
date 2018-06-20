@@ -47,7 +47,38 @@ public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
 
 abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<Sequence, V> {
     
-    protected T[] visitors;
-    protected V[] values;
+    T[] visitors;
+    V[] values;
+    
+    
+    AbstractSequence(T[] visitors, V[] values) {
+        this.visitors = visitors;
+        this.values = values;
+    }
+    
+    
+    @Override
+    public Sequence and(V... values) {
+        if (this.visitors.length != values.length) {
+            throw new IllegalArgumentException()
+        }
+        
+        this.values = values;
+        return this;
+    }
+    
+}
+
+
+class ExactSequence<T extends TreeVisitor<Boolean, V>, V> extends AbstractSequence<T, V> {
+
+    public ExactSequence(T[] visitors, V[] values) {
+        super(visitors, values);
+    }
+
+    @Override
+    public boolean match(List<? extends Tree> trees) {
+        if (trees.length)
+    }
     
 }
