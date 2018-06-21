@@ -23,7 +23,6 @@
  */
 package com.karuslabs.annotations.signature;
 
-import com.karuslabs.annotations.signature.ParameterizedType;
 import com.sun.source.tree.*;
 import com.sun.source.util.SimpleTreeVisitor;
 

@@ -32,6 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({METHOD, TYPE})
 @Retention(RUNTIME)
-public @interface RequiresSpigot {
+public @interface Spigot {
     
 }

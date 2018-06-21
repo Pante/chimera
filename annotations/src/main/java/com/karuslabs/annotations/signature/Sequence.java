@@ -23,20 +23,31 @@
  */
 package com.karuslabs.annotations.signature;
 
+import com.karuslabs.annotations.Ignored;
+
 import com.sun.source.tree.*;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 
 @FunctionalInterface
 public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
     
+    public static <T extends TreeVisitor<Boolean, ?>> Sequence<T> any() {
+        return (Sequence<T>) AnySequence.ANY;
+    }
+            
+    public static <T extends TreeVisitor<Boolean, ?>> Sequence<T> empty() {
+        return (Sequence<T>) EmptySequence.EMPTY;
+    }
+    
     public static <T extends TreeVisitor<Boolean, V>, V> And<Sequence, V> of(T... visitors) {
-        return null;
+        return new ExactSequence<>(visitors);
     }
     
     public static <T extends TreeVisitor<Boolean, V>, V> And<Sequence, V> contains(T... visitors) {
-        return null;
+        return new PartialSequence<>(visitors);
     }
     
     
@@ -48,7 +59,7 @@ public interface Sequence<T extends TreeVisitor<Boolean, ?>> {
 abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements Sequence<T>, And<Sequence, V> {
     
     T[] visitors;
-    V[] values;
+    @Nullable V[] values;
     
     
     AbstractSequence(T[] visitors, V[] values) {
@@ -59,12 +70,41 @@ abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements
     
     @Override
     public Sequence and(V... values) {
-        if (this.visitors.length != values.length) {
-            throw new IllegalArgumentException()
+        if (visitors.length != values.length) {
+            throw new IllegalArgumentException("Invalid number of values specified, number of types and classes must be the same");
         }
         
         this.values = values;
         return this;
+    }
+    
+    @Override
+    public Sequence get() {
+        this.values = null;
+        return this;
+    }
+    
+}
+
+
+class AnySequence<T extends TreeVisitor<Boolean, ?>> implements Sequence<T> {
+    
+    static final AnySequence<?> ANY = new AnySequence<>();
+    
+    @Override
+    public boolean match(@Ignored List<? extends Tree> trees) {
+        return true;
+    }
+    
+}
+
+class EmptySequence<T extends TreeVisitor<Boolean, ?>> implements Sequence<T> {
+    
+    static final EmptySequence<?> EMPTY = new EmptySequence<>();
+    
+    @Override
+    public boolean match(List<? extends Tree> trees) {
+        return trees.isEmpty();
     }
     
 }
@@ -72,13 +112,68 @@ abstract class AbstractSequence<T extends TreeVisitor<Boolean, V>, V> implements
 
 class ExactSequence<T extends TreeVisitor<Boolean, V>, V> extends AbstractSequence<T, V> {
 
-    public ExactSequence(T[] visitors, V[] values) {
-        super(visitors, values);
+    ExactSequence(T[] visitors) {
+        super(visitors, null);
     }
 
     @Override
     public boolean match(List<? extends Tree> trees) {
-        if (trees.length)
+        if (visitors.length != trees.size()) {
+            return false;
+        }
+        
+        if (values == null) {
+            for (int i = 0; i < visitors.length; i++) {
+                if (!trees.get(i).accept(visitors[i], null)) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 0; i < visitors.length; i++) {
+                if (!trees.get(i).accept(visitors[i], values[i])) {
+                    return false;
+                }
+            }
+        }
+        
+        
+        return true;
+    }
+    
+}
+
+class PartialSequence<T extends TreeVisitor<Boolean, V>, V> extends AbstractSequence<T, V> {
+
+    PartialSequence(T[] visitors) {
+        super(visitors, null);
+    }
+
+    @Override
+    public boolean match(List<? extends Tree> trees) {
+        if (visitors.length > trees.size()) {
+            return false;
+        }
+        
+        int j = 0;
+        if (values == null) {
+            for (int i = 0; i < trees.size() && j < visitors.length; i++) {
+                if (trees.get(i).accept(visitors[j], null)) {
+                    j++;
+                } else {
+                    j = 0;
+                }
+            }
+        } else {
+            for (int i = 0; i < trees.size() && j < visitors.length; i++) {
+                if (trees.get(i).accept(visitors[j], values[j])) {
+                    j++;
+                } else {
+                    j = 0;
+                }
+            }
+        }
+        
+        return (j + 1) == visitors.length;
     }
     
 }

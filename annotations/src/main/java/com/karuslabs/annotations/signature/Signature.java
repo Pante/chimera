@@ -23,11 +23,13 @@
  */
 package com.karuslabs.annotations.signature;
 
+import com.sun.source.util.SimpleTreeVisitor;
 
-public interface And<R, T> {
+
+public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
     
-    public R and(T... others);
-    
-    public R get();
+    public Signature() {
+        super(false);
+    }
     
 }

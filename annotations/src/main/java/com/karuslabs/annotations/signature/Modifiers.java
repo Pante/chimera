@@ -23,11 +23,22 @@
  */
 package com.karuslabs.annotations.signature;
 
+import java.util.*;
+import javax.lang.model.element.Modifier;
 
-public interface And<R, T> {
+
+@FunctionalInterface
+public interface Modifiers {
     
-    public R and(T... others);
+    public boolean match(Set<Modifier> expected, Set<Modifier> actual);
     
-    public R get();
+    
+    public static final Modifiers ANY = (expected, actual) -> true;
+    
+    public static final Modifiers EMPTY = (expected, actual) -> actual.isEmpty();
+    
+    public static final Modifiers EXACT = (expected, actual) -> expected.equals(actual);
+    
+    public static final Modifiers CONTAINS = (expected, actual) -> actual.containsAll(expected);
     
 }

@@ -72,6 +72,11 @@ public abstract class ParameterizedType extends Type implements And<Type, Class<
         return this;
     }
     
+    @Override
+    public Type get() {
+        return this;
+    }
+    
     protected boolean parameters(List<? extends Tree> parameters) {
         if (types.length != parameters.size()) {
             return false;
