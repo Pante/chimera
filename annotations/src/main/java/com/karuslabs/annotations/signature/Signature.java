@@ -23,13 +23,28 @@
  */
 package com.karuslabs.annotations.signature;
 
+import com.sun.source.tree.ModifiersTree;
 import com.sun.source.util.SimpleTreeVisitor;
+
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
 
 public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
     
-    public Signature() {
+    protected Set<Modifier> modifiers;
+    protected Modifiers assertion;
+    
+    
+    public Signature(Set<Modifier> modifiers, Modifiers assertion) {
         super(false);
+        this.modifiers = modifiers;
+        this.assertion = assertion;
+    }
+    
+    
+    public boolean modifiers(ModifiersTree tree) {
+        return assertion.match(modifiers, tree.getFlags());
     }
     
 }

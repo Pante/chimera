@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.animation.screen;
 
-import com.karuslabs.annotations.RequiresSpigot;
+import com.karuslabs.annotations.Spigot;
 import com.karuslabs.commons.locale.Translation;
 import com.karuslabs.commons.util.concurrent.*;
 
@@ -40,7 +40,7 @@ import static net.md_5.bungee.api.ChatMessageType.ACTION_BAR;
 import static net.md_5.bungee.api.chat.TextComponent.fromLegacyText;
 
 
-@RequiresSpigot
+@Spigot
 public class ActionBar extends Bar {
     
     private Supplier<BiFunction<Player, Context, String>> format;
