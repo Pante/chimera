@@ -26,4 +26,6 @@ package com.karuslabs.annotations.signatures;
 
 public class Variable {
     
+    
+    
 }
