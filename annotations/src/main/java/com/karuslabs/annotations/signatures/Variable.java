@@ -23,9 +23,11 @@
  */
 package com.karuslabs.annotations.signatures;
 
+import com.karuslabs.annotations.signature.Type;
+
 
 public class Variable {
     
-    
+    private Type type;
     
 }
