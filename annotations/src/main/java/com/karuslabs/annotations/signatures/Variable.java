@@ -29,5 +29,6 @@ import com.karuslabs.annotations.signature.Type;
 public class Variable {
     
     private Type type;
+    private Class<?> returnType;
     
 }
