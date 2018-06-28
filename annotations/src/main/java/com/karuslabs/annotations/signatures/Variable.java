@@ -23,12 +23,17 @@
  */
 package com.karuslabs.annotations.signatures;
 
-import com.karuslabs.annotations.signature.Type;
+import com.karuslabs.annotations.signature.*;
+
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
 
 public class Variable {
     
+    private Modifiers modifiers;
+    private Set<Modifier> variableModifiers;
     private Type type;
-    private Class<?> returnType;
-    
+    private Class<?> returnable;
+
 }
