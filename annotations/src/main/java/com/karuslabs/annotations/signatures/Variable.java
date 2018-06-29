@@ -29,11 +29,16 @@ import java.util.Set;
 import javax.lang.model.element.Modifier;
 
 
-public class Variable {
-    
-    private Modifiers modifiers;
-    private Set<Modifier> variableModifiers;
+public class Variable extends Signature {
+
     private Type type;
     private Class<?> returnable;
+
+    
+    public Variable(Set<Modifier> modifiers, Modifiers assertion) {
+        super(modifiers, assertion);
+    }
+    
+    
 
 }
