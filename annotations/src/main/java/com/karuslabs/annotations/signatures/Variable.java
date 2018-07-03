@@ -23,10 +23,17 @@
  */
 package com.karuslabs.annotations.signatures;
 
-/**
- *
- * @author Karus Labs
- */
-public class Variable {
+import com.karuslabs.annotations.signature.Modifiers;
+import com.karuslabs.annotations.signature.Signature;
+
+import java.util.Set;
+import javax.lang.model.element.Modifier;
+
+
+public class Variable extends Signature {
+    
+    public Variable(Set<Modifier> modifiers, Modifiers assertion) {
+        super(modifiers, assertion);
+    }
     
 }
