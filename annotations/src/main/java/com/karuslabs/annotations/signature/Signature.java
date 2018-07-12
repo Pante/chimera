@@ -32,19 +32,19 @@ import javax.lang.model.element.Modifier;
 
 public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
     
-    protected Set<Modifier> modifiers;
-    protected Modifiers assertion;
+    private Modifiers modifiers;
+    private Set<Modifier> values;
     
     
-    public Signature(Set<Modifier> modifiers, Modifiers assertion) {
+    public Signature(Modifiers modifiers, Set<Modifier> values) {
         super(false);
         this.modifiers = modifiers;
-        this.assertion = assertion;
+        this.values = values;
     }
     
     
     public boolean modifiers(ModifiersTree tree) {
-        return assertion.match(modifiers, tree.getFlags());
+        return modifiers.match(values, tree.getFlags());
     }
     
 }

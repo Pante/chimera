@@ -23,17 +23,16 @@
  */
 package com.karuslabs.annotations.signatures;
 
-import com.karuslabs.annotations.signature.Modifiers;
-import com.karuslabs.annotations.signature.Signature;
+import com.karuslabs.annotations.signature.*;
 
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
 
-public class Variable extends Signature {
+public abstract class Typeable extends Signature {
     
-    public Variable(Set<Modifier> modifiers, Modifiers assertion) {
-        super(modifiers, assertion);
+    public Typeable(Modifiers modifiers, Set<Modifier> values) {
+        super(modifiers, values);
     }
     
 }
