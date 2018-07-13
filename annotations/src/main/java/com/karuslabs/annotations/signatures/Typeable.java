@@ -31,8 +31,14 @@ import javax.lang.model.element.Modifier;
 
 public abstract class Typeable extends Signature {
     
-    public Typeable(Modifiers modifiers, Set<Modifier> values) {
+    private Type type;
+    private Class<?> value;
+    
+    
+    public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value) {
         super(modifiers, values);
+        this.type = type;
+        this.value = value;
     }
     
 }
