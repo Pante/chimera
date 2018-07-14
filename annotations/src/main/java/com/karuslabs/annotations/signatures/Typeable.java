@@ -25,6 +25,8 @@ package com.karuslabs.annotations.signatures;
 
 import com.karuslabs.annotations.signature.*;
 
+import com.sun.source.tree.Tree;
+
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
@@ -39,6 +41,11 @@ public abstract class Typeable extends Signature {
         super(modifiers, values);
         this.type = type;
         this.value = value;
+    }
+    
+    
+    protected boolean type(Tree tree) {
+        return type.visit(tree, value);
     }
     
 }
