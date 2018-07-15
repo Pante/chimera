@@ -27,7 +27,9 @@ import com.sun.source.tree.ModifiersTree;
 import com.sun.source.util.SimpleTreeVisitor;
 
 import java.util.Set;
+import java.util.regex.Matcher;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.Name;
 
 
 public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {

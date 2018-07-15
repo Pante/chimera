@@ -25,41 +25,17 @@ package com.karuslabs.annotations.signatures;
 
 import com.karuslabs.annotations.signature.*;
 
-import com.sun.source.tree.Tree;
-
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.lang.model.element.*;
-
-import static java.util.regex.Pattern.LITERAL;
+import javax.lang.model.element.Modifier;
 
 
-public abstract class Typeable extends Signature {
-    
-    private Type type;
-    private Class<?> value;
-    private Matcher name;
+public class Variable extends Typeable {
     
     
-    public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, String name) {
-        this(modifiers, values, type, value, Pattern.compile(name, LITERAL).matcher(""));
-    }
-    
-    public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
-        super(modifiers, values);
-        this.type = type;
-        this.value = value;
-        this.name =name;
-    }
-    
-    
-    public boolean type(Tree tree) {
-        return type.visit(tree, value);
-    }
-    
-    public boolean name(Name name) {
-        return this.name.reset(name).matches();
+    public Variable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value) {
+        super(modifiers, values, type, value);
+        this.n
     }
     
 }
