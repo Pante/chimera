@@ -29,10 +29,7 @@ import com.sun.source.tree.Tree;
 
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.lang.model.element.*;
-
-import static java.util.regex.Pattern.LITERAL;
 
 
 public abstract class Typeable extends Signature {
@@ -40,17 +37,13 @@ public abstract class Typeable extends Signature {
     private Type type;
     private Class<?> value;
     private Matcher name;
-    
-    
-    public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, String name) {
-        this(modifiers, values, type, value, Pattern.compile(name, LITERAL).matcher(""));
-    }
+
     
     public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
         super(modifiers, values);
         this.type = type;
         this.value = value;
-        this.name =name;
+        this.name = name;
     }
     
     

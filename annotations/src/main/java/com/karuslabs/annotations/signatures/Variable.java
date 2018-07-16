@@ -32,10 +32,8 @@ import javax.lang.model.element.Modifier;
 
 public class Variable extends Typeable {
     
-    
-    public Variable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value) {
-        super(modifiers, values, type, value);
-        this.n
+    public Variable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
+        super(modifiers, values, type, value, name);
     }
     
 }
