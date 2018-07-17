@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.completion;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
@@ -54,10 +55,33 @@ public interface Completion {
         }
         
         return sender.getServer().getOnlinePlayers().stream().filter(predicate).map(Player::getName).collect(toList());
-    };
-            
+    };        
     
     public static final Completion WORLD_NAMES = (sender, argument) -> 
             sender.getServer().getWorlds().stream().map(World::getName).filter(name -> name.startsWith(argument)).collect(toList());
+    
+    
+    public static final Completion SPAM = new SpamCompletion();
+    
+}
+
+class SpamCompletion implements Completion {
+    
+    static final String[] MENU = new String[]{
+        "Egg and Spam",
+        "Egg, bacon and Spam",
+        "Egg, bacon, sausage and Spam",
+        "Spam, bacon, sausage and Spam",
+        "Spam, egg, Spam, Spam, bacon and Spam",
+        "Spam, Spam, Spam, egg and Spam",
+        "Spam, Sausage, Spam, Spam, Spam, Bacon, Spam, Tomato and Spam",
+        "Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam"
+    };
+    
+    
+    @Override
+    public List<String> complete(CommandSender sender, String argument) {
+        return List.of(MENU[ThreadLocalRandom.current().nextInt(MENU.length)]);
+    }
     
 }

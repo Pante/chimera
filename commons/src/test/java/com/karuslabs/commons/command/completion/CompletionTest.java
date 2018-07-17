@@ -37,6 +37,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static com.karuslabs.commons.command.completion.Completion.*;
 import static java.util.Collections.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItemInArray;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -90,6 +92,12 @@ class CompletionTest {
         server.getWorlds().add(bobby);
         
         assertEquals(singletonList("bobby"), WORLD_NAMES.complete(sender, "bobb"));
+    }
+    
+    
+    @Test
+    void spam() {
+        assertThat(SpamCompletion.MENU, hasItemInArray(SPAM.complete(sender, "").get(0)));
     }
     
 }
