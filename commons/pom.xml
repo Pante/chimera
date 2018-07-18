@@ -43,6 +43,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
+                    <annotationProcessors>
+                        <annotationProcessor>com.karuslabs.annotations.processors.StaticProcessor</annotationProcessor>
+                    </annotationProcessors>
                     <source>${source}</source>
                     <target>${target}</target>
                 </configuration>

@@ -25,23 +25,32 @@ package com.karuslabs.annotations.signatures;
 
 import com.karuslabs.annotations.signature.*;
 
-import com.sun.source.tree.VariableTree;
+import com.sun.source.tree.MethodTree;
 
 import java.util.Set;
 import java.util.regex.Matcher;
 import javax.lang.model.element.Modifier;
 
 
-public class Variable extends Typeable {
+public class Method extends Typeable {
     
-    public Variable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
+    private Sequence<ParameterizedType> parameterized;
+    private Sequence<Variable> parameters;
+    private Sequence<Type> exceptions;
+    
+    
+    public Method(Modifiers modifiers, Set<Modifier> values,  Sequence<ParameterizedType> parameterized, Type type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Type> exceptions) {
         super(modifiers, values, type, value, name);
+        this.parameterized = parameterized;
+        this.parameters = parameters;
+        this.exceptions = exceptions;
     }
     
     
     @Override
-    public Boolean visitVariable(VariableTree tree, Void empty) {
-        return modifiers(tree.getModifiers()) && type(tree.getType()) && name(tree.getName());
+    public Boolean visitMethod(MethodTree tree, Void empty) {
+        return modifiers(tree.getModifiers()) && parameterized.match(tree.getTypeParameters()) && type(tree.getReturnType()) 
+            && name(tree.getName()) && parameters.match(tree.getParameters()) && exceptions.match(tree.getThrows());
     }
     
 }
