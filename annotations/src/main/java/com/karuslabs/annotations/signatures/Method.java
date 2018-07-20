@@ -34,12 +34,12 @@ import javax.lang.model.element.Modifier;
 
 public class Method extends Typeable {
     
-    private Sequence<ParameterizedType> parameterized;
+    private Sequence<Parameterized> parameterized;
     private Sequence<Variable> parameters;
-    private Sequence<Type> exceptions;
+    private Sequence<Identifier> exceptions;
     
     
-    public Method(Modifiers modifiers, Set<Modifier> values,  Sequence<ParameterizedType> parameterized, Type type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Type> exceptions) {
+    public Method(Modifiers modifiers, Set<Modifier> values, Sequence<Parameterized> parameterized, Identifier type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Identifier> exceptions) {
         super(modifiers, values, type, value, name);
         this.parameterized = parameterized;
         this.parameters = parameters;

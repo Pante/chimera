@@ -23,22 +23,29 @@
  */
 package com.karuslabs.annotations.signatures;
 
-import com.karuslabs.annotations.signature.Modifiers;
-import com.karuslabs.annotations.signature.ParameterizedType;
-import com.karuslabs.annotations.signature.Sequence;
-import com.karuslabs.annotations.signature.Type;
-import java.util.Set;
-import java.util.regex.Matcher;
-import javax.lang.model.element.Modifier;
+import com.karuslabs.annotations.signature.*;
 
-/**
- *
- * @author Karus Labs
- */
+import com.sun.source.tree.Tree;
+
+import java.util.Set;
+import javax.lang.model.element.*;
+
+
 public class Constructor extends Method {
     
-    public Constructor(Modifiers modifiers, Set<Modifier> values, Sequence<ParameterizedType> parameterized, Type type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Type> exceptions) {
-        super(modifiers, values, parameterized, type, value, name, parameters, exceptions);
+    public Constructor(Modifiers modifiers, Set<Modifier> values, Sequence<Parameterized> parameterized, Sequence<Variable> parameters, Sequence<Identifier> exceptions) {
+        super(modifiers, values, parameterized, null, null, null, parameters, exceptions);
+    }
+    
+    
+    @Override
+    public boolean type(Tree tree) {
+        return tree == null;
+    }
+    
+    @Override
+    public boolean name(Name name) {
+        return name.contentEquals("<init>");
     }
     
 }

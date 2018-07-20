@@ -28,13 +28,28 @@ import com.karuslabs.annotations.signature.*;
 import com.sun.source.tree.VariableTree;
 
 import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.regex.*;
 import javax.lang.model.element.Modifier;
+
+import static java.util.Collections.EMPTY_SET;
+import static java.util.regex.Pattern.LITERAL;
 
 
 public class Variable extends Typeable {
     
-    public Variable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
+    private static final Variable ANY = new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, Pattern.compile(".*", LITERAL).matcher(""));
+     
+        
+    public static Variable of(Identifier type, Class<?> value, String literal) {
+        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, Pattern.compile(literal, LITERAL).matcher(""));
+    }
+    
+    public static Variable any() {
+        return ANY;
+    }
+    
+    
+    public Variable(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value, Matcher name) {
         super(modifiers, values, type, value, name);
     }
     
@@ -42,6 +57,25 @@ public class Variable extends Typeable {
     @Override
     public Boolean visitVariable(VariableTree tree, Void empty) {
         return modifiers(tree.getModifiers()) && type(tree.getType()) && name(tree.getName());
+    }
+    
+    
+    public static VariableBuilder builder() {
+        return new VariableBuilder(new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, Pattern.compile(".*", LITERAL).matcher("")));
+    }
+    
+    
+    public static class VariableBuilder extends TypeableBuilder<VariableBuilder, Variable> {
+
+        VariableBuilder(Variable signature) {
+            super(signature);
+        }
+
+        @Override
+        protected VariableBuilder getThis() {
+            return this;
+        }
+        
     }
     
 }

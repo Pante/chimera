@@ -28,18 +28,20 @@ import com.karuslabs.annotations.signature.*;
 import com.sun.source.tree.Tree;
 
 import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.regex.*;
 import javax.lang.model.element.*;
+
+import static java.util.regex.Pattern.LITERAL;
 
 
 public abstract class Typeable extends Signature {
     
-    private Type type;
-    private Class<?> value;
-    private Matcher name;
+    Identifier type;
+    Class<?> value;
+    Matcher name;
 
     
-    public Typeable(Modifiers modifiers, Set<Modifier> values, Type type, Class<?> value, Matcher name) {
+    public Typeable(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value, Matcher name) {
         super(modifiers, values);
         this.type = type;
         this.value = value;
@@ -53,6 +55,37 @@ public abstract class Typeable extends Signature {
     
     public boolean name(Name name) {
         return this.name.reset(name).matches();
+    }
+    
+    
+    public static abstract class TypeableBuilder<GenericBuilder extends TypeableBuilder, GenericSignature extends Typeable> extends Builder<GenericBuilder, GenericSignature> {
+        
+        public TypeableBuilder(GenericSignature signature) {
+            super(signature);
+        }
+        
+        
+        public TypeableBuilder type(Identifier matcher, Class<?> type) {
+            signature.type = matcher;
+            signature.value = type;
+            return getThis();
+        }
+        
+        public TypeableBuilder name(String literal) {
+            signature.name = Pattern.compile(literal, LITERAL).matcher("");
+            return getThis();
+        }
+        
+        public TypeableBuilder name(Pattern name) {
+            signature.name = name.matcher("");
+            return getThis();
+        }
+        
+        public TypeableBuilder name(Matcher name) {
+            signature.name = name;
+            return getThis();
+        }
+        
     }
     
 }

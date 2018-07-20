@@ -33,36 +33,41 @@ import javax.lang.model.type.TypeKind;
 import static javax.lang.model.type.TypeKind.*;
 
 
-public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
+public abstract class Identifier extends SimpleTreeVisitor<Boolean, Class<?>> {
     
-    static final Type ANY = new Type(true) {};
-    static final Type EXACT = new ExactType();
-    static final Type FROM = new ParentType();
-    static final Type TO = new SubclassType();
+    static final Identifier ANY = new Identifier(true) {};
+    static final Identifier NONE = new Identifier(false) {};
+    static final Identifier EXACT = new ExactType();
+    static final Identifier FROM = new ParentType();
+    static final Identifier TO = new SubclassType();
     
     
-    public static Type any() {
+    public static Identifier any() {
         return ANY;
     }
     
-    public static Type exact() {
+    public static Identifier none() {
+        return NONE;
+    }
+    
+    public static Identifier exact() {
         return EXACT;
     }
     
-    public static Type parentOf() {
+    public static Identifier parentOf() {
         return FROM;
     }
     
-    public static Type subclassOf() {
+    public static Identifier subclassOf() {
         return TO;
     }
     
     
-    public Type() {
+    public Identifier() {
         this(false);
     }
     
-    public Type(boolean value) {
+    public Identifier(boolean value) {
         super(value);
     }
     
@@ -92,7 +97,7 @@ public abstract class Type extends SimpleTreeVisitor<Boolean, Class<?>> {
 
 }
 
-class ExactType extends Type {
+class ExactType extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
@@ -105,7 +110,7 @@ class ExactType extends Type {
     }
 }
 
-class ParentType extends Type {
+class ParentType extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
@@ -123,11 +128,11 @@ class ParentType extends Type {
 
 }
 
-class SubclassType extends Type {
+class SubclassType extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-        ParameterizedType.of(Type.EXACT);
+        Parameterized.of(Identifier.EXACT);
         return check(tree.getName(), expected);
     }
 

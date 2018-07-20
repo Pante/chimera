@@ -28,42 +28,42 @@ import com.sun.source.tree.*;
 import java.util.List;
 
 
-public abstract class ParameterizedType extends Type implements And<Type, Class<?>> {
+public abstract class Parameterized extends Identifier implements And<Identifier, Class<?>> {
     
-    static final Type[] TYPES = new Type[] {};
+    static final Identifier[] TYPES = new Identifier[] {};
     static final Class<?>[] CLASSES = new Class<?>[] {};
-    static final Type RAW = new RawType();
+    static final Identifier RAW = new RawType();
     
     
-    public static And<Type, Class<?>> of(Type... types) {
+    public static And<Identifier, Class<?>> of(Identifier... types) {
         return new ExactParameterizedType(types, CLASSES);
     }
     
-    public static And<Type, Class<?>> parentOf(Type... types) {
+    public static And<Identifier, Class<?>> parentOf(Identifier... types) {
         return new ParentParameterizedType(types, CLASSES);
     }
     
-    public static And<Type, Class<?>> subclassOf(Type... types) {
+    public static And<Identifier, Class<?>> subclassOf(Identifier... types) {
         return new SubclassParameterizedType(types, CLASSES);
     }
     
-    public static Type raw() {
+    public static Identifier raw() {
         return RAW;
     }
     
     
-    protected Type[] types;
+    protected Identifier[] types;
     protected Class<?>[] classes;
 
     
-    public ParameterizedType(Type[] types, Class<?>[] classes) {
+    public Parameterized(Identifier[] types, Class<?>[] classes) {
         this.types = types;
         this.classes = classes;
     }
 
         
     @Override
-    public Type and(Class<?>... classes) {
+    public Identifier and(Class<?>... classes) {
         if (types.length != classes.length) {
             throw new IllegalArgumentException("Invalid number of classes specified, number of types and classes must be the same");
         }
@@ -73,7 +73,7 @@ public abstract class ParameterizedType extends Type implements And<Type, Class<
     }
     
     @Override
-    public Type get() {
+    public Identifier get() {
         return this;
     }
     
@@ -94,15 +94,15 @@ public abstract class ParameterizedType extends Type implements And<Type, Class<
 }
 
 
-class ExactParameterizedType extends ParameterizedType {
+class ExactParameterizedType extends Parameterized {
 
-    ExactParameterizedType(Type[] types, Class<?>[] classes) {
+    ExactParameterizedType(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
     @Override
     public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-        return tree.getType().accept(Type.EXACT, expected) && parameters(tree.getTypeArguments());
+        return tree.getType().accept(Identifier.EXACT, expected) && parameters(tree.getTypeArguments());
     }
 
     @Override
@@ -112,15 +112,15 @@ class ExactParameterizedType extends ParameterizedType {
 
 }
 
-class ParentParameterizedType extends ParameterizedType {
+class ParentParameterizedType extends Parameterized {
 
-    ParentParameterizedType(Type[] types, Class<?>[] classes) {
+    ParentParameterizedType(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
     @Override
     public Boolean visitParameterizedType(ParameterizedTypeTree actual, Class<?> expected) {
-        return actual.getType().accept(Type.FROM, expected) && parameters(actual.getTypeArguments());
+        return actual.getType().accept(Identifier.FROM, expected) && parameters(actual.getTypeArguments());
     }
 
     @Override
@@ -130,15 +130,15 @@ class ParentParameterizedType extends ParameterizedType {
 
 }
     
-class SubclassParameterizedType extends ParameterizedType {
+class SubclassParameterizedType extends Parameterized {
 
-    SubclassParameterizedType(Type[] types, Class<?>[] classes) {
+    SubclassParameterizedType(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
     @Override
     public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-        return tree.getType().accept(Type.TO, expected) && parameters(tree.getTypeArguments());
+        return tree.getType().accept(Identifier.TO, expected) && parameters(tree.getTypeArguments());
     }
 
     @Override
@@ -148,7 +148,7 @@ class SubclassParameterizedType extends ParameterizedType {
 
 }
 
-class RawType extends ParameterizedType {
+class RawType extends Parameterized {
 
     public RawType() {
         super(TYPES, CLASSES);
@@ -156,7 +156,7 @@ class RawType extends ParameterizedType {
 
     @Override
     public Boolean visitParameterizedType(ParameterizedTypeTree tree, Class<?> expected) {
-        return tree.getType().accept(Type.EXACT, expected) && tree.getTypeArguments().isEmpty();
+        return tree.getType().accept(Identifier.EXACT, expected) && tree.getTypeArguments().isEmpty();
     }
 
     @Override

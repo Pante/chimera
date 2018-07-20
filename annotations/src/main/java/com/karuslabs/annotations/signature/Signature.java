@@ -27,15 +27,13 @@ import com.sun.source.tree.ModifiersTree;
 import com.sun.source.util.SimpleTreeVisitor;
 
 import java.util.Set;
-import java.util.regex.Matcher;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 
 
 public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
     
-    private Modifiers modifiers;
-    private Set<Modifier> values;
+    Modifiers modifiers;
+    Set<Modifier> values;
     
     
     public Signature(Modifiers modifiers, Set<Modifier> values) {
@@ -47,6 +45,32 @@ public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
     
     public boolean modifiers(ModifiersTree tree) {
         return modifiers.match(values, tree.getFlags());
+    }
+    
+    
+    public static abstract class Builder<GenericBuilder extends Builder, GenericSignature extends Signature> {
+        
+        protected GenericSignature signature;
+        
+        
+        public Builder(GenericSignature signature) {
+            this.signature = signature;
+        }
+        
+        
+        public GenericBuilder modifiers(Modifiers matcher, Set<Modifier> modifiers) {
+            signature.modifiers = matcher;
+            signature.values = modifiers;
+            return getThis();
+        }
+        
+        public GenericSignature build() {
+            return signature;
+        }
+        
+        
+        protected abstract GenericBuilder getThis();
+        
     }
     
 }
