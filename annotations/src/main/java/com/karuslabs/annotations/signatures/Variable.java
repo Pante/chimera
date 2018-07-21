@@ -29,6 +29,7 @@ import com.sun.source.tree.VariableTree;
 
 import java.util.Set;
 import java.util.regex.*;
+import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
 import static java.util.Collections.EMPTY_SET;
@@ -37,19 +38,28 @@ import static java.util.regex.Pattern.LITERAL;
 
 public class Variable extends Typeable {
     
-    private static final Variable ANY = new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, Pattern.compile(".*", LITERAL).matcher(""));
+    private static final Variable ANY = new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, null);
      
-        
-    public static Variable of(Identifier type, Class<?> value, String literal) {
-        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, Pattern.compile(literal, LITERAL).matcher(""));
-    }
     
     public static Variable any() {
         return ANY;
     }
     
     
-    public Variable(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value, Matcher name) {
+    public static Variable of(Identifier type, Class<?> value) {
+        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, null);
+    }
+        
+    public static Variable of(Identifier type, Class<?> value, String literal) {
+        return of(type, value, Pattern.compile(literal, LITERAL));
+    }
+    
+    public static Variable of(Identifier type, Class<?> value, Pattern pattern) {
+        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, pattern.matcher(""));
+    }
+    
+    
+    public Variable(Modifiers modifiers, Set<Modifier> values, Identifier type, @Nullable Class<?> value, @Nullable Matcher name) {
         super(modifiers, values, type, value, name);
     }
     
@@ -61,7 +71,7 @@ public class Variable extends Typeable {
     
     
     public static VariableBuilder builder() {
-        return new VariableBuilder(new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, Pattern.compile(".*", LITERAL).matcher("")));
+        return new VariableBuilder(new Variable(Modifiers.ANY, EMPTY_SET, Identifier.any(), null, null));
     }
     
     

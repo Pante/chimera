@@ -29,6 +29,7 @@ import com.sun.source.tree.Tree;
 
 import java.util.Set;
 import java.util.regex.*;
+import javax.annotation.Nullable;
 import javax.lang.model.element.*;
 
 import static java.util.regex.Pattern.LITERAL;
@@ -41,7 +42,7 @@ public abstract class Typeable extends Signature {
     Matcher name;
 
     
-    public Typeable(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value, Matcher name) {
+    public Typeable(Modifiers modifiers, Set<Modifier> values, Identifier type, @Nullable Class<?> value, @Nullable Matcher name) {
         super(modifiers, values);
         this.type = type;
         this.value = value;
@@ -54,7 +55,7 @@ public abstract class Typeable extends Signature {
     }
     
     public boolean name(Name name) {
-        return this.name.reset(name).matches();
+        return this.name == null || this.name.reset(name).matches();
     }
     
     
