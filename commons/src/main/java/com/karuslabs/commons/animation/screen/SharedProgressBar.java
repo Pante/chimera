@@ -104,7 +104,7 @@ public class SharedProgressBar extends AbstractBar {
         
         
         @Override
-        protected @Nonnull SharedProgressBarBuilder getThis() {
+        protected @Nonnull SharedProgressBarBuilder self() {
             return this;
         }
     

@@ -50,7 +50,7 @@ public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
     
     
     @Override
-    protected @Nonnull SpawnEggBuilder getThis() {
+    protected @Nonnull SpawnEggBuilder self() {
         return this;
     }
     

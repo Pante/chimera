@@ -26,6 +26,9 @@ package com.karuslabs.annotations.signature;
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
+import static com.karuslabs.annotations.signature.Constants.CONSTANTS;
+import static javax.lang.model.element.Modifier.*;
+
 
 @FunctionalInterface
 public interface Modifiers {
@@ -40,5 +43,15 @@ public interface Modifiers {
     public static final Modifiers EXACT = (expected, actual) -> expected.equals(actual);
     
     public static final Modifiers CONTAINS = (expected, actual) -> actual.containsAll(expected);
+    
+    public static final Modifiers CONSTANT = (expected, actual) -> actual.containsAll(CONSTANTS) && actual.containsAll(expected);
+    
+    public static final Modifiers INSTANCE = (expected, actual) -> !actual.contains(STATIC) && actual.containsAll(expected);
+    
+}
+
+class Constants {
+    
+    static final Set<Modifier> CONSTANTS = Set.of(STATIC, FINAL);
     
 }

@@ -33,8 +33,8 @@ import javax.lang.model.element.*;
 
 public class Constructor extends Method {
     
-    public Constructor(Modifiers modifiers, Set<Modifier> values, Sequence<Parameterized> parameterized, Sequence<Variable> parameters, Sequence<Identifier> exceptions) {
-        super(modifiers, values, parameterized, null, null, null, parameters, exceptions);
+    public Constructor(Modifiers modifiers, Set<Modifier> values, Sequence<Generic> generics, Sequence<Variable> parameters, Sequence<Identifier> thrown) {
+        super(modifiers, values, generics, null, null, null, parameters, thrown);
     }
     
     
@@ -46,6 +46,20 @@ public class Constructor extends Method {
     @Override
     public boolean name(Name name) {
         return name.contentEquals("<init>");
+    }
+    
+    
+    public static class ConstructorBuilder extends ExecutableBuilder<ConstructorBuilder, Constructor> {
+
+        ConstructorBuilder(Constructor signature) {
+            super(signature);
+        }
+
+        @Override
+        protected ConstructorBuilder self() {
+            return this;
+        }
+        
     }
     
 }

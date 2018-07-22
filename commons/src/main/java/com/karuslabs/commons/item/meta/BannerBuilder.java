@@ -62,7 +62,7 @@ public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
 
     @Override
-    protected @Nonnull BannerBuilder getThis() {
+    protected @Nonnull BannerBuilder self() {
         return this;
     }
     

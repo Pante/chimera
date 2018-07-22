@@ -28,23 +28,23 @@ import com.sun.source.tree.*;
 import java.util.List;
 
 
-public abstract class Parameterized extends Identifier implements And<Identifier, Class<?>> {
+public abstract class Generic extends Identifier implements And<Identifier, Class<?>> {
     
     static final Identifier[] TYPES = new Identifier[] {};
     static final Class<?>[] CLASSES = new Class<?>[] {};
-    static final Identifier RAW = new RawType();
+    static final Identifier RAW = new Raw();
     
     
     public static And<Identifier, Class<?>> of(Identifier... types) {
-        return new ExactParameterizedType(types, CLASSES);
+        return new ExactGeneric(types, CLASSES);
     }
     
     public static And<Identifier, Class<?>> parentOf(Identifier... types) {
-        return new ParentParameterizedType(types, CLASSES);
+        return new ParentGeneric(types, CLASSES);
     }
     
     public static And<Identifier, Class<?>> subclassOf(Identifier... types) {
-        return new SubclassParameterizedType(types, CLASSES);
+        return new SubclassGeneric(types, CLASSES);
     }
     
     public static Identifier raw() {
@@ -56,7 +56,7 @@ public abstract class Parameterized extends Identifier implements And<Identifier
     protected Class<?>[] classes;
 
     
-    public Parameterized(Identifier[] types, Class<?>[] classes) {
+    public Generic(Identifier[] types, Class<?>[] classes) {
         this.types = types;
         this.classes = classes;
     }
@@ -94,9 +94,9 @@ public abstract class Parameterized extends Identifier implements And<Identifier
 }
 
 
-class ExactParameterizedType extends Parameterized {
+class ExactGeneric extends Generic {
 
-    ExactParameterizedType(Identifier[] types, Class<?>[] classes) {
+    ExactGeneric(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
@@ -112,9 +112,9 @@ class ExactParameterizedType extends Parameterized {
 
 }
 
-class ParentParameterizedType extends Parameterized {
+class ParentGeneric extends Generic {
 
-    ParentParameterizedType(Identifier[] types, Class<?>[] classes) {
+    ParentGeneric(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
@@ -125,14 +125,14 @@ class ParentParameterizedType extends Parameterized {
 
     @Override
     public Boolean visitTypeParameter(TypeParameterTree actual, Class<?> expected) {
-        return ParentType.check(actual.getName(), expected) && parameters(actual.getBounds());
+        return ParentIdentifier.check(actual.getName(), expected) && parameters(actual.getBounds());
     }
 
 }
     
-class SubclassParameterizedType extends Parameterized {
+class SubclassGeneric extends Generic {
 
-    SubclassParameterizedType(Identifier[] types, Class<?>[] classes) {
+    SubclassGeneric(Identifier[] types, Class<?>[] classes) {
         super(types, classes);
     }
 
@@ -143,14 +143,14 @@ class SubclassParameterizedType extends Parameterized {
 
     @Override
     public Boolean visitTypeParameter(TypeParameterTree tree, Class<?> expected) {
-        return SubclassType.check(tree.getName(), expected) && parameters(tree.getBounds());
+        return SubclassIdentifier.check(tree.getName(), expected) && parameters(tree.getBounds());
     }
 
 }
 
-class RawType extends Parameterized {
+class Raw extends Generic {
 
-    public RawType() {
+    public Raw() {
         super(TYPES, CLASSES);
     }
 

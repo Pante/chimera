@@ -75,7 +75,7 @@ public class MaterialParticles extends AbstractParticles {
         }
         
         @Override
-        protected MaterialBuilder getThis() {
+        protected MaterialBuilder self() {
             return this;
         }
         

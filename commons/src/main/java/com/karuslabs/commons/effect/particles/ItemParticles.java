@@ -75,7 +75,7 @@ public class ItemParticles extends AbstractParticles {
         }
 
         @Override
-        protected ItemBuilder getThis() {
+        protected ItemBuilder self() {
             return this;
         }
         

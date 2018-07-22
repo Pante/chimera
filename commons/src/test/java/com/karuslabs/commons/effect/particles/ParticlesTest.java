@@ -134,7 +134,7 @@ class ParticlesTest extends Base {
         }
 
         @Override
-        protected StubBuilder getThis() {
+        protected StubBuilder self() {
             return this;
         }
         

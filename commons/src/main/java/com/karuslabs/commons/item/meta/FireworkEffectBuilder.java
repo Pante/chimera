@@ -50,7 +50,7 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectBuilder, Firewo
 
     
     @Override
-    protected @Nonnull FireworkEffectBuilder getThis() {
+    protected @Nonnull FireworkEffectBuilder self() {
         return this;
     }
     

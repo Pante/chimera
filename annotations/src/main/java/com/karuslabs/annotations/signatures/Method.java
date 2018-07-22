@@ -31,26 +31,70 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import javax.lang.model.element.Modifier;
 
+import static java.util.Collections.EMPTY_SET;
+
 
 public class Method extends Typeable {
     
-    private Sequence<Parameterized> parameterized;
-    private Sequence<Variable> parameters;
-    private Sequence<Identifier> exceptions;
+    Sequence<Generic> generics;
+    Sequence<Variable> parameters;
+    Sequence<Identifier> thrown;
     
     
-    public Method(Modifiers modifiers, Set<Modifier> values, Sequence<Parameterized> parameterized, Identifier type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Identifier> exceptions) {
+    public Method(Modifiers modifiers, Set<Modifier> values, Sequence<Generic> generics, Identifier type, Class<?> value, Matcher name, Sequence<Variable> parameters, Sequence<Identifier> thrown) {
         super(modifiers, values, type, value, name);
-        this.parameterized = parameterized;
+        this.generics = generics;
         this.parameters = parameters;
-        this.exceptions = exceptions;
+        this.thrown = thrown;
     }
     
     
     @Override
     public Boolean visitMethod(MethodTree tree, Void empty) {
-        return modifiers(tree.getModifiers()) && parameterized.match(tree.getTypeParameters()) && type(tree.getReturnType()) 
-            && name(tree.getName()) && parameters.match(tree.getParameters()) && exceptions.match(tree.getThrows());
+        return modifiers(tree.getModifiers()) && generics.match(tree.getTypeParameters()) && type(tree.getReturnType()) 
+            && name(tree.getName()) && parameters.match(tree.getParameters()) && thrown.match(tree.getThrows());
+    }
+    
+    
+    public static MethodBuilder builder() {
+        return new MethodBuilder(new Method(Modifiers.ANY, EMPTY_SET, Sequence.any(), Identifier.any(), null, null, Sequence.any(), Sequence.any()));
+    }
+    
+    public static class MethodBuilder extends ExecutableBuilder<MethodBuilder, Method> {
+
+        MethodBuilder(Method signature) {
+            super(signature);
+        }
+
+        @Override
+        protected MethodBuilder self() {
+            return this;
+        }
+        
+    }
+    
+    public static abstract class ExecutableBuilder<Builder extends ExecutableBuilder, Executable extends Method> extends TypeableBuilder<Builder, Executable> {
+
+        public ExecutableBuilder(Executable signature) {
+            super(signature);
+        }
+
+        
+        public Builder generics(Sequence<Generic> generics) {
+            signature.generics = generics;
+            return self();
+        }
+        
+        public Builder parameters(Sequence<Variable> parameters) {
+            signature.parameters = parameters;
+            return self();
+        }
+        
+        public Builder thrown(Sequence<Identifier> exceptions) {
+            signature.thrown = exceptions;
+            return self();
+        }
+        
     }
     
 }

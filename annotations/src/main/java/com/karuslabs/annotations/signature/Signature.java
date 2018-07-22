@@ -61,7 +61,7 @@ public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
         public GenericBuilder modifiers(Modifiers matcher, Set<Modifier> modifiers) {
             signature.modifiers = matcher;
             signature.values = modifiers;
-            return getThis();
+            return self();
         }
         
         public GenericSignature build() {
@@ -69,7 +69,7 @@ public abstract class Signature extends SimpleTreeVisitor<Boolean, Void> {
         }
         
         
-        protected abstract GenericBuilder getThis();
+        protected abstract GenericBuilder self();
         
     }
     

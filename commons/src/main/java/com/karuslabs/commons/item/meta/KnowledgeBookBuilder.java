@@ -56,7 +56,7 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookBuilder, Knowledg
     
 
     @Override
-    protected @Nonnull KnowledgeBookBuilder getThis() {
+    protected @Nonnull KnowledgeBookBuilder self() {
         return this;
     }
     

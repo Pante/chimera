@@ -60,7 +60,7 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
 
     
     @Override
-    protected @Nonnull MapBuilder getThis() {
+    protected @Nonnull MapBuilder self() {
         return this;
     }
     

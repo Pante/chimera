@@ -29,13 +29,14 @@ import com.sun.source.tree.*;
 
 import java.util.*;
 import java.util.regex.Matcher;
+import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 
 
 public class Type extends Signature {
     
     private Matcher name;
-    private Sequence<Parameterized> parameters;
+    private Sequence<Generic> generics;
     private Identifier parent;
     private Class<?> value;
     private Sequence<Identifier> interfaces;
@@ -45,10 +46,10 @@ public class Type extends Signature {
     private Sequence<Method> methods;
     
     
-    public Type(Modifiers modifiers, Set<Modifier> values, Matcher name, Sequence<Parameterized> parameters, Identifier parent, Class<?> value, Sequence<Identifier> interfaces, Sequence<Variable> fields, Sequence<Constructor> constructors, Sequence<Method> methods) {
+    public Type(Modifiers modifiers, Set<Modifier> values, Matcher name, Sequence<Generic> generics, @Nullable Identifier parent, @Nullable Class<?> value, Sequence<Identifier> interfaces, Sequence<Variable> fields, Sequence<Constructor> constructors, Sequence<Method> methods) {
         super(modifiers, values);
         this.name = name;
-        this.parameters = parameters;
+        this.generics = generics;
         this.parent = parent;
         this.value = value;
         this.interfaces = interfaces;
@@ -60,7 +61,7 @@ public class Type extends Signature {
     
     @Override
     public Boolean visitClass(ClassTree tree, Void empty) {
-        return modifiers(tree.getModifiers()) && name.reset(tree.getSimpleName()).matches() && parameters.match(tree.getTypeParameters())
+        return modifiers(tree.getModifiers()) && (name == null || name.reset(tree.getSimpleName()).matches()) && generics.match(tree.getTypeParameters())
             && parent.visit(tree.getExtendsClause(), value) && interfaces.match(tree.getImplementsClause()) && members(tree.getMembers());
     }
     

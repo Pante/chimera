@@ -51,7 +51,7 @@ abstract class AbstractBar extends Bar {
         
         public GenericBuilder supplier(Supplier<BossBar> supplier) {
             bar.supplier = supplier;
-            return getThis();
+            return self();
         }
         
     }

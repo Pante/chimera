@@ -34,6 +34,7 @@ import javax.lang.model.element.Modifier;
 
 import static java.util.Collections.EMPTY_SET;
 import static java.util.regex.Pattern.LITERAL;
+import static javax.lang.model.element.Modifier.*;
 
 
 public class Variable extends Typeable {
@@ -46,16 +47,25 @@ public class Variable extends Typeable {
     }
     
     
+    public static Variable of(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value) {
+        return new Variable(modifiers, values, type, value, null);
+    }
+    
+    public static Variable of(Modifiers modifiers, Set<Modifier> values, Identifier type, Class<?> value, String literal) {
+        return new Variable(modifiers, values, type, value, Pattern.compile(literal, LITERAL).matcher(""));
+    }
+    
+    
     public static Variable of(Identifier type, Class<?> value) {
-        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, null);
+        return of(type, value, (Pattern) null);
     }
         
     public static Variable of(Identifier type, Class<?> value, String literal) {
         return of(type, value, Pattern.compile(literal, LITERAL));
     }
     
-    public static Variable of(Identifier type, Class<?> value, Pattern pattern) {
-        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, pattern.matcher(""));
+    public static Variable of(Identifier type, Class<?> value, @Nullable Pattern pattern) {
+        return new Variable(Modifiers.ANY, EMPTY_SET, type, value, pattern != null ? pattern.matcher("") : null);
     }
     
     
@@ -82,7 +92,7 @@ public class Variable extends Typeable {
         }
 
         @Override
-        protected VariableBuilder getThis() {
+        protected VariableBuilder self() {
             return this;
         }
         

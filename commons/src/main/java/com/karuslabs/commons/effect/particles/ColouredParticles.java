@@ -85,7 +85,7 @@ public class ColouredParticles extends Particles {
         }
 
         @Override
-        protected ColouredBuilder getThis() {
+        protected ColouredBuilder self() {
             return this;
         }
         

@@ -108,7 +108,7 @@ public class ProgressBar extends AbstractBar {
         
         
         @Override
-        protected @Nonnull ProgressBarBuilder getThis() {
+        protected @Nonnull ProgressBarBuilder self() {
             return this;
         }
     

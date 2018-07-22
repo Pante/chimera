@@ -65,7 +65,7 @@ public class BookBuilder extends Builder<BookBuilder, BookMeta> {
 
     
     @Override
-    protected @Nonnull BookBuilder getThis() {
+    protected @Nonnull BookBuilder self() {
         return this;
     }
     

@@ -149,7 +149,7 @@ public class TitleBar extends Bar {
         }
         
         @Override
-        protected @Nonnull TitleBarBuilder getThis() {
+        protected @Nonnull TitleBarBuilder self() {
             return this;
         }
     

@@ -67,7 +67,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     
     
     @Override
-    protected @Nonnull SkullBuilder getThis() {
+    protected @Nonnull SkullBuilder self() {
         return this;
     }
     

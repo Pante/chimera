@@ -69,22 +69,22 @@ public abstract class Typeable extends Signature {
         public TypeableBuilder type(Identifier matcher, Class<?> type) {
             signature.type = matcher;
             signature.value = type;
-            return getThis();
+            return self();
         }
         
         public TypeableBuilder name(String literal) {
             signature.name = Pattern.compile(literal, LITERAL).matcher("");
-            return getThis();
+            return self();
         }
         
         public TypeableBuilder name(Pattern name) {
             signature.name = name.matcher("");
-            return getThis();
+            return self();
         }
         
         public TypeableBuilder name(Matcher name) {
             signature.name = name;
-            return getThis();
+            return self();
         }
         
     }

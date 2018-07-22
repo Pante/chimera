@@ -59,7 +59,7 @@ public class StandardParticles extends AbstractParticles {
         }
 
         @Override
-        protected StandardBuilder getThis() {
+        protected StandardBuilder self() {
             return this;
         }
         

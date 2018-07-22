@@ -81,30 +81,30 @@ public abstract class Bar {
         
         public GenericBuilder translation(Translation translation) {
             bar.translation = translation;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder infinite() {
             bar.iterations = INFINITE;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder iterations(long iterations) {
             bar.iterations = iterations;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder delay(long delay) {
             bar.delay = delay;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder period(long period) {
             bar.period = period;
-            return getThis();
+            return self();
         }
 
-        protected abstract @Nonnull GenericBuilder getThis();
+        protected abstract @Nonnull GenericBuilder self();
         
         public GenericBar build() {
             return bar;

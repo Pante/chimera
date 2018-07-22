@@ -60,7 +60,7 @@ class StubBar extends Bar {
         }
 
         @Override
-        protected StubBuilder getThis() {
+        protected StubBuilder self() {
             return this;
         }
         

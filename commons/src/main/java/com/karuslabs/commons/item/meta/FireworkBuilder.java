@@ -61,7 +61,7 @@ public class FireworkBuilder extends Builder<FireworkBuilder, FireworkMeta> {
     
     
     @Override
-    protected @Nonnull FireworkBuilder getThis() {
+    protected @Nonnull FireworkBuilder self() {
         return this;
     }
     

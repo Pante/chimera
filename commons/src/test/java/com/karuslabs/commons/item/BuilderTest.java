@@ -110,7 +110,7 @@ class BuilderTest {
         }
 
         @Override
-        protected StubBuilder getThis() {
+        protected StubBuilder self() {
             return this;
         }
         

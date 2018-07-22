@@ -99,7 +99,7 @@ public class ActionBar extends Bar {
         }
         
         @Override
-        protected @Nonnull ActionBarBuilder getThis() {
+        protected @Nonnull ActionBarBuilder self() {
             return this;
         }
         

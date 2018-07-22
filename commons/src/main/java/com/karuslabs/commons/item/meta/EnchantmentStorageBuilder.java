@@ -50,7 +50,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageBuilder
     
     
     @Override
-    protected @Nonnull EnchantmentStorageBuilder getThis() {
+    protected @Nonnull EnchantmentStorageBuilder self() {
         return this;
     }
     

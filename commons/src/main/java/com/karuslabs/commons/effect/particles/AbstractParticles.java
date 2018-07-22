@@ -72,22 +72,22 @@ abstract class AbstractParticles extends Particles {
         
         public GenericBuilder offsetX(double x) {
             particles.offsetX = x;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder offsetY(double y) {
             particles.offsetY = y;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder offsetZ(double z) {
             particles.offsetZ = z;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder speed(double speed) {
             particles.speed = speed;
-            return getThis();
+            return self();
         }
         
     }

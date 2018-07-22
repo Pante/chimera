@@ -37,9 +37,9 @@ public abstract class Identifier extends SimpleTreeVisitor<Boolean, Class<?>> {
     
     static final Identifier ANY = new Identifier(true) {};
     static final Identifier NONE = new Identifier(false) {};
-    static final Identifier EXACT = new ExactType();
-    static final Identifier FROM = new ParentType();
-    static final Identifier TO = new SubclassType();
+    static final Identifier EXACT = new ExactIdentifier();
+    static final Identifier FROM = new ParentIdentifier();
+    static final Identifier TO = new SubclassIdentifier();
     
     
     public static Identifier any() {
@@ -97,7 +97,7 @@ public abstract class Identifier extends SimpleTreeVisitor<Boolean, Class<?>> {
 
 }
 
-class ExactType extends Identifier {
+class ExactIdentifier extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
@@ -110,7 +110,7 @@ class ExactType extends Identifier {
     }
 }
 
-class ParentType extends Identifier {
+class ParentIdentifier extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
@@ -128,11 +128,11 @@ class ParentType extends Identifier {
 
 }
 
-class SubclassType extends Identifier {
+class SubclassIdentifier extends Identifier {
 
     @Override
     public Boolean visitIdentifier(IdentifierTree tree, Class<?> expected) {
-        Parameterized.of(Identifier.EXACT);
+        Generic.of(Identifier.EXACT);
         return check(tree.getName(), expected);
     }
 

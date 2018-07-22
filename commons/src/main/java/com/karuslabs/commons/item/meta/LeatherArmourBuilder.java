@@ -50,7 +50,7 @@ public class LeatherArmourBuilder extends Builder<LeatherArmourBuilder, LeatherA
     
     
     @Override
-    protected @Nonnull LeatherArmourBuilder getThis() {
+    protected @Nonnull LeatherArmourBuilder self() {
         return this;
     }
     

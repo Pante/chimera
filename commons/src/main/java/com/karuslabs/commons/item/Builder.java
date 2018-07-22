@@ -56,34 +56,34 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }   
     
     
-    protected @Nonnull abstract GenericBuilder getThis();
+    protected @Nonnull abstract GenericBuilder self();
     
     
     public GenericBuilder amount(int amount) {
         item.setAmount(amount);
-        return getThis();
+        return self();
     }
 
     public GenericBuilder durability(short data) {
         item.setDurability(data);
-        return getThis();
+        return self();
     }
 
     
     public GenericBuilder enchantment(Enchantment enchantment, int level) {
         item.addUnsafeEnchantment(enchantment, level);
-        return getThis();
+        return self();
     }
 
     public GenericBuilder enchantments(Map<Enchantment, Integer> enchantments) {
         item.addUnsafeEnchantments(enchantments);
-        return getThis();
+        return self();
     }
 
     
     public GenericBuilder name(String name) {
         meta.setDisplayName(name);
-        return getThis();
+        return self();
     }
     
 
@@ -93,7 +93,7 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
         }
         meta.getLore().add(lore);
         
-        return getThis();
+        return self();
     }
     
     public GenericBuilder lore(List<String> lore) {
@@ -102,13 +102,13 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
         }
         meta.getLore().addAll(lore);
         
-        return getThis();
+        return self();
     }
 
     
     public GenericBuilder flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
-        return getThis();
+        return self();
     }
 
     

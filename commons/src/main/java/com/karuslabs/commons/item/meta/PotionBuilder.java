@@ -61,7 +61,7 @@ public class PotionBuilder extends Builder<PotionBuilder, PotionMeta> {
     
 
     @Override
-    protected @Nonnull PotionBuilder getThis() {
+    protected @Nonnull PotionBuilder self() {
         return this;
     }
     

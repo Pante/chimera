@@ -114,15 +114,15 @@ public abstract class Particles {
         
         public GenericBuilder particle(Particle particle) {
             particles.particle = particle;
-            return getThis();
+            return self();
         }
         
         public GenericBuilder amount(int amount) {
             particles.amount = amount;
-            return getThis();
+            return self();
         }
         
-        protected abstract GenericBuilder getThis();
+        protected abstract GenericBuilder self();
         
         
         public GenericParticles build() {
