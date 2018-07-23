@@ -34,7 +34,6 @@ import javax.lang.model.element.Modifier;
 
 import static java.util.Collections.EMPTY_SET;
 import static java.util.regex.Pattern.LITERAL;
-import static javax.lang.model.element.Modifier.*;
 
 
 public class Variable extends Typeable {
