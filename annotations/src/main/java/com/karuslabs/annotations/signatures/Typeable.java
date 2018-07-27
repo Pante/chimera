@@ -32,30 +32,22 @@ import java.util.regex.*;
 import javax.annotation.Nullable;
 import javax.lang.model.element.*;
 
-import static java.util.regex.Pattern.LITERAL;
-
 
 public abstract class Typeable extends Signature {
     
     Identifier type;
     Class<?> value;
-    Matcher name;
 
     
     public Typeable(Modifiers modifiers, Set<Modifier> values, Identifier type, @Nullable Class<?> value, @Nullable Matcher name) {
-        super(modifiers, values);
+        super(modifiers, values, name);
         this.type = type;
         this.value = value;
-        this.name = name;
     }
     
     
     public boolean type(Tree tree) {
         return type.visit(tree, value);
-    }
-    
-    public boolean name(Name name) {
-        return this.name == null || this.name.reset(name).matches();
     }
     
     
@@ -69,21 +61,6 @@ public abstract class Typeable extends Signature {
         public TypeableBuilder type(Identifier matcher, Class<?> type) {
             signature.type = matcher;
             signature.value = type;
-            return self();
-        }
-        
-        public TypeableBuilder name(String literal) {
-            signature.name = Pattern.compile(literal, LITERAL).matcher("");
-            return self();
-        }
-        
-        public TypeableBuilder name(Pattern name) {
-            signature.name = name.matcher("");
-            return self();
-        }
-        
-        public TypeableBuilder name(Matcher name) {
-            signature.name = name;
             return self();
         }
         
