@@ -67,7 +67,7 @@ class ItemBuilderTest {
             of(mock(MapMeta.class), wrap(builder::asMap)),
             of(mock(PotionMeta.class), wrap(builder::asPotion)),
             of(mock(SkullMeta.class), wrap(builder::asSkull)),
-            of(mock(SpawnEggMeta.class), wrap(builder::asSpawnEgg))
+            of(mock(TropicalFishBucketMeta.class), wrap(builder::asTropicalFishBucket))
         );
     }
     
