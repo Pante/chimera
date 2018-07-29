@@ -58,7 +58,7 @@ class BuilderTest {
     
     @Test
     void build() {
-        builder.amount(1).durability((short) 8).enchantment(OXYGEN, 2).enchantments(EMPTY_MAP).flags(HIDE_POTION_EFFECTS).name("lol").build();
+        builder.amount(1).durability((short) 8).enchantment(OXYGEN, 2).enchantments(EMPTY_MAP).flags(HIDE_POTION_EFFECTS).display("lol").localised("locale").build();
         
         verify(item).setAmount(1);
         verify(item).setDurability((short) 8);
@@ -67,6 +67,7 @@ class BuilderTest {
         
         verify(meta).addItemFlags(HIDE_POTION_EFFECTS);
         verify(meta).setDisplayName("lol");
+        verify(meta).setLocalizedName("locale");
         
         verify(item).setItemMeta(meta);
     }

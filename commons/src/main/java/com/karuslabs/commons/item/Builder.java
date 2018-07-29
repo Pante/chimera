@@ -81,8 +81,13 @@ public abstract class Builder<GenericBuilder extends Builder, GenericMeta extend
     }
 
     
-    public GenericBuilder name(String name) {
+    public GenericBuilder display(String name) {
         meta.setDisplayName(name);
+        return self();
+    }
+    
+    public GenericBuilder localised(String name) {
+        meta.setLocalizedName(name);
         return self();
     }
     

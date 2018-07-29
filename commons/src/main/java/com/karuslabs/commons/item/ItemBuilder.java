@@ -85,8 +85,8 @@ public class ItemBuilder extends Builder<ItemBuilder, ItemMeta> {
         return new SkullBuilder(this);
     }
     
-    public SpawnEggBuilder asSpawnEgg() {
-        return new SpawnEggBuilder(this);
+    public TropicalFishBucketBuilder asTropicalFishBucket() {
+        return new TropicalFishBucketBuilder(this);
     }
     
 

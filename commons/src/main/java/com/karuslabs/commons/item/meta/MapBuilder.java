@@ -48,6 +48,11 @@ public class MapBuilder extends Builder<MapBuilder, MapMeta> {
         return this;
     }
     
+    public MapBuilder id(int id) {
+        meta.setMapId(id);
+        return this;
+    }
+    
     public MapBuilder locationName(String name) {
         meta.setLocationName(name);
         return this;

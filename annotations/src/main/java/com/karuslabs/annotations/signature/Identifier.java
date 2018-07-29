@@ -71,7 +71,6 @@ public abstract class Identifier extends SimpleTreeVisitor<Boolean, Class<?>> {
         super(value);
     }
     
-    
     public @Nullable static TypeKind map(Class<?> primitive) {
         switch (primitive.getName()) {
             case "boolean":

@@ -26,9 +26,11 @@ package com.karuslabs.commons.command;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.*;
@@ -569,6 +571,31 @@ public class StubServer implements Server {
 
     @Override
     public Set<String> getListeningPluginChannels() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BlockData createBlockData(Material mtrl) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BlockData createBlockData(Material mtrl, Consumer<BlockData> cnsmr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BlockData createBlockData(String string) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BlockData createBlockData(Material mtrl, String string) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public <T extends Keyed> Tag<T> getTag(String string, NamespacedKey nk, Class<T> type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

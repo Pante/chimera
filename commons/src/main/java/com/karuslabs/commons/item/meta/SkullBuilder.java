@@ -60,6 +60,7 @@ public class SkullBuilder extends Builder<SkullBuilder, SkullMeta> {
     }
     
     
+    @Deprecated
     public SkullBuilder owner(String name) {
         meta.setOwner(name);
         return this;

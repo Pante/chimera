@@ -40,9 +40,10 @@ class MapBuilderTest {
     
     @Test
     void build() {
-        builder.colour(SILVER).locationName("name").scaling(true);
+        builder.colour(SILVER).locationName("name").id(3).scaling(true);
         
         verify(meta).setColor(SILVER);
+        verify(meta).setMapId(3);
         verify(meta).setLocationName("name");
         verify(meta).setScaling(true);
     }

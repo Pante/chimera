@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,32 +25,41 @@ package com.karuslabs.commons.item.meta;
 
 import com.karuslabs.commons.item.Builder;
 
-import javax.annotation.Nonnull;
-
-import org.bukkit.entity.EntityType;
+import org.bukkit.DyeColor;
+import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SpawnEggMeta;
+import org.bukkit.inventory.meta.TropicalFishBucketMeta;
 
 
-public class SpawnEggBuilder extends Builder<SpawnEggBuilder, SpawnEggMeta> {
+public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketBuilder, TropicalFishBucketMeta> {
     
-    public SpawnEggBuilder(ItemStack item) {
+    public TropicalFishBucketBuilder(ItemStack item) {
         super(item);
     }
     
-    public SpawnEggBuilder(Builder builder) {
+    public TropicalFishBucketBuilder(Builder builder) {
         super(builder);
     }
     
     
-    public SpawnEggBuilder spawned(EntityType type) {
-        meta.setSpawnedType(type);
+    public TropicalFishBucketBuilder body(DyeColor colour) {
+        meta.setBodyColor(colour);
         return this;
     }
     
+    public TropicalFishBucketBuilder pattern(Pattern pattern) {
+        meta.setPattern(pattern);
+        return this;
+    }
     
+    public TropicalFishBucketBuilder colour(DyeColor colour) {
+        meta.setPatternColor(colour);
+        return this;
+    }
+    
+
     @Override
-    protected @Nonnull SpawnEggBuilder self() {
+    protected TropicalFishBucketBuilder self() {
         return this;
     }
     

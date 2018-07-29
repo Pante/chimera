@@ -32,13 +32,13 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import static org.bukkit.Material.BANNER;
+import static org.bukkit.Material.WHITE_BANNER;
 
 
 public class BannerBuilder extends Builder<BannerBuilder, BannerMeta> {
     
     public BannerBuilder() {
-        this(new ItemStack(BANNER));
+        this(new ItemStack(WHITE_BANNER));
     }
     
     public BannerBuilder(ItemStack item) {
