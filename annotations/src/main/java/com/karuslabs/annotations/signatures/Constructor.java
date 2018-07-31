@@ -28,6 +28,7 @@ import com.karuslabs.annotations.signature.*;
 import com.sun.source.tree.Tree;
 
 import java.util.Set;
+import javax.annotation.Nullable;
 import javax.lang.model.element.*;
 
 
@@ -39,7 +40,7 @@ public class Constructor extends Method {
     
     
     @Override
-    public boolean type(Tree tree) {
+    public boolean type(@Nullable Tree tree) {
         return tree == null;
     }
     
