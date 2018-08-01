@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 @Documented
-@Target({METHOD, TYPE})
+@Target({PACKAGE, METHOD, TYPE})
 @Retention(RUNTIME)
 public @interface Spigot {
     
