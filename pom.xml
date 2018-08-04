@@ -24,9 +24,6 @@
     <modules>
         <module>annotations</module>
         <module>commons</module>
-        <module>command-lint-maven-plugin</module>
-        <module>plugin-annotations-maven-plugin</module>
-        <module>plugin-lint-maven-plugin</module>
     </modules>
   
         
