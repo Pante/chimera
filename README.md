@@ -3,12 +3,12 @@
 </p>
 
 
-A collection of open source libraries & tools devloped by Karus Labs. This libary consists of the commons library, the plugin-annotations maven plugin which processes the annotated plugin and generates a plugin.yml, the commands-validator maven plugin which validates a command.yml and the plugin-validator maven plugin which validates a plugin.yml.
+A collection of open source libraries & tools devloped by Karus Labs.
 
 [![Travis-CI](https://travis-ci.org/Pante/Karus-Commons.svg?branch=master)](https://travis-ci.org/Pante/Karus-Commons)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
 [![Codecov](https://codecov.io/gh/Pante/Karus-Commons/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/Karus-Commons)
-[![Documented Source Code](https://img.shields.io/badge/documented-source-brightgreen.svg)](https://github.com/Pante/Karus-Commons/tree/Documentation)
+[![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Karus-Commons/tree/stable)
 
 ***
 #### Karus-Commons
@@ -38,67 +38,4 @@ _Annotation checkers_:
     <annotationProcessor>com.karuslabs.commons.command.annotation.checkers.NamespaceChecker</annotationProcessor>
     <annotationProcessor>com.karuslabs.commons.locale.annotation.checkers.ResourceChecker</annotationProcessor>
 </annotationProcessors>
-```
-
-***
-#### Command-Validator Maven Plugin
-[![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a8fbfc620d67748ba)
-[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/command-validator-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a8fbfc620d67748ba)
-[![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/command-validator-maven-plugin/apidocs/index.html)
-```XML
-<plugin>
-    <groupId>com.karuslabs</groupId>
-    <artifactId>command-validator-maven-plugin</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
-    <executions>
-        <execution>
-            <phase>compile</phase>
-            <goals>
-                <goal>validate</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-
-***
-#### Plugin-Annotations Maven Plugin
-[![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a09d32eb722a260d7)
-[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/plugin-annotations-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a09d32eb722a260d7)
-[![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/plugin-annotations-maven-plugin/apidocs/index.html)
-```XML
-<plugin>
-    <groupId>com.karuslabs</groupId>
-    <artifactId>plugin-annotations-maven-plugin</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
-    <executions>
-        <execution>
-            <phase>compile</phase>
-            <goals>
-                <goal>annotations</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
-```
-
-***
-#### Plugin-Validator Maven Plugin
-[![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a08e3f8d17d1d753f)
-[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/plugin-validator-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a08e3f8d17d1d753f)
-[![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/plugin-validator-maven-plugin/apidocs/index.html)
-```XML
-<plugin>
-    <groupId>com.karuslabs</groupId>
-    <artifactId>plugin-validator-maven-plugin</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
-    <executions>
-        <execution>
-            <phase>compile</phase>
-            <goals>
-                <goal>validator</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
 ```
