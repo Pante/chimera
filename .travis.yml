@@ -1,11 +1,6 @@
 language: java
 jdk:
-  - oraclejdk9
-  
-branches:
-  only:
-  - master
-  - documentation
+  - oraclejdk10
 
 script: 
   - mvn --settings travis-settings.xml deploy
