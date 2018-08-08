@@ -23,58 +23,26 @@
  */
 package com.karuslabs.commons.item;
 
-import java.util.List;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.BookMeta.Generation;
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.Color.SILVER;
+import static org.bukkit.Material.WATER;
+import static org.mockito.Mockito.verify;
 
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
+class LeatherArmourBuilderTest {
     
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
-    }
-    
-    BookBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
+    LeatherArmorMeta meta = StubBukkit.meta(LeatherArmorMeta.class);
+    LeatherArmourBuilder builder = LeatherArmourBuilder.of(WATER);
     
     
-    public BookBuilder author(String name) {
-        meta.setAuthor(name);
-        return this;
-    }
-    
-    public BookBuilder generation(Generation generation) {
-        meta.setGeneration(generation);
-        return this;
-    }
-    
-    
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
-    }
-    
-    public BookBuilder pages(String... pages) {
-        meta.addPage(pages);
-        return this;
-    }
-    
-    
-    public BookBuilder title(String title) {
-        meta.setTitle(title);
-        return this;
-    }
-    
-
-    @Override
-    protected BookBuilder self() {
-        return this;
+    @Test
+    void build() {
+        builder.self().colour(SILVER);
+        
+        verify(meta).setColor(SILVER);
     }
     
 }

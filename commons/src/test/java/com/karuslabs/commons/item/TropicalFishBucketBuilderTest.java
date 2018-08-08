@@ -23,58 +23,29 @@
  */
 package com.karuslabs.commons.item;
 
-import java.util.List;
-
-import org.bukkit.Material;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.BookMeta.Generation;
+
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.DyeColor.*;
+import static org.bukkit.Material.WATER;
+import static org.bukkit.entity.TropicalFish.Pattern.DASHER;
+import static org.mockito.Mockito.*;
 
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
+class TropicalFishBucketBuilderTest {
     
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
-    }
-    
-    BookBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
+    TropicalFishBucketMeta meta = StubBukkit.meta(TropicalFishBucketMeta.class);
+    TropicalFishBucketBuilder builder = TropicalFishBucketBuilder.of(WATER);
     
     
-    public BookBuilder author(String name) {
-        meta.setAuthor(name);
-        return this;
-    }
-    
-    public BookBuilder generation(Generation generation) {
-        meta.setGeneration(generation);
-        return this;
-    }
-    
-    
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
-    }
-    
-    public BookBuilder pages(String... pages) {
-        meta.addPage(pages);
-        return this;
-    }
-    
-    
-    public BookBuilder title(String title) {
-        meta.setTitle(title);
-        return this;
-    }
-    
-
-    @Override
-    protected BookBuilder self() {
-        return this;
+    @Test
+    void build() {
+        builder.self().body(BLUE).pattern(RED).pattern(DASHER);
+        
+        verify(meta).setBodyColor(BLUE);
+        verify(meta).setPatternColor(RED);
+        verify(meta).setPattern(DASHER);
     }
     
 }

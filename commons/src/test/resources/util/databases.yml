@@ -1,5 +1,0 @@
-mongodb:
-    authentication: true
-    host: ahost
-    password: apassword
-    

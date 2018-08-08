@@ -23,58 +23,37 @@
  */
 package com.karuslabs.commons.item;
 
-import java.util.List;
+import org.bukkit.inventory.meta.SkullMeta;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.BookMeta.Generation;
+import org.junit.jupiter.api.Test;
+
+import static com.karuslabs.commons.item.SkullBuilder.Head.ALEX;
+import static java.util.UUID.fromString;
+import static org.bukkit.Material.WATER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
+class SkullBuilderTest {
     
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
-    }
-    
-    BookBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
+    SkullMeta meta = StubBukkit.meta(SkullMeta.class);
+    SkullBuilder builder = SkullBuilder.of(WATER);
     
     
-    public BookBuilder author(String name) {
-        meta.setAuthor(name);
-        return this;
-    }
-    
-    public BookBuilder generation(Generation generation) {
-        meta.setGeneration(generation);
-        return this;
+    @Test
+    void owner() {
+        var owner = StubBukkit.offline();
+        
+        builder.self().head(ALEX);
+        
+        verify(meta).setOwningPlayer(owner);
     }
     
     
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
-    }
-    
-    public BookBuilder pages(String... pages) {
-        meta.addPage(pages);
-        return this;
-    }
-    
-    
-    public BookBuilder title(String title) {
-        meta.setTitle(title);
-        return this;
-    }
-    
-
-    @Override
-    protected BookBuilder self() {
-        return this;
+    @Test
+    void head() {
+        assertEquals(ALEX.name, "MHF_ALEX");
+        assertEquals(ALEX.id, fromString("6ab43178-89fd-4905-97f6-0f67d9d76fd9"));
     }
     
 }

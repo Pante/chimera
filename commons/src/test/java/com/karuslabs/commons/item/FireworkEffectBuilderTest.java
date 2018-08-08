@@ -23,58 +23,32 @@
  */
 package com.karuslabs.commons.item;
 
-import java.util.List;
+import org.bukkit.FireworkEffect;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.BookMeta.Generation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.bukkit.Material.WATER;
+import static org.mockito.Mockito.verify;
 
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
+@ExtendWith(MockitoExtension.class)
+class FireworkEffectBuilderTest {
     
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
-    }
-    
-    BookBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
+    FireworkEffectMeta meta = StubBukkit.meta(FireworkEffectMeta.class);
+    FireworkEffectBuilder builder = FireworkEffectBuilder.of(WATER);
+    @Mock FireworkEffect effect;
     
     
-    public BookBuilder author(String name) {
-        meta.setAuthor(name);
-        return this;
-    }
-    
-    public BookBuilder generation(Generation generation) {
-        meta.setGeneration(generation);
-        return this;
-    }
-    
-    
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
-    }
-    
-    public BookBuilder pages(String... pages) {
-        meta.addPage(pages);
-        return this;
-    }
-    
-    
-    public BookBuilder title(String title) {
-        meta.setTitle(title);
-        return this;
-    }
-    
-
-    @Override
-    protected BookBuilder self() {
-        return this;
+    @Test
+    void effect() {
+        builder.self().effect(effect);
+        
+        verify(meta).setEffect(effect);
     }
     
 }

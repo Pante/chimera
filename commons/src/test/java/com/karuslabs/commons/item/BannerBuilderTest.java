@@ -23,58 +23,32 @@
  */
 package com.karuslabs.commons.item;
 
-import java.util.List;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.inventory.meta.BannerMeta;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.BookMeta.Generation;
+import org.junit.jupiter.api.Test;
+
+import static org.bukkit.DyeColor.*;
+import static org.bukkit.Material.WATER;
+import static org.bukkit.block.banner.PatternType.*;
+import static org.mockito.Mockito.*;
 
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
+class BannerBuilderTest {
     
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
-    }
-    
-    BookBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
+    BannerMeta meta = StubBukkit.meta(BannerMeta.class);
+    BannerBuilder builder = BannerBuilder.of(WATER);
     
     
-    public BookBuilder author(String name) {
-        meta.setAuthor(name);
-        return this;
-    }
-    
-    public BookBuilder generation(Generation generation) {
-        meta.setGeneration(generation);
-        return this;
-    }
-    
-    
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
-    }
-    
-    public BookBuilder pages(String... pages) {
-        meta.addPage(pages);
-        return this;
-    }
-    
-    
-    public BookBuilder title(String title) {
-        meta.setTitle(title);
-        return this;
-    }
-    
-
-    @Override
-    protected BookBuilder self() {
-        return this;
+    @Test
+    void pattern() {
+        var first = new Pattern(RED, BORDER);
+        var second = new Pattern(RED, FLOWER);
+        
+        builder.self().pattern(first).pattern(1, second);
+        
+        verify(meta).addPattern(first);
+        verify(meta).setPattern(1, second);
     }
     
 }

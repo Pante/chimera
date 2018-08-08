@@ -31,14 +31,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import static java.util.Arrays.asList;
 
-
-public abstract class Builder<Meta extends ItemMeta, This extends Builder> {
+public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     ItemStack item;
     Meta meta;
-    private @Nullable List<String> lore;
+    @Nullable List<String> lore;
     
     
     public Builder(Material material) {
@@ -54,69 +52,68 @@ public abstract class Builder<Meta extends ItemMeta, This extends Builder> {
     }
     
     
-    public This amount(int amount) {
+    public Self amount(int amount) {
         item.setAmount(amount);
         return self();
     }
     
-    public This durability(short durability) {
+    public Self durability(short durability) {
         item.setDurability(durability);
         return self();
     }
     
     
-    public This display(String name) {
+    public Self display(String name) {
         meta.setDisplayName(name);
         return self();
     }
     
-    public This localised(String name) {
+    public Self localised(String name) {
         meta.setLocalizedName(name);
         return self();
     }
     
     
-    public This enchantment(Enchantment enchantment, int level) {
+    public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
         return self();
     }
     
     
-    public This flags(Collection<ItemFlag> flags) {
-        meta.addItemFlags(flags.toArray(new ItemFlag[0]));
-        return self();
+    public Self flags(Collection<ItemFlag> flags) {
+        return flags(flags.toArray(new ItemFlag[0]));
     }
     
-    public This flags(ItemFlag... flags) {
+    public Self flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
         return self();
     }
     
     
-    public This lore(Collection<String> lore) {
-        if (this.lore == null) {
-            this.lore = new ArrayList<>(lore);
+    public Self lore(Collection<String> lines) {
+        if (lore == null) {
+            lore = new ArrayList<>(lines);
             
         } else {
-           this.lore.addAll(lore);
+           lore.addAll(lines);
         }
         return self();
     }
     
-    public This lore(String... lore) {
-        if (this.lore == null) {
-            this.lore = asList(lore);
-            
-        } else {
-            for (var line : lore) {
-                this.lore.add(line);
-            }
+    public Self lore(String... lines) {
+        if (lore == null) {
+            lore = new ArrayList<>(lines.length);
         }
+        
+        for (var line : lines) {
+            lore.add(line);
+        }
+
         return self();
     }
     
     
-    public This unbreakable(boolean unbreakable) {
+    public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);
         return self();
     }
@@ -128,7 +125,16 @@ public abstract class Builder<Meta extends ItemMeta, This extends Builder> {
         return item;
     }
     
+    public Self reset(Material material) {
+        item = new ItemStack(material);
+        meta = (Meta) item.getItemMeta();
+        if (lore != null) {
+            lore.clear();
+        }
+        return self();
+    }
     
-    protected abstract This self();
+    
+    protected abstract Self self();
     
 }
