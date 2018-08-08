@@ -36,12 +36,11 @@ import static org.mockito.Mockito.*;
 class TropicalFishBucketBuilderTest {
     
     TropicalFishBucketMeta meta = StubBukkit.meta(TropicalFishBucketMeta.class);
-    TropicalFishBucketBuilder builder = TropicalFishBucketBuilder.of(WATER);
     
     
     @Test
     void build() {
-        builder.self().body(BLUE).pattern(RED).pattern(DASHER);
+        TropicalFishBucketBuilder.of(WATER).self().body(BLUE).pattern(RED).pattern(DASHER);
         
         verify(meta).setBodyColor(BLUE);
         verify(meta).setPatternColor(RED);

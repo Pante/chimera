@@ -27,18 +27,24 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
 
+@ExtendWith(MockitoExtension.class)
 class BlockStateBuilderTest {
+    
+    BlockStateMeta meta = StubBukkit.meta(BlockStateMeta.class);
+    @Mock BlockState state;
     
     @Test
     void state() {
-        var meta = StubBukkit.meta(BlockStateMeta.class);
-        var state = mock(BlockState.class);
-        BlockStateBuilder.of(WATER).state(state);
+        BlockStateBuilder.of(WATER).self().state(state);
         
         verify(meta).setBlockState(state);
     }

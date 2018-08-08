@@ -42,14 +42,13 @@ import static org.mockito.Mockito.*;
 class FireworkBuilderTest {
     
     FireworkMeta meta = StubBukkit.meta(FireworkMeta.class);
-    FireworkBuilder builder = FireworkBuilder.of(WATER);
     @Mock FireworkEffect effect;
     @Mock Set<FireworkEffect> set;
     
     
     @Test
     void build() {
-        builder.self().power(1).effects(effect).effects(set);
+        FireworkBuilder.of(WATER).self().power(1).effects(effect).effects(set);
         
         verify(meta).setPower(1);
         verify(meta).addEffects(effect);

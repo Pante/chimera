@@ -36,12 +36,11 @@ import static org.mockito.Mockito.*;
 class BookBuilderTest {
     
     BookMeta meta = StubBukkit.meta(BookMeta.class);
-    BookBuilder builder = BookBuilder.of(WATER);
     
     
     @Test
     void build() {
-        builder.self().author("Pante").title("Karus Commons").generation(ORIGINAL).pages(List.of("A", "B"));
+        BookBuilder.of(WATER).self().author("Pante").title("Karus Commons").generation(ORIGINAL).pages(List.of("A", "B"));
         
         verify(meta).setAuthor("Pante");
         verify(meta).setTitle("Karus Commons");

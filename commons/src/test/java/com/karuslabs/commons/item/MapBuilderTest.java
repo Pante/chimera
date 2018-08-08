@@ -35,12 +35,11 @@ import static org.mockito.Mockito.*;
 class MapBuilderTest {
     
     MapMeta meta = StubBukkit.meta(MapMeta.class);
-    MapBuilder builder = MapBuilder.of(WATER);
     
     
     @Test
     void build() {
-        builder.self().colour(SILVER).id(1).location("name").scaling(true);
+        MapBuilder.of(WATER).self().colour(SILVER).id(1).location("name").scaling(true);
         
         verify(meta).setColor(SILVER);
         verify(meta).setMapId(1);

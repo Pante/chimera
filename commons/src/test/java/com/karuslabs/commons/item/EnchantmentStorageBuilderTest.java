@@ -35,12 +35,11 @@ import static org.mockito.Mockito.*;
 class EnchantmentStorageBuilderTest {
     
     EnchantmentStorageMeta meta = StubBukkit.meta(EnchantmentStorageMeta.class);
-    EnchantmentStorageBuilder builder = EnchantmentStorageBuilder.of(WATER);
     
     
     @Test
     void build() {
-        builder.self().stored(CHANNELING, 1);
+        EnchantmentStorageBuilder.of(WATER).self().stored(CHANNELING, 1);
         
         verify(meta).addStoredEnchant(CHANNELING, 1, true);
     }

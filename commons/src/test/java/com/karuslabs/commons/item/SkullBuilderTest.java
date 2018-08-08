@@ -37,14 +37,14 @@ import static org.mockito.Mockito.*;
 class SkullBuilderTest {
     
     SkullMeta meta = StubBukkit.meta(SkullMeta.class);
-    SkullBuilder builder = SkullBuilder.of(WATER);
     
     
     @Test
     void owner() {
+        var builder = SkullBuilder.of(WATER).self();
         var owner = StubBukkit.offline();
         
-        builder.self().head(ALEX);
+        builder.head(ALEX);
         
         verify(meta).setOwningPlayer(owner);
     }

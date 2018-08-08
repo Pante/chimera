@@ -35,12 +35,11 @@ import static org.mockito.Mockito.verify;
 class LeatherArmourBuilderTest {
     
     LeatherArmorMeta meta = StubBukkit.meta(LeatherArmorMeta.class);
-    LeatherArmourBuilder builder = LeatherArmourBuilder.of(WATER);
     
     
     @Test
     void build() {
-        builder.self().colour(SILVER);
+        LeatherArmourBuilder.of(WATER).self().colour(SILVER);
         
         verify(meta).setColor(SILVER);
     }

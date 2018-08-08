@@ -42,14 +42,13 @@ import static org.mockito.Mockito.*;
 class KnowledgeBookBuilderTest {
     
     KnowledgeBookMeta meta = StubBukkit.meta(KnowledgeBookMeta.class);
-    KnowledgeBookBuilder builder = KnowledgeBookBuilder.of(WATER);
     @Mock NamespacedKey first;
     @Mock NamespacedKey second;
     
     
     @Test
     void recipes() {
-        builder.self().recipes(first).recipes(Set.of(second));
+        KnowledgeBookBuilder.of(WATER).self().recipes(first).recipes(Set.of(second));
         
         verify(meta).addRecipe(first);
         verify(meta).addRecipe(second);

@@ -41,14 +41,13 @@ import static org.mockito.Mockito.verify;
 public class PotionBuilderTest {
     
     PotionMeta meta = StubBukkit.meta(PotionMeta.class);
-    PotionBuilder builder = PotionBuilder.of(WATER);
     @Mock PotionData data;
     @Mock PotionEffect effect;
     
     
     @Test
     void build() {
-        builder.self().colour(SILVER).data(data).effect(effect);
+        PotionBuilder.of(WATER).self().colour(SILVER).data(data).effect(effect);
         
         verify(meta).setColor(SILVER);
         verify(meta).setBasePotionData(data);
