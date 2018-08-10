@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.karuslabs</groupId>
-    <artifactId>library</artifactId>
+    <artifactId>chimera</artifactId>
     <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     
-    <name>Karus-Library</name>
+    <name>Chimera</name>
     <description>A collection of Karus Lab's libraries and build-tools</description>
   
     

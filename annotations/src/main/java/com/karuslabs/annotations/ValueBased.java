@@ -21,19 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class Commands {
-    
-    public static boolean supported() {
-        try {
-            Class.forName("com.mojang.brigadier.CommandDispatcher");
-            return true;
-            
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE})
+public @interface ValueBased {
     
 }
