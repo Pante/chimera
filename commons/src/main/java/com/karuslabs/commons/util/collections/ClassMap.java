@@ -39,6 +39,15 @@ public interface ClassMap<T> {
     public static <T> ClassMap<T> of(Map<Class<? extends T>, T> map) {
         return new ClassProxiedMap<>(map);
     }
+    
+    
+    public default <U extends T> boolean containsKey(Class<U> type) {
+        return map().containsKey(type);
+    }
+    
+    public default <U extends T> boolean containsValue(U value) {
+        return map().containsValue(value);
+    }
         
     
     public default <U extends T> U get(Class<? extends T> type) {
