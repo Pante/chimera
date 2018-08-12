@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.collections;
 
+import com.google.common.primitives.Primitives;
+
 import java.util.*;
 
 
@@ -50,13 +52,13 @@ public interface ClassMap<T> {
     }
         
     
-    public default <U extends T> U get(Class<? extends T> type) {
+    public default <U extends T> U get(Class<U> type) {
         return (U) map().get(type);
     }
     
-    public default <U extends T> U getOrDefault(Class<? extends T> type, U value) {
+    public default <U extends T> U getOrDefault(Class<U> type, U value) {
         var item = map().get(type);
-        if (item != null && type.isAssignableFrom(item.getClass())) {
+        if (item != null && Primitives.wrap(type).isAssignableFrom(item.getClass())) {
             return (U) item;
             
         } else {
@@ -64,7 +66,7 @@ public interface ClassMap<T> {
         }
     }
     
-    public default <U extends T> U put(Class<? extends U> type, U value) {
+    public default <U extends T> U put(Class<U> type, U value) {
         return (U) map().put(type, value);
     }
     
@@ -85,11 +87,6 @@ class ClassHashMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
     @Override
     public Map<Class<? extends T>, T> map() {
         return this;
-    }
-
-    @Override
-    public Object clone() {
-        return super.clone();
     }
     
 }

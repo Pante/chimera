@@ -27,6 +27,7 @@ import com.karuslabs.commons.util.concurrent.locks.CloseableReadWriteLock.*;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock.*;
 
 
 public class CloseableReadWriteLock extends ReentrantReadWriteLock {
@@ -41,8 +42,8 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
     
     public CloseableReadWriteLock(boolean fair) {
         super(fair);
-        reader = new AcquisitionReadLock(super.readLock());
-        writer = new AcquistionWriteLock(super.writeLock());
+        reader = new AcquisitionReadLock(this, super.readLock());
+        writer = new AcquistionWriteLock(this, super.writeLock());
     }
     
     
@@ -61,8 +62,8 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         
         ReadLock lock;
 
-        protected CloseableReadLock(ReadLock lock) {
-            super(null);
+        protected CloseableReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
+            super(owner);
             this.lock = lock;
         }
         
@@ -74,16 +75,6 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         @Override
         public void lockInterruptibly() throws InterruptedException {
             lock.lockInterruptibly();
-        }
-        
-        @Override
-        public Condition newCondition() {
-            return lock.newCondition();
-        }
-        
-        @Override
-        public String toString() {
-            return lock.toString();
         }
         
         @Override
@@ -100,6 +91,16 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         public void unlock() {
             lock.unlock();
         }
+  
+        @Override
+        public Condition newCondition() {
+            return lock.newCondition();
+        }
+        
+        @Override
+        public String toString() {
+            return lock.toString();
+        }
         
     }
     
@@ -107,8 +108,8 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         
         WriteLock lock;
         
-        protected CloseableWriteLock(WriteLock lock) {
-            super(null);
+        protected CloseableWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
+            super(owner);
             this.lock = lock;
         }
         
@@ -133,16 +134,6 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         }
         
         @Override
-        public Condition newCondition() {
-            return lock.newCondition();
-        }
-        
-        @Override
-        public String toString() {
-            return lock.toString();
-        }
-        
-        @Override
         public boolean tryLock() {
             return lock.tryLock();
         }
@@ -156,6 +147,16 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         public void unlock() {
             lock.unlock();
         }
+                
+        @Override
+        public Condition newCondition() {
+            return lock.newCondition();
+        }
+                
+        @Override
+        public String toString() {
+            return lock.toString();
+        }
         
     }
     
@@ -164,8 +165,8 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
 
 class AcquisitionReadLock extends CloseableReadLock implements Acquisition {
 
-    AcquisitionReadLock(ReentrantReadWriteLock.ReadLock lock) {
-        super(lock);
+    AcquisitionReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
+        super(owner, lock);
     }
 
     @Override
@@ -190,8 +191,8 @@ class AcquisitionReadLock extends CloseableReadLock implements Acquisition {
 
 class AcquistionWriteLock extends CloseableWriteLock implements Acquisition {
 
-    AcquistionWriteLock(ReentrantReadWriteLock.WriteLock lock) {
-        super(lock);
+    AcquistionWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
+        super(owner, lock);
     }
 
     @Override
