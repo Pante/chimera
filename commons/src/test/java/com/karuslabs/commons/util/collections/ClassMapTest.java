@@ -25,19 +25,12 @@
 package com.karuslabs.commons.util.collections;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -108,8 +101,8 @@ class ClassHashMapTest {
 @ExtendWith(MockitoExtension.class)
 class ClassProxiedMapTest {
     
-    Map<Class<Object>, Object> proxied = new HashMap<>();
-    ClassMap<Object> map = ClassMap.of();
+    Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);
+    ClassMap<Object> map = ClassMap.of(proxied);
     
     
     @Test
