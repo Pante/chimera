@@ -24,12 +24,13 @@
 package com.karuslabs.commons.item.builders;
 
 import java.util.*;
-import javax.annotation.Nullable;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {

@@ -27,57 +27,75 @@ import com.karuslabs.commons.util.collections.TokenMap.Key;
 
 import java.util.concurrent.*;
 
+import static com.karuslabs.commons.util.collections.TokenMap.key;
 
-public interface ConcurrentTokenMap<T, N> extends TokenMap<T, N> {
+
+public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
-    public static <T, N> ConcurrentTokenMap<T, N> of() {
-        return new TokenConcurrentHashMap<>();
+    public static <N, T> ConcurrentTokenMap<N, T> of() {
+        return new ConcurrentHashTokenMap<>();
     }
     
-    public static <T, N> ConcurrentTokenMap<T, N> of(int capacity) {
-        return new TokenConcurrentHashMap<>(capacity);
+    public static <N, T> ConcurrentTokenMap<N, T> of(int capacity) {
+        return new ConcurrentHashTokenMap<>(capacity);
     }
     
-    public static <T, N> ConcurrentTokenMap<T, N> of(ConcurrentMap<Key<? extends T, N>, T> map) {
-        return new TokenProxiedConcurrentMap<>(map);
+    public static <N, T> ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
+        return new ConcurrentProxiedTokenMap<>(map);
     }
     
     
     @Override
-    public ConcurrentMap<Key<? extends T, N>, T> map();
+    public default <U extends T> boolean containsKey(N name, Class<U> type) {
+        return map().containsKey(key(name, type));
+    }
+    
+    @Override
+    public default <U extends T> U get(N name, Class<U> type) {
+        return get(key(name, type));
+    }
+    
+    @Override
+    public default <U extends T> U getOrDefault(N name, Class<U> type, U value) {
+        return getOrDefault(key(name, type), value);
+    }
+    
+    
+    @Override
+    public ConcurrentMap<Key<N, ? extends T>, T> map();
     
 }
 
 
-class TokenConcurrentHashMap<T, N> extends ConcurrentHashMap<Key<? extends T, N>, T> implements ConcurrentTokenMap<T, N> {
+class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>, T> implements ConcurrentTokenMap<N, T> {
     
-    TokenConcurrentHashMap() {}
+    ConcurrentHashTokenMap() {}
     
-    TokenConcurrentHashMap(int capacity) {
+    ConcurrentHashTokenMap(int capacity) {
         super(capacity);
     }
     
     
     @Override
-    public ConcurrentMap<Key<? extends T, N>, T> map() {
+    public ConcurrentMap<Key<N, ? extends T>, T> map() {
         return this;
     }
     
 }
 
 
-class TokenProxiedConcurrentMap<T, N> implements ConcurrentTokenMap<T, N> {
+class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
     
-    ConcurrentMap<Key<? extends T, N>, T> map;
+    ConcurrentMap<Key<N, ? extends T>, T> map;
     
     
-    TokenProxiedConcurrentMap(ConcurrentMap<Key<? extends T, N>, T> map) {
+    ConcurrentProxiedTokenMap(ConcurrentMap<Key<N, ? extends T>, T> map) {
         this.map = map;
     }
     
     
     @Override
-    public ConcurrentMap<Key<? extends T, N>, T> map() {
+    public ConcurrentMap<Key<N, ? extends T>, T> map() {
         return map;
     }
     

@@ -13,15 +13,6 @@
     <name>Annotations</name>
     <description>Karus Lab's annotations and annotation processors</description>
     
-    <dependencies>
-        <dependency>
-            <groupId>com.google.errorprone</groupId>
-            <artifactId>javac</artifactId>
-            <version>9+181-r4173-1</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-    
     <build>
         <defaultGoal>clean package install</defaultGoal>
         <plugins>  

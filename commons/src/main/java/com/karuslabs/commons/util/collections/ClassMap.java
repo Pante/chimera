@@ -31,15 +31,15 @@ import java.util.*;
 public interface ClassMap<T> {
     
     public static <T> ClassMap<T> of() {
-        return new ClassHashMap<>();
+        return new HashClassMap<>();
     }
     
     public static <T> ClassMap<T> of(int capacity) {
-        return new ClassHashMap<>(capacity);
+        return new HashClassMap<>(capacity);
     }
     
     public static <T> ClassMap<T> of(Map<Class<? extends T>, T> map) {
-        return new ClassProxiedMap<>(map);
+        return new ProxiedClassMap<>(map);
     }
     
     
@@ -76,11 +76,11 @@ public interface ClassMap<T> {
 }
 
 
-class ClassHashMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap<T> {
+class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap<T> {
     
-    ClassHashMap() {}
+    HashClassMap() {}
     
-    ClassHashMap(int capacity) {
+    HashClassMap(int capacity) {
         super(capacity);
     }
     
@@ -91,11 +91,11 @@ class ClassHashMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
     
 }
 
-class ClassProxiedMap<T> implements ClassMap<T> {
+class ProxiedClassMap<T> implements ClassMap<T> {
     
     private Map<Class<? extends T>, T> map;
     
-    ClassProxiedMap(Map<Class<? extends T>, T> map) {
+    ProxiedClassMap(Map<Class<? extends T>, T> map) {
         this.map = map;
     }
 

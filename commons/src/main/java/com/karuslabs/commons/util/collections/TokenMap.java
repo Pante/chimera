@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.collections;
 
+import com.google.gson.internal.Primitives;
+
 import com.karuslabs.annotations.ValueBased;
 import com.karuslabs.commons.util.collections.TokenMap.Key;
 
@@ -31,26 +33,24 @@ import java.util.*;
 import static com.karuslabs.commons.util.collections.TokenMap.key;
 
 
-public interface TokenMap<T, N> {
+public interface TokenMap<N, T> {
     
-    public static <T, N> TokenMap<T, N> of() {
-        return new TokenHashMap<>();
+    public static <N, T> TokenMap<N, T> of() {
+        return new HashTokenMap<>();
     }
     
-    public static <T, N> TokenMap<T, N> of(int capacity) {
-        return new TokenHashMap<>(capacity);
+    public static <N, T> TokenMap<N, T> of(int capacity) {
+        return new HashTokenMap<>(capacity);
     }
     
-    public static <T, N> TokenMap<T, N> of(Map<Key<? extends T, N>, T> map) {
-        return new TokenProxiedMap<>(map);
+    public static <N, T> TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
+        return new ProxiedTokenMap<>(map);
     }
     
     
-    public default <U extends T> boolean containsKey(Class<U> type, N name) {
-        return map().containsKey(key(type, name));
-    }
+    public <U extends T> boolean containsKey(N name, Class<U> type);
     
-    public default <U extends T> boolean containsKey(Key<U, N> key) {
+    public default <U extends T> boolean containsKey(Key<N, U> key) {
         return map().containsKey(key);
     }
     
@@ -59,22 +59,18 @@ public interface TokenMap<T, N> {
     }
     
     
-    public default <U extends T> U get(Class<U> type, N name) {
-        return get(key(type, name));
-    }
+    public <U extends T> U get(N name, Class<U> type);
     
-    public default <U extends T> U get(Key<U, N> key) {
+    public default <U extends T> U get(Key<N, U> key) {
         return (U) map().get(key);
     }
     
     
-    public default <U extends T> U getOrDefault(Class<U> type, N name, U value) {
-        return getOrDefault(key(type, name), value);
-    }
+    public <U extends T> U getOrDefault(N name, Class<U> type, U value);
     
-    public default <U extends T> U getOrDefault(Key<U, N> key, U value) {
+    public default <U extends T> U getOrDefault(Key<N, U> key, U value) {
         T item = map().get(key);
-        if (item != null && key.type.isAssignableFrom(item.getClass())) {
+        if (item != null && Primitives.wrap(key.type).isAssignableFrom(item.getClass())) {
             return (U) item;
         } else {
             return value;
@@ -82,35 +78,35 @@ public interface TokenMap<T, N> {
     }
     
     
-    public default <U extends T> U put(Class<U> type, N name, U value) {
-        return put(key(type, name), value);
+    public default <U extends T> U put(N name, Class<U> type, U value) {
+        return put(key(name, type), value);
     }
     
-    public default <U extends T> U put(Key<U, N> key, U value) {
+    public default <U extends T> U put(Key<N, U> key, U value) {
         return (U) map().put(key, value);
     }
     
     
-    public Map<Key<? extends T, N>, T> map();
+    public Map<Key<N, ? extends T>, T> map();
     
     
-    public static <T, N> Key<T, N> key(Class<T> type, N name) {
-        return new Key<>(type, name);
+    public static <N, T> Key<N, T> key(N name, Class<T> type) {
+        return new Key<>(name, type);
     }
     
-    public @ValueBased final class Key<T, N> {
+    public @ValueBased final class Key<N, T> {
 
-        Class<? extends T> type;
         N name;
+        Class<? extends T> type;
         int hash;
 
-        Key(Class<T> type, N name) {
-            this.type = type;
+        Key(N name, Class<T> type) {
             this.name = name;
+            this.type = type;
             this.hash = hash();
         }
 
-        Key<? extends T, N> set(Class<? extends T> type, N name) {
+        Key<N, ? extends T> set(N name, Class<? extends T> type) {
             this.type = type;
             this.name = name;
             this.hash = hash();
@@ -153,80 +149,75 @@ public interface TokenMap<T, N> {
 }
 
 
-class TokenHashMap<T, N> extends HashMap<Key<? extends T, N>, T> implements TokenMap<T, N> {
+class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements TokenMap<N, T> {
     
-    Key<T, N> cached;
+    Key<N, T> cached;
     
     
-    TokenHashMap() {
+    HashTokenMap() {
         cached = key(null, null);
     }
     
-    TokenHashMap(int capacity) {
+    HashTokenMap(int capacity) {
         super(capacity);
         cached = key(null, null);
     }
     
     
     @Override
-    public <U extends T> boolean containsKey(Class<U> type, N name) {
-        return containsKey(cached.set(type, name));
+    public <U extends T> boolean containsKey(N name, Class<U> type) {
+        return containsKey(cached.set(name, type));
     }
 
     @Override
-    public <U extends T> U get(Class<U> type, N name) {
-        return get((Key<U, N>) cached.set(type, name));
+    public <U extends T> U get(N name, Class<U> type) {
+        return get((Key<N, U>) cached.set(name, type));
     }
 
     @Override
-    public <U extends T> U getOrDefault(Class<U> type, N name, U value) {
-        return getOrDefault((Key<U, N>) cached.set(type, name), value);
+    public <U extends T> U getOrDefault(N name, Class<U> type, U value) {
+        return getOrDefault((Key<N, U>) cached.set(name, type), value);
     }
 
     
     @Override
-    public Map<Key<? extends T, N>, T> map() {
+    public Map<Key<N, ? extends T>, T> map() {
         return this;
-    }
-
-    @Override
-    public Object clone() {
-        return super.clone();
     }
     
 }
 
 
-class TokenProxiedMap<T, N> implements TokenMap<T, N> {
+class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     
-    Map<Key<? extends T, N>, T> map;
-    Key<T, N> cached;
+    Map<Key<N, ? extends T>, T> map;
+    Key<N, T> cached;
     
     
-    TokenProxiedMap(Map<Key<? extends T, N>, T> map) {
+    ProxiedTokenMap(Map<Key<N, ? extends T>, T> map) {
         this.map = map;
         cached = key(null, null);
     }
     
     
     @Override
-    public <U extends T> boolean containsKey(Class<U> type, N name) {
-        return containsKey(cached.set(type, name));
+    public <U extends T> boolean containsKey(N name, Class<U> type) {
+        return containsKey(cached.set(name, type));
     }
 
     @Override
-    public <U extends T> U get(Class<U> type, N name) {
-        return get((Key<U, N>) cached.set(type, name));
+    public <U extends T> U get(N name, Class<U> type) {
+        return get((Key<N, U>) cached.set(name, type));
     }
 
     @Override
-    public <U extends T> U getOrDefault(Class<U> type, N name, U value) {
-        return getOrDefault((Key<U, N>) cached.set(type, name), value);
+    public <U extends T> U getOrDefault(N name, Class<U> type, U value) {
+        return getOrDefault((Key<N, U>) cached.set(name, type), value);
     }
 
     
     @Override
-    public Map<Key<? extends T, N>, T> map() {
+    public Map<Key<N, ? extends T>, T> map() {
         return map;
     }
     

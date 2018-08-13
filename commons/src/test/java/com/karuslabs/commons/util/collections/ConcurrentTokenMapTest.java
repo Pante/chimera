@@ -24,7 +24,9 @@
 
 package com.karuslabs.commons.util.collections;
 
-import java.util.*;
+import com.karuslabs.commons.util.collections.TokenMap.Key;
+
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,60 +36,38 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ClassMapTest {
+class ConcurrentTokenMapTest {
     
-    ClassMap<Object> map = ClassMap.of();
+    ConcurrentTokenMap<String, Object> map = ConcurrentTokenMap.of();
     
     
     @Test
     void containsKey() {
-        map.put(int.class, 1);
-        assertTrue(map.containsKey(int.class));
-        assertFalse(map.containsKey(Integer.class));
-    }
-    
-    
-    @Test
-    void containsValue() {
-        map.put(int.class, 1); 
-        assertTrue(map.containsValue(1));
+        map.put("a", String.class, "b");
+        assertTrue(map.containsKey("a", String.class));
     }
     
     
     @Test
     void get() {
-        map.put(String.class, "test");
-        assertEquals(String.class, map.get(String.class).getClass());
+        map.put("a", int.class, 1);
+        assertEquals(1, (int) map.get("a", int.class));
     }
     
     
     @Test
-    void getOrDefault_value() {
-        map.put(int.class, 1);
-        assertEquals(1, (int) map.getOrDefault(int.class, 2));
-    }
-    
-    
-    @Test
-    void getOrDefault_default() {
-        map.map().put(int.class, "invalid");
-        assertEquals(2, (int) map.getOrDefault(int.class, 2));
-    }
-    
-    
-    @Test
-    void put() {
-        map.put(String.class, "first");
-        assertEquals("first", map.put(String.class, "second"));
+    void getOrDefault() {
+        map.map().put(TokenMap.key("a", int.class), map);
+        assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
     }
     
 }
 
 
 @ExtendWith(MockitoExtension.class)
-class HashClassMapTest {
+class ConcurrentHashTokenMapTest {
     
-    ClassMap<Object> map = ClassMap.of(1);
+    ConcurrentTokenMap<String, Object> map = ConcurrentTokenMap.of(1);
     
     
     @Test
@@ -99,10 +79,10 @@ class HashClassMapTest {
 
 
 @ExtendWith(MockitoExtension.class)
-class ProxiedClassMapTest {
+class ConcurrentProxiedTokenMapTest {
     
-    Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);
-    ClassMap<Object> map = ClassMap.of(proxied);
+    ConcurrentMap<Key<String, ? extends Object>, Object> proxied = new ConcurrentHashMap<>();
+    ConcurrentTokenMap<String, Object> map = ConcurrentTokenMap.of(proxied);
     
     
     @Test

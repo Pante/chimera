@@ -76,7 +76,7 @@ public @ValueBased interface Weak<T> {
 }
 
 
-final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
+@ValueBased final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     static final Weak<?> EMPTY = new WeakValue<>(null);
     

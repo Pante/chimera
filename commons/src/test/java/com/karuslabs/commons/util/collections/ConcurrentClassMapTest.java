@@ -24,74 +24,40 @@
 
 package com.karuslabs.commons.util.collections;
 
-import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ClassMapTest {
-    
-    ClassMap<Object> map = ClassMap.of();
-    
+class ConcurrentClassMapTest {
     
     @Test
-    void containsKey() {
-        map.put(int.class, 1);
-        assertTrue(map.containsKey(int.class));
-        assertFalse(map.containsKey(Integer.class));
-    }
-    
-    
-    @Test
-    void containsValue() {
-        map.put(int.class, 1); 
-        assertTrue(map.containsValue(1));
-    }
-    
-    
-    @Test
-    void get() {
-        map.put(String.class, "test");
-        assertEquals(String.class, map.get(String.class).getClass());
-    }
-    
-    
-    @Test
-    void getOrDefault_value() {
-        map.put(int.class, 1);
-        assertEquals(1, (int) map.getOrDefault(int.class, 2));
-    }
-    
-    
-    @Test
-    void getOrDefault_default() {
-        map.map().put(int.class, "invalid");
-        assertEquals(2, (int) map.getOrDefault(int.class, 2));
-    }
-    
-    
-    @Test
-    void put() {
-        map.put(String.class, "first");
-        assertEquals("first", map.put(String.class, "second"));
+    void of() {
+        var map = ConcurrentClassMap.of();
+        assertNotNull(map);
     }
     
 }
 
 
 @ExtendWith(MockitoExtension.class)
-class HashClassMapTest {
-    
-    ClassMap<Object> map = ClassMap.of(1);
-    
+class ConcurrentHashClassMapTest {
     
     @Test
     void map() {
+        var map = ConcurrentClassMap.of(1);
         assertSame(map, map.map());
     }
     
@@ -99,14 +65,12 @@ class HashClassMapTest {
 
 
 @ExtendWith(MockitoExtension.class)
-class ProxiedClassMapTest {
-    
-    Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);
-    ClassMap<Object> map = ClassMap.of(proxied);
-    
+class ConcurrentProxiedClassMapTest {
     
     @Test
     void map() {
+        var proxied = new ConcurrentHashMap<Class<? extends Object>, Object>(0);
+        var map = ConcurrentClassMap.of(proxied);
         assertSame(proxied, map.map());
     }
     

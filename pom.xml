@@ -30,35 +30,20 @@
     <distributionManagement>
         <repository>
             <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/releases</url>
+            <url>https://repo.karuslabs.com/repository/chimera/releases</url>
         </repository>
         
         <snapshotRepository>
             <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
+            <url>https://repo.karuslabs.com/repository/chimera/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     
-        
-    <repositories>
-        <repository>
-            <id>mojang-repo</id>
-            <url>https://libraries.minecraft.net/</url>
-        </repository>
-        
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-    
-    
     <dependencies>      
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <scope>compile</scope>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>2.5.4</version>
         </dependency>
         
         <dependency>

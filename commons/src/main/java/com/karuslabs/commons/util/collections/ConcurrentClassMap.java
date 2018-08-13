@@ -29,11 +29,15 @@ import java.util.concurrent.*;
 public interface ConcurrentClassMap<T> extends ClassMap<T> {
     
     public static <T> ConcurrentClassMap<T> of() {
-        return new ClassConcurrentHashMap<>();
+        return new ConcurrentHashClassMap<>();
+    }
+    
+    public static <T> ConcurrentClassMap<T> of(int capacity) {
+        return new ConcurrentHashClassMap<>(capacity);
     }
     
     public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
-        return new ClassProxiedConcurrentMap<>(map);
+        return new ConcurrentProxiedClassMap<>(map);
     }
     
     
@@ -43,11 +47,11 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
 }
 
 
-class ClassConcurrentHashMap<T> extends ConcurrentHashMap<Class<? extends T>, T> implements ConcurrentClassMap<T> {
+class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T> implements ConcurrentClassMap<T> {
 
-    ClassConcurrentHashMap() {}
+    ConcurrentHashClassMap() {}
     
-    ClassConcurrentHashMap(int capacity) {
+    ConcurrentHashClassMap(int capacity) {
         super(capacity);
     }
     
@@ -58,12 +62,12 @@ class ClassConcurrentHashMap<T> extends ConcurrentHashMap<Class<? extends T>, T>
     
 }
 
-class ClassProxiedConcurrentMap<T> implements ConcurrentClassMap<T> {
+class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
 
     private ConcurrentMap<Class<? extends T>, T> map;
     
     
-    ClassProxiedConcurrentMap(ConcurrentMap<Class<? extends T>, T> map) {
+    ConcurrentProxiedClassMap(ConcurrentMap<Class<? extends T>, T> map) {
         this.map = map;
     }
 
