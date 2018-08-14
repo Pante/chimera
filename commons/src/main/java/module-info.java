@@ -28,7 +28,7 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.util.collections;
     exports com.karuslabs.commons.util.concurrent.locks;
     
-    requires annotations;
+    requires com.karuslabs.annotations;
     requires jdk.compiler;
     requires brigadier;
     requires spigot.api;
