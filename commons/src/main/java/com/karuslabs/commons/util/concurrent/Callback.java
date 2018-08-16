@@ -26,4 +26,8 @@ package com.karuslabs.commons.util.concurrent;
 
 public interface Callback<T> {
     
+    public void done(T result);
+    
+    public boolean cancel(boolean mayInterruptIfRunning);
+    
 }

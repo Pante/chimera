@@ -26,14 +26,16 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+import org.bukkit.scheduler.BukkitTask;
 
-public class ScheduledResultTask<T> implements Result<T> {
+
+class BukkitResultTask<T> implements Callback<T>, Result<T> {
     
-    public ScheduledResultTask(Consumer<Callback> consumer) {
+    BukkitResultTask(Consumer<Callback> consumer) {
         
     }
     
-    public ScheduledResultTask(Runnable runnable, T result) {
+    BukkitResultTask(Runnable runnable, T result) {
         
     }
     
@@ -47,7 +49,24 @@ public class ScheduledResultTask<T> implements Result<T> {
     public boolean cancel(boolean mayInterruptIfRunning) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
+    public void set(BukkitTask task) {
+        
+    }
+    
 
+    @Override
+    public T get() throws InterruptedException, ExecutionException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     @Override
     public boolean isCancelled() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -57,14 +76,10 @@ public class ScheduledResultTask<T> implements Result<T> {
     public boolean isDone() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    
     @Override
-    public T get() throws InterruptedException, ExecutionException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public void done(T result) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

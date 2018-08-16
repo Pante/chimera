@@ -27,10 +27,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
-public interface BukkitExecutor {
+public interface BukkitExecutor {    
     
     public static BukkitExecutor of(Plugin plugin) {
-        return null; // TODO
+        return new CachedBukkitExecutor(plugin);
     }
     
     
@@ -40,5 +40,34 @@ public interface BukkitExecutor {
     
     
     public BukkitScheduler scheduler();
+    
+}
+
+
+class CachedBukkitExecutor extends AsynchronousScheduledExecutor implements BukkitExecutor {
+    
+    ScheduledExecutor synchronous;
+    
+    
+    CachedBukkitExecutor(Plugin plugin) {
+        super(plugin);
+        synchronous = new SynchronousScheduledExecutor(plugin);
+    }
+
+    
+    @Override
+    public ScheduledExecutor async() {
+        return this;
+    }
+
+    @Override
+    public ScheduledExecutor sync() {
+        return synchronous;
+    }
+
+    @Override
+    public BukkitScheduler scheduler() {
+        return scheduler;
+    }
     
 }

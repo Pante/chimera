@@ -27,66 +27,47 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 
-public abstract class ScheduledExecutor {
-    
+public interface ScheduledExecutor {
         
-    public <T> Result<T> submit(Callable<T> callable) {
+    public default <T> Result<T> submit(Callable<T> callable) {
         return submit(callable, 0L);
     }
         
-    public <T> Result<T> submit(Callable<T> callable, long delay) {
-        return submit(new ResultTask<>(callable), delay);
-    }
+    public <T> Result<T> submit(Callable<T> callable, long delay);
     
     
-    public <T> Result<T> submit(Runnable runnable, T result) {
+    public default <T> Result<T> submit(Runnable runnable, T result) {
         return submit(runnable, result, 0L);
     }
         
-    public <T> Result<T> submit(Runnable runnable, T result, long delay) {
-        return submit(new ResultTask<>(runnable, result), delay);
-    }
+    public <T> Result<T> submit(Runnable runnable, T result, long delay);
     
     
-    public Result<?> submit(Runnable runnable) {
+    public default Result<?> submit(Runnable runnable) {
         return submit(runnable, 0L);
     }
     
-    public Result<?> submit(Runnable runnable, long delay) {
-        return submit(new ResultTask<>(runnable, null), delay);
-    }
+    public Result<?> submit(Runnable runnable, long delay);
     
     
-    protected abstract <T> Result<T> submit(ResultTask<T> task, long delay);
-    
-    
-    public <T> Result<T> schedule(Consumer<Callback> consumer, long period) {
+    public default <T> Result<T> schedule(Consumer<Callback> consumer, long period) {
         return schedule(consumer, period, 0L);
     }
     
-    public <T> Result<T> schedule(Consumer<Callback> consumer, long period, long delay) {
-        return schedule(new ScheduledResultTask<>(consumer), period, delay);
-    }
+    public <T> Result<T> schedule(Consumer<Callback> consumer, long period, long delay);
     
     
-    public <T> Result<T> schedule(Runnable runnable, T result, long period) {
+    public default <T> Result<T> schedule(Runnable runnable, T result, long period) {
         return schedule(runnable, result, period, 0L);
     }
     
-    public <T> Result<T> schedule(Runnable runnable, T result, long period, long delay) {
-        return schedule(new ScheduledResultTask<>(runnable, result), period, delay);
-    }
+    public <T> Result<T> schedule(Runnable runnable, T result, long period, long delay);
     
     
-    public Result<?> schedule(Runnable runnable, long period) {
+    public default Result<?> schedule(Runnable runnable, long period) {
         return schedule(runnable, period, 0L);
     }
     
-    public Result<?> schedule(Runnable runnable, long period, long delay) {
-        return schedule(new ScheduledResultTask<>(runnable, null), period, delay);
-    }
-    
-    
-    protected abstract <T> Result<T> schedule(ScheduledResultTask<T> task, long period, long delay);
+    public Result<?> schedule(Runnable runnable, long period, long delay);
     
 }
