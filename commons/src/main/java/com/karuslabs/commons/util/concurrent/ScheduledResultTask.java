@@ -23,51 +23,55 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public interface BukkitExecutor {    
+public class ScheduledResultTask<T> extends ResultTask<T> implements Callback<T> {
     
-    public static BukkitExecutor of(Plugin plugin) {
-        return new CachedBukkitExecutor(plugin);
+    public static final long INFINITE = -1;
+    
+    
+    @Nullable T result;
+    volatile long count;
+
+    
+    public ScheduledResultTask(Runnable runnable, T result) {
+        this(runnable, result, INFINITE);
+    }
+    
+    public ScheduledResultTask(Runnable runnable, T result, long count) {
+        super(runnable, result);
+        this.result = result;
+        this.count = count;
     }
     
     
-    public ScheduledExecutor async();
-    
-    public ScheduledExecutor sync();
-    
-    
-    public BukkitScheduler scheduler();
-    
-}
-
-
-class CachedBukkitExecutor extends AsynchronousScheduledExecutor implements BukkitExecutor {
-    
-    ScheduledExecutor synchronous;
-    
-    
-    CachedBukkitExecutor(Plugin plugin) {
-        super(plugin);
-        synchronous = new SynchronousScheduledExecutor(plugin);
+    @Override
+    public void run() {
+        if (runAndReset() && count > 0 && --count == 0) {
+            set(result);
+        }
     }
 
     
     @Override
-    public ScheduledExecutor async() {
-        return this;
+    public void set(T result) {
+        super.set(result);
+    }
+    
+    @Override
+    public void exception(Throwable throwable) {
+        super.setException(throwable);
     }
 
     @Override
-    public ScheduledExecutor sync() {
-        return synchronous;
+    public boolean cancel() {
+        return cancel(false);
     }
 
     @Override
-    public BukkitScheduler scheduler() {
-        return scheduler;
+    public long count() {
+        return count;
     }
     
 }

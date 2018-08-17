@@ -21,53 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.util.concurrent.bukkit;
 
+import com.karuslabs.commons.util.concurrent.Callback;
+import com.karuslabs.commons.util.concurrent.Result;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 
 public interface ScheduledExecutor {
-        
+
     public default <T> Result<T> submit(Callable<T> callable) {
         return submit(callable, 0L);
     }
-        
+
     public <T> Result<T> submit(Callable<T> callable, long delay);
-    
+
     
     public default <T> Result<T> submit(Runnable runnable, T result) {
         return submit(runnable, result, 0L);
     }
-        
+
     public <T> Result<T> submit(Runnable runnable, T result, long delay);
-    
+
     
     public default Result<?> submit(Runnable runnable) {
         return submit(runnable, 0L);
     }
-    
+
     public Result<?> submit(Runnable runnable, long delay);
-    
+
     
     public default <T> Result<T> schedule(Consumer<Callback> consumer, long period) {
         return schedule(consumer, period, 0L);
     }
-    
+
     public <T> Result<T> schedule(Consumer<Callback> consumer, long period, long delay);
-    
+
     
     public default <T> Result<T> schedule(Runnable runnable, T result, long period) {
         return schedule(runnable, result, period, 0L);
     }
-    
+
     public <T> Result<T> schedule(Runnable runnable, T result, long period, long delay);
-    
+
     
     public default Result<?> schedule(Runnable runnable, long period) {
         return schedule(runnable, period, 0L);
     }
-    
+
     public Result<?> schedule(Runnable runnable, long period, long delay);
-    
+
 }
