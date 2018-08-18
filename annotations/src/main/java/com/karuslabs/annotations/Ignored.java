@@ -21,27 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-open module com.karuslabs.commons {
-    exports com.karuslabs.commons.item;
-    exports com.karuslabs.commons.item.builders;
-    exports com.karuslabs.commons.util;
-    exports com.karuslabs.commons.util.collections;
-    exports com.karuslabs.commons.util.concurrent;
-    exports com.karuslabs.commons.util.concurrent.bukkit;
-    exports com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE_PARAMETER, PARAMETER})
+public @interface Ignored {
     
-    requires com.karuslabs.annotations;
-    requires jdk.compiler;
-    requires brigadier;
-    requires org.bukkit;
-    requires commons.lang;
-    requires json.simple;
-    requires guava;
-    requires gson;
-    requires snakeyaml;
-    requires bungeecord.chat;
-    requires checker.qual;
-    requires mockito.junit.jupiter;
-    requires junit;
-    requires hamcrest.core;
 }

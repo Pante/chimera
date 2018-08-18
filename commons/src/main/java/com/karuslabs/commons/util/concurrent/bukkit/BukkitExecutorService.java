@@ -21,27 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-open module com.karuslabs.commons {
-    exports com.karuslabs.commons.item;
-    exports com.karuslabs.commons.item.builders;
-    exports com.karuslabs.commons.util;
-    exports com.karuslabs.commons.util.collections;
-    exports com.karuslabs.commons.util.concurrent;
-    exports com.karuslabs.commons.util.concurrent.bukkit;
-    exports com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.util.concurrent.bukkit;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
+
+public interface BukkitExecutorService {
     
-    requires com.karuslabs.annotations;
-    requires jdk.compiler;
-    requires brigadier;
-    requires org.bukkit;
-    requires commons.lang;
-    requires json.simple;
-    requires guava;
-    requires gson;
-    requires snakeyaml;
-    requires bungeecord.chat;
-    requires checker.qual;
-    requires mockito.junit.jupiter;
-    requires junit;
-    requires hamcrest.core;
+    public static BukkitExecutorService of(Plugin plugin) {
+        return new AsyncBukkitExecutorService(plugin);
+    }
+    
+    
+    public BukkitExecutor async();
+    
+    public BukkitExecutor sync();
+    
+    public BukkitScheduler scheduler();
+    
+}
+
+class AsyncBukkitExecutorService extends AsyncBukkitExecutor implements BukkitExecutorService {
+    
+    private final BukkitExecutor sync;
+    
+    
+    public AsyncBukkitExecutorService(Plugin plugin) {
+        super(plugin);
+        this.sync = new SyncBukkitExecutor(plugin);
+    }
+
+    @Override
+    public BukkitExecutor async() {
+        return this;
+    }
+
+    @Override
+    public BukkitExecutor sync() {
+       return sync;
+    }
+
+    @Override
+    public BukkitScheduler scheduler() {
+        return scheduler;
+    }
+    
 }

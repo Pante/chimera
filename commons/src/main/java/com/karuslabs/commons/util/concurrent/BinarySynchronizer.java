@@ -21,27 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-open module com.karuslabs.commons {
-    exports com.karuslabs.commons.item;
-    exports com.karuslabs.commons.item.builders;
-    exports com.karuslabs.commons.util;
-    exports com.karuslabs.commons.util.collections;
-    exports com.karuslabs.commons.util.concurrent;
-    exports com.karuslabs.commons.util.concurrent.bukkit;
-    exports com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.util.concurrent;
+
+import com.karuslabs.annotations.Ignored;
+
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+
+
+public class BinarySynchronizer extends AbstractQueuedSynchronizer {
+
+    public BinarySynchronizer() {
+        setState(1);
+    }
+
     
-    requires com.karuslabs.annotations;
-    requires jdk.compiler;
-    requires brigadier;
-    requires org.bukkit;
-    requires commons.lang;
-    requires json.simple;
-    requires guava;
-    requires gson;
-    requires snakeyaml;
-    requires bungeecord.chat;
-    requires checker.qual;
-    requires mockito.junit.jupiter;
-    requires junit;
-    requires hamcrest.core;
+    @Override
+    protected boolean tryAcquire(@Ignored int acquires) {
+        return getState() == 0;
+    }
+    
+    @Override
+    protected int tryAcquireShared(@Ignored int acquires) {
+        return getState() == 0 ? 1 : -1;
+    }
+    
+    
+    @Override
+    protected boolean tryRelease(@Ignored int releases) {
+        return tryReleaseShared(releases);
+    }
+    
+    @Override
+    protected boolean tryReleaseShared(@Ignored int releases) {
+        while (true) {
+            int current = getState();
+            if (current == 0) {
+                return false;
+            }
+
+            int updated = current - 1;
+            if (compareAndSetState(current, updated)) {
+                return updated == 0;
+            }
+        }
+    }
+
 }

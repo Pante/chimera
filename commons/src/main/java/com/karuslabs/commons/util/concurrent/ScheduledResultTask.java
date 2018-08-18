@@ -23,12 +23,38 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class ScheduledResultTask<T> extends ResultTask<T> implements Callback<T> {
     
     public static final long INFINITE = -1;
+    
+    
+    public static <T> ScheduledResultTask<T> of(Consumer<Callback<T>> consumer) {
+        return of(consumer, INFINITE);
+    }
+    
+    public static <T> ScheduledResultTask<T> of(Consumer<Callback<T>> consumer, long count) {
+        var callable = ScheduledCallable.of(consumer);
+        var result = new ScheduledResultTask<>(callable, count);
+        callable.set(result);
+        return result;
+    }
+    
+    
+    public static <T> ScheduledResultTask<T> of(ScheduledCallable<T> callable) {
+        return of(callable, INFINITE);
+    }
+    
+    public static <T> ScheduledResultTask<T> of(ScheduledCallable<T> callable, long count) {
+        var result = new ScheduledResultTask<>(callable, count);
+        callable.set(result);
+        return result;
+    }
     
     
     @Nullable T result;
@@ -42,6 +68,11 @@ public class ScheduledResultTask<T> extends ResultTask<T> implements Callback<T>
     public ScheduledResultTask(Runnable runnable, T result, long count) {
         super(runnable, result);
         this.result = result;
+        this.count = count;
+    }
+    
+    protected ScheduledResultTask(Callable<T> callable, long count) {
+        super(callable);
         this.count = count;
     }
     
