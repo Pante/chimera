@@ -39,10 +39,7 @@ public class ScheduledResultTask<T> extends ResultTask<T> implements Callback<T>
     }
     
     public static <T> ScheduledResultTask<T> of(Consumer<Callback<T>> consumer, long count) {
-        var callable = ScheduledCallable.of(consumer);
-        var result = new ScheduledResultTask<>(callable, count);
-        callable.set(result);
-        return result;
+        return of(ScheduledCallable.of(consumer), count);
     }
     
     

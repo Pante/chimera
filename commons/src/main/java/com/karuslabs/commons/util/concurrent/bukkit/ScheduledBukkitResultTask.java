@@ -24,7 +24,6 @@
 package com.karuslabs.commons.util.concurrent.bukkit;
 
 import com.karuslabs.commons.util.concurrent.*;
-import static com.karuslabs.commons.util.concurrent.ScheduledResultTask.INFINITE;
 
 import java.lang.invoke.*;
 import java.util.concurrent.Callable;
@@ -59,19 +58,19 @@ public class ScheduledBukkitResultTask<T> extends ScheduledResultTask<T> {
         return result;
     }
     
-    public static <T> ScheduledResultTask<T> of(ScheduledCallable<T> callable) {
+    public static <T> ScheduledBukkitResultTask<T> of(ScheduledCallable<T> callable) {
         return of(callable, INFINITE);
     }
     
-    public static <T> ScheduledResultTask<T> of(ScheduledCallable<T> callable, long count) {
+    public static <T> ScheduledBukkitResultTask<T> of(ScheduledCallable<T> callable, long count) {
         var result = new ScheduledBukkitResultTask<>(callable, count);
         callable.set(result);
         return result;
     }
     
     
-    private BinarySynchronizer synchronizer;
-    private volatile @Nullable BukkitTask task;
+    LatchSynchronizer synchronizer;
+    volatile @Nullable BukkitTask task;
     
     
     public ScheduledBukkitResultTask(Runnable runnable, T result) {
@@ -80,11 +79,12 @@ public class ScheduledBukkitResultTask<T> extends ScheduledResultTask<T> {
     
     public ScheduledBukkitResultTask(Runnable runnable, T result, long count) {
         super(runnable, result, count);
-        this.synchronizer = new BinarySynchronizer();
+        this.synchronizer = new LatchSynchronizer(1);
     }
     
-    public ScheduledBukkitResultTask(Callable<T> callable, long count) {
+    protected ScheduledBukkitResultTask(Callable<T> callable, long count) {
         super(callable, count);
+        this.synchronizer = new LatchSynchronizer(1);
     }
     
     
@@ -118,7 +118,7 @@ public class ScheduledBukkitResultTask<T> extends ScheduledResultTask<T> {
             synchronizer.releaseShared(1);
             
         } else {
-            throw new IllegalStateException("Task has been set");
+            throw new IllegalStateException("BukkitTask has been set");
         }
     }
     

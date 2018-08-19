@@ -21,49 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.annotations.Ignored;
+import java.util.function.Consumer;
 
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class BinarySynchronizer extends AbstractQueuedSynchronizer {
-
-    public BinarySynchronizer() {
-        setState(1);
-    }
-
+@ExtendWith(MockitoExtension.class)
+class ScheduledCallableTest {
     
-    @Override
-    protected boolean tryAcquire(@Ignored int acquires) {
-        return getState() == 0;
-    }
-    
-    @Override
-    protected int tryAcquireShared(@Ignored int acquires) {
-        return getState() == 0 ? 1 : -1;
-    }
+    Consumer<Callback<String>> consumer = mock(Consumer.class);
+    Callback<String> callback = mock(Callback.class);
+    ScheduledCallable<String> callable = ScheduledCallable.of(consumer);
     
     
-    @Override
-    protected boolean tryRelease(@Ignored int releases) {
-        return tryReleaseShared(releases);
+    @Test
+    void call() throws Exception {
+        callable.set(callback);
+        callable.call();
+        
+        verify(consumer).accept(callback);
     }
     
-    @Override
-    protected boolean tryReleaseShared(@Ignored int releases) {
-        while (true) {
-            int current = getState();
-            if (current == 0) {
-                return false;
-            }
-
-            int updated = current - 1;
-            if (compareAndSetState(current, updated)) {
-                return updated == 0;
-            }
-        }
+    
+    @Test
+    void call_throws_exception() {
+        assertThrows(NullPointerException.class, callable::call);
     }
-
+    
+    
+    @Test
+    void set_throws_exception() {
+        callable.set(callback);
+        assertEquals("Callback has been set", assertThrows(IllegalStateException.class, () -> callable.set(callback)).getMessage());
+    }
+    
 }

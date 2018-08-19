@@ -60,8 +60,8 @@ public class BukkitResultTask<T> extends ResultTask<T> {
     
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
-        var scheduled = this.task;
-        if (!super.cancel(mayInterruptIfRunning) || scheduled == null) {
+        var scheduled = task;
+        if (scheduled == null || !super.cancel(mayInterruptIfRunning)) {
             return false;
         }
         
@@ -76,7 +76,7 @@ public class BukkitResultTask<T> extends ResultTask<T> {
     
     public void setTask(BukkitTask task) {
         if (!TASK.compareAndSet(this, null, task)) {
-            throw new IllegalStateException("Task has been set");
+            throw new IllegalStateException("BukkitTask has been set");
         }
     }
     
