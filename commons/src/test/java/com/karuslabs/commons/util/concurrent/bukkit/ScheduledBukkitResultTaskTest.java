@@ -26,25 +26,19 @@ package com.karuslabs.commons.util.concurrent.bukkit;
 
 import com.karuslabs.commons.util.concurrent.*;
 
+import java.util.concurrent.*;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 import org.bukkit.scheduler.BukkitTask;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 import static java.lang.Thread.State.WAITING;
-import java.util.concurrent.ExecutionException;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -91,8 +85,7 @@ class ScheduledBukkitResultTaskTest {
     @Test
     void done() {
         var result = new ScheduledBukkitResultTask(() -> {}, "");
-        result.synchronizer.releaseShared(1);
-        result.task = task;
+        result.setTask(task);
         result.done();
         
         verify(task).cancel();

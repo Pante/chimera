@@ -30,6 +30,7 @@ import java.util.function.Consumer;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public abstract class BukkitExecutor {
@@ -135,14 +136,15 @@ class SyncBukkitExecutor extends BukkitExecutor {
 
     @Override
     protected <T> Result<T> submit(BukkitResultTask<T> result, long delay) {
-        var task = scheduler.runTaskLater(plugin, result, delay);
+        BukkitTask task = scheduler.runTaskLater(plugin, result, delay);
         result.setTask(task);
+        
         return result;
     }
 
     @Override
     protected <T> Result<T> schedule(ScheduledBukkitResultTask<T> result, long period, long delay) {
-        var task = scheduler.runTaskTimer(plugin, result, delay, period);
+        BukkitTask task = scheduler.runTaskTimer(plugin, result, delay, period);
         result.setTask(task);
         return result;
     }

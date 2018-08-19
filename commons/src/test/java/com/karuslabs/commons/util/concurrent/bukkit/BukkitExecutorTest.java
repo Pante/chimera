@@ -24,22 +24,159 @@
 
 package com.karuslabs.commons.util.concurrent.bukkit;
 
-import java.util.stream.Stream;
+import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class BukkitExecutorTest {
+    
+    BukkitExecutor executor;
+    BukkitScheduler scheduler;
+    Plugin plugin;
+    
+    
+    BukkitExecutorTest() {
+        scheduler = mock(BukkitScheduler.class);
+        Server server = when(mock(Server.class).getScheduler()).thenReturn(scheduler).getMock();
+        plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
+        executor = new AsyncBukkitExecutor(plugin);
+    }
+    
+    
+    @Test
+    void submit_callable() {
+        executor.submit(() -> "");
+        verify(scheduler).runTaskLaterAsynchronously(eq(plugin), any(Runnable.class), eq(0L));
+    }
+    
+    
+    @Test
+    void submit_runnable() {
+        executor.submit(() -> {}, "");
+        verify(scheduler).runTaskLaterAsynchronously(eq(plugin), any(Runnable.class), eq(0L));
+    }
+    
+    
+    @Test
+    void submit_runnable_null() {
+        executor.submit(() -> {});
+        verify(scheduler).runTaskLaterAsynchronously(eq(plugin), any(Runnable.class), eq(0L));
+    }
+    
+    
+    @Test
+    void schedule_consumer() {
+        executor.schedule(callback -> {}, 1);
+        verify(scheduler).runTaskTimerAsynchronously(eq(plugin), any(Runnable.class), eq(0L), eq(1L));
+    }
+    
+    
+    @Test
+    void schedule_runnable() {
+        executor.schedule(() -> {}, "", 1);
+        verify(scheduler).runTaskTimerAsynchronously(eq(plugin), any(Runnable.class), eq(0L), eq(1L));
+    }
+    
+    
+    @Test
+    void schedule_runnable_null() {
+        executor.schedule(() -> {}, 1);
+        verify(scheduler).runTaskTimerAsynchronously(eq(plugin), any(Runnable.class), eq(0L), eq(1L));
+    }
+    
+}
+
+
+@ExtendWith(MockitoExtension.class)
+class AsyncBukkitExecutorTest {
+    
+    AsyncBukkitExecutor executor;
+    BukkitScheduler scheduler;
+    Plugin plugin;
+    BukkitResultTask<String> result;
+    ScheduledBukkitResultTask<String> scheduled;
+    BukkitTask task;
+    
+    
+    AsyncBukkitExecutorTest() {
+        result = new BukkitResultTask<>(() -> {}, null);
+        scheduled = new ScheduledBukkitResultTask<>(() -> {}, null);
+        task = mock(BukkitTask.class);
+        scheduler = when(mock(BukkitScheduler.class).runTaskLaterAsynchronously(any(Plugin.class), any(Runnable.class), anyLong())).thenReturn(task).getMock();
+        when(scheduler.runTaskTimerAsynchronously(any(Plugin.class), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
+        Server server = when(mock(Server.class).getScheduler()).thenReturn(scheduler).getMock();
+        plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
+        executor = new AsyncBukkitExecutor(plugin);
+    }
+    
+    
+    @Test
+    void submit() {
+        executor.submit(result, 0);
+        
+        verify(scheduler).runTaskLaterAsynchronously(eq(plugin), any(Runnable.class), eq(0L));
+        assertThrows(IllegalStateException.class, () -> result.setTask(task));
+    }
+    
+    
+    @Test
+    void schedule() {
+        executor.schedule(scheduled, 1, 0);
+        
+        verify(scheduler).runTaskTimerAsynchronously(eq(plugin), any(Runnable.class), eq(0L), eq(1L));
+        assertThrows(IllegalStateException.class, () -> scheduled.setTask(task));
+    }
+    
+}
+
+
+@ExtendWith(MockitoExtension.class)
+class SyncBukkitExecutorTest {
+    
+    SyncBukkitExecutor executor;
+    BukkitScheduler scheduler;
+    Plugin plugin;
+    BukkitResultTask<String> result;
+    ScheduledBukkitResultTask<String> scheduled;
+    BukkitTask task;
+    
+    
+    SyncBukkitExecutorTest() {
+        result = new BukkitResultTask<>(() -> {}, null);
+        scheduled = new ScheduledBukkitResultTask<>(() -> {}, null);
+        task = mock(BukkitTask.class);
+        scheduler = when(mock(BukkitScheduler.class).runTaskLater(any(Plugin.class), any(Runnable.class), anyLong())).thenReturn(task).getMock();
+        when(scheduler.runTaskTimer(any(Plugin.class), any(Runnable.class), anyLong(), anyLong())).thenReturn(task);
+        Server server = when(mock(Server.class).getScheduler()).thenReturn(scheduler).getMock();
+        plugin = when(mock(Plugin.class).getServer()).thenReturn(server).getMock();
+        executor = new SyncBukkitExecutor(plugin);
+    }
+    
+    
+    @Test
+    void submit() {
+        executor.submit(result, 0);
+        
+        verify(scheduler).runTaskLater(eq(plugin), any(Runnable.class), eq(0L));
+        assertThrows(IllegalStateException.class, () -> result.setTask(task));
+    }
+    
+    
+    @Test
+    void schedule() {
+        executor.schedule(scheduled, 1, 0);
+        
+        verify(scheduler).runTaskTimer(eq(plugin), any(Runnable.class), eq(0L), eq(1L));
+        assertThrows(IllegalStateException.class, () -> scheduled.setTask(task));
+    }
     
 }
