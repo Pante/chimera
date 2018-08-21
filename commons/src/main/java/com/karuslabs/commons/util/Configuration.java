@@ -27,28 +27,71 @@ import com.karuslabs.annotations.Static;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
+import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import java.io.File;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 
 public @Static class Configuration {
     
-    static final ObjectMapper MAPPER = new ObjectMapper();
+    static final ObjectMapper JSON = new ObjectMapper();
+    static final ObjectMapper PROPERTIES = new JavaPropsMapper();
+    static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
+    
     
     public static Map<String, String> from(File file) {
         var name = file.getName();
         switch (name.substring(name.lastIndexOf('.'))) {
+            case ".json":
+                return from(file, JSON);
+                
+            case ".properties":
+                return from(file, PROPERTIES);
+                
             case ".yml":
             case ".yaml":
-            case ".json":
-            case ".properties":
+                return from(file, YAML);
+                
             default:
                 throw new UnsupportedOperationException("Unuspported file extension");
         }
     }
     
-    static void visit(Map<String, String> map, JsonNode node, String path) {
+    static Map<String, String> from(File file, ObjectMapper mapper) {
+        try {
+            return visit(new HashMap<>(), mapper.readTree(file), "");
+            
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+    
+    
+    public static Map<String, String> fromJSON(InputStream stream) {
+        return from(stream, JSON);
+    }
+    
+    public static Map<String, String> fromProperties(InputStream stream) {
+        return from(stream, PROPERTIES);
+    }
+    
+    public static Map<String, String> fromYAML(InputStream stream) {
+        return from(stream, YAML);
+    }
+    
+    static Map<String, String> from(InputStream stream, ObjectMapper mapper) {
+        try {
+            return visit(new HashMap<>(), mapper.readTree(stream), "");
+            
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+    
+    
+    static Map<String, String> visit(Map<String, String> map, JsonNode node, String path) {
         if (node.isObject()) {
             var object = (ObjectNode) node;
             var prefix = path.isEmpty() ? "" : path + ".";
@@ -69,6 +112,8 @@ public @Static class Configuration {
             var value = (ValueNode) node;
             map.put(path, value.asText());
         }
+        
+        return map;
     }
     
 }
