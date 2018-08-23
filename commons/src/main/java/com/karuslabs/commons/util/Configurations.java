@@ -34,7 +34,7 @@ import java.io.*;
 import java.util.*;
 
 
-public @Static class Configuration {
+public @Static class Configurations {
     
     static final ObjectMapper JSON = new ObjectMapper();
     static final ObjectMapper PROPERTIES = new JavaPropsMapper();
@@ -43,7 +43,8 @@ public @Static class Configuration {
     
     public static Map<String, String> from(File file) {
         var name = file.getName();
-        switch (name.substring(name.lastIndexOf('.'))) {
+        var extension = name.substring(name.lastIndexOf('.'));
+        switch (extension) {
             case ".json":
                 return from(file, JSON);
                 
@@ -55,7 +56,7 @@ public @Static class Configuration {
                 return from(file, YAML);
                 
             default:
-                throw new UnsupportedOperationException("Unuspported file extension");
+                throw new UnsupportedOperationException("Unuspported file extension: " + extension);
         }
     }
     
