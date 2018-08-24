@@ -106,9 +106,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
             lore = new ArrayList<>(lines.length);
         }
         
-        for (var line : lines) {
-            lore.add(line);
-        }
+        lore.addAll(List.of(lines));
 
         return self();
     }

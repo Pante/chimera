@@ -33,6 +33,7 @@ open module com.karuslabs.commons {
     requires com.karuslabs.annotations;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.dataformat.javaprop;
     requires com.fasterxml.jackson.dataformat.yaml;
     requires jdk.compiler;
     requires brigadier;
