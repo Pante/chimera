@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
-
-import com.karuslabs.annotations.Static;
+package com.karuslabs.commons.configuration;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
@@ -34,87 +32,86 @@ import java.io.*;
 import java.util.*;
 
 
-public @Static class Configurations {
-    
+public abstract class Configuration<T> {
+        
     static final ObjectMapper JSON = new ObjectMapper();
     static final ObjectMapper PROPERTIES = new JavaPropsMapper();
     static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
     
     
-    public static Map<String, String> from(File file) {
+    public Map<String, T> from(File file) {
         var name = file.getName();
         var extension = name.substring(name.lastIndexOf('.'));
         switch (extension) {
             case ".json":
                 return from(file, JSON);
-                
+
             case ".properties":
                 return from(file, PROPERTIES);
-                
+
             case ".yml":
             case ".yaml":
                 return from(file, YAML);
-                
+
             default:
                 throw new UnsupportedOperationException("Unuspported file extension: " + extension);
         }
     }
-    
-    static Map<String, String> from(File file, ObjectMapper mapper) {
+
+    Map<String, T> from(File file, ObjectMapper mapper) {
         try {
-            return visit(new HashMap<>(), mapper.readTree(file), "");
-            
+            return visit("", mapper.readTree(file), new HashMap<>());
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
-    
-    
-    public static Map<String, String> fromJSON(InputStream stream) {
+
+    public Map<String, T> fromJSON(InputStream stream) {
         return from(stream, JSON);
     }
-    
-    public static Map<String, String> fromProperties(InputStream stream) {
+
+    public Map<String, T> fromProperties(InputStream stream) {
         return from(stream, PROPERTIES);
     }
-    
-    public static Map<String, String> fromYAML(InputStream stream) {
+
+    public Map<String, T> fromYAML(InputStream stream) {
         return from(stream, YAML);
     }
-    
-    static Map<String, String> from(InputStream stream, ObjectMapper mapper) {
+
+    Map<String, T> from(InputStream stream, ObjectMapper mapper) {
         try {
-            return visit(new HashMap<>(), mapper.readTree(stream), "");
-            
+            return visit("", mapper.readTree(stream), new HashMap<>());
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
     
     
-    static Map<String, String> visit(Map<String, String> map, JsonNode node, String path) {
+    Map<String, T> visit(String path, JsonNode node, Map<String, T> map) {
         if (node.isObject()) {
             var object = (ObjectNode) node;
             var prefix = path.isEmpty() ? "" : path + ".";
-            
+
             var fields = object.fields();
             while (fields.hasNext()) {
                 var entry = fields.next();
-                visit(map, entry.getValue(), prefix + entry.getKey());
+                visit(prefix + entry.getKey(), entry.getValue(), map);
             }
-            
+
         } else if (node.isArray()) {
-            var array = (ArrayNode) node;
-            for (int i = 0; i < array.size(); i++) {
-                visit(map, array.get(i), path + "[" + i + "]");
-            }
-            
+            visitArray(path, (ArrayNode) node, map);
+
         } else {
-            var value = (ValueNode) node;
-            map.put(path, value.asText());
+            visitValue(path, (ValueNode) node, map);
         }
-        
+
         return map;
     }
+    
+    protected abstract void visitArray(String path, ArrayNode array, Map<String, T> map);
+    
+    protected abstract void visitValue(String path, ValueNode value, Map<String, T> map);
     
 }
