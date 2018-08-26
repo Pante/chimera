@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.configuration;
+package com.karuslabs.commons.util;
 
 import com.karuslabs.annotations.Static;
 
@@ -32,16 +32,36 @@ import java.util.*;
 
 public @Static class Configurations {
     
-    private static final StringifiedConfiguration STRINGIFY = new StringifiedConfiguration();
     private static final FlattenConfiguration FLATTEN = new FlattenConfiguration();
+    private static final StringifiedConfiguration STRINGIFY = new StringifiedConfiguration();
     
     
-    public static FlattenableConfiguration<Object, String> stringify() {
+    public static Configuration<String> flatStringify() {
+        return FLATTEN;
+    }
+    
+    public static Configuration<Object> stringify() {
         return STRINGIFY;
     }    
     
+            
+    static class FlattenConfiguration extends Configuration<String> {
+
+        @Override
+        protected void visitArray(String path, ArrayNode array, Map<String, String> map) {
+            for (int i = 0; i < array.size(); i++) {
+                visit(path + "[" + i + "]", array.get(i), map);
+            }
+        }
+
+        @Override
+        protected void visitValue(String path, ValueNode value, Map<String, String> map) {
+            map.put(path, value.asText());
+        }
+        
+    }
     
-    static class StringifiedConfiguration extends FlattenableConfiguration<Object, String> {
+    static class StringifiedConfiguration extends Configuration<Object> {
         
         private static final String[] EMPTY = new String[0];
         
@@ -73,27 +93,6 @@ public @Static class Configurations {
             map.put(path, value.asText());
         }
 
-        @Override
-        public Configuration<String> flat() {
-            return FLATTEN;
-        }
-
-    } 
-        
-    static class FlattenConfiguration extends Configuration<String> {
-
-        @Override
-        protected void visitArray(String path, ArrayNode array, Map<String, String> map) {
-            for (int i = 0; i < array.size(); i++) {
-                visit(path + "[" + i + "]", array.get(i), map);
-            }
-        }
-
-        @Override
-        protected void visitValue(String path, ValueNode value, Map<String, String> map) {
-            map.put(path, value.asText());
-        }
-        
     }
     
 }

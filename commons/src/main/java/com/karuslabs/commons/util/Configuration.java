@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.configuration;
+package com.karuslabs.commons.util;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
@@ -41,20 +41,19 @@ public abstract class Configuration<T> {
     
     public Map<String, T> from(File file) {
         var name = file.getName();
-        var extension = name.substring(name.lastIndexOf('.'));
-        switch (extension) {
+        var format = name.substring(name.lastIndexOf('.'));
+        switch (format) {
             case ".json":
                 return from(file, JSON);
 
             case ".properties":
                 return from(file, PROPERTIES);
 
-            case ".yml":
-            case ".yaml":
+            case ".yml": case ".yaml":
                 return from(file, YAML);
 
             default:
-                throw new UnsupportedOperationException("Unuspported file extension: " + extension);
+                throw new UnsupportedOperationException("Unuspported file format: " + format);
         }
     }
 
@@ -67,6 +66,7 @@ public abstract class Configuration<T> {
         }
     }
 
+    
     public Map<String, T> fromJSON(InputStream stream) {
         return from(stream, JSON);
     }

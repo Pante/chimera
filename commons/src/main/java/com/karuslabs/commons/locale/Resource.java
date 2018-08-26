@@ -21,11 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.configuration;
+package com.karuslabs.commons.locale;
+
+import java.util.*;
 
 
-public abstract class FlattenableConfiguration<T, U> extends Configuration<T> {
+public interface Resource {
     
-    public abstract Configuration<U> flat();
+    public String get(String key, Object... arguments);
+    
+    public String get(String key);
+    
+            
+    public String at(String key, int index);
+    
+    public String at(String key, int index, Object... arguments);
+    
+    public String[] all(String key);
+    
+    
+    public Resource locale(Locale locale);    
+    
+    public Locale locale();
+    
+    public ResourceBundle bundle(Locale locale);
     
 }

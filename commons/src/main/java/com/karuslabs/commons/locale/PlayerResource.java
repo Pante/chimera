@@ -23,29 +23,20 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.*;
+import java.util.Locale;
 
-import static java.util.Collections.enumeration;
+import org.bukkit.entity.Player;
 
 
-public class Bundle extends ResourceBundle {
-    
-    private final Map<String, Object> messages;
-    
-    
-    public Bundle(Map<String, Object> messages) {
-        this.messages = messages;
-    }
-    
+public interface PlayerResource extends Resource {
     
     @Override
-    protected Object handleGetObject(String key) {
-        return messages.get(key);
-    }
-
-    @Override
-    public Enumeration<String> getKeys() {
-        return parent == null ? enumeration(messages.keySet()) : new BundleEnumeration(parent.getKeys(), messages.keySet());
-    }
+    public PlayerResource locale(Locale locale);
+    
+    public PlayerResource locale(Player player);
+    
+    public PlayerResource localeOrDefault(Player player, Locale locale);
+    
+    public PlayerResource localeOrDetected(Player player);
     
 }
