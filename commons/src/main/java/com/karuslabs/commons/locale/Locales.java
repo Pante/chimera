@@ -23,20 +23,12 @@
  */
 package com.karuslabs.commons.locale;
 
-import java.util.Locale;
+import com.karuslabs.annotations.Static;
 
-import org.bukkit.entity.Player;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
-public interface PlayerResource extends Resource {
-    
-    @Override
-    public PlayerResource locale(Locale locale);
-    
-    public PlayerResource locale(Player player);
-    
-    public PlayerResource localeOrDefault(Player player, Locale locale);
-    
-    public PlayerResource localeOrDetected(Player player);
-    
+public @Static class Locales {
+
 }

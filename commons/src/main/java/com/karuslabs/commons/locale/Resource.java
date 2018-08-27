@@ -23,27 +23,79 @@
  */
 package com.karuslabs.commons.locale;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 
-public interface Resource {
+public class Resource extends MessageFormat {
     
-    public String get(String key, Object... arguments);
-    
-    public String get(String key);
-    
-            
-    public String at(String key, int index);
-    
-    public String at(String key, int index, Object... arguments);
-    
-    public String[] all(String key);
+    private BundleLoader loader;
+    private String name;
+    private ResourceBundle bundle;
     
     
-    public Resource locale(Locale locale);    
+    public Resource(BundleLoader loader, String name) {
+        this(loader, name, Locale.getDefault(Locale.Category.FORMAT));
+    }
     
-    public Locale locale();
+    public Resource(BundleLoader loader, String name, Locale locale) {
+        super("");
+        this.loader = loader;
+        this.name = name;
+        this.bundle = ResourceBundle.getBundle(name, locale, loader);
+    }
     
-    public ResourceBundle bundle(Locale locale);
+        
+    public String get(String key) {
+        return bundle.getString(key);
+    }
+    
+    public String get(String key, Object... arguments) {
+        return format(bundle.getString(key), arguments);
+    }
+    
+    
+    public String at(String key, int index) {
+        return bundle.getStringArray(key)[index];
+    }
+    
+    public String at(String key, int index, Object... arguments) {
+        return format(bundle.getStringArray(key)[index], arguments);
+    }
+    
+    
+    public String[] all(String key) {
+        return bundle.getStringArray(key);
+    }
+    
+    
+    public Resource locale(Locale locale) {
+        setLocale(locale);
+        return this;
+    }
+    
+    @Override
+    public void setLocale(Locale locale) {
+        if (getLocale().equals(locale)) {
+            this.bundle = ResourceBundle.getBundle(name, locale, loader);
+        }
+        
+        super.setLocale(locale);
+    }
+    
+    
+    public String getBasename() {
+        return name;
+    }
+    
+    public BundleLoader getBundleLoader() {
+        return loader;
+    }
+    
+    
+    @Override
+    public Resource clone() {
+        return (Resource) super.clone();
+    }
     
 }
