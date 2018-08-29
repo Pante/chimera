@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.locale;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.*;
 import com.google.common.collect.*;
 
 import com.karuslabs.annotations.Static;
@@ -38,14 +37,14 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public @Static class Locales {
     
     private static final BiMap<String, Locale> LOCALES;
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(0, MINUTES).build();
+    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
     private static final Set<String> LANGUAGES = Set.of(Locale.getISOLanguages());
     private static final Set<String> COUNTRIES = Set.of(Locale.getISOCountries());
     
     static {
         var locales = Locale.getAvailableLocales();
-        
         LOCALES = HashBiMap.create(locales.length);
+        
         for (var locale : locales) {
             LOCALES.put(locale.toLanguageTag().replace('-', '_'), locale);
         }

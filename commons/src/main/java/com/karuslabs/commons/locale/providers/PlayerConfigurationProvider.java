@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.locale.providers;
 
-import java.util.Locale;
+import java.util.*;
 
 
 public class PlayerConfigurationProvider implements Provider {

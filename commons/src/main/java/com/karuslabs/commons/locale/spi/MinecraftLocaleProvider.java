@@ -21,40 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
-
-import com.karuslabs.commons.locale.providers.Provider;
+package com.karuslabs.commons.locale.spi;
 
 import java.util.Locale;
+import java.util.spi.LocaleServiceProvider;
 
-import org.bukkit.entity.Player;
 
+public class MinecraftLocaleProvider extends LocaleServiceProvider {
+    
+    private static final Locale[] LOCALES = new Locale[]{
+        new Locale("en", "7S"),
+        new Locale("en", "UD"),
+        new Locale("enp"),
+        new Locale("en", "WS"),
+        new Locale("lol", "US")
+    };
 
-public class PlayerResource extends Resource {
-    
-    private Provider<Player> provider;
-    
-    
-    public PlayerResource(BundleLoader loader, String name, Provider<Player> provider) {
-        super(loader, name);
-        this.provider = provider;
-    }
-    
-        
-    public PlayerResource locale(Player player) {
-        return locale(provider.get(player));
-    }
     
     @Override
-    public PlayerResource locale(Locale locale) {
-        super.locale(locale);
-        return this;
-    }
-    
-    
-    @Override
-    public PlayerResource clone() {
-        return (PlayerResource) super.clone();
+    public Locale[] getAvailableLocales() {
+        return LOCALES;
     }
     
 }

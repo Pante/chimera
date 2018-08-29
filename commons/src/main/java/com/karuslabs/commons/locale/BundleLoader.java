@@ -23,8 +23,10 @@
  */
 package com.karuslabs.commons.locale;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.karuslabs.annotations.Ignored;
-import com.karuslabs.commons.util.Configurations;
+import com.karuslabs.commons.io.parsers.StringParser.LenientStringifier;
 
 import java.io.*;
 import java.util.*;
@@ -37,6 +39,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class BundleLoader extends Control {
     
     private static final List<String> FORMATS = List.of("json", "properties", "yml", "yaml");
+    private static final LenientStringifier STRINGIFIER = new LenientStringifier() {
+        @Override
+        public Map<String, Object> exceptional(IOException e) {
+            return null;
+        }
+        
+        @Override
+        public ObjectMapper defaultMapper(String format) {
+            return JSON;
+        }
+    };
     
     
     private Source[] sources;
@@ -64,19 +77,8 @@ public class BundleLoader extends Control {
     }
     
     protected ResourceBundle load(InputStream stream, String format) {
-        switch (format) {
-            case "properties":
-                return new Bundle(Configurations.stringify().fromProperties(stream));
-
-            case "json":
-                return new Bundle(Configurations.stringify().fromJSON(stream));
-                
-            case "yml": case "yaml":
-                return new Bundle(Configurations.stringify().fromYAML(stream));
-                
-            default:
-                return null;
-        }
+        var map = STRINGIFIER.from(stream, format);
+        return map != null ? new Bundle(map) : null;
     }
     
     

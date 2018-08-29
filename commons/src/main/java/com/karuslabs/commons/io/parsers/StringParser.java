@@ -21,57 +21,73 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util;
+package com.karuslabs.commons.io.parsers;
 
-import com.karuslabs.annotations.Static;
-
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
 
 import java.util.*;
 
 
-public @Static class Configurations {
+public abstract class StringParser<T> extends Parser<Map<String, T>> {
+
+    private static final LenientStringifier LENIENT = new LenientStringifier();
+    private static final Stringifier FLAT = new Stringifier();
+
     
-    private static final FlattenConfiguration FLATTEN = new FlattenConfiguration();
-    private static final StringifiedConfiguration STRINGIFY = new StringifiedConfiguration();
-    
-    
-    public static Configuration<String> flatStringify() {
-        return FLATTEN;
+    public static LenientStringifier lenient() {
+        return LENIENT;
     }
     
-    public static Configuration<Object> stringify() {
-        return STRINGIFY;
-    }    
+    public static final StringParser stringify() {
+        return FLAT;
+    }
     
-            
-    static class FlattenConfiguration extends Configuration<String> {
+    
+    @Override
+    protected Map<String, T> visit(String path, JsonNode node, Map<String, T> map) {
+        if (node.isObject()) {
+            var object = (ObjectNode) node;
+            var prefix = path.isEmpty() ? "" : path + ".";
 
-        @Override
-        protected void visitArray(String path, ArrayNode array, Map<String, String> map) {
-            for (int i = 0; i < array.size(); i++) {
-                visit(path + "[" + i + "]", array.get(i), map);
+            var fields = object.fields();
+            while (fields.hasNext()) {
+                var entry = fields.next();
+                visit(prefix + entry.getKey(), entry.getValue(), map);
             }
+
+        } else if (node.isArray()) {
+            visitArray(path, (ArrayNode) node, map);
+
+        } else {
+            visitValue(path, (ValueNode) node, map);
         }
 
-        @Override
-        protected void visitValue(String path, ValueNode value, Map<String, String> map) {
-            map.put(path, value.asText());
-        }
-        
+        return map;
     }
     
-    static class StringifiedConfiguration extends Configuration<Object> {
-        
+    protected abstract void visitArray(String path, ArrayNode array, Map<String, T> map);
+    
+    protected abstract void visitValue(String path, ValueNode value, Map<String, T> map);
+
+    
+    @Override
+    protected Map<String, T> initial() {
+        return new HashMap<>();
+    }
+    
+    
+    public static class LenientStringifier extends StringParser<Object> {
+
         private static final String[] EMPTY = new String[0];
-        
+
         @Override
         protected void visitArray(String path, ArrayNode array, Map<String, Object> map) {
             if (array.size() == 0) {
                 map.put(path, EMPTY);
                 return;
             }
-            
+
             var strings = new ArrayList<String>(array.size());
             for (int i = 0; i < array.size(); i++) {
                 var value = array.get(i);
@@ -82,7 +98,7 @@ public @Static class Configurations {
                     strings.add(value.asText());
                 }
             }
-            
+
             if (!strings.isEmpty()) {
                 map.put(path, strings.toArray(EMPTY));
             }
@@ -90,6 +106,22 @@ public @Static class Configurations {
 
         @Override
         protected void visitValue(String path, ValueNode value, Map<String, Object> map) {
+            map.put(path, value.asText());
+        }
+
+    }
+    
+    public static class Stringifier extends StringParser<String> {
+
+        @Override
+        protected void visitArray(String path, ArrayNode array, Map<String, String> map) {
+            for (int i = 0; i < array.size(); i++) {
+                visit(path + "[" + i + "]", array.get(i), map);
+            }
+        }
+
+        @Override
+        protected void visitValue(String path, ValueNode value, Map<String, String> map) {
             map.put(path, value.asText());
         }
 

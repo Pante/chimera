@@ -24,6 +24,7 @@
 package com.karuslabs.commons.locale.providers;
 
 import com.karuslabs.commons.locale.Locales;
+import com.karuslabs.commons.locale.Locales;
 
 import java.util.Locale;
 
@@ -31,16 +32,16 @@ import org.bukkit.entity.Player;
 
 
 @FunctionalInterface
-public interface Provider<K> {
+public interface Provider<T> {
         
     public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
     
     public static final Provider<?> NONE = key -> Locale.getDefault();
     
     
-    public Locale get(K key);
+    public Locale get(T key);
     
-    public default Locale getOrDefault(K key, Locale locale) {
+    public default Locale getOrDefault(T key, Locale locale) {
         var value = get(key);
         return value != null ? value : locale;
     }

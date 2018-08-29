@@ -1,1 +1,1 @@
-com.karuslabs.commons.locale.MinecraftLocaleProvider
+com.karuslabs.commons.locale.spi.MinecraftLocaleProvider

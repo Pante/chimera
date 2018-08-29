@@ -23,25 +23,33 @@
  */
 package com.karuslabs.commons.locale;
 
+
+import com.karuslabs.commons.locale.providers.Provider;
 import java.text.MessageFormat;
 import java.util.*;
 
 
-public class Resource extends MessageFormat {
+public class Resource<T> extends MessageFormat {
     
     private BundleLoader loader;
     private String name;
+    private Provider<T> provider;
     private ResourceBundle bundle;
     
     
     public Resource(BundleLoader loader, String name) {
-        this(loader, name, Locale.getDefault(Locale.Category.FORMAT));
+        this(loader, name, (Provider<T>) Provider.NONE);
     }
     
-    public Resource(BundleLoader loader, String name, Locale locale) {
+    public Resource(BundleLoader loader, String name, Provider<T> provider) {
+        this(loader, name, Locale.getDefault(Locale.Category.FORMAT), provider);
+    }
+    
+    public Resource(BundleLoader loader, String name, Locale locale, Provider<T> provider) {
         super("");
         this.loader = loader;
         this.name = name;
+        this.provider = provider;
         this.bundle = ResourceBundle.getBundle(name, locale, loader);
     }
     
@@ -69,6 +77,14 @@ public class Resource extends MessageFormat {
     }
     
     
+    public Resource locale(T key) {
+        return locale(provider.get(key));
+    }
+    
+    public Resource locale(T key, Locale locale) {
+        return locale(provider.getOrDefault(key, locale));
+    }
+    
     public Resource locale(Locale locale) {
         setLocale(locale);
         return this;
@@ -84,12 +100,16 @@ public class Resource extends MessageFormat {
     }
     
     
-    public String getBasename() {
+    public BundleLoader getBundleLoader() {
+        return loader;
+    }
+    
+    public String getBaseName() {
         return name;
     }
     
-    public BundleLoader getBundleLoader() {
-        return loader;
+    public Provider<T> getProvider() {
+        return provider;
     }
     
     
