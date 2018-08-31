@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parsers;
+package com.karuslabs.commons.io.parser;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
@@ -30,36 +30,37 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.*;
 
 
-public abstract class Parser<T> {
-        
+public abstract class Parser<T, R> extends SimpleVisitor<T, R> {
+    
     protected static final ObjectMapper JSON = new ObjectMapper();
     protected static final ObjectMapper PROPERTIES = new JavaPropsMapper();
     protected static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
+
+    
+    public Parser(R value) {
+        super(value);
+    }
     
     
-    public T from(File file) {
+    public R from(File file) {
         try {
             var name = file.getName();
             var format = name.substring(name.lastIndexOf('.') + 1);
-            return visit("", mapper(format).readTree(file), initial());
+            return visit("", mapper(format).readTree(file), value());
 
         } catch (IOException e) {
             return exceptional(e);
         }
     }
 
-    public T from(InputStream stream, String format) {
+    public R from(InputStream stream, String format) {
         try (stream) {
-            return visit("", mapper(format).readTree(stream), initial());
+            return visit("", mapper(format).readTree(stream), value());
 
         } catch (IOException e) {
             return exceptional(e);
         }
     }
-    
-        
-    protected abstract T visit(String path, JsonNode node, T value);
-    
     
     protected ObjectMapper mapper(String format) {
         switch (format) {
@@ -69,21 +70,24 @@ public abstract class Parser<T> {
             case "properties":
                 return PROPERTIES;
 
-            case "yml": case "yaml":
+            case "yml":
+            case "yaml":
                 return YAML;
 
             default:
                 return defaultMapper(format);
         }
     }
-    
+
     protected ObjectMapper defaultMapper(String format) {
         throw new UnsupportedOperationException("Unuspported format: " + format);
     }
-    
-    protected abstract T initial();
-    
-    protected T exceptional(IOException e) {
+        
+    protected T value() {
+        return null;
+    }
+
+    protected R exceptional(IOException e) {
         throw new UncheckedIOException(e);
     }
     

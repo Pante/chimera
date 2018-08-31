@@ -26,7 +26,7 @@ package com.karuslabs.commons.locale;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.karuslabs.annotations.Ignored;
-import com.karuslabs.commons.io.parsers.StringParser.LenientStringifier;
+import com.karuslabs.commons.io.parser.parsers.LenientStringifier;
 
 import java.io.*;
 import java.util.*;
