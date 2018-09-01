@@ -12,21 +12,29 @@ A collection of open source libraries & tools devloped by Karus Labs. **This is 
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
 ***
-#### Karus-Commons
-[![stable](https://img.shields.io/badge/stable-3.1.0--SNAPSHOT-blue.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a88b3526c0bd0b389)
-[![maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/karus-commons/snapshots/com/karuslabs/commons/maven-metadata.xml.svg)](https://repo.karuslabs.com/#browse/browse/components:karus-commons:e67efc5804a3cb7a1c4a6d7ac5b49f2a)
+#### Chimera
+[![releases-maven(https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
+[![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
 [![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/commons/apidocs/overview-summary.html)
 ```XML
+
+<!-- Stable Builds -->
 <repository>
-  <id>karus-commons</id>
-  <url>https://repo.karuslabs.com/repository/karus-commons/snapshots/</url>
+  <id>chimera-releases</id>
+  <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
+</repository>
+
+<!-- Nightly Builds -->
+<repository>
+  <id>chimera-snapshots</id>
+  <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
 </repository>
 
 <dependencies>
   <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>commons</artifactId>
-      <version>3.1.0-SNAPSHOT</version>
+      <version>4.0.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
