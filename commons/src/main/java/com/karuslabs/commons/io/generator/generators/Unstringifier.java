@@ -51,64 +51,71 @@ public class Unstringifier<T> extends Generator<Map<String, T>, JsonNode> {
     public JsonNode generate(JsonNodeFactory factory, Map<String, T> map) {
         var root = factory.objectNode();
         for (var entry : map.entrySet()) {
-            generate(root, factory, SEPERATOR.split(entry.getKey()), 0, entry.getValue());
+            generate(root, factory, SEPERATOR.split(entry.getKey()), -1, entry.getValue());
         }
         
         return root;
     }
     
     protected void generate(ObjectNode parent, JsonNodeFactory factory, String[] names, int index, T value) {
-        if (index == names.length - 1) {
-            parent.set(names[index], this.value.generate(factory, value));
-            return;
-        }
+        var current = parent;
+        int last = names.length - 1;
         
-        var name = names[index];
-        var current = parent.get(name);
-        var next = names[++index];
-        int parsed = index(next);
-        
-        if (parsed == -1) {
-            if (current == null) {
-                current = factory.objectNode();
-                parent.set(name, current);
-            }
-            generate((ObjectNode) current, factory, names, index++, value);
+        for (index += 1; index <= last; index++) {
+            var name = names[index];
             
-        } else {
-            if (current == null) {
-                current = new SparseArrayNode(factory);
-                parent.set(name, current);
+            if (index == last) {
+                parent.set(name, this.value.generate(factory, value));
+                return;
             }
-            generate((ArrayNode) current, factory, names, index++, value, parsed);
+            
+            var next = names[index + 1];
+            var child = current.get(name);
+            int parsed = index(next);
+            
+            if (parsed == -1) {
+                if (child == null) {
+                    child = factory.objectNode();
+                }
+                
+                current.set(name, child);
+                current = (ObjectNode) child;
+
+            } else {
+                generate(child == null ?  new SparseArrayNode(factory) : (ArrayNode) child, factory, names, index, value, parsed);
+                return;
+            }
         }
     }
-        
+    
     protected void generate(ArrayNode parent, JsonNodeFactory factory, String[] names, int index, T value, int name) {
-        if (index == names.length - 1) {
-            parent.set(name, this.value.generate(factory, value));
-            return;
-        }
+        var current = parent;
+        int last = names.length - 1;
         
-        var current = parent.get(name);
-        var next = names[++index];
-        int parsed = index(next);
-        
-        if (parsed == -1) {
-            if (current == null) {
-                current = factory.objectNode();
-                parent.set(name, current);
+        for (index += 1; index <= last; index++) {
+            if (index == last) {
+                parent.set(name, this.value.generate(factory, value));
+                return;
             }
-            generate((ObjectNode) current, factory, names, index++, value);
             
-        } else {
-            if (current == null) {
-                current = new SparseArrayNode(factory);
-                parent.set(name, current);
+            var next = names[index + 1];
+            var child = current.get(name);
+            int parsed = index(next);
+            
+            if (parsed != -1) {
+                if (child == null) {
+                    child = new SparseArrayNode(factory);
+                }
+                current.set(name, child);
+                current = (ArrayNode) child;
+                
+            } else {
+                generate(child == null ? factory.objectNode() : (ObjectNode) child, factory, names, index, value);
+                return;
             }
-            generate((ArrayNode) current, factory, names, index++, value, parsed);
         }
     }
+
         
     
     protected int index(String name) {
