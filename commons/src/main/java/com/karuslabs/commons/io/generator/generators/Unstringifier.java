@@ -76,13 +76,18 @@ public class Unstringifier<T> extends Generator<Map<String, T>, JsonNode> {
             if (parsed == -1) {
                 if (child == null) {
                     child = factory.objectNode();
+                    current.set(name, child);
                 }
                 
-                current.set(name, child);
                 current = (ObjectNode) child;
 
             } else {
-                generate(child == null ?  new SparseArrayNode(factory) : (ArrayNode) child, factory, names, index, value, parsed);
+                if (child == null) {
+                    child = new SparseArrayNode(factory);
+                    current.set(name, child);
+                }
+                
+                generate((ArrayNode) child, factory, names, index, value, parsed);
                 return;
             }
         }
@@ -105,12 +110,17 @@ public class Unstringifier<T> extends Generator<Map<String, T>, JsonNode> {
             if (parsed != -1) {
                 if (child == null) {
                     child = new SparseArrayNode(factory);
+                    current.set(name, child);
                 }
-                current.set(name, child);
                 current = (ArrayNode) child;
                 
             } else {
-                generate(child == null ? factory.objectNode() : (ObjectNode) child, factory, names, index, value);
+                if (child == null) {
+                    child = factory.objectNode();
+                    current.set(name, child);
+                }
+                
+                generate((ObjectNode) child, factory, names, index, value);
                 return;
             }
         }
