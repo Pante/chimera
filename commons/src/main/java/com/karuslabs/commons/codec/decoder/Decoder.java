@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser;
+package com.karuslabs.commons.codec.decoder;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
@@ -30,14 +30,14 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.*;
 
 
-public abstract class Parser<T, R> extends SimpleVisitor<T, R> {
+public abstract class Decoder<T, R> extends SimpleVisitor<T, R> {
     
     protected static final ObjectMapper JSON = new ObjectMapper();
     protected static final ObjectMapper PROPERTIES = new JavaPropsMapper();
     protected static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
 
     
-    public Parser(R value) {
+    public Decoder(R value) {
         super(value);
     }
     

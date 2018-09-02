@@ -21,15 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.jackson;
+package com.karuslabs.commons.codec.decoders;
 
-import com.fasterxml.jackson.databind.node.*;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import com.karuslabs.commons.codec.decoder.Decoder;
+
+import java.util.*;
 
 
-public class SparseArrayNode extends ArrayNode {
+public abstract class StringKeyDecoder<T> extends Decoder<Map<String, T>, Map<String, T>> {
     
-    public SparseArrayNode(JsonNodeFactory factory) {
-        super(factory);
+    public StringKeyDecoder(Map<String, T> value) {
+        super(value);
+    }
+    
+    
+    @Override
+    public Map<String, T> visit(String path, ObjectNode node, Map<String, T> map) {
+        var prefix = path.isEmpty() ? "" : path + ".";
+        var fields = node.fields();
+        while (fields.hasNext()) {
+            var entry = fields.next();
+            visit(prefix + entry.getKey(), entry.getValue(), map);
+        }
+        
+        return map;
+    }
+    
+    @Override
+    protected Map<String, T> value() {
+        return new HashMap<>();
     }
     
 }

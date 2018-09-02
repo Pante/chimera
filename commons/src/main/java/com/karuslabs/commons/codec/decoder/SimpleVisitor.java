@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser;
+package com.karuslabs.commons.codec.decoder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
@@ -40,48 +40,48 @@ public class SimpleVisitor<T, R> implements Visitor<T, R> {
 
     
     @Override
-    public R visitArray(String path, ArrayNode array, T value) {
+    public R visit(String path, ArrayNode array, T value) {
         return visitDefault(path, array, value);
     }
 
     @Override
-    public R visitObject(String path, ObjectNode object, T value) {
+    public R visit(String path, ObjectNode object, T value) {
         return visitDefault(path, object, value);
     }
 
     
     @Override
-    public R visitBinary(String path, BinaryNode binary, T value) {
+    public R visit(String path, BinaryNode binary, T value) {
         return visitDefault(path, binary, value);
     }
 
     @Override
-    public R visitBoolean(String path, BooleanNode bool, T value) {
+    public R visit(String path, BooleanNode bool, T value) {
         return visitDefault(path, bool, value);
     }
 
     @Override
-    public R visitMissing(String path, MissingNode missing, T value) {
+    public R visit(String path, MissingNode missing, T value) {
         return visitDefault(path, missing, value);
     }
 
     @Override
-    public R visitNull(String path, NullNode nil, T value) {
+    public R visit(String path, NullNode nil, T value) {
         return visitDefault(path, nil, value);
     }
 
     @Override
-    public R visitNumber(String path, NumericNode number, T value) {
+    public R visit(String path, NumericNode number, T value) {
         return visitDefault(path, number, value);
     }
 
     @Override
-    public R visitPOJO(String path, POJONode pojo, T value) {
+    public R visit(String path, POJONode pojo, T value) {
         return visitDefault(path, pojo, value);
     }
 
     @Override
-    public R visitText(String path, TextNode text, T value) {
+    public R visit(String path, TextNode text, T value) {
         return visitDefault(path, text, value);
     }
     

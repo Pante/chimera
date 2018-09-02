@@ -21,15 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.generator;
+package com.karuslabs.commons.codec.encoders;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
+import com.karuslabs.commons.codec.encoder.Encoder;
+import com.karuslabs.commons.locale.Locales;
 
-@FunctionalInterface
-public interface Value<T, R extends JsonNode> {
-   
-    public R generate(JsonNodeFactory factory, T value);
+import java.util.*;
+
+
+public class LocaleEncoder extends Encoder<Map<UUID, Locale>, JsonNode> {
+    
+    private static final LocaleEncoder GENERATOR = new LocaleEncoder();
+    
+    public static LocaleEncoder generate() {
+        return GENERATOR;
+    }
+    
+    
+    @Override
+    public JsonNode encode(JsonNodeFactory factory, Map<UUID, Locale> map) {
+        var container = factory.objectNode();
+        for (var entry : map.entrySet()) {
+            container.set(entry.getKey().toString(), factory.textNode(Locales.of(entry.getValue())));
+        }
+        
+        return container;
+    }
     
 }

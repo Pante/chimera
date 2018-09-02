@@ -23,14 +23,41 @@
  */
 package com.karuslabs.commons.locale.providers;
 
+import com.karuslabs.commons.codec.encoders.LocaleEncoder;
+import com.karuslabs.commons.codec.decoders.LocaleDecoder;
+
+import java.io.File;
 import java.util.*;
 
 
-public class PlayerConfigurationProvider implements Provider {
-
+public class PlayerConfigurationProvider implements Provider<UUID> {
+    
+    private Map<UUID, Locale> locales;
+    private File file;
+    
+    
+    public PlayerConfigurationProvider(File file) {
+        this.locales = LocaleDecoder.decode().from(file);
+        this.file = file;
+    }
+    
+    
+    public void reload() {
+        locales = LocaleDecoder.decode().from(file);
+    }
+    
+    public void save() {
+        LocaleEncoder.generate().to(file, locales);
+    }
+    
+    
     @Override
-    public Locale get(Object key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Locale get(UUID key) {
+        return locales.get(key);
+    }
+    
+    public Map<UUID, Locale> locales() {
+        return locales;
     }
     
 }

@@ -22,8 +22,17 @@
  * THE SOFTWARE.
  */
 open module com.karuslabs.commons {
+    exports com.karuslabs.commons.codec.decoder;
+    exports com.karuslabs.commons.codec.decoders;
+    exports com.karuslabs.commons.codec.encoder;
+    exports com.karuslabs.commons.codec.encoder.encoded;
+    exports com.karuslabs.commons.codec.encoders;
+    exports com.karuslabs.commons.codec.jackson;
     exports com.karuslabs.commons.item;
     exports com.karuslabs.commons.item.builders;
+    exports com.karuslabs.commons.locale;
+    exports com.karuslabs.commons.locale.providers;
+    exports com.karuslabs.commons.locale.spi;
     exports com.karuslabs.commons.util;
     exports com.karuslabs.commons.util.collections;
     exports com.karuslabs.commons.util.concurrent;
@@ -44,7 +53,7 @@ open module com.karuslabs.commons {
     requires gson;
     requires snakeyaml;
     requires bungeecord.chat;
-    requires checker.qual;
+    requires org.checkerframework.checker.qual;
     requires mockito.junit.jupiter;
     requires junit;
     requires hamcrest.core;

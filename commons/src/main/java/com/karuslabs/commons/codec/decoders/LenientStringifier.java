@@ -21,36 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser.parsers;
+package com.karuslabs.commons.codec.decoders;
 
-import com.fasterxml.jackson.databind.JsonNode
-        ;
-import com.karuslabs.commons.io.parser.Parser;
+import com.fasterxml.jackson.databind.node.*;
 
 import java.util.*;
 
 
-public abstract class StringKeyParser<T> extends Parser<Map<String, T>, Map<String, T>> {
+public class LenientStringifier extends StringKeyDecoder<Object> {
     
-    public StringKeyParser(Map<String, T> value) {
-        super(value);
+    private static final String[] EMPTY = new String[0];
+    
+    
+    public LenientStringifier() {
+        super(null);
     }
     
     
-    protected Map<String, T> visitObject(String path, JsonNode node, Map<String, T> map) {
-        var prefix = path.isEmpty() ? "" : path + ".";
-        var fields = node.fields();
-        while (fields.hasNext()) {
-            var entry = fields.next();
-            visit(prefix + entry.getKey(), entry.getValue(), map);
+    @Override
+    public Map<String, Object> visit(String path, ArrayNode array, Map<String, Object> map) {
+        if (array.size() == 0) {
+            map.put(path, EMPTY);
+            return map;
+        }
+
+        var strings = new ArrayList<String>(array.size());
+        for (int i = 0; i < array.size(); i++) {
+            var value = array.get(i);
+            if (value.isArray() || value.isObject()) {
+                visit(path + "[" + i + "]", value, map);
+
+            } else {
+                strings.add(value.asText());
+            }
+        }
+
+        if (!strings.isEmpty()) {
+            map.put(path, strings.toArray(EMPTY));
         }
         
         return map;
     }
-    
+
     @Override
-    protected Map<String, T> value() {
-        return new HashMap<>();
+    public Map<String, Object> visit(String path, ValueNode value, Map<String, Object> map) {
+        map.put(path, value.asText());
+        return map;
     }
     
 }

@@ -21,32 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.providers;
+package com.karuslabs.commons.codec.decoders;
 
-import com.karuslabs.commons.locale.Locales;
+import com.fasterxml.jackson.databind.node.*;
 
-import java.util.Locale;
-
-import org.bukkit.entity.Player;
+import java.util.Map;
 
 
-@FunctionalInterface
-public interface Provider<T> {
-        
-    public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
+public class Stringifier extends StringKeyDecoder<String> {
     
-    public static final Provider<?> NONE = key -> Locale.getDefault();
+    private static final Stringifier STRINGIFIER = new Stringifier();
     
     
-    public Locale get(T key);
-    
-    public default Locale getOrDefault(T key, Locale locale) {
-        var value = get(key);
-        return value != null ? value : locale;
+    public static Stringifier stringify() {
+        return STRINGIFIER;
     }
     
-    public default Locale getDefault() {
-        return Locale.getDefault();
+    
+    public Stringifier() {
+        super(null);
+    }
+    
+    
+    @Override
+    public Map<String, String> visit(String path, ArrayNode array, Map<String, String> map) {
+        for (int i = 0; i < array.size(); i++) {
+            visit(path + "[" + i + "]", array.get(i), map);
+        }
+        
+        return map;
+    }
+    
+    @Override
+    public Map<String, String> visit(String path, ValueNode node, Map<String, String> map) {
+        map.put(path, node.asText());
+        return map;
     }
     
 }

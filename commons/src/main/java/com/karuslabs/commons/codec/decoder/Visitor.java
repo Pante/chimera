@@ -21,50 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser;
+package com.karuslabs.commons.codec.decoder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
 
-public interface Visitor<T, R> extends Parslet<T, R> {
+public interface Visitor<T, R> extends Decoded<T, R> {
     
     @Override
     public default R visit(String path, JsonNode node, T value) {
         switch (node.getNodeType()) {
             case ARRAY:
-                return visitArray(path, (ArrayNode) node, value);
+                return visit(path, (ArrayNode) node, value);
                 
             case OBJECT:
-                return visitObject(path, (ObjectNode) node, value);
+                return visit(path, (ObjectNode) node, value);
                 
             default:
-                return visitValue(path, (ValueNode) node, value);
+                return visit(path, (ValueNode) node, value);
         }
     }
     
-    public default R visitValue(String path, ValueNode node, T value) {
+    public default R visit(String path, ValueNode node, T value) {
         switch (node.getNodeType()) {
             case BINARY:
-                return visitBinary(path, (BinaryNode) node, value);
+                return visit(path, (BinaryNode) node, value);
                 
             case BOOLEAN:
-                return visitBoolean(path, (BooleanNode) node, value);
+                return visit(path, (BooleanNode) node, value);
                 
             case MISSING:
-                return visitMissing(path, (MissingNode) node, value);
+                return visit(path, (MissingNode) node, value);
                 
             case NULL:
-                return visitNull(path, (NullNode) node, value);
+                return visit(path, (NullNode) node, value);
                 
             case NUMBER:
-                return visitNumber(path, (NumericNode) node, value);
+                return visit(path, (NumericNode) node, value);
                 
             case POJO:
-                return visitPOJO(path, (POJONode) node, value);
+                return visit(path, (POJONode) node, value);
                 
             case STRING:
-                return visitText(path, (TextNode) node, value);
+                return visit(path, (TextNode) node, value);
                 
             default:
                 throw new UnsupportedOperationException("Unsupported node: " + node.getNodeType().name());
@@ -72,23 +72,23 @@ public interface Visitor<T, R> extends Parslet<T, R> {
     }
     
     
-    public R visitArray(String path, ArrayNode array, T value);
+    public R visit(String path, ArrayNode array, T value);
     
-    public R visitObject(String path, ObjectNode object, T value);
+    public R visit(String path, ObjectNode object, T value);
     
     
-    public R visitBinary(String path, BinaryNode binary, T value);
+    public R visit(String path, BinaryNode binary, T value);
     
-    public R visitBoolean(String path, BooleanNode bool, T value);
+    public R visit(String path, BooleanNode bool, T value);
     
-    public R visitMissing(String path, MissingNode missing, T value);
+    public R visit(String path, MissingNode missing, T value);
     
-    public R visitNull(String path, NullNode nil, T value);
+    public R visit(String path, NullNode nil, T value);
     
-    public R visitNumber(String path, NumericNode number, T value);
+    public R visit(String path, NumericNode number, T value);
     
-    public R visitPOJO(String path, POJONode pojo, T value);
+    public R visit(String path, POJONode pojo, T value);
     
-    public R visitText(String path, TextNode text, T value);
+    public R visit(String path, TextNode text, T value);
     
 }

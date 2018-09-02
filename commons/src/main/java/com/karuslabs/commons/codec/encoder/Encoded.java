@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser;
+package com.karuslabs.commons.codec.encoder;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 
 @FunctionalInterface
-public interface Parslet<T, R> {
-    
-    public R visit(String path, JsonNode node, T value);
+public interface Encoded<T, R extends JsonNode> {
+   
+    public R encode(JsonNodeFactory factory, T value);
     
 }

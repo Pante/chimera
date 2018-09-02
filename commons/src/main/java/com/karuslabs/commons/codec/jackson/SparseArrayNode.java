@@ -21,32 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.providers;
+package com.karuslabs.commons.codec.jackson;
 
-import com.karuslabs.commons.locale.Locales;
-
-import java.util.Locale;
-
-import org.bukkit.entity.Player;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.*;
 
 
-@FunctionalInterface
-public interface Provider<T> {
-        
-    public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
+public class SparseArrayNode extends ArrayNode {
     
-    public static final Provider<?> NONE = key -> Locale.getDefault();
-    
-    
-    public Locale get(T key);
-    
-    public default Locale getOrDefault(T key, Locale locale) {
-        var value = get(key);
-        return value != null ? value : locale;
+    public SparseArrayNode(JsonNodeFactory factory) {
+        super(factory);
     }
     
-    public default Locale getDefault() {
-        return Locale.getDefault();
+    @Override
+    public JsonNode set(int index, JsonNode value) {
+        while (index >= size()) {
+            add(NullNode.instance);
+        }
+        return super.set(index, value);
     }
     
 }

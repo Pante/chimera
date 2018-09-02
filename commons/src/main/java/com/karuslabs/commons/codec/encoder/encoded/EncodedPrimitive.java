@@ -21,18 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.generator.values;
+package com.karuslabs.commons.codec.encoder.encoded;
 
 import com.fasterxml.jackson.databind.node.*;
 
-import com.karuslabs.commons.io.generator.Value;
 import com.karuslabs.commons.util.Type;
+import com.karuslabs.commons.codec.encoder.Encoded;
 
 
-public class Primitive implements Value<Object, ValueNode> {
+public class EncodedPrimitive implements Encoded<Object, ValueNode> {
 
     @Override
-    public ValueNode generate(JsonNodeFactory factory, Object value) {
+    public ValueNode encode(JsonNodeFactory factory, Object value) {
         switch (Type.of(value)) {
             case BOOLEAN:
                 return factory.booleanNode((Boolean) value);

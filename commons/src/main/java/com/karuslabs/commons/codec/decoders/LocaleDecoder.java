@@ -21,53 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser.parsers;
+package com.karuslabs.commons.codec.decoders;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ValueNode;
+import com.fasterxml.jackson.databind.node.*;
+
+import com.karuslabs.commons.codec.decoder.Decoder;
+import com.karuslabs.commons.locale.Locales;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-
-public class LenientStringifier extends StringKeyParser<Object> {
+public class LocaleDecoder extends Decoder<Map<UUID, Locale>, Map<UUID, Locale>> {
     
-    private static final String[] EMPTY = new String[0];
+    private static final LocaleDecoder DECODER = new LocaleDecoder();
     
     
-    public LenientStringifier() {
-        super(null);
+    public static LocaleDecoder decode() {
+        return DECODER;
     }
     
     
+    public LocaleDecoder() {
+        this(Map.of());
+    }
+    
+    public LocaleDecoder(Map<UUID, Locale> map) {
+        super(map);
+    }
+
     @Override
-    public Map<String, Object> visitArray(String path, ArrayNode array, Map<String, Object> map) {
-        if (array.size() == 0) {
-            map.put(path, EMPTY);
-            return map;
+    public Map<UUID, Locale> visit(String path, ObjectNode node, Map<UUID, Locale> map) {
+        var fields = node.fields();
+        while (fields.hasNext()) {
+            var entry = fields.next();
+            visit(entry.getKey(), entry.getValue(), map);
         }
 
-        var strings = new ArrayList<String>(array.size());
-        for (int i = 0; i < array.size(); i++) {
-            var value = array.get(i);
-            if (value.isArray() || value.isObject()) {
-                visit(path + "[" + i + "]", value, map);
-
-            } else {
-                strings.add(value.asText());
-            }
-        }
-
-        if (!strings.isEmpty()) {
-            map.put(path, strings.toArray(EMPTY));
-        }
-        
         return map;
     }
 
     @Override
-    public Map<String, Object> visitValue(String path, ValueNode value, Map<String, Object> map) {
-        map.put(path, value.asText());
+    public Map<UUID, Locale> visit(String uuid, ValueNode locale, Map<UUID, Locale> map) {
+        map.put(UUID.fromString(uuid), Locales.of(locale.asText()));
         return map;
     }
-    
+
+    @Override
+    protected Map<UUID, Locale> value() {
+        return new ConcurrentHashMap<>();
+    }
+
 }

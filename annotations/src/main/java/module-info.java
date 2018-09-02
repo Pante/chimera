@@ -24,7 +24,7 @@
 open module com.karuslabs.annotations {
     exports com.karuslabs.annotations;
     
-    requires checker.qual;
+    requires org.checkerframework.checker.qual;
     requires jdk.compiler;
     requires mockito.junit.jupiter;
 }

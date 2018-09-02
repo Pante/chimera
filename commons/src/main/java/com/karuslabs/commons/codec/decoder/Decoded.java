@@ -21,41 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.parser.parsers;
+package com.karuslabs.commons.codec.decoder;
 
-import com.fasterxml.jackson.databind.node.*;
-
-import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
 
 
-public class Stringifier extends StringKeyParser<String> {
+@FunctionalInterface
+public interface Decoded<T, R> {
     
-    private static final Stringifier STRINGIFIER = new Stringifier();
-    
-    
-    public static Stringifier stringify() {
-        return STRINGIFIER;
-    }
-    
-    
-    public Stringifier() {
-        super(null);
-    }
-    
-    
-    @Override
-    public Map<String, String> visitArray(String path, ArrayNode array, Map<String, String> map) {
-        for (int i = 0; i < array.size(); i++) {
-            visit(path + "[" + i + "]", array.get(i), map);
-        }
-        
-        return map;
-    }
-    
-    @Override
-    public Map<String, String> visitValue(String path, ValueNode node, Map<String, String> map) {
-        map.put(path, node.asText());
-        return map;
-    }
+    public R visit(String path, JsonNode node, T value);
     
 }

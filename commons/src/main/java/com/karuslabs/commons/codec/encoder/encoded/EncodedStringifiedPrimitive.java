@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.generator.values;
+package com.karuslabs.commons.codec.encoder.encoded;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
-import com.karuslabs.commons.io.generator.Value;
+import com.karuslabs.commons.codec.encoder.Encoded;
 
 import java.util.regex.Pattern;
 
 
-public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Value<T, R> {
+public abstract class EncodedStringifiedPrimitive<T, R extends JsonNode> implements Encoded<T, R> {
     
     private static final LenientStringifiedPrimitive LENIENT = new LenientStringifiedPrimitive();
     private static final StrictStringifiedPrimitive STRICT = new StrictStringifiedPrimitive();
@@ -62,19 +62,19 @@ public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Val
     }
     
     
-    public static class StrictStringifiedPrimitive extends StringifiedPrimitive<String, ValueNode> {
+    public static class StrictStringifiedPrimitive extends EncodedStringifiedPrimitive<String, ValueNode> {
 
         @Override
-        public ValueNode generate(JsonNodeFactory factory, String value) {
+        public ValueNode encode(JsonNodeFactory factory, String value) {
             return unstringify(factory, value);
         }
         
     }
     
-    public static class LenientStringifiedPrimitive extends StringifiedPrimitive<Object, JsonNode> {
+    public static class LenientStringifiedPrimitive extends EncodedStringifiedPrimitive<Object, JsonNode> {
 
         @Override
-        public JsonNode generate(JsonNodeFactory factory, Object value) {
+        public JsonNode encode(JsonNodeFactory factory, Object value) {
             if (value instanceof String[]) {
                 var array = factory.arrayNode();
                 for (var string : (String[]) value) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.io.generator;
+package com.karuslabs.commons.codec.encoder;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
@@ -32,7 +32,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.*;
 
 
-public abstract class Generator<T, R extends JsonNode> implements Value<T, R> {
+public abstract class Encoder<T, R extends JsonNode> implements Encoded<T, R> {
     
     protected static final ObjectWriter JSON = new ObjectMapper().writer().with(new DefaultPrettyPrinter());
     protected static final ObjectWriter PROPERTIES = new JavaPropsMapper().writer().with(new DefaultPrettyPrinter());
@@ -44,7 +44,7 @@ public abstract class Generator<T, R extends JsonNode> implements Value<T, R> {
             var name = file.getName();
             var format = name.substring(name.lastIndexOf('.') + 1);
             var writer = writer(format);
-            writer.writeValue(file, generate(JsonNodeFactory.instance, value));
+            writer.writeValue(file, encode(JsonNodeFactory.instance, value));
 
         } catch (IOException e) {
             exceptional(e);
@@ -54,7 +54,7 @@ public abstract class Generator<T, R extends JsonNode> implements Value<T, R> {
     public void to(OutputStream stream, String format, T value) {
         try (stream) {
             var writer = writer(format);
-            writer.writeValue(stream, generate(JsonNodeFactory.instance, value));
+            writer.writeValue(stream, encode(JsonNodeFactory.instance, value));
 
         } catch (IOException e) {
             exceptional(e);
