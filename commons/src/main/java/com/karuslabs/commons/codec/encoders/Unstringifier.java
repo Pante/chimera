@@ -27,8 +27,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
 import com.karuslabs.commons.codec.encoder.*;
-import com.karuslabs.commons.codec.encoder.encoded.EncodedStringifiedPrimitive;
-import com.karuslabs.commons.codec.jackson.SparseArrayNode;
+import com.karuslabs.commons.codec.encoder.encoded.StringifiedPrimitive;
+import com.karuslabs.commons.codec.nodes.SparseArrayNode;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -36,8 +36,8 @@ import java.util.regex.Pattern;
 
 public class Unstringifier<T> extends Encoder<Map<String, T>, JsonNode> {
     
-    private static final Unstringifier<Object> LENIENT = new Unstringifier(EncodedStringifiedPrimitive.lenient());
-    private static final Unstringifier<String> UNSTRINGIFY = new Unstringifier(EncodedStringifiedPrimitive.unstringify());
+    private static final Unstringifier<Object> LENIENT = new Unstringifier(StringifiedPrimitive.lenient());
+    private static final Unstringifier<String> UNSTRINGIFY = new Unstringifier(StringifiedPrimitive.unstringify());
     
     
     public static Unstringifier<Object> lenient() {

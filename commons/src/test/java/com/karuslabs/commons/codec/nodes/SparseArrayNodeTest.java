@@ -21,45 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.codec.decoders;
+
+package com.karuslabs.commons.codec.nodes;
 
 import com.fasterxml.jackson.databind.node.*;
 
-import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class Stringifier extends StringKeyDecoder<String> {
+@ExtendWith(MockitoExtension.class)
+class SparseArrayNodeTest {
     
-    private static final Stringifier STRINGIFIER = new Stringifier();
-    
-    
-    public static Stringifier stringify() {
-        return STRINGIFIER;
-    }
+    SparseArrayNode node = new SparseArrayNode(JsonNodeFactory.instance);
     
     
-    public Stringifier() {
-        super(null);
-    }
-    
-    
-    @Override
-    public Map<String, String> visit(String path, ArrayNode array, Map<String, String> map) {
-        if (array.size() > 0) {
-            for (int i = 0; i < array.size(); i++) {
-                visit(path + "[" + i + "]", array.get(i), map);
-            }
-        } else {
-            map.put(path, "");
-        }
-
-        return map;
-    }
-    
-    @Override
-    public Map<String, String> visit(String path, ValueNode node, Map<String, String> map) {
-        map.put(path, node.asText());
-        return map;
+    @Test
+    void set() {
+        assertEquals(0, node.size());
+        
+        var number = JsonNodeFactory.instance.numberNode(3);
+        node.set(9, number);
+        
+        assertEquals(10, node.size());
+        assertEquals(number, node.get(9));
     }
     
 }

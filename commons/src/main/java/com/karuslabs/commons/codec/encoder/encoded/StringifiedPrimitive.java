@@ -31,7 +31,7 @@ import com.karuslabs.commons.codec.encoder.Encoded;
 import java.util.regex.Pattern;
 
 
-public abstract class EncodedStringifiedPrimitive<T, R extends JsonNode> implements Encoded<T, R> {
+public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Encoded<T, R> {
     
     private static final LenientStringifiedPrimitive LENIENT = new LenientStringifiedPrimitive();
     private static final StrictStringifiedPrimitive STRICT = new StrictStringifiedPrimitive();
@@ -46,7 +46,41 @@ public abstract class EncodedStringifiedPrimitive<T, R extends JsonNode> impleme
     }
     
     
-    private static final Pattern NUMBER = Pattern.compile("^(-?)(0|([1-9][0-9]*))(\\\\.[0-9]+)?$");
+    // Copied from the JavaDoc for Double#parseDouble(double)
+    private static final String DIGITS = "(\\p{Digit}+)";
+    private static final String HEX = "(\\p{XDigit}+)";
+    private static final String EXP = "[eE][+-]?" + DIGITS;
+    private final Pattern NUMBER
+            = Pattern.compile("[\\x00-\\x20]*"
+            + // Optional leading "whitespace"
+            "[+-]?("
+            + // Optional sign character
+            "NaN|"
+            + // "NaN" string
+            "Infinity|"
+            + // "Infinity" string
+            // A decimal floating-point string representing a finite positive
+            // number without a leading sign has at most five basic pieces:
+            // Digits . Digits ExponentPart FloatTypeSuffix
+            //
+            // Since this method allows integer-only strings as input
+            // in addition to strings of floating-point literals, the
+            // two sub-patterns below are simplifications of the grammar
+            // productions from section 3.10.2 of
+            // The Java Language Specification.
+            // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
+            "(((" + DIGITS + "(\\.)?(" + DIGITS + "?)(" + EXP + ")?)|"
+            + // . Digits ExponentPart_opt FloatTypeSuffix_opt
+            "(\\.(" + DIGITS + ")(" + EXP + ")?)|"
+            + // Hexadecimal strings
+            "(("
+            + // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+            "(0[xX]" + HEX + "(\\.)?)|"
+            + // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
+            "(0[xX]" + HEX + "?(\\.)" + HEX + ")"
+            + ")[pP][+-]?" + DIGITS + "))"
+            + "[fFdD]?))"
+            + "[\\x00-\\x20]*");// Optional trailing "whitespace"
     
     
     protected ValueNode unstringify(JsonNodeFactory factory, String value) {
@@ -62,7 +96,7 @@ public abstract class EncodedStringifiedPrimitive<T, R extends JsonNode> impleme
     }
     
     
-    public static class StrictStringifiedPrimitive extends EncodedStringifiedPrimitive<String, ValueNode> {
+    public static class StrictStringifiedPrimitive extends StringifiedPrimitive<String, ValueNode> {
 
         @Override
         public ValueNode encode(JsonNodeFactory factory, String value) {
@@ -71,7 +105,7 @@ public abstract class EncodedStringifiedPrimitive<T, R extends JsonNode> impleme
         
     }
     
-    public static class LenientStringifiedPrimitive extends EncodedStringifiedPrimitive<Object, JsonNode> {
+    public static class LenientStringifiedPrimitive extends StringifiedPrimitive<Object, JsonNode> {
 
         @Override
         public JsonNode encode(JsonNodeFactory factory, Object value) {

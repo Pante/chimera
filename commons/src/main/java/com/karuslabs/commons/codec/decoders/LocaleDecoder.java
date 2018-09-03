@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.codec.decoders;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
 import com.karuslabs.commons.codec.decoder.Decoder;
@@ -64,6 +65,11 @@ public class LocaleDecoder extends Decoder<Map<UUID, Locale>, Map<UUID, Locale>>
     public Map<UUID, Locale> visit(String uuid, ValueNode locale, Map<UUID, Locale> map) {
         map.put(UUID.fromString(uuid), Locales.of(locale.asText()));
         return map;
+    }
+    
+    @Override
+    public Map<UUID, Locale> visitDefault(String uuid, JsonNode locale, Map<UUID, Locale> map) {
+        throw new IllegalArgumentException("Invalid value for key: " + uuid);
     }
 
     @Override

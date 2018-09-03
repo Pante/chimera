@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.node.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class SimpleVisitor<T, R> implements Visitor<T, R> {
+public abstract class SimpleVisitor<T, R> implements Visitor<T, R> {
     
     protected R value;
 

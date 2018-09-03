@@ -27,7 +27,7 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.codec.encoder;
     exports com.karuslabs.commons.codec.encoder.encoded;
     exports com.karuslabs.commons.codec.encoders;
-    exports com.karuslabs.commons.codec.jackson;
+    exports com.karuslabs.commons.codec.nodes;
     exports com.karuslabs.commons.item;
     exports com.karuslabs.commons.item.builders;
     exports com.karuslabs.commons.locale;

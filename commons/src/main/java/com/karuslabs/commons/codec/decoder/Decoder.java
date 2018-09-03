@@ -70,8 +70,7 @@ public abstract class Decoder<T, R> extends SimpleVisitor<T, R> {
             case "properties":
                 return PROPERTIES;
 
-            case "yml":
-            case "yaml":
+            case "yml": case "yaml":
                 return YAML;
 
             default:
@@ -80,7 +79,7 @@ public abstract class Decoder<T, R> extends SimpleVisitor<T, R> {
     }
 
     protected ObjectMapper defaultMapper(String format) {
-        throw new UnsupportedOperationException("Unuspported format: " + format);
+        throw new UnsupportedOperationException("Unsupported format: " + format);
     }
         
     protected T value() {

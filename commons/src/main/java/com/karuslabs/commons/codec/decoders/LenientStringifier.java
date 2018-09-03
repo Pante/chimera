@@ -30,7 +30,13 @@ import java.util.*;
 
 public class LenientStringifier extends StringKeyDecoder<Object> {
     
+    private static final LenientStringifier STRINGIFIER = new LenientStringifier();
     private static final String[] EMPTY = new String[0];
+    
+    
+    public static LenientStringifier stringify() {
+        return STRINGIFIER;
+    }
     
     
     public LenientStringifier() {

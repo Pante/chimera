@@ -29,7 +29,7 @@ import com.karuslabs.commons.util.Type;
 import com.karuslabs.commons.codec.encoder.Encoded;
 
 
-public class EncodedPrimitive implements Encoded<Object, ValueNode> {
+public class Primitive implements Encoded<Object, ValueNode> {
 
     @Override
     public ValueNode encode(JsonNodeFactory factory, Object value) {

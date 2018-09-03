@@ -79,7 +79,7 @@ public abstract class Encoder<T, R extends JsonNode> implements Encoded<T, R> {
     }
 
     protected ObjectWriter defaultWriter(String format) {
-        throw new UnsupportedOperationException("Unuspported format: " + format);
+        throw new UnsupportedOperationException("Unsupported format: " + format);
     }
 
     protected void exceptional(IOException e) {

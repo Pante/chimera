@@ -1,0 +1,9 @@
+a:
+    b: ["first", 1, true]
+
+c:
+    d: "second"
+    
+e: "third"
+
+f: []

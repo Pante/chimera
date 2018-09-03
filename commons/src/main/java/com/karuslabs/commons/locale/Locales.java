@@ -37,9 +37,13 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public @Static class Locales {
     
     private static final BiMap<String, Locale> LOCALES;
-    private static final Cache<String, Locale> CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
+    
+    private static final Cache<String, Locale> STRING_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
+    private static final Cache<Locale, String> LOCALE_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, MINUTES).build();
+    
     private static final Set<String> LANGUAGES = Set.of(Locale.getISOLanguages());
     private static final Set<String> COUNTRIES = Set.of(Locale.getISOCountries());
+    
     
     static {
         var locales = Locale.getAvailableLocales();
@@ -53,31 +57,32 @@ public @Static class Locales {
     
     public static String of(Locale locale) {
         var tag = LOCALES.inverse().get(locale);
-        if (tag != null) {
-            return tag;
+        tag = tag == null ? LOCALE_CACHE.getIfPresent(locale) : tag;
+        if (tag == null) {
+            tag = locale.toLanguageTag().replace('-', '_'); 
+            LOCALE_CACHE.put(locale, tag);
         }
         
-        return locale.toLanguageTag().replace('-', '_');
+        return tag;
     }
     
     public static Locale of(String tag) {
-        var cached = LOCALES.get(tag);
-        cached = cached == null ? CACHE.getIfPresent(tag) : cached;
-        if (cached != null) {
-            return cached;
+        var locale = LOCALES.get(tag);
+        locale = locale == null ? STRING_CACHE.getIfPresent(tag) : locale;
+        if (locale == null) {
+            locale = Locale.forLanguageTag(tag.replace('_', '-'));
+            STRING_CACHE.put(tag, locale);
         }
         
-        var locale = Locale.forLanguageTag(tag.replace('_', '-'));
-        CACHE.put(tag, locale);
         return locale;
     }
     
     
-    public static boolean isLanguage(String language) {
+    public static boolean isISOLanguage(String language) {
         return language.length() == 2 && LANGUAGES.contains(language.toLowerCase(ENGLISH));
     }
     
-    public static boolean isCountry(String country) {
+    public static boolean isISOCountry(String country) {
         return country.length() == 2 && COUNTRIES.contains(country.toUpperCase(ENGLISH));
     }
     

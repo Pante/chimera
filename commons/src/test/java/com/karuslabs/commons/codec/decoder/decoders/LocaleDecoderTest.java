@@ -21,24 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.codec.jackson;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.*;
+package com.karuslabs.commons.codec.decoder.decoders;
+
+import com.karuslabs.commons.codec.decoders.LocaleDecoder;
+
+import java.util.*;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class SparseArrayNode extends ArrayNode {
+@ExtendWith(MockitoExtension.class)
+class LocaleDecoderTest {
     
-    public SparseArrayNode(JsonNodeFactory factory) {
-        super(factory);
+    @ParameterizedTest
+    @CsvSource({"json", "properties", "yml"})
+    void from(String format) {
+        var results = LocaleDecoder.decode().from(getClass().getClassLoader().getResourceAsStream("codec/decoder/locales." + format), format);
+        
+        assertEquals(Locale.SIMPLIFIED_CHINESE, results.get(UUID.fromString("123e4567-e89b-12d3-a456-556642440000")));
     }
     
-    @Override
-    public JsonNode set(int index, JsonNode value) {
-        while (index >= size()) {
-            add(NullNode.instance);
-        }
-        return super.set(index, value);
+    
+    @Test
+    void visitDefault_exception() {
+        assertEquals("Invalid value for key: path", assertThrows(IllegalArgumentException.class, () -> LocaleDecoder.decode().visitDefault("path", null, Map.of())).getMessage());
     }
     
 }

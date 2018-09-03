@@ -21,45 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.codec.decoders;
+package com.karuslabs.commons.codec.nodes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
-import java.util.Map;
 
-
-public class Stringifier extends StringKeyDecoder<String> {
+public class SparseArrayNode extends ArrayNode {
     
-    private static final Stringifier STRINGIFIER = new Stringifier();
-    
-    
-    public static Stringifier stringify() {
-        return STRINGIFIER;
+    public SparseArrayNode(JsonNodeFactory factory) {
+        super(factory);
     }
-    
-    
-    public Stringifier() {
-        super(null);
-    }
-    
     
     @Override
-    public Map<String, String> visit(String path, ArrayNode array, Map<String, String> map) {
-        if (array.size() > 0) {
-            for (int i = 0; i < array.size(); i++) {
-                visit(path + "[" + i + "]", array.get(i), map);
-            }
-        } else {
-            map.put(path, "");
+    public JsonNode set(int index, JsonNode value) {
+        while (index >= size()) {
+            add(NullNode.instance);
         }
-
-        return map;
-    }
-    
-    @Override
-    public Map<String, String> visit(String path, ValueNode node, Map<String, String> map) {
-        map.put(path, node.asText());
-        return map;
+        return super.set(index, value);
     }
     
 }

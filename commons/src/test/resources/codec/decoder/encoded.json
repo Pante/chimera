@@ -1,0 +1,19 @@
+{
+    "a": {
+        "b": [
+            "first",
+            {
+                "c": ["second", 1, false],
+                "d": {}
+            },
+            2,
+            true
+        ]
+    },
+    
+    "e": {
+        "f": "third"
+    },
+    
+    "g": "fourth"
+}

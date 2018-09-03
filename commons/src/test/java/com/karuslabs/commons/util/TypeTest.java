@@ -21,45 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.codec.decoders;
 
-import com.fasterxml.jackson.databind.node.*;
+package com.karuslabs.commons.util;
 
-import java.util.Map;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class Stringifier extends StringKeyDecoder<String> {
+@ExtendWith(MockitoExtension.class)
+class TypeTest {
     
-    private static final Stringifier STRINGIFIER = new Stringifier();
+    @ParameterizedTest
+    @MethodSource({"of_provider"})
+    void of(Object object) {
+        assertEquals(Type.of(object).boxed, object.getClass());
+    }
     
-    
-    public static Stringifier stringify() {
-        return STRINGIFIER;
+    static Stream<Object> of_provider() {
+        return Stream.of(true, 'a', "b", (byte) 0, (short) 0, 0, 0L, (float) 0, (double) 0);
     }
     
     
-    public Stringifier() {
-        super(null);
-    }
-    
-    
-    @Override
-    public Map<String, String> visit(String path, ArrayNode array, Map<String, String> map) {
-        if (array.size() > 0) {
-            for (int i = 0; i < array.size(); i++) {
-                visit(path + "[" + i + "]", array.get(i), map);
-            }
-        } else {
-            map.put(path, "");
-        }
-
-        return map;
-    }
-    
-    @Override
-    public Map<String, String> visit(String path, ValueNode node, Map<String, String> map) {
-        map.put(path, node.asText());
-        return map;
+    @Test
+    void of_type() {
+        assertNull(Type.of(new Object()).boxed);
     }
     
 }
