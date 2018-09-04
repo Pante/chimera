@@ -21,26 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.providers;
 
-import java.util.Locale;
+package com.karuslabs.commons.locale;
+
+import java.util.*;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static java.util.Collections.enumeration;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Provider<T> {
+@ExtendWith(MockitoExtension.class)
+class BundleEnumerationTest {
     
-    public static final Provider<?> NONE = key -> Locale.getDefault();
+    BundleEnumeration enumeration = new BundleEnumeration(enumeration(Set.of("a")), Set.of());
     
     
-    public Locale get(T key);
-    
-    public default Locale getOrDefault(T key, Locale locale) {
-        var value = get(key);
-        return value != null ? value : locale;
+    @Test
+    void hasMoreElements() {
+        assertTrue(enumeration.hasMoreElements());
+        assertEquals("a", enumeration.nextElement());
     }
     
-    public default Locale getDefault() {
-        return Locale.getDefault();
+    
+    @Test
+    void nextElement_ThrowsException() {
+        enumeration.nextElement();
+        assertThrows(NoSuchElementException.class, enumeration::nextElement);
     }
     
 }

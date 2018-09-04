@@ -23,24 +23,14 @@
  */
 package com.karuslabs.commons.locale.providers;
 
-import java.util.Locale;
+import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.locale.Locales;
+
+import org.bukkit.entity.Player;
 
 
-@FunctionalInterface
-public interface Provider<T> {
-    
-    public static final Provider<?> NONE = key -> Locale.getDefault();
-    
-    
-    public Locale get(T key);
-    
-    public default Locale getOrDefault(T key, Locale locale) {
-        var value = get(key);
-        return value != null ? value : locale;
-    }
-    
-    public default Locale getDefault() {
-        return Locale.getDefault();
-    }
+public @Static class PlayerProviders {
+                
+    public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
     
 }

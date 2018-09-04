@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
 import com.karuslabs.commons.codec.encoder.Encoded;
+import com.karuslabs.commons.codec.nodes.SparseArrayNode;
+import java.util.Arrays;
 
 import java.util.regex.Pattern;
 
@@ -46,11 +48,12 @@ public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Enc
     }
     
     
+    private static final Pattern LONG = Pattern.compile("(([+-]?)[\\d]+)");
     // Copied from the JavaDoc for Double#parseDouble(double)
     private static final String DIGITS = "(\\p{Digit}+)";
     private static final String HEX = "(\\p{XDigit}+)";
     private static final String EXP = "[eE][+-]?" + DIGITS;
-    private final Pattern NUMBER
+    private final Pattern DOUBLE
             = Pattern.compile("[\\x00-\\x20]*"
             + // Optional leading "whitespace"
             "[+-]?("
@@ -84,12 +87,15 @@ public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Enc
     
     
     protected ValueNode unstringify(JsonNodeFactory factory, String value) {
-        if (value.equals("true") || value.equals("false"))
+        if (value.equals("true") || value.equals("false")) {
             return factory.booleanNode(Boolean.parseBoolean(value));
+
+        } else if (LONG.matcher(value).matches()) {
+            return factory.numberNode(Long.parseLong(value));
             
-        if (NUMBER.matcher(value).matches()) {
+        } else if (DOUBLE.matcher(value).matches()) {
             return factory.numberNode(Double.parseDouble(value));
-            
+
         } else {
             return factory.textNode(value);
         }
@@ -110,7 +116,7 @@ public abstract class StringifiedPrimitive<T, R extends JsonNode> implements Enc
         @Override
         public JsonNode encode(JsonNodeFactory factory, Object value) {
             if (value instanceof String[]) {
-                var array = factory.arrayNode();
+                var array = new SparseArrayNode(factory);
                 for (var string : (String[]) value) {
                     array.add(unstringify(factory, string));
                 }

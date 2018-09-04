@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.node.*;
 import com.karuslabs.commons.codec.encoder.*;
 import com.karuslabs.commons.codec.encoder.encoded.StringifiedPrimitive;
 import com.karuslabs.commons.codec.nodes.SparseArrayNode;
+import java.math.BigDecimal;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -84,18 +85,21 @@ public class Unstringifier<T> extends Encoder<Map<String, T>, JsonNode> {
             if (current instanceof ObjectNode) {
                 var object = (ObjectNode) current;
                 current = object.get(name);
-                if (current == null) {
+                if (current == null || current instanceof NullNode) {
                     object.set(name, current = node(factory, ahead));
                 }
                 
             } else if (current instanceof ArrayNode) {
                 var array = (ArrayNode) current;
                 current = array.get(index);
-                if (current instanceof NullNode) {
+                if (current == null || current instanceof NullNode) {
                     array.set(index, current = node(factory, ahead));
+                    
+                } else if (current instanceof ValueNode) {
+                    array.insert(index, current = node(factory, ahead));
                 }
             }
-            
+                        
             index = ahead;
         }
         
@@ -113,13 +117,48 @@ public class Unstringifier<T> extends Encoder<Map<String, T>, JsonNode> {
         return index == -1 ? factory.objectNode() : new SparseArrayNode(factory);
     }
     
+    
     protected void encode(JsonNode node, JsonNodeFactory factory, String name, int index, T value) {
+        var encoded = encoder.encode(factory, value);
+        
         if (node instanceof ObjectNode) {
-            ((ObjectNode) node).set(name, encoder.encode(factory, value));
+            encode((ObjectNode) node, name, encoded);
             
         } else if (node instanceof ArrayNode) {
-            ((ArrayNode) node).set(index, encoder.encode(factory, value));
+            encode((ArrayNode) node, index, encoded);
         }
+    }
+    
+    
+    protected void encode(ObjectNode node, String name, JsonNode encoded) {
+        var original = node.get(name);
+        if (original instanceof ArrayNode && encoded instanceof ArrayNode) {
+            encoded = merge((ArrayNode) original, (ArrayNode) encoded);
+        }
+        node.set(name, encoded);
+    }
+    
+    protected void encode(ArrayNode node, int index, JsonNode encoded) {
+        var original = node.get(index);
+        if (original == null || original instanceof NullNode) {
+            node.set(index, encoded);
+            
+        } else {
+            node.insert(index, encoded);
+        }
+    }
+    
+    
+    protected ArrayNode merge(ArrayNode original, ArrayNode created) {
+        var iterator = created.elements();
+        for (int i = 0; iterator.hasNext(); i++) {
+            var node = original.get(i);
+            if (node == null || node instanceof NullNode) {
+                original.set(i, iterator.next());
+            }
+        }
+        
+        return original;
     }
     
 }

@@ -36,7 +36,7 @@ public class LocaleEncoder extends Encoder<Map<UUID, Locale>, JsonNode> {
     
     private static final LocaleEncoder GENERATOR = new LocaleEncoder();
     
-    public static LocaleEncoder generate() {
+    public static LocaleEncoder encode() {
         return GENERATOR;
     }
     

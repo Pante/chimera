@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.decoder.decoders;
-
-import com.karuslabs.commons.codec.decoders.Stringifier;
+package com.karuslabs.commons.codec.decoders;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,10 +40,11 @@ class StringifierTest {
     @Test
     void visit_json() {
         var results = Stringifier.stringify().from(getClass().getClassLoader().getResourceAsStream(ENCODED + "json"), "json");
-        assertEquals(8, results.size());
+        assertEquals(9, results.size());
         
         assertEquals("first", results.get("a.b[0]"));
         assertEquals("second", results.get("a.b[1].c[0]"));
+        assertEquals("value", results.get("a.b[2][0]"));
         assertEquals("1", results.get("a.b[1].c[1]"));
         assertEquals("false", results.get("a.b[1].c[2]"));
         assertEquals("third", results.get("e.f"));

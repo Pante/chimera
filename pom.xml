@@ -99,6 +99,7 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>2.21.0</version>
+            <scope>test</scope>
         </dependency>
         
         <dependency>

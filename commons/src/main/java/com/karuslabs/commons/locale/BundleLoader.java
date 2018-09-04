@@ -76,7 +76,7 @@ public class BundleLoader extends Control {
         return null;
     }
     
-    protected ResourceBundle load(InputStream stream, String format) {
+    protected @Nullable ResourceBundle load(InputStream stream, String format) {
         var map = STRINGIFIER.from(stream, format);
         return map != null ? new Bundle(map) : null;
     }

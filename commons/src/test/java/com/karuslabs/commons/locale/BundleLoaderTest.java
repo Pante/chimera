@@ -22,9 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.nodes;
+package com.karuslabs.commons.locale;
 
-import com.fasterxml.jackson.databind.node.*;
+import java.io.IOException;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,32 +35,40 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class SparseArrayNodeTest {
+class BundleLoaderTest {
     
-    SparseArrayNode node = new SparseArrayNode(JsonNodeFactory.instance);
+    static BundleLoader loader = new BundleLoader(Source.embedded("locales/standard"), Source.embedded("locales/others"));
     
     
     @Test
-    void deepCopy() {
-        var child = new SparseArrayNode(JsonNodeFactory.instance);
-        
-        node.add(child);
-        node = node.deepCopy();
-        
-        assertTrue(node.get(0) instanceof SparseArrayNode);
-        assertNotSame(child, node.get(0));
+    void newBundle() throws IOException {
+        assertNotNull(loader.newBundle("locales", Locale.FRENCH, "yml", getClass().getClassLoader(), true));
     }
     
     
     @Test
-    void set() {
-        assertEquals(0, node.size());
-        
-        var number = JsonNodeFactory.instance.numberNode(3);
-        node.set(9, number);
-        
-        assertEquals(10, node.size());
-        assertEquals(number, node.get(9));
+    void newBundle_invalid_format() throws IOException {
+        assertNull(loader.newBundle("locales", Locale.FRENCH, "xml", getClass().getClassLoader(), true));
+    }
+    
+    
+    @Test
+    void load() {
+        var bundle = loader.load(getClass().getClassLoader().getResourceAsStream("locales/standard/locales.json"), "json");
+        assertNotNull(bundle);
+    }
+    
+    
+    @Test
+    void load_null() {
+        var bundle = loader.load(getClass().getClassLoader().getResourceAsStream("locales/others/locales_fr.yml"), "json");
+        assertNull(bundle);
+    }
+    
+    
+    @Test
+    void getFormats() {
+        assertEquals(List.of("json", "properties", "yml", "yaml"), loader.getFormats("anything"));
     }
     
 }

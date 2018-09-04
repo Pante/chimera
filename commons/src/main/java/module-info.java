@@ -39,6 +39,8 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.util.concurrent.bukkit;
     exports com.karuslabs.commons.util.concurrent.locks;
     
+    provides java.util.spi.LocaleServiceProvider with com.karuslabs.commons.locale.spi.MinecraftLocaleProvider;
+    
     requires com.karuslabs.annotations;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -54,7 +56,6 @@ open module com.karuslabs.commons {
     requires snakeyaml;
     requires bungeecord.chat;
     requires org.checkerframework.checker.qual;
-    requires mockito.junit.jupiter;
     requires junit;
     requires hamcrest.core;
 }

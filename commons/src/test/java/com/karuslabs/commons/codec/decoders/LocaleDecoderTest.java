@@ -21,26 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale.providers;
 
-import java.util.Locale;
+package com.karuslabs.commons.codec.decoders;
+
+import java.util.*;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-@FunctionalInterface
-public interface Provider<T> {
+@ExtendWith(MockitoExtension.class)
+class LocaleDecoderTest {
     
-    public static final Provider<?> NONE = key -> Locale.getDefault();
-    
-    
-    public Locale get(T key);
-    
-    public default Locale getOrDefault(T key, Locale locale) {
-        var value = get(key);
-        return value != null ? value : locale;
+    @ParameterizedTest
+    @CsvSource({"json", "properties", "yml"})
+    void from(String format) {
+        var results = LocaleDecoder.decode().from(getClass().getClassLoader().getResourceAsStream("codec/decoder/locales." + format), format);
+        
+        assertEquals(Locale.SIMPLIFIED_CHINESE, results.get(UUID.fromString("123e4567-e89b-12d3-a456-556642440000")));
     }
     
-    public default Locale getDefault() {
-        return Locale.getDefault();
+    
+    @Test
+    void visitDefault_exception() {
+        assertEquals("Invalid value for key: path", assertThrows(IllegalArgumentException.class, () -> LocaleDecoder.decode().visitDefault("path", null, Map.of())).getMessage());
     }
     
 }

@@ -22,37 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.decoder.decoders;
-
-import com.karuslabs.commons.codec.decoders.LocaleDecoder;
+package com.karuslabs.commons.locale;
 
 import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class LocaleDecoderTest {
+class BundleTest {
     
-    @ParameterizedTest
-    @CsvSource({"json", "properties", "yml"})
-    void from(String format) {
-        var results = LocaleDecoder.decode().from(getClass().getClassLoader().getResourceAsStream("codec/decoder/locales." + format), format);
-        
-        assertEquals(Locale.SIMPLIFIED_CHINESE, results.get(UUID.fromString("123e4567-e89b-12d3-a456-556642440000")));
-    }
+    ResourceBundle bundle = ResourceBundle.getBundle("locales", Locale.KOREAN, new BundleLoader(Source.embedded(getClass().getClassLoader().getResource("locales/standard").getPath())));
     
     
-    @Test
-    void visitDefault_exception() {
-        assertEquals("Invalid value for key: path", assertThrows(IllegalArgumentException.class, () -> LocaleDecoder.decode().visitDefault("path", null, Map.of())).getMessage());
-    }
-    
+//    @Test
+//    void handleGetObject() {
+//        assertEquals("annyeong", bundle.getString("greeting"));
+//        assertEquals("Bye", bundle.getString("goodbye"));
+//    }
+//    
+//    
+//    @Test
+//    void getKeys() {
+//        var keys = bundle.getKeys();
+//        assertEquals("annyeong", keys.nextElement());
+//        assertEquals("Bye", keys.nextElement());
+//    }
+
 }

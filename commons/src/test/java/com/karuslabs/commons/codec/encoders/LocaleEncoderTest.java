@@ -22,44 +22,58 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.nodes;
+package com.karuslabs.commons.codec.encoders;
 
-import com.fasterxml.jackson.databind.node.*;
+import com.karuslabs.commons.codec.decoders.LocaleDecoder;
 
-import org.junit.jupiter.api.Test;
+import java.io.File;
+import java.util.*;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.util.Locale.*;
+import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class SparseArrayNodeTest {
+class LocaleEncoderTest {
     
-    SparseArrayNode node = new SparseArrayNode(JsonNodeFactory.instance);
+    static final String FOLDER = LocaleEncoderTest.class.getClassLoader().getResource("codec/encoder/").getPath();
+    static final File JSON = new File(FOLDER, "locales.json");
+    static final File PROPERTIES = new File(FOLDER, "locales.properties");
+    static final File YAML = new File(FOLDER, "locales.yml");
+    static final Map<UUID, Locale> LOCALES = Map.of(randomUUID(), CANADA_FRENCH, randomUUID(), KOREAN, randomUUID(), JAPAN);
     
     
     @Test
-    void deepCopy() {
-        var child = new SparseArrayNode(JsonNodeFactory.instance);
-        
-        node.add(child);
-        node = node.deepCopy();
-        
-        assertTrue(node.get(0) instanceof SparseArrayNode);
-        assertNotSame(child, node.get(0));
+    void to_json() {
+        LocaleEncoder.encode().to(JSON, LOCALES);
+        assertEquals(LOCALES, LocaleDecoder.decode().from(JSON));
     }
     
     
     @Test
-    void set() {
-        assertEquals(0, node.size());
-        
-        var number = JsonNodeFactory.instance.numberNode(3);
-        node.set(9, number);
-        
-        assertEquals(10, node.size());
-        assertEquals(number, node.get(9));
+    void to_properties() {
+        LocaleEncoder.encode().to(PROPERTIES, LOCALES);
+        assertEquals(LOCALES, LocaleDecoder.decode().from(PROPERTIES));
+    }
+    
+    
+    @Test
+    void to_yaml() {
+        LocaleEncoder.encode().to(YAML, LOCALES);
+        assertEquals(LOCALES, LocaleDecoder.decode().from(YAML));
+    }
+    
+    
+    @AfterAll
+    static void delete_files() {
+        JSON.delete();
+        PROPERTIES.delete();
+        YAML.delete();
     }
     
 }

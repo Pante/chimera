@@ -26,11 +26,29 @@ package com.karuslabs.commons.codec.nodes;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.*;
 
+import java.util.*;
+
 
 public class SparseArrayNode extends ArrayNode {
     
     public SparseArrayNode(JsonNodeFactory factory) {
-        super(factory);
+        this(factory, new ArrayList<>());
+    }
+    
+    public SparseArrayNode(JsonNodeFactory factory, List<JsonNode> children) {
+        super(factory, children);
+    }
+    
+    
+    @Override
+    public SparseArrayNode deepCopy() {
+        var children = new ArrayList<JsonNode>();
+        var iterator = elements();
+        while (iterator.hasNext()) {
+            children.add(iterator.next().deepCopy());
+        }
+        
+        return new SparseArrayNode(_nodeFactory, children);
     }
     
     @Override

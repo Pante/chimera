@@ -53,6 +53,7 @@ class StringifiedPrimitiveTest {
         return Stream.of(
             of("true", BooleanNode.class),
             of("false", BooleanNode.class),
+            of("+910000000000", LongNode.class),
             of("-0.91", DoubleNode.class),
             of("-0.91.0", TextNode.class)
         );
@@ -75,6 +76,7 @@ class LenientStringifiedPrimitiveTest {
         return Stream.of(
             of("true", BooleanNode.class),
             of("false", BooleanNode.class),
+            of("+910000000000", LongNode.class),
             of("-0.91", DoubleNode.class),
             of("-0.91.0", TextNode.class)
         );

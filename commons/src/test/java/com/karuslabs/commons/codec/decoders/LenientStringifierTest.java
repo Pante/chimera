@@ -22,9 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.decoder.decoders;
-
-import com.karuslabs.commons.codec.decoders.LenientStringifier;
+package com.karuslabs.commons.codec.decoders;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,13 +42,16 @@ class LenientStringifierTest {
     @Test
     void visit_json() {
         var results = LenientStringifier.stringify().from(getClass().getClassLoader().getResourceAsStream(ENCODED + "json"), "json");
-        assertEquals(4, results.size());
+        assertEquals(5, results.size());
         
         array = (String[]) results.get("a.b");
         assertArrayEquals(new String[] {"first", "2", "true"}, array);
         
         array = (String[]) results.get("a.b[1].c");
         assertArrayEquals(new String[] {"second", "1", "false"}, array);
+        
+        array = (String[]) results.get("a.b[2]");
+        assertArrayEquals(new String[] {"value"}, array);
         
         assertEquals("third", results.get("e.f"));
         

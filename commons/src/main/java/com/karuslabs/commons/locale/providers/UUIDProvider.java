@@ -30,13 +30,13 @@ import java.io.File;
 import java.util.*;
 
 
-public class PlayerConfigurationProvider implements Provider<UUID> {
+public class UUIDProvider implements Provider<UUID> {
     
     private Map<UUID, Locale> locales;
     private File file;
     
     
-    public PlayerConfigurationProvider(File file) {
+    public UUIDProvider(File file) {
         this.locales = LocaleDecoder.decode().from(file);
         this.file = file;
     }
@@ -47,7 +47,7 @@ public class PlayerConfigurationProvider implements Provider<UUID> {
     }
     
     public void save() {
-        LocaleEncoder.generate().to(file, locales);
+        LocaleEncoder.encode().to(file, locales);
     }
     
     

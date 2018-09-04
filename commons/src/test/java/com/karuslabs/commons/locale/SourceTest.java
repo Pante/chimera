@@ -22,9 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.codec.nodes;
+package com.karuslabs.commons.locale;
 
-import com.fasterxml.jackson.databind.node.*;
+import com.karuslabs.commons.codec.decoders.Stringifier;
+
+import java.io.IOException;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,32 +37,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class SparseArrayNodeTest {
-    
-    SparseArrayNode node = new SparseArrayNode(JsonNodeFactory.instance);
-    
+class SourceTest {
     
     @Test
-    void deepCopy() {
-        var child = new SparseArrayNode(JsonNodeFactory.instance);
-        
-        node.add(child);
-        node = node.deepCopy();
-        
-        assertTrue(node.get(0) instanceof SparseArrayNode);
-        assertNotSame(child, node.get(0));
+    void embedded() {
+        var map = Stringifier.stringify().from(Source.embedded("codec/decoder").stream("encoded.properties"), "properties");
+        assertEquals(Map.of("a", "value", "b", "true"), map);
     }
     
     
     @Test
-    void set() {
-        assertEquals(0, node.size());
-        
-        var number = JsonNodeFactory.instance.numberNode(3);
-        node.set(9, number);
-        
-        assertEquals(10, node.size());
-        assertEquals(number, node.get(9));
+    void folder() {
+        var map = Stringifier.stringify().from(Source.folder(getClass().getClassLoader().getResource("codec/decoder").getPath()).stream("encoded.properties"), "properties");
+        assertEquals(Map.of("a", "value", "b", "true"), map);
     }
+    
+    
+    @Test
+    void folder_directory() throws IOException {
+        try (var stream = Source.folder("codec/").stream("decoder")) {
+            assertNull(stream);
+        }
+    }
+    
+    
+    @Test
+    void folder_nonexistent() throws IOException {
+        try (var stream = Source.folder("codec/decoder").stream("nonexistent.json")) {
+            assertNull(stream);
+        }
+    }
+    
     
 }
