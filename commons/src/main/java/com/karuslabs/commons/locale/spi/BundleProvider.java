@@ -21,25 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.locale;
+package com.karuslabs.commons.locale.spi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.karuslabs.annotations.Ignored;
 import com.karuslabs.commons.codec.decoders.LenientStringifier;
+import com.karuslabs.commons.locale.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
-import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.spi.ResourceBundleProvider;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class BundleLoader extends Control {
+public class BundleProvider implements ResourceBundleProvider {
+
+    static final Control CONTROL = Control.getControl(Control.FORMAT_DEFAULT);
+    static final String[] FORMATS = new String[] {"json", "properties", "yml", "yaml"};
+    static final Map<String, Source[]> SOURCES = new ConcurrentHashMap<>();
     
-    private static final List<String> FORMATS = List.of("json", "properties", "yml", "yaml");
-    private static final LenientStringifier STRINGIFIER = new LenientStringifier() {
+    
+    static final LenientStringifier STRINGIFIER = new LenientStringifier() {
         @Override
         public Map<String, Object> exceptional(IOException e) {
             return null;
@@ -52,39 +57,32 @@ public class BundleLoader extends Control {
     };
     
     
-    private Source[] sources;
+    public static void register(String name, Source... sources) {
+        SOURCES.put(name, sources);
+    }
     
-    
-    public BundleLoader(Source... sources) {
-        this.sources = sources;
+    public static Source[] getSources(String name) {
+        return SOURCES.get(name);
     }
     
     
     @Override
-    public @Nullable ResourceBundle newBundle(String name, Locale locale, String format, @Ignored ClassLoader loader, @Ignored boolean reload) throws IOException {
-        if (getFormats(name).contains(format)) {
-            var bundle = toResourceName(toBundleName(name, locale), format);
-            for (var source : sources) {
+    public @Nullable ResourceBundle getBundle(String name, Locale locale) {
+        var bundle = CONTROL.toBundleName(name, locale);
+        for (var source : SOURCES.get(name)) {
+            for (var format : FORMATS) {
                 try (var stream = source.stream(bundle)) {
                     if (stream != null) {
-                        return load(stream, format);
+                        var map = STRINGIFIER.from(stream, format);
+                        return map != null ? new Bundle(map) : null;
                     }
+                } catch (IOException e) {
+                    return null;
                 }
             }
         }
         
         return null;
-    }
-    
-    protected @Nullable ResourceBundle load(InputStream stream, String format) {
-        var map = STRINGIFIER.from(stream, format);
-        return map != null ? new Bundle(map) : null;
-    }
-    
-    
-    @Override
-    public List<String> getFormats(@Ignored String bundleName) {
-        return FORMATS;
     }
     
 }

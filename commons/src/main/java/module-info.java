@@ -22,6 +22,9 @@
  * THE SOFTWARE.
  */
 open module com.karuslabs.commons {
+    provides java.util.spi.LocaleServiceProvider with com.karuslabs.commons.locale.spi.MinecraftLocaleProvider;
+    provides java.util.spi.ResourceBundleProvider with com.karuslabs.commons.locale.spi.BundleProvider;
+    
     exports com.karuslabs.commons.codec.decoder;
     exports com.karuslabs.commons.codec.decoders;
     exports com.karuslabs.commons.codec.encoder;
@@ -39,14 +42,12 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.util.concurrent.bukkit;
     exports com.karuslabs.commons.util.concurrent.locks;
     
-    provides java.util.spi.LocaleServiceProvider with com.karuslabs.commons.locale.spi.MinecraftLocaleProvider;
-    
     requires com.karuslabs.annotations;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.dataformat.javaprop;
     requires com.fasterxml.jackson.dataformat.yaml;
-    requires jdk.compiler;
+ 
     requires brigadier;
     requires org.bukkit;
     requires commons.lang;

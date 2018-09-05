@@ -44,8 +44,10 @@ public interface Source {
     
 }
 
+
 class EmbeddedSource implements Source {
     
+    private static final int HASH = EmbeddedSource.class.hashCode();
     private String folder;
     
     
@@ -59,10 +61,33 @@ class EmbeddedSource implements Source {
         return getClass().getClassLoader().getResourceAsStream(folder + name);
     }
     
+    
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof EmbeddedSource)) {
+            return false;
+        }
+
+        return folder.equals(((EmbeddedSource) other).folder);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + HASH;
+        hash = 53 * hash + folder.hashCode();
+        return hash;
+    }
+    
 }
 
 class FolderSource implements Source {
     
+    private static final int HASH = FolderSource.class.hashCode();
     private String folder;
     
     FolderSource(String folder) {
@@ -82,6 +107,27 @@ class FolderSource implements Source {
         } catch (FileNotFoundException e) {
             return null;
         }
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof FolderSource)) {
+            return false;
+        }
+
+        return folder.equals(((FolderSource) other).folder);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + HASH;
+        hash = 53 * hash + folder.hashCode();
+        return hash;
     }
     
 }

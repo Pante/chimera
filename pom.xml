@@ -58,6 +58,7 @@
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
             <version>2.5.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>

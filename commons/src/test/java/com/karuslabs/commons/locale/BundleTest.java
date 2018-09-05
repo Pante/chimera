@@ -36,9 +36,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class BundleTest {
     
-    ResourceBundle bundle = ResourceBundle.getBundle("locales", Locale.KOREAN, new BundleLoader(Source.embedded(getClass().getClassLoader().getResource("locales/standard").getPath())));
-    
-    
 //    @Test
 //    void handleGetObject() {
 //        assertEquals("annyeong", bundle.getString("greeting"));

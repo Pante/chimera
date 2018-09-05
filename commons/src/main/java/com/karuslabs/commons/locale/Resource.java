@@ -23,34 +23,34 @@
  */
 package com.karuslabs.commons.locale;
 
-
 import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.commons.locale.spi.BundleProvider;
+
 import java.text.MessageFormat;
 import java.util.*;
 
 
 public class Resource<T> extends MessageFormat {
     
-    private BundleLoader loader;
     private String name;
     private Provider<T> provider;
     private ResourceBundle bundle;
     
     
-    public Resource(BundleLoader loader, String name) {
-        this(loader, name, (Provider<T>) Provider.NONE);
+    public Resource(String name, Source... sources) {
+        this(name, (Provider<T>) Provider.NONE, sources);
     }
     
-    public Resource(BundleLoader loader, String name, Provider<T> provider) {
-        this(loader, name, Locale.getDefault(Locale.Category.FORMAT), provider);
+    public Resource(String name, Provider<T> provider, Source... sources) {
+        this(name, Locale.getDefault(Locale.Category.FORMAT), provider, sources);
     }
     
-    public Resource(BundleLoader loader, String name, Locale locale, Provider<T> provider) {
+    public Resource(String name, Locale locale, Provider<T> provider, Source... sources) {
         super("");
-        this.loader = loader;
         this.name = name;
         this.provider = provider;
-        this.bundle = ResourceBundle.getBundle(name, locale, loader);
+        this.bundle = ResourceBundle.getBundle(name, locale);
+        BundleProvider.register(name, sources);
     }
     
         
@@ -93,15 +93,10 @@ public class Resource<T> extends MessageFormat {
     @Override
     public void setLocale(Locale locale) {
         if (getLocale().equals(locale)) {
-            this.bundle = ResourceBundle.getBundle(name, locale, loader);
+            this.bundle = ResourceBundle.getBundle(name, locale);
         }
         
         super.setLocale(locale);
-    }
-    
-    
-    public BundleLoader getBundleLoader() {
-        return loader;
     }
     
     public String getBaseName() {
