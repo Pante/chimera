@@ -50,13 +50,7 @@ open module com.karuslabs.commons {
  
     requires brigadier;
     requires org.bukkit;
-    requires commons.lang;
-    requires json.simple;
     requires guava;
-    requires gson;
-    requires snakeyaml;
     requires bungeecord.chat;
     requires org.checkerframework.checker.qual;
-    requires junit;
-    requires hamcrest.core;
 }

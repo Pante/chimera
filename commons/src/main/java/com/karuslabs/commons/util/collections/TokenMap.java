@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.collections;
 
-import com.google.gson.internal.Primitives;
+import com.google.common.primitives.Primitives;
 
 import com.karuslabs.annotations.ValueBased;
 import com.karuslabs.commons.util.collections.TokenMap.Key;
