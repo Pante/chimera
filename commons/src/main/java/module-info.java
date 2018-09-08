@@ -22,9 +22,6 @@
  * THE SOFTWARE.
  */
 open module com.karuslabs.commons {
-    provides java.util.spi.LocaleServiceProvider with com.karuslabs.commons.locale.spi.MinecraftLocaleProvider;
-    provides java.util.spi.ResourceBundleProvider with com.karuslabs.commons.locale.spi.BundleProvider;
-    
     exports com.karuslabs.commons.codec.decoder;
     exports com.karuslabs.commons.codec.decoders;
     exports com.karuslabs.commons.codec.encoder;
@@ -33,9 +30,6 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.codec.nodes;
     exports com.karuslabs.commons.item;
     exports com.karuslabs.commons.item.builders;
-    exports com.karuslabs.commons.locale;
-    exports com.karuslabs.commons.locale.providers;
-    exports com.karuslabs.commons.locale.spi;
     exports com.karuslabs.commons.util;
     exports com.karuslabs.commons.util.collections;
     exports com.karuslabs.commons.util.concurrent;
