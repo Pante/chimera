@@ -27,8 +27,6 @@ import com.karuslabs.commons.util.collections.TokenMap.Key;
 
 import java.util.concurrent.*;
 
-import static com.karuslabs.commons.util.collections.TokenMap.key;
-
 
 public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
@@ -47,22 +45,35 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
     @Override
     public default <U extends T> boolean containsKey(N name, Class<U> type) {
-        return map().containsKey(key(name, type));
+        return map().containsKey(ThreadLocalKey.KEY.get().set(name, type));
     }
     
     @Override
     public default <U extends T> U get(N name, Class<U> type) {
-        return get(key(name, type));
+        return get((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
     
     @Override
     public default <U extends T> U getOrDefault(N name, Class<U> type, U value) {
-        return getOrDefault(key(name, type), value);
+        return getOrDefault((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type), value);
     }
+
+
+    @Override
+    public ConcurrentMap<Key<N, ? extends T>, T> map();
+    
+}
+
+
+class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
+    
+    static final ThreadLocalKey KEY = new ThreadLocalKey();
     
     
     @Override
-    public ConcurrentMap<Key<N, ? extends T>, T> map();
+    protected Key<Object, Object> initialValue() {
+        return TokenMap.key(null, null);
+    }
     
 }
 
