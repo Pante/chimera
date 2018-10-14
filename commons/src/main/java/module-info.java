@@ -22,18 +22,11 @@
  * THE SOFTWARE.
  */
 open module com.karuslabs.commons {
-    exports com.karuslabs.commons.codec.decoder;
-    exports com.karuslabs.commons.codec.decoders;
-    exports com.karuslabs.commons.codec.encoder;
-    exports com.karuslabs.commons.codec.encoder.encoded;
-    exports com.karuslabs.commons.codec.encoders;
-    exports com.karuslabs.commons.codec.nodes;
     exports com.karuslabs.commons.item;
     exports com.karuslabs.commons.item.builders;
     exports com.karuslabs.commons.util;
     exports com.karuslabs.commons.util.collections;
     exports com.karuslabs.commons.util.concurrent;
-    exports com.karuslabs.commons.util.concurrent.bukkit;
     exports com.karuslabs.commons.util.concurrent.locks;
     
     requires com.karuslabs.annotations;
@@ -43,7 +36,7 @@ open module com.karuslabs.commons {
     requires com.fasterxml.jackson.dataformat.yaml;
  
     requires brigadier;
-    requires org.bukkit;
+    requires spigot.api;
     requires guava;
     requires bungeecord.chat;
     requires org.checkerframework.checker.qual;

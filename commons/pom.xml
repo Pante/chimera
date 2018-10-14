@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>brigadier</artifactId>
-            <version>0.1.27</version>
+            <version>1.0.15</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
