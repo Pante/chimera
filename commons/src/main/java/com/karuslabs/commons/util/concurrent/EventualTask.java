@@ -21,46 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.locks.ReentrantLock;
-
-
-public abstract class CloseableLock extends ReentrantLock implements Acquirable {
-    
-    public static CloseableLock of(boolean fair) {
-        return new AcquisitionLock(fair);
-    }
-    
-    CloseableLock(boolean fair) {
-        super(fair);
-    }
-    
-}
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 
-class AcquisitionLock extends CloseableLock implements Acquisition {
+public class EventualTask<T> extends FutureTask<T> {
     
-    AcquisitionLock(boolean fair) {
-        super(fair);
-    }
-    
-    
-    @Override
-    public Acquisition acquire() {
-        lock();
-        return this;
+    public EventualTask(Callable<T> callable) {
+        super(callable);
     }
 
-    @Override
-    public Acquisition acquireInterruptibly() throws InterruptedException {
-        lockInterruptibly();
-        return this;
-    }
-
-    @Override
-    public void close() {
-        unlock();
+    public EventualTask(Runnable runnable, T result) {
+        super(runnable, result);
     }
     
 }

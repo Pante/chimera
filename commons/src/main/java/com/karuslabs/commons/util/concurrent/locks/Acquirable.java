@@ -26,8 +26,8 @@ package com.karuslabs.commons.util.concurrent.locks;
 
 public interface Acquirable {
     
-    public Acquisition acquire();
+    public Mutex acquire();
     
-    public Acquisition acquireInterruptibly() throws InterruptedException;
+    public Mutex acquireInterruptibly() throws InterruptedException;
     
 }

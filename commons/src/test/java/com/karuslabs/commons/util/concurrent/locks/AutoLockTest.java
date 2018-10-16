@@ -21,46 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package com.karuslabs.commons.util.concurrent;
-
-import java.util.function.Consumer;
+package com.karuslabs.commons.util.concurrent.locks;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ScheduledCallableTest {
+class AutoLockTest {
     
-    Consumer<Callback<String>> consumer = mock(Consumer.class);
-    Callback<String> callback = mock(Callback.class);
-    ScheduledCallable<String> callable = ScheduledCallable.of(consumer);
+    @Spy AutoLock lock = new AutoLock();
     
     
     @Test
-    void call() throws Exception {
-        callable.set(callback);
-        callable.call();
+    void acquire() {
+        lock.acquire();
         
-        verify(consumer).accept(callback);
+        verify(lock).lock();
     }
     
     
     @Test
-    void call_throws_exception() {
-        assertThrows(NullPointerException.class, callable::call);
+    void acquireInterruptibly() throws InterruptedException {
+        lock.acquireInterruptibly();
+        
+        verify(lock).lockInterruptibly();
     }
     
     
     @Test
-    void set_throws_exception() {
-        callable.set(callback);
-        assertEquals("Callback has been set", assertThrows(IllegalStateException.class, () -> callable.set(callback)).getMessage());
+    void close() {
+        try (var acquired = lock.acquire()) {
+            // Do nothing
+        }
+        
+        assertEquals(0, lock.getHoldCount());
     }
     
 }

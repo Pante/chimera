@@ -36,7 +36,7 @@ open module com.karuslabs.commons {
     requires com.fasterxml.jackson.dataformat.yaml;
  
     requires brigadier;
-    requires spigot.api;
+    requires org.bukkit;
     requires guava;
     requires bungeecord.chat;
     requires org.checkerframework.checker.qual;

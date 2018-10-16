@@ -24,7 +24,9 @@
 package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.item.builders.BookBuilder;
+
 import java.util.List;
+
 import org.bukkit.inventory.meta.BookMeta;
 
 import org.junit.jupiter.api.Test;

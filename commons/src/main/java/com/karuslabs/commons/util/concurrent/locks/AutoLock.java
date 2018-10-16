@@ -23,11 +23,34 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import java.util.concurrent.locks.ReentrantLock;
 
-@FunctionalInterface
-public interface Acquisition extends AutoCloseable {
+
+public class AutoLock extends ReentrantLock implements Acquirable {
+    
+    private final Mutex mutex;
+    
+    
+    public AutoLock() {
+        this(false);
+    }
+    
+    public AutoLock(boolean fair) {
+        super(fair);
+        this.mutex = this::unlock;
+    }
+    
     
     @Override
-    public void close();
+    public Mutex acquire() {
+        lock();
+        return mutex;
+    }
+
+    @Override
+    public Mutex acquireInterruptibly() throws InterruptedException {
+        lockInterruptibly();
+        return mutex;
+    }
     
 }

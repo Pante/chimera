@@ -23,44 +23,11 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.*;
-
-
-@ExtendWith(MockitoExtension.class)
-class CloseableLockTest {
+@FunctionalInterface
+public interface Mutex extends AutoCloseable {
     
-    @Spy AcquisitionLock lock = (AcquisitionLock) CloseableLock.of(true);
-    
-    
-    @Test
-    void acquire() {
-        lock.acquire();
-        
-        verify(lock).lock();
-    }
-    
-    
-    @Test
-    void acquireInterruptibly() throws InterruptedException {
-        lock.acquireInterruptibly();
-        
-        verify(lock).lockInterruptibly();
-    }
-    
-    
-    @Test
-    void close() {
-        try (var acquired = lock.acquire()) {
-            // Do nothing
-        }
-        
-        verify(lock).unlock();
-    }
+    @Override
+    public void close();
     
 }

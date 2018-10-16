@@ -23,49 +23,65 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-import com.karuslabs.commons.util.concurrent.locks.CloseableReadWriteLock.*;
+import com.karuslabs.commons.util.concurrent.locks.AutoReadWriteLock.*;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock.*;
 
 
-public class CloseableReadWriteLock extends ReentrantReadWriteLock {
+public class AutoReadWriteLock extends ReentrantReadWriteLock {
     
-    CloseableReadLock reader;
-    CloseableWriteLock writer;
+    private final AutoReadLock reader;
+    private final AutoWriteLock writer;
     
     
-    public CloseableReadWriteLock() {
+    public AutoReadWriteLock() {
         this(false);
     }
     
-    public CloseableReadWriteLock(boolean fair) {
+    public AutoReadWriteLock(boolean fair) {
         super(fair);
-        reader = new AcquisitionReadLock(this, super.readLock());
-        writer = new AcquistionWriteLock(this, super.writeLock());
+        reader = new AutoReadLock(this, super.readLock());
+        writer = new AutoWriteLock(this, super.writeLock());
     }
     
     
     @Override
-    public CloseableReadLock readLock() {
+    public AutoReadLock readLock() {
         return reader;
     }
     
     @Override
-    public CloseableWriteLock writeLock() {
+    public AutoWriteLock writeLock() {
         return writer;
     }
     
     
-    public static abstract class CloseableReadLock extends ReadLock implements Acquirable {
+    public static class AutoReadLock extends ReadLock implements Acquirable {
         
-        ReadLock lock;
+        private final ReadLock lock;
+        private final Mutex mutex;
 
-        protected CloseableReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
+        protected AutoReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
             super(owner);
             this.lock = lock;
+            this.mutex = lock::unlock;
         }
+        
+        
+        @Override
+        public Mutex acquire() {
+            lock();
+            return mutex;
+        }
+
+        @Override
+        public Mutex acquireInterruptibly() throws InterruptedException {
+            lockInterruptibly();
+            return mutex;
+        }
+        
         
         @Override
         public void lock() {
@@ -104,14 +120,30 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
         
     }
     
-    public static abstract class CloseableWriteLock extends WriteLock implements Acquirable {
+    public static class AutoWriteLock extends WriteLock implements Acquirable {
         
-        WriteLock lock;
+        private final WriteLock lock;
+        private final Mutex mutex;
         
-        protected CloseableWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
+        protected AutoWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
             super(owner);
             this.lock = lock;
+            this.mutex = lock::unlock;
         }
+        
+        
+        @Override
+        public Mutex acquire() {
+            lock();
+            return mutex;
+        }
+
+        @Override
+        public Mutex acquireInterruptibly() throws InterruptedException {
+            lockInterruptibly();
+            return mutex;
+        }
+        
         
         @Override
         public int getHoldCount() {
@@ -158,58 +190,6 @@ public class CloseableReadWriteLock extends ReentrantReadWriteLock {
             return lock.toString();
         }
         
-    }
-    
-}
-
-
-class AcquisitionReadLock extends CloseableReadLock implements Acquisition {
-
-    AcquisitionReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
-        super(owner, lock);
-    }
-
-    @Override
-    public Acquisition acquire() {
-        lock();
-        return this;
-    }
-
-    @Override
-    public Acquisition acquireInterruptibly() throws InterruptedException {
-        lockInterruptibly();
-        return this;
-    }
-
-    @Override
-    public void close() {
-        unlock();
-    }
-    
-}
-
-
-class AcquistionWriteLock extends CloseableWriteLock implements Acquisition {
-
-    AcquistionWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
-        super(owner, lock);
-    }
-
-    @Override
-    public Acquisition acquire() {
-        lock();
-        return this;
-    }
-
-    @Override
-    public Acquisition acquireInterruptibly() throws InterruptedException {
-       lockInterruptibly();
-       return this;
-    }
-
-    @Override
-    public void close() {
-        unlock();
     }
     
 }
