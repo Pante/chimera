@@ -23,17 +23,9 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 
-public class EventualTask<T> extends FutureTask<T> {
-    
-    public EventualTask(Callable<T> callable) {
-        super(callable);
-    }
-
-    public EventualTask(Runnable runnable, T result) {
-        super(runnable, result);
-    }
+public abstract class Callback<T> implements Runnable, Supplier<T> {
     
 }
