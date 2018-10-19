@@ -23,9 +23,13 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.function.Supplier;
 
-
-public abstract class Callback<T> implements Runnable, Supplier<T> {
+public interface Execution<T> {
+            
+    public boolean cancel(boolean mayInterruptIfRunning);
+    
+    public void set(T result);
+    
+    public void exception(Throwable throwable);
     
 }
