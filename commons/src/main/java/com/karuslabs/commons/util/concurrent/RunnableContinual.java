@@ -23,13 +23,22 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import java.util.concurrent.Future;
 
-public interface Execution<T> {
-            
-    public boolean cancel(boolean mayInterruptIfRunning);
+
+public class RunnableContinual<T> extends Continual<T> {
     
-    public void set(T result);
+    private Runnable runnable;
     
-    public void exception(Throwable throwable);
+    
+    public RunnableContinual(Runnable runnable, long times) {
+        super(times);
+        this.runnable = runnable;
+    }
+
+    @Override
+    protected void run(Future<T> context) {
+        runnable.run();
+    }
     
 }

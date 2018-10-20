@@ -23,111 +23,47 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.*;
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import java.util.function.Supplier;
+import java.util.concurrent.Future;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Continual<T> extends EventualTask<T> implements RunnableScheduledFuture<T> {    
+public abstract class Continual<T> implements Runnable {
     
-    public static final long INFINITE = -1;
+    public static final int INFINITE = -1;
     
-    private @Nullable Supplier<T> supplier;
-    private @Nullable T result;
+    
+    private @Nullable Future<T> context;
     private long times;
-    private long elapsed;
-    private long period;
     
     
-    public Continual(Executable<T> executable, long elapsed, long period) {
-        this(executable, INFINITE, elapsed, period);
-    }
-    
-    public Continual(Executable<T> executable, long times, long elapsed, long period) {
-        super(executable, null);
+    public Continual(long times) {
         this.times = times;
-        this.elapsed = elapsed;
-        this.period = period;
-    }
-    
-    
-    public Continual(Runnable runnable, Supplier<T> supplier, long elapsed, long period) {
-        this(runnable, supplier, INFINITE, elapsed, period);
-    }
-    
-    public Continual(Runnable runnable, Supplier<T> supplier, long times, long elapsed, long period) {
-        super(runnable, null);
-        this.supplier = supplier;
-        this.times = times;
-        this.elapsed = elapsed;
-        this.period = period;
-    }
-    
-    
-    public Continual(Runnable runnable, T result, long elapsed, long period) {
-        this(runnable, result, INFINITE, elapsed, period);
-    } 
-    
-    public Continual(Runnable runnable, T result, long times, long elapsed, long period) {
-        super(runnable, null);
-        this.result = result;
-        this.times = times;
-        this.elapsed = elapsed;
-        this.period = period;
     }
     
     
     @Override
     public void run() {
-        if (times == 0 || (runAndReset() && times > 0 && --times == 0)) {
-            if (supplier != null) {
-                set(supplier.get());
-                
-            } else if (result != null) {
-                set(result);
-            }
+        if (times == INFINITE || --times > INFINITE) {
+            run(context);
             
         } else {
-            elapsed += period;
+            finish(context);
         }
     }
-
-
-    @Override
-    public int compareTo(Delayed other) {
-        if (other == this) {
-            return 0;
+    
+    protected abstract void run(Future<T> context);
+    
+    protected void finish(Future<T> context) {
+        context.cancel(false);
+    }
+    
+    public void set(Future<T> context) {
+        if (context != null) {
+            this.context = context;
+        } else {
+            throw new IllegalStateException("Context has already been set");
         }
-        
-        if (other instanceof Continual) {
-            var x = (Continual) other;
-            long diff = elapsed - x.elapsed;
-            if (diff < 0) {
-                return -1;
-                
-            } else {
-                return 1;
-            }
-        }
-
-        long diff = getDelay(NANOSECONDS) - other.getDelay(NANOSECONDS);
-        return (diff < 0) ? -1 : (diff > 0) ? 1 : 0;
-    }
-    
-    @Override
-    public long getDelay(TimeUnit unit) {
-        return unit.convert(elapsed - System.nanoTime(), NANOSECONDS);
-    }
-    
-    @Override
-    public boolean isPeriodic() {
-        return true;
-    }
-    
-    public long times() {
-        return times;
     }
     
 }

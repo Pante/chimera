@@ -24,14 +24,13 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
-import java.util.function.Supplier;
 
 
 public class ContinuousExecutor extends ScheduledThreadPoolExecutor {
     
     public ContinuousExecutor(int corePoolSize) {
         super(corePoolSize);
-    }
+}
 
     public ContinuousExecutor(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
@@ -47,46 +46,24 @@ public class ContinuousExecutor extends ScheduledThreadPoolExecutor {
     }
     
     
-    public <V> Continual<V> schedule(Executable<V> executable, long initial, long delay, TimeUnit unit) {
-        
+    public ScheduledFuture<?> schedule(Runnable runnable, long initial, long period, TimeUnit unit, long times) {
+        return schedule(new RunnableContinual(runnable, times), initial, period, unit);
     }
     
-    public <V> Continual<V> schedule(Executable<V> executable, long initial, long delay, TimeUnit unit, long times) {
-        
+    public ScheduledFuture<?> schedule(Continual<?> continual, long initial, long period, TimeUnit unit) {
+        return scheduleAtFixedRate(continual, initial, period, unit);
     }
     
-    protected <V> Continual<V> initialise(Executable<V> executable, long initial, long delay, TimeUnit unit, long times) {
+    @Override
+    protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> task) {
+        if (runnable instanceof Continual) {
+            var continual = (Continual<V>) runnable;
+            continual.set(task);
+        }
         
+        return task;
     }
     
 }
 
-class ContinualTask<T> extends Continual<T> {
-    
-    ContinualTask(Executable<T> executable, long elapsed, long period) {
-        this(executable, Continual.INFINITE, elapsed, period);
-    }
-    
-    ContinualTask(Executable<T> executable, long times, long elapsed, long period) {
-        super(executable, times, elapsed, period);
-    }
-    
-    
-    ContinualTask(Runnable runnable, Supplier<T> supplier, long elapsed, long period) {
-        this(runnable, supplier, Continual.INFINITE, elapsed, period);
-    }
-    
-    ContinualTask(Runnable runnable, Supplier<T> supplier, long times, long elapsed, long period) {
-        super(runnable, supplier, times, elapsed, period);
-    }
-    
-    
-    ContinualTask(Runnable runnable, T result, long elapsed, long period) {
-        this(runnable, result, INFINITE, elapsed, period);
-    } 
-    
-    ContinualTask(Runnable runnable, T result, long times, long elapsed, long period) {
-        super(runnable, result, times, elapsed, period);
-    }
-    
-}
+

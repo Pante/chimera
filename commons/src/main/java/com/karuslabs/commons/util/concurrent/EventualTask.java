@@ -26,7 +26,7 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 
 
-public class EventualTask<T> extends FutureTask<T> {
+public class EventualTask<T> extends FutureTask<T> implements Eventual<T> {
     
     public EventualTask(Callable<T> callable) {
         super(callable);
