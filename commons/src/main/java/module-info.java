@@ -30,12 +30,6 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.util.concurrent.locks;
     
     requires com.karuslabs.annotations;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
-    requires com.fasterxml.jackson.dataformat.javaprop;
-    requires com.fasterxml.jackson.dataformat.yaml;
- 
-    requires brigadier;
     requires org.bukkit;
     requires guava;
     requires bungeecord.chat;
