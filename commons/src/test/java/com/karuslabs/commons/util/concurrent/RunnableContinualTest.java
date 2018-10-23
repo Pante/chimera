@@ -25,46 +25,52 @@ package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.Future;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public abstract class Continual<T> implements Runnable {
+@ExtendWith(MockitoExtension.class)
+class RunnableContinualTest {
     
-    public static final int INFINITE = -1;
+    Runnable runnable = mock(Runnable.class);;
+    Continual<String> continual = new RunnableContinual<>(runnable, 0);
+    Future<String> context = mock(Future.class);
     
     
-    private @Nullable Future<T> context;
-    private long times;
-    
-    
-    public Continual(long times) {
-        this.times = times;
+    @BeforeEach
+    void before() {
+        continual.set(context);
     }
     
     
-    @Override
-    public void run() {
-        if (times == INFINITE || --times > INFINITE) {
-            run(context);
-            
-        } else {
-            finish(context);
-        }
+    @Test
+    void run_timed() {
+        var continual = new RunnableContinual<String>(runnable, 1);
+        continual.set(context);
+        
+        continual.run();
+        verify(runnable).run();
+        
+        continual.run();
+        verify(context).cancel(false);
     }
     
-    protected abstract void run(Future<T> context);
     
-    protected void finish(Future<T> context) {
-        context.cancel(false);
+    @Test
+    void run_finish() {
+        continual.run();
+        verify(runnable, times(0)).run();
+        verify(context).cancel(false);
     }
     
-    public void set(Future<T> context) {
-        if (this.context == null) {
-            this.context = context;
-            
-        } else {
-            throw new IllegalStateException("Context has already been set");
-        }
+    
+    @Test
+    void set_throws_exception() {
+        assertEquals("Context has already been set", assertThrows(IllegalStateException.class, () -> continual.set(context)).getMessage());
     }
     
 }

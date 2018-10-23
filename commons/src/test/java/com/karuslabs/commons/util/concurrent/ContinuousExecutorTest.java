@@ -23,48 +23,41 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.RunnableScheduledFuture;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public abstract class Continual<T> implements Runnable {
+@ExtendWith(MockitoExtension.class)
+class ContinuousExecutorTest {
     
-    public static final int INFINITE = -1;
-    
-    
-    private @Nullable Future<T> context;
-    private long times;
+    ContinuousExecutor executor = new ContinuousExecutor(1);
+    RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
     
     
-    public Continual(long times) {
-        this.times = times;
+    @Test
+    void decorateTask_runnable() {
+        Runnable runnable = mock(Runnable.class);
+        
+        assertEquals(task, executor.decorateTask(runnable, task));
+        
+        verifyZeroInteractions(runnable);
+        verifyZeroInteractions(task);
     }
     
     
-    @Override
-    public void run() {
-        if (times == INFINITE || --times > INFINITE) {
-            run(context);
-            
-        } else {
-            finish(context);
-        }
-    }
-    
-    protected abstract void run(Future<T> context);
-    
-    protected void finish(Future<T> context) {
-        context.cancel(false);
-    }
-    
-    public void set(Future<T> context) {
-        if (this.context == null) {
-            this.context = context;
-            
-        } else {
-            throw new IllegalStateException("Context has already been set");
-        }
+    @Test
+    void decorateTask_continual() {
+        Continual continual = mock(Continual.class);
+        
+        assertEquals(task, executor.decorateTask(continual, task));
+        
+        verify(continual).set(task);
     }
     
 }

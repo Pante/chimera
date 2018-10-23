@@ -30,7 +30,7 @@ public class ContinuousExecutor extends ScheduledThreadPoolExecutor {
     
     public ContinuousExecutor(int corePoolSize) {
         super(corePoolSize);
-}
+    }
 
     public ContinuousExecutor(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
