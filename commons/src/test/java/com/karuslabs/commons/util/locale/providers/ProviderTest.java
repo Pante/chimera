@@ -21,32 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.commons.util.locale.providers;
 
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.inventory.meta.BannerMeta;
+import java.util.Locale;
 
-import org.junit.jupiter.api.Test;
+import org.bukkit.entity.Player;
 
-import static org.bukkit.DyeColor.*;
-import static org.bukkit.Material.WATER;
-import static org.bukkit.block.banner.PatternType.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class BannerBuilderTest {
+@ExtendWith(MockitoExtension.class)
+class ProviderTest {
     
-    BannerMeta meta = StubBukkit.meta(BannerMeta.class);
+    Player player = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
+    
     
     @Test
-    void pattern() {
-        var first = new Pattern(RED, BORDER);
-        var second = new Pattern(RED, FLOWER);
+    void detected() {
+        assertEquals(Locale.UK, Provider.DETECTED.get(player));
+    }
+    
+    
+    @Test
+    void none() {
+        assertEquals(Locale.getDefault(), Provider.NONE.get(null));
+    }
+    
+    
+    @Test
+    void getOrDefault() {
+        Provider<?> provider = key -> Locale.FRANCE;
+        Provider<?> empty = key -> null;
         
-        BannerBuilder.of(WATER).self().pattern(first).pattern(1, second);
-        
-        verify(meta).addPattern(first);
-        verify(meta).setPattern(1, second);
+        assertEquals(Locale.FRANCE, provider.getOrDefault(null, Locale.ITALY));
+        assertEquals(Locale.CANADA, empty.getOrDefault(null, Locale.CANADA));
+    }
+    
+    
+    @Test
+    void getDefault() {
+        assertEquals(Locale.getDefault(), Provider.NONE.getDefault());
     }
     
 }

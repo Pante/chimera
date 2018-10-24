@@ -21,32 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.commons.util.locale.spi;
 
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.inventory.meta.BannerMeta;
-
-import org.junit.jupiter.api.Test;
-
-import static org.bukkit.DyeColor.*;
-import static org.bukkit.Material.WATER;
-import static org.bukkit.block.banner.PatternType.*;
-import static org.mockito.Mockito.*;
+import java.util.Locale;
+import java.util.spi.LocaleServiceProvider;
 
 
-class BannerBuilderTest {
+public class MinecraftLocaleProvider extends LocaleServiceProvider {
     
-    BannerMeta meta = StubBukkit.meta(BannerMeta.class);
+    private static final Locale[] LOCALES = new Locale[]{
+        new Locale("en", "7S"),
+        new Locale("en", "UD"),
+        new Locale("enp"),
+        new Locale("en", "WS"),
+        new Locale("lol", "US")
+    };
+
     
-    @Test
-    void pattern() {
-        var first = new Pattern(RED, BORDER);
-        var second = new Pattern(RED, FLOWER);
-        
-        BannerBuilder.of(WATER).self().pattern(first).pattern(1, second);
-        
-        verify(meta).addPattern(first);
-        verify(meta).setPattern(1, second);
+    @Override
+    public Locale[] getAvailableLocales() {
+        return LOCALES;
     }
     
 }

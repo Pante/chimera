@@ -23,9 +23,16 @@
         </dependency>
         
         <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>lingua-franca</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

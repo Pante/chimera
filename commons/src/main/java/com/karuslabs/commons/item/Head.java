@@ -29,7 +29,7 @@ import static java.util.UUID.fromString;
 
 
 public enum Head {
-
+    
     ALEX("MHF_ALEX", "6ab43178-89fd-4905-97f6-0f67d9d76fd9"),
     BLAZE("MHF_BLAZE", "4c38ed11-596a-4fd4-ab1d-26f386c1cbac"),
     CAVE_SPIDER("MHF_CaveSpider", "cab28771-f0cd-4fe7-b129-02c69eba79a5"),

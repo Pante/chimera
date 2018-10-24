@@ -21,32 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.commons.util.locale.providers;
 
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.inventory.meta.BannerMeta;
+import com.karuslabs.lingua.franca.Locales;
 
-import org.junit.jupiter.api.Test;
+import java.util.Locale;
 
-import static org.bukkit.DyeColor.*;
-import static org.bukkit.Material.WATER;
-import static org.bukkit.block.banner.PatternType.*;
-import static org.mockito.Mockito.*;
+import org.bukkit.entity.Player;
 
 
-class BannerBuilderTest {
+@FunctionalInterface
+public interface Provider<T> {
     
-    BannerMeta meta = StubBukkit.meta(BannerMeta.class);
+    public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
     
-    @Test
-    void pattern() {
-        var first = new Pattern(RED, BORDER);
-        var second = new Pattern(RED, FLOWER);
-        
-        BannerBuilder.of(WATER).self().pattern(first).pattern(1, second);
-        
-        verify(meta).addPattern(first);
-        verify(meta).setPattern(1, second);
+    public static final Provider NONE = key -> Locale.getDefault();
+    
+    
+    public Locale get(T key);
+    
+    public default Locale getOrDefault(T key, Locale locale) {
+        var value = get(key);
+        return value != null ? value : locale;
+    }
+    
+    public default Locale getDefault() {
+        return Locale.getDefault();
     }
     
 }

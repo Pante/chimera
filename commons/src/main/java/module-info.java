@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 open module com.karuslabs.commons {
+    provides java.util.spi.LocaleServiceProvider with com.karuslabs.commons.util.locale.spi.MinecraftLocaleProvider;
+    
     exports com.karuslabs.commons.item;
     exports com.karuslabs.commons.item.builders;
     exports com.karuslabs.commons.util;
@@ -30,8 +32,9 @@ open module com.karuslabs.commons {
     exports com.karuslabs.commons.util.concurrent.locks;
     
     requires com.karuslabs.annotations;
+    requires com.karuslabs.lingua.franca;
     requires org.bukkit;
-    requires guava;
+    requires com.google.common;
     requires bungeecord.chat;
     requires org.checkerframework.checker.qual;
 }
