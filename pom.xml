@@ -45,6 +45,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        
+        <repository>
+            <id>lingua-releases</id>
+            <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
+        </repository>
     </repositories>
     
     

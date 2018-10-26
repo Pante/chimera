@@ -14,6 +14,24 @@
     <description>Karus Lab's commons library</description>
      
      
+    <repositories>
+        <repository>
+            <id>minecraft-libraries</id>
+            <url>https://libraries.minecraft.net</url>
+        </repository>
+        
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        
+        <repository>
+            <id>karuslabs-spigot</id>
+            <url>https://repo.karuslabs.com/repository/craftbukkit/</url>
+        </repository>
+    </repositories>
+     
+     
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -31,9 +49,22 @@
         
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>brigadier</artifactId>
+            <version>1.0.15</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     
