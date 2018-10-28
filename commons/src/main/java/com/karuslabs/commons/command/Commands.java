@@ -54,6 +54,7 @@ public class Commands {
                 return ((CraftServer) plugin.getServer()).getServer().commandDispatcher.a();
             };
         };
+        craftserver.getPluginManager().registerEvents(dispatcher, plugin);
     }
     
     
