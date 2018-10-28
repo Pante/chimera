@@ -28,54 +28,50 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class ProxyDispatcher<T> implements Listener {
+
+public abstract class Dispatcher<T> implements Listener {
     
-    public static <T> ProxyDispatcher<T> of(Plugin plugin, Supplier<CommandDispatcher<T>> source) {
-        var dispatcher = new ProxyDispatcher<>(source);
-        plugin.getServer().getPluginManager().registerEvents(dispatcher, plugin);
-        
-        return dispatcher;
-    }
-    
-    
-    private Supplier<CommandDispatcher<T>> source;
-    private CommandDispatcher<T> dispatcher;
+    protected Plugin plugin;
+    private @Nullable CommandDispatcher<T> dispatcher;
     private List<CommandNode<T>> commands;
 
     
-    protected ProxyDispatcher(Supplier<CommandDispatcher<T>> source) {
-        this(source, source.get(), new ArrayList<>());
+    protected Dispatcher(Plugin plugin) {
+        this(plugin, new ArrayList<>());
     }
     
-    protected ProxyDispatcher(Supplier<CommandDispatcher<T>> source, CommandDispatcher<T> dispatcher, List<CommandNode<T>> commands) {
-        this.source = source;
-        this.dispatcher = dispatcher;
+    protected Dispatcher(Plugin plugin, List<CommandNode<T>> commands) {
+        this.plugin = plugin;
         this.commands = commands;
     }
     
     
     @EventHandler
     public void load(ServerLoadEvent event) {
-        dispatcher = source.get();
+        dispatcher = dispatcher();
         for (var command : commands) {
             dispatcher.getRoot().addChild(command);
         }
     }
     
+    public abstract CommandDispatcher<T> dispatcher();
     
-    public <Builder extends ArgumentBuilder<T, Builder>> ProxyDispatcher<T> add(ArgumentBuilder<T, Builder> command) {
+    
+    public <Builder extends ArgumentBuilder<T, Builder>> Dispatcher<T> add(ArgumentBuilder<T, Builder> command) {
         return add(command.build());
     }
     
-    public ProxyDispatcher<T> add(CommandNode<T> command) {
-        dispatcher.getRoot().addChild(command);
+    public Dispatcher<T> add(CommandNode<T> command) {
+        if (dispatcher != null) {
+            dispatcher.getRoot().addChild(command);
+        }
         commands.add(command);
         return this;
     }

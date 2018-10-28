@@ -25,7 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.tree.CommandNode;
-
+    
 import java.util.*;
 
 import net.minecraft.server.v1_13_R2.*;
@@ -49,7 +49,7 @@ public class ProxyCommand extends Command {
         super(command.getName(), description, command.getUsageText(), aliases);
         this.server = server;
         this.command = command;
-    }
+}
     
     
     @Override
