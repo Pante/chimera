@@ -28,6 +28,9 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.*;
+import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R2.MinecraftServer;
+
 
 import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
@@ -38,41 +41,29 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Dispatcher<T> implements Listener {
     
+    protected MinecraftServer server;
     protected Plugin plugin;
-    private @Nullable CommandDispatcher<T> dispatcher;
-    private List<CommandNode<T>> commands;
+    private @Nullable CommandDispatcher<CommandListenerWrapper> dispatcher;
 
     
-    protected Dispatcher(Plugin plugin) {
-        this(plugin, new ArrayList<>());
-    }
-    
-    protected Dispatcher(Plugin plugin, List<CommandNode<T>> commands) {
+    protected Dispatcher(MinecraftServer server, Plugin plugin) {
         this.plugin = plugin;
-        this.commands = commands;
+        this.server = server;
+        this.dispatcher = server.commandDispatcher.a();
     }
-    
-    
-    @EventHandler
-    public void load(ServerLoadEvent event) {
-        dispatcher = dispatcher();
-        for (var command : commands) {
-            dispatcher.getRoot().addChild(command);
-        }
-    }
+
     
     public abstract CommandDispatcher<T> dispatcher();
     
     
-    public <Builder extends ArgumentBuilder<T, Builder>> Dispatcher<T> add(ArgumentBuilder<T, Builder> command) {
+    public <Builder extends ArgumentBuilder<CommandListenerWrapper, Builder>> Dispatcher<T> add(ArgumentBuilder<CommandListenerWrapper, Builder> command) {
         return add(command.build());
     }
     
-    public Dispatcher<T> add(CommandNode<T> command) {
+    public Dispatcher<T> add(CommandNode<CommandListenerWrapper> command) {
         if (dispatcher != null) {
             dispatcher.getRoot().addChild(command);
         }
-        commands.add(command);
         return this;
     }
     

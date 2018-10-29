@@ -34,6 +34,7 @@ import net.minecraft.server.v1_13_R2.MinecraftServer;
 
 import org.bukkit.command.CommandMap;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.plugin.Plugin;
 
 
@@ -48,7 +49,7 @@ public class Commands {
         var craftserver = ((CraftServer) plugin.getServer());
         server = craftserver.getServer();
         map = craftserver.getCommandMap();
-        dispatcher = new Dispatcher<>(plugin) {
+        dispatcher = new Dispatcher<>(server, plugin) {
             @Override
             public CommandDispatcher<CommandListenerWrapper> dispatcher() {
                 return ((CraftServer) plugin.getServer()).getServer().commandDispatcher.a();
@@ -60,7 +61,9 @@ public class Commands {
     
     public void register(List<String> aliases, Bridge.Builder<?, ?, ?> builder) {
         var command = builder.unbridge().build();
-        map.register(command.getName(), new ProxyCommand(server, command, aliases, "description"));
+        var wrapper = new VanillaCommandWrapper(server.vanillaCommandDispatcher, command);
+        wrapper.setDescription("Fuck noob team");
+        map.register(command.getName(), wrapper);
         dispatcher.add(command);
     }
     

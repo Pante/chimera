@@ -56,7 +56,7 @@ public class RequiredBridge extends Bridge implements SuggestionProvider<Command
     
     public static class RequiredBuilder<T> extends Builder<RequiredBuilder<T>, RequiredBridge, RequiredArgumentBuilder<CommandListenerWrapper, T>> {
         
-        private RequiredBuilder(RequiredBridge bridge, RequiredArgumentBuilder builder) {
+        private RequiredBuilder(RequiredBridge bridge, RequiredArgumentBuilder<CommandListenerWrapper, T> builder) {
             super(bridge, builder);
         }
         
