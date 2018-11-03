@@ -23,48 +23,70 @@
  */
 package com.karuslabs.commons.command;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.*;
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
 
+import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 
 import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public abstract class Dispatcher<T> implements Listener {
+public class Dispatcher implements Listener {
     
-    protected MinecraftServer server;
-    protected Plugin plugin;
-    private @Nullable CommandDispatcher<CommandListenerWrapper> dispatcher;
-
-    
-    protected Dispatcher(MinecraftServer server, Plugin plugin) {
-        this.plugin = plugin;
-        this.server = server;
-        this.dispatcher = server.commandDispatcher.a();
-    }
-
-    
-    public abstract CommandDispatcher<T> dispatcher();
-    
-    
-    public <Builder extends ArgumentBuilder<CommandListenerWrapper, Builder>> Dispatcher<T> add(ArgumentBuilder<CommandListenerWrapper, Builder> command) {
-        return add(command.build());
+    public static Dispatcher of(Plugin plugin) {
+        var dispatcher = new Dispatcher(plugin);
+        plugin.getServer().getPluginManager().registerEvents(dispatcher, plugin);
+        
+        return dispatcher;
     }
     
-    public Dispatcher<T> add(CommandNode<CommandListenerWrapper> command) {
-        if (dispatcher != null) {
-            dispatcher.getRoot().addChild(command);
-        }
+    
+    private CraftServer server;
+    private CommandDispatcher dispatcher;
+    private List<CommandNode<CommandListenerWrapper>> commands;
+    
+    
+    protected Dispatcher(Plugin plugin) {
+        this.server = (CraftServer) plugin.getServer();
+        this.dispatcher = server.getServer().commandDispatcher;
+        this.commands = new ArrayList<>();
+    }
+    
+    
+    public <Builder extends ArgumentBuilder<?, Builder>> Dispatcher add(Builder builder) {
+        return add(builder.build());
+    }
+    
+    public Dispatcher add(CommandNode<?> command) {
+        var child = (CommandNode<CommandListenerWrapper>) command;
+        dispatcher.a().getRoot().addChild(child);
+        commands.add(child);
         return this;
+    }
+    
+         
+    public void update() {
+        for (var player : server.getHandle().players) {
+            dispatcher.a(player);
+        }
+    }
+    
+    
+    @EventHandler
+    protected void load(ServerLoadEvent event) {
+        dispatcher = server.getServer().commandDispatcher;
+        
+        var root = dispatcher.a().getRoot();
+        for (var command : commands) {
+            root.addChild(command);
+        }
+        
+        update();
     }
     
 }

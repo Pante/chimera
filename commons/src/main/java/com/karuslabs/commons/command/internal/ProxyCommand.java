@@ -21,52 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.internal;
 
-import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.tree.CommandNode;
     
 import java.util.*;
 
 import net.minecraft.server.v1_13_R2.*;
-
-import org.bukkit.Location;
-import org.bukkit.command.*;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.command.*;
 import org.bukkit.craftbukkit.v1_13_R2.entity.*;
+
+import org.bukkit.Location;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
+import org.bukkit.plugin.Plugin;
 
 
-public class ProxyCommand extends Command {
+public class ProxyCommand extends Command implements PluginIdentifiableCommand {
     
     private MinecraftServer server;
+    private Plugin plugin;
     private CommandNode<CommandListenerWrapper> command;
     
     
-    public ProxyCommand(MinecraftServer server, CommandNode<CommandListenerWrapper> command, List<String> aliases, String description) {
+    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<CommandListenerWrapper> command) {
+        this(server, plugin, command, new ArrayList<>(0), "");
+    }
+    
+    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<CommandListenerWrapper> command, List<String> aliases, String description) {
         super(command.getName(), description, command.getUsageText(), aliases);
         this.server = server;
+        this.plugin = plugin;
         this.command = command;
-}
+    }
     
     
     @Override
-    public boolean execute(CommandSender sender, String label, String[] args) {
+    public boolean execute(CommandSender sender, String label, String[] arguments) {
         if (testPermission(sender)) {
-            var listener = listener(sender);
-            server.commandDispatcher.a(listener, join(getName(), args), join(label, args));
-        }
-        
+            var listener = from(sender);
+            server.commandDispatcher.a(listener, join(getName(), arguments), join(label, arguments));
+        }   
+
         return true;
     }
     
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args, Location location) throws IllegalArgumentException {
-
-        var listener = listener(sender);
-        var parsed = server.commandDispatcher.a().parse(join(getName(), args), listener);
+    public List<String> tabComplete(CommandSender sender, String alias, String[] arguments, Location location) throws IllegalArgumentException {
+        var listener = from(sender);
+        var parsed = server.commandDispatcher.a().parse(join(getName(), arguments), listener);
 
         var results = new ArrayList<String>();
         server.commandDispatcher.a().getCompletionSuggestions(parsed).thenAccept(suggestions -> {
@@ -74,12 +79,12 @@ public class ProxyCommand extends Command {
                 results.add(suggestion.getText());
             }
         });
-
+    
         return results;
-    }
+}
     
     
-    private CommandListenerWrapper listener(CommandSender sender) {
+    private CommandListenerWrapper from(CommandSender sender) {
         if (sender instanceof Player) {
             return ((CraftPlayer) sender).getHandle().getCommandListener();
         }
@@ -102,8 +107,14 @@ public class ProxyCommand extends Command {
         throw new IllegalArgumentException("Cannot make " + sender + " a vanilla command listener");
     }
     
-    private String join(String name, String[] args) {
-        return "/" + name + ((args.length > 0) ? " " + String.join(" ", args) : "");
+    private String join(String name, String... arguments) {
+        return "/" + name + ((arguments.length > 0) ? " " + String.join(" ", arguments) : "");
+    }
+
+    
+    @Override
+    public Plugin getPlugin() {
+        return plugin;
     }
     
 }

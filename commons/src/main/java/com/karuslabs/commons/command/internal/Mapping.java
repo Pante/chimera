@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.bridges;
+package com.karuslabs.commons.command.internal;
 
-import com.karuslabs.commons.command.Execution;
-
+import com.karuslabs.commons.command.*;
+    
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
+import com.mojang.brigadier.suggestion.*;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
@@ -39,65 +40,46 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public abstract class Bridge implements Command<CommandListenerWrapper>, Predicate<CommandListenerWrapper> {
+public class Mapping implements Command<CommandListenerWrapper>, Predicate<CommandListenerWrapper>, SuggestionProvider<CommandListenerWrapper> {
     
-    protected @Nullable Execution execution;
-    protected @Nullable Predicate<CommandSender> requirement;
+    private @Nullable Execution execution;
+    private @Nullable Predicate<CommandSender> requirement;
+    private @Nullable Suggestor suggestor;
     
     
     @Override
     public int run(CommandContext<CommandListenerWrapper> context) throws CommandSyntaxException {
-        return execution.execute(sender(context), context);
-    }
+        return execution.execute(from(context), context);
+}
     
     @Override
     public boolean test(CommandListenerWrapper listener) {
         return requirement.test(listener.getBukkitSender());
     }
     
+    @Override
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandListenerWrapper> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+        return suggestor.suggest(from(context), context, builder);
+    }
     
-    protected CommandSender sender(CommandContext<CommandListenerWrapper> context) {
+    protected CommandSender from(CommandContext<CommandListenerWrapper> context) {
         return context.getSource().getBukkitSender();
     }
     
     
-    public static abstract class Builder<Self extends Builder<Self, B, T>, B extends Bridge, T extends ArgumentBuilder<CommandListenerWrapper, T>> {
-        
-        protected B bridge;
-        protected T builder;
-        
-        
-        protected Builder(B bridge, T builder) {
-            this.bridge = bridge;
-            this.builder = builder;
-        }
-        
-        
-        public Self then(Builder<?, ?, ?> builder) {
-            this.builder.then(builder.unbridge());
-            return self();
-        }
-        
-        
-        public Self executes(Execution execution) {
-            bridge.execution = execution;
-            builder.executes(bridge);
-            return self();
-        }
-        
-        public Self requires(Predicate<CommandSender> requirement) {
-            bridge.requirement = requirement;
-            builder.executes(bridge);
-            return self();
-        }
-        
-        protected abstract Self self();
-        
-        
-        public T unbridge() {
-            return builder;
-        }
-        
+    public Mapping execution(Execution execution) {
+        this.execution = execution;
+        return this;
+    }
+    
+    public Mapping requirement(Predicate<CommandSender> requirement) {
+        this.requirement = requirement;
+        return this;
+    }
+    
+    public Mapping suggests(Suggestor suggestor) {
+        this.suggestor = suggestor;
+        return this;
     }
     
 }

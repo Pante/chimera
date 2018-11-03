@@ -23,48 +23,54 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.bridges.Bridge;
+import com.karuslabs.commons.command.internal.ProxyCommand;
 
-import com.mojang.brigadier.CommandDispatcher;
-
-import java.util.List;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 
 import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
-import net.minecraft.server.v1_13_R2.MinecraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 
 import org.bukkit.command.CommandMap;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.command.VanillaCommandWrapper;
 import org.bukkit.plugin.Plugin;
 
 
 public class Commands {
     
-    private MinecraftServer server;
+    private CraftServer server;
+    private Plugin plugin;
     private CommandMap map;
-    private Dispatcher<CommandListenerWrapper> dispatcher;
+    private Dispatcher dispatcher;
     
     
     public Commands(Plugin plugin) {
-        var craftserver = ((CraftServer) plugin.getServer());
-        server = craftserver.getServer();
-        map = craftserver.getCommandMap();
-        dispatcher = new Dispatcher<>(server, plugin) {
-            @Override
-            public CommandDispatcher<CommandListenerWrapper> dispatcher() {
-                return ((CraftServer) plugin.getServer()).getServer().commandDispatcher.a();
-            };
-        };
-        craftserver.getPluginManager().registerEvents(dispatcher, plugin);
+        this.server = ((CraftServer) plugin.getServer());
+        this.plugin = plugin;
+        this.map = server.getCommandMap();
+        this.dispatcher = Dispatcher.of(plugin);
     }
     
     
-    public void register(List<String> aliases, Bridge.Builder<?, ?, ?> builder) {
-        var command = builder.unbridge().build();
-        var wrapper = new VanillaCommandWrapper(server.vanillaCommandDispatcher, command);
-        wrapper.setDescription("Fuck noob team");
-        map.register(command.getName(), wrapper);
-        dispatcher.add(command);
+    public <Builder extends ArgumentBuilder<?, Builder>> Commands add(Builder builder) {
+        return add(builder.build());
+    }    
+    
+    public <Builder extends ArgumentBuilder<?, Builder>> Commands add(String prefix, Builder builder) {
+        return add(prefix, builder.build());
+    }
+    
+    public Commands add(CommandNode<?> command) {
+        return add(plugin.getName(), command);
+    }
+    
+    public Commands add(String prefix, CommandNode<?> command) {
+        map.register(prefix, new ProxyCommand(server.getServer(), plugin, (CommandNode<CommandListenerWrapper>) command));
+        return this;
+    }
+    
+    
+    public Dispatcher dispatcher() {
+        return dispatcher;
     }
     
 }
