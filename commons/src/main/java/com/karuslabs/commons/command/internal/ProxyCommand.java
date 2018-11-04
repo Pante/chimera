@@ -81,7 +81,7 @@ public class ProxyCommand extends Command implements PluginIdentifiableCommand {
         });
     
         return results;
-}
+    }
     
     
     private CommandListenerWrapper from(CommandSender sender) {

@@ -30,8 +30,10 @@ import java.util.*;
 
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 
 import org.bukkit.event.*;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -48,12 +50,14 @@ public class Dispatcher implements Listener {
     
     private CraftServer server;
     private CommandDispatcher dispatcher;
+    private CommandDispatcher vanilla;
     private List<CommandNode<CommandListenerWrapper>> commands;
     
     
     protected Dispatcher(Plugin plugin) {
         this.server = (CraftServer) plugin.getServer();
         this.dispatcher = server.getServer().commandDispatcher;
+        this.vanilla = server.getServer().vanillaCommandDispatcher;
         this.commands = new ArrayList<>();
     }
     
@@ -65,6 +69,7 @@ public class Dispatcher implements Listener {
     public Dispatcher add(CommandNode<?> command) {
         var child = (CommandNode<CommandListenerWrapper>) command;
         dispatcher.a().getRoot().addChild(child);
+        vanilla.a().getRoot().addChild(child);
         commands.add(child);
         return this;
     }
@@ -79,14 +84,18 @@ public class Dispatcher implements Listener {
     
     @EventHandler
     protected void load(ServerLoadEvent event) {
-        dispatcher = server.getServer().commandDispatcher;
-        
         var root = dispatcher.a().getRoot();
         for (var command : commands) {
             root.addChild(command);
         }
         
         update();
+    }
+    
+    @EventHandler
+    protected void resend(PlayerJoinEvent event) {
+        var player = ((CraftPlayer) event.getPlayer()).getHandle();
+        dispatcher.a(player);
     }
     
 }
