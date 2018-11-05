@@ -21,16 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.composers;
 
 import com.karuslabs.commons.command.internal.Mapping;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Composer {
+
+public abstract class Composer<C extends Composer<C, T>, T extends ArgumentBuilder<?, T>> {
     
+    protected T builder;
     protected Mapping mapping;
-    protected List<String> aliases;
+    protected @Nullable List<String> aliases;
+    protected String description;
+    
+    
+    public Composer(T builder) {
+        this.builder = builder;
+        this.mapping = new Mapping();
+        this.description = "";
+    }
+    
+    
+    protected abstract C self();
     
 }

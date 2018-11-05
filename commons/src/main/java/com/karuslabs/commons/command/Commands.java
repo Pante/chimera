@@ -64,7 +64,7 @@ public class Commands {
     }
     
     public Commands add(String prefix, CommandNode<?> command) {
-        map.register(prefix, new ProxyCommand(server.getServer(), plugin, (CommandNode<CommandListenerWrapper>) command));
+        map.register(prefix, new ProxyCommand(server.getServer(), plugin, command));
         dispatcher.add(command);
         return this;
     }

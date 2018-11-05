@@ -89,11 +89,11 @@ public class Dispatcher implements Listener {
             root.addChild(command);
         }
         
-        update();
+        Dispatcher.this.update();
     }
     
     @EventHandler
-    protected void resend(PlayerJoinEvent event) {
+    protected void update(PlayerJoinEvent event) {
         var player = ((CraftPlayer) event.getPlayer()).getHandle();
         dispatcher.a(player);
     }

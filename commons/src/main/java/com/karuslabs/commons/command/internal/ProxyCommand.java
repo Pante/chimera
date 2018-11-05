@@ -43,18 +43,16 @@ public class ProxyCommand extends Command implements PluginIdentifiableCommand {
     
     private MinecraftServer server;
     private Plugin plugin;
-    private CommandNode<CommandListenerWrapper> command;
     
     
-    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<CommandListenerWrapper> command) {
+    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<?> command) {
         this(server, plugin, command, new ArrayList<>(0), "");
     }
     
-    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<CommandListenerWrapper> command, List<String> aliases, String description) {
+    public ProxyCommand(MinecraftServer server, Plugin plugin, CommandNode<?> command, List<String> aliases, String description) {
         super(command.getName(), description, command.getUsageText(), aliases);
         this.server = server;
         this.plugin = plugin;
-        this.command = command;
     }
     
     
