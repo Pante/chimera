@@ -23,79 +23,63 @@
  */
 package com.karuslabs.commons.command;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.*;
+import com.mojang.brigadier.tree.*;
 
-import java.util.*;
+import java.util.Map;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
+
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 
-import org.bukkit.event.*;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.server.ServerLoadEvent;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.Listener;
 
 
-public class Dispatcher implements Listener {
-    
-    public static Dispatcher of(Plugin plugin) {
-        var dispatcher = new Dispatcher(plugin);
-        plugin.getServer().getPluginManager().registerEvents(dispatcher, plugin);
-        
-        return dispatcher;
-    }
-    
+public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
     private CraftServer server;
-    private CommandDispatcher dispatcher;
-    private CommandDispatcher vanilla;
-    private List<CommandNode<CommandListenerWrapper>> commands;
     
     
-    protected Dispatcher(Plugin plugin) {
-        this.server = (CraftServer) plugin.getServer();
-        this.dispatcher = server.getServer().commandDispatcher;
-        this.vanilla = server.getServer().vanillaCommandDispatcher;
-        this.commands = new ArrayList<>();
+    protected Dispatcher(Server server) {
+        this.server = ((CraftServer) server);
     }
     
     
-    public <Builder extends ArgumentBuilder<?, Builder>> Dispatcher add(Builder builder) {
-        return add(builder.build());
-    }
-    
-    public Dispatcher add(CommandNode<?> command) {
-        var child = (CommandNode<CommandListenerWrapper>) command;
-        dispatcher.a().getRoot().addChild(child);
-        vanilla.a().getRoot().addChild(child);
-        commands.add(child);
-        return this;
-    }
-    
-         
     public void update() {
+        var dispatcher = server.getServer().commandDispatcher;
         for (var player : server.getHandle().players) {
             dispatcher.a(player);
         }
     }
     
-    
-    @EventHandler
-    protected void load(ServerLoadEvent event) {
-        var root = dispatcher.a().getRoot();
-        for (var command : commands) {
-            root.addChild(command);
+    public void rebuild() {
+        
+    }
+                
+    void rebuild(CommandNode<CommandSender> source, CommandNode<CommandListenerWrapper> target, Map<CommandNode<CommandSender>, CommandNode<CommandListenerWrapper>> cache) {
+        for (var child : source.getChildren()) {
+            var command = rebuild(child);
+            rebuild(child, command, cache);
+            target.addChild(command);
         }
         
-        Dispatcher.this.update();
+        var redirected = source.getRedirect();
+        if (redirected != null) {
+            target.addChild(rebuild(redirected));
+        }
     }
     
-    @EventHandler
-    protected void update(PlayerJoinEvent event) {
-        var player = ((CraftPlayer) event.getPlayer()).getHandle();
-        dispatcher.a(player);
+    CommandNode<CommandListenerWrapper> rebuild(CommandNode<CommandSender> command) {
+        if (command instanceof ArgumentCommandNode) {
+            var type = ((ArgumentCommandNode<CommandSender, Object>) command).getType();
+            return RequiredArgumentBuilder.<CommandListenerWrapper, Object>argument(command.getName(), type).build();
+            
+        } else {
+            return LiteralArgumentBuilder.<CommandListenerWrapper>literal(command.getName()).build();
+        }
     }
-    
+
 }
