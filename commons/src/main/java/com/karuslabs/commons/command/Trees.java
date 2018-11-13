@@ -42,15 +42,18 @@ public class Trees {
         if (redirected != null) {
             var destination = mapped.get(redirected);
             if (destination == null) {
-                mapped.put(redirected, destination = map(redirected, mapped));
+                destination = map(redirected, mapped);
+                mapped.put(redirected, destination);
             }
-            return target.redirect(destination).build();
+
+            target.redirect(destination);
         }
         
         for (var child : command.getChildren()) {
             var next = mapped.get(child);
             if (next == null) {
-                mapped.put(child, next = map(child, mapped));
+                next = map(child, mapped);
+                mapped.put(child, next);
             }
             
             target.then(next);
