@@ -36,15 +36,26 @@ public class Trees {
     private static final Predicate<?> TRUE = source -> true;
     
     
+    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target) {
+        map(root, target, null);
+    }
+    
+    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, @Nullable S source) {
+        for (var command : root.getChildren()) {
+            target.addChild(map(command, source));
+        }
+    }
+    
+    
     public static <S, T> CommandNode<T> map(CommandNode<S> command) {
-        return map(command, null, new IdentityHashMap<>());
+        return map(command, null);
     }
     
     public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, S source) {
-        return map(command, source, new IdentityHashMap<>());
+        return map(command, new IdentityHashMap<>(), source);
     }
     
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, @Nullable S source, Map<CommandNode<S>, CommandNode<T>> mapped) {       
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, @Nullable S source) {       
         if (source != null && !command.canUse(source)) {
             return null;
         }
@@ -54,24 +65,24 @@ public class Trees {
         if (command.getRedirect() == null) {
             target = reinterpret(command);
             for (var child : command.getChildren()) {
-                var kid = find(child, source, mapped);
+                var kid = find(child, mapped, source);
                 if (kid != null) {
                     target.addChild(kid);
                 }
             }
             
         } else {
-            var destination = find(command.getRedirect(), source, mapped);
+            var destination = find(command.getRedirect(), mapped, source);
             target = reinterpret(command, destination);
         }
         
         return target;
     }
     
-    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, @Nullable S source, Map<CommandNode<S>, CommandNode<T>> mapped) {
+    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, @Nullable S source) {
         var target = mapped.get(command);
         if (target == null) {
-            target = map(command, source, mapped);
+            target = map(command, mapped, source);
             mapped.put(command, target);
         }
         
