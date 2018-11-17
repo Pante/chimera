@@ -26,47 +26,23 @@ package com.karuslabs.commons.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.util.*;
-
 import net.minecraft.server.v1_13_R2.*;
 
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerCommandSendEvent;
+import org.bukkit.event.Listener;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Dispatcher extends CommandDispatcher<CommandSender> {
+public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    private CraftServer server;
+    private CommandDispatcher<CommandListenerWrapper> dispatcher;
+    private MinecraftServer server;
     
     
-    public void update() {
-        for (var player : server.getOnlinePlayers()) {
-            update(player);
-        }
-    }
-    
-    public void update(Player player) {
-        RootCommandNode<ICompletionProvider> root = new RootCommandNode<>();
-        Trees.map(getRoot(), root, player);
-        
-        var commands = new HashSet<String>(root.getChildren().size());
-        for (var command : root.getChildren()) {
-            commands.add(command.getName());
-        }
-
-        var event = new PlayerCommandSendEvent(player, new HashSet<>(commands));
-        server.getPluginManager().callEvent(event);
-        
-        commands.removeAll(event.getCommands());
-        for (var command : commands) {
-            root.removeCommand(command);
-        }
-        
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutCommands(root));
+    public Dispatcher synchronize() {
+        Trees.map(getRoot(), dispatcher.getRoot());
+        return this;
     }
     
 }

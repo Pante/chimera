@@ -13,34 +13,38 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * THE SOFTWMapperRE IS PROVIDED "MapperS IS", WITHOUT WMapperRRMapperNTY OF MapperNY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WMapperRRMapperNTIES OF MERCHMapperNTMapperBILITY,
+ * FITNESS FOR Mapper PMapperRTICULMapperR PURPOSE MapperND NONINFRINGEMENT. IN NO EVENT SHMapperLL THE
+ * MapperUTHORS OR COPYRIGHT HOLDERS BE LIMapperBLE FOR MapperNY CLMapperIM, DMapperMMapperGES OR OTHER
+ * LIMapperBILITY, WHETHER IN MapperN MapperCTION OF CONTRMapperCT, TORT OR OTHERWISE, MapperRISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWMapperRE OR THE USE OR OTHER DEMapperLINGS IN
+ * THE SOFTWMapperRE.
  */
 package com.karuslabs.commons.command;
 
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class Trees {
-    
-    private static final Predicate<?> TRUE = source -> true;
-    
-    
+     
     public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target) {
-        map(root, target, null);
+        map(root, target, (S) null);
+    }
+    
+    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, Mapper<S, T> mapper) {
+        map(root, target, mapper, null);
     }
     
     public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, @Nullable S source) {
+        map(root, target, Mapper.standard(), source);
+    }
+    
+    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, Mapper<S, T> mapper, @Nullable S source) {
         for (var command : root.getChildren()) {
             target.addChild(map(command, source));
         }
@@ -48,41 +52,50 @@ public class Trees {
     
     
     public static <S, T> CommandNode<T> map(CommandNode<S> command) {
-        return map(command, null);
+        return map(command, (S) null);
     }
     
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, S source) {
-        return map(command, new IdentityHashMap<>(), source);
+    public static <S, T> CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper) {
+        return map(command, new IdentityHashMap<>(), Mapper.standard(), null);
     }
     
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, @Nullable S source) {       
-        if (source != null && !command.canUse(source)) {
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, @Nullable S source) {
+        return map(command, new IdentityHashMap<>(), Mapper.standard(), source);
+    }
+    
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper, @Nullable S source) {
+        return map(command, new IdentityHashMap<>(), Mapper.standard(), source);
+    } 
+    
+    
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, Mapper<S, T> mapper, @Nullable S source) {       
+        if (source != null && command.getRequirement() != null && !command.canUse(source)) {
             return null;
         }
         
         CommandNode<T> target;
         
         if (command.getRedirect() == null) {
-            target = reinterpret(command);
+            target = mapper.map(command);
             for (var child : command.getChildren()) {
-                var kid = find(child, mapped, source);
+                var kid = find(child, mapped, mapper, source);
                 if (kid != null) {
                     target.addChild(kid);
                 }
             }
             
         } else {
-            var destination = find(command.getRedirect(), mapped, source);
-            target = reinterpret(command, destination);
+            var destination = find(command.getRedirect(), mapped, mapper, source);
+            target = mapper.map(command, destination);
         }
         
         return target;
     }
     
-    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, @Nullable S source) {
+    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, Mapper<S, T> mapper, @Nullable S source) {
         var target = mapped.get(command);
         if (target == null) {
-            target = map(command, mapped, source);
+            target = map(command, mapped, mapper, source);
             mapped.put(command, target);
         }
         
@@ -90,24 +103,50 @@ public class Trees {
     }
     
     
-    public static <T> CommandNode<T> reinterpret(CommandNode<?> command) {
-        return reinterpret(command, null);
-    }
-    
-    public static <T> CommandNode<T> reinterpret(CommandNode<?> command, @Nullable CommandNode<T> destination) {
-        if (command instanceof ArgumentCommandNode) {
+    public static class Mapper<S, T> {
+
+        private static final Mapper<?, ?> MAPPER = new Mapper<>();
+
+        public static <S, T> Mapper<S, T> standard() {
+            return (Mapper<S, T>) MAPPER;
+        }
+
+        public CommandNode<T> map(CommandNode<S> command) {
+            return map(command, null);
+        }
+
+        public CommandNode<T> map(CommandNode<S> command, @Nullable CommandNode<T> destination) {
+            if (command instanceof ArgumentCommandNode) {
+                return argument(command, destination);
+
+            } else if (command instanceof LiteralCommandNode) {
+                return literal(command, destination);
+
+            } else if (command instanceof RootCommandNode) {
+                return root(command, destination);
+
+            } else {
+                return otherwise(command, destination);
+            }
+        }
+
+        protected CommandNode<T> argument(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             var type = ((ArgumentCommandNode<?, ?>) command).getType();
-            return new ArgumentCommandNode<>(command.getName(), type, null, (Predicate<T>) TRUE, destination, null, false, null);
-            
-        } else if (command instanceof LiteralCommandNode) {
-            return new LiteralCommandNode<>(command.getName(), null, (Predicate<T>) TRUE, destination, null, false);
-            
-        } else if (command instanceof RootCommandNode) {
+            return new ArgumentCommandNode<>(command.getName(), type, null, null, destination, null, false, null);
+        }
+
+        protected CommandNode<T> literal(CommandNode<S> command, @Nullable CommandNode<T> destination) {
+            return new LiteralCommandNode<>(command.getName(), null, null, destination, null, false);
+        }
+
+        protected CommandNode<T> root(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             return new RootCommandNode<>();
-            
-        } else {
+        }
+
+        protected CommandNode<T> otherwise(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             throw new UnsupportedOperationException("Unsupported node \"" + command.getName() + "\" of type: " + command.getClass().getName());
         }
+
     }
     
 }
