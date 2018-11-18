@@ -26,6 +26,7 @@ package com.karuslabs.commons.command;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -56,11 +57,11 @@ public class Trees {
     }
     
     public static <S, T> CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper) {
-        return map(command, new IdentityHashMap<>(), Mapper.standard(), null);
+        return map(command, mapper, null);
     }
     
     public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, @Nullable S source) {
-        return map(command, new IdentityHashMap<>(), Mapper.standard(), source);
+        return map(command, Mapper.standard(), source);
     }
     
     public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper, @Nullable S source) {
@@ -111,6 +112,7 @@ public class Trees {
             return (Mapper<S, T>) MAPPER;
         }
 
+        
         public CommandNode<T> map(CommandNode<S> command) {
             return map(command, null);
         }
@@ -132,11 +134,11 @@ public class Trees {
 
         protected CommandNode<T> argument(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             var type = ((ArgumentCommandNode<?, ?>) command).getType();
-            return new ArgumentCommandNode<>(command.getName(), type, null, null, destination, null, false, null);
+            return new ArgumentCommandNode<>(command.getName(), type, null, requirement(command), destination, null, false, null);
         }
 
         protected CommandNode<T> literal(CommandNode<S> command, @Nullable CommandNode<T> destination) {
-            return new LiteralCommandNode<>(command.getName(), null, null, destination, null, false);
+            return new LiteralCommandNode<>(command.getName(), null, requirement(command), destination, null, false);
         }
 
         protected CommandNode<T> root(CommandNode<S> command, @Nullable CommandNode<T> destination) {
@@ -145,6 +147,11 @@ public class Trees {
 
         protected CommandNode<T> otherwise(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             throw new UnsupportedOperationException("Unsupported node \"" + command.getName() + "\" of type: " + command.getClass().getName());
+        }
+        
+        
+        protected @Nullable Predicate<T> requirement(CommandNode<S> command) {
+            return null;
         }
 
     }

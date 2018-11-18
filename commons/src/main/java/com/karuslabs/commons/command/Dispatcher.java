@@ -23,26 +23,43 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.Trees.Mapper;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
+
+import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
+    
+    private static final RequirementMapper MAPPER = new RequirementMapper();
     
     private CommandDispatcher<CommandListenerWrapper> dispatcher;
     private MinecraftServer server;
     
     
     public Dispatcher synchronize() {
-        Trees.map(getRoot(), dispatcher.getRoot());
+        Trees.map(getRoot(), dispatcher.getRoot(), MAPPER);
         return this;
+    }
+    
+}
+
+class RequirementMapper extends Mapper<CommandSender, CommandListenerWrapper> {
+    
+    static final Predicate<CommandListenerWrapper> TRUE = listener -> true;
+    
+    
+    @Override
+    protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
+        var requirement = command.getRequirement();
+        return requirement == null ? TRUE : listener -> requirement.test(listener.getBukkitSender());
     }
     
 }
