@@ -13,15 +13,17 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWMapperRE IS PROVIDED "MapperS IS", WITHOUT WMapperRRMapperNTY OF MapperNY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WMapperRRMapperNTIES OF MERCHMapperNTMapperBILITY,
- * FITNESS FOR Mapper PMapperRTICULMapperR PURPOSE MapperND NONINFRINGEMENT. IN NO EVENT SHMapperLL THE
- * MapperUTHORS OR COPYRIGHT HOLDERS BE LIMapperBLE FOR MapperNY CLMapperIM, DMapperMMapperGES OR OTHER
- * LIMapperBILITY, WHETHER IN MapperN MapperCTION OF CONTRMapperCT, TORT OR OTHERWISE, MapperRISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWMapperRE OR THE USE OR OTHER DEMapperLINGS IN
- * THE SOFTWMapperRE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.karuslabs.commons.command;
+
+import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.tree.*;
 
@@ -31,93 +33,88 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Trees {
-     
-    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target) {
-        map(root, target, (S) null);
+public @Static class Trees {
+            
+    private static final Factory<?, ?> FACTORY = new Factory();
+    
+    
+    public static <S, T> void map(CommandNode<S> command, CommandNode<T> target, Factory<S, T> factory) {
+        map(command, target, factory, null);
     }
     
-    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, Mapper<S, T> mapper) {
-        map(root, target, mapper, null);
+    public static <S, T> void map(CommandNode<S> command, CommandNode<T> target, @Nullable S sender) {
+        map(command, target, factory(), sender);
     }
     
-    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, @Nullable S source) {
-        map(root, target, Mapper.standard(), source);
-    }
-    
-    public static <S, T> void map(RootCommandNode<S> root, RootCommandNode<T> target, Mapper<S, T> mapper, @Nullable S source) {
-        for (var command : root.getChildren()) {
-            target.addChild(map(command, source));
-        }
+    public static <S, T> void map(CommandNode<S> command, CommandNode<T> target, Factory<S, T> factory, @Nullable S sender) {
+        var commands = new IdentityHashMap<CommandNode<S>, CommandNode<T>>();
+        commands.put(command, target);
+        
+        map(command, factory, commands, sender);
     }
     
     
-    public static <S, T> CommandNode<T> map(CommandNode<S> command) {
-        return map(command, (S) null);
+    public static <S, T> CommandNode<T> map(CommandNode<S> command, Factory<S, T> factory) {
+        return map(command, factory, null);
+    }
+        
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, @Nullable S sender) {
+        return map(command, factory(), sender);
     }
     
-    public static <S, T> CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper) {
-        return map(command, mapper, null);
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Factory<S, T> factory, @Nullable S sender) {
+        return map(command, factory, new IdentityHashMap<>(), sender);
     }
     
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, @Nullable S source) {
-        return map(command, Mapper.standard(), source);
-    }
     
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Mapper<S, T> mapper, @Nullable S source) {
-        return map(command, new IdentityHashMap<>(), Mapper.standard(), source);
-    } 
-    
-    
-    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, Mapper<S, T> mapper, @Nullable S source) {       
-        if (source != null && command.getRequirement() != null && !command.canUse(source)) {
+    public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
+        if (sender != null && command.getRequirement() != null && !command.canUse(sender)) {
             return null;
         }
         
-        CommandNode<T> target;
+        CommandNode<T> target = commands.get(command);
         
         if (command.getRedirect() == null) {
-            target = mapper.map(command);
+            target = target == null ? factory.from(command) : target;
             for (var child : command.getChildren()) {
-                var kid = find(child, mapped, mapper, source);
-                if (kid != null) {
-                    target.addChild(kid);
+                var leaf = find(child, factory, commands, sender);
+                if (leaf != null) {
+                    target.addChild(leaf);
                 }
             }
             
         } else {
-            var destination = find(command.getRedirect(), mapped, mapper, source);
-            target = mapper.map(command, destination);
+            target = target == null ? factory.from(command, find(command.getRedirect(), factory, commands, sender)) : target;
         }
         
         return target;
     }
     
-    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> mapped, Mapper<S, T> mapper, @Nullable S source) {
-        var target = mapped.get(command);
+    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
+        var target = commands.get(command);
         if (target == null) {
-            target = map(command, mapped, mapper, source);
-            mapped.put(command, target);
+            target = map(command, factory, commands, sender);
+            commands.put(command, target);
         }
         
         return target;
     }
     
     
-    public static class Mapper<S, T> {
-
-        private static final Mapper<?, ?> MAPPER = new Mapper<>();
-
-        public static <S, T> Mapper<S, T> standard() {
-            return (Mapper<S, T>) MAPPER;
-        }
-
+    public static <S, T> Factory<S, T> factory() {
+        return (Factory<S, T>) FACTORY;
+    }
+    
+    public static class Factory<S, T> {
         
-        public CommandNode<T> map(CommandNode<S> command) {
-            return map(command, null);
+        public static final Predicate<?> TRUE = s -> true;
+        
+        
+        public CommandNode<T> from(CommandNode<S> command) {
+            return from(command, null);
         }
-
-        public CommandNode<T> map(CommandNode<S> command, @Nullable CommandNode<T> destination) {
+        
+        public CommandNode<T> from(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             if (command instanceof ArgumentCommandNode) {
                 return argument(command, destination);
 
@@ -131,7 +128,7 @@ public class Trees {
                 return otherwise(command, destination);
             }
         }
-
+        
         protected CommandNode<T> argument(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             var type = ((ArgumentCommandNode<?, ?>) command).getType();
             return new ArgumentCommandNode<>(command.getName(), type, null, requirement(command), destination, null, false, null);
@@ -150,10 +147,10 @@ public class Trees {
         }
         
         
-        protected @Nullable Predicate<T> requirement(CommandNode<S> command) {
-            return null;
+        protected Predicate<T> requirement(CommandNode<S> command) {
+            return (Predicate<T>) TRUE;
         }
-
+        
     }
     
 }

@@ -26,12 +26,12 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.Future;
 
 
-public class RunnableContinual<T> extends Continual<T> {
+public class RunnableRepetition<T> extends Repetition<T> {
     
     private Runnable runnable;
     
     
-    public RunnableContinual(Runnable runnable, long times) {
+    public RunnableRepetition(Runnable runnable, long times) {
         super(times);
         this.runnable = runnable;
     }

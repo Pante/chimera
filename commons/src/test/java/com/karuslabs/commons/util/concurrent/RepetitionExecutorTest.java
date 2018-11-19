@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.RunnableScheduledFuture;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,43 +34,30 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class RunnableContinualTest {
+class RepetitionExecutorTest {
     
-    Runnable runnable = mock(Runnable.class);;
-    Continual<String> continual = new RunnableContinual<>(runnable, 0);
-    Future<String> context = mock(Future.class);
-    
-    
-    @BeforeEach
-    void before() {
-        continual.set(context);
-    }
+    RepetitionExecutor executor = new RepetitionExecutor(1);
+    RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
     
     
     @Test
-    void run_timed() {
-        var continual = new RunnableContinual<String>(runnable, 1);
-        continual.set(context);
+    void decorateTask_runnable() {
+        Runnable runnable = mock(Runnable.class);
         
-        continual.run();
-        verify(runnable).run();
+        assertEquals(task, executor.decorateTask(runnable, task));
         
-        continual.run();
-        verify(context).cancel(false);
+        verifyZeroInteractions(runnable);
+        verifyZeroInteractions(task);
     }
     
     
     @Test
-    void run_finish() {
-        continual.run();
-        verify(runnable, times(0)).run();
-        verify(context).cancel(false);
-    }
-    
-    
-    @Test
-    void set_throws_exception() {
-        assertEquals("Context has already been set", assertThrows(IllegalStateException.class, () -> continual.set(context)).getMessage());
+    void decorateTask_continual() {
+        Repetition continual = mock(Repetition.class);
+        
+        assertEquals(task, executor.decorateTask(continual, task));
+        
+        verify(continual).set(task);
     }
     
 }

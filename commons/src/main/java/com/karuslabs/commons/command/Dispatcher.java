@@ -23,43 +23,71 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.Trees.Mapper;
+import com.karuslabs.commons.command.Trees.Factory;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.*;
+import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
 
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
+import org.bukkit.entity.Player;
+import org.bukkit.event.*;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 
 
-public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
+public abstract class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    private static final RequirementMapper MAPPER = new RequirementMapper();
+    private static final Factory<CommandSender, CommandListenerWrapper> FACTORY = new RequirementFactory();
+        
     
-    private CommandDispatcher<CommandListenerWrapper> dispatcher;
     private MinecraftServer server;
+    private CommandDispatcher<CommandListenerWrapper> dispatcher;
     
     
-    public Dispatcher synchronize() {
-        Trees.map(getRoot(), dispatcher.getRoot(), MAPPER);
-        return this;
+    public Dispatcher(Server server) {
+        this.server = ((CraftServer) server).getServer();
+        this.dispatcher = this.server.commandDispatcher.a();
     }
+    
+    
+    @EventHandler
+    protected void load(ServerLoadEvent event) {
+        dispatcher = server.commandDispatcher.a();
+        synchronize();
+        update();
+    }
+    
+    @EventHandler
+    protected void join(PlayerJoinEvent event) {
+        update(event.getPlayer());
+    }
+    
+    
+    public void synchronize() {
+        Trees.map(getRoot(), dispatcher.getRoot(), FACTORY);
+    }
+    
+    
+    public abstract void update();
+    
+    public abstract void update(Player player);
     
 }
 
-class RequirementMapper extends Mapper<CommandSender, CommandListenerWrapper> {
-    
-    static final Predicate<CommandListenerWrapper> TRUE = listener -> true;
-    
+
+class RequirementFactory extends Factory<CommandSender, CommandListenerWrapper> {
     
     @Override
     protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
         var requirement = command.getRequirement();
-        return requirement == null ? TRUE : listener -> requirement.test(listener.getBukkitSender());
+        return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : s -> requirement.test(s.getBukkitSender());
     }
     
 }

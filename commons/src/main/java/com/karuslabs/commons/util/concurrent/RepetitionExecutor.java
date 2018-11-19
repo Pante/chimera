@@ -26,38 +26,38 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 
 
-public class ContinuousExecutor extends ScheduledThreadPoolExecutor {
+public class RepetitionExecutor extends ScheduledThreadPoolExecutor {
     
-    public ContinuousExecutor(int corePoolSize) {
+    public RepetitionExecutor(int corePoolSize) {
         super(corePoolSize);
     }
 
-    public ContinuousExecutor(int corePoolSize, ThreadFactory threadFactory) {
+    public RepetitionExecutor(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
     }
     
 
-    public ContinuousExecutor(int corePoolSize, RejectedExecutionHandler handler) {
+    public RepetitionExecutor(int corePoolSize, RejectedExecutionHandler handler) {
         super(corePoolSize, handler);
     }
 
-    public ContinuousExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+    public RepetitionExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, threadFactory, handler);
     }
     
     
     public ScheduledFuture<?> schedule(Runnable runnable, long initial, long period, TimeUnit unit, long times) {
-        return schedule(new RunnableContinual(runnable, times), initial, period, unit);
+        return schedule(new RunnableRepetition(runnable, times), initial, period, unit);
     }
     
-    public ScheduledFuture<?> schedule(Continual<?> continual, long initial, long period, TimeUnit unit) {
+    public ScheduledFuture<?> schedule(Repetition<?> continual, long initial, long period, TimeUnit unit) {
         return scheduleAtFixedRate(continual, initial, period, unit);
     }
     
     @Override
     protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> task) {
-        if (runnable instanceof Continual) {
-            var continual = (Continual<V>) runnable;
+        if (runnable instanceof Repetition) {
+            var continual = (Repetition<V>) runnable;
             continual.set(task);
         }
         
