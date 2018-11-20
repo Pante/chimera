@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.tree;
 
 import com.karuslabs.annotations.Static;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
@@ -38,6 +39,10 @@ public @Static class Trees {
     private static final Factory<?, ?> FACTORY = new Factory();
     
     
+    public static <S, T> void map(CommandNode<S> command, CommandNode<T> target) {
+        map(command, target, factory(), null);
+    }
+    
     public static <S, T> void map(CommandNode<S> command, CommandNode<T> target, Factory<S, T> factory) {
         map(command, target, factory, null);
     }
@@ -47,12 +52,18 @@ public @Static class Trees {
     }
     
     public static <S, T> void map(CommandNode<S> command, CommandNode<T> target, Factory<S, T> factory, @Nullable S sender) {
-        var commands = new IdentityHashMap<CommandNode<S>, CommandNode<T>>();
-        commands.put(command, target);
-        
-        map(command, factory, commands, sender);
+        for (var child : command.getChildren()) {
+            var mapped = map(child, factory, sender);
+            if (mapped != null) {
+                target.addChild(mapped);
+            }
+        }
     }
     
+    
+    public static <S, T> CommandNode<T> map(CommandNode<S> command) {
+        return map(command, factory(), null);
+    }
     
     public static <S, T> CommandNode<T> map(CommandNode<S> command, Factory<S, T> factory) {
         return map(command, factory, null);
@@ -70,33 +81,44 @@ public @Static class Trees {
     public static <S, T> @Nullable CommandNode<T> map(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
         if (sender != null && command.getRequirement() != null && !command.canUse(sender)) {
             return null;
-        }
+        } 
         
-        CommandNode<T> target = commands.get(command);
-        
-        if (command.getRedirect() == null) {
-            target = target == null ? factory.from(command) : target;
-            for (var child : command.getChildren()) {
-                var leaf = find(child, factory, commands, sender);
-                if (leaf != null) {
-                    target.addChild(leaf);
-                }
-            }
+        var target = commands.get(command);
+        if (target != null) {
+            return target;
+            
+        } else if (command.getRedirect() != null) {
+            return redirect(command, factory, commands, sender);
             
         } else {
-            target = target == null ? factory.from(command, find(command.getRedirect(), factory, commands, sender)) : target;
+            return children(command, factory, commands, sender);
         }
-        
+    }
+    
+    private static <S, T> @Nullable CommandNode<T> redirect(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
+        var target = factory.from(command);
+        commands.put(command, target);
+
+        var destination = map(command.getRedirect(), factory, commands, sender);
+        if (target instanceof Redirectable<?>) {
+            ((Redirectable<T>) target).setRedirect(destination);
+        } else {
+        }
+
         return target;
     }
     
-    private static <S, T> @Nullable CommandNode<T> find(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
-        var target = commands.get(command);
-        if (target == null) {
-            target = map(command, factory, commands, sender);
-            commands.put(command, target);
+    private static <S, T> @Nullable CommandNode<T> children(CommandNode<S> command, Factory<S, T> factory, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
+        var target = factory.from(command);
+        commands.put(command, target);
+
+        for (var child : command.getChildren()) {
+            var leaf = map(child, factory, commands, sender);
+            if (leaf != null) {
+                target.addChild(leaf);
+            }
         }
-        
+
         return target;
     }
     
@@ -107,6 +129,7 @@ public @Static class Trees {
     
     public static class Factory<S, T> {
         
+        public static final Command<?> COMMAND = s -> 0;
         public static final Predicate<?> TRUE = s -> true;
         
         
@@ -129,13 +152,13 @@ public @Static class Trees {
             }
         }
         
-        protected CommandNode<T> argument(CommandNode<S> command, @Nullable CommandNode<T> destination) {
+        protected RedirectableArgument<T, ?> argument(CommandNode<S> command, @Nullable CommandNode<T> destination) {
             var type = ((ArgumentCommandNode<?, ?>) command).getType();
-            return new ArgumentCommandNode<>(command.getName(), type, null, requirement(command), destination, null, false, null);
+            return new RedirectableArgument<>(command.getName(), type, command(command), requirement(command), destination, null, false, null);
         }
 
-        protected CommandNode<T> literal(CommandNode<S> command, @Nullable CommandNode<T> destination) {
-            return new LiteralCommandNode<>(command.getName(), null, requirement(command), destination, null, false);
+        protected RedirectableLiteral<T> literal(CommandNode<S> command, @Nullable CommandNode<T> destination) {
+            return new RedirectableLiteral<>(command.getName(), command(command), requirement(command), destination, null, false);
         }
 
         protected CommandNode<T> root(CommandNode<S> command, @Nullable CommandNode<T> destination) {
@@ -146,6 +169,10 @@ public @Static class Trees {
             throw new UnsupportedOperationException("Unsupported node \"" + command.getName() + "\" of type: " + command.getClass().getName());
         }
         
+        
+        protected Command<T> command(CommandNode<S> command) {
+            return (Command<T>) COMMAND;
+        }
         
         protected Predicate<T> requirement(CommandNode<S> command) {
             return (Predicate<T>) TRUE;
