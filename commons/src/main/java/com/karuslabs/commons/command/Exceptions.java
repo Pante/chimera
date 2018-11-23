@@ -41,18 +41,65 @@ import org.bukkit.entity.minecart.CommandMinecart;
 public @Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
-    
+    private static final String CONTEXT = "command.context.here";
+    private static final String FAILURE = "command.failed";
     
     public static void report(CommandSender sender, CommandSyntaxException exception) {
+        var listener = from(sender);
         
+        listener.sendFailureMessage(ChatComponentUtils.a(exception.getRawMessage()));
+        
+        var input = exception.getInput();
+        if (input != null && exception.getCursor() >= 0) {
+            var index = Math.min(input.length(), exception.getCursor());
+
+            var text = new ChatComponentText("");
+            if (index > 10) {
+                text.a("...");
+            }
+
+            text.a(input.substring(Math.max(0, index - 10), index));
+            
+            if (index < input.length()) {
+                var error = new ChatComponentText(input.substring(index));
+                error.getChatModifier().setColor(EnumChatFormat.RED);
+                error.getChatModifier().setUnderline(true);
+                
+                text.addSibling(error);
+            }
+
+            var context = new ChatMessage(CONTEXT, EMPTY);
+            context.getChatModifier().setItalic(true);
+            context.getChatModifier().setColor(EnumChatFormat.RED);
+            
+            text.addSibling(context);
+            text.getChatModifier().setColor(EnumChatFormat.GRAY);
+            text.getChatModifier().setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, input));
+            
+            listener.sendFailureMessage(text);
+        }
     }
+    
     
     public static void report(CommandSender sender, Exception exception) {
+        var listener = from(sender);
         
+        var message = exception.getMessage();
+        var details = new ChatComponentText(message == null ? exception.getClass().getName() : message);
+        
+        var stacktrace = exception.getStackTrace();
+        for (int i = 0; i < Math.min(stacktrace.length, 3); i++) {
+            details.a("\n\n" + stacktrace[i].getMethodName() + "\n " + stacktrace[i].getFileName() + ":" + stacktrace[i].getLineNumber());
+        }
+                
+        var failure = new ChatMessage(FAILURE, EMPTY);
+        failure.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, details));
+        
+        listener.sendFailureMessage(failure);
     }
     
     
-    CommandListenerWrapper listener(CommandSender sender) {
+    static CommandListenerWrapper from(CommandSender sender) {
         if (sender instanceof Player) {
             return ((CraftPlayer) sender).getHandle().getCommandListener();
             

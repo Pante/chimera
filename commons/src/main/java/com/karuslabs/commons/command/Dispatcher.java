@@ -24,30 +24,35 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.tree.*;
-import com.karuslabs.commons.command.tree.Trees.Factory;
+import com.karuslabs.commons.command.tree.Trees.Visitor;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.util.Map;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
 
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    private static final Factory<CommandSender, CommandListenerWrapper> FACTORY = new RequirementFactory();
+    private static final Visitor<CommandSender, CommandListenerWrapper> LISTENER_VISITOR = new ListenerVisitor();
+    private static final Visitor<CommandListenerWrapper, ICompletionProvider> COMPLETION_VISITOR = new CompletionVisitor();
     
     
     private MinecraftServer server;
@@ -55,23 +60,30 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         
     
     public static Dispatcher of(Plugin plugin) {
-        var dispatcher = new Dispatcher(plugin.getServer());
-        plugin.getServer().getPluginManager().registerEvents(dispatcher, plugin);
+        var server = plugin.getServer();
+        
+        var root = new Root(plugin, ((CraftServer) server).getCommandMap());
+        var dispatcher = new Dispatcher(server, root);
+        root.set(dispatcher);
+        
+        server.getPluginManager().registerEvents(dispatcher, plugin);
         
         return dispatcher;
     }
     
     
-    protected Dispatcher(Server server) {
+    protected Dispatcher(Server server, RootCommandNode<CommandSender> root) {
+        super(root);
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
     }
     
     
     public void synchronize() {
-        Trees.map(getRoot(), dispatcher.getRoot(), FACTORY);
+        Trees.map(getRoot(), dispatcher.getRoot(), LISTENER_VISITOR);
     } 
         
+    
     public void update() {
         for (var player : server.getPlayerList().players) {
             update(player);
@@ -84,8 +96,8 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     private void update(EntityPlayer player) {
         var root = new RootCommandNode<ICompletionProvider>();
-        Trees.map(dispatcher.getRoot(), root, player.getCommandListener());
-
+        Trees.map(dispatcher.getRoot(), root, COMPLETION_VISITOR, player.getCommandListener());
+        
         player.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
     
@@ -101,14 +113,55 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     protected void update(PlayerJoinEvent event) {
         update(event.getPlayer());
     }
+
+        
+    public static class Root extends RootCommandNode<CommandSender> {
+
+        private Plugin plugin;
+        private CommandMap map;
+        private @Nullable CommandDispatcher<CommandSender> dispatcher;
+        
+
+        public Root(Plugin plugin, CommandMap map) {
+            this.plugin = plugin;
+            this.map = map;
+        }
+
+        
+        @Override
+        public void addChild(CommandNode<CommandSender> command) {
+            super.addChild(command);
+            map.register(plugin.getName(), new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText()));
+        }
+        
+        
+        protected void set(CommandDispatcher<CommandSender> dispatcher) {
+            this.dispatcher = dispatcher;
+        }
+
+    }
     
     
-    static class RequirementFactory extends Factory<CommandSender, CommandListenerWrapper> {
+    static class ListenerVisitor extends Visitor<CommandSender, CommandListenerWrapper> {
         
         @Override
         protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
             var requirement = command.getRequirement();
             return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
+        }
+        
+    }
+    
+    static class CompletionVisitor extends Visitor<CommandListenerWrapper, ICompletionProvider> {
+        
+        @Override
+        public @Nullable CommandNode<ICompletionProvider> map(CommandNode<CommandListenerWrapper> command, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> commands, @Nullable CommandListenerWrapper sender) {
+            if (command instanceof ArgumentCommandNode && ((ArgumentCommandNode<?, ?>) command).getCustomSuggestions() instanceof BukkitCommandWrapper) {
+                return null;
+                
+            }
+            
+            return super.map(command, commands, sender);
         }
         
     }

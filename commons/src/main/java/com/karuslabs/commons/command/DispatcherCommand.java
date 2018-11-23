@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import java.util.List;
 
 import org.bukkit.command.*;
@@ -31,21 +35,44 @@ import org.bukkit.plugin.Plugin;
 
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     
-    private Dispatcher dispatcher;
     private Plugin plugin;
+    private CommandDispatcher<CommandSender> dispatcher;
+    
+    
+    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
+        this(name, plugin, dispatcher, "", usage);
+    }
+    
+    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String description, String usage) {
+        super(name, description, usage, List.of());
+        this.plugin = plugin;
+        this.dispatcher = dispatcher;
+    }
     
     
     @Override
     public boolean execute(CommandSender sender, String label, String[] arguments) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-    @Override
-    public List<String> tabComplete(CommandSender sender, String label, String[] arguments) {
+        if (!testPermission(sender)) {
+            return true;
+        }
         
+        var reader = new StringReader(join(label, arguments));
+        if (reader.canRead() && reader.peek() == 47) {
+            reader.skip();
+        }
+        
+        try {
+            dispatcher.execute(reader, sender);
+            
+        } catch (CommandSyntaxException e) {
+            Exceptions.report(sender, e);
+            
+        } catch (Exception e) {
+            Exceptions.report(sender, e);
+        }
+        
+        return true;
     }
-    
     
     private String join(String name, String[] arguments) {
         String command =  "/" + name;
