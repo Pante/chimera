@@ -94,7 +94,11 @@ public @Static class Trees {
         
         
         public @Nullable CommandNode<T> map(CommandNode<S> command, Map<CommandNode<S>, CommandNode<T>> commands, @Nullable S sender) {
+            System.out.println("Parsing: " + command.getName());
+            System.out.println("Requirement: " + command.getRequirement());
+            System.out.println("Can use:" + command.canUse(sender));
             if (sender != null && command.getRequirement() != null && !command.canUse(sender)) {
+                System.out.println("Hiding: " + command.getName());
                 return null;
             }
 

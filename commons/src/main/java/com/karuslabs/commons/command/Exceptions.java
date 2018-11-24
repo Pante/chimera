@@ -44,6 +44,7 @@ public @Static class Exceptions {
     private static final String CONTEXT = "command.context.here";
     private static final String FAILURE = "command.failed";
     
+    
     public static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         

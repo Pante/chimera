@@ -157,8 +157,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         @Override
         public @Nullable CommandNode<ICompletionProvider> map(CommandNode<CommandListenerWrapper> command, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> commands, @Nullable CommandListenerWrapper sender) {
             if (command instanceof ArgumentCommandNode && ((ArgumentCommandNode<?, ?>) command).getCustomSuggestions() instanceof BukkitCommandWrapper) {
-                return null;
-                
+                return null; 
             }
             
             return super.map(command, commands, sender);

@@ -57,11 +57,12 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
         }
         
         var reader = new StringReader(join(label, arguments));
-        if (reader.canRead() && reader.peek() == 47) {
+        if (reader.canRead() && reader.peek() == '/') {
             reader.skip();
         }
         
         try {
+            System.out.println(join(label, arguments));
             dispatcher.execute(reader, sender);
             
         } catch (CommandSyntaxException e) {
