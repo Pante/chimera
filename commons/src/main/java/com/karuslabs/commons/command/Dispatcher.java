@@ -23,8 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.*;
-import com.karuslabs.commons.command.tree.Trees.Visitor;
+import com.karuslabs.commons.command.tree.Trees;
+import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
@@ -51,8 +51,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    private static final Visitor<CommandSender, CommandListenerWrapper> LISTENER_VISITOR = new ListenerVisitor();
-    private static final Visitor<CommandListenerWrapper, ICompletionProvider> COMPLETION_VISITOR = new CompletionVisitor();
+    private static final Functor<CommandSender, CommandListenerWrapper> LISTENER_FUNCTOR = new ListenerFunctor();
+    private static final Functor<CommandListenerWrapper, ICompletionProvider> COMPLETION_FUNCTOR = new CompletionFunctor();
     
     
     private MinecraftServer server;
@@ -77,14 +77,10 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
     }
-    
-    
-    public void synchronize() {
-        Trees.map(getRoot(), dispatcher.getRoot(), LISTENER_VISITOR);
-    } 
         
     
     public void update() {
+        Trees.map(getRoot(), dispatcher.getRoot(), null, LISTENER_FUNCTOR);
         for (var player : server.getPlayerList().players) {
             update(player);
         }
@@ -96,7 +92,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     private void update(EntityPlayer player) {
         var root = new RootCommandNode<ICompletionProvider>();
-        Trees.map(dispatcher.getRoot(), root, COMPLETION_VISITOR, player.getCommandListener());
+        Trees.map(dispatcher.getRoot(), root, player.getCommandListener(), COMPLETION_FUNCTOR);
         
         player.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
@@ -105,7 +101,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        synchronize();
         update();
     }
     
@@ -142,7 +137,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
-    static class ListenerVisitor extends Visitor<CommandSender, CommandListenerWrapper> {
+    static class ListenerFunctor extends Functor<CommandSender, CommandListenerWrapper> {
         
         @Override
         protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
@@ -152,15 +147,16 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         
     }
     
-    static class CompletionVisitor extends Visitor<CommandListenerWrapper, ICompletionProvider> {
+    static class CompletionFunctor extends Functor<CommandListenerWrapper, ICompletionProvider> {
         
         @Override
-        public @Nullable CommandNode<ICompletionProvider> map(CommandNode<CommandListenerWrapper> command, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> commands, @Nullable CommandListenerWrapper sender) {
+        public @Nullable CommandNode<ICompletionProvider> map(CommandNode<CommandListenerWrapper> command, @Nullable
+                CommandListenerWrapper sender, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> commands) {
             if (command instanceof ArgumentCommandNode && ((ArgumentCommandNode<?, ?>) command).getCustomSuggestions() instanceof BukkitCommandWrapper) {
                 return null; 
             }
             
-            return super.map(command, commands, sender);
+            return super.map(command, sender, commands);
         }
         
     }

@@ -41,8 +41,6 @@ import org.bukkit.entity.minecart.CommandMinecart;
 public @Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
-    private static final String CONTEXT = "command.context.here";
-    private static final String FAILURE = "command.failed";
     
     
     public static void report(CommandSender sender, CommandSyntaxException exception) {
@@ -69,7 +67,7 @@ public @Static class Exceptions {
                 text.addSibling(error);
             }
 
-            var context = new ChatMessage(CONTEXT, EMPTY);
+            var context = new ChatMessage("command.context.here", EMPTY);
             context.getChatModifier().setItalic(true);
             context.getChatModifier().setColor(EnumChatFormat.RED);
             
@@ -93,7 +91,7 @@ public @Static class Exceptions {
             details.a("\n\n" + stacktrace[i].getMethodName() + "\n " + stacktrace[i].getFileName() + ":" + stacktrace[i].getLineNumber());
         }
                 
-        var failure = new ChatMessage(FAILURE, EMPTY);
+        var failure = new ChatMessage("command.failed", EMPTY);
         failure.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, details));
         
         listener.sendFailureMessage(failure);

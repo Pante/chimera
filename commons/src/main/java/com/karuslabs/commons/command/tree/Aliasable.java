@@ -23,31 +23,13 @@
  */
 package com.karuslabs.commons.command.tree;
 
-import com.mojang.brigadier.*;
-import com.mojang.brigadier.tree.*;
+import com.mojang.brigadier.tree.CommandNode;
 
-import java.util.function.Predicate;
+import java.util.List;
 
 
-public class RedirectableLiteral<S> extends LiteralCommandNode<S> implements Redirectable<S> {
+public interface Aliasable<S> {
     
-    private CommandNode<S> destination;
-    
-    
-    public RedirectableLiteral(String name, Command<S> command, Predicate<S> requirement, CommandNode<S> redirect, RedirectModifier<S> modifier, boolean fork) {
-        super(name, command, requirement, redirect, modifier, fork);
-        this.destination = redirect;
-    }
-    
-    
-    @Override
-    public CommandNode<S> getRedirect() {
-        return destination;
-    }
-    
-    @Override
-    public void setRedirect(CommandNode<S> destination) {
-        this.destination = destination;
-    }
+    public List<CommandNode<S>> aliases();
     
 }

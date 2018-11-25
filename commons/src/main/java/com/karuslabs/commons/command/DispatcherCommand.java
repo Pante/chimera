@@ -62,7 +62,6 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
         }
         
         try {
-            System.out.println(join(label, arguments));
             dispatcher.execute(reader, sender);
             
         } catch (CommandSyntaxException e) {

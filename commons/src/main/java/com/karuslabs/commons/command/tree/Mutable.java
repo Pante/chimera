@@ -23,13 +23,22 @@
  */
 package com.karuslabs.commons.command.tree;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.CommandNode;
 
 
-public interface Redirectable<T> {
+public interface Mutable<S> {    
     
-    public CommandNode<T> getRedirect();
+    public CommandNode<S> removeChild(String child);
     
-    public void setRedirect(CommandNode<T> destination);
+    
+    public Command<S> getCommand();
+    
+    public void setCommand(Command<S> command);
+    
+    
+    public CommandNode<S> getRedirect();
+    
+    public void setRedirect(CommandNode<S> destination);
     
 }
