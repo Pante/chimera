@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.tree.Literal;
+import com.karuslabs.commons.command.tree.Argument;
 import com.karuslabs.annotations.Static;
 
-import com.karuslabs.commons.command.tree.*;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.*;
@@ -49,6 +50,25 @@ public @Static class Commands {
             
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new ExceptionInInitializerError(e);
+        }
+    }
+    
+    
+    public static <S> CommandNode<S> alias(CommandNode<S> command, String alias) {
+        if (command instanceof Argument<?, ?>) {
+            return alias((Argument<S, ?>) command, alias);
+            
+        } else if (command instanceof ArgumentCommandNode<?, ?>) {
+            return alias((ArgumentCommandNode<S, ?>) command, alias);
+            
+        } else if (command instanceof Literal<?>) {
+            return alias((Literal<S>) command, alias);
+            
+        } else if (command instanceof LiteralCommandNode<?>) {
+            return alias((LiteralCommandNode<S>) command, alias);
+            
+        } else {
+            throw new UnsupportedOperationException("Unsupported commnd, '" + command.getName() + "' of type: " + command.getClass().getName());
         }
     }
     
@@ -96,16 +116,16 @@ public @Static class Commands {
         var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
         var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
         var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
-        
+
         var removed = commands.remove(child);
         if (removed != null) {
             literals.remove(child);
             arguments.remove(child);
         }
-            
+
         return removed;
     }
-    
+
     public static <S> boolean remove(CommandNode<S> command, String... children) {
         var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
         var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
@@ -115,8 +135,8 @@ public @Static class Commands {
         for (var child : children) {
             var removed = commands.remove(child);
             if (removed != null) {
-                literals.remove(child);
-                arguments.remove(child);
+            literals.remove(child);
+            arguments.remove(child);
                 
             } else {
                 all = false;

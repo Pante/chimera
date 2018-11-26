@@ -29,30 +29,33 @@ import com.karuslabs.commons.command.tree.Trees.Functor;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.util.Map;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
 
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.command.BukkitCommandWrapper;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 
 import org.bukkit.Server;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
 
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    private static final Functor<CommandSender, CommandListenerWrapper> LISTENER_FUNCTOR = new ListenerFunctor();
-    private static final Functor<CommandListenerWrapper, ICompletionProvider> COMPLETION_FUNCTOR = new CompletionFunctor();
+    static final Functor<CommandSender, CommandListenerWrapper> FUNCTOR = new Functor<>() {
+        @Override
+        protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
+            var requirement = command.getRequirement();
+            return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
+        }
+    };
     
     
     private MinecraftServer server;
@@ -77,22 +80,35 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
     }
-        
     
-    public void update() {
-        Trees.map(getRoot(), dispatcher.getRoot(), null, LISTENER_FUNCTOR);
+    
+    public void synchronize() {
+        update();
         for (var player : server.getPlayerList().players) {
-            update(player);
+            synchronize(player);
         }
     }
     
-    public void update(Player player) {
-        update(((CraftPlayer) player).getHandle());
+    public void synchronize(Player player) {
+        synchronize(((CraftPlayer) player).getHandle());
+    }
+
+    void update() {
+        var target = dispatcher.getRoot();
+        
+        for (var child : getRoot().getChildren()) {
+            Commands.remove(target, child.getName());
+            
+            var mapped = FUNCTOR.map(child);
+            if (mapped != null) {
+                target.addChild(mapped);
+            }
+        }
     }
     
-    private void update(EntityPlayer player) {
+    void synchronize(EntityPlayer player) {
         var root = new RootCommandNode<ICompletionProvider>();
-        Trees.map(dispatcher.getRoot(), root, player.getCommandListener(), COMPLETION_FUNCTOR);
+        Trees.map(dispatcher.getRoot(), root, player.getCommandListener());
         
         player.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
@@ -101,64 +117,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        update();
+        synchronize();
     }
     
     @EventHandler
-    protected void update(PlayerJoinEvent event) {
-        update(event.getPlayer());
-    }
-
-        
-    public static class Root extends RootCommandNode<CommandSender> {
-
-        private Plugin plugin;
-        private CommandMap map;
-        private @Nullable CommandDispatcher<CommandSender> dispatcher;
-        
-
-        public Root(Plugin plugin, CommandMap map) {
-            this.plugin = plugin;
-            this.map = map;
-        }
-
-        
-        @Override
-        public void addChild(CommandNode<CommandSender> command) {
-            super.addChild(command);
-            map.register(plugin.getName(), new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText()));
-        }
-        
-        
-        protected void set(CommandDispatcher<CommandSender> dispatcher) {
-            this.dispatcher = dispatcher;
-        }
-
-    }
-    
-    
-    static class ListenerFunctor extends Functor<CommandSender, CommandListenerWrapper> {
-        
-        @Override
-        protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
-            var requirement = command.getRequirement();
-            return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
-        }
-        
-    }
-    
-    static class CompletionFunctor extends Functor<CommandListenerWrapper, ICompletionProvider> {
-        
-        @Override
-        public @Nullable CommandNode<ICompletionProvider> map(CommandNode<CommandListenerWrapper> command, @Nullable
-                CommandListenerWrapper sender, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> commands) {
-            if (command instanceof ArgumentCommandNode && ((ArgumentCommandNode<?, ?>) command).getCustomSuggestions() instanceof BukkitCommandWrapper) {
-                return null; 
-            }
-            
-            return super.map(command, sender, commands);
-        }
-        
+    protected void synchronize(PlayerJoinEvent event) {
+        synchronize(event.getPlayer());
     }
     
 }

@@ -126,7 +126,7 @@ public @Static class Trees {
 
         protected CommandNode<T> argument(CommandNode<S> command) {
             var argument = (ArgumentCommandNode<S, ?>) command;
-            return new Argument<>(argument.getName(), argument.getType(), execution(argument), requirement(argument), suggestions(command));
+            return new Argument<>(argument.getName(), argument.getType(), execution(argument), requirement(argument), null);
         }
 
         protected CommandNode<T> literal(CommandNode<S> command) {
