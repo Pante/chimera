@@ -27,6 +27,7 @@ import com.karuslabs.commons.command.Commands;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
@@ -100,6 +101,21 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
                 (((Mutable<S>) alias)).setRedirect(destination);
             }
         }
+    }
+    
+    
+    public static class Builder<S, T> extends ArgumentBuilder<S, Builder<S, T>> {
+
+        @Override
+        protected Builder<S, T> getThis() {
+            return this;
+        }
+
+        @Override
+        public CommandNode<S> build() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
     }
     
 }

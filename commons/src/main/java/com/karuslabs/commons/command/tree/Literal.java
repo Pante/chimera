@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.tree;
 import com.karuslabs.commons.command.Commands;
 
 import com.mojang.brigadier.*;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
@@ -98,6 +99,21 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
                 (((Mutable<S>) alias)).setRedirect(destination);
             }
         }
+    }
+    
+    
+    public static class Builder<S> extends ArgumentBuilder<S, Builder<S>> {
+
+        @Override
+        protected Builder<S> getThis() {
+            return this;
+        }
+
+        @Override
+        public CommandNode<S> build() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
     }
     
 }
