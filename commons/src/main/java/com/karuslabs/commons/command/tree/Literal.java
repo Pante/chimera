@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree;
 
-import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.*;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -102,16 +102,41 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
     }
     
     
+    public static <S> Builder<S> of(String name) {
+        return new Builder<>(name);
+    }
+    
+    
     public static class Builder<S> extends ArgumentBuilder<S, Builder<S>> {
-
+        
+        String name;
+        
+        
+        protected Builder(String name) {
+            this.name = name;
+        }
+        
+        
+        public Builder<S> executes(SingleCommand<S> command) {
+            return executes((Command<S>) command);
+        }
+        
+        
         @Override
         protected Builder<S> getThis() {
             return this;
         }
 
+        
         @Override
-        public CommandNode<S> build() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Literal<S> build() {
+            var literal = new Literal<>(name, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
+
+            for (var child : getArguments()) {
+                literal.addChild(child);
+            }
+
+            return literal;
         }
 
     }

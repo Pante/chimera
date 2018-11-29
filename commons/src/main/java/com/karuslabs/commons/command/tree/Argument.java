@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree;
 
-import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.*;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -104,16 +104,47 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
     }
     
     
+    public static <S, T> Builder<S, T> of(String name, ArgumentType<T> type) {
+        return new Builder<>(name, type);
+    }
+    
+    
     public static class Builder<S, T> extends ArgumentBuilder<S, Builder<S, T>> {
-
+        
+        String name;
+        ArgumentType<T> type;
+        SuggestionProvider<S> suggestions;
+        
+        
+        protected Builder(String name, ArgumentType<T> type) {
+            this.name = name;
+            this.type = type;
+        }
+        
+        
+        public Builder<S, T> executes(SingleCommand<S> command) {
+            return executes((Command<S>) command);
+        }
+        
+        public Builder<S, T> suggests(SuggestionProvider<S> suggestions) {
+            this.suggestions = suggestions;
+            return getThis();
+        }
+        
+        
         @Override
         protected Builder<S, T> getThis() {
             return this;
         }
 
         @Override
-        public CommandNode<S> build() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Argument<S, T> build() {
+            var argument = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
+            for (var child : getArguments()) {
+                argument.addChild(child);
+            }
+            
+            return argument;
         }
 
     }
