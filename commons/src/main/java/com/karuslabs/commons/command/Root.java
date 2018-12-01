@@ -53,7 +53,7 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText()))) {
+        if (map.register(prefix, new ProxyCommand(command.getName(), plugin, dispatcher, command.getUsageText()))) {
             super.addChild(command);
         }
         

@@ -33,17 +33,17 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 
-public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
+public class ProxyCommand extends Command implements PluginIdentifiableCommand {
     
     private Plugin plugin;
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
+    public ProxyCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
         this(name, plugin, dispatcher, "", usage);
     }
     
-    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String description, String usage) {
+    public ProxyCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String description, String usage) {
         super(name, description, usage, List.of());
         this.plugin = plugin;
         this.dispatcher = dispatcher;
