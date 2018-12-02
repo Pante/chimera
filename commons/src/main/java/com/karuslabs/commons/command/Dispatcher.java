@@ -29,6 +29,7 @@ import com.karuslabs.commons.command.tree.Trees.Functor;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.util.Queue;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
@@ -123,6 +124,19 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void synchronize(PlayerJoinEvent event) {
         synchronize(event.getPlayer());
+    }
+    
+    
+    public static class Task implements Runnable {
+        
+        private Queue<Player> players;
+        
+        
+        @Override
+        public void run() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
     }
     
 }
