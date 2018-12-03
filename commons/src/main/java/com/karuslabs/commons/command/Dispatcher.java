@@ -130,11 +130,22 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     public static class Task implements Runnable {
         
         private Queue<Player> players;
+        private boolean running;
+        
+        
+        public Task(Queue<Player> players) {
+            this.players = players;
+            this.running = false;
+        } 
+        
         
         
         @Override
         public void run() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            Player player;
+            do {
+                
+            } while (player)
         }
         
     }
