@@ -118,36 +118,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        synchronize();
+        update();
     }
     
     @EventHandler
     protected void synchronize(PlayerJoinEvent event) {
         synchronize(event.getPlayer());
-    }
-    
-    
-    public static class Task implements Runnable {
-        
-        private Queue<Player> players;
-        private boolean running;
-        
-        
-        public Task(Queue<Player> players) {
-            this.players = players;
-            this.running = false;
-        } 
-        
-        
-        
-        @Override
-        public void run() {
-            Player player;
-            do {
-                
-            } while (player)
-        }
-        
     }
     
 }

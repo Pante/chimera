@@ -21,53 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.event;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.*;
+import com.karuslabs.commons.command.Dispatcher;
 
-import org.bukkit.command.*;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public class Root extends RootCommandNode<CommandSender> {
     
-    private String prefix;
+public class SynchronizationTask implements Runnable {
+    
+    private BukkitScheduler scheduler;
     private Plugin plugin;
-    private CommandMap map;
-    private @Nullable CommandDispatcher<CommandSender> dispatcher;
+    private @Nullable Dispatcher dispatcher;
+    private Queue<Player> players;
+    private boolean scheduled;
+
     
-    
-    public Root(Plugin plugin, CommandMap map) {
-        this(plugin.getName().toLowerCase(), plugin, map);
+    public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin) {
+        this(scheduler, plugin, null, new ConcurrentLinkedQueue<>());
     }
     
-    public Root(String prefix, Plugin plugin, CommandMap map) {
-        this.prefix = prefix;
+    public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin, @Nullable Dispatcher dispatcher, Queue<Player> players) {
+        this.scheduler = scheduler;
         this.plugin = plugin;
-        this.map = map;
+        this.dispatcher = dispatcher;
+        this.players = players;
+        this.scheduled = false;
     }
     
+    
+    public void add(Player player) {
+        players.offer(player);
+        if (!scheduled) {
+            scheduler.scheduleSyncDelayedTask(plugin, this);
+        }
+    }
+
     
     @Override
-    public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText()))) {
-            super.addChild(command);
+    public void run() {
+        var player = players.poll();
+        
+        while (player != null) {
+            dispatcher.synchronize(player);
+            player = players.poll();
         }
         
-        super.addChild(Commands.alias(command, prefix + ":" + command.getName()));
+        this.scheduled = false;
     }
-    
-    
-    public void set(CommandDispatcher<CommandSender> dispatcher) {
-        if (dispatcher != null) {
-            this.dispatcher = dispatcher;
-            
-        } else {
-            throw new IllegalStateException("Dispatcher is already initialized");
-        }
-    }
-    
+
 }
