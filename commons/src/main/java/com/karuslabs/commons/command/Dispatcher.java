@@ -23,13 +23,13 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.event.*;
 import com.karuslabs.commons.command.tree.Trees;
 import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.util.Queue;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
@@ -41,7 +41,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -61,6 +61,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     private MinecraftServer server;
     private CommandDispatcher<CommandListenerWrapper> dispatcher; 
+    private SynchronizationTask task;
         
     
     public static Dispatcher of(Plugin plugin) {
@@ -118,12 +119,18 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        update();
     }
     
     @EventHandler
     protected void synchronize(PlayerJoinEvent event) {
         synchronize(event.getPlayer());
+    }
+    
+    @EventHandler
+    protected void send(PlayerCommandSendEvent event) {
+        if (!(event instanceof SynchronizationEvent)) {
+            task.add(event.getPlayer());
+        }
     }
     
 }
