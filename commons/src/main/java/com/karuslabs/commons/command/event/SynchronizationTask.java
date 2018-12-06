@@ -70,11 +70,16 @@ public class SynchronizationTask implements Runnable {
         var player = players.poll();
         
         while (player != null) {
-            dispatcher.synchronize(player);
+            dispatcher.update(player);
             player = players.poll();
         }
         
         this.scheduled = false;
+    }
+    
+    
+    public void set(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
 }

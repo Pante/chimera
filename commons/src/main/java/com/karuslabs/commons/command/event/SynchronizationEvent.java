@@ -26,13 +26,28 @@ package com.karuslabs.commons.command.event;
 import java.util.Collection;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 
 
 public class SynchronizationEvent extends PlayerCommandSendEvent {
     
+    private static final HandlerList handlers = new HandlerList();
+    
+    
     public SynchronizationEvent(Player player, Collection<String> commands) {
         super(player, commands);
+    }
+    
+    
+    
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
     
 }
