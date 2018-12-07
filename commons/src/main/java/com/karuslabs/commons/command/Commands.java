@@ -38,13 +38,13 @@ import java.util.Map;
 
 public @Static class Commands {
 
-    private static final VarHandle COMMAND = variable("command", Command.class);
-    private static final VarHandle CHILDREN = variable("children", Map.class);
-    private static final VarHandle LITERALS = variable("literals", Map.class);
-    private static final VarHandle ARGUMENTS = variable("arguments", Map.class);
+    private static final VarHandle COMMAND = find("command", Command.class);
+    private static final VarHandle CHILDREN = find("children", Map.class);
+    private static final VarHandle LITERALS = find("literals", Map.class);
+    private static final VarHandle ARGUMENTS = find("arguments", Map.class);
     
     
-    private static VarHandle variable(String name, Class<?> type) {
+    private static VarHandle find(String name, Class<?> type) {
         try {
             return MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, name, type);
             
