@@ -34,9 +34,9 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class RepetitionExecutorTest {
+class RepeaterTest {
     
-    RepetitionExecutor executor = new RepetitionExecutor(1);
+    Repeater executor = new Repeater(1);
     RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
     
     

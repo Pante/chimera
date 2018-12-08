@@ -27,7 +27,7 @@
         
         <repository>
             <id>karuslabs-spigot</id>
-            <url>https://repo.karuslabs.com/repository/craftbukkit/</url>
+            <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
     </repositories>
      

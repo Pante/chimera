@@ -110,6 +110,7 @@ public @Static class Exceptions {
             
         } else if (sender instanceof RemoteConsoleCommandSender) {
             return ((DedicatedServer) MinecraftServer.getServer()).remoteControlCommandListener.f();
+            
         } else if (sender instanceof ConsoleCommandSender) {
             return ((CraftServer) sender.getServer()).getServer().getServerCommandListener();
             

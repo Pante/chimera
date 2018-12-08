@@ -90,7 +90,32 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
-    public Dispatcher synchronize() {
+    public void update() {
+        map();
+        synchronize();
+    }
+  
+    
+    @EventHandler
+    protected void synchronize(ServerLoadEvent event) {
+        dispatcher = server.commandDispatcher.a();
+        map();
+    }
+    
+    @EventHandler
+    protected void update(PlayerJoinEvent event) {
+        synchronize(event.getPlayer());
+    }
+    
+    @EventHandler
+    protected void update(PlayerCommandSendEvent event) {
+        if (!(event instanceof SynchronizationEvent)) {
+            task.add(event.getPlayer());
+        }
+    }
+    
+        
+    protected void map() {
         var target = dispatcher.getRoot();
         
         for (var child : getRoot().getChildren()) {
@@ -101,18 +126,16 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
                 target.addChild(mapped);
             }
         }
-        
-        return this;
     }
     
     
-    public void update() {
+    public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
-            update(player);
+            synchronize(player);
         }
     }
     
-    public void update(Player player) {
+    public void synchronize(Player player) {
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
@@ -123,25 +146,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         Commands.remove(root, commands.toArray(new String[]{}));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
-    }
-    
-    
-    @EventHandler
-    protected void synchronize(ServerLoadEvent event) {
-        dispatcher = server.commandDispatcher.a();
-        synchronize();
-    }
-    
-    @EventHandler
-    protected void update(PlayerJoinEvent event) {
-        update(event.getPlayer());
-    }
-    
-    @EventHandler
-    protected void update(PlayerCommandSendEvent event) {
-        if (!(event instanceof SynchronizationEvent)) {
-            task.add(event.getPlayer());
-        }
     }
     
 }

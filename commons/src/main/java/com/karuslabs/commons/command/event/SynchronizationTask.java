@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.event;
 
 import com.karuslabs.commons.command.Dispatcher;
-
+    
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -46,7 +46,7 @@ public class SynchronizationTask implements Runnable {
     
     public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin) {
         this(scheduler, plugin, null, new ConcurrentLinkedQueue<>());
-    }
+}
     
     public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin, @Nullable Dispatcher dispatcher, Queue<Player> players) {
         this.scheduler = scheduler;
@@ -70,7 +70,7 @@ public class SynchronizationTask implements Runnable {
         var player = players.poll();
         
         while (player != null) {
-            dispatcher.update(player);
+            dispatcher.synchronize(player);
             player = players.poll();
         }
         

@@ -23,10 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.Literal;
-import com.karuslabs.commons.command.tree.Argument;
+import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.annotations.Static;
-
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.*;

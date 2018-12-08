@@ -26,22 +26,22 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 
 
-public class RepetitionExecutor extends ScheduledThreadPoolExecutor {
+public class Repeater extends ScheduledThreadPoolExecutor {
     
-    public RepetitionExecutor(int corePoolSize) {
+    public Repeater(int corePoolSize) {
         super(corePoolSize);
     }
 
-    public RepetitionExecutor(int corePoolSize, ThreadFactory threadFactory) {
+    public Repeater(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
     }
     
 
-    public RepetitionExecutor(int corePoolSize, RejectedExecutionHandler handler) {
+    public Repeater(int corePoolSize, RejectedExecutionHandler handler) {
         super(corePoolSize, handler);
     }
 
-    public RepetitionExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+    public Repeater(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, threadFactory, handler);
     }
     
@@ -57,8 +57,8 @@ public class RepetitionExecutor extends ScheduledThreadPoolExecutor {
     @Override
     protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> task) {
         if (runnable instanceof Repetition) {
-            var continual = (Repetition<V>) runnable;
-            continual.set(task);
+            var repetition = (Repetition<V>) runnable;
+            repetition.set(task);
         }
         
         return task;

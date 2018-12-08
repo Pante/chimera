@@ -23,25 +23,18 @@
  */
 package com.karuslabs.commons.util.locale.providers;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
@@ -94,6 +87,17 @@ class YAMLProviderTest {
         provider.save();
         
         verify(provider.configuration).save(source);
+    }
+    
+    
+    @Test
+    void save_throws_exception() throws IOException {
+        YamlConfiguration mock = mock(YamlConfiguration.class);
+        doThrow(IOException.class).when(mock).save(any(File.class));
+        
+        provider.configuration = mock;
+        
+        assertThrows(UncheckedIOException.class, provider::save);
     }
     
 }
