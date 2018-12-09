@@ -40,17 +40,12 @@
     </distributionManagement>
     
     
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        
+    <repositories>      
         <repository>
             <id>lingua-releases</id>
             <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
         </repository>
-        
+                
         <repository>
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
@@ -60,10 +55,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        
+                
         <repository>
-            <id>karuslabs-spigot</id>
-            <url>https://repo.karuslabs.com/repository/spigot/</url>
+            <id>craftbukkit-mirror</id>
+            <url>https://repo.karuslabs.com/repository/craftbukkit/</url>
         </repository>
     </repositories>
     
