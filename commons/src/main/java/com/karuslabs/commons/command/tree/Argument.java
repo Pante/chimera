@@ -48,9 +48,13 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
     }
     
     public Argument(String name, ArgumentType<T> type, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork, SuggestionProvider<S> suggestions) {
+        this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
+    }
+    
+    public Argument(String name, ArgumentType<T> type, List<CommandNode<S>> aliases, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork, SuggestionProvider<S> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
-        this.aliases = new ArrayList<>(0);
+        this.aliases = aliases;
     }
     
     
@@ -113,14 +117,21 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
         
         String name;
         ArgumentType<T> type;
-        SuggestionProvider<S> suggestions;
+        List<String> aliases;
+        @Nullable SuggestionProvider<S> suggestions;
         
         
         protected Builder(String name, ArgumentType<T> type) {
             this.name = name;
             this.type = type;
+            this.aliases = new ArrayList<>(0);
         }
         
+        
+        public Builder<S, T> alias(String alias) {
+            aliases.add(alias);
+            return this;
+        }
         
         public Builder<S, T> executes(SingleCommand<S> command) {
             return executes((Command<S>) command);
@@ -142,6 +153,10 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
             var argument = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
                 argument.addChild(child);
+            }
+            
+            for (var alias : aliases) {
+                Commands.alias(argument, alias);
             }
             
             return argument;

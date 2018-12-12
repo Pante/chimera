@@ -34,6 +34,8 @@ import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
+
 
 public @Static class Trees {
     
@@ -49,10 +51,16 @@ public @Static class Trees {
     }
     
     public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Functor<S, T> functor) {
+        map(source, target, caller, functor(), (Predicate<CommandNode<S>>) TRUE);
+    }
+    
+    public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Functor<S, T> functor, Predicate<CommandNode<S>> requirement) {
         for (var child : source.getChildren()) {
-            var mapped = functor.map(child, caller);
-            if (mapped != null) {
-                target.addChild(mapped);
+            if (requirement.test(child)) {
+                var mapped = functor.map(child, caller);
+                if (mapped != null) {
+                    target.addChild(mapped);
+                }
             }
         }
     }

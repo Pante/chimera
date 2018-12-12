@@ -25,10 +25,9 @@ package com.karuslabs.commons.command.event;
 
 import com.karuslabs.commons.command.Dispatcher;
     
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
 
-import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -37,43 +36,37 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     
 public class SynchronizationTask implements Runnable {
     
+    static final Set<PlayerCommandSendEvent> EVENTS = new HashSet<>();
+    
+    
     private BukkitScheduler scheduler;
     private Plugin plugin;
     private @Nullable Dispatcher dispatcher;
-    private Queue<Player> players;
     private boolean scheduled;
 
     
-    public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin) {
-        this(scheduler, plugin, null, new ConcurrentLinkedQueue<>());
-}
-    
-    public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin, @Nullable Dispatcher dispatcher, Queue<Player> players) {
+    public SynchronizationTask(BukkitScheduler scheduler, Plugin plugin, @Nullable Dispatcher dispatcher) {
         this.scheduler = scheduler;
         this.plugin = plugin;
         this.dispatcher = dispatcher;
-        this.players = players;
         this.scheduled = false;
     }
     
     
-    public void add(Player player) {
-        players.offer(player);
-        if (!scheduled) {
-            scheduler.scheduleSyncDelayedTask(plugin, this);
+    public void add(PlayerCommandSendEvent event) {
+        if (EVENTS.add(event) && !scheduled) {
+            scheduler.scheduleSyncDelayedTask(plugin, this, 1L);
+            scheduled = true;
         }
     }
 
     
     @Override
     public void run() {
-        var player = players.poll();
-        
-        while (player != null) {
-            dispatcher.synchronize(player);
-            player = players.poll();
+        for (var event : EVENTS) {
+            dispatcher.synchronize(event.getPlayer(), event.getCommands());
         }
-        
+        EVENTS.clear();
         this.scheduled = false;
     }
     

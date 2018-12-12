@@ -31,7 +31,7 @@ import com.mojang.brigadier.tree.*;
 
 import java.lang.invoke.*;
 
-import java.util.Map;
+import java.util.*;
 
 
 public @Static class Commands {
@@ -96,7 +96,7 @@ public @Static class Commands {
     }
     
     public static <S> Literal<S> alias(LiteralCommandNode<S> command, String alias) {
-        var literal = new Literal<>(alias, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+        var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
         for (var child : command.getChildren()) {
             literal.addChild(child);
         }

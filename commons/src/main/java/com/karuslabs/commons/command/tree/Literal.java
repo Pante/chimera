@@ -46,9 +46,13 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
     }
     
     public Literal(String name, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork) {
+        this(name, new ArrayList<>(0), command, requirement, destination, modifier, fork);
+    }
+    
+    public Literal(String name, List<CommandNode<S>> aliases, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
-        this.aliases = new ArrayList<>(0);
+        this.aliases = aliases;
     }
     
     
@@ -110,12 +114,19 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
     public static class Builder<S> extends ArgumentBuilder<S, Builder<S>> {
         
         String name;
+        List<String> aliases;
         
         
         protected Builder(String name) {
             this.name = name;
+            this.aliases = new ArrayList<>(0);
         }
         
+        
+        public Builder<S> alias(String alias) {
+            aliases.add(alias);
+            return this;
+        }
         
         public Builder<S> executes(SingleCommand<S> command) {
             return executes((Command<S>) command);
@@ -131,9 +142,12 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
         @Override
         public Literal<S> build() {
             var literal = new Literal<>(name, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
-
             for (var child : getArguments()) {
                 literal.addChild(child);
+            }
+            
+            for (var alias : aliases) {
+                Commands.alias(literal, alias);
             }
 
             return literal;

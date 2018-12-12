@@ -24,12 +24,13 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.event.*;
-import com.karuslabs.commons.command.tree.Trees;
+import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.util.*;
 import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
@@ -46,7 +47,7 @@ import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
 import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
@@ -58,18 +59,13 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
             return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
         }
     };
-    
-    
-    private MinecraftServer server;
-    private CommandDispatcher<CommandListenerWrapper> dispatcher; 
-    private SynchronizationTask task;
-        
+
     
     public static Dispatcher of(Plugin plugin) {
         var server = plugin.getServer();
         
         var root = new Root(plugin, ((CraftServer) server).getCommandMap());
-        var task = new SynchronizationTask(server.getScheduler(), plugin);
+        var task = new SynchronizationTask(server.getScheduler(), plugin, null);
         
         var dispatcher = new Dispatcher(server, root, task);
         
@@ -82,6 +78,11 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
+    private MinecraftServer server;
+    private CommandDispatcher<CommandListenerWrapper> dispatcher; 
+    private SynchronizationTask task;
+
+    
     protected Dispatcher(Server server, RootCommandNode<CommandSender> root, SynchronizationTask task) {
         super(root);
         this.server = ((CraftServer) server).getServer();
@@ -90,30 +91,17 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
+    public Literal<CommandSender> register(Literal.Builder<CommandSender> command) {
+        var literal = command.build();
+        getRoot().addChild(literal);
+        return literal;
+    }
+    
+    
     public void update() {
         map();
         synchronize();
-    }
-  
-    
-    @EventHandler
-    protected void synchronize(ServerLoadEvent event) {
-        dispatcher = server.commandDispatcher.a();
-        map();
-    }
-    
-    @EventHandler
-    protected void update(PlayerJoinEvent event) {
-        synchronize(event.getPlayer());
-    }
-    
-    @EventHandler
-    protected void update(PlayerCommandSendEvent event) {
-        if (!(event instanceof SynchronizationEvent)) {
-            task.add(event.getPlayer());
-        }
-    }
-    
+    }  
         
     protected void map() {
         var target = dispatcher.getRoot();
@@ -136,16 +124,33 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     public void synchronize(Player player) {
+        var permitted = dispatcher.getRoot().getChildren().stream().map(CommandNode::getName).collect(toSet());       
+        server.server.getPluginManager().callEvent(new SynchronizationEvent(player, permitted));
+        
+        synchronize(player, permitted);
+    }
+    
+    public void synchronize(Player player, Collection<String> commands) {    
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener());
-        
-        var commands = root.getChildren().stream().map(CommandNode::getName).collect(toList());
-        server.server.getPluginManager().callEvent(new SynchronizationEvent(player, commands));
-        Commands.remove(root, commands.toArray(new String[]{}));
+        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), Trees.functor(), command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
+    }
+    
+    
+    @EventHandler
+    protected void update(PlayerCommandSendEvent event) {
+        if (!(event instanceof SynchronizationEvent)) {
+            task.add(event);
+        }
+    }
+    
+    @EventHandler
+    protected void map(ServerLoadEvent event) {
+        dispatcher = server.commandDispatcher.a();
+        map();
     }
     
 }
