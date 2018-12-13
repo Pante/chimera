@@ -52,7 +52,7 @@ import static java.util.stream.Collectors.toSet;
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    static final Functor<CommandSender, CommandListenerWrapper> FUNCTOR = new Functor<>() {
+    static final Functor<CommandSender, CommandListenerWrapper> REQUIREMENT_FUNCTOR = new Functor<>() {
         @Override
         protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
             var requirement = command.getRequirement();
@@ -109,7 +109,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         for (var child : getRoot().getChildren()) {
             Commands.remove(target, child.getName());
             
-            var mapped = FUNCTOR.map(child);
+            var mapped = REQUIREMENT_FUNCTOR.map(child);
             if (mapped != null) {
                 target.addChild(mapped);
             }
