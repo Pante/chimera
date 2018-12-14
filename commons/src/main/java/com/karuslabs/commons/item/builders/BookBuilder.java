@@ -32,6 +32,9 @@ import org.bukkit.inventory.meta.BookMeta.Generation;
 
 public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
+    private static final String[] EMPTY = new String[0];
+    
+    
     public static BookBuilder of(Material material) {
         return new BookBuilder(material);
     }
@@ -57,7 +60,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
     
     public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(new String[0]));
+        return pages(pages.toArray(EMPTY));
     }
     
     public BookBuilder pages(String... pages) {
