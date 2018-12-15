@@ -158,7 +158,7 @@ public @Static class Trees {
             return (Predicate<T>) TRUE;
         }
 
-        protected SuggestionProvider<T> suggestions(CommandNode<S> command) {
+        protected SuggestionProvider<T> suggestions(ArgumentCommandNode<S, ?> command) {
             return (SuggestionProvider<T>) EMPTY;
         }
 

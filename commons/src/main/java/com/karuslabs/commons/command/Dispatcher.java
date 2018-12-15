@@ -28,6 +28,7 @@ import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
@@ -58,6 +59,14 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
             var requirement = command.getRequirement();
             return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
         }
+    };
+    
+    static final Functor<CommandListenerWrapper, ICompletionProvider> SUGGESTION_FUNCTOR = new Functor<>() {
+        @Override
+        protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
+            SuggestionProvider provider = command.getCustomSuggestions();
+            return provider;
+        } 
     };
 
     
