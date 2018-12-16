@@ -64,6 +64,8 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     static final Functor<CommandListenerWrapper, ICompletionProvider> SUGGESTION_FUNCTOR = new Functor<>() {
         @Override
         protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
+            // Fucking nasty workaround using raw types which Mojang abused.
+            // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
             SuggestionProvider provider = command.getCustomSuggestions();
             return provider;
         } 
