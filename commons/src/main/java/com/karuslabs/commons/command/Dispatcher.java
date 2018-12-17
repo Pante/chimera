@@ -47,21 +47,15 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
 import static java.util.stream.Collectors.toSet;
 
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
     
-    static final Functor<CommandSender, CommandListenerWrapper> REQUIREMENT_FUNCTOR = new Functor<>() {
-        @Override
-        protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
-            var requirement = command.getRequirement();
-            return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
-        }
-    };
-    
-    static final Functor<CommandListenerWrapper, ICompletionProvider> SUGGESTION_FUNCTOR = new Functor<>() {
+    static final Functor<CommandListenerWrapper, ICompletionProvider> FUNCTOR = new Functor<>() {
         @Override
         protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
             // Fucking nasty workaround using raw types which Mojang abused.
@@ -92,6 +86,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private MinecraftServer server;
     private CommandDispatcher<CommandListenerWrapper> dispatcher; 
     private SynchronizationTask task;
+    private Functor<CommandSender, CommandListenerWrapper> functor;
 
     
     protected Dispatcher(Server server, RootCommandNode<CommandSender> root, SynchronizationTask task) {
@@ -99,6 +94,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.task = task;
+        this.functor = new ReparsingFunctor(this);
     }
     
     
@@ -120,7 +116,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         for (var child : getRoot().getChildren()) {
             Commands.remove(target, child.getName());
             
-            var mapped = REQUIREMENT_FUNCTOR.map(child);
+            var mapped = functor.map(child);
             if (mapped != null) {
                 target.addChild(mapped);
             }
@@ -145,7 +141,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), Trees.functor(), command -> commands.contains(command.getName()));
+        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), FUNCTOR, command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
@@ -164,4 +160,35 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         map();
     }
     
+}
+
+class ReparsingFunctor extends Functor<CommandSender, CommandListenerWrapper> {
+    
+    private CommandDispatcher<CommandSender> dispatcher;
+    
+    
+    ReparsingFunctor(CommandDispatcher<CommandSender> dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+    
+
+    @Override
+    protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
+        var requirement = command.getRequirement();
+        return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
+    }
+
+    @Override
+    protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
+        var suggestor = command.getCustomSuggestions();
+        if (suggestor == null) {
+            return null;
+        }
+
+        return (context, suggestions) -> {
+            var reparsed = dispatcher.parse(context.getInput(), context.getSource().getBukkitSender()).getContext().build(context.getInput());
+            return suggestor.getSuggestions(reparsed, suggestions);
+        };
+    }
+
 }
