@@ -87,6 +87,13 @@ public interface TokenMap<N, T> {
     }
     
     
+    public <U extends T> U remove(N name, Class<U> type);
+    
+    public default <U extends T> U remove(Key<N, U> key) {
+        return (U) map().remove(key);
+    }
+    
+    
     public Map<Key<N, ? extends T>, T> map();
     
     
@@ -178,6 +185,11 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
     public <U extends T> U getOrDefault(N name, Class<U> type, U value) {
         return getOrDefault((Key<N, U>) cached.set(name, type), value);
     }
+    
+    @Override
+    public <U extends T> U remove(N name, Class<U> type) {
+        return remove((Key<N, U>) cached.set(name, type));
+    }
 
     
     @Override
@@ -213,6 +225,11 @@ class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     @Override
     public <U extends T> U getOrDefault(N name, Class<U> type, U value) {
         return getOrDefault((Key<N, U>) cached.set(name, type), value);
+    }
+    
+    @Override
+    public <U extends T> U remove(N name, Class<U> type) {
+        return remove((Key<N, U>) cached.set(name, type));
     }
 
     

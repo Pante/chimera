@@ -57,6 +57,11 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     public default <U extends T> U getOrDefault(N name, Class<U> type, U value) {
         return getOrDefault((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type), value);
     }
+    
+    @Override
+    public default <U extends T> U remove(N name, Class<U> type) {
+        return remove((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
+    }
 
 
     @Override

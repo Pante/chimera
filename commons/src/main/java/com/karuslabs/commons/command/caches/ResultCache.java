@@ -21,17 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.cache;
+package com.karuslabs.commons.command.caches;
 
 import com.mojang.brigadier.ParseResults;
+
+import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public interface ParsingCache<T> {
+public interface ResultCache {    
     
-    public boolean add(String input, ParseResults<T> result);
+    public static final ResultCache NONE = new ResultCache() {
+        
+        @Override
+        public @Nullable ParseResults<CommandSender> get(String input) {
+            return null;
+        }
+
+        @Override
+        public void put(String input, ParseResults<CommandSender> results) {
+            
+        }
+
+        @Override
+        public void remove(String input) {
+            
+        }
+        
+    };
     
-    public @Nullable ParseResults<T> remove(String input);
+    
+    public @Nullable ParseResults<CommandSender> get(String input);
+    
+    public void put(String input, ParseResults<CommandSender> results);
+    
+    public void remove(String input);
+    
+    
+    public default void cache(String input, ParseResults<CommandSender> results) {
+        
+    }
     
 }

@@ -70,6 +70,10 @@ public interface ClassMap<T> {
         return (U) map().put(type, value);
     }
     
+    public default <U extends T> U remove(Class<U> type) {
+        return (U) map().remove(type);
+    }
+    
     
     public Map<Class<? extends T>, T> map();
     

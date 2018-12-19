@@ -23,16 +23,17 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.caches.ResultCache;
+import com.karuslabs.commons.command.internal.Root;
 import com.karuslabs.commons.command.event.*;
 import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.*;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 import net.minecraft.server.v1_13_R2.*;
 
@@ -49,52 +50,25 @@ import org.bukkit.plugin.Plugin;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
 import static java.util.stream.Collectors.toSet;
 
 
-public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {
-    
-    static final Functor<CommandListenerWrapper, ICompletionProvider> FUNCTOR = new Functor<>() {
-        @Override
-        protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-            // Fucking nasty workaround using raw types which Mojang abused.
-            // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-            SuggestionProvider provider = command.getCustomSuggestions();
-            return provider;
-        } 
-    };
-
-    
-    public static Dispatcher of(Plugin plugin) {
-        var server = plugin.getServer();
-        
-        var root = new Root(plugin, ((CraftServer) server).getCommandMap());
-        var task = new SynchronizationTask(server.getScheduler(), plugin, null);
-        
-        var dispatcher = new Dispatcher(server, root, task);
-        
-        root.set(dispatcher);
-        task.set(dispatcher);
-        
-        server.getPluginManager().registerEvents(dispatcher, plugin);
-        
-        return dispatcher;
-    }
-    
+public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
     private MinecraftServer server;
     private CommandDispatcher<CommandListenerWrapper> dispatcher; 
     private SynchronizationTask task;
     private Functor<CommandSender, CommandListenerWrapper> functor;
+    private ResultCache cache;
 
     
-    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, SynchronizationTask task) {
+    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, SynchronizationTask task, ResultCache cache) {
         super(root);
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.task = task;
-        this.functor = new ReparsingFunctor(this);
+        this.functor = new CommandSenderFunctor(this);
+        this.cache = cache;
     }
     
     
@@ -124,6 +98,18 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
+    @Override
+    public ParseResults<CommandSender> parse(StringReader command, CommandSender source) {
+        var results = cache.get(command.getString());
+        if (results == null) {
+            results = super.parse(command, source);
+            cache.put(command.getString(), results);
+        }
+        
+        return results;
+    }
+    
+    
     public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
             synchronize(player);
@@ -141,7 +127,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), FUNCTOR, command -> commands.contains(command.getName()));
+        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), CommandListenerFunctor.FUNCTOR, command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
@@ -160,35 +146,65 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         map();
     }
     
-}
-
-class ReparsingFunctor extends Functor<CommandSender, CommandListenerWrapper> {
     
-    private CommandDispatcher<CommandSender> dispatcher;
-    
-    
-    ReparsingFunctor(CommandDispatcher<CommandSender> dispatcher) {
-        this.dispatcher = dispatcher;
+    public ResultCache cache() {
+        return cache;
+    }    
+        
+            
+    public static Builder of(Plugin plugin) {
+        return new Builder(plugin);
     }
     
+    public static class Builder  {
+        
+        private Plugin plugin;
+        private ResultCache cache;
+        private @Nullable Root root;
+        private @Nullable SynchronizationTask task;
 
-    @Override
-    protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
-        var requirement = command.getRequirement();
-        return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
-    }
+        
+        protected Builder(Plugin plugin) {
+            this.plugin = plugin;
+            this.cache = ResultCache.NONE;
+        }
+        
+        
+        public Builder cache(ResultCache cache) {
+            this.cache = cache;
+            return this;
+        }
+        
+        public Builder root(Root root) {
+            this.root = root;
+            return this;
+        }
+        
+        public Builder task(SynchronizationTask task) {
+            this.task = task;
+            return this;
+        }
+        
+        public Dispatcher build() {
+            var server = plugin.getServer();
+            if (root == null) {
+                root = new Root(plugin, ((CraftServer) server).getCommandMap());
+            }
 
-    @Override
-    protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
-        var suggestor = command.getCustomSuggestions();
-        if (suggestor == null) {
-            return null;
+            if (task == null) {
+                task = new SynchronizationTask(server.getScheduler(), plugin, null);
+            }
+
+            var dispatcher = new Dispatcher(server, root, task, cache);
+
+            root.set(dispatcher);
+            task.set(dispatcher);
+
+            server.getPluginManager().registerEvents(dispatcher, plugin);
+            
+            return dispatcher;
         }
 
-        return (context, suggestions) -> {
-            var reparsed = dispatcher.parse(context.getInput(), context.getSource().getBukkitSender()).getContext().build(context.getInput());
-            return suggestor.getSuggestions(reparsed, suggestions);
-        };
     }
-
+    
 }
