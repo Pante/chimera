@@ -41,7 +41,7 @@ class CommandListenerFunctor extends Functor<CommandListenerWrapper, ICompletion
         // Fucking nasty workaround using raw types which Mojang abused.
         // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();
-        return provider;
+        return CompletionProviders.b(provider);
     }
     
 };
