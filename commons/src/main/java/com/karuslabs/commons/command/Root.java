@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.internal;
+package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.Commands;
-import com.karuslabs.commons.command.internal.DispatcherCommand;
+import com.karuslabs.commons.command.DispatcherCommand;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 

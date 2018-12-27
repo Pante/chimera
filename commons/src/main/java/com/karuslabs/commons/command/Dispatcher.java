@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.caches.ResultCache;
-import com.karuslabs.commons.command.internal.Root;
 import com.karuslabs.commons.command.event.*;
 import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.commons.command.tree.Trees.Functor;
