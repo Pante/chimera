@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.Trees.Functor;
+import com.karuslabs.commons.command.tree.Trees.Builder;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -38,12 +38,12 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class CommandSenderFunctor extends Functor<CommandSender, CommandListenerWrapper> {
+class CommandSenderBuilder extends Builder<CommandSender, CommandListenerWrapper> {
     
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    CommandSenderFunctor(CommandDispatcher<CommandSender> dispatcher) {
+    CommandSenderBuilder(CommandDispatcher<CommandSender> dispatcher) {
         this.dispatcher = dispatcher;
     }
     
@@ -57,14 +57,15 @@ class CommandSenderFunctor extends Functor<CommandSender, CommandListenerWrapper
     @Override
     protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
         var suggestor = command.getCustomSuggestions();
-        if (suggestor == null) {
-            return null;
-        }
-
-        return (context, suggestions) -> {
+        if (suggestor != null) {
+            return (context, suggestions) -> {
             var reparsed = dispatcher.parse(context.getInput(), context.getSource().getBukkitSender()).getContext().build(context.getInput());
             return suggestor.getSuggestions(reparsed, suggestions);
-        };
+            };
+            
+        } else {
+            return null;
+        }
     }
 
 }

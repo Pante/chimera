@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.Trees.Functor;
+import com.karuslabs.commons.command.tree.Trees.Builder;
 
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
@@ -31,9 +31,9 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import net.minecraft.server.v1_13_R2.*;
 
 
-class CommandListenerFunctor extends Functor<CommandListenerWrapper, ICompletionProvider> {
+class CommandListenerBuilder extends Builder<CommandListenerWrapper, ICompletionProvider> {
     
-    static final CommandListenerFunctor FUNCTOR = new CommandListenerFunctor();
+    static final CommandListenerBuilder BUILDER = new CommandListenerBuilder();
     
     
     @Override
@@ -41,7 +41,7 @@ class CommandListenerFunctor extends Functor<CommandListenerWrapper, ICompletion
         // Fucking nasty workaround using raw types which Mojang abused.
         // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();
-        return CompletionProviders.b(provider);
+        return provider == null ? null: CompletionProviders.b(provider);
     }
     
 };

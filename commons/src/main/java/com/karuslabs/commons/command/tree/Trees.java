@@ -34,12 +34,12 @@ import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.commons.command.tree.Trees.Functor.TRUE;
+import static com.karuslabs.commons.command.tree.Trees.Builder.TRUE;
 
 
 public @Static class Trees {
     
-    private static final Functor<?, ?> FUNCTOR = new Functor<>();
+    private static final Builder<?, ?> FUNCTOR = new Builder<>();
     
     
     public static <S, T> void map(CommandNode<S> source, CommandNode<T> target) {
@@ -47,14 +47,14 @@ public @Static class Trees {
     }
     
     public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller) {
-        map(source, target, caller, functor());
+        map(source, target, caller, builder());
     }
     
-    public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Functor<S, T> functor) {
-        map(source, target, caller, functor(), (Predicate<CommandNode<S>>) TRUE);
+    public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Builder<S, T> builder) {
+        map(source, target, caller, builder, (Predicate<CommandNode<S>>) TRUE);
     }
     
-    public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Functor<S, T> functor, Predicate<CommandNode<S>> requirement) {
+    public static <S, T> void map(CommandNode<S> source, CommandNode<T> target, @Nullable S caller, Builder<S, T> functor, Predicate<CommandNode<S>> requirement) {
         for (var child : source.getChildren()) {
             if (requirement.test(child)) {
                 var mapped = functor.map(child, caller);
@@ -66,12 +66,12 @@ public @Static class Trees {
     }
     
     
-    public static <S, T> Functor<S, T> functor() {
-        return (Functor<S, T>) FUNCTOR;
+    public static <S, T> Builder<S, T> builder() {
+        return (Builder<S, T>) FUNCTOR;
     }
     
     
-    public static class Functor<S, T> {
+    public static class Builder<S, T> {
 
         public static final Command<?> NONE = context -> 0;
         public static final Predicate<?> TRUE = source -> true;
@@ -134,7 +134,7 @@ public @Static class Trees {
 
         protected CommandNode<T> argument(CommandNode<S> command) {
             var argument = (ArgumentCommandNode<S, ?>) command;
-            return new Argument<>(argument.getName(), argument.getType(), execution(argument), requirement(argument), null);
+            return new Argument<>(argument.getName(), argument.getType(), execution(argument), requirement(argument), suggestions(argument));
         }
 
         protected CommandNode<T> literal(CommandNode<S> command) {
@@ -158,8 +158,8 @@ public @Static class Trees {
             return (Predicate<T>) TRUE;
         }
 
-        protected SuggestionProvider<T> suggestions(ArgumentCommandNode<S, ?> command) {
-            return (SuggestionProvider<T>) EMPTY;
+        protected @Nullable SuggestionProvider<T> suggestions(ArgumentCommandNode<S, ?> command) {
+            return null;
         }
 
     }

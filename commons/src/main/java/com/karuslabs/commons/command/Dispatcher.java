@@ -26,7 +26,6 @@ package com.karuslabs.commons.command;
 import com.karuslabs.commons.command.caches.ResultCache;
 import com.karuslabs.commons.command.event.*;
 import com.karuslabs.commons.command.tree.*;
-import com.karuslabs.commons.command.tree.Trees.Functor;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.*;
@@ -57,7 +56,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private MinecraftServer server;
     private CommandDispatcher<CommandListenerWrapper> dispatcher; 
     private SynchronizationTask task;
-    private Functor<CommandSender, CommandListenerWrapper> functor;
+    private Trees.Builder<CommandSender, CommandListenerWrapper> builder;
     private ResultCache cache;
 
     
@@ -66,7 +65,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.task = task;
-        this.functor = new CommandSenderFunctor(this);
+        this.builder = new CommandSenderBuilder(this);
         this.cache = cache;
     }
     
@@ -89,7 +88,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         for (var child : getRoot().getChildren()) {
             Commands.remove(target, child.getName());
             
-            var mapped = functor.map(child);
+            var mapped = builder.map(child);
             if (mapped != null) {
                 target.addChild(mapped);
             }
@@ -126,7 +125,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), CommandListenerFunctor.FUNCTOR, command -> commands.contains(command.getName()));
+        Trees.map(dispatcher.getRoot(), root, entity.getCommandListener(), CommandListenerBuilder.BUILDER, command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
