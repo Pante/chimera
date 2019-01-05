@@ -26,6 +26,7 @@ package com.karuslabs.commons.item.builders;
 import java.util.*;
 
 import org.bukkit.Material;
+import org.bukkit.attribute.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,6 +75,11 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         return self();
     }
     
+    
+    public Self attribute(Attribute attribute, AttributeModifier modifier) {
+        meta.addAttributeModifier(attribute, modifier);
+        return self();
+    }
     
     public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
