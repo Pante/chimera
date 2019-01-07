@@ -23,12 +23,12 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.Builder;
-import com.karuslabs.commons.item.builders.ItemBuilder;
 import java.util.*;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,14 +86,11 @@ class BuilderTest {
     
     
     @Test
-    void reset() {
-        var builder = ItemBuilder.of(APPLE).lore("A");
+    void tag() {
+        NamespacedKey key = mock(NamespacedKey.class);
+        var builder = ItemBuilder.of(APPLE).tag(key, ItemTagType.INTEGER, 0);
         
-        var first = builder.build();
-        var second = builder.reset(ACACIA_BOAT).build();
-        
-        assertNotSame(first, second);
-        assertTrue(builder.lore.isEmpty());
+        verify(builder.meta.getCustomTagContainer()).setCustomTag(key, ItemTagType.INTEGER, 0);
     }
     
 }

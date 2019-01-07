@@ -25,11 +25,12 @@ package com.karuslabs.commons.item.builders;
 
 import java.util.*;
 
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.attribute.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.tags.ItemTagType;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -118,6 +119,12 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
+    public <T, V> Self tag(NamespacedKey key, ItemTagType<T, V> type, V value) {
+        meta.getCustomTagContainer().setCustomTag(key, type, value);
+        return self();
+    }
+    
+    
     public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);
         return self();
@@ -128,15 +135,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
-    }
-    
-    public Self reset(Material material) {
-        item = new ItemStack(material);
-        meta = (Meta) item.getItemMeta();
-        if (lore != null) {
-            lore.clear();
-        }
-        return self();
     }
     
     
