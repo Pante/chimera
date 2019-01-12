@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.old.command;
 
-import com.karuslabs.commons.command.caches.ResultCache;
-import com.karuslabs.commons.command.event.*;
-import com.karuslabs.commons.command.tree.*;
+import com.karuslabs.commons.command.synchronization.SynchronizationEvent;
+import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.old.command.event.SynchronizationTask;
+import com.karuslabs.commons.old.command.tree.Trees;
+import com.karuslabs.commons.command.tree.nodes.Literal;
+import com.karuslabs.commons.old.command.caches.ResultCache;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.*;

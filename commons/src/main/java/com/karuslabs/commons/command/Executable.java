@@ -21,24 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.tree;
+package com.karuslabs.commons.command;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 
-public interface Mutable<S> {    
+@FunctionalInterface
+public interface Executable<S> extends Command<S> {
     
-    public CommandNode<S> removeChild(String child);
-    
-    
-    public Command<S> getCommand();
-    
-    public void setCommand(Command<S> command);
+    public void execute(CommandContext<S> context) throws CommandSyntaxException;
     
     
-    public CommandNode<S> getRedirect();
-    
-    public void setRedirect(CommandNode<S> destination);
+    @Override
+    public default int run(CommandContext<S> context) throws CommandSyntaxException {
+        execute(context);
+        return SINGLE_SUCCESS;
+    }
     
 }

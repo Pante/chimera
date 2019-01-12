@@ -21,9 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.tree;
+package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.Commands;
+
+import com.karuslabs.commons.command.Executable;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -34,24 +36,26 @@ import com.mojang.brigadier.tree.*;
 import java.util.*;
 import java.util.function.Predicate;
 
+import org.bukkit.command.CommandSender;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasable<S>, Mutable<S> {
+public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T> {
 
-    private CommandNode<S> destination;
-    private List<CommandNode<S>> aliases;
+    private CommandNode<T> destination;
+    private List<CommandNode<T>> aliases;
+
     
-    
-    public Argument(String name, ArgumentType<T> type, Command<S> command, Predicate<S> requirement, SuggestionProvider<S> suggestions) {
+    public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);
     }
     
-    public Argument(String name, ArgumentType<T> type, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork, SuggestionProvider<S> suggestions) {
+    public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
     }
     
-    public Argument(String name, ArgumentType<T> type, List<CommandNode<S>> aliases, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork, SuggestionProvider<S> suggestions) {
+    public Argument(String name, ArgumentType<V> type, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
         this.aliases = aliases;
@@ -59,15 +63,15 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
     
     
     @Override
-    public void addChild(CommandNode<S> child) {
+    public void addChild(CommandNode<T> child) {
         super.addChild(child);
         for (var alias : aliases) {
-            alias.addChild(alias);
+            alias.addChild(child);
         }
     }
     
     @Override
-    public CommandNode<S> removeChild(String child) {
+    public CommandNode<T> removeChild(String child) {
         var removed = Commands.remove(this, child);
         for (var alias : aliases) {
             Commands.remove(alias, child);
@@ -78,78 +82,82 @@ public class Argument<S, T> extends ArgumentCommandNode<S, T> implements Aliasab
         
     
     @Override
-    public List<CommandNode<S>> aliases() {
+    public List<CommandNode<T>> aliases() {
         return aliases;
     }
     
     
     @Override
-    public void setCommand(Command<S> command) {
-        Commands.set(this, command);
+    public void setCommand(Command<T> command) {
+        Commands.executes(this, command);
         for (var alias : aliases) {
-            Commands.set(alias, command);
+            Commands.executes(alias, command);
         }
     }
     
     
     @Override
-    public @Nullable CommandNode<S> getRedirect() {
+    public @Nullable CommandNode<T> getRedirect() {
         return destination;
     }
 
     @Override
-    public void setRedirect(CommandNode<S> destination) {
+    public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
         for (var alias : aliases) {
-            if (alias instanceof Mutable<?>) {
-                (((Mutable<S>) alias)).setRedirect(destination);
+            if (alias instanceof Node<?>) {
+                (((Node<T>) alias)).setRedirect(destination);
             }
         }
     }
     
     
-    public static <S, T> Builder<S, T> of(String name, ArgumentType<T> type) {
+    public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
+        return new Builder<>(name, type);
+    }
+    
+    public static <V> Builder<CommandSender, V>of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
     
-    public static class Builder<S, T> extends ArgumentBuilder<S, Builder<S, T>> {
+    public static class Builder<T, V> extends ArgumentBuilder<T, Builder<T, V>> {
         
         String name;
-        ArgumentType<T> type;
+        ArgumentType<V> type;
         List<String> aliases;
-        @Nullable SuggestionProvider<S> suggestions;
+        @Nullable SuggestionProvider<T> suggestions;
         
         
-        protected Builder(String name, ArgumentType<T> type) {
+        protected Builder(String name, ArgumentType<V> type) {
             this.name = name;
             this.type = type;
             this.aliases = new ArrayList<>(0);
         }
         
         
-        public Builder<S, T> alias(String alias) {
+        public Builder<T, V> alias(String alias) {
             aliases.add(alias);
             return this;
         }
         
-        public Builder<S, T> executes(SingleCommand<S> command) {
-            return executes((Command<S>) command);
+        public Builder<T, V> executes(Executable<T> command) {
+            return executes((Command<T>) command);
         }
         
-        public Builder<S, T> suggests(SuggestionProvider<S> suggestions) {
+        public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
             return getThis();
         }
         
         
         @Override
-        protected Builder<S, T> getThis() {
+        protected Builder<T, V> getThis() {
             return this;
         }
 
         @Override
-        public Argument<S, T> build() {
+        public Argument<T, V> build() {
             var argument = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
                 argument.addChild(child);

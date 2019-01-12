@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,46 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.caches;
+package com.karuslabs.commons.command.tree.nodes;
 
-import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.tree.CommandNode;
 
-import org.bukkit.command.CommandSender;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.List;
 
 
-public interface ResultCache {    
+public interface Node<T> {
     
-    public static final ResultCache NONE = new ResultCache() {
-        
-        @Override
-        public @Nullable ParseResults<CommandSender> get(String input) {
-            return null;
-        }
+    public List<CommandNode<T>> aliases();
 
-        @Override
-        public void put(String input, ParseResults<CommandSender> results) {
-            
-        }
-
-        @Override
-        public void remove(String input) {
-            
-        }
-        
-    };
+    
+    public CommandNode<T> removeChild(String child);
     
     
-    public @Nullable ParseResults<CommandSender> get(String input);
+    public Command<T> getCommand();
     
-    public void put(String input, ParseResults<CommandSender> results);
-    
-    public void remove(String input);
+    public void setCommand(Command<T> command);
     
     
-    public default void cache(String input, ParseResults<CommandSender> results) {
-        
-    }
+    public CommandNode<T> getRedirect();
+    
+    public void setRedirect(CommandNode<T> destination);
     
 }

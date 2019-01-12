@@ -23,26 +23,25 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.*;
 import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.*;
 
 import java.lang.invoke.*;
-
 import java.util.*;
 
 
 public @Static class Commands {
 
-    private static final VarHandle COMMAND = find("command", Command.class);
-    private static final VarHandle CHILDREN = find("children", Map.class);
-    private static final VarHandle LITERALS = find("literals", Map.class);
-    private static final VarHandle ARGUMENTS = find("arguments", Map.class);
+    static final VarHandle COMMAND = field("command", Command.class);
+    static final VarHandle CHILDREN = field("children", Map.class);
+    static final VarHandle LITERALS = field("literals", Map.class);
+    static final VarHandle ARGUMENTS = field("arguments", Map.class);
     
     
-    private static VarHandle find(String name, Class<?> type) {
+    static VarHandle field(String name, Class<?> type) {
         try {
             return MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, name, type);
             
@@ -52,60 +51,44 @@ public @Static class Commands {
     }
     
     
-    public static <S> CommandNode<S> alias(CommandNode<S> command, String alias) {
-        if (command instanceof Argument<?, ?>) {
-            return alias((Argument<S, ?>) command, alias);
+    public static <T> CommandNode<T> alias(CommandNode<T> command, String alias) {
+        if (command instanceof ArgumentCommandNode<?, ?>) {
+            return alias((ArgumentCommandNode<T, ?>) command, alias);
             
-        } else if (command instanceof ArgumentCommandNode<?, ?>) {
-            return alias((ArgumentCommandNode<S, ?>) command, alias);
-            
-        } else if (command instanceof Literal<?>) {
-            return alias((Literal<S>) command, alias);
-            
-        } else if (command instanceof LiteralCommandNode<?>) {
-            return alias((LiteralCommandNode<S>) command, alias);
+        } if (command instanceof LiteralCommandNode<?>) {
+            return alias((LiteralCommandNode<T>) command, alias);
             
         } else {
             throw new UnsupportedOperationException("Unsupported commnd, '" + command.getName() + "' of type: " + command.getClass().getName());
         }
     }
     
-    
-    public static <S, T> Argument<S, T> alias(Argument<S, T> command, String alias) {
-        var argument = alias((ArgumentCommandNode<S, T>) command, alias);
-        command.aliases().add(argument);
-        
-        return argument;
-    }
-    
-    public static <S, T> Argument<S, T> alias(ArgumentCommandNode<S, T> command, String alias) {
+    public static <T, V> Argument<T, V> alias(ArgumentCommandNode<T, V> command, String alias) {
         var argument = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
-        for (var child : command.getChildren()) {
-            argument.addChild(child);
-        }
-        
-        return argument;
+        return alias(command, argument);
     }
+
     
-    
-    public static <S> Literal<S> alias(Literal<S> command, String alias) {
-        var literal = alias((LiteralCommandNode<S>) command, alias);
-        command.aliases().add(literal);
-        
-        return literal;
-    }
-    
-    public static <S> Literal<S> alias(LiteralCommandNode<S> command, String alias) {
+    public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
         var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
-        for (var child : command.getChildren()) {
-            literal.addChild(child);
-        }
-        
-        return literal;
+        return alias(command, literal);
     }
     
     
-    public static <S> void set(CommandNode<S> command, Command<S> execution) {
+    static <Alias extends CommandNode<T>, T> Alias alias(CommandNode<T> command, Alias alias) {
+        if (command instanceof Node<?>) {
+            ((Node<T>) command).aliases().add(alias);
+        }
+        
+        for (var child : command.getChildren()) {
+            alias.addChild(child);
+        }
+        
+        return alias;
+    }
+    
+    
+    public static <T> void executes(CommandNode<T> command, Command<T> execution) {
         COMMAND.set(command, execution);
     }
     

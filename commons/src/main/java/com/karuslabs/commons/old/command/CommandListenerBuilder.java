@@ -21,33 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.event;
+package com.karuslabs.commons.old.command;
 
-import java.util.Collection;
+import com.karuslabs.commons.old.command.tree.Trees.Builder;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerCommandSendEvent;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.tree.ArgumentCommandNode;
+
+import net.minecraft.server.v1_13_R2.*;
 
 
-public class SynchronizationEvent extends PlayerCommandSendEvent {
+class CommandListenerBuilder extends Builder<CommandListenerWrapper, ICompletionProvider> {
     
-    private static final HandlerList handlers = new HandlerList();
-    
-    
-    public SynchronizationEvent(Player player, Collection<String> commands) {
-        super(player, commands);
-    }
-    
+    static final CommandListenerBuilder BUILDER = new CommandListenerBuilder();
     
     
     @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
+    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
+        // Fucking nasty workaround using raw types which Mojang abused.
+        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
+        SuggestionProvider provider = command.getCustomSuggestions();
+        return provider == null ? null: CompletionProviders.b(provider);
     }
     
-}
+};

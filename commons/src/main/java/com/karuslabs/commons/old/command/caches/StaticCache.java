@@ -21,23 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.old.command.caches;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.google.common.cache.*;
+
+import com.mojang.brigadier.ParseResults;
+
+import org.bukkit.command.CommandSender;
 
 
-@FunctionalInterface
-public interface SingleCommand<S> extends Command<S> {
+public class StaticCache implements ResultCache {
     
-    public void execute(CommandContext<S> context) throws CommandSyntaxException;
+    private Cache<String, ParseResults<CommandSender>> cache;
+    
+    
+    public StaticCache() {
+        this(CacheBuilder.newBuilder().build());
+    }
+    
+    public StaticCache(Cache<String, ParseResults<CommandSender>> cache) {
+        this.cache = cache;
+    }
+    
     
     
     @Override
-    public default int run(CommandContext<S> context) throws CommandSyntaxException {
-        execute(context);
-        return SINGLE_SUCCESS;
+    public ParseResults<CommandSender> get(String input) {
+        return cache.getIfPresent(input);
+    }
+
+    @Override
+    public void put(String input, ParseResults<CommandSender> results) {
+        cache.put(input, results);
+    }
+
+    @Override
+    public void remove(String input) {
+        cache.invalidate(input);
     }
     
 }

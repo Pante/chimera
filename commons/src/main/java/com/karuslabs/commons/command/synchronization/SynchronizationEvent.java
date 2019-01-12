@@ -21,15 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.tree;
+package com.karuslabs.commons.command.synchronization;
 
-import com.mojang.brigadier.tree.CommandNode;
+import java.util.Collection;
 
-import java.util.List;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 
 
-public interface Aliasable<S> {
+public class SynchronizationEvent extends PlayerCommandSendEvent {
     
-    public List<CommandNode<S>> aliases();
+    private static final HandlerList handlers = new HandlerList();
+    
+    
+    public SynchronizationEvent(Player player, Collection<String> commands) {
+        super(player, commands);
+    }
+    
+    
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
     
 }

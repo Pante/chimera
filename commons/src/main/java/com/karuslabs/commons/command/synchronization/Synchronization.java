@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.command.tree.Trees.Builder;
-
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
-
-import net.minecraft.server.v1_13_R2.*;
+import java.util.List;
 
 
-class CommandListenerBuilder extends Builder<CommandListenerWrapper, ICompletionProvider> {
+public class Synchronization implements Runnable {
     
-    static final CommandListenerBuilder BUILDER = new CommandListenerBuilder();
+    private List<PlayerCommandSenderEvent> events;
+    
     
     
     @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround using raw types which Mojang abused.
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-        SuggestionProvider provider = command.getCustomSuggestions();
-        return provider == null ? null: CompletionProviders.b(provider);
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-};
+}

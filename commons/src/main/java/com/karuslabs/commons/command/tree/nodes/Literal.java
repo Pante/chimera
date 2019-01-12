@@ -21,9 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.tree;
+package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.Commands;
+
+import com.karuslabs.commons.command.Executable;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -32,24 +34,26 @@ import com.mojang.brigadier.tree.*;
 import java.util.*;
 import java.util.function.Predicate;
 
+import org.bukkit.command.CommandSender;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, Mutable<S> {
+public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
 
-    private CommandNode<S> destination;
-    private List<CommandNode<S>> aliases;
+    private CommandNode<T> destination;
+    private List<CommandNode<T>> aliases;
     
     
-    public Literal(String name, Command<S> command, Predicate<S> requirement) {
+    public Literal(String name, Command<T> command, Predicate<T> requirement) {
         this(name, command, requirement, null, null, false);
     }
     
-    public Literal(String name, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork) {
+    public Literal(String name, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         this(name, new ArrayList<>(0), command, requirement, destination, modifier, fork);
     }
     
-    public Literal(String name, List<CommandNode<S>> aliases, Command<S> command, Predicate<S> requirement, @Nullable CommandNode<S> destination, RedirectModifier<S> modifier, boolean fork) {
+    public Literal(String name, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
         this.aliases = aliases;
@@ -57,15 +61,15 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
     
     
     @Override
-    public void addChild(CommandNode<S> child) {
+    public void addChild(CommandNode<T> child) {
         super.addChild(child);
         for (var alias : aliases) {
-            alias.addChild(alias);
+            alias.addChild(child);
         }
     }
     
     @Override
-    public CommandNode<S> removeChild(String child) {
+    public CommandNode<T> removeChild(String child) {
         var removed = Commands.remove(this, child);
         for (var alias : aliases) {
             Commands.remove(alias, child);
@@ -76,42 +80,46 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
     
     
     @Override
-    public List<CommandNode<S>> aliases() {
+    public List<CommandNode<T>> aliases() {
         return aliases;
     }
     
     
     @Override
-    public void setCommand(Command<S> command) {
-        Commands.set(this, command);
+    public void setCommand(Command<T> command) {
+        Commands.executes(this, command);
         for (var alias : aliases) {
-            Commands.set(alias, command);
+            Commands.executes(alias, command);
         }
     }
 
     
     @Override
-    public @Nullable CommandNode<S> getRedirect() {
+    public @Nullable CommandNode<T> getRedirect() {
         return destination;
     }
 
     @Override
-    public void setRedirect(CommandNode<S> destination) {
+    public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
         for (var alias : aliases) {
-            if (alias instanceof Mutable<?>) {
-                (((Mutable<S>) alias)).setRedirect(destination);
+            if (alias instanceof Node<?>) {
+                (((Node<T>) alias)).setRedirect(destination);
             }
         }
     }
+
     
+    public static <T> Builder<T> builder(String name) {
+        return new Builder<>(name);
+    }
     
-    public static <S> Builder<S> of(String name) {
+    public static Builder<CommandSender> of(String name) {
         return new Builder<>(name);
     }
     
     
-    public static class Builder<S> extends ArgumentBuilder<S, Builder<S>> {
+    public static class Builder<T> extends ArgumentBuilder<T, Builder<T>> {
         
         String name;
         List<String> aliases;
@@ -123,24 +131,24 @@ public class Literal<S> extends LiteralCommandNode<S> implements Aliasable<S>, M
         }
         
         
-        public Builder<S> alias(String alias) {
+        public Builder<T> alias(String alias) {
             aliases.add(alias);
             return this;
         }
         
-        public Builder<S> executes(SingleCommand<S> command) {
-            return executes((Command<S>) command);
+        public Builder<T> executes(Executable<T> command) {
+            return executes((Command<T>) command);
         }
         
         
         @Override
-        protected Builder<S> getThis() {
+        protected Builder<T> getThis() {
             return this;
         }
 
         
         @Override
-        public Literal<S> build() {
+        public Literal<T> build() {
             var literal = new Literal<>(name, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
             for (var child : getArguments()) {
                 literal.addChild(child);

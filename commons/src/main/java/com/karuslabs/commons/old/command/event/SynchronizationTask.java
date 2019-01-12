@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.event;
+package com.karuslabs.commons.old.command.event;
 
-import com.karuslabs.commons.command.Dispatcher;
+import com.karuslabs.commons.old.command.Dispatcher;
     
 import java.util.*;
 
@@ -36,7 +36,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     
 public class SynchronizationTask implements Runnable {
     
-    static final Set<PlayerCommandSendEvent> EVENTS = new HashSet<>();
+    static final List<PlayerCommandSendEvent> EVENTS = new ArrayList<>();
     
     
     private BukkitScheduler scheduler;
