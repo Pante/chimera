@@ -28,15 +28,18 @@ import com.karuslabs.commons.command.tree.Tree;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.plugin.*;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -44,8 +47,28 @@ import static java.util.stream.Collectors.toSet;
 public class Synchronizer implements Listener {
     
     private MinecraftServer server;
+    private Plugin plugin;
     private CommandDispatcher<CommandListenerWrapper> dispatcher; 
     private Tree<CommandListenerWrapper, ICompletionProvider> tree;
+    private WeakReference<Synchronization> synchronization;
+    
+    
+    public static Synchronizer of(Plugin plugin) {
+        var server = ((CraftServer) plugin.getServer()).getServer();
+        var tree = new Tree<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
+        var registration = plugin.getServer().getServicesManager().getRegistration(Synchronization.class);
+        
+        return new Synchronizer(server, plugin, tree, registration == null ? null : registration.getProvider());
+    }
+    
+    
+    Synchronizer(MinecraftServer server, Plugin plugin, Tree<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
+        this.server = server;
+        this.plugin = plugin;
+        this.dispatcher = server.getCommandDispatcher().a();
+        this.tree = tree;
+        this.synchronization = new WeakReference<>(synchronization);
+    }
     
     
     public void synchronize() {
@@ -65,7 +88,7 @@ public class Synchronizer implements Listener {
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        tree.map(dispatcher.getRoot(), root, entity.getCommandListener());
+        tree.map(dispatcher.getRoot(), root, entity.getCommandListener(), command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
@@ -73,9 +96,17 @@ public class Synchronizer implements Listener {
     
     @EventHandler
     protected void synchronize(PlayerCommandSendEvent event) {
-        if (!(event instanceof SynchronizationEvent)) {
-            task.add(event);
+        if (event instanceof SynchronizationEvent) {
+            return;
         }
+        
+        var task = synchronization.get();
+        if (task == null) {
+            synchronization = new WeakReference<>(task = new Synchronization(this,plugin.getServer().getScheduler(), plugin));
+            plugin.getServer().getServicesManager().register(Synchronization.class, task, plugin, ServicePriority.Low);
+        }
+        
+        task.add(event);
     }
     
     @EventHandler

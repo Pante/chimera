@@ -23,18 +23,47 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import java.util.List;
+import java.util.*;
+
+import org.bukkit.event.player.PlayerCommandSendEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 
 public class Synchronization implements Runnable {
     
-    private List<PlayerCommandSenderEvent> events;
+    private Synchronizer synchronizer;
+    private BukkitScheduler scheduler;
+    private Plugin plugin;
+    private List<PlayerCommandSendEvent> events;
+    private boolean running;
     
+    
+    public Synchronization(Synchronizer synchronizer, BukkitScheduler scheduler, Plugin plugin) {
+        this.synchronizer = synchronizer;
+        this.scheduler = scheduler;
+        this.plugin = plugin;
+        this.events = new ArrayList<>();
+        this.running = false;
+    }
+    
+    
+    public void add(PlayerCommandSendEvent event) {
+        if (events.add(event) && !running) {
+            scheduler.scheduleSyncDelayedTask(plugin, this, 1L);
+            running = true;
+        }
+    }
     
     
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (var event : events) {
+            synchronizer.synchronize(event.getPlayer(), event.getCommands());
+        }
+        
+        events.clear();
+        running = false;
     }
     
 }

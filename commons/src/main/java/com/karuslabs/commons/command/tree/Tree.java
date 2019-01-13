@@ -39,22 +39,16 @@ public class Tree<T, R> {
     
     
     private Mapper<T, R> mapper;
-    private Predicate<CommandNode<T>> predicate;
     
     
     public Tree(Mapper<T, R> mapper) {
-        this(mapper, (Predicate<CommandNode<T>>) TRUE);
-    }
-    
-    public Tree(Mapper<T, R> mapper, Predicate<CommandNode<T>> predicate) {
         this.mapper = mapper;
-        this.predicate = predicate;
     }
     
     
-    public void map(RootCommandNode<T> source, RootCommandNode<R> target, T caller) {
+    public void map(RootCommandNode<T> source, RootCommandNode<R> target, T caller, Predicate<CommandNode<T>> requirement) {
         for (var child : source.getChildren()) {
-            if (predicate.test(child)) {
+            if (requirement.test(child)) {
                 var mapped = map(child, caller);
                 if (mapped != null) {
                     target.addChild(mapped);

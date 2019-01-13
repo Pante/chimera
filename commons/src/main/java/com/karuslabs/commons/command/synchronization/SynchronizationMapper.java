@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.old.command;
+package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.old.command.tree.Trees.Builder;
+import com.karuslabs.commons.command.tree.Mapper;
 
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
@@ -31,9 +31,9 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 import net.minecraft.server.v1_13_R2.*;
 
 
-class CommandListenerBuilder extends Builder<CommandListenerWrapper, ICompletionProvider> {
+class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
-    static final CommandListenerBuilder BUILDER = new CommandListenerBuilder();
+    static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
     
     @Override
@@ -44,4 +44,4 @@ class CommandListenerBuilder extends Builder<CommandListenerWrapper, ICompletion
         return provider == null ? null: CompletionProviders.b(provider);
     }
     
-};
+}
