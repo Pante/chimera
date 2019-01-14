@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.old.command;
+package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.old.command.tree.Trees.Builder;
+import com.karuslabs.commons.command.tree.Mapper;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -38,12 +38,12 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class CommandSenderBuilder extends Builder<CommandSender, CommandListenerWrapper> {
+class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    CommandSenderBuilder(CommandDispatcher<CommandSender> dispatcher) {
+    DispatcherMapper(CommandDispatcher<CommandSender> dispatcher) {
         this.dispatcher = dispatcher;
     }
     
@@ -57,15 +57,15 @@ class CommandSenderBuilder extends Builder<CommandSender, CommandListenerWrapper
     @Override
     protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
         var suggestor = command.getCustomSuggestions();
-        if (suggestor != null) {
-            return (context, suggestions) -> {
-            var reparsed = dispatcher.parse(context.getInput(), context.getSource().getBukkitSender()).getContext().build(context.getInput());
-            return suggestor.getSuggestions(reparsed, suggestions);
-            };
-            
-        } else {
+        if (suggestor == null) {
             return null;
         }
+        
+        return (context, suggestions) -> {
+            var sender = context.getSource().getBukkitSender();
+            var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());
+            return suggestor.getSuggestions(reparsed, suggestions);
+        };
     }
-
+    
 }

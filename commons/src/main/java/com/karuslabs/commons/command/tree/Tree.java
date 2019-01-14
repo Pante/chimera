@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.tree;
 
+import com.karuslabs.commons.command.Commands;
 import com.karuslabs.commons.command.tree.nodes.Node;
 
 import com.mojang.brigadier.tree.*;
@@ -45,6 +46,16 @@ public class Tree<T, R> {
         this.mapper = mapper;
     }
     
+    
+    public void replace(RootCommandNode<T> source, RootCommandNode<R> target) {
+        for (var child : source.getChildren()) {
+            Commands.remove(target, child.getName());
+            var mapped = map(child);
+            if (mapped != null) {
+                target.addChild(mapped);
+            }
+        }
+    }
     
     public void map(RootCommandNode<T> source, RootCommandNode<R> target, T caller, Predicate<CommandNode<T>> requirement) {
         for (var child : source.getChildren()) {

@@ -76,12 +76,12 @@ public @Static class Commands {
     
     
     static <Alias extends CommandNode<T>, T> Alias alias(CommandNode<T> command, Alias alias) {
-        if (command instanceof Node<?>) {
-            ((Node<T>) command).aliases().add(alias);
-        }
-        
         for (var child : command.getChildren()) {
             alias.addChild(child);
+        }
+        
+        if (command instanceof Node<?>) {
+            ((Node<T>) command).aliases().add(alias);
         }
         
         return alias;

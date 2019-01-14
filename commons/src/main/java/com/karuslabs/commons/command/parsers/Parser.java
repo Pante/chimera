@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,46 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.old.command.caches;
+package com.karuslabs.commons.command.parsers;
 
-import com.mojang.brigadier.ParseResults;
+import com.karuslabs.commons.command.Dispatcher;
+
+import com.mojang.brigadier.*;
 
 import org.bukkit.command.CommandSender;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public interface ResultCache {    
+@FunctionalInterface
+public interface Parser {
     
-    public static final ResultCache NONE = new ResultCache() {
-        
-        @Override
-        public @Nullable ParseResults<CommandSender> get(String input) {
-            return null;
-        }
-
-        @Override
-        public void put(String input, ParseResults<CommandSender> results) {
-            
-        }
-
-        @Override
-        public void remove(String input) {
-            
-        }
-        
-    };
+    public static final Parser DEFAULT = (dispatcher, reader, source) -> dispatcher.defaultParse(reader, source);
     
     
-    public @Nullable ParseResults<CommandSender> get(String input);
-    
-    public void put(String input, ParseResults<CommandSender> results);
-    
-    public void remove(String input);
-    
-    
-    public default void cache(String input, ParseResults<CommandSender> results) {
-        
-    }
+    public ParseResults<CommandSender> accept(Dispatcher dispatcher, StringReader reader, CommandSender source);
     
 }

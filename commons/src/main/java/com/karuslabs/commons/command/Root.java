@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.old.command;
+package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.DispatcherCommand;
 import com.karuslabs.commons.command.Commands;
@@ -55,11 +55,15 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText()))) {
+        if (map.register(prefix, from(command))) {
             super.addChild(command);
         }
         
         super.addChild(Commands.alias(command, prefix + ":" + command.getName()));
+    }
+    
+    protected Command from(CommandNode<CommandSender> command) {
+        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
     }
     
     
