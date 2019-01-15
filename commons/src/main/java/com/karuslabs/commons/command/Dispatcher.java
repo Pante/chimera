@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.parsers.*;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.Tree;
 import com.karuslabs.commons.command.tree.nodes.Literal;
@@ -39,7 +40,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
-import com.karuslabs.commons.command.parsers.Parser;
+import org.bukkit.plugin.Plugin;
 
 
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
@@ -51,7 +52,23 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private Tree<CommandSender, CommandListenerWrapper> tree;
     
     
-    protected Dispatcher(RootCommandNode<CommandSender> root, Server server, Synchronizer synchronizer, Parser parser) {
+    public static Dispatcher of(Plugin plugin) {
+        return of(plugin, new CachedParser());
+    }
+    
+    public static Dispatcher of(Plugin plugin, Parser parser) {
+        var server = ((CraftServer) plugin.getServer());
+        var root = new Root(plugin, server.getCommandMap());
+        var synchronizer = Synchronizer.of(plugin);
+        
+        var dispatcher = new Dispatcher(server, root, synchronizer, parser);
+        server.getPluginManager().registerEvents(dispatcher, plugin);
+        
+        return dispatcher;
+    }
+    
+    
+    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer, Parser parser) {
         super(root);
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
@@ -88,7 +105,11 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     public void update() {
         tree.replace(getRoot(), dispatcher.getRoot());
         synchronizer.synchronize();
-    }  
-
+    }
+    
+    
+    public Synchronizer synchronizer() {
+        return synchronizer;
+    }
     
 }

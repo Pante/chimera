@@ -23,15 +23,17 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.Mapper;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
+import java.util.*;
 import java.util.function.Predicate;
 
-import net.minecraft.server.v1_13_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_13_R2.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -39,6 +41,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
+    
+    private static final Map<ClientsideProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
+    
+    static {
+        CLIENT_SIDE = new EnumMap<>(ClientsideProvider.class);
+        CLIENT_SIDE.put(ClientsideProvider.RECIPES, CompletionProviders.b);
+        CLIENT_SIDE.put(ClientsideProvider.SOUNDS, CompletionProviders.c);
+        CLIENT_SIDE.put(ClientsideProvider.ENTITIES, CompletionProviders.d);
+    }
+    
     
     private CommandDispatcher<CommandSender> dispatcher;
     
@@ -59,6 +71,11 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         var suggestor = command.getCustomSuggestions();
         if (suggestor == null) {
             return null;
+        }
+        
+        var client = CLIENT_SIDE.get(suggestor);
+        if (client != null) {
+            return client;
         }
         
         return (context, suggestions) -> {

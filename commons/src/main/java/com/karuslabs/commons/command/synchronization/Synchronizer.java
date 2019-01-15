@@ -54,11 +54,14 @@ public class Synchronizer implements Listener {
     
     
     public static Synchronizer of(Plugin plugin) {
-        var server = ((CraftServer) plugin.getServer()).getServer();
+        var server = ((CraftServer) plugin.getServer());
         var tree = new Tree<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
         var registration = plugin.getServer().getServicesManager().getRegistration(Synchronization.class);
         
-        return new Synchronizer(server, plugin, tree, registration == null ? null : registration.getProvider());
+        var synchronizer = new Synchronizer(server.getServer(), plugin, tree, registration == null ? null : registration.getProvider());
+        server.getPluginManager().registerEvents(synchronizer, plugin);
+        
+        return synchronizer;
     }
     
     
