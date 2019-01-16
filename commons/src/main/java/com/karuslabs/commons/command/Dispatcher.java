@@ -62,6 +62,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var synchronizer = Synchronizer.of(plugin);
         
         var dispatcher = new Dispatcher(server, root, synchronizer, parser);
+        root.set(dispatcher);
         server.getPluginManager().registerEvents(dispatcher, plugin);
         
         return dispatcher;
