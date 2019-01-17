@@ -23,18 +23,82 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.karuslabs.commons.command.Read;
 
+import com.mojang.brigadier.*;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.*;
+import com.mojang.brigadier.suggestion.*;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import org.bukkit.Bukkit;
+
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 
-public class PlayerArgument implements ArgumentType<Player> {
+public class PlayerArgument implements WordArgument<Player> {
+    
+    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
+    private static final Collection<String> EXAMPLES = List.of("Bob", "Pante");
 
+    
+    private Server server;
+    
+    
+    public PlayerArgument(Server server) {
+        this.server = server;
+    }
+    
+    
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        var argument = Read.until(reader, ' ');
+        var player = Bukkit.getPlayerExact(argument);
+        
+        if (player != null) {
+            return player;
+            
+        } else {
+            throw EXCEPTION.create(argument);
+        }
+        
+    }
+
+    
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        if (context.getSource() instanceof Player) {
+            return visible((Player) context.getSource(), builder);
+            
+        } else {
+            return players(builder);
+        }
+    }
+    
+    protected CompletableFuture<Suggestions> visible(Player source, SuggestionsBuilder builder) {
+        for (var player: server.getOnlinePlayers()) {
+            if (source.canSee(player)) {
+                builder.suggest(player.getName());
+            }
+        }
+        
+        return builder.buildFuture();
+    }
+    
+    protected CompletableFuture<Suggestions> players(SuggestionsBuilder builder) {
+        for (var player: server.getOnlinePlayers()) {
+                builder.suggest(player.getName());
+        }
+        
+        return builder.buildFuture();
+    }
+    
+
+    @Override
+    public Collection<String> getExamples() {
+        return EXAMPLES;
     }
     
 }

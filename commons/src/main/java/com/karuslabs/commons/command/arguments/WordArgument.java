@@ -21,26 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.synchronization;
+package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.command.tree.Mapper;
-
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
-
-import net.minecraft.server.v1_13_R2.*;
+import com.mojang.brigadier.arguments.*;
 
 
-class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
+public interface WordArgument<T> extends TypeArgument<T, String> {
     
-    static final SynchronizationMapper MAPPER = new SynchronizationMapper();
+    public static final ArgumentType<String> WORD = StringArgumentType.word();
+    
     
     @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround using raw types which Mojang abused.
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-        SuggestionProvider provider = command.getCustomSuggestions();
-        return provider == null ? null: CompletionProviders.b(provider);
+    public default ArgumentType<String> primitive() {
+        return WORD;
     }
     
 }

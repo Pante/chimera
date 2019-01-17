@@ -21,26 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.synchronization;
+package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.tree.Mapper;
+import com.karuslabs.annotations.Static;
 
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
-
-import net.minecraft.server.v1_13_R2.*;
+import com.mojang.brigadier.StringReader;
 
 
-class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
+public @Static class Read {
     
-    static final SynchronizationMapper MAPPER = new SynchronizationMapper();
-    
-    @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround using raw types which Mojang abused.
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-        SuggestionProvider provider = command.getCustomSuggestions();
-        return provider == null ? null: CompletionProviders.b(provider);
+    public static String until(StringReader reader, char delimiter) {
+        var start = reader.getCursor();
+        while (reader.canRead() && reader.peek() != delimiter) {
+            reader.skip();
+        }
+        
+        return reader.getString().substring(start, reader.getCursor());
     }
+    
     
 }

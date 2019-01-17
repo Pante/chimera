@@ -21,26 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.synchronization;
+package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.command.tree.Mapper;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.*;
 
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.ArgumentCommandNode;
+import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.command.CommandSender;
 
 
-class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
-    
-    static final SynchronizationMapper MAPPER = new SynchronizationMapper();
+public interface TypeArgument<T, V> extends ArgumentType<T>, SuggestionProvider<CommandSender> {
     
     @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround using raw types which Mojang abused.
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-        SuggestionProvider provider = command.getCustomSuggestions();
-        return provider == null ? null: CompletionProviders.b(provider);
+    public default CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+        return listSuggestions(context, builder);
     }
+    
+    public ArgumentType<V> primitive();
     
 }

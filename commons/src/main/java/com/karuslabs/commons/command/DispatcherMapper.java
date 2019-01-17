@@ -23,10 +23,12 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.arguments.TypeArgument;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.Mapper;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
@@ -59,25 +61,44 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         this.dispatcher = dispatcher;
     }
     
-
+    
+    @Override
+    protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
+        var type = command.getType();
+        return type instanceof TypeArgument<?, ?> ? ((TypeArgument<?, ?>) type).primitive() : type;
+    }
+    
+    
     @Override
     protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
         var requirement = command.getRequirement();
         return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
     }
 
+    
     @Override
     protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
+        var type = command.getType();
         var suggestor = command.getCustomSuggestions();
-        if (suggestor == null) {
+        
+        if (!(type instanceof TypeArgument<?, ?>) && suggestor == null) {
             return null;
+            
+        } else 
+            if (suggestor == null) {
+            return reparse((TypeArgument<?, ?>) type);
         }
         
         var client = CLIENT_SIDE.get(suggestor);
         if (client != null) {
             return client;
-        }
-        
+ 
+        } else {
+            return reparse(suggestor);
+        } 
+    }
+    
+    protected SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());

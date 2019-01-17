@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.tree;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
@@ -59,7 +60,7 @@ public class Mapper<T, R> {
     
     protected CommandNode<R> argument(CommandNode<T> command) {
         var argument = (ArgumentCommandNode<T, ?>) command;
-        return new Argument<>(argument.getName(), argument.getType(), execution(argument), requirement(argument), suggestions(argument));
+        return new Argument<>(argument.getName(), type(argument), execution(argument), requirement(argument), suggestions(argument));
     }
 
     protected CommandNode<R> literal(CommandNode<T> command) {
@@ -73,8 +74,12 @@ public class Mapper<T, R> {
     protected CommandNode<R> otherwise(CommandNode<T> command) {
         throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
     }
-
-
+    
+    
+    protected ArgumentType<?> type(ArgumentCommandNode<T, ?> command) {
+        return command.getType();
+    }
+    
     protected Command<R> execution(CommandNode<T> command) {
         return (Command<R>) NONE;
     }
