@@ -27,12 +27,24 @@ import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.StringReader;
 
+import java.util.function.Predicate;
+
 
 public @Static class Read {
     
     public static String until(StringReader reader, char delimiter) {
         var start = reader.getCursor();
         while (reader.canRead() && reader.peek() != delimiter) {
+            reader.skip();
+        }
+        
+        return reader.getString().substring(start, reader.getCursor());
+    }
+    
+        
+    public static String when(StringReader reader, Predicate<Character> match) {
+        var start = reader.getCursor();
+        while (reader.canRead() && match.test(reader.peek())) {
             reader.skip();
         }
         
