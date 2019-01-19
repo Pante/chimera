@@ -16,8 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <source>10</source>
-        <target>10</target>
+        <source>11</source>
+        <target>11</target>
     </properties>
     
     
