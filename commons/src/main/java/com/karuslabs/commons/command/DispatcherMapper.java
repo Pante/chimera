@@ -44,7 +44,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
-    private static final Map<ClientsideProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
+    static final Map<ClientsideProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
     
     static {
         CLIENT_SIDE = new EnumMap<>(ClientsideProvider.class);
@@ -84,8 +84,7 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         if (!(type instanceof TypeArgument<?, ?>) && suggestor == null) {
             return null;
             
-        } else 
-            if (suggestor == null) {
+        } else if (suggestor == null) {
             return reparse((TypeArgument<?, ?>) type);
         }
         

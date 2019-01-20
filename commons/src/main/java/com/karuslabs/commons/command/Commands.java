@@ -32,6 +32,8 @@ import com.mojang.brigadier.tree.*;
 import java.lang.invoke.*;
 import java.util.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public @Static class Commands {
 
@@ -59,7 +61,7 @@ public @Static class Commands {
             return alias((LiteralCommandNode<T>) command, alias);
             
         } else {
-            throw new UnsupportedOperationException("Unsupported commnd, '" + command.getName() + "' of type: " + command.getClass().getName());
+            throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
         }
     }
     
@@ -93,7 +95,7 @@ public @Static class Commands {
     }
     
         
-    public static <S> CommandNode<S> remove(CommandNode<S> command, String child) {
+    public static <S> @Nullable CommandNode<S> remove(CommandNode<S> command, String child) {
         var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
         var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
         var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
@@ -113,11 +115,11 @@ public @Static class Commands {
         var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
         
         var all = true;
-        for (var child : children) {
+            for (var child : children) {
             var removed = commands.remove(child);
             if (removed != null) {
-            literals.remove(child);
-            arguments.remove(child);
+                literals.remove(child);
+                arguments.remove(child);
                 
             } else {
                 all = false;

@@ -116,9 +116,10 @@ public @Static class Exceptions {
             
         } else if (sender instanceof ProxiedCommandSender) {
             return ((ProxiedNativeCommandSender) sender).getHandle();
+            
+        } else {
+            throw new IllegalArgumentException("Cannot make " + sender + " a vanilla command listener");
         }
-
-        throw new IllegalArgumentException("Cannot make " + sender + " a vanilla command listener");
     }
     
 }

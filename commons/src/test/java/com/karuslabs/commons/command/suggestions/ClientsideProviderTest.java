@@ -21,21 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.parsers;
+package com.karuslabs.commons.command.suggestions;
 
-import com.karuslabs.commons.command.Dispatcher;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import com.mojang.brigadier.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.bukkit.command.CommandSender;
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Parser {
+@ExtendWith(MockitoExtension.class)
+class ClientsideProviderTest {
     
-    public static final Parser DEFAULT = (dispatcher, reader, source) -> dispatcher.defaultParse(reader, source);
-    
-    
-    public ParseResults<CommandSender> accept(Dispatcher dispatcher, StringReader reader, CommandSender source);
-    
-}
+    @Test
+    void getSuggestions() {
+        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).buildFuture()).thenReturn(null).getMock();
+        
+        ClientsideProvider.ENTITIES.getSuggestions(null, builder);
+        
+        verify(builder).buildFuture();
+        verifyNoMoreInteractions(builder);
+    }
+
+} 

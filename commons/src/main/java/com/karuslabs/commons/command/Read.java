@@ -28,9 +28,13 @@ import com.karuslabs.annotations.Static;
 import com.mojang.brigadier.StringReader;
 
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 
 public @Static class Read {
+    
+    public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
+    
     
     public static String until(StringReader reader, char delimiter) {
         var start = reader.getCursor();
@@ -39,6 +43,25 @@ public @Static class Read {
         }
         
         return reader.getString().substring(start, reader.getCursor());
+    }
+    
+    public static String until(StringReader reader, char... delimiters) {
+        var start = reader.getCursor();
+        while (reader.canRead() && !contains(delimiters, reader.peek())) {
+            reader.skip();
+        }
+        
+        return reader.getString().substring(start, reader.getCursor());
+    }
+    
+    private static boolean contains(char[] characters, char value) {
+        for (var c : characters) {
+            if (value == c) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
         

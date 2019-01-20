@@ -24,13 +24,11 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.tree.nodes.Root;
-import com.karuslabs.commons.command.parsers.*;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.Tree;
 import com.karuslabs.commons.command.tree.nodes.Literal;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.*;
 import com.mojang.brigadier.tree.*;
 
 import net.minecraft.server.v1_13_R2.*;
@@ -49,20 +47,15 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private MinecraftServer server;
     private CommandDispatcher<CommandListenerWrapper> dispatcher;
     private Synchronizer synchronizer;
-    private Parser parser;
     private Tree<CommandSender, CommandListenerWrapper> tree;
-    
+
     
     public static Dispatcher of(Plugin plugin) {
-        return of(plugin, new CachedParser());
-    }
-    
-    public static Dispatcher of(Plugin plugin, Parser parser) {
         var server = ((CraftServer) plugin.getServer());
         var root = new Root(plugin, server.getCommandMap());
         var synchronizer = Synchronizer.of(plugin);
         
-        var dispatcher = new Dispatcher(server, root, synchronizer, parser);
+        var dispatcher = new Dispatcher(server, root, synchronizer);
         root.set(dispatcher);
         server.getPluginManager().registerEvents(dispatcher, plugin);
         
@@ -70,12 +63,11 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
-    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer, Parser parser) {
+    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer) {
         super(root);
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
-        this.parser = parser;
         this.tree = new Tree<>(new DispatcherMapper(this));
     }
     
@@ -84,16 +76,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var literal = command.build();
         getRoot().addChild(literal);
         return literal;
-    }
-    
-    
-    @Override
-    public ParseResults<CommandSender> parse(StringReader command, CommandSender source) {
-        return parser.accept(this, command, source);
-    }
-    
-    public ParseResults<CommandSender> defaultParse(StringReader command, CommandSender source) {
-        return super.parse(command, source);
     }
 
     
