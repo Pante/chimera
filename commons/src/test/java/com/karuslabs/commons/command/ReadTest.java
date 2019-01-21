@@ -21,49 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.synchronization;
+package com.karuslabs.commons.command;
 
-import java.util.*;
+import com.mojang.brigadier.StringReader;
 
-import org.bukkit.event.player.PlayerCommandSendEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class Synchronization implements Runnable {
+@ExtendWith(MockitoExtension.class)
+class ReadTest {
     
-    private Synchronizer synchronizer;
-    private BukkitScheduler scheduler;
-    private Plugin plugin;
-    Set<PlayerCommandSendEvent> events;
-    boolean running;
+    StringReader reader = new StringReader("abcd");
     
     
-    public Synchronization(Synchronizer synchronizer, BukkitScheduler scheduler, Plugin plugin) {
-        this.synchronizer = synchronizer;
-        this.scheduler = scheduler;
-        this.plugin = plugin;
-        this.events = new HashSet<>();
-        this.running = false;
+    @Test
+    void until_char() {
+        assertEquals("a", Read.until(reader, 'b'));
     }
     
     
-    public void add(PlayerCommandSendEvent event) {
-        if (events.add(event) && !running) {
-            scheduler.scheduleSyncDelayedTask(plugin, this);
-            running = true;
-        }
+    @Test
+    void until_chars() {
+        assertEquals("ab", Read.until(reader, 'c', 'd'));
     }
     
     
-    @Override
-    public void run() {
-        for (var event : events) {
-            synchronizer.synchronize(event.getPlayer(), event.getCommands());
-        }
-        
-        events.clear();
-        running = false;
+    @Test
+    void until_end() {
+        assertEquals("abc", Read.until(reader, val -> val == 'd'));
     }
-    
-}
+
+} 

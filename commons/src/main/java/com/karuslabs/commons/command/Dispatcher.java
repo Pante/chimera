@@ -77,20 +77,20 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         getRoot().addChild(literal);
         return literal;
     }
-
-    
-    @EventHandler
-    protected void map(ServerLoadEvent event) {
-        dispatcher = server.commandDispatcher.a();
-        tree.replace(getRoot(), dispatcher.getRoot());
-    }  
-        
+      
     
     public void update() {
         tree.replace(getRoot(), dispatcher.getRoot());
         synchronizer.synchronize();
     }
     
+    
+    @EventHandler
+    protected void update(ServerLoadEvent event) {
+        dispatcher = server.commandDispatcher.a();
+        tree.replace(getRoot(), dispatcher.getRoot());
+    }
+ 
     
     public Synchronizer synchronizer() {
         return synchronizer;

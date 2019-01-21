@@ -51,7 +51,7 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     
     
     @Override
-    public boolean execute(CommandSender sender, String label, String[] arguments) {
+    public boolean execute(CommandSender sender, String label, String... arguments) {
         if (!testPermission(sender)) {
             return true;
         }

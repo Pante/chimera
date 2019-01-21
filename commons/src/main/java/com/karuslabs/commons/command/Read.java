@@ -65,9 +65,9 @@ public @Static class Read {
     }
     
         
-    public static String when(StringReader reader, Predicate<Character> match) {
+    public static String until(StringReader reader, Predicate<Character> end) {
         var start = reader.getCursor();
-        while (reader.canRead() && match.test(reader.peek())) {
+        while (reader.canRead() && !end.test(reader.peek())) {
             reader.skip();
         }
         

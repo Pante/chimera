@@ -106,6 +106,7 @@ class DispatcherMapperTest {
     void suggestions_reparse() {
         SuggestionProvider<CommandSender> suggestor = (a, b) -> null;
         doReturn(PROVIDER).when(mapper).reparse(suggestor);
+        
         assertSame(PROVIDER, mapper.suggestions(Argument.of("name", PlayerArgument.WORD).suggests(suggestor).build()));
     }
     
