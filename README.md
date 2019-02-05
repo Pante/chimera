@@ -3,7 +3,7 @@
 </p>
 
 
-A collection of open source libraries & tools devloped by Karus Labs. **This is a bleeding edge version of Chimera, formerly known as Karus-Commons. For a production ready version, please refer to the stable branch.**
+Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleeding edge version of Chimera, formerly known as Karus-Commons. For a production ready version, please refer to the stable branch.**
 
 [![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
