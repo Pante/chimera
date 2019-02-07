@@ -34,10 +34,7 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Tree<T, R> {
-    
-    private static final Predicate<?> TRUE = any -> true;
-    
+public class Tree<T, R> {    
     
     private Mapper<T, R> mapper;
     
@@ -88,7 +85,7 @@ public class Tree<T, R> {
             mappings.put(command, target);
             
             redirect(command, target, caller, mappings);
-            children(command, target, caller, mappings);
+            descend(command, target, caller, mappings);
         }
 
         return target;
@@ -101,7 +98,7 @@ public class Tree<T, R> {
         }
     }
     
-    protected void children(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
+    protected void descend(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
         for (var child : command.getChildren()) {
             var mapped = map(child, caller, mappings);
             if (mapped != null) {

@@ -23,42 +23,120 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import java.util.stream.Stream;
+import com.karuslabs.commons.command.tree.Tree;
 
-import net.minecraft.server.v1_13_R2.MinecraftServer;
+import java.util.List;
+
+import net.minecraft.server.v1_13_R2.*;
+
 import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.scheduler.CraftScheduler;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class SynchronizerTest {
     
+    Synchronizer synchronizer;
     Plugin plugin = mock(Plugin.class);
     CraftServer craftserver = mock(CraftServer.class);
     MinecraftServer server = mock(MinecraftServer.class);
+    CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
     ServicesManager services = mock(ServicesManager.class);
+    CommandDispatcher wrapper = mock(CommandDispatcher.class);
+    com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> dispatcher = new com.mojang.brigadier.CommandDispatcher();
     
     
     @BeforeEach
     void before() {
         when(plugin.getServer()).thenReturn(craftserver);
         when(craftserver.getServer()).thenReturn(server);
+        when(craftserver.getScheduler()).thenReturn(scheduler);
         when(craftserver.getPluginManager()).thenReturn(manager);
         when(craftserver.getServicesManager()).thenReturn(services);
+        
+        server.server = craftserver;
+        server.commandDispatcher = when(wrapper.a()).thenReturn(dispatcher).getMock();
+        
+        synchronizer = spy(Synchronizer.of(plugin));
     }
     
+    
+    @Test
+    void synchronize() {
+        List<CraftPlayer> online = List.of(mock(CraftPlayer.class));
+        when(craftserver.getOnlinePlayers()).thenReturn(online);
+        doNothing().when(synchronizer).synchronize(any(Player.class));
+        
+        synchronizer.synchronize();
+        
+        verify(synchronizer).synchronize(any(Player.class));
+    }
+    
+    
+    @Test
+    void synchronize_player() {
+        Player player = mock(Player.class);
+        doNothing().when(synchronizer).synchronize(any(), any());
+        
+        synchronizer.synchronize(player);
+        
+        verify(manager).callEvent(any(SynchronizationEvent.class));
+        verify(synchronizer).synchronize(eq(player), any());
+    }
+    
+    
+    @Test
+    void synchronize_player_commands() {
+        synchronizer.tree = mock(Tree.class);
+        
+        EntityPlayer entity = mock(EntityPlayer.class);
+        entity.playerConnection = mock(PlayerConnection.class);
+        
+        CraftPlayer player = when(mock(CraftPlayer.class).getHandle()).thenReturn(entity).getMock();
+        
+        synchronizer.synchronize(player, List.of());
+        
+        verify(synchronizer.tree).map(any(), any(), any(), any());
+        verify(entity.playerConnection).sendPacket(any(PacketPlayOutCommands.class));
+    }
+    
+    
+    @Test
+    void synchronize_event_ignore_event() {
+        synchronizer.synchronize(new SynchronizationEvent(null, List.of()));
+        
+        assertNull(synchronizer.synchronization.get());
+    }
+    
+    
+    @Test
+    void synchronize_event() {
+        synchronizer.synchronize(mock(PlayerCommandSendEvent.class));
+        var task = synchronizer.synchronization.get();
+        
+        assertTrue(task.running);
+        verify(services).register(Synchronization.class, task, plugin, ServicePriority.Low);
+    }
+    
+    
+    @Test
+    void load() {
+        synchronizer.dispatcher = null;
+        synchronizer.load(null);
+        
+        assertSame(synchronizer.dispatcher, dispatcher);
+    }
 
 } 

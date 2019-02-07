@@ -48,9 +48,9 @@ public class Synchronizer implements Listener {
     
     private MinecraftServer server;
     private Plugin plugin;
-    private CommandDispatcher<CommandListenerWrapper> dispatcher; 
-    private Tree<CommandListenerWrapper, ICompletionProvider> tree;
-    private WeakReference<Synchronization> synchronization;
+    CommandDispatcher<CommandListenerWrapper> dispatcher; 
+    Tree<CommandListenerWrapper, ICompletionProvider> tree;
+    WeakReference<Synchronization> synchronization;
     
     
     public static Synchronizer of(Plugin plugin) {
@@ -68,7 +68,7 @@ public class Synchronizer implements Listener {
     Synchronizer(MinecraftServer server, Plugin plugin, Tree<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
         this.server = server;
         this.plugin = plugin;
-        this.dispatcher = server.getCommandDispatcher().a();
+        this.dispatcher = server.commandDispatcher.a();
         this.tree = tree;
         this.synchronization = new WeakReference<>(synchronization);
     }
@@ -105,7 +105,8 @@ public class Synchronizer implements Listener {
         
         var task = synchronization.get();
         if (task == null) {
-            synchronization = new WeakReference<>(task = new Synchronization(this,plugin.getServer().getScheduler(), plugin));
+            task = new Synchronization(this, plugin.getServer().getScheduler(), plugin);
+            synchronization = new WeakReference<>(task);
             plugin.getServer().getServicesManager().register(Synchronization.class, task, plugin, ServicePriority.Low);
         }
         
