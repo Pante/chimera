@@ -74,6 +74,16 @@ class SynchronizerTest {
     
     
     @Test
+    void of() {
+        reset(manager);
+        
+        var synchronizer = Synchronizer.of(plugin);
+        
+        verify(manager).registerEvents(synchronizer, plugin);
+    }
+    
+    
+    @Test
     void synchronize() {
         List<CraftPlayer> online = List.of(mock(CraftPlayer.class));
         when(craftserver.getOnlinePlayers()).thenReturn(online);

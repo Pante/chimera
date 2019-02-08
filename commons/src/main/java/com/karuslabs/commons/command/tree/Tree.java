@@ -44,7 +44,7 @@ public class Tree<T, R> {
     }
     
     
-    public void replace(RootCommandNode<T> source, RootCommandNode<R> target) {
+    public void truncate(RootCommandNode<T> source, RootCommandNode<R> target) {
         for (var child : source.getChildren()) {
             Commands.remove(target, child.getName());
             var mapped = map(child);
@@ -75,7 +75,7 @@ public class Tree<T, R> {
     }
     
     public @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        if (caller == null && command.getRequirement() == null && !command.canUse(caller)) {
+        if (caller != null && command.getRequirement() != null && !command.canUse(caller)) {
             return null;
         }
         

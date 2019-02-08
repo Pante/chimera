@@ -26,13 +26,14 @@ package com.karuslabs.commons.command.arguments;
 import com.mojang.brigadier.arguments.*;
 
 
+@FunctionalInterface
 public interface StringArgument<T> extends TypeArgument<T, String> {
     
-    public static final ArgumentType<String> STRING = StringArgumentType.string();
+    public static final StringArgumentType STRING = StringArgumentType.string();
     
     
     @Override
-    public default ArgumentType<String> primitive() {
+    public default StringArgumentType primitive() {
         return STRING;
     }
     

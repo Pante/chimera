@@ -45,9 +45,9 @@ import org.bukkit.plugin.Plugin;
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
     private MinecraftServer server;
-    private CommandDispatcher<CommandListenerWrapper> dispatcher;
-    private Synchronizer synchronizer;
-    private Tree<CommandSender, CommandListenerWrapper> tree;
+    CommandDispatcher<CommandListenerWrapper> dispatcher;
+    Synchronizer synchronizer;
+    Tree<CommandSender, CommandListenerWrapper> tree;
 
     
     public static Dispatcher of(Plugin plugin) {
@@ -56,7 +56,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var synchronizer = Synchronizer.of(plugin);
         
         var dispatcher = new Dispatcher(server, root, synchronizer);
-        root.set(dispatcher);
+        root.dispatcher(dispatcher);
         server.getPluginManager().registerEvents(dispatcher, plugin);
         
         return dispatcher;
@@ -80,7 +80,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
       
     
     public void update() {
-        tree.replace(getRoot(), dispatcher.getRoot());
+        tree.truncate(getRoot(), dispatcher.getRoot());
         synchronizer.synchronize();
     }
     
@@ -88,7 +88,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        tree.replace(getRoot(), dispatcher.getRoot());
+        tree.truncate(getRoot(), dispatcher.getRoot());
     }
  
     

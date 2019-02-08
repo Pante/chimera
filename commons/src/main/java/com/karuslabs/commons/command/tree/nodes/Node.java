@@ -34,6 +34,8 @@ public interface Node<T> {
     public List<CommandNode<T>> aliases();
 
     
+    public void addChild(CommandNode<T> child);
+    
     public CommandNode<T> removeChild(String child);
     
     

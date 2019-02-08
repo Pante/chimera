@@ -23,10 +23,8 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.DispatcherCommand;
-import com.karuslabs.commons.command.Commands;
-import com.karuslabs.commons.command.Commands;
-import com.karuslabs.commons.command.DispatcherCommand;
+import com.karuslabs.commons.command.*;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
@@ -41,7 +39,7 @@ public class Root extends RootCommandNode<CommandSender> {
     private String prefix;
     private Plugin plugin;
     private CommandMap map;
-    private @Nullable CommandDispatcher<CommandSender> dispatcher;
+    @Nullable CommandDispatcher<CommandSender> dispatcher;
     
     
     public Root(Plugin plugin, CommandMap map) {
@@ -57,24 +55,28 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, from(command))) {
+        if (map.register(prefix, wrap(command))) {
             super.addChild(command);
         }
         
         super.addChild(Commands.alias(command, prefix + ":" + command.getName()));
     }
     
-    protected Command from(CommandNode<CommandSender> command) {
+    protected Command wrap(CommandNode<CommandSender> command) {
         return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
     }
     
     
-    public void set(CommandDispatcher<CommandSender> dispatcher) {
-        if (dispatcher != null) {
+    public @Nullable CommandDispatcher<CommandSender> dispatcher() {
+        return dispatcher;
+    }
+    
+    public void dispatcher(CommandDispatcher<CommandSender> dispatcher) {
+        if (this.dispatcher == null) {
             this.dispatcher = dispatcher;
             
         } else {
-            throw new IllegalStateException("Dispatcher is already initialized");
+            throw new IllegalStateException("CommandDispatcher is already initialized");
         }
     }
     

@@ -23,17 +23,24 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.mojang.brigadier.arguments.*;
+import com.mojang.brigadier.arguments.StringArgumentType.StringType;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public interface WordArgument<T> extends TypeArgument<T, String> {
+@ExtendWith(MockitoExtension.class)
+class StringArgumentTest {
     
-    public static final StringArgumentType WORD = StringArgumentType.word();
+    StringArgument argument = reader -> null;
     
     
-    @Override
-    public default StringArgumentType primitive() {
-        return WORD;
+    @Test
+    void primitive() {
+        assertEquals(StringType.QUOTABLE_PHRASE, argument.primitive().getType());
     }
-    
-}
+
+} 

@@ -23,6 +23,12 @@
  */
 package com.karuslabs.commons.command.tree;
 
+import com.karuslabs.commons.command.tree.nodes.Literal;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.*;
+
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +36,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,12 +46,115 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TreeTest {
     
-    Tree<String, String> tree = new Tree(spy(new Mapper<>()));
+    static Literal<String> mapped = Literal.<String>builder("child").build();
+    
+    Tree<String, String> tree = spy(new Tree(spy(new Mapper<>())));
+    Literal<String> literal = Literal.<String>builder("parent").then(Literal.<String>builder("child").build()).build();
     
     
     @Test
-    void descend() {
+    void truncate() {
+        var source = new RootCommandNode<String>();
+        source.addChild(Literal.<String>builder("a").build());
+        source.addChild(Literal.<String>builder("b").build());
+        source.addChild(Literal.<String>builder("c").requires(val -> false).build());
         
+        var target = new RootCommandNode<String>();
+        target.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
+        
+        tree.truncate(source, target);
+        
+        assertEquals(3, target.getChildren().size());
+        assertNull(target.getChild("a").getChild("child"));
     }
+    
+    
+    @Test
+    void map_roots() {
+        var source = new RootCommandNode<String>();
+        source.addChild(Literal.<String>builder("a").build());
+        source.addChild(Literal.<String>builder("b").build());
+        source.addChild(Literal.<String>builder("c").requires(val -> false).build());
+        
+        var target = new RootCommandNode<String>();
+        target.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
+        
+        tree.map(source, target, "", command -> !command.getName().equalsIgnoreCase("b"));
+        
+        assertEquals(1, target.getChildren().size());
+        assertNotNull(target.getChild("a").getChild("child"));
+    }
+    
+    
+    @Test
+    void map_command() {
+        doReturn(null).when(tree).map(any(CommandNode.class), any(String.class));
+        
+        tree.map(literal);
+        
+        verify(tree).map(literal, null);
+    }
+    
+    
+    @Test
+    void map_command_caller() {
+        var root = Literal.<String>builder("root").build();
+        var a = Literal.<String>builder("a").then(Literal.<String>builder("b").requires(val -> false).build()).build();
+        var c = Literal.<String>builder("c").redirect(a).build();
+        var d = Literal.<String>builder("d").then(c).build();
+        
+        
+        root.addChild(a);
+        root.addChild(c);
+        root.addChild(d);
+        
+        var mapped = tree.map(root, "");
+        var empty = mapped.getChild("a");
+        var same = mapped.getChild("d").getChild("c");
+        
+        assertEquals("root", mapped.getName());
+        assertEquals(0, empty.getChildren().size());
+        assertSame(empty, mapped.getChild("c").getRedirect());
+        assertSame(mapped.getChild("c"), same);
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("redirect_parameters")
+    void redirect(CommandNode<String> destination, CommandNode<String> target, CommandNode<String> expected) {
+        doReturn(destination).when(tree).map(any(CommandNode.class), any(String.class), any(Map.class));
+        literal.setRedirect(destination);
+        
+        tree.redirect(literal, target, "", new HashMap<>());
 
+        
+        assertSame(expected, target.getRedirect());
+    }
+    
+    static Stream<Arguments> redirect_parameters() {
+        var destination = LiteralArgumentBuilder.<String>literal("a").build();
+        return Stream.of(
+            of(destination, Literal.builder("a").build(), destination),
+            of(destination, LiteralArgumentBuilder.<String>literal("a").build(), null),
+            of(null, Literal.builder("a").build(), null),
+            of(null, LiteralArgumentBuilder.<String>literal("a").build(), null)
+        );
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("descend_parameters")
+    void descend(CommandNode<String> returned) {
+        doReturn(returned).when(tree).map(any(CommandNode.class), any(String.class), any(Map.class));
+        
+        var target = new RootCommandNode<String>();
+        
+        tree.descend(literal, target, "", new HashMap<>());
+        assertSame(returned, target.getChild("child"));
+    }
+    
+    static Stream<CommandNode<String>> descend_parameters() {
+        return Stream.of(mapped, null);
+    }
+    
 } 
