@@ -54,7 +54,6 @@ public class PlayerArgument implements WordArgument<Player> {
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
         var player = Bukkit.getPlayerExact(reader.readUnquotedString());
-        
         if (player != null) {
             return player;
             
