@@ -23,9 +23,9 @@
  */
 package com.karuslabs.commons.util.collections;
 
-import java.util.AbstractMap;
+import java.util.AbstractSet;
 
 
-public abstract class Trie<T> extends AbstractMap<String, T> {
+public abstract class TrieSet extends AbstractSet<String> {
     
 }
