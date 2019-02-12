@@ -23,9 +23,20 @@
  */
 package com.karuslabs.commons.util.collections;
 
-import java.util.AbstractMap;
+import java.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public abstract class Trie<T> extends AbstractMap<String, T> {
+    
+    static class Node<T> {
+        
+        char character;
+        Map<Character, Node<T>> children;
+        @Nullable String string;
+        @Nullable T value;
+        
+    }
     
 }
