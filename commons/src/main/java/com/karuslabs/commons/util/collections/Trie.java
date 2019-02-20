@@ -33,7 +33,8 @@ public abstract class Trie<T> extends AbstractMap<String, T> {
     static class Node<T> {
         
         char character;
-        Map<Character, Node<T>> children;
+        Node<T>[] ascii;
+        @Nullable Map<Character, Node<T>> expanded;
         @Nullable String string;
         @Nullable T value;
         
