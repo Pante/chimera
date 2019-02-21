@@ -25,19 +25,125 @@ package com.karuslabs.commons.util.collections;
 
 import java.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public abstract class Trie<T> extends AbstractMap<String, T> {
+public class Trie<T> implements Map<String, T> {
     
-    static class Node<T> {
+    private TrieEntry<T> root;
+    private TrieEntrySet<T> view;
+    private boolean caseSensitive;
+    private int size;
+    
+    
+    public Trie() {
+        this(true);
+    }
+    
+    public Trie(boolean caseSensitive) {
+        this.root = new TrieEntry<>(null);
+        this.view = new TrieEntrySet<>();
+        this.caseSensitive = caseSensitive;
+    }
+
+
+    @Override
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public T get(Object key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public T put(String key, T value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void putAll(Map<? extends String, ? extends T> m) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public T remove(Object key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    @Override
+    public Set<String> keySet() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<T> values() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Set<Map.Entry<String, T>> entrySet() {
+        return view;
+    }
+
+
+    @Override
+    public void clear() {
         
-        char character;
-        Node<T>[] ascii;
-        @Nullable Map<Character, Node<T>> expanded;
-        @Nullable String string;
-        @Nullable T value;
+    }
+    
+    public boolean caseSensitive() {
+        return caseSensitive;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    
+    class TrieEntrySet<T> extends AbstractSet<Entry<String, T>> {
+
+        @Override
+        public boolean contains(Object o) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean add(Entry<String, T> e) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
         
+        @Override
+        public Iterator<Entry<String, T>> iterator() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        @Override
+        public int size() {
+            return size;
+        }
+
     }
     
 }
