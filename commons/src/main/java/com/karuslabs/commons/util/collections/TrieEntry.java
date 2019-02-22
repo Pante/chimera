@@ -24,66 +24,88 @@
 package com.karuslabs.commons.util.collections;
 
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class TrieEntry<T> extends AbstractMap.SimpleEntry<String, T> {
-
-    private static final int VISIBLE = 95;
-
+class TrieEntry<T> extends SimpleEntry<String, T> {
+    
+    static final int PRINTABLE = 95;
+    static final int OFFSET = 32;
+    
     
     @Nullable TrieEntry<T> parent;
     @Nullable TrieEntry<T>[] ascii;
     @Nullable Map<Character, TrieEntry<T>> expanded;
-
+    int descendants;
     
-    TrieEntry(@Nullable TrieEntry<T> parent) {
-        super(null, null);
-        this.parent = parent;
-        ascii = (TrieEntry<T>[]) new Object[VISIBLE];
-        expanded = null;
+    
+    TrieEntry() {
+        this(null, null, null);
     }
-
+    
     TrieEntry(@Nullable TrieEntry<T> parent, String key, T value) {
         super(key, value);
         this.parent = parent;
         ascii = null;
         expanded = null;
+        descendants = 0;
     }
-
     
-    @Nullable TrieEntry<T> get(char index) {
-        if (ascii != null && 31 < index && index < 127) {
-            return ascii[index - 32];
-
+    
+    @Nullable TrieEntry<T> get(char character) {
+        if (ascii != null && 31 < character && character < 127) {
+            return ascii[character - OFFSET];
+            
         } else if (expanded != null) {
-            return expanded.get(index);
-
+            return expanded.get(character);
+            
         } else {
             return null;
         }
     }
-
-    @Nullable TrieEntry<T> set(char index, @Nullable TrieEntry<T> node) {
-        if (31 < index && index < 127) {
+    
+    @Nullable TrieEntry<T> add(char character, String key, T value) {
+        descendants++;
+        if (31 < character && character < 127) {
             if (ascii == null) {
-                ascii = (TrieEntry<T>[]) new Object[VISIBLE];
+                ascii = (TrieEntry<T>[]) new Object[PRINTABLE];
             }
-
-            var old = ascii[index];
-            ascii[index] = node;
-
+            
+            var old = ascii[character - OFFSET];
+            ascii[character - OFFSET] = new TrieEntry<>(this, key, value);
             return old;
-
+        
         } else {
             if (expanded == null) {
                 expanded = new HashMap<>();
             }
-
-            return expanded.put(index, node);
+            
+            return expanded.put(character, new TrieEntry<>(this, key, value));
         }
     }
-
+    
+    @Nullable TrieEntry<T> remove(char character) {
+        TrieEntry<T> removed = null;
+        if (ascii != null && 31 < character && character < 127) {
+            removed = ascii[character - OFFSET];
+            ascii[character - OFFSET] = null;
+        
+        } else if (expanded != null) {
+            removed = expanded.remove(character);   
+        }
+        
+        if (removed != null) {
+            descendants--;
+        }
+        
+        return removed;
+    }
+    
+    void clear() {
+        ascii = null;
+        expanded = null;
+    }
+    
 }
-
