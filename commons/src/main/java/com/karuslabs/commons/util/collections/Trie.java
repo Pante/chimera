@@ -32,6 +32,7 @@ public class Trie<T> implements Map<String, T> {
     
     private TrieEntry<T> root;
     private int size;
+    private boolean caseSensitive;
         
     
     @Override
@@ -66,16 +67,16 @@ public class Trie<T> implements Map<String, T> {
     
     @Override
     public boolean containsKey(Object key) {
-        return entry(key) != null;
+        return getEntry(key) != null;
     }
     
     @Override
     public @Nullable T get(Object key) {
-        var entry = entry(key);
+        var entry = getEntry(key);
         return entry == null ? null: entry.getValue();
     } 
     
-    @Nullable TrieEntry<T> entry(Object key) {
+    @Nullable TrieEntry<T> getEntry(Object key) {
         if (key == null) {
             throw new NullPointerException("Null keys are not permitted in a Trie");
         }
@@ -130,13 +131,26 @@ public class Trie<T> implements Map<String, T> {
     
     @Override
     public T remove(Object key) {
-        var entry = entry(key);
-        if (entry == null) {
+        var entry = getEntry(key);
+        if (entry != null) {
+            return remove(entry);
+            
+        } else {
             return null;
+        }
+    }
+    
+    T removeEntry(TrieEntry<T> entry) {
+        var leaf = entry;
+        if (entry.descendants == 0) {
+            
+        } else {
+            entry.get
+            entry.setValue(null);
         }
         
         var leaf = entry;
-        var characters = ((String) key).toCharArray();
+        var characters = entry.getKey().toCharArray();
         for (int i = characters.length; i >= 0; i--) {
             entry = entry.parent;
             entry.remove(characters[i]);
@@ -182,8 +196,36 @@ public class Trie<T> implements Map<String, T> {
     }
     
     
-    class EntrySet<T> extends AbstractSet<Entry<String, T>> {
+    class TrieIterator implements Iterator<T> {
+        
+        Deque<TrieEntry<T>> stack;
+        TrieEntry<T> last;
+        
+        
+        TrieIterator() {
+            stack = new ArrayDeque<>();
+        }
 
+        @Override
+        public boolean hasNext() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public T next() {
+            
+        }
+
+        @Override
+        public void remove() {
+            removeEntry(last);
+        }
+        
+    }
+    
+    
+    class EntrySet<T> extends AbstractSet<Entry<String, T>> {
+        
         @Override
         public Iterator<Entry<String, T>> iterator() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
