@@ -23,32 +23,56 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.karuslabs.commons.util.collections.Trie;
 
-import java.util.Collection;
+import com.mojang.brigadier.*;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.*;
+import com.mojang.brigadier.suggestion.*;
+
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Material;
 
 
 public class MaterialArgument implements WordArgument<Material> {
-
+    
+    static final Trie<Material> MATERIALS;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
+    static final Collection<String> EXAMPLES = List.of("flint_and_steel", "tnt");
+    
+    static {
+        MATERIALS = new Trie<>();
+        for (var material : Material.values()) {
+            MATERIALS.put(material.getKey().getKey(), material);
+        }
+    }
+    
+    
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        var material = MATERIALS.get(reader.readUnquotedString());
+        if (material != null) {
+            return material;
+            
+        } else {
+            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
+        }
     }
 
     @Override
-    public CompletableFuture listSuggestions(CommandContext cc, SuggestionsBuilder sb) {
-        return WordArgument.super.listSuggestions(cc, sb); //To change body of generated methods, choose Tools | Templates.
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(material);
+        }
+        
+        return builder.buildFuture();
     }
 
     @Override
-    public Collection getExamples() {
-        return WordArgument.super.getExamples(); //To change body of generated methods, choose Tools | Templates.
+    public Collection<String> getExamples() {
+        return EXAMPLES;
     }
     
 }

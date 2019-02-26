@@ -60,7 +60,6 @@ public class PlayerArgument implements WordArgument<Player> {
         } else {
             throw EXCEPTION.createWithContext(reader, reader.getRemaining());
         }
-        
     }
 
     

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.util.collections;
 
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -30,30 +31,160 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 class TrieEntry<T> implements Entry<String, T> {
     
+    static final int PRINTABLE = 95;
+    static final int OFFSET = 32;
+    
+    
     final char character;
-    @Nullable char[] ascii;
+    @Nullable TrieEntry<T> parent;
+    @Nullable TrieEntry<T>[] ascii;
+    @Nullable Map<Character, TrieEntry<T>> expanded;
+    int children;
+    
     @Nullable String key;
     @Nullable T value;
     
     
-    TrieEntry(char character) {
+    TrieEntry(char character, @Nullable TrieEntry<T> parent) {
+        this(character, parent, null, null);
+    }
+    
+    TrieEntry(char character, @Nullable TrieEntry<T> parent, String key, T value) {
         this.character = character;
+        this.parent = parent;
+        this.children = 0;
+        this.key = key;
+        this.value = value;
+    }
+    
+    
+    @Nullable TrieEntry<T> get(char character) {
+        if (ascii != null && 31 < character && character < 127) {
+            return ascii[character - OFFSET];
+            
+        } else if (expanded != null) {
+            return expanded.get(character);
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    @Nullable TrieEntry<T> add(char character) {
+        return add(character, key, value);
+    }
+    
+    @Nullable TrieEntry<T> add(char character, String key, T value) {
+        children++;
+        if (31 < character && character < 127) {
+            if (ascii == null) {
+                ascii = (TrieEntry<T>[]) new Object[PRINTABLE];
+            }
+            
+            return ascii[character - OFFSET] = new TrieEntry<>(character, this, key, value);
+            
+        } else {
+            if (expanded == null) {
+                expanded = new HashMap<>();
+            }
+            
+            var entry = new TrieEntry(character, this, key, value);
+            expanded.put(character, entry);
+            
+            return entry;
+        }
+    }
+    
+    @Nullable TrieEntry<T> set(char character, String key, T value) {
+        children++;
+        if (31 < character && character < 127) {
+            if (ascii == null) {
+                ascii = (TrieEntry<T>[]) new Object[PRINTABLE];
+            }
+            
+            var old = ascii[character - OFFSET];
+            ascii[character - OFFSET] = new TrieEntry<>(character, this, key, value);
+            return old;
+            
+        } else {
+            if (expanded == null) {
+                expanded = new HashMap<>();
+            }
+            
+            return expanded.put(character, new TrieEntry(character, this, key, value));
+        }
+    }
+    
+    @Nullable TrieEntry<T> remove(char character) {
+        TrieEntry<T> removed = null;
+        if (ascii != null && 31 < character && character < 127) {
+            removed = ascii[character - OFFSET];
+            ascii[character - OFFSET] = null;
+
+        } else if (expanded != null) {
+            removed = expanded.remove(character);
+        }
+
+        if (removed != null) {
+            children--;
+        }
+
+        return removed;
+    }
+
+    void clear() {
+        ascii = null;
+        expanded = null;
     }
     
     
     @Override
-    public String getKey() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public @Nullable String getKey() {
+        return key;
     }
 
     @Override
-    public T getValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public @Nullable T getValue() {
+        return value;
     }
 
     @Override
-    public T setValue(T value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public @Nullable T setValue(T value) {
+        var replaced = this.value;
+        this.value = value;
+
+        return replaced;
+    }
+    
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Map.Entry)) {
+            return false;
+        }
+        
+        Map.Entry<?, ?> e = (Map.Entry<?, ?>) other;
+        return equals(key, e.getKey()) && equals(value, e.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return (key == null ? 0 : key.hashCode())
+                ^ (value == null ? 0 : value.hashCode());
+    }
+    
+    @Override
+    public String toString() {
+        return key + "=" + value;
+    }
+    
+    
+    /**
+     * See https://bugs.openjdk.java.net/browse/JDK-8015417
+     */
+    static boolean equals(Object o1, Object o2) {
+        return o1 == null ? o2 == null : o1.equals(o2);
     }
     
 }
