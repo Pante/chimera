@@ -33,37 +33,37 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Material;
+import org.bukkit.Particle;
 
 
-public class MaterialArgument implements WordArgument<Material> {
-    
-    static final Trie<Material> MATERIALS;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
-    static final Collection<String> EXAMPLES = List.of("flint_and_steel", "tnt");
+public class ParticleArgument implements WordArgument<Particle> {
+
+    static final Trie<Particle> PARTICLES;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
+    static final Collection<String> EXAMPLES = List.of("barrier", "bubble_column_up");
     
     static {
-        MATERIALS = new Trie<>();
-        for (var material : Material.values()) {
-            MATERIALS.put(material.getKey().getKey(), material);
+        PARTICLES = new Trie<>();
+        for (var particle : Particle.values()) {
+            PARTICLES.put(particle.toString().toLowerCase(), particle);
         }
     }
     
     
     @Override
-    public Material parse(StringReader reader) throws CommandSyntaxException {
-        var material = MATERIALS.get(reader.readUnquotedString());
-        if (material == null) {
+    public Particle parse(StringReader reader) throws CommandSyntaxException {
+        var particles = PARTICLES.get(reader.readUnquotedString());
+        if (particles == null) {
             throw EXCEPTION.createWithContext(reader, reader.getRemaining());
         }
         
-        return material;
+        return particles;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
-            builder.suggest(material);
+        for (var particles : PARTICLES.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(particles);
         }
         
         return builder.buildFuture();

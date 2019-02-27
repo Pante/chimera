@@ -85,7 +85,7 @@ public class PlayersArgument implements StringArgument<List<Player>> {
     }
     
     List<Player> online() {
-        // Interally, Bukkit uses a CopyWriteList, but we check it anyways in case
+        // Interally, Bukkit uses a CopyWriteList, but we check anyways in case
         // some fucking idiot decides to create a fork of Bukkit that doesn't.
         if (server.getOnlinePlayers() instanceof List<?>) {
             return (List<Player>) server.getOnlinePlayers();

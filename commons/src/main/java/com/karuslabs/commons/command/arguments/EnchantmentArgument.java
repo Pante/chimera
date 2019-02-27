@@ -33,37 +33,37 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 
 
-public class MaterialArgument implements WordArgument<Material> {
+public class EnchantmentArgument implements WordArgument<Enchantment> {
     
-    static final Trie<Material> MATERIALS;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
-    static final Collection<String> EXAMPLES = List.of("flint_and_steel", "tnt");
+    static final Trie<Enchantment> ENCHANTMENTS;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(enchantment -> new LiteralMessage("Unknown enchantment: " + enchantment));
+    static final Collection<String> EXAMPLES = List.of("arrow_damage", "channeling");
     
     static {
-        MATERIALS = new Trie<>();
-        for (var material : Material.values()) {
-            MATERIALS.put(material.getKey().getKey(), material);
+        ENCHANTMENTS = new Trie<>();
+        for (var enchantment : Enchantment.values()) {
+            ENCHANTMENTS.put(enchantment.getKey().getKey(), enchantment);
         }
     }
     
     
     @Override
-    public Material parse(StringReader reader) throws CommandSyntaxException {
-        var material = MATERIALS.get(reader.readUnquotedString());
-        if (material == null) {
-            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
+    public Enchantment parse(StringReader reader) throws CommandSyntaxException {
+        var enchantment = ENCHANTMENTS.get(reader.readUnquotedString());
+        if (enchantment == null) {
+            EXCEPTION.createWithContext(reader, reader.getRemaining());
         }
         
-        return material;
+        return enchantment;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
-            builder.suggest(material);
+        for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(enchantment);
         }
         
         return builder.buildFuture();
