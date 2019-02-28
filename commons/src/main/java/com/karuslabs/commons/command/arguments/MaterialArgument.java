@@ -52,9 +52,11 @@ public class MaterialArgument implements WordArgument<Material> {
     
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
-        var material = MATERIALS.get(reader.readUnquotedString());
+        var name = reader.readUnquotedString();
+        var material = MATERIALS.get(name);
+        
         if (material == null) {
-            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
+            throw EXCEPTION.createWithContext(reader, name);
         }
         
         return material;

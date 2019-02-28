@@ -23,57 +23,40 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.util.collections.Trie;
-
-import com.mojang.brigadier.*;
+import com.karuslabs.commons.util.Position;
+import static com.karuslabs.commons.util.Position.X;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 
-public class EnchantmentArgument implements WordArgument<Enchantment> {
-    
-    static final Trie<Enchantment> ENCHANTMENTS;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(enchantment -> new LiteralMessage("Unknown enchantment: " + enchantment));
-    static final Collection<String> EXAMPLES = List.of("arrow_damage", "channeling");
-    
-    static {
-        ENCHANTMENTS = new Trie<>();
-        for (var enchantment : Enchantment.values()) {
-            ENCHANTMENTS.put(enchantment.getKey().getKey(), enchantment);
-        }
-    }
-    
-    
+public class VectorArgument implements StringArgument<Vector> {
+
     @Override
-    public Enchantment parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString();
-        var enchantment = ENCHANTMENTS.get(name);
-        
-        if (enchantment == null) {
-            throw EXCEPTION.createWithContext(reader, name);
-        }
-        
-        return enchantment;
+    public Vector parse(StringReader reader) throws CommandSyntaxException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {
-            builder.suggest(enchantment);
+        if (context.getSource() instanceof Player) {
+            var player = (Player) context.getSource();
         }
         
         return builder.buildFuture();
     }
+    
 
     @Override
     public Collection<String> getExamples() {
-        return EXAMPLES;
+        return StringArgument.super.getExamples(); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

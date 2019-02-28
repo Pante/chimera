@@ -52,9 +52,11 @@ public class ParticleArgument implements WordArgument<Particle> {
     
     @Override
     public Particle parse(StringReader reader) throws CommandSyntaxException {
-        var particles = PARTICLES.get(reader.readUnquotedString());
+        var name = reader.readUnquotedString();
+        var particles = PARTICLES.get(name);
+        
         if (particles == null) {
-            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
+            throw EXCEPTION.createWithContext(reader, name);
         }
         
         return particles;

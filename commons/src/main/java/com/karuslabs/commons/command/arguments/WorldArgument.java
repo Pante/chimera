@@ -23,9 +23,39 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import org.bukkit.World;
+import com.karuslabs.commons.command.arguments.parsers.VectorParser;
+import com.mojang.brigadier.*;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.*;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+
+import org.bukkit.*;
 
 
 public class WorldArgument implements WordArgument<World> {
+    
+    static final Collection<String> EXAMPLES = List.of("world_name");
+    
+    
+    private Server server;
+    
+    
+    @Override
+    public <S> World parse(StringReader reader) throws CommandSyntaxException {
+        return null;
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> cc, SuggestionsBuilder sb) {
+        return WordArgument.super.listSuggestions(cc, sb); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<String> getExamples() {
+        return EXAMPLES;
+    }
     
 }

@@ -24,42 +24,112 @@
 package com.karuslabs.commons.command.arguments.parsers;
 
 import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.util.Vectors;
 
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.*;
 
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public @Static class VectorParser {
     
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(val -> new LiteralMessage("Source must be a player"));
-    
-    
-    public static Location parseLocation() {
+    static final SimpleCommandExceptionType SOURCE = new SimpleCommandExceptionType(new LiteralMessage("Source must be a player"));
+    static final SimpleCommandExceptionType MIXED = new SimpleCommandExceptionType(new LiteralMessage("Cannot mix world and local coordinates (everything must either use ^ or not)")); 
+    static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world:" + world));
         
+    static final Location INVALID = new Location(null, Double.NaN, Double.NaN, Double.NaN);
+    
+    
+    public static Location toLocation(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
+        var cursor = reader.getCursor();
+        
+        var world = Bukkit.getWorld(reader.readUnquotedString());
+        if (world == null) {
+            reader.setCursor(cursor);
+        }
+        
+        var vector = to3DVector(context, reader);
+        return new Location(world, vector.getX(), vector.getY(), vector.getZ());
     }
     
-    public static Vector parse2DVector() {
+    
+    public static World toWorld(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
+        var name = reader.readUnquotedString();
+        var world = Bukkit.getWorld(name);
         
+        if (world == null) {
+            throw WORLD.createWithContext(reader, name);
+        }
+        
+        return world;
     }
     
-    public static Vector parse3DVector() {
         
+    public static Vector to2DVector(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
+        return toVector(context, reader, false);
+    }
+    
+    public static Vector to3DVector(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
+        return toVector(context, reader, true);
+    }
+    
+    static Vector toVector(CommandContext<?> context, StringReader reader, boolean y) throws CommandSyntaxException {
+        var location = of(context.getSource());
+        
+        if (reader.peek() == '^') {
+            if (location == INVALID) {
+                throw MIXED.createWithContext(reader);
+            }
+            
+            var vector = new Vector(parseRelative(reader), y ? parseRelative(reader) : 0, parseRelative(reader));
+            return Vectors.rotate(vector, location);
+            
+        } else {
+            return new Vector(parseAbsolute(reader, location.getX()), y ? parseAbsolute(reader, location.getY()) : 0, parseAbsolute(reader, location.getZ()));
+        }
     }
     
     
-    public static double parse(StringReader reader, double position, double offset) throws CommandSyntaxException {
-        if (reader.peek() == '~') {
+    static Location of(Object source) {
+        if (source instanceof Player) {
+            return ((Player) source).getLocation();
+            
+        } else {
+            return INVALID;
+        }
+    }
+    
+    static double parseAbsolute(StringReader reader, double position) throws CommandSyntaxException {
+        reader.skipWhitespace();
+        switch (reader.peek()) {
+            case '^':
+                throw MIXED.createWithContext(reader);
+                
+            case '~':
+                if (!Double.isNaN(position)) {
+                    return position + reader.readDouble();
+                    
+                } else {
+                    throw SOURCE.createWithContext(reader);
+                }
+                
+            default:
+                return reader.readDouble();
+        }
+    }
+    
+    static double parseRelative(StringReader reader) throws CommandSyntaxException {
+        reader.skipWhitespace();
+        if (reader.peek() == '^') {
             reader.skip();
-            return position + reader.readDouble();
+            return reader.readDouble();
             
-        } else if (reader.peek() == '^') {
-            
+        } else {
+            throw MIXED.createWithContext(reader);
         }
     }
     
