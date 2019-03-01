@@ -23,43 +23,17 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
-
-import com.mojang.brigadier.*;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.*;
-
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.*;
+import com.mojang.brigadier.arguments.StringArgumentType;
 
 
-public class WorldArgument implements WordArgument<World> {
+public interface GreedyArgument<T> extends StringArgument<T> {
     
-    static final Collection<String> EXAMPLES = List.of("world_name");
+    public static final StringArgumentType GREEDY = StringArgumentType.greedyString();
     
     
     @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
-    }
-
-    @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName());
-            }
-        }
-        
-        return builder.buildFuture();
-    }
-
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
+    public default StringArgumentType primitive() {
+        return GREEDY;
     }
     
 }

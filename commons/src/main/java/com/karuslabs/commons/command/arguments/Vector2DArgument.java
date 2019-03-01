@@ -25,36 +25,22 @@ package com.karuslabs.commons.command.arguments;
 
 import com.karuslabs.commons.command.arguments.parsers.VectorParser;
 
-import com.mojang.brigadier.*;
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.*;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.*;
+import org.bukkit.util.Vector;
 
 
-public class WorldArgument implements WordArgument<World> {
+public class Vector2DArgument extends Selector2DArgument<Vector> {
     
-    static final Collection<String> EXAMPLES = List.of("world_name");
-    
-    
-    @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
-    }
+    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0");
+
 
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName());
-            }
-        }
-        
-        return builder.buildFuture();
+    public Vector parse(StringReader reader) throws CommandSyntaxException {
+        return VectorParser.parse2DVector(reader);
     }
 
     @Override

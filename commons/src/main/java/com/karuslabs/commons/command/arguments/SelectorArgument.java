@@ -23,43 +23,48 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
-
-import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.*;
 
-import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 
-public class WorldArgument implements WordArgument<World> {
-    
-    static final Collection<String> EXAMPLES = List.of("world_name");
+public abstract class SelectorArgument<T> implements GreedyArgument<T> {
     
     
-    @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
-    }
-
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName());
+        var source = context.getSource();
+        var parts = split(builder.getRemaining());
+        
+        if (source instanceof Player) {
+            var block = ((Player) source).getTargetBlock(null, 5);
+            
+            if (block != null) {
+                suggest(builder, context, block.getLocation(), parts);
             }
         }
         
+        suggest(builder, context, parts);
+        
         return builder.buildFuture();
     }
-
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
+    
+    protected String[] split(String remaining) {
+        return remaining.split(" ");
+    }
+    
+    
+    
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
+        
+    }
+    
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
+        
     }
     
 }

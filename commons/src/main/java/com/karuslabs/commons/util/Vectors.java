@@ -33,7 +33,24 @@ import static java.lang.Math.*;
 
 public @Static class Vectors {
     
-    public static final Vector rotateAroundXAxis(Vector vector, double angle) {
+    @FunctionalInterface
+    public static interface Reducer<T> {
+        
+        public T reduce(T container, double x, double y, double z);
+        
+    }
+    
+    public static Reducer<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
+        
+    public static Reducer<Location> LOCATION = (location, x, y, z) -> {
+        location.setX(x);
+        location.setY(y);
+        location.setZ(z);
+        return location;
+    };
+    
+    
+    public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
         cos = cos(angle);
         sin = sin(angle);
@@ -42,7 +59,7 @@ public @Static class Vectors {
         return vector.setY(y).setZ(z);
     }
 
-    public static final Vector rotateAroundYAxis(Vector vector, double angle) {
+    public static Vector rotateAroundYAxis(Vector vector, double angle) {
         double x, z, cos, sin;
         cos = cos(angle);
         sin = sin(angle);
@@ -51,7 +68,7 @@ public @Static class Vectors {
         return vector.setX(x).setZ(z);
     }
 
-    public static final Vector rotateAroundZAxis(Vector vector, double angle) {
+    public static Vector rotateAroundZAxis(Vector vector, double angle) {
         double x, y, cos, sin;
         cos = cos(angle);
         sin = sin(angle);
@@ -61,7 +78,7 @@ public @Static class Vectors {
     }
 
     
-    public static final Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
+    public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
         rotateAroundXAxis(vector, angleX);
         rotateAroundYAxis(vector, angleY);
         rotateAroundZAxis(vector, angleZ);
@@ -69,12 +86,25 @@ public @Static class Vectors {
         return vector;
     }
 
-    public static final Vector rotate(Vector vector, Location location) {
-        return rotate(vector, location.getYaw(), location.getPitch());
+    public static Vector rotate(Vector vector, Location pivot) {
+        return rotate(vector, pivot.getYaw(), pivot.getPitch());
     }
 
-    public static final Vector rotate(Vector vector, float yawDegrees, float pitchDegrees) {
-        double initialX, initialY, initialZ;
+    public static Vector rotate(Vector vector, float yawDegrees, float pitchDegrees) {
+        return rotate(VECTOR, vector, vector.getX(), vector.getY(), vector.getZ(), yawDegrees, pitchDegrees);
+    }
+    
+    
+    public static Location rotate(Location location, Location pivot) {
+        return rotate(location, pivot.getYaw(), pivot.getPitch());
+    }
+
+    public static Location rotate(Location location, float yawDegrees, float pitchDegrees) {
+        return rotate(LOCATION, location, location.getX(), location.getY(), location.getZ(), yawDegrees, pitchDegrees);
+    }
+    
+    
+    public static <T> T rotate(Reducer<T> reducer, T container, double initialX, double initialY, double initialZ, float yawDegrees, float pitchDegrees) {
         double x, y, z;
         
         double yaw = toRadians(-(yawDegrees + 90));
@@ -85,8 +115,6 @@ public @Static class Vectors {
         double cosPitch = cos(pitch);
         double sinPitch = sin(pitch);
         
-        initialX = vector.getX();
-        initialY = vector.getY();
         x = initialX * cosPitch - initialY * sinPitch;
         y = initialX * sinPitch + initialY * cosPitch;
 
@@ -95,15 +123,14 @@ public @Static class Vectors {
         double sinYaw = sin(yaw);
         
         initialX = x;
-        initialZ = vector.getZ();
         x = initialZ * sinYaw + initialX * cosYaw;
         z = initialZ * cosYaw - initialX * sinYaw;
 
-        return vector.setX(x).setY(y).setZ(z);
+        return reducer.reduce(container, x, y, z);
     }
 
     
-    public static final double angleToXAxis(Vector vector) {
+    public static double angleToXAxis(Vector vector) {
         return atan2(vector.getX(), vector.getY());
     }
     

@@ -23,40 +23,51 @@
  */
 package com.karuslabs.commons.command.arguments;
 
+import com.karuslabs.commons.command.arguments.parsers.VectorParser;
 import com.karuslabs.commons.util.Position;
-import static com.karuslabs.commons.util.Position.X;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.*;
-import com.mojang.brigadier.suggestion.*;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+import java.util.*;
 
 
-public class VectorArgument implements StringArgument<Vector> {
-
+public class Position3DArgument extends Selector2DArgument<Position> {
+    
+    static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~");
+    
+    
     @Override
-    public Vector parse(StringReader reader) throws CommandSyntaxException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public <S> Position parse(StringReader reader) throws CommandSyntaxException {
+        return VectorParser.parse3DPosition(reader);
     }
-
+    
+        
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        if (context.getSource() instanceof Player) {
-            var player = (Player) context.getSource();
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
+        if (builder.remaining.isEmpty()) {
+            builder.suggest("~");
+            builder.suggest("~ ~");
+            builder.suggest("~ ~ ~");
+            return;
         }
         
-        return builder.buildFuture();
+        var prefix = builder.remaining.charAt(0);
+        if (parts.length == 1) {
+            builder.suggest(parts[0] + " " + prefix);
+            builder.suggest(parts[0] + " " + prefix + " " + prefix);
+            
+        } else if (parts.length == 2) {
+            builder.suggest(parts[0] + " " + parts[1] + " " + prefix);
+        }
     }
     
 
     @Override
     public Collection<String> getExamples() {
-        return StringArgument.super.getExamples(); //To change body of generated methods, choose Tools | Templates.
+        return EXAMPLES;
     }
     
 }

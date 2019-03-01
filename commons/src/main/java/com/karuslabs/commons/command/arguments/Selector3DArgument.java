@@ -23,43 +23,28 @@
  */
 package com.karuslabs.commons.command.arguments;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
-
-import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.*;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.*;
+import org.bukkit.Location;
 
 
-public class WorldArgument implements WordArgument<World> {
-    
-    static final Collection<String> EXAMPLES = List.of("world_name");
-    
-    
-    @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
-    }
+public abstract class Selector3DArgument<T> extends SelectorArgument<T> {
 
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName());
-            }
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
+        if (builder.getRemaining().isEmpty()) {
+            builder.suggest(String.valueOf(location.getX()));
+            builder.suggest(location.getX() + " " + location.getY());
+            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+
+        } else if (parts.length == 1) {
+            builder.suggest(parts[0] + " " + location.getY());
+            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+            
+        } else if (parts.length == 2) {
+            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
         }
-        
-        return builder.buildFuture();
-    }
-
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
     }
     
 }

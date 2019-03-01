@@ -24,41 +24,31 @@
 package com.karuslabs.commons.command.arguments.parsers;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.util.Vectors;
+import com.karuslabs.commons.util.Position;
 
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 
 public @Static class VectorParser {
     
-    static final SimpleCommandExceptionType SOURCE = new SimpleCommandExceptionType(new LiteralMessage("Source must be a player"));
     static final SimpleCommandExceptionType MIXED = new SimpleCommandExceptionType(new LiteralMessage("Cannot mix world and local coordinates (everything must either use ^ or not)")); 
     static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world:" + world));
-        
-    static final Location INVALID = new Location(null, Double.NaN, Double.NaN, Double.NaN);
     
     
-    public static Location toLocation(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
-        var cursor = reader.getCursor();
+    public static Position parseWorldPosition(StringReader reader) throws CommandSyntaxException {
+        var world = parseWorld(reader);
+        var vector = parse3DPosition(reader);
         
-        var world = Bukkit.getWorld(reader.readUnquotedString());
-        if (world == null) {
-            reader.setCursor(cursor);
-        }
-        
-        var vector = to3DVector(context, reader);
-        return new Location(world, vector.getX(), vector.getY(), vector.getZ());
+        return new Position(world, vector.getX(), vector.getY(), vector.getZ());
     }
     
     
-    public static World toWorld(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString();
+    public static World parseWorld(StringReader reader) throws CommandSyntaxException {
+        var name = reader.readString();
         var world = Bukkit.getWorld(name);
         
         if (world == null) {
@@ -68,69 +58,82 @@ public @Static class VectorParser {
         return world;
     }
     
-        
-    public static Vector to2DVector(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
-        return toVector(context, reader, false);
+    
+    public static Position parse2DPosition(StringReader reader) throws CommandSyntaxException {
+        return parsePosition(reader, false);
     }
     
-    public static Vector to3DVector(CommandContext<?> context, StringReader reader) throws CommandSyntaxException {
-        return toVector(context, reader, true);
+    public static Position parse3DPosition(StringReader reader) throws CommandSyntaxException {
+        return parsePosition(reader, true);
     }
     
-    static Vector toVector(CommandContext<?> context, StringReader reader, boolean y) throws CommandSyntaxException {
-        var location = of(context.getSource());
+    
+    static Position parsePosition(StringReader reader, boolean y) throws CommandSyntaxException {
+        var position = new Position();
         
         if (reader.peek() == '^') {
-            if (location == INVALID) {
+            position.rotate(true);
+        }
+        
+        parse(reader, position, Position.X);
+        if (y) {
+            parse(reader, position, Position.Y);
+        }
+        parse(reader, position, Position.Z);
+        
+        return position;
+    }
+    
+    static Position parse(StringReader reader, Position position, int axis) throws CommandSyntaxException {
+        reader.skipWhitespace();
+        
+        if (position.rotate()) {
+            if (reader.peek() != '^') {
                 throw MIXED.createWithContext(reader);
             }
             
-            var vector = new Vector(parseRelative(reader), y ? parseRelative(reader) : 0, parseRelative(reader));
-            return Vectors.rotate(vector, location);
-            
-        } else {
-            return new Vector(parseAbsolute(reader, location.getX()), y ? parseAbsolute(reader, location.getY()) : 0, parseAbsolute(reader, location.getZ()));
-        }
-    }
-    
-    
-    static Location of(Object source) {
-        if (source instanceof Player) {
-            return ((Player) source).getLocation();
-            
-        } else {
-            return INVALID;
-        }
-    }
-    
-    static double parseAbsolute(StringReader reader, double position) throws CommandSyntaxException {
-        reader.skipWhitespace();
-        switch (reader.peek()) {
-            case '^':
-                throw MIXED.createWithContext(reader);
-                
-            case '~':
-                if (!Double.isNaN(position)) {
-                    return position + reader.readDouble();
-                    
-                } else {
-                    throw SOURCE.createWithContext(reader);
-                }
-                
-            default:
-                return reader.readDouble();
-        }
-    }
-    
-    static double parseRelative(StringReader reader) throws CommandSyntaxException {
-        reader.skipWhitespace();
-        if (reader.peek() == '^') {
             reader.skip();
-            return reader.readDouble();
-            
+            return position.set(axis, reader.readDouble());
+
         } else {
-            throw MIXED.createWithContext(reader);
+            switch (reader.peek()) {
+                case '^':
+                    throw MIXED.createWithContext(reader);
+
+                case '~':
+                    position.relative(axis, true);
+
+                default:
+                    return position.set(axis, reader.readDouble());
+            }
         }
+    }
+    
+    
+    public static Vector parse2DVector(StringReader reader) throws CommandSyntaxException {
+        return parseVector(reader, false);
+    }
+    
+    public static Vector parse3DVector(StringReader reader) throws CommandSyntaxException {
+        return parseVector(reader, true);
+    }
+    
+    
+    static Vector parseVector(StringReader reader, boolean y) throws CommandSyntaxException {
+        var vector = new Vector();
+        
+        reader.skipWhitespace();
+        vector.setX(reader.readDouble());
+        
+        if (y) {
+            reader.skipWhitespace();
+            vector.setY(reader.readDouble());
+        }
+        
+        reader.skipWhitespace();
+        vector.setZ(reader.readDouble());
+        
+        return vector;
     }
     
 }
