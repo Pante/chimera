@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.*;
@@ -32,8 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
-public abstract class SelectorArgument<T> implements GreedyArgument<T> {
-    
+public abstract class SelectorType<T> implements Type<T> {
     
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

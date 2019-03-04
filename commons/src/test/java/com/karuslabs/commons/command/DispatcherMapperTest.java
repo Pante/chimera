@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.arguments.*;
+import com.karuslabs.commons.command.types.PlayerType;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
@@ -65,7 +65,7 @@ class DispatcherMapperTest {
         var bool = BoolArgumentType.bool();
         
         assertEquals(bool, mapper.type(Argument.of("test", bool).build()));
-        assertEquals(PlayerArgument.WORD, mapper.type(Argument.of("test", new PlayerArgument(null)).build()));
+        assertEquals(PlayerType.WORD, mapper.type(Argument.of("test", new PlayerType(null)).build()));
     }
     
     
@@ -82,13 +82,13 @@ class DispatcherMapperTest {
     
     @Test
     void suggestions_primitive_empty() {
-        assertNull(mapper.suggestions(Argument.of("a", PlayerArgument.WORD).build()));
+        assertNull(mapper.suggestions(Argument.of("a", PlayerType.WORD).build()));
     }
     
     
     @Test
     void suggestions_typeargument() {
-        var argument = new PlayerArgument(null);
+        var argument = new PlayerType(null);
         doReturn(PROVIDER).when(mapper).reparse(argument);
         
         assertSame(PROVIDER, mapper.suggestions(Argument.of("a", argument).build()));
@@ -98,7 +98,7 @@ class DispatcherMapperTest {
     
     @Test
     void suggestions_clientside() {
-        assertSame(DispatcherMapper.CLIENT_SIDE.get(ClientsideProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerArgument.WORD).suggests(ClientsideProvider.ENTITIES).build()));
+        assertSame(DispatcherMapper.CLIENT_SIDE.get(ClientsideProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientsideProvider.ENTITIES).build()));
     }
     
     
@@ -107,7 +107,7 @@ class DispatcherMapperTest {
         SuggestionProvider<CommandSender> suggestor = (a, b) -> null;
         doReturn(PROVIDER).when(mapper).reparse(suggestor);
         
-        assertSame(PROVIDER, mapper.suggestions(Argument.of("name", PlayerArgument.WORD).suggests(suggestor).build()));
+        assertSame(PROVIDER, mapper.suggestions(Argument.of("name", PlayerType.WORD).suggests(suggestor).build()));
     }
     
     

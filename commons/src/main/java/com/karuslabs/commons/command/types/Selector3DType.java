@@ -21,31 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import java.util.*;
-
-import org.bukkit.util.Vector;
+import org.bukkit.Location;
 
 
-public class Vector3DArgument extends Selector3DArgument<Vector> {
-    
-    static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0");
-    
-    
-    @Override
-    public Vector parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse3DVector(reader);
-    }
+public abstract class Selector3DType<T> extends SelectorType<T> {
 
     @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
+        if (builder.getRemaining().isEmpty()) {
+            builder.suggest(String.valueOf(location.getX()));
+            builder.suggest(location.getX() + " " + location.getY());
+            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+
+        } else if (parts.length == 1) {
+            builder.suggest(parts[0] + " " + location.getY());
+            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+            
+        } else if (parts.length == 2) {
+            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
+        }
     }
     
 }

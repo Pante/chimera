@@ -158,16 +158,16 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
 
         @Override
         public Argument<T, V> build() {
-            var argument = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
+            var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
-                argument.addChild(child);
+                parameter.addChild(child);
             }
             
             for (var alias : aliases) {
-                Commands.alias(argument, alias);
+                Commands.alias(parameter, alias);
             }
             
-            return argument;
+            return parameter;
         }
 
     }

@@ -21,19 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
+
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import java.util.*;
+
+import net.minecraft.server.v1_13_R2.ArgumentVec3;
+
+import org.bukkit.util.Vector;
 
 
-public interface GreedyArgument<T> extends StringArgument<T> {
+public class Vector3DType extends Selector3DType<Vector> {
     
-    public static final StringArgumentType GREEDY = StringArgumentType.greedyString();
+    static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0");
+    static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);
     
     
     @Override
-    public default StringArgumentType primitive() {
-        return GREEDY;
+    public Vector parse(StringReader reader) throws CommandSyntaxException {
+        return VectorParser.parse3DVector(reader);
+    }
+
+    @Override
+    public Collection<String> getExamples() {
+        return EXAMPLES;
+    }
+
+    @Override
+    public ArgumentType<?> primitive() {
+        return VECTOR_3D;
     }
     
 }

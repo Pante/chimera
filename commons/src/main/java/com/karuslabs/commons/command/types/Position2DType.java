@@ -21,25 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
+import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
+import com.karuslabs.commons.util.Position;
+
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.*;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.*;
 
-import org.bukkit.command.CommandSender;
+import net.minecraft.server.v1_13_R2.ArgumentVec2;
 
 
-public interface TypeArgument<T, V> extends ArgumentType<T>, SuggestionProvider<CommandSender> {
+public class Position2DType extends Selector2DType<Position> {
+    
+    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0", "^ ^", "~ ~");
+    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
+    
     
     @Override
-    public default CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-        return listSuggestions(context, builder);
+    public <S> Position parse(StringReader reader) throws CommandSyntaxException {
+        return VectorParser.parse2DPosition(reader);
     }
     
-    public ArgumentType<V> primitive();
+        
+    @Override
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
+        if (builder.remaining.isEmpty()) {
+            builder.suggest("~");
+            builder.suggest("~ ~");
+            
+        } else if (parts.length == 1) {
+            var prefix = builder.remaining.charAt(0) == '^' ? '^' : '~';
+            builder.suggest(parts[0] + " " + prefix);
+        }
+    }
+    
+
+    @Override
+    public Collection<String> getExamples() {
+        return EXAMPLES;
+    }
+
+    @Override
+    public ArgumentType<?> primitive() {
+        return VECTOR_2D;
+    }
     
 }

@@ -66,8 +66,8 @@ public @Static class Commands {
     }
     
     public static <T, V> Argument<T, V> alias(ArgumentCommandNode<T, V> command, String alias) {
-        var argument = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
-        return alias(command, argument);
+        var parameter = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
+        return alias(command, parameter);
     }
 
     

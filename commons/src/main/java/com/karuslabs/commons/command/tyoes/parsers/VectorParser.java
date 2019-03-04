@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments.parsers;
+package com.karuslabs.commons.command.tyoes.parsers;
 
 import com.karuslabs.annotations.Static;
 import com.karuslabs.commons.util.Position;
@@ -37,14 +37,6 @@ public @Static class VectorParser {
     
     static final SimpleCommandExceptionType MIXED = new SimpleCommandExceptionType(new LiteralMessage("Cannot mix world and local coordinates (everything must either use ^ or not)")); 
     static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world:" + world));
-    
-    
-    public static Position parseWorldPosition(StringReader reader) throws CommandSyntaxException {
-        var world = parseWorld(reader);
-        var vector = parse3DPosition(reader);
-        
-        return new Position(world, vector.getX(), vector.getY(), vector.getZ());
-    }
     
     
     public static World parseWorld(StringReader reader) throws CommandSyntaxException {

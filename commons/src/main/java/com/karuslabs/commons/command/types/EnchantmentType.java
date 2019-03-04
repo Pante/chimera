@@ -21,37 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
+import com.karuslabs.commons.util.collections.Trie;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 
 
-public class WorldArgument implements WordArgument<World> {
+public class EnchantmentType implements WordType<Enchantment> {
     
-    static final Collection<String> EXAMPLES = List.of("world_name");
+    static final Trie<Enchantment> ENCHANTMENTS;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(enchantment -> new LiteralMessage("Unknown enchantment: " + enchantment));
+    static final Collection<String> EXAMPLES = List.of("arrow_damage", "channeling");
+    
+    static {
+        ENCHANTMENTS = new Trie<>();
+        for (var enchantment : Enchantment.values()) {
+            ENCHANTMENTS.put(enchantment.getKey().getKey(), enchantment);
+        }
+    }
     
     
     @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
+    public Enchantment parse(StringReader reader) throws CommandSyntaxException {
+        var name = reader.readUnquotedString();
+        var enchantment = ENCHANTMENTS.get(name);
+        
+        if (enchantment == null) {
+            throw EXCEPTION.createWithContext(reader, name);
+        }
+        
+        return enchantment;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName());
-            }
+        for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(enchantment);
         }
         
         return builder.buildFuture();

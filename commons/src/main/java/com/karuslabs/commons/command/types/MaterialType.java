@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
 import com.karuslabs.commons.util.collections.Trie;
 
@@ -33,39 +33,39 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Particle;
+import org.bukkit.Material;
 
 
-public class ParticleArgument implements WordArgument<Particle> {
-
-    static final Trie<Particle> PARTICLES;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
-    static final Collection<String> EXAMPLES = List.of("barrier", "bubble_column_up");
+public class MaterialType implements WordType<Material> {
+    
+    static final Trie<Material> MATERIALS;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
+    static final Collection<String> EXAMPLES = List.of("flint_and_steel", "tnt");
     
     static {
-        PARTICLES = new Trie<>();
-        for (var particle : Particle.values()) {
-            PARTICLES.put(particle.toString().toLowerCase(), particle);
+        MATERIALS = new Trie<>();
+        for (var material : Material.values()) {
+            MATERIALS.put(material.getKey().getKey(), material);
         }
     }
     
     
     @Override
-    public Particle parse(StringReader reader) throws CommandSyntaxException {
+    public Material parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString();
-        var particles = PARTICLES.get(name);
+        var material = MATERIALS.get(name);
         
-        if (particles == null) {
+        if (material == null) {
             throw EXCEPTION.createWithContext(reader, name);
         }
         
-        return particles;
+        return material;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var particles : PARTICLES.prefixedKeys(builder.getRemaining())) {
-            builder.suggest(particles);
+        for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(material);
         }
         
         return builder.buildFuture();

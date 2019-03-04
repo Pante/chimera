@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
-
-import com.karuslabs.commons.command.Read;
+package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
@@ -31,82 +29,41 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class PlayersArgument implements StringArgument<List<Player>> {
+public class PlayerType implements WordType<Player> {
     
-    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown selector or player: " + name));
-    private static final Collection<String> EXAMPLES = List.of("@a", "@r", "Pante, Kevaasaurus");
-    private static final Message ALL = new LiteralMessage("All online players");
-    private static final Message RANDOM = new LiteralMessage("A random online player");
-    
+    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
+    private static final Collection<String> EXAMPLES = List.of("Bob", "Pante");
+
     
     private Server server;
     
     
-    public PlayersArgument(Server server) {
+    public PlayerType(Server server) {
         this.server = server;
     }
     
     
     @Override
-    public List<Player> parse(StringReader reader) throws CommandSyntaxException {
-        var argument = reader.readString();
-        if (argument.equalsIgnoreCase("@a")) {
-            return online();
+    public Player parse(StringReader reader) throws CommandSyntaxException {
+        var player = Bukkit.getPlayerExact(reader.readUnquotedString());
+        if (player == null) {
+            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
         }
         
-        var online = online();
-        var players = new ArrayList<Player>();
-        var names = Read.COMMA.split(argument);
-        for (var name : names) {
-            if (name.equalsIgnoreCase("@r")) {
-                online.get(ThreadLocalRandom.current().nextInt(online.size()));
-                continue;
-            }
-            
-            var player = server.getPlayerExact(name);
-            if (player != null) {
-                players.add(player);
-                
-            } else {
-                throw EXCEPTION.create(name);
-            }
-        }
-        
-        
-        return players;
+        return player;
     }
-    
-    List<Player> online() {
-        // Interally, Bukkit uses a CopyWriteList, but we check anyways in case
-        // some fucking idiot decides to create a fork of Bukkit that doesn't.
-        if (server.getOnlinePlayers() instanceof List<?>) {
-            return (List<Player>) server.getOnlinePlayers();
 
-        } else {
-            return new ArrayList<>(server.getOnlinePlayers());
-        }
-    }
-    
     
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var remaining = builder.getRemaining();
-        if (remaining.isEmpty() || remaining.equals("@")) {
-            builder.suggest("@a", ALL);
-        }
-        
-        if ("@r".startsWith(remaining)) {
-            builder.suggest("@r", RANDOM);
-        }
-        
         var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
         return suggest(builder, source); 
     }
@@ -121,7 +78,7 @@ public class PlayersArgument implements StringArgument<List<Player>> {
         return builder.buildFuture();
     }
     
-    
+
     @Override
     public Collection<String> getExamples() {
         return EXAMPLES;

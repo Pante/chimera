@@ -21,35 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType.StringType;
+import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
 
-import java.util.stream.Stream;
+import com.mojang.brigadier.*;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.*;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
+import org.bukkit.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class GreedyArgumentTest {
+public class WorldType implements WordType<World> {
     
-    GreedyArgument argument = reader -> null;
+    static final Collection<String> EXAMPLES = List.of("world_name");
     
     
-    @Test
-    void primitive() {
-        assertEquals(StringType.GREEDY_PHRASE, argument.primitive().getType());
+    @Override
+    public <S> World parse(StringReader reader) throws CommandSyntaxException {
+        return VectorParser.parseWorld(reader);
     }
 
-} 
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        for (var world : Bukkit.getWorlds()) {
+            if (world.getName().startsWith(builder.getRemaining())) {
+                builder.suggest(world.getName());
+            }
+        }
+        
+        return builder.buildFuture();
+    }
+
+    @Override
+    public Collection<String> getExamples() {
+        return EXAMPLES;
+    }
+    
+}

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
 import com.karuslabs.commons.util.collections.Trie;
 
@@ -33,39 +33,39 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Particle;
 
 
-public class EnchantmentArgument implements WordArgument<Enchantment> {
-    
-    static final Trie<Enchantment> ENCHANTMENTS;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(enchantment -> new LiteralMessage("Unknown enchantment: " + enchantment));
-    static final Collection<String> EXAMPLES = List.of("arrow_damage", "channeling");
+public class ParticleType implements WordType<Particle> {
+
+    static final Trie<Particle> PARTICLES;
+    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
+    static final Collection<String> EXAMPLES = List.of("barrier", "bubble_column_up");
     
     static {
-        ENCHANTMENTS = new Trie<>();
-        for (var enchantment : Enchantment.values()) {
-            ENCHANTMENTS.put(enchantment.getKey().getKey(), enchantment);
+        PARTICLES = new Trie<>();
+        for (var particle : Particle.values()) {
+            PARTICLES.put(particle.toString().toLowerCase(), particle);
         }
     }
     
     
     @Override
-    public Enchantment parse(StringReader reader) throws CommandSyntaxException {
+    public Particle parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString();
-        var enchantment = ENCHANTMENTS.get(name);
+        var particles = PARTICLES.get(name);
         
-        if (enchantment == null) {
+        if (particles == null) {
             throw EXCEPTION.createWithContext(reader, name);
         }
         
-        return enchantment;
+        return particles;
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {
-            builder.suggest(enchantment);
+        for (var particles : PARTICLES.prefixedKeys(builder.getRemaining())) {
+            builder.suggest(particles);
         }
         
         return builder.buildFuture();

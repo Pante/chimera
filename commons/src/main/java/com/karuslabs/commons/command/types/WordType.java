@@ -21,26 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.arguments.StringArgumentType.StringType;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.mojang.brigadier.arguments.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class WordArgumentTest {
+public interface WordType<T> extends Type<T> {
     
-    WordArgument argument = reader -> null;
+    public static final StringArgumentType WORD = StringArgumentType.word();
     
     
-    @Test
-    void primitive() {
-        assertEquals(StringType.SINGLE_WORD, argument.primitive().getType());
+    @Override
+    public default StringArgumentType primitive() {
+        return WORD;
     }
-
-} 
+    
+}

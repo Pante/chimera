@@ -21,25 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.arguments.StringArgumentType.StringType;
 
-import org.bukkit.Location;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public abstract class Selector2DArgument<T> extends SelectorArgument<T> {
-
-    @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest(String.valueOf(location.getX()));
-            builder.suggest(location.getX() + " " + location.getZ());
-
-        } else if (parts.length == 1) {
-            builder.suggest(parts[0] + " " + location.getY());
-        }
-    }
+@ExtendWith(MockitoExtension.class)
+class WordTypeTest {
     
-}
+    WordType type = reader -> null;
+    
+    
+    @Test
+    void primitive() {
+        assertEquals(StringType.SINGLE_WORD, type.primitive().getType());
+    }
+
+} 

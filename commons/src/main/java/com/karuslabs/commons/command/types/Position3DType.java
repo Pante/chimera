@@ -21,27 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
+import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
 import com.karuslabs.commons.util.Position;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.*;
 
+import net.minecraft.server.v1_13_R2.ArgumentVec3;
 
-public class Position2DArgument extends Selector2DArgument<Position> {
+
+public class Position3DType extends Selector3DType<Position> {
     
-    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0", "^ ^", "~ ~");
+    static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~");
+    static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(true);
     
     
     @Override
     public <S> Position parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse2DPosition(reader);
+        return VectorParser.parse3DPosition(reader);
     }
     
         
@@ -50,10 +54,17 @@ public class Position2DArgument extends Selector2DArgument<Position> {
         if (builder.remaining.isEmpty()) {
             builder.suggest("~");
             builder.suggest("~ ~");
-            
-        } else if (parts.length == 1) {
-            var prefix = builder.remaining.charAt(0) == '^' ? '^' : '~';
+            builder.suggest("~ ~ ~");
+            return;
+        }
+        
+        var prefix = builder.remaining.charAt(0) == '^' ? '^' : '~';
+        if (parts.length == 1) {
             builder.suggest(parts[0] + " " + prefix);
+            builder.suggest(parts[0] + " " + prefix + " " + prefix);
+            
+        } else if (parts.length == 2) {
+            builder.suggest(parts[0] + " " + parts[1] + " " + prefix);
         }
     }
     
@@ -61,6 +72,11 @@ public class Position2DArgument extends Selector2DArgument<Position> {
     @Override
     public Collection<String> getExamples() {
         return EXAMPLES;
+    }
+    
+    @Override
+    public ArgumentType<?> primitive() {
+        return VECTOR_3D;
     }
     
 }

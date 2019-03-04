@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.arguments.TypeArgument;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.Mapper;
 
@@ -40,6 +39,7 @@ import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import com.karuslabs.commons.command.types.Type;
 
 
 class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
@@ -65,7 +65,7 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     @Override
     protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
         var type = command.getType();
-        return type instanceof TypeArgument<?, ?> ? ((TypeArgument<?, ?>) type).primitive() : type;
+        return type instanceof Type<?> ? ((Type<?>) type).primitive() : type;
     }
     
     
@@ -81,11 +81,11 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         var type = command.getType();
         var suggestor = command.getCustomSuggestions();
         
-        if (!(type instanceof TypeArgument<?, ?>) && suggestor == null) {
+        if (!(type instanceof Type<?>) && suggestor == null) {
             return null;
             
         } else if (suggestor == null) {
-            return reparse((TypeArgument<?, ?>) type);
+            return reparse((Type<?>) type);
         }
         
         var client = CLIENT_SIDE.get(suggestor);

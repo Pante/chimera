@@ -21,30 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
-import org.bukkit.Location;
+import com.mojang.brigadier.arguments.*;
 
 
-public abstract class Selector3DArgument<T> extends SelectorArgument<T> {
-
+@FunctionalInterface
+public interface StringType<T> extends Type<T> {
+    
+    public static final StringArgumentType STRING = StringArgumentType.string();
+    
+    
     @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest(String.valueOf(location.getX()));
-            builder.suggest(location.getX() + " " + location.getY());
-            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
-
-        } else if (parts.length == 1) {
-            builder.suggest(parts[0] + " " + location.getY());
-            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
-            
-        } else if (parts.length == 2) {
-            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
-        }
+    public default StringArgumentType primitive() {
+        return STRING;
     }
     
 }

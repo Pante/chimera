@@ -21,31 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.arguments;
+package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.arguments.parsers.VectorParser;
-
-import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.*;
 
-import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.util.Vector;
+import org.bukkit.command.CommandSender;
 
 
-public class Vector2DArgument extends Selector2DArgument<Vector> {
+public interface Type<T> extends ArgumentType<T>, SuggestionProvider<CommandSender> {
     
-    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0");
-
-
     @Override
-    public Vector parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse2DVector(reader);
+    public default CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) throws CommandSyntaxException {
+        return listSuggestions(context, builder);
     }
-
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
-    }
+    
+    public ArgumentType<?> primitive();
     
 }
