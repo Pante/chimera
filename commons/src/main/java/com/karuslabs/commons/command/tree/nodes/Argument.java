@@ -150,6 +150,15 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
             return getThis();
         }
         
+        public Builder<T, V> optional(CommandNode<T> node) {
+            then(node);
+            for (var child : node.getChildren()) {
+                then(child);
+            }
+            
+            return this;
+        }
+        
         
         @Override
         protected Builder<T, V> getThis() {

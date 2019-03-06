@@ -140,6 +140,15 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
             return executes((Command<T>) command);
         }
         
+        public Builder<T> optional(CommandNode<T> node) {
+            then(node);
+            for (var child : node.getChildren()) {
+                then(child);
+            }
+            
+            return this;
+        }
+        
         
         @Override
         protected Builder<T> getThis() {
