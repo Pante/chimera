@@ -23,47 +23,39 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.*;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.concurrent.CompletableFuture;
+import net.minecraft.server.v1_13_R2.ArgumentVec3;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 
-public abstract class SelectorType<T> implements Type<T> {
+public abstract class Cartesian3DType<T> extends CartesianType<T> {
+    
+    static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);
+    
     
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var source = context.getSource();
-        var parts = split(builder.getRemaining());
-        
-        if (source instanceof Player) {
-            var block = ((Player) source).getTargetBlock(null, 5);
-            
-            if (block != null) {
-                suggest(builder, context, block.getLocation(), parts);
-            }
-        }
-        
-        suggest(builder, context, parts);
-        
-        return builder.buildFuture();
-    }
-    
-    protected String[] split(String remaining) {
-        return remaining.split(" ");
-    }
-    
-    
-    
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        
+        if (builder.getRemaining().isEmpty()) {
+            builder.suggest(String.valueOf(location.getX()));
+            builder.suggest(location.getX() + " " + location.getY());
+            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+
+        } else if (parts.length == 1) {
+            builder.suggest(parts[0] + " " + location.getY());
+            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+            
+        } else if (parts.length == 2) {
+            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
+        }
     }
     
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        
+    @Override
+    public ArgumentType<?> primitive() {
+        return VECTOR_3D;
     }
     
 }

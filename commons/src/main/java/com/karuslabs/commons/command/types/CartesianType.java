@@ -24,27 +24,45 @@
 package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.suggestion.*;
 
-import org.bukkit.Location;
+import java.util.concurrent.CompletableFuture;
+
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 
 
-public abstract class Selector3DType<T> extends SelectorType<T> {
-
+public abstract class CartesianType<T> implements Type<T> {    
+    
     @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest(String.valueOf(location.getX()));
-            builder.suggest(location.getX() + " " + location.getY());
-            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
-
-        } else if (parts.length == 1) {
-            builder.suggest(parts[0] + " " + location.getY());
-            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
-            
-        } else if (parts.length == 2) {
-            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        var source = context.getSource();
+        var parts = split(builder.getRemaining());
+        
+        if (source instanceof Player) {
+            var block = ((Player) source).getTargetBlockExact(5);
+            if (block != null) {
+                suggest(builder, context, block.getLocation(), parts);
+            }
         }
+        
+        suggest(builder, context, parts);
+        
+        return builder.buildFuture();
+    }
+    
+    protected String[] split(String remaining) {
+        return remaining.split(" ");
+    }
+    
+    
+    
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
+        
+    }
+    
+    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
+        
     }
     
 }

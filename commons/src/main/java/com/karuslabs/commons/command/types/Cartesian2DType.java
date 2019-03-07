@@ -23,14 +23,20 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
+import net.minecraft.server.v1_13_R2.ArgumentVec2;
 
 import org.bukkit.Location;
 
 
-public abstract class Selector2DType<T> extends SelectorType<T> {
-
+public abstract class Cartesian2DType<T> extends CartesianType<T> {
+    
+    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
+    
+    
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
         if (builder.getRemaining().isEmpty()) {
@@ -40,6 +46,12 @@ public abstract class Selector2DType<T> extends SelectorType<T> {
         } else if (parts.length == 1) {
             builder.suggest(parts[0] + " " + location.getY());
         }
+    }
+    
+    
+    @Override
+    public ArgumentType<?> primitive() {
+        return VECTOR_2D;
     }
     
 }

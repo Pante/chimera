@@ -33,7 +33,7 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class PlayersType implements StringType<List<Player>> {
     
     private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown selector or player: " + name));
-    private static final Collection<String> EXAMPLES = List.of("@a", "@r", "Pante, Kevaasaurus");
+    private static final Collection<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
     private static final Message ALL = new LiteralMessage("All online players");
     private static final Message RANDOM = new LiteralMessage("A random online player");
     
@@ -50,8 +50,8 @@ public class PlayersType implements StringType<List<Player>> {
     private Server server;
     
     
-    public PlayersType(Server server) {
-        this.server = server;
+    public PlayersType() {
+        this.server = Bukkit.getServer();
     }
     
     
@@ -112,8 +112,11 @@ public class PlayersType implements StringType<List<Player>> {
     }
     
     protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
+        var parts = Read.COMMA.split(builder.getRemaining());
+        var last = parts[parts.length - 1];
+        
         for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {
+            if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
                 builder.suggest(player.getName());
             }
         }

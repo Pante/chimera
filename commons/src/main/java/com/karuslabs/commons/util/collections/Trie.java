@@ -69,7 +69,7 @@ public class Trie<V> extends AbstractMap<String, V> {
             }
         }
         
-        accumulate(root, visitor, collection);
+        accumulate(entry, visitor, collection);
         return collection;
     }
     

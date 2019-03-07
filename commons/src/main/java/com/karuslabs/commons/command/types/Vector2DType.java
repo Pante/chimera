@@ -26,20 +26,16 @@ package com.karuslabs.commons.command.types;
 import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
 
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.*;
 
-import net.minecraft.server.v1_13_R2.ArgumentVec2;
-
 import org.bukkit.util.Vector;
 
 
-public class Vector2DType extends Selector2DType<Vector> {
+public class Vector2DType extends Cartesian2DType<Vector> {
     
     static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0");
-    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(false);
 
     
     @Override
@@ -50,11 +46,6 @@ public class Vector2DType extends Selector2DType<Vector> {
     @Override
     public Collection<String> getExamples() {
         return EXAMPLES;
-    }
-
-    @Override
-    public ArgumentType<?> primitive() {
-        return VECTOR_2D;
     }
     
 }

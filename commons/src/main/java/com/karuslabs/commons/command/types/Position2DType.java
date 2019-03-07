@@ -27,20 +27,16 @@ import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
 import com.karuslabs.commons.util.Position;
 
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.*;
 
-import net.minecraft.server.v1_13_R2.ArgumentVec2;
 
-
-public class Position2DType extends Selector2DType<Position> {
+public class Position2DType extends Cartesian2DType<Position> {
     
     static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0", "^ ^", "~ ~");
-    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
     
     
     @Override
@@ -65,11 +61,6 @@ public class Position2DType extends Selector2DType<Position> {
     @Override
     public Collection<String> getExamples() {
         return EXAMPLES;
-    }
-
-    @Override
-    public ArgumentType<?> primitive() {
-        return VECTOR_2D;
     }
     
 }

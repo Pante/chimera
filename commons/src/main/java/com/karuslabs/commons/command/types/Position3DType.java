@@ -37,7 +37,7 @@ import java.util.*;
 import net.minecraft.server.v1_13_R2.ArgumentVec3;
 
 
-public class Position3DType extends Selector3DType<Position> {
+public class Position3DType extends Cartesian3DType<Position> {
     
     static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~");
     static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(true);

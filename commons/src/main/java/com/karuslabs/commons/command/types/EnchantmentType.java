@@ -64,6 +64,7 @@ public class EnchantmentType implements WordType<Enchantment> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        System.out.println("Enchantments: " + builder.getRemaining());
         for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {
             builder.suggest(enchantment);
         }

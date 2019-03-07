@@ -45,6 +45,10 @@ public class MaterialType implements WordType<Material> {
     static {
         MATERIALS = new Trie<>();
         for (var material : Material.values()) {
+            if (material.isLegacy()) {
+                throw new UnsupportedOperationException("Leagcy Material enumerations are not supported. Please add 'api-version: 1.13' to your plugin.yml");
+            }
+            
             MATERIALS.put(material.getKey().getKey(), material);
         }
     }
@@ -64,6 +68,7 @@ public class MaterialType implements WordType<Material> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+        System.out.println("Material: " + builder.getRemaining());
         for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
             builder.suggest(material);
         }

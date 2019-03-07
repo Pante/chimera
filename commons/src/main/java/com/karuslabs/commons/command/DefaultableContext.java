@@ -55,7 +55,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
     public DefaultableContext(CommandContext<S> context) {
         super(null, null, null, null, null, null, null, null, false);
         this.context = context;
-        this.arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(null);
+        this.arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(context);
     }
     
     

@@ -46,8 +46,8 @@ public class PlayerType implements WordType<Player> {
     private Server server;
     
     
-    public PlayerType(Server server) {
-        this.server = server;
+    public PlayerType() {
+        this.server = Bukkit.getServer();
     }
     
     

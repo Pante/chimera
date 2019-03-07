@@ -65,7 +65,7 @@ class DispatcherMapperTest {
         var bool = BoolArgumentType.bool();
         
         assertEquals(bool, mapper.type(Argument.of("test", bool).build()));
-        assertEquals(PlayerType.WORD, mapper.type(Argument.of("test", new PlayerType(null)).build()));
+        assertEquals(PlayerType.WORD, mapper.type(Argument.of("test", new PlayerType()).build()));
     }
     
     
@@ -88,7 +88,7 @@ class DispatcherMapperTest {
     
     @Test
     void suggestions_typeargument() {
-        var argument = new PlayerType(null);
+        var argument = new PlayerType();
         doReturn(PROVIDER).when(mapper).reparse(argument);
         
         assertSame(PROVIDER, mapper.suggestions(Argument.of("a", argument).build()));

@@ -30,7 +30,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
+
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -38,15 +41,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ExecutableTest {
     
-    Executable<Object> executable = val -> val.isForked();
+    Executable<Object> executable = val -> assertTrue(val instanceof DefaultableContext<?>);
     
     
     @Test
     void run() throws CommandSyntaxException {
-        CommandContext<Object> context = when(mock(CommandContext.class).isForked()).thenReturn(true).getMock();
+        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, false);
         
         assertEquals(SINGLE_SUCCESS, executable.run(context));
-        verify(context).isForked();
     }
 
 } 

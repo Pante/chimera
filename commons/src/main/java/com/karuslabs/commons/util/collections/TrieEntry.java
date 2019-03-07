@@ -79,7 +79,7 @@ class TrieEntry<T> implements Entry<String, T> {
         children++;
         if (31 < character && character < 127) {
             if (ascii == null) {
-                ascii = (TrieEntry<T>[]) new Object[PRINTABLE];
+                ascii = (TrieEntry<T>[]) new TrieEntry<?>[PRINTABLE];
             }
             
             return ascii[character - OFFSET] = new TrieEntry<>(character, this, key, value);
@@ -100,7 +100,7 @@ class TrieEntry<T> implements Entry<String, T> {
         children++;
         if (31 < character && character < 127) {
             if (ascii == null) {
-                ascii = (TrieEntry<T>[]) new Object[PRINTABLE];
+                ascii = (TrieEntry<T>[]) new TrieEntry<?>[PRINTABLE];
             }
             
             var old = ascii[character - OFFSET];
