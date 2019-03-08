@@ -27,9 +27,13 @@ package com.karuslabs.commons.util.collections;
 import com.karuslabs.commons.util.collections.TokenMap.Key;
 
 import java.util.concurrent.*;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,27 +42,45 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ConcurrentTokenMapTest {
     
-    ConcurrentTokenMap<String, Object> map = ConcurrentTokenMap.of();
-    
-    
-    @Test
-    void containsKey() {
+    @ParameterizedTest
+    @MethodSource({"map_provider"})
+    void containsKey(ConcurrentTokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         assertTrue(map.containsKey("a", String.class));
     }
     
     
-    @Test
-    void get() {
+    @ParameterizedTest
+    @MethodSource({"map_provider"})
+    void get(ConcurrentTokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.get("a", int.class));
     }
     
     
-    @Test
-    void getOrDefault() {
+    @ParameterizedTest
+    @MethodSource({"map_provider"})
+    void getOrDefault(ConcurrentTokenMap<String, Object> map) {
         map.map().put(TokenMap.key("a", int.class), map);
         assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
+    }
+    
+    
+    @Test
+    void remove() {
+        var map = ConcurrentTokenMap.of();
+        map.put(TokenMap.key("a", int.class), 1);
+        map.remove("a", int.class);
+        
+        assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
+    }
+    
+    
+    static Stream<ConcurrentTokenMap<String, Object>> map_provider() {
+        ConcurrentTokenMap<String, Object> hashed = ConcurrentTokenMap.of();
+        ConcurrentTokenMap<String, Object> proxied = ConcurrentTokenMap.of(new ConcurrentHashMap<>());
+        
+        return Stream.of(hashed, proxied);
     }
     
 }

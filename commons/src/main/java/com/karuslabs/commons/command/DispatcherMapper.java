@@ -65,7 +65,7 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     @Override
     protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
         var type = command.getType();
-        return type instanceof Type<?> ? ((Type<?>) type).primitive() : type;
+        return type instanceof Type<?> ? ((Type<?>) type).mapped() : type;
     }
     
     
@@ -95,6 +95,14 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         } else {
             return reparse(suggestor);
         } 
+    }
+    
+    protected SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
+        return (context, suggestions) -> {
+            var sender = context.getSource().getBukkitSender();
+            var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());
+            return type.listSuggestions(reparsed, suggestions);
+        };
     }
     
     protected SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {

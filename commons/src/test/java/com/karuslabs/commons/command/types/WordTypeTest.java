@@ -39,8 +39,8 @@ class WordTypeTest {
     
     
     @Test
-    void primitive() {
-        assertEquals(StringType.SINGLE_WORD, type.primitive().getType());
+    void mapped() {
+        assertEquals(StringType.SINGLE_WORD, type.mapped().getType());
     }
 
 } 

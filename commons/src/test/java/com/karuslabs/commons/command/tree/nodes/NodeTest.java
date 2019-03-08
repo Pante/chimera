@@ -63,8 +63,8 @@ class NodeTest {
         node.addChild(child);
         node.removeChild("child");
         
-        assertEquals(0, ((CommandNode<?>) node).getChildren().size());
-        assertEquals(0, node.aliases().get(0).getChildren().size());
+        assertEquals(2, ((CommandNode<?>) node).getChildren().size());
+        assertEquals(2, node.aliases().get(0).getChildren().size());
     }
     
     
@@ -92,10 +92,22 @@ class NodeTest {
     }
     
     
+    @ParameterizedTest
+    @MethodSource("node_parameters")
+    void optionally(Node<CommandSender> node) {
+        var command = (CommandNode<?>) node;
+
+        assertEquals(2, command.getChildren().size());
+        assertNotNull(command.getChild("optional"));
+        assertNotNull(command.getChild("optional child"));
+    }
+    
+    
     static Stream<Node<CommandSender>> node_parameters() {
+        var optional = Literal.of("optional").then(Literal.of("optional child"));
         return Stream.of(
-            Literal.of("literal").executes(val -> {}).alias("literal alias").build(),
-            Argument.of("argument", StringArgumentType.word()).executes(val -> {}).alias("argument alias").build()
+            Literal.of("literal").executes(val -> {}).alias("literal alias").optionally(optional).build(),
+            Argument.of("argument", StringArgumentType.word()).executes(val -> {}).alias("argument alias").optionally(optional).build()
         );
     }
 

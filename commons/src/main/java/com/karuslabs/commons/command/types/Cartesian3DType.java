@@ -54,7 +54,7 @@ public abstract class Cartesian3DType<T> extends CartesianType<T> {
     }
     
     @Override
-    public ArgumentType<?> primitive() {
+    public ArgumentType<?> mapped() {
         return VECTOR_3D;
     }
     

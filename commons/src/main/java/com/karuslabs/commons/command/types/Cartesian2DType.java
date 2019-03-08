@@ -50,7 +50,7 @@ public abstract class Cartesian2DType<T> extends CartesianType<T> {
     
     
     @Override
-    public ArgumentType<?> primitive() {
+    public ArgumentType<?> mapped() {
         return VECTOR_2D;
     }
     

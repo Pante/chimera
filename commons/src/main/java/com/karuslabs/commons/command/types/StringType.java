@@ -33,7 +33,7 @@ public interface StringType<T> extends Type<T> {
     
     
     @Override
-    public default StringArgumentType primitive() {
+    public default StringArgumentType mapped() {
         return STRING;
     }
     

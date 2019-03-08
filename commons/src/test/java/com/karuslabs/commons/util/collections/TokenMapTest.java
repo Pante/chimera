@@ -34,19 +34,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class TokenMapTest {
-    
-    TokenMap<String, Object> map = TokenMap.of();
-    
+class TokenMapTest {    
     
     @ParameterizedTest
     @MethodSource({"map_provider"})
@@ -56,8 +50,9 @@ class TokenMapTest {
     }
     
     
-    @Test
-    void containsValue() {
+    @ParameterizedTest
+    @MethodSource({"map_provider"})
+    void containsValue(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertTrue(map.containsValue(1));
     }
@@ -95,10 +90,31 @@ class TokenMapTest {
     }
     
     
-    static Stream<Arguments> map_provider() {
+    @ParameterizedTest
+    @MethodSource({"map_provider"})
+    void remove_name(TokenMap<String, Object> map) {
+        map.put("a", String.class, "b");
+        map.remove("a", String.class);
+        
+        assertFalse(map.containsKey(TokenMap.key("a", String.class)));
+    }
+    
+    
+    @Test
+    void remove_key() {
+        var map = TokenMap.of();
+        
+        map.put("a", String.class, "b");
+        map.remove(TokenMap.key("a", String.class));
+        
+        assertFalse(map.containsKey(TokenMap.key("a", String.class)));
+    }
+    
+    
+    static Stream<TokenMap<String, Object>> map_provider() {
         TokenMap<String, Object> hashed = TokenMap.of(1);
         TokenMap<String, Object> proxied = TokenMap.of(new HashMap<>());
-        return Stream.of(of(hashed), of(proxied));
+        return Stream.of(hashed, proxied);
     }
     
 }

@@ -56,7 +56,7 @@ public class MaterialType implements WordType<Material> {
     
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString();
+        var name = reader.readUnquotedString().toLowerCase();
         var material = MATERIALS.get(name);
         
         if (material == null) {
@@ -68,7 +68,6 @@ public class MaterialType implements WordType<Material> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        System.out.println("Material: " + builder.getRemaining());
         for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {
             builder.suggest(material);
         }

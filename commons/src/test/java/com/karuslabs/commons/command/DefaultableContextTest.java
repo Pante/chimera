@@ -21,41 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.types;
+package com.karuslabs.commons.command;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.context.CommandContext;
 
-import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class TypeTest {
+class DefaultableContextTest {
     
-    Type type = new Type() {
-        @Override
-        public ArgumentType primitive() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public Object parse(StringReader reader) throws CommandSyntaxException {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    };
-    
-    
-    @Test
-    void getSuggestions() throws CommandSyntaxException, InterruptedException, ExecutionException {
-        assertEquals(Suggestions.empty().get(), type.getSuggestions(null, null).get());
-    }
+    CommandContext<Object> context = mock(CommandContext.class);
+    DefaultableContext<Object> defaultable = new DefaultableContext<>(context);
 
 } 

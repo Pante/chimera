@@ -24,22 +24,10 @@
 package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.*;
-
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.command.CommandSender;
 
 
-public interface Type<T> extends ArgumentType<T>, SuggestionProvider<CommandSender> {
+public interface Type<T> extends ArgumentType<T> {
     
-    @Override
-    public default CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) throws CommandSyntaxException {
-        return listSuggestions(context, builder);
-    }
-    
-    public ArgumentType<?> primitive();
+    public ArgumentType<?> mapped();
     
 }

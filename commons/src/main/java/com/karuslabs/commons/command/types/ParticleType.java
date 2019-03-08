@@ -52,7 +52,7 @@ public class ParticleType implements WordType<Particle> {
     
     @Override
     public Particle parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString();
+        var name = reader.readUnquotedString().toLowerCase();
         var particles = PARTICLES.get(name);
         
         if (particles == null) {

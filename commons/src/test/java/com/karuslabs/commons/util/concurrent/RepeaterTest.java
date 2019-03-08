@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.RunnableScheduledFuture;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,15 +36,36 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RepeaterTest {
     
-    Repeater executor = new Repeater(1);
+    Repeater repeater = spy(new Repeater(1));
     RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
+    
+    
+    @Test
+    void schedule_runnable() {
+        doReturn(null).when(repeater).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
+        
+        repeater.schedule(() -> {}, 1, 2, TimeUnit.DAYS, 4);
+        
+        verify(repeater).scheduleAtFixedRate(any(RunnableRepetition.class), eq(1L), eq(2L), eq(TimeUnit.DAYS));
+    }
+    
+    
+    @Test
+    void schedule_repetition() {
+        doReturn(null).when(repeater).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
+        
+        var repetition = new RunnableRepetition(() -> {}, 3);
+        repeater.schedule(repetition, 1, 2, TimeUnit.DAYS);
+        
+        verify(repeater).scheduleAtFixedRate(repetition, 1, 2, TimeUnit.DAYS);
+    }
     
     
     @Test
     void decorateTask_runnable() {
         Runnable runnable = mock(Runnable.class);
         
-        assertEquals(task, executor.decorateTask(runnable, task));
+        assertEquals(task, repeater.decorateTask(runnable, task));
         
         verifyZeroInteractions(runnable);
         verifyZeroInteractions(task);
@@ -55,7 +76,7 @@ class RepeaterTest {
     void decorateTask_continual() {
         Repetition continual = mock(Repetition.class);
         
-        assertEquals(task, executor.decorateTask(continual, task));
+        assertEquals(task, repeater.decorateTask(continual, task));
         
         verify(continual).set(task);
     }

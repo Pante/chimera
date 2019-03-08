@@ -41,7 +41,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PlayersType implements StringType<List<Player>> {
     
-    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown selector or player: " + name));
+    private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("Cannot use @a selector in a list of players. "));
+    private static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player or selector: " + name));
     private static final Collection<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
     private static final Message ALL = new LiteralMessage("All online players");
     private static final Message RANDOM = new LiteralMessage("A random online player");
@@ -57,7 +58,8 @@ public class PlayersType implements StringType<List<Player>> {
     
     @Override
     public List<Player> parse(StringReader reader) throws CommandSyntaxException {
-        var argument = reader.readString();
+        var argument = reader.peek() == '"' ? reader.readQuotedString() : Read.until(reader, ' ');
+        
         if (argument.equalsIgnoreCase("@a")) {
             return online();
         }
@@ -66,8 +68,9 @@ public class PlayersType implements StringType<List<Player>> {
         var players = new ArrayList<Player>();
         var names = Read.COMMA.split(argument);
         for (var name : names) {
+            System.out.println("Name: " + name);
             if (name.equalsIgnoreCase("@r")) {
-                online.get(ThreadLocalRandom.current().nextInt(online.size()));
+                players.add(online.get(ThreadLocalRandom.current().nextInt(online.size())));
                 continue;
             }
             
@@ -75,8 +78,11 @@ public class PlayersType implements StringType<List<Player>> {
             if (player != null) {
                 players.add(player);
                 
+            } else if (argument.equalsIgnoreCase("@a")) {
+                throw INVALID.createWithContext(reader);
+                
             } else {
-                throw EXCEPTION.create(name);
+                throw UNKNOWN.createWithContext(reader, name);
             }
         }
         
@@ -103,23 +109,26 @@ public class PlayersType implements StringType<List<Player>> {
             builder.suggest("@a", ALL);
         }
         
-        if ("@r".startsWith(remaining)) {
-            builder.suggest("@r", RANDOM);
+        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
+        var parts = Read.COMMA.split(remaining, -1);
+        var last = parts[parts.length - 1].replace("\"", "");
+        var beginning = remaining.substring(0, remaining.lastIndexOf(last));
+        
+        if ("@r".startsWith(last)) {
+            builder.suggest(beginning + "@r", RANDOM);
         }
         
-        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
+        for (var player: server.getOnlinePlayers()) {
+            if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
+                builder.suggest(beginning + player.getName());
+            }
+        }        
+        
         return suggest(builder, source); 
     }
     
     protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
-        var parts = Read.COMMA.split(builder.getRemaining());
-        var last = parts[parts.length - 1];
         
-        for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
-                builder.suggest(player.getName());
-            }
-        }
         
         return builder.buildFuture();
     }

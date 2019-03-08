@@ -50,8 +50,8 @@ public class Repeater extends ScheduledThreadPoolExecutor {
         return schedule(new RunnableRepetition(runnable, times), initial, period, unit);
     }
     
-    public ScheduledFuture<?> schedule(Repetition<?> continual, long initial, long period, TimeUnit unit) {
-        return scheduleAtFixedRate(continual, initial, period, unit);
+    public ScheduledFuture<?> schedule(Repetition<?> repetition, long initial, long period, TimeUnit unit) {
+        return scheduleAtFixedRate(repetition, initial, period, unit);
     }
     
     @Override

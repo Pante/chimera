@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.types.PlayerType;
+import com.karuslabs.commons.command.types.*;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
@@ -112,7 +112,19 @@ class DispatcherMapperTest {
     
     
     @Test
-    void reparse() throws CommandSyntaxException {
+    void reparse_type() throws CommandSyntaxException {
+        Type<Object> provider = mock(Type.class);
+        SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
+        CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();
+        
+        mapper.reparse(provider).getSuggestions(context, builder);
+        
+        verify(provider).listSuggestions(any(CommandContext.class), eq(builder));
+    }
+    
+    
+    @Test
+    void reparse_suggestion_provider() throws CommandSyntaxException {
         SuggestionProvider provider = mock(SuggestionProvider.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
         CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();

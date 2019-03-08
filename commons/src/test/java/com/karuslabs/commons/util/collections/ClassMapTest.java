@@ -25,60 +25,83 @@
 package com.karuslabs.commons.util.collections;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ClassMapTest {
+class ClassMapTest {    
     
-    ClassMap<Object> map = ClassMap.of();
-    
-    
-    @Test
-    void containsKey() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void containsKey(ClassMap<Object> map) {
         map.put(int.class, 1);
         assertTrue(map.containsKey(int.class));
         assertFalse(map.containsKey(Integer.class));
     }
     
     
-    @Test
-    void containsValue() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void containsValue(ClassMap<Object> map) {  
         map.put(int.class, 1); 
         assertTrue(map.containsValue(1));
     }
     
     
-    @Test
-    void get() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void get(ClassMap<Object> map) {
         map.put(String.class, "test");
         assertEquals(String.class, map.get(String.class).getClass());
     }
     
     
-    @Test
-    void getOrDefault_value() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void getOrDefault_value(ClassMap<Object> map) {
         map.put(int.class, 1);
         assertEquals(1, (int) map.getOrDefault(int.class, 2));
     }
     
     
-    @Test
-    void getOrDefault_default() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void getOrDefault_default(ClassMap<Object> map) {
         map.map().put(int.class, "invalid");
         assertEquals(2, (int) map.getOrDefault(int.class, 2));
     }
     
     
-    @Test
-    void put() {
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void put(ClassMap<Object> map) {
         map.put(String.class, "first");
         assertEquals("first", map.put(String.class, "second"));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("map_provider")
+    void remove(ClassMap<Object> map) {
+        map.put(int.class, 1); 
+        map.remove(int.class);
+        assertFalse(map.containsKey(int.class));
+    }
+    
+    
+    static Stream<ClassMap<Object>> map_provider() {
+        var hashed = ClassMap.of();
+        var proxied = ClassMap.of(new HashMap<>());
+        
+        return Stream.of(hashed, proxied);
     }
     
 }

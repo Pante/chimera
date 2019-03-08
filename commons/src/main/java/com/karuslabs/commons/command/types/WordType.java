@@ -32,7 +32,7 @@ public interface WordType<T> extends Type<T> {
     
     
     @Override
-    public default StringArgumentType primitive() {
+    public default StringArgumentType mapped() {
         return WORD;
     }
     

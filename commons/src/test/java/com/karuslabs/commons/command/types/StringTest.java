@@ -39,8 +39,8 @@ class StringTest {
     
     
     @Test
-    void primitive() {
-        assertEquals(StringType.QUOTABLE_PHRASE, argument.primitive().getType());
+    void mapped() {
+        assertEquals(StringType.QUOTABLE_PHRASE, argument.mapped().getType());
     }
 
 } 
