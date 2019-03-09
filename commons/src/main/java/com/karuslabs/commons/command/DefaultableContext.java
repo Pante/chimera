@@ -49,13 +49,13 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     
     private CommandContext<S> context;
-    private Map<String, ParsedArgument<S, ?>> arguments;
+    private @Nullable Map<String, ParsedArgument<S, ?>> arguments;
     
     
     public DefaultableContext(CommandContext<S> context) {
         super(null, null, null, null, null, null, null, null, false);
         this.context = context;
-        this.arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(context);
+        this.arguments = null;
     }
     
     
@@ -64,6 +64,10 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
     
     public <V> V getOptionalArgument(String name, Class<V> type, V value) {
+        if (arguments == null) {
+            arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(context);
+        }  
+        
         var argument = arguments.get(name);
         if (argument != null) {
             return getArgument(name, type);
@@ -105,18 +109,6 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof DefaultableContext)) return false;
-
-        return super.equals(other);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode();
-    }
-
-    @Override
     public RedirectModifier<S> getRedirectModifier() {
         return context.getRedirectModifier();
     }
@@ -139,6 +131,21 @@ public class DefaultableContext<S> extends CommandContext<S> {
     @Override
     public boolean isForked() {
         return context.isForked();
+    }
+    
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof DefaultableContext)) {
+            return false;
+        }
+
+        return context.equals(((DefaultableContext) object).context);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * context.hashCode();
     }
     
 }

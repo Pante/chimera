@@ -124,7 +124,7 @@ public class Position extends Location {
             return true;
         }
         
-        if (!(object.getClass() == Position.class)) {
+        if (!(object instanceof Position)) {
             return false;
         }
         
