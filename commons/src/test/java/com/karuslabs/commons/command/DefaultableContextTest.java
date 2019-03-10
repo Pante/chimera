@@ -119,13 +119,13 @@ class DefaultableContextTest {
     void equality(Object other, boolean expected) {
         assertEquals(expected, defaultable.equals(other));
     }
-//    
-//    
-//    @ParameterizedTest
-//    @MethodSource("equality_provider")
-//    void hashCode(Object other, boolean expected) {
-//        assertEquals(expected, defaultable.hashCode() == Objects.hashCode(other));
-//    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("equality_provider")
+    void hashCode(Object other, boolean expected) {
+        assertEquals(expected, defaultable.hashCode() == Objects.hashCode(other));
+    }
     
     
     static Stream<Arguments> equality_provider() {
