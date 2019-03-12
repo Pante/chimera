@@ -23,11 +23,10 @@
  */
 package com.karuslabs.commons.command;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ParsedArgument;
+import com.mojang.brigadier.*;
+import com.mojang.brigadier.context.*;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DefaultableContextTest {
     
-    CommandContext<Object> context = new CommandContext<>(null, null, Map.of("argument", new ParsedArgument<>(0, 1, "value")), null, null, null, null, null, false);
+    static final Object OBJECT = new Object();
+    static final Command<Object> COMMAND = context -> 1;
+    static final StringRange RANGE = new StringRange(0, 0);
+    static final RedirectModifier<Object> MODIFIER = context -> List.of();
+    
+    
+    CommandContext<Object> context = new CommandContext<>(OBJECT, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, Map.of(), RANGE, null, MODIFIER, false);
     DefaultableContext<Object> defaultable = new DefaultableContext<>(context);
     
     CommandContext<Object> mock = mock(CommandContext.class);
@@ -129,7 +134,7 @@ class DefaultableContextTest {
     
     
     static Stream<Arguments> equality_provider() {
-        var context = new CommandContext<>(null, null, Map.of("argument", new ParsedArgument<>(0, 1, "value")), null, null, null, null, null, false);
+        var context = new CommandContext<>(OBJECT, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, Map.of(), RANGE, null, MODIFIER, false);
         var other = new DefaultableContext<>(context);
         return Stream.of(
             of(other, true),

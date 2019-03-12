@@ -24,11 +24,15 @@
 package com.karuslabs.commons.util;
 
 import java.util.*;
+
 import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 
 public class Position extends Location {
+    
+    private static final double EPSILON = 0.000001;
+    
     
     public static final int X = 0;
     public static final int Y = 1;
@@ -46,15 +50,19 @@ public class Position extends Location {
     public Position(double x, double y, double z) {
         this(null, x, y, z);
     }
-
+    
     public Position(World world, double x, double y, double z) {
-        super(world, x, y, z);
+        this(world, x, y, z, 0, 0);
+    }
+
+    public Position(World world, double x, double y, double z, float yaw, float pitch) {
+        super(world, x, y, z, yaw, pitch);
         relative = new boolean[]{ false, false, false };
         rotate = false;
     }
     
     
-    public void apply(Location origin, Location to) {
+    public void apply(Location to, Location origin) {
         to.setX(relative[X] ? getX() + origin.getX() : getX());
         to.setY(relative[Y] ? getY() + origin.getY() : getY());
         to.setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
@@ -62,7 +70,7 @@ public class Position extends Location {
         if (rotate) Vectors.rotate(to, origin);
     }
     
-    public void apply(Location origin, Vector to) {
+    public void apply(Vector to, Location origin) {
         to.setX(relative[X] ? getX() + origin.getX() : getX())
           .setY(relative[Y] ? getY() + origin.getY() : getY())
           .setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
@@ -130,11 +138,11 @@ public class Position extends Location {
         
         var other = (Position) object;
         return Objects.equals(getWorld(), other.getWorld())
-            && Double.compare(getX(), other.getX()) == 0
-            && Double.compare(getY(), other.getY()) == 0
-            && Double.compare(getY(), other.getZ()) == 0
-            && Float.compare(getPitch(), other.getPitch()) == 0
-            && Float.compare(getYaw(), other.getYaw()) == 0 
+            && Math.abs(getX() - other.getX()) < EPSILON
+            && Math.abs(getY() - other.getY()) < EPSILON
+            && Math.abs(getZ() - other.getZ()) < EPSILON
+            && Math.abs(getYaw() - other.getYaw()) < EPSILON
+            && Math.abs(getPitch() - other.getPitch()) < EPSILON
             && rotate == other.rotate 
             && Arrays.equals(relative, other.relative);
     }
@@ -152,7 +160,7 @@ public class Position extends Location {
     
     @Override
     public String toString() {
-        return "rotate[" + rotate + "]" + point(getX(), X) + point(getY(), Y) + point(getZ(), Z);
+        return "rotate[" + rotate + "], " + getWorld() + "[world]" + point(getX(), X) + point(getY(), Y) + point(getZ(), Z) + ", " + getYaw() + "[yaw], " + getPitch() + "[pitch]";
     }
     
     private String point(double point, int axis) {

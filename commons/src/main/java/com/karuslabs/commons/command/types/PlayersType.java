@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.Read;
+import com.karuslabs.commons.command.Lexer;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
@@ -58,7 +58,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     @Override
     public List<Player> parse(StringReader reader) throws CommandSyntaxException {
-        var argument = reader.peek() == '"' ? reader.readQuotedString() : Read.until(reader, ' ');
+        var argument = reader.peek() == '"' ? reader.readQuotedString() : Lexer.until(reader, ' ');
         
         if (argument.equalsIgnoreCase("@a")) {
             return online();
@@ -66,7 +66,7 @@ public class PlayersType implements StringType<List<Player>> {
         
         var online = online();
         var players = new ArrayList<Player>();
-        var names = Read.COMMA.split(argument);
+        var names = Lexer.COMMA.split(argument);
         for (var name : names) {
             System.out.println("Name: " + name);
             if (name.equalsIgnoreCase("@r")) {
@@ -110,7 +110,7 @@ public class PlayersType implements StringType<List<Player>> {
         }
         
         var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
-        var parts = Read.COMMA.split(remaining, -1);
+        var parts = Lexer.COMMA.split(remaining, -1);
         var last = parts[parts.length - 1].replace("\"", "");
         var beginning = remaining.substring(0, remaining.lastIndexOf(last));
         

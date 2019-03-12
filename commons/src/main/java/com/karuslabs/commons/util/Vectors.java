@@ -48,7 +48,15 @@ public @Static class Vectors {
         location.setZ(z);
         return location;
     };
+
     
+    public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
+        rotateAroundXAxis(vector, angleX);
+        rotateAroundYAxis(vector, angleY);
+        rotateAroundZAxis(vector, angleZ);
+        
+        return vector;
+    }
     
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;
@@ -75,15 +83,6 @@ public @Static class Vectors {
         x = vector.getX() * cos - vector.getY() * sin;
         y = vector.getX() * sin + vector.getY() * cos;
         return vector.setX(x).setY(y);
-    }
-
-    
-    public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
-        rotateAroundXAxis(vector, angleX);
-        rotateAroundYAxis(vector, angleY);
-        rotateAroundZAxis(vector, angleZ);
-        
-        return vector;
     }
 
     public static Vector rotate(Vector vector, Location pivot) {

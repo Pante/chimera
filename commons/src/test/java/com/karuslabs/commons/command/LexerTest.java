@@ -33,26 +33,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ReadTest {
+class LexerTest {
     
     StringReader reader = new StringReader("abcd");
     
     
     @Test
     void until_char() {
-        assertEquals("a", Read.until(reader, 'b'));
+        assertEquals("a", Lexer.until(reader, 'b'));
     }
     
     
     @Test
     void until_chars() {
-        assertEquals("ab", Read.until(reader, 'c', 'd'));
+        assertEquals("ab", Lexer.until(reader, 'c', 'd'));
     }
     
     
     @Test
     void until_end() {
-        assertEquals("abc", Read.until(reader, val -> val == 'd'));
+        assertEquals("abc", Lexer.until(reader, val -> val == 'd'));
     }
 
 } 
