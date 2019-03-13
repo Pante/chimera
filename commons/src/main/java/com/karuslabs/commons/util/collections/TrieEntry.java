@@ -72,7 +72,7 @@ class TrieEntry<T> implements Entry<String, T> {
     
     
     @Nullable TrieEntry<T> add(char character) {
-        return add(character, key, value);
+        return add(character, null, null);
     }
     
     @Nullable TrieEntry<T> add(char character, String key, T value) {
@@ -96,25 +96,32 @@ class TrieEntry<T> implements Entry<String, T> {
         }
     }
     
+    
     @Nullable TrieEntry<T> set(char character, String key, T value) {
-        children++;
+        TrieEntry<T> old = null;
         if (31 < character && character < 127) {
             if (ascii == null) {
                 ascii = (TrieEntry<T>[]) new TrieEntry<?>[PRINTABLE];
             }
             
-            var old = ascii[character - OFFSET];
+            old = ascii[character - OFFSET];
             ascii[character - OFFSET] = new TrieEntry<>(character, this, key, value);
-            return old;
-            
+
         } else {
             if (expanded == null) {
                 expanded = new HashMap<>();
             }
             
-            return expanded.put(character, new TrieEntry(character, this, key, value));
+            old = expanded.put(character, new TrieEntry(character, this, key, value));
         }
+        
+        if (old == null) {
+            children++;
+        }
+        
+        return old;
     }
+    
     
     @Nullable TrieEntry<T> remove(char character) {
         TrieEntry<T> removed = null;
@@ -134,6 +141,7 @@ class TrieEntry<T> implements Entry<String, T> {
     }
 
     void clear() {
+        children = 0;
         ascii = null;
         expanded = null;
     }
@@ -160,6 +168,10 @@ class TrieEntry<T> implements Entry<String, T> {
 
     @Override
     public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        
         if (!(other instanceof Map.Entry)) {
             return false;
         }
@@ -167,24 +179,24 @@ class TrieEntry<T> implements Entry<String, T> {
         Map.Entry<?, ?> e = (Map.Entry<?, ?>) other;
         return equals(key, e.getKey()) && equals(value, e.getValue());
     }
-
-    @Override
-    public int hashCode() {
-        return (key == null ? 0 : key.hashCode())
-                ^ (value == null ? 0 : value.hashCode());
-    }
-    
-    @Override
-    public String toString() {
-        return key + "=" + value;
-    }
-    
-    
+        
     /**
      * See https://bugs.openjdk.java.net/browse/JDK-8015417
      */
     static boolean equals(Object o1, Object o2) {
         return o1 == null ? o2 == null : o1.equals(o2);
+    }
+
+    
+    @Override
+    public int hashCode() {
+        return (key == null ? 0 : key.hashCode())
+             ^ (value == null ? 0 : value.hashCode());
+    }
+    
+    @Override
+    public String toString() {
+        return key + "=" + value;
     }
     
 }

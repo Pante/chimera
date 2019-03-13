@@ -48,47 +48,47 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     
     public Set<Entry<String, V>> prefixEntries(String prefix) {
-        return startsWith(prefix, entry -> entry, new HashSet<>(), Collections.emptySet());
+        return prefixed(prefix, entry -> entry, new HashSet<>());
     }
     
     public Set<String> prefixedKeys(String prefix) {
-        return startsWith(prefix, entry -> entry.getKey(), new HashSet<>(), Collections.emptySet());
+        return prefixed(prefix, entry -> entry.getKey(), new HashSet<>());
     }
     
     public Collection<V> prefixedValues(String prefix) {
-        return startsWith(prefix, entry -> entry.getValue(), new ArrayList<>(), Collections.emptyList());
+        return prefixed(prefix, entry -> entry.getValue(), new ArrayList<>());
     }
     
     
-    <C extends Collection<T>, T> C startsWith(String prefix, Function<Entry<String, V>, T> visitor, C collection, C empty) {
+    public <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
         var entry = root;
         for (var character : prefix.toCharArray()) {
             entry = entry.get(character);
             if (entry == null) {
-                return empty;
+                return collection;
             }
         }
         
-        accumulate(entry, visitor, collection);
+        accumulate(entry, mapper, collection);
         return collection;
     }
     
-    <C extends Collection<T>, T> void accumulate(TrieEntry<V> entry, Function<Entry<String, V>, T> visitor, C leaves) {
+    <C extends Collection<T>, T> void accumulate(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
         if (entry.key != null) {
-            leaves.add(visitor.apply(entry));
+            leaves.add(mapper.apply(entry));
         }
         
         if (entry.ascii != null) {
             for (var child : entry.ascii) {
                 if (child != null) {
-                    accumulate(child, visitor, leaves);
+                    accumulate(child, mapper, leaves);
                 }
             }
         }
         
         if (entry.expanded != null) {
             for (var child : entry.expanded.values()) {
-                accumulate(child, visitor, leaves);
+                accumulate(child, mapper, leaves);
             }
         }
     }
@@ -139,7 +139,7 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     @Nullable TrieEntry<V> getEntry(Object key) {
         if (key == null) {
-            throw new NullPointerException("Null keys are not permitted in a Trie");
+            throw new NullPointerException("Null keys are not permitted in a trie");
         }
         
         var entry = root;
@@ -153,6 +153,13 @@ public class Trie<V> extends AbstractMap<String, V> {
         return entry;
     }
 
+        
+    @Override
+    public void putAll(Map<? extends String, ? extends V> map) {
+        for (var entry : map.entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
+    }
     
     @Override
     public @Nullable V put(String key, V value) {
@@ -162,12 +169,11 @@ public class Trie<V> extends AbstractMap<String, V> {
         int i = 0;
         for (; i < array.length - 1; i++) {
             var next = entry.get(array[i]);
-            if (next != null) {
-                entry = next;
-                
-            } else {
+            if (next == null) {
                 break;
             }
+            
+            entry = next;
         }
         
         for (; i < array.length - 1; i++) {
@@ -185,13 +191,6 @@ public class Trie<V> extends AbstractMap<String, V> {
             return replaced.value;
         }
     }
-    
-    @Override
-    public void putAll(Map<? extends String, ? extends V> map) {
-        for (var entry : map.entrySet()) {
-            put(entry.getKey(), entry.getValue());
-        }
-    }
 
     
     @Override
@@ -202,20 +201,22 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     @Nullable V removeEntry(TrieEntry<V> entry) {
         var removed = entry;
+        var value = removed.value;
+        
         if (entry.children == 0) {
             do {
                 entry.parent.remove(entry.character);
                 entry = entry.parent;
             } while (entry.key == null && entry != root && entry.parent.children == 1);
-            size--;
             
         } else {
             entry.key = null;
             entry.value = null;
         }
         
+        size--;
         modifications++;
-        return removed.value;
+        return value;
     }
     
 
@@ -263,6 +264,9 @@ public class Trie<V> extends AbstractMap<String, V> {
         }
         return values;
     }
+    
+    
+    // TODO: ADD EQUALITY METHODS
     
     
     class EntrySet extends AbstractSet<Entry<String, V>> {
