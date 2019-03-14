@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.tyoes.parsers.VectorParser;
+import com.karuslabs.commons.command.types.parsers.VectorParser;
 import com.karuslabs.commons.util.Position;
 
 import com.mojang.brigadier.StringReader;

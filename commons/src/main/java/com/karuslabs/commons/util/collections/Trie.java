@@ -150,7 +150,7 @@ public class Trie<V> extends AbstractMap<String, V> {
             }
         }
         
-        return entry;
+        return entry.getKey() == null ? null : entry;
     }
 
         
@@ -266,19 +266,28 @@ public class Trie<V> extends AbstractMap<String, V> {
     }
     
     
-    // TODO: ADD EQUALITY METHODS
-    
-    
     class EntrySet extends AbstractSet<Entry<String, V>> {
         
         @Override
         public boolean contains(Object object) {
-            return getEntry(object) != null;
+            var entry = (Entry<String, V>) object;
+            var found = getEntry(entry.getKey());
+            
+            return entry.equals(found);
         }
         
         @Override
         public boolean remove(Object object) {
-            return removeEntry((TrieEntry<V>) object) != null;
+            var other = (Entry<String, V>) object;
+            var entry = getEntry(other.getKey());
+            
+            if (entry != null && Objects.equals(entry.getValue(), other.getValue())) {
+                removeEntry(entry);
+                return true;
+                
+            } else {
+                return false;
+            }
         }
         
         @Override
@@ -296,13 +305,13 @@ public class Trie<V> extends AbstractMap<String, V> {
     class KeySet extends AbstractSet<String> {
         
         @Override
-        public boolean contains(Object object) {
-            return containsKey(object);
+        public boolean contains(Object key) {
+            return containsKey(key);
         }
         
         @Override
-        public boolean remove(Object object) {
-            return Trie.this.remove(object) != null;
+        public boolean remove(Object key) {
+            return Trie.this.remove(key) != null;
         }
         
         @Override
@@ -320,8 +329,8 @@ public class Trie<V> extends AbstractMap<String, V> {
     class ValueCollection extends AbstractCollection<V> {
 
         @Override
-        public boolean contains(Object object) {
-            return containsValue(object);
+        public boolean contains(Object value) {
+            return containsValue(value);
         }
         
         @Override
@@ -372,7 +381,7 @@ public class Trie<V> extends AbstractMap<String, V> {
                     children(entry);
                 }
                 
-            } while (entry.key != null);
+            } while (entry.key == null);
             
             return entry;
         }

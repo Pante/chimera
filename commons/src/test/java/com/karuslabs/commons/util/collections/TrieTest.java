@@ -23,24 +23,28 @@
  */
 package com.karuslabs.commons.util.collections;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import com.karuslabs.commons.util.collections.Trie.TrieIterator;
+
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class TrieTest {
+    
+    static final Trie<String> TRIE = new Trie<>();
+    static {
+        TRIE.put("key", "value");
+        TRIE.put("other", null);
+    }
     
     Trie<String> trie = new Trie<>();
     Trie<String> populated = new Trie<>();
@@ -51,6 +55,71 @@ class TrieTest {
         populated.put("apple", "apple_value");
         populated.put("application", "application_value");
         populated.put("banana", null);
+    }
+    
+    
+    @Test
+    void prefixedEntries() {
+        var entries = populated.prefixEntries("app");
+        assertEquals(3, entries.size());
+        assertTrue(entries.contains(new TrieEntry<>('p', null, "app", "app_value")));
+        assertTrue(entries.contains(new TrieEntry<>('e', null, "apple", "apple_value")));
+        assertTrue(entries.contains(new TrieEntry<>('n', null, "application", "application_value")));
+    }
+    
+    
+    @Test
+    void prefixedKeys() {
+        var keys = populated.prefixedKeys("app");
+        assertEquals(3, keys.size());
+        assertTrue(keys.contains("app"));
+        assertTrue(keys.contains("apple"));
+        assertTrue(keys.contains("application"));
+    }
+    
+    
+    @Test
+    void prefixedValues() {
+        var values = populated.prefixedValues("app");
+        assertEquals(3, values.size());
+        assertTrue(values.contains("app_value"));
+        assertTrue(values.contains("apple_value"));
+        assertTrue(values.contains("application_value"));
+    }
+    
+    
+    @Test
+    void prefixed() {
+        populated.put("applyingÜee", "value");
+        assertEquals(1, populated.prefixed("applyin", entry -> entry, new ArrayList<>()).size());
+    }
+    
+    
+    @Test
+    void prefixed_null() {
+        assertTrue(populated.prefixed("applying", entry -> entry, new ArrayList<>()).isEmpty());
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({", true", "apple_value, true", "value, true", "apply_value, false"})
+    void containsValue(String value, boolean expected) {
+        populated.put("applÜe", "value");
+        assertEquals(expected, populated.containsValue(value));
+    }
+
+    
+    @ParameterizedTest
+    @CsvSource({"app, true", "banana, true", "applicant, false"})
+    void containsKey(String key, boolean expected) {
+        assertEquals(expected, populated.containsKey(key));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"application, application_value", "applicant, ", "appl, "})
+    void get(String key, String expected) {
+        assertEquals(expected, populated.get(key));
     }
     
     
@@ -146,6 +215,159 @@ class TrieTest {
         assertTrue(populated.isEmpty());
         assertEquals(5, populated.modifications);
         assertNull(populated.get("app"));
+    }
+    
+    
+    @Test
+    void entryset_contains() {
+        var entries = populated.entrySet();
+        assertEquals(4, entries.size());
+        
+        assertTrue(entries.contains(new TrieEntry<>('p', null, "app", "app_value")));
+        assertFalse(entries.contains(new TrieEntry<>('e', null, "invalid", "apple_value")));
+        assertFalse(entries.contains(new TrieEntry<>('e', null, "apple", "invalid")));
+        assertFalse(entries.contains(new TrieEntry<>('X', null, "application", "appliction_value")));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"app, app_value, true, 3", "apple, invalid_value, false, 4", "appli, application_value, false, 4"})
+    void entryset_remove(String key, String value, boolean expected, int size) {
+        var entries = populated.entrySet();
+        assertEquals(4, entries.size());
+
+        assertEquals(expected, entries.remove(new TrieEntry<>(' ', null, key, value)));
+        assertEquals(size, entries.size());
+    }
+    
+    
+    @Test
+    void keyset_contains() {
+        var keys = populated.keySet();
+        assertEquals(4, keys.size());
+        
+        assertTrue(keys.contains("app"));
+        assertFalse(keys.contains("invalid"));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"app, true, 3", "appl, false, 4"})
+    void keyset_remove(String key, boolean expected, int size) {
+        var keys = populated.keySet();
+        assertEquals(4, keys.size());
+        
+        assertEquals(expected, keys.remove(key));
+        assertEquals(size, keys.size());
+    }
+    
+    
+    @Test
+    void values_contains() {
+        var values = populated.values();
+        assertEquals(4, values.size());
+        
+        assertTrue(values.contains("app_value"));
+        assertTrue(values.contains(null));
+        assertFalse(values.contains("invalid"));
+    }
+    
+    
+    @ParameterizedTest
+    @CsvSource({"app_value, true, 3", ", true, 3", "application, false, 4"})
+    void values_remove(String value, boolean expected, int size) {
+        var values = populated.values();
+        assertEquals(4, values.size());
+        
+        assertEquals(expected, values.remove(value));
+        assertEquals(size, values.size());
+    }
+    
+    
+    @Test
+    void trie_iterator_next_throws_concurrent_exception() {
+        var iterator = populated.keySet().iterator();
+        populated.put("new", "value");
+        
+        assertThrows(ConcurrentModificationException.class, iterator::next);
+    }
+    
+    
+    @Test
+    void trie_iterator_next_throws_empty_exception() {
+        var iterator = trie.keySet().iterator();
+        
+        assertThrows(NoSuchElementException.class, iterator::next);
+    }
+    
+    
+    @Test
+    void trie_iterator_next() {
+        var keys = Set.of("app", "apple", "application", "anÜb", "banana");
+        populated.put("anÜb", "value");
+        
+        int counter = 0;
+        for (var key : populated.keySet()) {
+            counter++;
+            assertTrue(keys.contains(key));
+        }
+        
+        assertEquals(5, counter);
+    }
+    
+    
+    @Test
+    void trie_iterator_remove_throws_concurrent_exception() {
+        var iterator = populated.keySet().iterator();
+        populated.remove("banana");
+        
+        assertThrows(ConcurrentModificationException.class, iterator::remove);
+    }
+    
+    
+    @Test
+    void trie_iterator_remove_throws_state_exception() {
+        var iterator = populated.keySet().iterator();
+        iterator.next();
+        iterator.remove();
+        
+        assertThrows(IllegalStateException.class, iterator::remove);
+    }
+    
+    
+    @Test
+    void trie_iterator_remove() {
+        var iterator = (TrieIterator) populated.keySet().iterator();
+        var key = iterator.next();
+        iterator.remove();
+        
+        assertFalse(populated.containsKey(key));
+        assertEquals(populated.modifications, iterator.expectedModifications);
+    }
+    
+    
+    @Test
+    void entryset_iterator() {
+        var iterator = populated.entrySet().iterator();
+        assertTrue(iterator.next() instanceof TrieEntry<?>);
+    }
+    
+    
+    @Test
+    void keyset_iterator() {
+        var iterator = populated.keySet().iterator();
+        assertTrue(Set.of("app", "apple", "application", "banana").contains(iterator.next()));
+    }
+    
+    
+    @Test
+    void values_iterator() {
+        var iterator = populated.values().iterator();
+        
+        var set = new HashSet<String>();
+        Collections.addAll(set, null, "app_value", "apple_value", "application_value");
+
+        assertTrue(set.contains(iterator.next()));
     }
 
 } 

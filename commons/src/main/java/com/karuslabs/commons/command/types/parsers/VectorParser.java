@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.tyoes.parsers;
+package com.karuslabs.commons.command.types.parsers;
 
 import com.karuslabs.annotations.Static;
 import com.karuslabs.commons.util.Position;
@@ -94,6 +94,7 @@ public @Static class VectorParser {
 
                 case '~':
                     position.relative(axis, true);
+                    reader.skip();
 
                 default:
                     return position.set(axis, reader.readDouble());
