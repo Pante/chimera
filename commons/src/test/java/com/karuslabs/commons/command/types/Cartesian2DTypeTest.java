@@ -23,38 +23,57 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import net.minecraft.server.v1_13_R2.ArgumentVec2;
 
 import org.bukkit.Location;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public abstract class Cartesian2DType<T> extends CartesianType<T> {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
+class Cartesian2DTypeTest {
     
-    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
-    
-    
-    @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        switch (parts.length) {
-            case 0:
-                builder.suggest(String.valueOf(location.getX()));
-                builder.suggest(location.getX() + " " + location.getZ());
-                break;
-                
-            case 1:
-                builder.suggest(parts[0] + " " + location.getY());
-                break;
+    Location location = new Location(null, 1, 2, 3);
+    SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
+    Cartesian2DType<String> type = new Cartesian2DType<>() {
+        @Override
+        public String parse(StringReader reader) throws CommandSyntaxException {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
+    };
+    
+    
+    @Test
+    void suggest_all() {
+        when(builder.getRemaining()).thenReturn("");
+        type.suggest(builder, null, location, new String[] {});
+        
+        verify(builder).suggest("1.0");
+        verify(builder).suggest("1.0 3.0");
     }
     
     
-    @Override
-    public ArgumentType<?> mapped() {
-        return VECTOR_2D;
+    @Test
+    void suggest_z() {
+        when(builder.getRemaining()).thenReturn("4");
+        type.suggest(builder, null, location, new String[] {"4"});
+        
+        verify(builder).suggest("4 2.0");
     }
     
-}
+    
+    @Test
+    void mapped() {
+        assertEquals(ArgumentVec2.class, type.mapped().getClass());
+    }
+
+} 

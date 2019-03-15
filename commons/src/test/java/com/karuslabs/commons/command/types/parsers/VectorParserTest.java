@@ -28,8 +28,12 @@ import com.karuslabs.commons.util.Position;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import org.bukkit.*;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -38,10 +42,34 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class VectorParserTest {
+    
+    @Test
+    void parseWorld() throws CommandSyntaxException {
+        World world = mock(World.class);
+        Logger logger = mock(Logger.class);
+        
+        Server server = when(mock(Server.class).getWorld("world_name")).thenReturn(world).getMock();
+        when(server.getLogger()).thenReturn(logger);
+        
+        Bukkit.setServer(server);
+        
+        assertEquals(world, VectorParser.parseWorld(new StringReader("world_name")));
+    }
+    
+    
+    @Test
+    void parseWorld_throws_exception() throws CommandSyntaxException {
+        assertEquals(
+            "Unknown world:name at position 4: name<--[HERE]", 
+            assertThrows(CommandSyntaxException.class, () -> VectorParser.parseWorld(new StringReader("name"))).getMessage()
+        );
+    }
+    
     
     @ParameterizedTest
     @MethodSource("parse2DPosition_parameters")

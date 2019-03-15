@@ -39,17 +39,20 @@ public abstract class Cartesian3DType<T> extends CartesianType<T> {
     
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest(String.valueOf(location.getX()));
-            builder.suggest(location.getX() + " " + location.getY());
-            builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
-
-        } else if (parts.length == 1) {
-            builder.suggest(parts[0] + " " + location.getY());
-            builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+        switch (parts.length) {
+            case 0:
+                builder.suggest(String.valueOf(location.getX()));
+                builder.suggest(location.getX() + " " + location.getY());
+                builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+                break;
+                
+            case 1:
+                builder.suggest(parts[0] + " " + location.getY());
+                builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+                break;
             
-        } else if (parts.length == 2) {
-            builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
+            case 2:
+                builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
         }
     }
     
