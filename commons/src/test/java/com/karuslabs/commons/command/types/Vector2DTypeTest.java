@@ -23,43 +23,36 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.types.parsers.VectorParser;
-import com.karuslabs.commons.util.Position;
-
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.*;
+import java.util.List;
+
+import org.bukkit.util.Vector;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class Position2DType extends Cartesian2DType<Position> {
+@ExtendWith(MockitoExtension.class)
+class Vector2DTypeTest {
     
-    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0", "^ ^", "~ ~");
+    Vector2DType type = new Vector2DType();
     
     
-    @Override
-    public <S> Position parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse2DPosition(reader);
+    @Test
+    void parse() throws CommandSyntaxException {
+        assertEquals(new Vector(1, 0, 2), type.parse(new StringReader("1 2")));
     }
     
-        
-    @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest("~").suggest("~ ~");
-            
-        } else if (parts.length == 1) {
-            var prefix = builder.getRemaining().charAt(0) == '^' ? '^' : '~';
-            builder.suggest(parts[0] + " " + prefix);
-        }
-    }
     
+    @Test
+    void getExamples() {
+        assertEquals(List.of("0 0", "0.0 0.0"), type.getExamples());
+    }
 
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
-    }
-    
-}
+} 

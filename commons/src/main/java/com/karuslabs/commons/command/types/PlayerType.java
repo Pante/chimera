@@ -53,9 +53,11 @@ public class PlayerType implements WordType<Player> {
     
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
-        var player = Bukkit.getPlayerExact(reader.readUnquotedString());
+        var name = reader.readUnquotedString();
+        var player = Bukkit.getPlayerExact(name);
+        
         if (player == null) {
-            throw EXCEPTION.createWithContext(reader, reader.getRemaining());
+            throw EXCEPTION.createWithContext(reader, name);
         }
         
         return player;

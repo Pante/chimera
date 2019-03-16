@@ -41,11 +41,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PlayersType implements StringType<List<Player>> {
     
-    private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("Cannot use @a selector in a list of players. "));
+    private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("'@a' cannot be used in a list of players."));
     private static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player or selector: " + name));
     private static final Collection<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
-    private static final Message ALL = new LiteralMessage("All online players");
-    private static final Message RANDOM = new LiteralMessage("A random online player");
+    static final Message ALL = new LiteralMessage("All online players");
+    static final Message RANDOM = new LiteralMessage("A online player chosen at random");
     
     
     private Server server;
@@ -68,7 +68,6 @@ public class PlayersType implements StringType<List<Player>> {
         var players = new ArrayList<Player>();
         var names = Lexer.COMMA.split(argument);
         for (var name : names) {
-            System.out.println("Name: " + name);
             if (name.equalsIgnoreCase("@r")) {
                 players.add(online.get(ThreadLocalRandom.current().nextInt(online.size())));
                 continue;
@@ -78,7 +77,7 @@ public class PlayersType implements StringType<List<Player>> {
             if (player != null) {
                 players.add(player);
                 
-            } else if (argument.equalsIgnoreCase("@a")) {
+            } else if (name.equalsIgnoreCase("@a")) {
                 throw INVALID.createWithContext(reader);
                 
             } else {
@@ -105,30 +104,37 @@ public class PlayersType implements StringType<List<Player>> {
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         var remaining = builder.getRemaining();
-        if (remaining.isEmpty() || remaining.equals("@")) {
+        if ("@".startsWith(remaining)) {
             builder.suggest("@a", ALL);
         }
         
         var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
+        var enclosed = remaining.startsWith("\"");
+        remaining = remaining.replace("\"", "");
+        
         var parts = Lexer.COMMA.split(remaining, -1);
-        var last = parts[parts.length - 1].replace("\"", "");
+        var last = parts[parts.length - 1];
         var beginning = remaining.substring(0, remaining.lastIndexOf(last));
         
         if ("@r".startsWith(last)) {
-            builder.suggest(beginning + "@r", RANDOM);
+            var suggestion = beginning + "@r";
+            if (enclosed) {
+                suggestion = '"' + suggestion +'"';
+            }
+            
+            builder.suggest(suggestion, RANDOM);
         }
         
         for (var player: server.getOnlinePlayers()) {
             if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
-                builder.suggest(beginning + player.getName());
+                var suggestion = beginning + player.getName();
+                if (enclosed) {
+                    suggestion = '"' + suggestion + '"';
+                }
+                
+                builder.suggest(suggestion);
             }
         }        
-        
-        return suggest(builder, source); 
-    }
-    
-    protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
-        
         
         return builder.buildFuture();
     }

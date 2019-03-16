@@ -23,62 +23,58 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.karuslabs.commons.util.Position;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
 import java.util.List;
 
-import org.bukkit.enchantments.Enchantment;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @ExtendWith(MockitoExtension.class)
-class EnchantmentTypeTest {
+class Position2DTypeTest {
     
-    EnchantmentType type = new EnchantmentType();
+    Position2DType type = new Position2DType();
     
     
     @Test
     void parse() throws CommandSyntaxException {
-        Enchantment enchantment = mock(Enchantment.class);
-        EnchantmentType.ENCHANTMENTS.put("channeling", enchantment);
-                
-        assertEquals(enchantment, type.parse(new StringReader("CHANNELING")));
+        assertEquals(new Position(1, 0, 3).relative(Position.Z, true), type.parse(new StringReader("1 ~3")));
     }
     
     
-    @Test
-    void parse_throws_exception() throws CommandSyntaxException {
-        assertEquals(
-            "Unknown enchantment: invalid",
-            assertThrows(CommandSyntaxException.class, () -> type.parse(new StringReader("invalid"))).getRawMessage().toString()
+    @ParameterizedTest
+    @MethodSource("suggest_parameters")
+    void suggest(String[] parts, SuggestionsBuilder expected) {
+        var suggestions = new SuggestionsBuilder(expected.getInput(), 0);
+        type.suggest(suggestions, null, parts);
+        
+        assertEquals(expected.build(), suggestions.build());
+    }
+    
+    static Stream<Arguments> suggest_parameters() {
+        return Stream.of(
+            of(new String[] {}, new SuggestionsBuilder("", 0).suggest("~").suggest("~ ~")),
+            of(new String[] {"^1"}, new SuggestionsBuilder("^1", 0).suggest("^1 ^")),
+            of(new String[] {"~1"}, new SuggestionsBuilder("~1", 0).suggest("~1 ~"))
         );
     }
     
     
     @Test
-    void listSuggestions() {
-        EnchantmentType.ENCHANTMENTS.put("arrow_damage", mock(Enchantment.class));
-        EnchantmentType.ENCHANTMENTS.put("arrow_fire", mock(Enchantment.class));
-        
-        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("arro").getMock();
-        type.listSuggestions(null, builder);
-        
-        verify(builder).suggest("arrow_damage");
-        verify(builder).suggest("arrow_fire");
-    }
-    
-    
-    @Test
     void getExamples() {
-        assertEquals(List.of("arrow_damage", "channeling"), type.getExamples());
+        assertEquals(List.of("0 0", "0.0 0.0", "^ ^", "~ ~"), type.getExamples());
     }
 
 } 

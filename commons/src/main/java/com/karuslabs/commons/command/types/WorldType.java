@@ -50,7 +50,7 @@ public class WorldType implements WordType<World> {
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var world : Bukkit.getWorlds()) {
             if (world.getName().startsWith(builder.getRemaining())) {
-                builder.suggest(world.getName().contains(" ") ? "\"" + world.getName() + "\"" : world.getName());
+                builder.suggest(world.getName().contains(" ") ? '"' + world.getName() + '"' : world.getName());
             }
         }
         

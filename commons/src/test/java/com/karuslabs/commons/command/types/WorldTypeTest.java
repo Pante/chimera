@@ -29,7 +29,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.List;
 
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,45 +40,50 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class EnchantmentTypeTest {
+class WorldTypeTest {
     
-    EnchantmentType type = new EnchantmentType();
+    static World quoted = when(mock(World.class).getName()).thenReturn("world name").getMock();
+    static World unquoted = when(mock(World.class).getName()).thenReturn("world_name").getMock();
+    
+    
+    static {
+        Server server = when(mock(Server.class).getWorlds()).thenReturn(List.of(quoted, unquoted)).getMock();
+        when(server.getWorld("world name")).thenReturn(quoted);
+        
+        try {
+            var field = Bukkit.class.getDeclaredField("server");
+            field.setAccessible(true);
+            field.set(null, server);
+            
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            
+        }
+    }
+    
+    
+    WorldType type = new WorldType();
     
     
     @Test
     void parse() throws CommandSyntaxException {
-        Enchantment enchantment = mock(Enchantment.class);
-        EnchantmentType.ENCHANTMENTS.put("channeling", enchantment);
-                
-        assertEquals(enchantment, type.parse(new StringReader("CHANNELING")));
-    }
-    
-    
-    @Test
-    void parse_throws_exception() throws CommandSyntaxException {
-        assertEquals(
-            "Unknown enchantment: invalid",
-            assertThrows(CommandSyntaxException.class, () -> type.parse(new StringReader("invalid"))).getRawMessage().toString()
-        );
+        assertEquals(quoted, type.parse(new StringReader("\"world name\"")));
     }
     
     
     @Test
     void listSuggestions() {
-        EnchantmentType.ENCHANTMENTS.put("arrow_damage", mock(Enchantment.class));
-        EnchantmentType.ENCHANTMENTS.put("arrow_fire", mock(Enchantment.class));
+        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("worl").getMock();
         
-        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("arro").getMock();
         type.listSuggestions(null, builder);
         
-        verify(builder).suggest("arrow_damage");
-        verify(builder).suggest("arrow_fire");
+        verify(builder).suggest("\"world name\"");
+        verify(builder).suggest("world_name");
     }
     
     
     @Test
     void getExamples() {
-        assertEquals(List.of("arrow_damage", "channeling"), type.getExamples());
+        assertEquals(List.of("world_name", "\"world name\""), type.getExamples());
     }
 
 } 

@@ -51,12 +51,17 @@ class VectorParserTest {
     @Test
     void parseWorld() throws CommandSyntaxException {
         World world = mock(World.class);
-        Logger logger = mock(Logger.class);
         
         Server server = when(mock(Server.class).getWorld("world_name")).thenReturn(world).getMock();
-        when(server.getLogger()).thenReturn(logger);
-        
-        Bukkit.setServer(server);
+            
+        try {
+            var field = Bukkit.class.getDeclaredField("server");
+            field.setAccessible(true);
+            field.set(null, server);
+
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+
+        }
         
         assertEquals(world, VectorParser.parseWorld(new StringReader("world_name")));
     }

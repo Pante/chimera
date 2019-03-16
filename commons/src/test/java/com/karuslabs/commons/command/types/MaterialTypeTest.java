@@ -28,8 +28,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,24 +41,29 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class EnchantmentTypeTest {
+class MaterialTypeTest {
+       
+    static {
+        Logger logger = mock(Logger.class);
+        Server server = when(mock(Server.class).getLogger()).thenReturn(logger).getMock();
+        
+        Bukkit.setServer(server);
+    }
     
-    EnchantmentType type = new EnchantmentType();
+    MaterialType type = new MaterialType();
+    SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
     
     
     @Test
     void parse() throws CommandSyntaxException {
-        Enchantment enchantment = mock(Enchantment.class);
-        EnchantmentType.ENCHANTMENTS.put("channeling", enchantment);
-                
-        assertEquals(enchantment, type.parse(new StringReader("CHANNELING")));
+        assertEquals(Material.CACTUS, type.parse(new StringReader("CACTUS")));
     }
     
     
     @Test
     void parse_throws_exception() throws CommandSyntaxException {
         assertEquals(
-            "Unknown enchantment: invalid",
+            "Unknown material: invalid",
             assertThrows(CommandSyntaxException.class, () -> type.parse(new StringReader("invalid"))).getRawMessage().toString()
         );
     }
@@ -65,20 +71,16 @@ class EnchantmentTypeTest {
     
     @Test
     void listSuggestions() {
-        EnchantmentType.ENCHANTMENTS.put("arrow_damage", mock(Enchantment.class));
-        EnchantmentType.ENCHANTMENTS.put("arrow_fire", mock(Enchantment.class));
+        type.listSuggestions(null, when(builder.getRemaining()).thenReturn("cactu").getMock());
         
-        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("arro").getMock();
-        type.listSuggestions(null, builder);
-        
-        verify(builder).suggest("arrow_damage");
-        verify(builder).suggest("arrow_fire");
+        verify(builder).suggest("cactus");
+        verify(builder).suggest("cactus_green");
     }
     
     
     @Test
     void getExamples() {
-        assertEquals(List.of("arrow_damage", "channeling"), type.getExamples());
+        assertEquals(List.of("flint_and_steel", "tnt"), type.getExamples());
     }
 
 } 

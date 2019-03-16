@@ -23,43 +23,56 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.types.parsers.VectorParser;
-import com.karuslabs.commons.util.Position;
-
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.*;
+import java.util.List;
+
+import org.bukkit.Particle;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-public class Position2DType extends Cartesian2DType<Position> {
+@ExtendWith(MockitoExtension.class)
+class ParticleTypeTest {
     
-    static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0", "^ ^", "~ ~");
+    ParticleType type = new ParticleType();
     
     
-    @Override
-    public <S> Position parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse2DPosition(reader);
+    @Test
+    void parse() throws CommandSyntaxException {
+        assertEquals(Particle.BLOCK_CRACK, type.parse(new StringReader("BLOCK_CRACK")));
     }
     
+    
+    @Test
+    void parse_throws_exception() throws CommandSyntaxException {
+        assertEquals(
+            "Unknown particle: invalid",
+            assertThrows(CommandSyntaxException.class, () -> type.parse(new StringReader("invalid"))).getRawMessage().toString()
+        );
+    }
+    
+    
+    @Test
+    void listSuggestions() {
+        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("block").getMock();
+        type.listSuggestions(null, builder);
         
-    @Override
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        if (builder.getRemaining().isEmpty()) {
-            builder.suggest("~").suggest("~ ~");
-            
-        } else if (parts.length == 1) {
-            var prefix = builder.getRemaining().charAt(0) == '^' ? '^' : '~';
-            builder.suggest(parts[0] + " " + prefix);
-        }
+        verify(builder).suggest("block_crack");
+        verify(builder).suggest("block_dust");
     }
     
+    
+    @Test
+    void getExamples() {
+        assertEquals(List.of("barrier", "bubble_column_up"), type.getExamples());
+    }
 
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
-    }
-    
-}
+} 

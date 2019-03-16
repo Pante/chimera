@@ -32,6 +32,7 @@ import com.mojang.brigadier.suggestion.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
 
@@ -44,12 +45,16 @@ public class MaterialType implements WordType<Material> {
     
     static {
         MATERIALS = new Trie<>();
+        
+        var warn = true;
         for (var material : Material.values()) {
-            if (material.isLegacy()) {
-                throw new UnsupportedOperationException("Leagcy Material enumerations are not supported. Please add 'api-version: 1.13' to your plugin.yml");
+            if (!material.isLegacy()) {
+                MATERIALS.put(material.getKey().getKey(), material);
+                
+            } else if (warn) {
+                Bukkit.getLogger().warning("Leagcy Material enumerations are not supported. Please add 'api-version: 1.13' to your plugin.yml");
+                warn = false;
             }
-            
-            MATERIALS.put(material.getKey().getKey(), material);
         }
     }
     
