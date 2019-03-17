@@ -40,12 +40,6 @@ public class SynchronizationEvent extends PlayerCommandSendEvent {
     }
     
     
-    /**
-     * Delegates checking of each individual key in a {@code ConfigurationSection} to a {@code Validator}.
-     * 
-     * @param config the ConfigurationSection
-     * @param key the key
-     */
     @Override
     public HandlerList getHandlers() {
         return handlers;

@@ -19,37 +19,14 @@
         <source>11</source>
         <target>11</target>
     </properties>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <links>
-                        <link>https://hub.spigotmc.org/javadocs/spigot/</link>
-                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
-                    </links>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>javadoc</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
+    
     
     <modules>
         <module>annotations</module>
         <module>commons</module>
     </modules>
-            
-    
+  
+        
     <distributionManagement>
         <repository>
             <id>karus</id>
@@ -60,11 +37,6 @@
             <id>karus</id>
             <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
         </snapshotRepository>
-        
-        <site>
-            <id>karus</id>
-            <url>dav:https://repo.karuslabs.com/repository/karus-commons-project/${project.version}/</url>
-        </site>
     </distributionManagement>
     
     
@@ -77,11 +49,6 @@
         <repository>
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
-        </repository>
-        
-        <repository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
         </repository>
         
         <repository>
@@ -104,20 +71,6 @@
             <scope>compile</scope>
         </dependency>
         
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-                
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.6-jre</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -161,59 +114,4 @@
         </dependency>
     </dependencies>
     
-    
-    <build>
-        <plugins>
-            <plugin> 
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <links>
-                        <link>https://hub.spigotmc.org/javadocs/spigot/</link>
-                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
-                    </links>
-                </configuration>
-                <executions> 
-                    <execution> 
-                        <id>attach-javadocs</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals> 
-                    </execution>
-                </executions> 
-            </plugin>
-            
-            <plugin> 
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId> 
-                <version>2.8.2</version>
-                <executions> 
-                    <execution> 
-                        <id>deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals> 
-                    </execution> 
-                </executions> 
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.wagon</groupId>
-                        <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>3.0.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

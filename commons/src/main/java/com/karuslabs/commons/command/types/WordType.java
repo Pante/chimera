@@ -29,14 +29,8 @@ import com.mojang.brigadier.arguments.*;
 public interface WordType<T> extends Type<T> {
     
     public static final StringArgumentType WORD = StringArgumentType.word();
+
     
-    
-    /**
-     * Returns {@code true}, or {@code false} if the specified number of steps is less than the maximum number of steps.
-     * 
-     * @param steps the number of steps
-     * @return true if the specified number of steps is greater than or equal to the maximum number of steps; else false
-     */
     @Override
     public default StringArgumentType mapped() {
         return WORD;

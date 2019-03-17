@@ -42,15 +42,6 @@ public abstract class Repetition<T> implements Runnable {
     }
     
     
-    /**
-     * Associates the specified button with the specified slot if the {@code Region}
-     * to which these {@code Buttons} are bound contains the specified slot.
-     * 
-     * @param slot the slot
-     * @param button the button
-     * @return the previous button associated with the specified slot
-     * @throws IllegalArgumentException if the region to which these buttons are bound does not contain the specified slot
-     */
     @Override
     public void run() {
         if (times == INFINITE || --times > INFINITE) {
