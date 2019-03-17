@@ -11,7 +11,7 @@ matrix:
         - ln -s /etc/ssl/certs/java/cacerts "${JAVA_HOME}/lib/security/cacerts"
 
 script: 
-  - mvn --settings travis-settings.xml deploy site site-deploy
+  - mvn --settings travis-settings.xml deploy site site-deploy -D maven.wagon.http.ssl.insecure=true -D maven.wagon.http.ssl.allowall=true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
