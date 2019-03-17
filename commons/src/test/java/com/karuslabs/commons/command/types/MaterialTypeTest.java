@@ -47,7 +47,14 @@ class MaterialTypeTest {
         Logger logger = mock(Logger.class);
         Server server = when(mock(Server.class).getLogger()).thenReturn(logger).getMock();
         
-        Bukkit.setServer(server);
+        try {
+            var field = Bukkit.class.getDeclaredField("server");
+            field.setAccessible(true);
+            field.set(null, server);
+            
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            
+        }
     }
     
     MaterialType type = new MaterialType();
