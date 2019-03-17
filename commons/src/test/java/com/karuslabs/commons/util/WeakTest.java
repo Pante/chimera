@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,167 +21,148 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.karuslabs.commons.util;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@TestInstance(PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class WeakTest {
     
-    static final String VALUE = "value";
-    static Weak<String> value = new Weak<>(VALUE);
-    static Weak<String> empty = new Weak<>(null);
-    static Weak<String> other = new Weak<>(null);
+    static final String VALUE = "test";
+    static final Weak<String> WEAK = Weak.of(VALUE);
     
     
-    @Test
-    void get() {
-        assertEquals("value", value.get());
-    }
-    
-    
-    @Test
-    void getNullable() {
-        assertNull(empty.getNullable());
-    }
-    
-    
-    @Test
-    void get_ThrowsException() {
-        assertThrows(NoSuchElementException.class, empty::get);
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void filter(Weak<String> reference, boolean empty) {
+        assertEquals(empty, reference.filter(value -> true).equals(Weak.empty()));
     }
     
     
     @ParameterizedTest
-    @MethodSource("ifPresent_parameters")
-    void ifPresent(Weak<String> weak, int times) {
+    @MethodSource({"weak_provider"})
+    void flatMap(Weak<String> reference, boolean empty) {
+        assertEquals(empty, reference.flatMap(value -> Weak.of(VALUE)).equals(Weak.empty()));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void map(Weak<String> reference, boolean empty) {
+        assertEquals(empty, reference.map(value -> VALUE).equals(Weak.empty()));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void orElse(Weak<String> reference, boolean empty) {
+        assertEquals(empty, reference.orElse(Weak::empty).equals(Weak.empty()));
+    }
+    
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void or_value(Weak<String> reference, boolean other) {
+        assertEquals(other, reference.or("OTHER").equals("OTHER"));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void or_supplier(Weak<String> reference, boolean other) {
+        assertEquals(other, reference.or(() -> "OTHER").equals("OTHER"));
+    }
+    
+    
+    @Test
+    void orThrow() {
+        assertEquals(VALUE, WEAK.orThrow());
+    }
+    
+    
+    @Test
+    void orThrow_exception() {
+        assertEquals("Value was reclaimed", assertThrows(NoSuchElementException.class, () -> Weak.empty().orThrow()).getMessage());
+    }
+    
+    
+    @Test
+    void orThrow_supplier() {
+        assertEquals(VALUE, WEAK.orThrow(RuntimeException::new));
+    }
+    
+    
+    @Test
+    void orThrow_supplier_exception() {
+        assertThrows(RuntimeException.class , () -> Weak.empty().orThrow(RuntimeException::new));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource({"weak_provider"})
+    void ifPresent(Weak<String> reference, boolean unconsumed) {
         Consumer<String> consumer = mock(Consumer.class);
+        reference.ifPresent(consumer);
         
-        weak.ifPreset(consumer);
-        
-        verify(consumer, times(times)).accept(any());
-    }
-    
-    static Stream<Arguments> ifPresent_parameters() {
-        return Stream.of(of(value, 1), of(empty, 0));
+        verify(consumer, times(unconsumed ? 0 : 1)).accept(VALUE);
     }
     
     
     @ParameterizedTest
-    @MethodSource("ifPresentOrElse_parameters")
-    void ifPresentOrElse(Weak<String> weak, int consumed, int ran) {
+    @MethodSource({"weak_provider"})
+    void ifPresent_otherwise(Weak<String> reference, boolean unconsumed) {
         Consumer<String> consumer = mock(Consumer.class);
-        Runnable runnable = mock(Runnable.class);
+        Runnable otherwise = mock(Runnable.class);
         
-        weak.ifPresentOrElse(consumer, runnable);
+        reference.ifPresent(consumer, otherwise);
         
-        verify(consumer, times(consumed)).accept(any());
-        verify(runnable, times(ran)).run();
-    }
-    
-    static Stream<Arguments> ifPresentOrElse_parameters() {
-        return Stream.of(of(value, 1, 0), of(empty, 0, 1));
+        verify(consumer, times(unconsumed ? 0 : 1)).accept(VALUE);
+        verify(otherwise, times(unconsumed ? 1: 0)).run();
     }
     
     
     @ParameterizedTest
-    @MethodSource("isPresent_parameters")
-    void isPresent(Weak<String> weak, boolean expected) {
-        assertEquals(expected, weak.isPresent());
-    }
-    
-    static Stream<Arguments> isPresent_parameters() {
-        return Stream.of(of(value, true), of(empty, false));
+    @MethodSource({"weak_provider"})
+    void isPresent(Weak<String> reference, boolean empty) {
+        assertEquals(empty, !reference.isPresent());
     }
     
     
     @ParameterizedTest
-    @MethodSource("or_parameters")
-    void or(Weak<String> weak, Weak<String> value, Weak<String> expected) {
-        assertSame(expected, weak.or(() -> value));
-    }
-    
-    static Stream<Arguments> or_parameters() {
-        return Stream.of(of(value, other, value), of(empty, other, other));
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("orElse_parameters")
-    void orElse(Weak<String> weak, String other, String expected) {
-        assertEquals(expected, weak.orElse(other));
-    }
-    
-    @ParameterizedTest
-    @MethodSource("orElse_parameters")
-    void orElseGet(Weak<String> weak, String other, String expected) {
-        assertEquals(expected, weak.orElseGet(() -> other));
-    }
-    
-    static Stream<Arguments> orElse_parameters() {
-        return Stream.of(of(value, "", "value"), of(empty, "", ""));
+    @MethodSource({"weak_provider"})
+    void stream(Weak<String> reference, boolean empty) {
+        assertEquals(empty, reference.stream().count() == 0);
     }
     
     
     @Test
-    void orElseThrow() {
-        assertEquals("value", value.orElseThrow(RuntimeException::new));
+    void equals() {
+        assertFalse(WEAK.equals("string"));
     }
+    
     
     @Test
-    void orElseThrow_ThrowsException() {
-        assertThrows(RuntimeException.class, () -> empty.orElseThrow(RuntimeException::new));
+    void hash() {
+        assertEquals(VALUE.hashCode(), Weak.of("test").hashCode());
     }
     
     
-    @ParameterizedTest
-    @MethodSource("stream_parameters")
-    void stream(Weak<String> weak, int expected) {
-        assertEquals(expected, weak.stream().toArray().length);
-    }
-    
-    static Stream<Arguments> stream_parameters() {
-        return Stream.of(of(value, 1), of(empty, 0));
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("weaks")
-    void equals(boolean expected, Object other) {
-        assertEquals(expected, value.equals(other));
-    }
-    
-    @ParameterizedTest
-    @MethodSource("weaks")
-    void hashCode(boolean expected, Object other) {
-        assertEquals(expected, value.hashCode() == other.hashCode());
-    }
-    
-    static Stream<Arguments> weaks() {
-        return Stream.of(
-            of(true, value),
-            of(true, new Weak<>("value")),
-            of(false, empty),
-            of(false, new Object())
-        );
-    }
-    
-    @Test
-    void tostring() {
-        assertEquals("Weak[value]", value.toString());
-        assertEquals("Weak.empty", empty.toString());
-    }
+    static Stream<Arguments> weak_provider() {
+        return Stream.of(of(WEAK, false), of(Weak.empty(), true));
+    }   
     
 }

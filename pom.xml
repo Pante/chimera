@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.karuslabs</groupId>
-    <artifactId>library</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <artifactId>chimera</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     
-    <name>Karus-Library</name>
+    <name>Chimera</name>
     <description>A collection of Karus Lab's libraries and build-tools</description>
   
     
@@ -16,8 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <source>11</source>
+        <target>11</target>
     </properties>
 
     <reporting>
@@ -45,22 +45,20 @@
     </reporting>
     
     <modules>
+        <module>annotations</module>
         <module>commons</module>
-        <module>command-validator-maven-plugin</module>
-        <module>plugin-annotations-maven-plugin</module>
-        <module>plugin-validator-maven-plugin</module>
     </modules>
             
     
     <distributionManagement>
         <repository>
             <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/releases</url>
+            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
         </repository>
         
         <snapshotRepository>
             <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
         </snapshotRepository>
         
         <site>
@@ -69,8 +67,18 @@
         </site>
     </distributionManagement>
     
-            
-    <repositories>
+    
+    <repositories>      
+        <repository>
+            <id>lingua-releases</id>
+            <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
+        </repository>
+                
+        <repository>
+            <id>minecraft-libraries</id>
+            <url>https://libraries.minecraft.net</url>
+        </repository>
+        
         <repository>
             <id>karus</id>
             <url>https://repo.karuslabs.com/repository/karus-commons/snapshots</url>
@@ -82,13 +90,20 @@
         </repository>
                 
         <repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>noti-spigot-mirror</id>
+            <url>https://repo.karuslabs.com/repository/spigot</url>
         </repository>
     </repositories>
-
-     
-    <dependencies>
+    
+    
+    <dependencies>      
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>2.7.0</version>
+            <scope>compile</scope>
+        </dependency>
+        
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -106,49 +121,42 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.1.0</version>
+            <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.1.0</version>
+            <version>1.4.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.1.0</version>
+            <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.1.0</version>
+            <version>5.4.0</version>
             <scope>test</scope>
         </dependency>
-        
+                
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-junit</artifactId>
-            <version>2.0.0.0</version>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>java-hamcrest</artifactId>
-            <version>2.0.0.0</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.25.1</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.15.0</version>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>2.25.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

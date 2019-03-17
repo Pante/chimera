@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains builders for {@code ItemStack}s.
+ * Contains facilities for creating and manipulating items.
  */
 package com.karuslabs.commons.item;

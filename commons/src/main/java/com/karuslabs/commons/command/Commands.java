@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,151 +23,110 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotation.processors.ResourceProcessor;
-import com.karuslabs.commons.command.annotation.processors.*;
-import com.karuslabs.commons.command.parser.*;
-import com.karuslabs.commons.locale.providers.Provider;
+import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.command.tree.nodes.*;
 
-import java.util.HashSet;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.tree.*;
 
-import org.bukkit.plugin.Plugin;
+import java.lang.invoke.*;
+import java.util.*;
 
-import static com.karuslabs.commons.configuration.Configurations.from;
-import static java.util.Arrays.asList;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * Represent the {@code Command}s for a {@code Plugin} and provides facilities for loading and manipulating
- * the {@code Command}s.
- */
-public class Commands {
-    
-    Plugin plugin;
-    ProxiedCommandMap map;
-    Provider provider;
-    References references;
-    CommandProcessor processor;
+public @Static class Commands {
+
+    static final VarHandle COMMAND = field("command", Command.class);
+    static final VarHandle CHILDREN = field("children", Map.class);
+    static final VarHandle LITERALS = field("literals", Map.class);
+    static final VarHandle ARGUMENTS = field("arguments", Map.class);
     
     
-    /**
-     * Constructs a {@code Commands} for the specified {@code Plugin} with the specified locale {@code Provider}.
-     * 
-     * @param plugin the Plugin
-     * @param provider the locale Provider
-     * @param references the references
-     * @param processor the processor for processing the annotations
-     */
-    public Commands(Plugin plugin, Provider provider, References references, CommandProcessor processor) {
-        this(plugin, new ProxiedCommandMap(plugin.getServer()), provider, references, processor);
-    }
-    
-    /**
-     * Constructs a {@code Commands} for the specified {@code Plugin} with 
-     * the specified {@code ProxiedCommandMap} and locale {@code Provider}.
-     * 
-     * @param plugin the Plugin
-     * @param map the ProxiedCommandMap
-     * @param provider the locale Provider
-     * @param references the references
-     * @param processor the processor for processing the annotations
-     */
-    public Commands(Plugin plugin, ProxiedCommandMap map, Provider provider, References references, CommandProcessor processor) {
-        this.plugin = plugin;
-        this.map = map;
-        this.provider = provider;
-        this.references = references;
-        this.processor = processor;
+    static VarHandle field(String name, Class<?> type) {
+        try {
+            return MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, name, type);
+            
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
     
     
-    /**
-     * Loads the {@code Command}s for this {@code Plugin} from an embedded YAML file at the specified path,
-     * using the {@code Parser} specified by {@link #loadParser()}.
-     * 
-     * @param path the path to the embedded YAML file
-     */
-    public void load(String path) {
-        map.registerAll(plugin.getName(), loadParser().parse(from(getClass().getClassLoader().getResourceAsStream(path))));
+    public static <T> CommandNode<T> alias(CommandNode<T> command, String alias) {
+        if (command instanceof ArgumentCommandNode<?, ?>) {
+            return alias((ArgumentCommandNode<T, ?>) command, alias);
+            
+        } if (command instanceof LiteralCommandNode<?>) {
+            return alias((LiteralCommandNode<T>) command, alias);
+            
+        } else {
+            throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
+        }
     }
     
-    /**
-     * Creates a {@code Parser}.
-     * 
-     * The default implementation returns the {@code Parser} specifeid by {@link Parsers#newParser(Plugin, File, References, NullHandle, Provider)} .
-     * 
-     * Subclasses may override this method to customise the loading of the specified {@code Parser}.
-     * 
-     * @return the Parser
-     */
-    protected Parser loadParser() {
-        return Parsers.newParser(plugin, plugin.getDataFolder(), references, NullHandle.NONE, provider);
+    public static <T, V> Argument<T, V> alias(ArgumentCommandNode<T, V> command, String alias) {
+        var parameter = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
+        return alias(command, parameter);
     }
+
     
-    
-    /**
-     * Registers the specified {@code CommandExecutor} to the {@code Command}s using the specified {@code Namespace} and other related annotations.
-     *
-     * @param executor the annotated executor
-     * @throws IllegalArgumentException if the specified CommandExecutor has no
-     */
-    public void register(CommandExecutor executor) {
-        processor.process(map, executor);
+    public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
+        var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+        return alias(command, literal);
     }
     
     
-    /**
-     * Returns a {@code Command} with the specified name, or {@code null} if the {@code Command} is not present.
-     * 
-     * @param name the name of the Command
-     * @return the Command if present; else null
-     */
-    public @Nullable Command getCommand(String name) {
-        return map.getCommand(name);
-    }
-    
-    /**
-     * Returns the {@code ProxiedCommandMap}.
-     * 
-     * @return the ProxiedCommandMap
-     */
-    public ProxiedCommandMap getProxiedCommandMap() {
-        return map;
-    }
-    
-    /**
-     * Returns the {@code References}.
-     * 
-     * @return the references
-     */
-    public References getReferences() {
-        return references;
-    }
-    
-    /**
-     * Returns the {@code CommandProcessor}.
-     * 
-     * @return the CommandProcessor
-     */
-    public CommandProcessor getProcessor() {
-        return processor;
-    }
-    
-    
-    /**
-     * Creates a {@code Commands} with the specified {@code Plugin} and {@code Provider} with the default settings.
-     * 
-     * @param plugin the plugin
-     * @param provider the provider
-     * @return the Commands
-     */
-    public static Commands simple(Plugin plugin, Provider provider) {
-        References references = new References();
-        CommandProcessor processor = new CommandProcessor(
-            new HashSet<>(asList(new InformationProcessor(), new LiteralProcessor(), new RegisteredProcessor(references), new ResourceProcessor())), new NamespaceResolver(plugin)
-        );
+    static <Alias extends CommandNode<T>, T> Alias alias(CommandNode<T> command, Alias alias) {
+        for (var child : command.getChildren()) {
+            alias.addChild(child);
+        }
         
-        return new Commands(plugin, provider, references, processor);
+        if (command instanceof Node<?>) {
+            ((Node<T>) command).aliases().add(alias);
+        }
+        
+        return alias;
+    }
+    
+    
+    public static <T> void executes(CommandNode<T> command, Command<T> execution) {
+        COMMAND.set(command, execution);
+    }
+    
+        
+    public static <S> @Nullable CommandNode<S> remove(CommandNode<S> command, String child) {
+        var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
+        var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
+        var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
+
+        var removed = commands.remove(child);
+        if (removed != null) {
+            literals.remove(child);
+            arguments.remove(child);
+        }
+
+        return removed;
+    }
+
+    public static <S> boolean remove(CommandNode<S> command, String... children) {
+        var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
+        var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
+        var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
+        
+        var all = true;
+            for (var child : children) {
+            var removed = commands.remove(child);
+            if (removed != null) {
+                literals.remove(child);
+                arguments.remove(child);
+                
+            } else {
+                all = false;
+            }
+        }
+        
+        return all;
     }
     
 }
