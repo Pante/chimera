@@ -28,12 +28,31 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 
+/**
+ * Represents a command that supports optional arguments when executed.
+ * 
+ * @param <S> the type of the source
+ */
 @FunctionalInterface
 public interface Executable<S> extends Command<S> {
     
+    /**
+     * Executes this command in the given context.
+     * 
+     * @param context the context
+     * @throws CommandSyntaxException if the command could not be executed
+     */
     public void execute(DefaultableContext<S> context) throws CommandSyntaxException;
     
     
+    /**
+     * Delegates execution to {@link #execute(DefaultableContext)} with the given 
+     * context before returning a {@code SINGLE_SUCCESS}.
+     * 
+     * @param context the context
+     * @return a single success
+     * @throws CommandSyntaxException if the command could not be executed
+     */
     @Override
     public default int run(CommandContext<S> context) throws CommandSyntaxException {
         execute(new DefaultableContext<>(context));

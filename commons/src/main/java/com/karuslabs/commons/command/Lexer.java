@@ -31,11 +31,28 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
+/**
+ * This class consists exclusively of static functions that breaks down the input 
+ * of a given {@code StringReader}.
+ */
 public @Static class Lexer {
     
+    /**
+     * A RegEx pattern that represents a comma followed by a unbounded number of
+     * whitespaces.
+     */
     public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
     
     
+    /**
+     * Returns a substring of the input between the current cursor of the {@code StringReader}
+     * and the index of the first encountered delimiter.
+     * 
+     * @param reader the reader
+     * @param delimiter the delimiter
+     * @return a substring between the current cursor and the index of the first
+     *         encountered delimiter
+     */
     public static String until(StringReader reader, char delimiter) {
         var start = reader.getCursor();
         while (reader.canRead() && reader.peek() != delimiter) {
@@ -45,6 +62,15 @@ public @Static class Lexer {
         return reader.getString().substring(start, reader.getCursor());
     }
     
+    /**
+     * Returns a substring of the input between the current cursor of the {@code StringReader}
+     * and the index of any of the delimiter that was first encountered.
+     * 
+     * @param reader the reader
+     * @param delimiters the delimiters
+     * @return a substring between the current cursor and the index of the first
+     *         encountered delimiter
+     */
     public static String until(StringReader reader, char... delimiters) {
         var start = reader.getCursor();
         while (reader.canRead() && !contains(delimiters, reader.peek())) {
@@ -64,7 +90,16 @@ public @Static class Lexer {
         return false;
     }
     
-        
+    
+    /**
+     * Returns a substring of the input between the current cursor of the {@code StringReader}
+     * and the index of the character for which the given predicate is first true.
+     * 
+     * @param reader the reader
+     * @param end the predicate
+     * @return a substring between the current cursor and the index of the character
+     *         when the predicate is first true
+     */
     public static String until(StringReader reader, Predicate<Character> end) {
         var start = reader.getCursor();
         while (reader.canRead() && !end.test(reader.peek())) {

@@ -27,8 +27,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
+/**
+ * A builder for {@code ItemStack}s.
+ */
 public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
+    /**
+     * Returns a {@code ItemBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return the builder
+     */
     public static ItemBuilder of(Material material) {
         return new ItemBuilder(material);
     }
@@ -83,10 +92,20 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
         return new FireworkBuilder(this);
     }
     
+    /**
+     * Returns a {@code FireworkEffectBuilder} for this {@code ItemStack}.
+     * 
+     * @return a FireworkEffectBuilder
+     */
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
+    /**
+     * Returns a {@code KnowledgeBookBuilder} for this {@code ItemStack}.
+     * 
+     * @return a KnowledgeBOokBuilder
+     */
     public KnowledgeBookBuilder asKnowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
@@ -127,6 +146,11 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
         return new SkullBuilder(this);
     }
     
+    /**
+     * Returns a {@code TropicalFishBucketBuilder} for this {@code ItemStack}.
+     * 
+     * @return a TropicalFishBucketBuilder
+     */
     public TropicalFishBucketBuilder asBucket() {
         return new TropicalFishBucketBuilder(this);
     }

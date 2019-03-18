@@ -28,8 +28,17 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.meta.*;
 
 
+/**
+ * A builder for banners.
+ */
 public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     
+    /**
+     * Returns a {@code BannerBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return a builder
+     */
     public static BannerBuilder of(Material material) {
         return new BannerBuilder(material);
     }
@@ -44,9 +53,9 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     
     
     /**
-     * Adds the specified {@code Pattern}.
+     * Adds the given pattern.
      * 
-     * @param pattern the Pattern
+     * @param pattern the pattern
      * @return this
      */
     public BannerBuilder pattern(Pattern pattern) {
@@ -54,14 +63,19 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
         return this;
     }
     
+    /**
+     * Sets the pattern at the given index.
+     * 
+     * @param index the index
+     * @param pattern the pattern
+     * @return this
+     */
     public BannerBuilder pattern(int index, Pattern pattern) {
         meta.setPattern(index, pattern);
         return this;
     }
     
-    /**
-     * {@inheritDoc} 
-     */
+    
     @Override
     protected BannerBuilder self() {
         return this;

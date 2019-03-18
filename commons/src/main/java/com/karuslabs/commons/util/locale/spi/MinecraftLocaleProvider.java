@@ -27,6 +27,9 @@ import java.util.Locale;
 import java.util.spi.LocaleServiceProvider;
 
 
+/**
+ * A {@code LocaleServiceProvider} for Minecraft exclusive locales.
+ */
 public class MinecraftLocaleProvider extends LocaleServiceProvider {
     
     private static final Locale[] LOCALES = new Locale[]{

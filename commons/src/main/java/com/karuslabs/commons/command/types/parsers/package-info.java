@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains implementations of {@code Window}s.
+ * Contains parsers for {@code ArgumentType}s.
  */
-package com.karuslabs.commons.graphics.windows;
+package com.karuslabs.commons.command.types.parsers;

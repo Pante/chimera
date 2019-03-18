@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains locale related annotations.
+ * Contains {@code SuggestionProvider} implementations.
  */
-package com.karuslabs.commons.locale.annotation;
+package com.karuslabs.commons.command.suggestions;

@@ -35,18 +35,43 @@ import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * Represents a {@code ItemStack} builder.
+ * 
+ * @param <Meta> the type of the ItemMeta
+ * @param <Self> the type of this Builder
+ */
 public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
+    /**
+     * The {code ItemStack} to build.
+     */
     ItemStack item;
+    /**
+     * The meta of the {@code ItemStack} to build.
+     */
     Meta meta;
+    /**
+     * The lore of the {@code ItemStack} to build.
+     */
     @Nullable List<String> lore;
     
     
+    /**
+     * Constructs a {@code Builder} for the given material.
+     * 
+     * @param material the material
+     */
     public Builder(Material material) {
         item = new ItemStack(material);
         meta = (Meta) item.getItemMeta();
     }
     
+    /**
+     * Constructs a copy of the given {@code Builder}.
+     * 
+     * @param source the builder to copy
+     */
     public Builder(Builder<ItemMeta, ?> source) {
         item = source.item;
         meta = (Meta) source.meta;
@@ -55,49 +80,105 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
+    /**
+     * Sets the amount.
+     * 
+     * @param amount the amount
+     * @return this
+     */
     public Self amount(int amount) {
         item.setAmount(amount);
         return self();
     }
     
+    /**
+     * Sets the durability.
+     * 
+     * @param durability the durability
+     * @return this
+     */
     public Self durability(short durability) {
         item.setDurability(durability);
         return self();
     }
     
     
+    /**
+     * Sets the display name.
+     * 
+     * @param name the display name
+     * @return this
+     */
     public Self display(String name) {
         meta.setDisplayName(name);
         return self();
     }
     
+    /**
+     * Sets the localised name.
+     * 
+     * @param name the name
+     * @return this
+     */
     public Self localised(String name) {
         meta.setLocalizedName(name);
         return self();
     }
     
     
+    /**
+     * Adds the modifier for the given attribute.
+     * 
+     * @param attribute the attribute
+     * @param modifier the attribute modifier
+     * @return this
+     */
     public Self attribute(Attribute attribute, AttributeModifier modifier) {
         meta.addAttributeModifier(attribute, modifier);
         return self();
     }
     
+    /**
+     * Adds an enchantment with the given level.
+     * 
+     * @param enchantment the enchantment
+     * @param level the enchantment level; level restrictions are ignored
+     * @return this
+     */
     public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
         return self();
     }
     
     
+    /**
+     * Adds the given flags.
+     * 
+     * @param flags the flags
+     * @return this
+     */
     public Self flags(Collection<ItemFlag> flags) {
         return flags(flags.toArray(new ItemFlag[0]));
     }
     
+    /**
+     * Adds the given flags.
+     * 
+     * @param flags the flags
+     * @return this
+     */
     public Self flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
         return self();
     }
     
     
+    /**
+     * Adds the given lore.
+     * 
+     * @param lines the lore
+     * @return this
+     */
     public Self lore(Collection<String> lines) {
         if (lore == null) {
             lore = new ArrayList<>(lines);
@@ -108,6 +189,12 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         return self();
     }
     
+    /**
+     * Adds the given lore.
+     * 
+     * @param lines the lore
+     * @return this
+     */
     public Self lore(String... lines) {
         if (lore == null) {
             lore = new ArrayList<>(lines.length);
@@ -119,18 +206,39 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
+    /**
+     * Sets the value using the {@code ItemTagType} for the given key.
+     * 
+     * @param <T> the underlying, primitive type of the value
+     * @param <V> the type of the value
+     * @param key the key
+     * @param type the mapper for the value
+     * @param value the value
+     * @return this
+     */
     public <T, V> Self tag(NamespacedKey key, ItemTagType<T, V> type, V value) {
         meta.getCustomTagContainer().setCustomTag(key, type, value);
         return self();
     }
     
     
+    /**
+     * Sets the breakability.
+     * 
+     * @param unbreakable the breakability
+     * @return this
+     */
     public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);
         return self();
     }
     
     
+    /**
+     * Builds an {@code ItemStack}.
+     * 
+     * @return the ItemStack
+     */
     public ItemStack build() {
         meta.setLore(lore);
         item.setItemMeta(meta);
@@ -138,6 +246,11 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
+    /**
+     * Returns this builder.
+     * 
+     * @return this
+     */
     protected abstract Self self();
     
 }

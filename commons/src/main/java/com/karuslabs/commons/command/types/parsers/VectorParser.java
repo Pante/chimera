@@ -33,12 +33,23 @@ import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 
+/**
+ * This class consists exclusively of functions that parse vector-related structures.
+ */
 public @Static class VectorParser {
     
     static final SimpleCommandExceptionType MIXED = new SimpleCommandExceptionType(new LiteralMessage("Cannot mix world and local coordinates (everything must either use ^ or not)")); 
     static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world:" + world));
     
     
+    /**
+     * Returns a world which name matches the string returned by the given {@code StringReader}.
+     * A name that contains whitespaces must be enclosed in double quotation marks.
+     * 
+     * @param reader the reader
+     * @return a world with the given name
+     * @throws CommandSyntaxException if a world with the given name does not exist
+     */
     public static World parseWorld(StringReader reader) throws CommandSyntaxException {
         var name = reader.readString();
         var world = Bukkit.getWorld(name);
@@ -51,10 +62,30 @@ public @Static class VectorParser {
     }
     
     
+    /**
+     * Returns a 2D position from the string returned by the given {@code StringReader} 
+     * that matches {@code (^|~)[x coordinate] (^|~)[z coordinate]}.
+     * 
+     * @param reader the reader
+     * @return a 2D position
+     * @throws CommandSyntaxException if either the string contained a mix of world
+     *                                and local coordinates or an invalid double
+     *                                was specified.
+     */
     public static Position parse2DPosition(StringReader reader) throws CommandSyntaxException {
         return parsePosition(reader, false);
     }
     
+    /**
+     * Returns a 3D position from the string returned by the given {@code StringReader} 
+     * that matches {@code (^|~)[x coordinate] (^|~)[y coordinate] (^|~)[z coordinate]}.
+     * 
+     * @param reader the reader
+     * @return a 3D position
+     * @throws CommandSyntaxException if either the string contained a mix of world
+     *                                and local coordinates or an invalid double
+     *                                was specified.
+     */
     public static Position parse3DPosition(StringReader reader) throws CommandSyntaxException {
         return parsePosition(reader, true);
     }
@@ -103,10 +134,26 @@ public @Static class VectorParser {
     }
     
     
+    /**
+     * Returns a 2D vector from the string returned by the given {@code StringReader} 
+     * that matches {@code [x coordinate] [z coordinate]}.
+     * 
+     * @param reader the reader
+     * @return a 2D vector
+     * @throws CommandSyntaxException if an invalid double was specified.
+     */
     public static Vector parse2DVector(StringReader reader) throws CommandSyntaxException {
         return parseVector(reader, false);
     }
     
+    /**
+     * Returns a 3D vector from the string returned by the given {@code StringReader} 
+     * that matches {@code [x coordinate] [y coordinate] [z coordinate]}.
+     * 
+     * @param reader the reader
+     * @return a 3D vector
+     * @throws CommandSyntaxException if an invalid double was specified.
+     */
     public static Vector parse3DVector(StringReader reader) throws CommandSyntaxException {
         return parseVector(reader, true);
     }

@@ -28,8 +28,17 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.*;
 
 
+/**
+ * A builder for potions.
+ */
 public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
+    /**
+     * Returns a {@code PotionBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return the builder
+     */
     public static PotionBuilder of(Material material) {
         return new PotionBuilder(material);
     }
@@ -54,11 +63,23 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
         return this;
     }
     
+    /**
+     * Sets the base potion data.
+     * 
+     * @param data the data
+     * @return this
+     */
     public PotionBuilder data(PotionData data) {
         meta.setBasePotionData(data);
         return this;
     }
     
+    /**
+     * Adds the given potion effect.
+     * 
+     * @param effect the potion effect
+     * @return this
+     */
     public PotionBuilder effect(PotionEffect effect) {
         meta.addCustomEffect(effect, true);
         return this;

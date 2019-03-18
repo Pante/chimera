@@ -27,8 +27,17 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
 
+/**
+ * A builder for maps.
+ */
 public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     
+    /**
+     * Returns a {@code MapBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return the builder
+     */
     public static MapBuilder of(Material material) {
         return new MapBuilder(material);
     }
@@ -53,24 +62,40 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
         return this;
     }
     
+    /**
+     * Sets the location name.
+     * 
+     * @param name the location name
+     * @return this
+     */
     public MapBuilder location(String name) {
         meta.setLocationName(name);
         return this;
     }
     
+    /**
+     * TO BE REMOVED
+     * 
+     * @param id
+     * @return 
+     */
     public MapBuilder id(int id) {
         meta.setMapId(id);
         return this;
     }
     
+    /**
+     * Sets the map scaling.
+     * 
+     * @param scaling the scaling
+     * @return this
+     */
     public MapBuilder scaling(boolean scaling) {
         meta.setScaling(scaling);
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    
     @Override
     protected MapBuilder self() {
         return this;

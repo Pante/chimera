@@ -38,11 +38,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 
+/**
+ * This class consists exclusively of static functions whcih handle exceptions that
+ * occur when parsing and executing commands.
+ * <br><br>
+ * <b>Implementation note:</b> This class was adapted from Spigot's CommandDispatcher
+ * implementation.
+ */
 public @Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
     
     
+    /**
+     * Reports the given exception to the sender.
+     * 
+     * @param sender the sender
+     * @param exception the exception
+     */
     public static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         
@@ -80,6 +93,12 @@ public @Static class Exceptions {
     }
     
     
+    /**
+     * Reports the given exception to the sender.
+     * 
+     * @param sender the sender
+     * @param exception the exception
+     */
     public static void report(CommandSender sender, Exception exception) {
         var listener = from(sender);
         

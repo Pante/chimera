@@ -30,11 +30,20 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.BookMeta.Generation;
 
 
+/**
+ * A builder for books.
+ */
 public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
     private static final String[] EMPTY = new String[0];
     
     
+    /**
+     * Returns a {@code BookBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return this
+     */
     public static BookBuilder of(Material material) {
         return new BookBuilder(material);
     }
@@ -48,27 +57,57 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     }
     
     
+    /**
+     * Sets the author.
+     * 
+     * @param name the author
+     * @return this
+     */
     public BookBuilder author(String name) {
         meta.setAuthor(name);
         return this;
     }
     
+    /**
+     * Sets the generation.
+     * 
+     * @param generation the generation
+     * @return this
+     */
     public BookBuilder generation(Generation generation) {
         meta.setGeneration(generation);
         return this;
     }
     
     
+    /**
+     * Adds the given pages.
+     * 
+     * @param pages the pages
+     * @return this
+     */
     public BookBuilder pages(List<String> pages) {
         return pages(pages.toArray(EMPTY));
     }
     
+    /**
+     * Adds the given pages.
+     * 
+     * @param pages the pages
+     * @return this
+     */
     public BookBuilder pages(String... pages) {
         meta.addPage(pages);
         return this;
     }
     
     
+    /**
+     * Sets the title.
+     * 
+     * @param title the title
+     * @return this
+     */
     public BookBuilder title(String title) {
         meta.setTitle(title);
         return this;

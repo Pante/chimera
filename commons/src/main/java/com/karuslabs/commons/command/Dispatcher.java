@@ -42,6 +42,21 @@ import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
 
+/**
+ * A {@code CommandDispatcher} subclass that facilities the registration of commands
+ * between a Spigot plugin and the server.
+ * <br><br>
+ * <b>Implementation details:</b> This dispatcher holds a reference to the dispatcher,
+ * s-dispatcher, that is used internally by the server. The s-dispatcher is flushed 
+ * each time the server is restarted or reloaded. In both cases, the flush occurs 
+ * after all plugins are enabled. This dispatcher and s-dispatcher are synchronized 
+ * when a flush occurs via a {@link com.karuslabs.commons.command.synchronization.Synchronizer}.
+ * 
+ * To avoid a performance penalty from unnecessary synchronizations, commands registered
+ * to this dispatcher are not immediately synchronized. The changes to this dispatcher
+ * will be reflected only after all plugins are enabled during the server start-up 
+ * and reload, or when {@link #update()} is called.
+ */
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
     private MinecraftServer server;
@@ -50,6 +65,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     Tree<CommandSender, CommandListenerWrapper> tree;
 
     
+    /**
+     * Creates a {@code Dispatcher} for the given plugin.
+     * 
+     * @param plugin the plugin
+     * @return a Dispatcher
+     */
     public static Dispatcher of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
         var root = new Root(plugin, server.getCommandMap());
@@ -63,6 +84,15 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
+    /**
+     * Constructs a {@code Dispatcher} with the given server, root and synchronizer.
+     * 
+     * @see #of(Plugin) 
+     * 
+     * @param server the server
+     * @param root the root
+     * @param synchronizer the synchronizer
+     */
     protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer) {
         super(root);
         this.server = ((CraftServer) server).getServer();
@@ -72,6 +102,14 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     
+    /**
+     * Registers the command built using the given builder. Synchronization of
+     * registered commands will occur after all plugins are enabled during the server 
+     * start-up and reload, or when {@link #update()} is called.
+     * 
+     * @param command the builder used to build the command to be registered
+     * @return the built command that was registered
+     */
     public Literal<CommandSender> register(Literal.Builder<CommandSender> command) {
         var literal = command.build();
         getRoot().addChild(literal);
@@ -79,12 +117,21 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
       
     
+    /**
+     * Synchronizes this dispatcher with the server.
+     */
     public void update() {
         tree.truncate(getRoot(), dispatcher.getRoot());
         synchronizer.synchronize();
     }
     
     
+    /**
+     * Synchronizes this dispatcher with the server when a {@code ServerLoadEvent}
+     * occurs.
+     * 
+     * @param event an event that denotes either a server reload or restart
+     */
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
@@ -92,6 +139,11 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
  
     
+    /**
+     * Returns a {@code Synchronizer}.
+     * 
+     * @return a synchronizer
+     */
     public Synchronizer synchronizer() {
         return synchronizer;
     }

@@ -33,8 +33,17 @@ import org.bukkit.inventory.meta.*;
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
 
+/**
+ * A builder for skulls.
+ */
 public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     
+    /**
+     * Returns a {@code SkullBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return the builder
+     */
     public static SkullBuilder of(Material material) {
         return new SkullBuilder(material);
     }
@@ -48,22 +57,38 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     }
     
     
+    /**
+     * Sets the head.
+     * 
+     * @param head the head
+     * @return this
+     */
     public SkullBuilder head(Head head) {
         return head(head.id);
     }
     
+    /**
+     * Sets the UUID.
+     * 
+     * @param id the UUID
+     * @return this
+     */
     public SkullBuilder head(UUID id) {
         return head(getOfflinePlayer(id));
     }
     
+    /**
+     * Sets the owner of the skull.
+     * 
+     * @param player the owner of the skull
+     * @return this
+     */
     public SkullBuilder head(OfflinePlayer player) {
         meta.setOwningPlayer(player);
         return this;
     }
+
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected SkullBuilder self() {
         return this;

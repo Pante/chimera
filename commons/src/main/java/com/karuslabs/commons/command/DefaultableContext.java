@@ -33,6 +33,12 @@ import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A {@code CommandContext} decorator that supports optional arguments. Overridden
+ * operations are delegated to an underlying {@code CommandContext}.
+ * 
+ * @param <S> the type of the source
+ */
 public class DefaultableContext<S> extends CommandContext<S> {
     
     static final VarHandle ARGUMENTS;
@@ -52,6 +58,11 @@ public class DefaultableContext<S> extends CommandContext<S> {
     private @Nullable Map<String, ParsedArgument<S, ?>> arguments;
     
     
+    /**
+     * Constructs a {@code DefaultableContext} with given underlying {@code CommandContext}.
+     * 
+     * @param context the underlying context to which operations are delegated to
+     */
     public DefaultableContext(CommandContext<S> context) {
         super(null, null, null, null, null, null, null, null, false);
         this.context = context;
@@ -59,10 +70,28 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
     
     
+    /**
+     * Returns an argument of the given name and type if present.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name of the argument
+     * @param type the the type of the argument
+     * @return the argument if present; otherwise null
+     */
     public <V> @Nullable V getOptionalArgument(String name, Class<V> type) {
         return getOptionalArgument(name, type, null);
     }
     
+    /**
+     * Returns an argument of the given name and type, or the given default value
+     * if the argument does not exist.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name of the argument
+     * @param type the type of the argument
+     * @param value the default value
+     * @return the argument if present; otherwise the default value
+     */
     public <V> V getOptionalArgument(String name, Class<V> type, V value) {
         if (arguments == null) {
             arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(context);

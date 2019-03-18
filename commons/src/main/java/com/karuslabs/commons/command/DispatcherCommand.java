@@ -33,16 +33,39 @@ import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 
+/**
+ * A Spigot {@code Command} subclass that delegates execution to a underlying 
+ * {@code CommandDispatcher}.
+ */
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     
     private Plugin plugin;
     private CommandDispatcher<CommandSender> dispatcher;
     
     
+    /**
+     * Constructs a {@code DispatcherCommand} with the given name plugin, dispatcher,
+     * and an empty description.
+     * 
+     * @param name the name
+     * @param plugin the owning plugin
+     * @param dispatcher the underlying dispatcher to which execution is delegated
+     * @param usage the example usage for this command
+     */
     public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
         this(name, plugin, dispatcher, "", usage);
     }
     
+    /**
+     * Constructs a {@code DispatcherCommand} with the given name, plugin, dispatcher,
+     * description and usage.
+     * 
+     * @param name the name
+     * @param plugin the owning plugin
+     * @param dispatcher the underlying dispatcher to which execution is delegated
+     * @param description the description of this command
+     * @param usage the example usage for this command
+     */
     public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String description, String usage) {
         super(name, description, usage, List.of());
         this.plugin = plugin;
@@ -50,6 +73,15 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     }
     
     
+    /**
+     * Delegates execution with the rejoined label and arguments to the underlying 
+     * {@code CommandDisaptcher} if given sender has sufficient permission.
+     * 
+     * @param sender the sender
+     * @param label the label
+     * @param arguments the arguments
+     * @return true
+     */
     @Override
     public boolean execute(CommandSender sender, String label, String... arguments) {
         if (!testPermission(sender)) {
@@ -83,7 +115,12 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
         return command;
     }
     
-
+    
+    /**
+     * Returns the owning plugin.
+     * 
+     * @return the owning plugin
+     */
     @Override
     public Plugin getPlugin() {
         return plugin;

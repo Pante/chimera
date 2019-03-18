@@ -27,8 +27,17 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
 
+/**
+ * A builder for leather armour.
+ */
 public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
+    /**
+     * Returns a {@code LeatherArmourBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return the builder
+     */
     public static LeatherArmourBuilder of(Material material) {
         return new LeatherArmourBuilder(material);
     }

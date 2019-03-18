@@ -31,6 +31,9 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.command.CommandSender;
 
 
+/**
+ * Represents a client-side {@code SuggestionProvider}.
+ */
 public enum ClientsideProvider implements SuggestionProvider<CommandSender> {
     
     ENTITIES,
@@ -39,9 +42,11 @@ public enum ClientsideProvider implements SuggestionProvider<CommandSender> {
     
     
     /**
-     * Returns the cause of this exception.
+     * Returns a {@code CompletableFutre} that contains an empty {@code Suggestions}
      * 
-     * @return the ExecutionException which is the cause of this exception.
+     * @param context the context
+     * @param builder the builder
+     * @return an empty suggestions
      */
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {

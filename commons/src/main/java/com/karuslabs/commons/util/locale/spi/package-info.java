@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,51 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
-
-import org.bukkit.*;
-import org.bukkit.inventory.meta.*;
-
 
 /**
- * A builder for firework effects.
+ * Contains {@code LocaleServiceProvider}s.
  */
-public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
-
-    /**
-     * Returns a {@code FireworkEffectBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return the builder
-     */
-    public static FireworkEffectBuilder of(Material material) {
-        return new FireworkEffectBuilder(material);
-    }
-    
-    FireworkEffectBuilder(Material material) {
-        super(material);
-    }
-    
-    FireworkEffectBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
-    
-    
-    /**
-     * Sets the main {@code FireworkEffect}.
-     * 
-     * @param effect the main effect
-     * @return this
-     */
-    public FireworkEffectBuilder effect(FireworkEffect effect) {
-        meta.setEffect(effect);
-        return this;
-    }
-
-
-    @Override
-    protected FireworkEffectBuilder self() {
-        return this;
-    }
-    
-}
+package com.karuslabs.commons.util.locale.spi;
