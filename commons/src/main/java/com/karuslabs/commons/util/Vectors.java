@@ -59,11 +59,11 @@ public @Static class Vectors {
     }
     
     /**
-     * Returns the specified {@code Vector} rotated about the X axis using the specified radian angle.
+     * Returns the vector rotated about the X axis using the given radian angle.
      * 
      * @param vector the vector
      * @param angle the angle
-     * @return the vector
+     * @return the given vector
      */
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
         double y, z, cos, sin;

@@ -50,7 +50,9 @@ import org.bukkit.plugin.Plugin;
  * s-dispatcher, that is used internally by the server. The s-dispatcher is flushed 
  * each time the server is restarted or reloaded. In both cases, the flush occurs 
  * after all plugins are enabled. This dispatcher and s-dispatcher are synchronized 
- * when a flush occurs via a {@link com.karuslabs.commons.command.synchronization.Synchronizer}.
+ * by this dispatcher each time the server is restarted and reloaded, or when {@link #update()} 
+ * is called. After which, the s-dispatcher and client are then synchronized via
+ * a {@link com.karuslabs.commons.command.synchronization.Synchronizer}.
  * 
  * To avoid a performance penalty from unnecessary synchronizations, commands registered
  * to this dispatcher are not immediately synchronized. The changes to this dispatcher

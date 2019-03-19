@@ -44,6 +44,25 @@ import org.bukkit.plugin.*;
 import static java.util.stream.Collectors.toSet;
 
 
+/**
+ * A {@code Synchronizer} that facilities synchronization between the internal server
+ * {@code CommandDispatcher} and a client.
+ * <br><br>
+ * <b>Implementation details: </b> Prior to synchronization between the internal 
+ * server {@code CommandDispatcher and a client, a {@link com.karuslabs.command.Dispatcher}
+ * would synchronize itself with the internal server {@code CommandDispatcher}.
+ * Due to a fault in NMS's command mapping implementation, redirected commands
+ * are not mapped and sent to clients correctly under certain circumstances, hence 
+ * this {@code Synchronizer} remaps and resends the commands each time after a
+ * {@code PlayerCommanndSendEvent} is emitted.
+ * 
+ * To avoid unnecessary remapping and resending across multiple plugins, a single
+ * {@link Synchronization} task is shared between plugins. This is achieved via 
+ * the {@code ServiceManager}. A plugin would first check if a synchronizer has 
+ * been registered and reuses the synchronization task if available. Otherwise, 
+ * a synchronizer is created and registered for shared use until the owning plugin 
+ * is unloaded.
+ */
 public class Synchronizer implements Listener {
     
     private MinecraftServer server;
@@ -53,6 +72,12 @@ public class Synchronizer implements Listener {
     WeakReference<Synchronization> synchronization;
     
     
+    /**
+     * Returns a {@code Synchronizer} for the given plugin.
+     * 
+     * @param plugin the owning plugin
+     * @return a synchronizer
+     */
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
         var tree = new Tree<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
@@ -74,12 +99,22 @@ public class Synchronizer implements Listener {
     }
     
     
+    /**
+     * Synchronizes the commands in the internal server {@code CommandDispatcher} 
+     * that each player is permitted to use with all currently online players.
+     */
     public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
             synchronize(player);
         }
     }
     
+    /**
+     * Synchronizes the commands in the internal server {@code CommandDispatcher} 
+     * that the given player is permitted to use with the player.
+     * 
+     * @param player the player
+     */
     public void synchronize(Player player) {
         var permitted = dispatcher.getRoot().getChildren().stream().map(CommandNode::getName).collect(toSet());       
         server.server.getPluginManager().callEvent(new SynchronizationEvent(player, permitted));
@@ -87,6 +122,13 @@ public class Synchronizer implements Listener {
         synchronize(player, permitted);
     }
     
+    /**
+     * Synchronizes the given commands in the internal {@code CommandDispatcher}
+     * with the given player.
+     * 
+     * @param player
+     * @param commands 
+     */
     public void synchronize(Player player, Collection<String> commands) {    
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
@@ -97,6 +139,13 @@ public class Synchronizer implements Listener {
     }
     
     
+    /**
+     * Synchronizes the commands in the internal {@code CommandDispatcher} returned 
+     * by the given event with the player returned by the event after the given event
+     * has been fully processed.
+     * 
+     * @param event the event
+     */
     @EventHandler
     protected void synchronize(PlayerCommandSendEvent event) {
         if (event instanceof SynchronizationEvent) {
@@ -113,6 +162,12 @@ public class Synchronizer implements Listener {
         task.add(event);
     }
     
+    /**
+     * Reloads the flushed internal server {@code CommandDispatcher} when the given
+     * event is emitted.
+     * 
+     * @param event the event
+     */
     @EventHandler
     protected void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();

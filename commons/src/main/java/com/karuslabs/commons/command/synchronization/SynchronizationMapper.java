@@ -30,13 +30,32 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 
 import net.minecraft.server.v1_13_R2.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+
+/**
+ * A mapper that maps the commands in the internal server {@code CommandDispatcher}
+ * to the type required by an outgoing {@code PacketPlayOutCommands}.
+ */
 class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
     static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
+    /**
+     * Returns either a wrapped {@code SuggestionProvider} returned by the given
+     * command, or null if the {@code SuggestionProvider} returned by the command
+     * is null.
+     * 
+     * This method relies on an unsafe workaround the generic type system through
+     * abusing raw types. It works only because {@code CommandListenerWrapper} is
+     * the sole implementation of {@code ICompletionProvider}.
+     * 
+     * @param command the command
+     * @return the wrapped SuggestionProvider if the SuggestionProvider of the command
+     *         is not null; otherwise null
+     */
     @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
+    protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
         // Fucking nasty workaround using raw types which Mojang abused.
         // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();

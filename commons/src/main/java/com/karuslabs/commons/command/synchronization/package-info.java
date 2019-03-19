@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  */
 
 /**
- * Contains classes for representing and manipulating {@code Inventories}.
+ * Contains classes and utilities that facilitate synchronization between the internal 
+ * server {@code CommandDispatcher} and a client.
  */
-package com.karuslabs.commons.graphics;
+package com.karuslabs.commons.command.synchronization;

@@ -30,11 +30,22 @@ import java.util.Locale;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A provider from which locales that are mapped to a key can be retrieved.
+ * 
+ * @param <T> the type of the key
+ */
 @FunctionalInterface
 public interface Provider<T> {
     
+    /**
+     * A {@code Provider} that returns the declared locale of a given player.
+     */
     public static final Provider<Player> DETECTED = player -> Locales.of(player.getLocale());
     
+    /**
+     * A {@code Provider} that always returns the default locale defined by {@link Locale#getDefault()}.
+     */
     public static final Provider NONE = key -> Locale.getDefault();
     
     
@@ -45,6 +56,13 @@ public interface Provider<T> {
         return value != null ? value : locale;
     }
     
+    /**
+     * Returns the default locale.
+     * 
+     * The default implementation returns the locale defined by {@link Locale#getDefault()}.
+     * 
+     * @return the default locale
+     */
     public default Locale getDefault() {
         return Locale.getDefault();
     }
