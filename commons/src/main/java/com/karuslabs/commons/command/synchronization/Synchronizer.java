@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toSet;
  * {@code CommandDispatcher} and a client.
  * <br><br>
  * <b>Implementation details: </b> Prior to synchronization between the internal 
- * server {@code CommandDispatcher and a client, a {@link com.karuslabs.command.Dispatcher}
+ * server {@code CommandDispatcher} and a client, a {@link com.karuslabs.commons.command.Dispatcher}
  * would synchronize itself with the internal server {@code CommandDispatcher}.
  * Due to a fault in NMS's command mapping implementation, redirected commands
  * are not mapped and sent to clients correctly under certain circumstances, hence 
@@ -126,8 +126,8 @@ public class Synchronizer implements Listener {
      * Synchronizes the given commands in the internal {@code CommandDispatcher}
      * with the given player.
      * 
-     * @param player
-     * @param commands 
+     * @param player the player
+     * @param commands the commands
      */
     public void synchronize(Player player, Collection<String> commands) {    
         var entity = ((CraftPlayer) player).getHandle();

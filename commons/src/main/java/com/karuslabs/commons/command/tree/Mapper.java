@@ -36,21 +36,47 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mapper that maps a given command of type T to type R.
+ * A mapper that maps a given command of type T to type R. Aliases and children of 
+ * a given command are ignored by this mapper; if such is required, a {@link Tree} 
+ * should be used instead.
  *
- * @param <T>
- * @param <R> 
+ * @param <T> the type of a given command
+ * @param <R> the resultant type of the mapped command
  */
 public class Mapper<T, R> {
     
+    /**
+     * An empty command that always returns {@code 0}.
+     */
     public static final Command<?> NONE = context -> 0;
+    /**
+     * A predicate that always returns {@code true}.
+     */
     public static final Predicate<?> TRUE = source -> true;
+    /**
+     * A {@code SuggestionProvider} that always returns an empty {@code Suggestions}.
+     */
     public static final SuggestionProvider<?> EMPTY = (suggestions, builder) -> builder.buildFuture();
     
     
+    /**
+     * Returns the mapped command from the given command.
+     * <br><br>
+     * <b>Default implementation:</b> Mapping of the different command subclasses 
+     * are delegated to their respective mapping methods. 
+     * <ul>
+     * <li>{@code ArgumentCommandNode}s to {@link #argument(CommandNode)}</li>
+     * <li>{@code LiteralCommandNode}s to {@link #literal(CommandNode)}</li>
+     * <li>{@code RootCommand}s to {@link #root(CommandNode)}</li>
+     * <li>All other commands to {@link #otherwise(CommandNode)}</li>
+     * </ul>
+     * 
+     * @param command the command to map
+     * @return the mapped command
+     */
     public CommandNode<R> map(CommandNode<T> command) {
         if (command instanceof ArgumentCommandNode<?, ?>) {
-            return parameter(command);
+            return argument(command);
 
         } else if (command instanceof LiteralCommandNode<?>) {
             return literal(command);
@@ -64,9 +90,25 @@ public class Mapper<T, R> {
     }
 
     
-    protected CommandNode<R> parameter(CommandNode<T> command) {
-        var parameter = (ArgumentCommandNode<T, ?>) command;
-        return new Argument<>(parameter.getName(), type(parameter), execution(parameter), requirement(parameter), suggestions(parameter));
+    /**
+     * Returns the mapped command from the given command.
+     * <br><br>
+     * <b>Default implementation:</b> The given command is expected to be either
+     * an instance or subclass of {@code ArgumentCommandNode}. Mapping of the different
+     * command components are delegated to the respective methods.
+     * <ul>
+     * <li>{@code ArgumentType}s to {@link #type(ArgumentCommandNode)}</li>
+     * <li>{@code Command}s to {@link #execution(CommandNode)}</li>
+     * <li>{@code Predicate}s to {@link #requirement(CommandNode)}</li>
+     * <li>{@code SuggestionProvider}s to {@link #suggestions(ArgumentCommandNode)}</li>
+     * </ul>
+     * 
+     * @param command the command to map
+     * @return the mapped command
+     */
+    protected CommandNode<R> argument(CommandNode<T> command) {
+        var argument = (ArgumentCommandNode<T, ?>) command;
+        return new Argument<>(argument.getName(), type(argument), execution(argument), requirement(argument), suggestions(argument));
     }
 
     protected CommandNode<R> literal(CommandNode<T> command) {
