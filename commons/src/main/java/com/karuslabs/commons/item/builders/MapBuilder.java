@@ -25,6 +25,7 @@ package com.karuslabs.commons.item.builders;
 
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.map.MapView;
 
 
 public class MapBuilder extends Builder<MapMeta, MapBuilder> {
@@ -52,8 +53,8 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
         return this;
     }
     
-    public MapBuilder id(int id) {
-        meta.setMapId(id);
+    public MapBuilder view(MapView map) {
+        meta.setMapView(map);
         return this;
     }
     
