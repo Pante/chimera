@@ -23,8 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.MapBuilder;
 import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapView;
 
 import org.junit.jupiter.api.Test;
 
@@ -40,10 +40,11 @@ class MapBuilderTest {
     
     @Test
     void build() {
-        MapBuilder.of(WATER).self().colour(SILVER).id(1).location("name").scaling(true);
+        var view = mock(MapView.class);
+        MapBuilder.of(WATER).self().colour(SILVER).view(view).location("name").scaling(true);
         
         verify(meta).setColor(SILVER);
-        verify(meta).setMapId(1);
+        verify(meta).setMapView(view);
         verify(meta).setLocationName("name");
         verify(meta).setScaling(true);
     }
