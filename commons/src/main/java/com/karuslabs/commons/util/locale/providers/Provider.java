@@ -49,8 +49,26 @@ public interface Provider<T> {
     public static final Provider NONE = key -> Locale.getDefault();
     
     
+    /**
+     * Returns the locale associated with the given key.
+     * 
+     * Implementations may differ on the default value to return if the provider
+     * contains no mapping for the given key.
+     * 
+     * @param key the key
+     * @return the locale to which the the given key is mapped
+     */
     public Locale get(T key);
     
+    /**
+     * Returns the locale associated with the given key, or given default locale
+     * if this provider contains no mapping for the key.
+     * 
+     * @param key the key
+     * @param locale the default locale
+     * @return the located associated with the given key, or the default locale if
+     *         this provider contains no mapping for the key
+     */
     public default Locale getOrDefault(T key, Locale locale) {
         var value = get(key);
         return value != null ? value : locale;

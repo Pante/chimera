@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent.locks;
-
 
 /**
- * Represents an object with may hold resources until it is closed.
+ * Contains classes and utilities for manipulating the structure of command trees.
  */
-@FunctionalInterface
-public interface Mutex extends AutoCloseable {
-    
-    @Override
-    public void close();
-    
-}
+package com.karuslabs.commons.command.tree;

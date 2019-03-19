@@ -31,6 +31,10 @@ import java.util.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 
+/**
+ * A {@code Provider} subclass in which locales that are mapped to UUIDs and stored
+ * in a YAML file can be retrieved.
+ */
 public class YAMLProvider implements Provider<UUID> {
     
     YamlConfiguration configuration;
@@ -38,10 +42,23 @@ public class YAMLProvider implements Provider<UUID> {
     private Locale defaultLocale;
     
     
+    /**
+     * Constructs a {@code YAMLProvider} from the given YAML file and a default
+     * locale defined by {@link Locale#getDefault()}.
+     * 
+     * @param file the YAML file
+     */
     public YAMLProvider(File file) {
         this(file, Locale.getDefault());
     }
     
+    /**
+     * Constructs a {@code YAMLProvider} from the given YAML file and default locale.
+     * 
+     * @param file the YAML file
+     * @param defaultLocale the default locale to return if this provider contains
+     *                      no mapping for a given UUID
+     */
     public YAMLProvider(File file, Locale defaultLocale) {
         this.configuration = YamlConfiguration.loadConfiguration(file);
         this.file = file;
@@ -49,22 +66,46 @@ public class YAMLProvider implements Provider<UUID> {
     }
     
     
+    /**
+     * Returns the locale associated with the given UUID, or the default locale
+     * if this provider contains no mapping for the UUID.
+     * 
+     * @param key the UUID
+     * @return the locale to which the the given UUID is mapped, or the default locale
+     *         if this provider contains no mapping for the UUID
+     */
     @Override
     public Locale get(UUID key) {
         var locale = configuration.getString(key.toString());
         return locale != null ? Locales.of(locale) : defaultLocale; 
     }
     
+    /**
+     * Returns the default locale.
+     * 
+     * @return the default locale
+     */
     @Override
     public Locale getDefault() {
         return defaultLocale;
     }
     
     
+    /**
+     * Returns the underlying YAML configuration.
+     * 
+     * @return the YAML configuration
+     */
     public YamlConfiguration configuration() {
         return configuration;
     }
     
+    /**
+     * Saves any changes made to the underlying YAML configuration.
+     * 
+     * @throws UncheckedIOException if changes to the underlying YAML configuration
+     *                              failed
+     */
     public void save() {
         try {
             configuration.save(file);

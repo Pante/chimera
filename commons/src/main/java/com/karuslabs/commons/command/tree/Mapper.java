@@ -35,6 +35,12 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A mapper that maps a given command of type T to type R.
+ *
+ * @param <T>
+ * @param <R> 
+ */
 public class Mapper<T, R> {
     
     public static final Command<?> NONE = context -> 0;
