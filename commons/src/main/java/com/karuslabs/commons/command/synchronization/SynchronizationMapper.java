@@ -30,13 +30,15 @@ import com.mojang.brigadier.tree.ArgumentCommandNode;
 
 import net.minecraft.server.v1_13_R2.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
     static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
     @Override
-    protected SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
+    protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
         // Fucking nasty workaround using raw types which Mojang abused.
         // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();

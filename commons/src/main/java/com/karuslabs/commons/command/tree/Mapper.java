@@ -44,7 +44,7 @@ public class Mapper<T, R> {
     
     public CommandNode<R> map(CommandNode<T> command) {
         if (command instanceof ArgumentCommandNode<?, ?>) {
-            return parameter(command);
+            return argument(command);
 
         } else if (command instanceof LiteralCommandNode<?>) {
             return literal(command);
@@ -58,7 +58,7 @@ public class Mapper<T, R> {
     }
 
     
-    protected CommandNode<R> parameter(CommandNode<T> command) {
+    protected CommandNode<R> argument(CommandNode<T> command) {
         var parameter = (ArgumentCommandNode<T, ?>) command;
         return new Argument<>(parameter.getName(), type(parameter), execution(parameter), requirement(parameter), suggestions(parameter));
     }
