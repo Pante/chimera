@@ -134,6 +134,9 @@
                 <configuration>
                     <docfilessubdirs>true</docfilessubdirs>
                     <additionalOptions>-html5</additionalOptions>
+                    <links>
+                        <link>https://repo.karuslabs.com/repository/brigadier/</link>
+                    </links>
                 </configuration>
                 <executions>
                     <execution>
