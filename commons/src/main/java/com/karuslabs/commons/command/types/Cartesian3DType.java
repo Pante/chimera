@@ -32,11 +32,26 @@ import net.minecraft.server.v1_13_R2.ArgumentVec3;
 import org.bukkit.Location;
 
 
+/**
+ * A 3D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 public abstract class Cartesian3DType<T> extends CartesianType<T> {
     
     static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);
     
     
+    /**
+     * Suggests the remaining coordinates based on the number of already entered
+     * coordinates contained in the given parts.
+     * 
+     * @param builder the builder
+     * @param context the context
+     * @param location the location of the block the source is looking at within
+     *                 a 5 block radius
+     * @param parts the parts of the argument split by a whitespace
+     */
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
         switch (parts.length) {
@@ -56,6 +71,11 @@ public abstract class Cartesian3DType<T> extends CartesianType<T> {
         }
     }
     
+    /**
+     * Returns an NMS {@code ArgumentVec3} type. 
+     * 
+     * @return the ArgumentVec3 type
+     */
     @Override
     public ArgumentType<?> mapped() {
         return VECTOR_3D;

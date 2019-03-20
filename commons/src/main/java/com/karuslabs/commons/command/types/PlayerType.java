@@ -37,6 +37,9 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A {@code Player} type.
+ */
 public class PlayerType implements WordType<Player> {
     
     private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
@@ -46,11 +49,22 @@ public class PlayerType implements WordType<Player> {
     private Server server;
     
     
+    /**
+     *  Constructs a {@code PlayerType}.
+     */
     public PlayerType() {
         this.server = Bukkit.getServer();
     }
     
     
+    /**
+     * Returns a online player whose name matches the string returned by the given 
+     * {@code StringReader}.
+     * 
+     * @param reader the reader
+     * @return a player with the given name
+     * @throws CommandSyntaxException if a player with the give name does not exist
+     */
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString();
@@ -64,12 +78,34 @@ public class PlayerType implements WordType<Player> {
     }
 
     
+    /**
+     * Returns the names of online players that begin with the remaining input of 
+     * the given {@code SuggesitonBuilder}. If the source is a player, an additional 
+     * check to determine the visibility of the suggested player to the source. 
+     * Suggested players that are invisible to the source are ignored.
+     * <br><br>
+     * Execution is delegated to {@link #suggest(SuggestionsBuilder, Player)}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the player names that begin with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
         return suggest(builder, source); 
     }
     
+    /**
+     * Suggests online players whose names begin with the remaining input of the given
+     * {@code SuggestionBuilder} and are visible to the source if the source is
+     * a player.
+     * 
+     * @param builder the builder
+     * @param source the player, or null if the source was not a player
+     * @return the player names that begin with the remaining input
+     */
     protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
         for (var player: server.getOnlinePlayers()) {
             if ((source == null || source.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {

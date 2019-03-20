@@ -21,32 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.types;
-
-import com.mojang.brigadier.arguments.*;
-
 
 /**
- * A word type that maps to an unquoted {@code StringArgumentType}.
- * 
- * @param <T> the type of the argument
+ * Contains {@code CommandNode} implementations.
  */
-public interface WordType<T> extends Type<T> {
-    
-    /**
-     * An unquoted {code StringArgumentType} to which this type is mapped.
-     */
-    public static final StringArgumentType WORD = StringArgumentType.word();
-
-    
-    /**
-     * Returns an unquoted {@code StringArgumentType}.
-     * 
-     * @return an unquoted StringArgumentType
-     */
-    @Override
-    public default StringArgumentType mapped() {
-        return WORD;
-    }
-    
-}
+package com.karuslabs.commons.command.tree.nodes;

@@ -36,16 +36,38 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 
 
+/**
+ * A {@code World} type.
+ */
 public class WorldType implements WordType<World> {
     
     static final Collection<String> EXAMPLES = List.of("world_name", "\"world name\"");
     
     
+    /**
+     * Returns a world which name matches the string returned by the given {@code StringReader}.
+     * A name that contains whitespaces must be enclosed in double quotation marks.
+     * 
+     * @see VectorParser#parseWorld(StringReader) 
+     * 
+     * @param reader the reader
+     * @return a world with the given name
+     * @throws CommandSyntaxException if a world with the given name does not exist
+     */
     @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
+    public World parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parseWorld(reader);
     }
-
+    
+    /**
+     * Returns the names of worlds that begin with the remaining input of the given 
+     * {@code SuggesitonBuilder}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the world names that begin with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var world : Bukkit.getWorlds()) {

@@ -25,7 +25,8 @@ package com.karuslabs.commons.util.concurrent.locks;
 
 
 /**
- * Represents an object with may hold resources until it is closed.
+ * An object that ensures the holder of this object has mutually exclusive access 
+ * to a resource.
  */
 @FunctionalInterface
 public interface Mutex extends AutoCloseable {

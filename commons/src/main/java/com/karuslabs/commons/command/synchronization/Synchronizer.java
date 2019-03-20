@@ -48,13 +48,14 @@ import static java.util.stream.Collectors.toSet;
  * A {@code Synchronizer} that facilities synchronization between the internal server
  * {@code CommandDispatcher} and a client.
  * <br><br>
- * <b>Implementation details: </b> Prior to synchronization between the internal 
- * server {@code CommandDispatcher} and a client, a {@link com.karuslabs.commons.command.Dispatcher}
- * would synchronize itself with the internal server {@code CommandDispatcher}.
- * Due to a fault in NMS's command mapping implementation, redirected commands
- * are not mapped and sent to clients correctly under certain circumstances, hence 
- * this {@code Synchronizer} remaps and resends the commands each time after a
- * {@code PlayerCommanndSendEvent} is emitted.
+ * <b>Implementation details:</b><br> 
+ * Prior to synchronization between the internal server {@code CommandDispatcher} 
+ * and a client, a {@link com.karuslabs.commons.command.Dispatcher} would synchronize 
+ * itself with the internal server {@code CommandDispatcher}. Due to a fault in NMS's 
+ * command mapping implementation, redirected commands are not mapped and sent to 
+ * clients correctly under certain circumstances, hence this {@code Synchronizer} 
+ * remaps and resends the commands each time after a {@code PlayerCommanndSendEvent} 
+ * is emitted.
  * 
  * To avoid unnecessary remapping and resending across multiple plugins, a single
  * {@link Synchronization} task is shared between plugins. This is achieved via 

@@ -65,6 +65,10 @@ public @Static class VectorParser {
     /**
      * Returns a 2D position from the string returned by the given {@code StringReader} 
      * that matches {@code (^|~)[x coordinate] (^|~)[z coordinate]}.
+     * <ul>
+     * <li>{@code ^} denotes relativity to the direction in which the source is facing.</li>
+     * <li>{@code ~} denotes absolute relativity to the location of the source</li> 
+     * </ul>
      * 
      * @param reader the reader
      * @return a 2D position
@@ -79,6 +83,10 @@ public @Static class VectorParser {
     /**
      * Returns a 3D position from the string returned by the given {@code StringReader} 
      * that matches {@code (^|~)[x coordinate] (^|~)[y coordinate] (^|~)[z coordinate]}.
+     * <ul>
+     * <li>{@code ^} denotes relativity to the direction in which the source is facing.</li>
+     * <li>{@code ~} denotes absolute relativity to the location of the source</li> 
+     * </ul>
      * 
      * @param reader the reader
      * @return a 3D position

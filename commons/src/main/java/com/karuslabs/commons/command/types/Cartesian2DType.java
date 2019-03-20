@@ -32,13 +32,25 @@ import net.minecraft.server.v1_13_R2.ArgumentVec2;
 import org.bukkit.Location;
 
 
+/**
+ * A 2D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 public abstract class Cartesian2DType<T> extends CartesianType<T> {
     
     static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
     
     
     /**
-     * Does nothing.
+     * Suggests the remaining coordinates based on the number of already entered
+     * coordinates contained in the given parts.
+     * 
+     * @param builder the builder
+     * @param context the context
+     * @param location the location of the block the source is looking at within
+     *                 a 5 block radius
+     * @param parts the parts of the argument split by a whitespace
      */
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
@@ -49,12 +61,17 @@ public abstract class Cartesian2DType<T> extends CartesianType<T> {
                 break;
                 
             case 1:
-                builder.suggest(parts[0] + " " + location.getY());
+                builder.suggest(parts[0] + " " + location.getZ());
                 break;
         }
     }
     
     
+    /**
+     * Returns an NMS {@code ArgumentVec2} type.
+     * 
+     * @return the ArgumentVec2 type
+     */
     @Override
     public ArgumentType<?> mapped() {
         return VECTOR_2D;

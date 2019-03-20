@@ -52,9 +52,9 @@ public interface Provider<T> {
     /**
      * Returns the locale associated with the given key.
      * <br><br>
-     * <b>Implementation requirement:</b> Implementations must provide a non-null, 
-     * default value if it contains no mapping for the given key. Implementations
-     * should never return {@code null}.
+     * <b>Implementation requirement:</b><br>
+     * Implementations must provide a non-null, default value if it contains no 
+     * mapping for the given key. Implementations should never return {@code null}.
      * 
      * @param key the key
      * @return the locale to which the the given key is mapped, or a default value

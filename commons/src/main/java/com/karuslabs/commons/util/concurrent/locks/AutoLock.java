@@ -26,27 +26,54 @@ package com.karuslabs.commons.util.concurrent.locks;
 import java.util.concurrent.locks.ReentrantLock;
 
 
+/**
+ * A {@code ReentrantLock} subclass that contains additional methods for automatic 
+ * resource management; i.e. automatic releasing of the lock when a try-with-resources 
+ * block is exited.
+ */
 public class AutoLock extends ReentrantLock implements Acquirable {
     
     private final Mutex mutex;
     
     
+    /**
+     * Constructs a non-fair {@code AutoLock}.
+     */
     public AutoLock() {
         this(false);
     }
     
+    /**
+     * Constructs a {@code AutoLock} with the specified fairness policy.
+     * 
+     * @param fair true if this lock should use a fair ordering policy 
+     */
     public AutoLock(boolean fair) {
         super(fair);
         this.mutex = this::unlock;
     }
     
     
+    /**
+     * Acquires this lock; automatically releasing this lock when returning from
+     * a try-with-resources block.
+     * 
+     * @return a mutex
+     */
     @Override
     public Mutex acquire() {
         lock();
         return mutex;
     }
-
+    
+    /**
+     * Acquires this lock unless the current thread is interrupted; automatically 
+     * releasing this lock when returning from a try-with-resources block.
+     * 
+     * @return a mutex
+     * @throws InterruptedException if the current thread is interrupted while acquiring 
+     *                              the object
+     */
     @Override
     public Mutex acquireInterruptibly() throws InterruptedException {
         lockInterruptibly();

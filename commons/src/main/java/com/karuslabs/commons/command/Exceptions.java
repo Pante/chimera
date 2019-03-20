@@ -42,8 +42,8 @@ import org.bukkit.entity.minecart.CommandMinecart;
  * This class consists exclusively of static functions whcih handle exceptions that
  * occur when parsing and executing commands.
  * <br><br>
- * <b>Implementation note:</b> This class was adapted from Spigot's CommandDispatcher
- * implementation.
+ * <b>Implementation details:</b><br>
+ * This class was adapted from Spigot's CommandDispatcher implementation.
  */
 public @Static class Exceptions {
     

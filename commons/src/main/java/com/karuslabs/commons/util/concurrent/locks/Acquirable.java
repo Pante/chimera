@@ -24,10 +24,35 @@
 package com.karuslabs.commons.util.concurrent.locks;
 
 
+/**
+ * An object from which concurrent access to a resource can be acquired.
+ */
 public interface Acquirable {
     
+    /**
+     * Acquires the object.
+     * <br><br>
+     * If the object is not available then the current thread becomes disabled for 
+     * thread scheduling purposes and lies dormant until the object has been acquired. 
+     * 
+     * @return a mutex 
+     */
     public Mutex acquire();
     
+    /**
+     * Acquires the object unless the current thread is interrupted.
+     * <br><br>
+     * If the object is not available then the current thread becomes disabled for 
+     * thread scheduling purposes and lies dormant until one of two things happens:
+     * <ul>
+     * <li> The object is acquired by the current thread
+     * <li> Some other thread interrupts the current thread 
+     * </ul>
+     * 
+     * @return a mutex
+     * @throws InterruptedException if the current thread is interrupted while acquiring 
+     *                              the object
+     */
     public Mutex acquireInterruptibly() throws InterruptedException;
     
 }

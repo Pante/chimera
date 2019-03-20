@@ -33,11 +33,24 @@ import java.util.*;
 import org.bukkit.util.Vector;
 
 
+/**
+ * A 3D vector type that matches {@code [x coordinate] [y coordinate] [z coordinate]}. 
+ */
 public class Vector3DType extends Cartesian3DType<Vector> {
     
     static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0");
     
     
+    /**
+     * Returns a 3D vector from the string returned by the given {@code StringReader}.
+     * 
+     * @see VectorParser#parse3DVector(StringReader) 
+     * 
+     * @param reader the reader
+     * @return a 3D vector
+     * @throws CommandSyntaxException if a 3D vector cannot be parsed from the given
+     *                                string
+     */
     @Override
     public Vector parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parse3DVector(reader);

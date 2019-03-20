@@ -46,7 +46,8 @@ import org.bukkit.plugin.Plugin;
  * A {@code CommandDispatcher} subclass that facilities the registration of commands
  * between a Spigot plugin and the server.
  * <br><br>
- * <b>Implementation details:</b> This dispatcher holds a reference to the dispatcher,
+ * <b>Implementation details:</b><br>
+ * This dispatcher holds a reference to the dispatcher,
  * s-dispatcher, that is used internally by the server. The s-dispatcher is flushed 
  * each time the server is restarted or reloaded. In both cases, the flush occurs 
  * after all plugins are enabled. This dispatcher and s-dispatcher are synchronized 

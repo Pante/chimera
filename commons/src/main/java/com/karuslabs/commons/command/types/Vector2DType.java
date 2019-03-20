@@ -33,11 +33,24 @@ import java.util.*;
 import org.bukkit.util.Vector;
 
 
+/**
+ * A 2D vector type that matches {@code [x coordinate] [z coordinate]}. 
+ */
 public class Vector2DType extends Cartesian2DType<Vector> {
     
     static final Collection<String> EXAMPLES = List.of("0 0", "0.0 0.0");
 
     
+    /**
+     * Returns a 2D vector from the string returned by the given {@code StringReader}.
+     * 
+     * @see VectorParser#parse2DVector(StringReader)
+     * 
+     * @param reader the reader
+     * @return a 2D vector
+     * @throws CommandSyntaxException if a 2D vector cannot be parsed from the given
+     *                                string
+     */
     @Override
     public Vector parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parse2DVector(reader);

@@ -26,6 +26,12 @@ package com.karuslabs.commons.command.types;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 
+/**
+ * An {@code ArgumentType} that has no supported client-side equivalent. An implementation
+ * must provide a supported {@code ArgumentType} to which the implementation is mapped.
+ * 
+ * @param <T> the type of the argument
+ */
 public interface Type<T> extends ArgumentType<T> {
     
     public ArgumentType<?> mapped();

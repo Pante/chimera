@@ -32,8 +32,23 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 public abstract class CartesianType<T> implements Type<T> {    
     
+    /**
+     * Splits the string returned from the builder by whitespaces. The provision of 
+     * suggestions is then delegated to {@link #suggest(SuggestionsBuilder, CommandContext, Location, String[])}
+     * if the source is a {@code Player} and {@link #suggest(SuggestionsBuilder, CommandContext, String[])}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the suggestions
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         var source = context.getSource();
@@ -51,16 +66,45 @@ public abstract class CartesianType<T> implements Type<T> {
         return builder.buildFuture();
     }
     
+    /**
+     * Returns the string that was split by whitespaces.
+     * 
+     * @param remaining the string to be split
+     * @return the parts of the string that was split by whitespace
+     */
     protected String[] split(String remaining) {
         return remaining.split(" ");
     }
     
     
     
+    /**
+     * Provides suggestions using the given builder, context, location and argument
+     * parts.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Does nothing.
+     * 
+     * @param builder the builder
+     * @param context the context
+     * @param location the location of the block the source is looking at within
+     *                 a 5 block radius
+     * @param parts the parts of the argument split by a whitespace
+     */
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
         
     }
     
+    /**
+     * Provides suggestions using the given builder, context and argument parts.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Does nothing.
+     * 
+     * @param builder the builder
+     * @param context the context
+     * @param parts the parts of the argument split by a whitespace
+     */
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
         
     }

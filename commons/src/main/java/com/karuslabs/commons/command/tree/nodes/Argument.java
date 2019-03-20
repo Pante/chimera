@@ -41,20 +41,64 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * An {@code ArgumentCommandNode} subclass that provides additional convenience
+ * methods and support for aliases.
+ * 
+ * @param <T> the type of the source
+ * @param <V> the type of the argument
+ */
 public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T> {
 
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
 
     
+    /**
+     * Constructs an {@code Argument} with the given name, type, command, requirement
+     * and suggestions.
+     * 
+     * @param name the name
+     * @param type the type of the argument
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param suggestions the SuggestionProvider
+     */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);
     }
     
+    /**
+     * Constructs an {@code Argument} with the given name, type, command, requirement,
+     * redirected destination, redirection modifier, fork and suggestions.
+     * 
+     * @param name the name
+     * @param type the type of the argument
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param destination the destination to which this argument is redirected
+     * @param modifier the redirection modifier
+     * @param fork the fork
+     * @param suggestions the SuggestionProvider
+     */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
     }
     
+    /**
+     * Constructs an {@code Argument} with the given name, type, aliases, command, requirement,
+     * redirected destination, redirection modifier, fork and suggestions.
+     * 
+     * @param name the name
+     * @param type the type of the argument
+     * @param aliases the aliases of this argument
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param destination the destination to which this argument is redirected
+     * @param modifier the redirection modifier
+     * @param fork the fork
+     * @param suggestions the SuggestionProvider
+     */
     public Argument(String name, ArgumentType<V> type, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
@@ -71,7 +115,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     }
     
     @Override
-    public CommandNode<T> removeChild(String child) {
+    public @Nullable CommandNode<T> removeChild(String child) {
         var removed = Commands.remove(this, child);
         for (var alias : aliases) {
             Commands.remove(alias, child);
@@ -112,15 +156,39 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     }
     
     
+    /**
+     * Returns a builder for an {@code Argument} with the given name and type.
+     * 
+     * @param <T> the type of the source
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a builder
+     */
     public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
+    /**
+     * Returns a builder for an {@code Argument} with {@code CommandSource} as the
+     * type of source, the given name and type.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a builder
+     */
     public static <V> Builder<CommandSender, V>of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
     
+    /**
+     * A {@code Argument} builder.
+     * 
+     * @param <T> the type of the source
+     * @param <V> the type of the argument
+     */
     public static class Builder<T, V> extends ArgumentBuilder<T, Builder<T, V>> {
         
         String name;
@@ -129,6 +197,12 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         @Nullable SuggestionProvider<T> suggestions;
         
         
+        /**
+         * Constructs a {@code Builder} with the given name and type.
+         * 
+         * @param name the name
+         * @param type the type
+         */
         protected Builder(String name, ArgumentType<V> type) {
             this.name = name;
             this.type = type;
@@ -136,25 +210,65 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         }
         
         
+        /**
+         * Adds an alias.
+         * 
+         * @param alias the alias
+         * @return this
+         */
         public Builder<T, V> alias(String alias) {
             aliases.add(alias);
             return this;
         }
         
+        /**
+         * Sets the {@code Command} to be executed.
+         * 
+         * @param command the command to be executed
+         * @return this
+         */
         public Builder<T, V> executes(Executable<T> command) {
             return executes((Command<T>) command);
         }
         
+        /**
+         * Sets the {@code SuggestionProvider} to be executed.
+         * 
+         * @param suggestions the SuggestionProvider
+         * @return this
+         */
         public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
             return getThis();
         }
         
         
+        /**
+         * Adds an optional child built from the given builder. Optional children are 
+         * appended to both the node to be built and the children of said node.
+         * <br><br>
+         * <b>Note:</b> Due to an issue with how the client processes the children 
+         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
+         * may not displayed correctly.
+         * 
+         * @param builder the builder from which the optional child is built
+         * @return this
+         */
         public Builder<T, V> optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }
         
+        /**
+         * Adds an optional child. Optional children are appended to both the node
+         * to be built and the children of said node.
+         * <br><br>
+         * <b>Note:</b> Due to an issue with how the client processes the children 
+         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
+         * may not displayed correctly.
+         * 
+         * @param node the optional child
+         * @return this
+         */
         public Builder<T, V> optionally(CommandNode<T> node) {
             then(node);
             for (var child : node.getChildren()) {
@@ -165,11 +279,21 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         }
         
         
+        /**
+         * Returns this.
+         * 
+         * @return this
+         */
         @Override
         protected Builder<T, V> getThis() {
             return this;
         }
-
+        
+        /**
+         * Builds the {@code Argument}.
+         * 
+         * @return the argument
+         */
         @Override
         public Argument<T, V> build() {
             var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);

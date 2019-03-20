@@ -27,14 +27,24 @@ import com.mojang.brigadier.arguments.*;
 
 
 /**
- * Represents a button in a {@code Window} or {@code Region}.
+ * A string type that maps to a {@code StringArgumentType}.
+ * 
+ * @param <T> the type of the argument
  */
 @FunctionalInterface
 public interface StringType<T> extends Type<T> {
     
+    /**
+     * A {code StringArgumentType} to which this type is mapped.
+     */
     public static final StringArgumentType STRING = StringArgumentType.string();
     
     
+    /**
+     * Returns a {@code StringArgumentType}.
+     * 
+     * @return a StringArgumentType
+     */
     @Override
     public default StringArgumentType mapped() {
         return STRING;

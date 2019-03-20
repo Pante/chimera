@@ -29,23 +29,81 @@ import com.mojang.brigadier.tree.CommandNode;
 import java.util.List;
 
 
+/**
+ * A mutable {@code CommandNode} that defines several operation for convenience 
+ * to modify the internal state of this {@code Node}.
+ * 
+ * @param <T> the type of the source
+ */
 public interface Node<T> {
     
+    /**
+     * Returns the aliases of this {@code Node}.
+     * 
+     * @return the aliases of this Node
+     */
     public List<CommandNode<T>> aliases();
 
     
+    /**
+     * Adds the given child to this {@code Node} and the aliases of this {@code Node}. 
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The child must also be added to the aliases of this implementation.
+     * 
+     * @param child the child
+     */
     public void addChild(CommandNode<T> child);
     
+    /**
+     * Removes the given child from this {@code Node} and the aliases of this {@code Node}.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The child must also be removed from the aliases of this implementation.
+     * 
+     * @param child the child
+     * @return the child that was removed; or null if this node contains no child
+     *         with the given name
+     */
     public CommandNode<T> removeChild(String child);
     
     
+    /**
+     * Returns the {@code Command} to be executed for this {@code Node}.
+     * 
+     * @return the command to be executed
+     */
     public Command<T> getCommand();
     
+    /**
+     * Sets the {@code Command} to be executed for this {@code Node} and the aliases
+     * of this {@code Node}.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The child must also be set for the aliases of this implementation.
+     * 
+     * @param command the command to be executed
+     */
     public void setCommand(Command<T> command);
     
     
+    /**
+     * Returns the {@code CommandNode} to which this {@code Node} is redirected.
+     * 
+     * @return the node to which this node is redirected
+     */
     public CommandNode<T> getRedirect();
     
+    /**
+     * Sets the {@code CommandNode} to which this {@code Node} and the aliases of 
+     * this {@code Node} are redirected.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The destination of the redirection must also be set for the aliases of this 
+     * implementation.
+     * 
+     * @param destination the node to which this node is redirected
+     */
     public void setRedirect(CommandNode<T> destination);
     
 }
