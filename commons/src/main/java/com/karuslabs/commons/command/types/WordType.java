@@ -31,6 +31,7 @@ import com.mojang.brigadier.arguments.*;
  * 
  * @param <T> the type of the argument
  */
+@FunctionalInterface
 public interface WordType<T> extends Type<T> {
     
     /**

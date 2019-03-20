@@ -28,6 +28,8 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 /**
  * A mutable {@code CommandNode} that defines several operation for convenience 
@@ -65,7 +67,7 @@ public interface Node<T> {
      * @return the child that was removed; or null if this node contains no child
      *         with the given name
      */
-    public CommandNode<T> removeChild(String child);
+    public @Nullable CommandNode<T> removeChild(String child);
     
     
     /**
@@ -90,9 +92,10 @@ public interface Node<T> {
     /**
      * Returns the {@code CommandNode} to which this {@code Node} is redirected.
      * 
-     * @return the node to which this node is redirected
+     * @return the node to which this node is redirected, or null if this Node
+     *         is not redirected
      */
-    public CommandNode<T> getRedirect();
+    public @Nullable CommandNode<T> getRedirect();
     
     /**
      * Sets the {@code CommandNode} to which this {@code Node} and the aliases of 
