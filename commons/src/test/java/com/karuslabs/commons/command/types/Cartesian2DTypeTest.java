@@ -67,7 +67,7 @@ class Cartesian2DTypeTest {
         when(builder.getRemaining()).thenReturn("4");
         type.suggest(builder, null, location, new String[] {"4"});
         
-        verify(builder).suggest("4 2.0");
+        verify(builder).suggest("4 3.0");
     }
     
     
