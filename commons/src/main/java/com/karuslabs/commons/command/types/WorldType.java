@@ -42,7 +42,7 @@ public class WorldType implements WordType<World> {
     
     
     @Override
-    public <S> World parse(StringReader reader) throws CommandSyntaxException {
+    public World parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parseWorld(reader);
     }
 

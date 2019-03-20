@@ -28,6 +28,8 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public interface Node<T> {
     
@@ -36,7 +38,7 @@ public interface Node<T> {
     
     public void addChild(CommandNode<T> child);
     
-    public CommandNode<T> removeChild(String child);
+    public @Nullable CommandNode<T> removeChild(String child);
     
     
     public Command<T> getCommand();
@@ -44,7 +46,7 @@ public interface Node<T> {
     public void setCommand(Command<T> command);
     
     
-    public CommandNode<T> getRedirect();
+    public @Nullable CommandNode<T> getRedirect();
     
     public void setRedirect(CommandNode<T> destination);
     

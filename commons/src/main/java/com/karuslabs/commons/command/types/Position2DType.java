@@ -40,7 +40,7 @@ public class Position2DType extends Cartesian2DType<Position> {
     
     
     @Override
-    public <S> Position parse(StringReader reader) throws CommandSyntaxException {
+    public Position parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parse2DPosition(reader);
     }
     

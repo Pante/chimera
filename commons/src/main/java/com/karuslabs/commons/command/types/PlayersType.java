@@ -36,8 +36,6 @@ import java.util.concurrent.*;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 public class PlayersType implements StringType<List<Player>> {
     

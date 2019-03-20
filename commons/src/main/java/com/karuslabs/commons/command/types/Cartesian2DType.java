@@ -46,7 +46,7 @@ public abstract class Cartesian2DType<T> extends CartesianType<T> {
                 break;
                 
             case 1:
-                builder.suggest(parts[0] + " " + location.getY());
+                builder.suggest(parts[0] + " " + location.getZ());
                 break;
         }
     }

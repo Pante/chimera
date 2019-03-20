@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.types;
 import com.mojang.brigadier.arguments.*;
 
 
+@FunctionalInterface
 public interface WordType<T> extends Type<T> {
     
     public static final StringArgumentType WORD = StringArgumentType.word();
