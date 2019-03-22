@@ -40,9 +40,9 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default Optional<T> acquire(long timeout, TimeUnit units) {
+    public default Optional<T> acquire(long timeout, TimeUnit unit) {
         try {
-            return Optional.ofNullable(get(timeout, units));
+            return Optional.ofNullable(get(timeout, unit));
             
         } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
             return Optional.empty();
@@ -59,9 +59,9 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default @Nullable T await(long timeout, TimeUnit units) {
+    public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
-            return get(timeout, units);
+            return get(timeout, unit);
             
         } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
             return null;
