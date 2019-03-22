@@ -28,8 +28,16 @@ import java.util.concurrent.Future;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A repeating asynchronous computation to be used in conjunction with a {@link Repeater}.
+ * 
+ * @param <T> the result type of the computation
+ */
 public abstract class Repetition<T> implements Runnable {
     
+    /**
+     * A constant that denotes infinite.
+     */
     public static final int INFINITE = -1;
     
     
@@ -37,11 +45,22 @@ public abstract class Repetition<T> implements Runnable {
     private long times;
     
     
+    
+    /**
+     * Constructs a {@code Repetition} to be executed the given number of times.
+     * 
+     * @param times the number of times this repetition is to be executed
+     */
     public Repetition(long times) {
         this.times = times;
     }
     
     
+    /**
+     * Delegates execution to {@link #run(Future)} and decreases the number of times
+     * this {@code Repetition} is to be executed if the stipulated number of times
+     * has not been exceeded. Execution is otherwise delegated to {@link #finish(Future)}.
+     */
     @Override
     public void run() {
         if (times == INFINITE || --times > INFINITE) {
@@ -52,12 +71,35 @@ public abstract class Repetition<T> implements Runnable {
         }
     }
     
+    /**
+     * Called for each remaining time this {@code Repetition} is to be executed.
+     * 
+     * @param context the context used to control the execution and result of this
+     *                repetition
+     */
     protected abstract void run(Future<T> context);
     
+    /**
+     * Called when the number of times this repetition was executed has exceeded
+     * the stipulated number of times.
+     * <br><br>
+     * <b>Default implementation:</b>
+     * Cancels the execution via the given context.
+     * 
+     * @param context the context used to control the execution and result of this
+     *                repetition
+     */
     protected void finish(Future<T> context) {
         context.cancel(false);
     }
     
+    /**
+     * Sets the context for this {@code Repetition}.
+     * 
+     * @param context the context used to control the execution and result of this
+     *                repetition
+     * @throws IllegalStateException if this repetition already has a context
+     */
     public void set(Future<T> context) {
         if (this.context == null) {
             this.context = context;

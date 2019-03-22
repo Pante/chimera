@@ -26,16 +26,35 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.Future;
 
 
+/**
+ * A {Code Repetition} that accepts and executes a given runnable each time this
+ * repetition is executed.
+ * 
+ * @param <T> the type of the result
+ */
 public class RunnableRepetition<T> extends Repetition<T> {
     
     private Runnable runnable;
     
     
+    /**
+     * Constructs a {@code RunnableRepetition} that will, upon running execute the
+     * runnable for the given umber of times.
+     * 
+     * @param runnable the runnable to be executed each time
+     * @param times the number of times this repetition is to be executed
+     */
     public RunnableRepetition(Runnable runnable, long times) {
         super(times);
         this.runnable = runnable;
     }
 
+    /**
+     * Executes the given runnable, ignoring the context.
+     * 
+     * @param context the context used to control the execution and result of this
+     *                repetition
+     */
     @Override
     protected void run(Future<T> context) {
         runnable.run();

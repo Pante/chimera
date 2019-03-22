@@ -28,6 +28,13 @@ import com.google.common.primitives.Primitives;
 import java.util.*;
 
 
+/**
+ * A map that associates a value to the class of the value. The respective primitives
+ * and wrappers are considered to be distinct types. Thus different values can be
+ * mapped to a primitive and its wrapper class.
+ * 
+ * @param <T> the parent type that all values extend
+ */
 public interface ClassMap<T> {
     
     public static <T> ClassMap<T> of() {

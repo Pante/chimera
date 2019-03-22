@@ -23,7 +23,7 @@
  */
 
 /**
- * Contains classes and utilities to facilitate the usage of Mojang's Brigadier Command 
+ * Contains classes and utilities to facilitate the usage of Mojang's Brigadier command 
  * library in a Spigot plugin.
  */
 package com.karuslabs.commons.command;

@@ -29,8 +29,20 @@ import java.util.concurrent.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A result of an asynchronous computation with additional retrieval methods.
+ * 
+ * @param <T> the result type of the computation
+ */
 public interface Eventual<T> extends Future<T> {
     
+    /**
+     * Waits if necessary for the computation to complete, and then retrieves its result.
+     * An empty optional is returned if either a {@code ExecutionException} or
+     * {@code InterruptedException} was thrown.
+     * 
+     * @return the computed result, or an empty optional if an exception was thrown
+     */
     public default Optional<T> acquire() {
         try {
             return Optional.ofNullable(get());
@@ -40,9 +52,19 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default Optional<T> acquire(long timeout, TimeUnit units) {
+    /**
+     * Waits if necessary for at most the given time for the computation to complete, 
+     * and then retrieves its result, if available. An empty optional is returned 
+     * if either a {@code ExecutionException} or {@code InterruptedException} was 
+     * thrown.
+     *
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result, or an empty optional if an exception was thrown
+     */
+    public default Optional<T> acquire(long timeout, TimeUnit unit) {
         try {
-            return Optional.ofNullable(get(timeout, units));
+            return Optional.ofNullable(get(timeout, unit));
             
         } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
             return Optional.empty();
@@ -50,6 +72,12 @@ public interface Eventual<T> extends Future<T> {
     }
     
     
+    /**
+     * Waits if necessary for the computation to complete, and then retrieves its result.
+     * Returns null if either a {@code ExecutionException} or {@code InterruptedException} was thrown.
+     * 
+     * @return the computed result, or null if an exception was thrown
+     */
     public default @Nullable T await() {
         try {
             return get();
@@ -59,9 +87,18 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default @Nullable T await(long timeout, TimeUnit units) {
+    /**
+     * Waits if necessary for at most the given time for the computation to complete, 
+     * and then retrieves its result, if available. Returns null if either a {@code ExecutionException} 
+     * or {@code InterruptedException} was thrown.
+     *
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result, or null if an exception was thrown
+     */
+    public default @Nullable T await(long timeout, TimeUnit unit) {
         try {
-            return get(timeout, units);
+            return get(timeout, unit);
             
         } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
             return null;

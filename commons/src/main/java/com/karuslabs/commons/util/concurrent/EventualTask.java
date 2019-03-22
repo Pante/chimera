@@ -26,12 +26,32 @@ package com.karuslabs.commons.util.concurrent;
 import java.util.concurrent.*;
 
 
+/**
+ * A cancellable result of an asynchronous computation with additional retrieval 
+ * methods.
+ * 
+ * @param <T> the type of the result
+ */
 public class EventualTask<T> extends FutureTask<T> implements Eventual<T> {
     
+    /**
+     * Constructs a {@code EventualTask} that will, upon running execute the given
+     * callable.
+     * 
+     * @param callable the callable task
+     */
     public EventualTask(Callable<T> callable) {
         super(callable);
     }
-
+    
+    /**
+     * Creates a {@code EventualTask} that will, upon running, execute the given 
+     * Runnable, and arrange that get will return the given result on successful 
+     * completion.
+     * 
+     * @param runnable the runnable task
+     * @param result the result to return on successful completion.
+     */
     public EventualTask(Runnable runnable, T result) {
         super(runnable, result);
     }
