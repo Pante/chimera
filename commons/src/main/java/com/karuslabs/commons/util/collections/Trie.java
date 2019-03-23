@@ -34,7 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * for look-up {@code O(m)} where {@code m} is the length the string to which a value 
  * is mapped.
  * <br><br>
- * <b>Implementation details:<b><br>
+ * <b>Implementation details:</b><br>
  * An entry is created for each character in a string and contains an array and map
  * children entries that are lazily initialised. Visible ASCII characters and other
  * characters are use as an index in the array of children entries and as a key in

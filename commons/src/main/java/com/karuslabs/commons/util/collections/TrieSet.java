@@ -27,7 +27,7 @@ import java.util.*;
 
 
 /**
- * A {@Set} backed by a {@code Trie}.
+ * A {@code Set} backed by a {@code Trie}.
  */
 public class TrieSet extends AbstractSet<String> {
     

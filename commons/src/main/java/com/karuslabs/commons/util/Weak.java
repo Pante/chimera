@@ -98,19 +98,11 @@ public @ValueBased interface Weak<T> {
     public <U> Weak<U> flatMap(Function<? super T, ? extends Weak<? extends U>> mapper);
     
     /**
-     * If a value is present, returns an {@code Weak} describing (as if by
-     * {@link #ofNullable}) the result of applying the given mapping function to
-     * the value, otherwise returns an empty {@code Weak}.
+     * If a value is present, returns an {@code Weak} describing the result of 
+     * applying the given mapping function to the value, otherwise returns an empty {@code Weak}.
      *
      * <p>If the mapping function returns a {@code null} result then this method
      * returns an empty {@code Weak}.
-     *
-     * @apiNote
-     * This method supports post-processing on {@code Weak} values, without
-     * the need to explicitly check for a return status.  For example, the
-     * following code traverses a stream of URIs, selects one that has not
-     * yet been processed, and creates a path from that URI, returning
-     * an {@code Weak<Path>}:
      *
      * <pre>{@code
      *     Weak<Path> p =
@@ -183,6 +175,7 @@ public @ValueBased interface Weak<T> {
      * @param exception the supplying function that produces an
      *        exception to be thrown
      * @return the value, if present
+     * @throws E the exception to be thrown
      * @throws NullPointerException if no value is present and the exception
      *          supplying function is {@code null}
      */
@@ -223,14 +216,6 @@ public @ValueBased interface Weak<T> {
     /**
      * If a value is present, returns a sequential {@link Stream} containing
      * only that value, otherwise returns an empty {@code Stream}.
-     *
-     * @apiNote
-     * This method can be used to transform a {@code Stream} of optional
-     * elements to a {@code Stream} of present value elements:
-     * <pre>{@code
-     *     Stream<Weak<T>> os = ..
-     *     Stream<T> s = os.flatMap(Weak::stream)
-     * }</pre>
      *
      * @return the optional value as a {@code Stream}
      */
