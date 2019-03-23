@@ -28,6 +28,9 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * An enumeration that maps primitive types to the wrapper types.
+ */
 public enum Type {
     
     BOOLEAN(Boolean.class, boolean.class),
@@ -63,16 +66,38 @@ public enum Type {
     }
     
     
+    /**
+     * Returns the type associated with the given object, or {@link #TYPE} if the
+     * given object is neither a primitive nor primitive wrapper.
+     * 
+     * @param object the object
+     * @return the associated type of the given object, or TYPE if the given object
+     *         is neither a primitive nor primitive wrapper
+     */
     public static Type of(Object object) {
         return of(object.getClass());
     }
     
+    /**
+     * Returns the type associated with the given class, or {@link #TYPE} if the
+     * given type is neither a primitive nor primitive wrapper.
+     * 
+     * @param type the type
+     * @return the associated Type of the given type, or TYPE if the given type
+     *         is neither a primitive nor primitive wrapper
+     */
     public static Type of(Class<?> type) {
         return TYPES.getOrDefault(type, TYPE);
     }
     
     
+    /**
+     * The primitive wrapper type.
+     */
     public final @Nullable Class<?> boxed;
+    /**
+     * The primitive type.
+     */
     public final @Nullable Class<?> unboxed;
 
 

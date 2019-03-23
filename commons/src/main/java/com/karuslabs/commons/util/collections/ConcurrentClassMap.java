@@ -26,16 +26,41 @@ package com.karuslabs.commons.util.collections;
 import java.util.concurrent.*;
 
 
+/**
+ * A concurrent {@code ClassMap}.
+ * 
+ * @param <T> the type of the values 
+ */
 public interface ConcurrentClassMap<T> extends ClassMap<T> {
     
+    /**
+     * Creates a {@code ConcurrentClassMap}.
+     *  
+     * @param <T> the type of the values
+     * @return a ConcurrentClassMap
+     */
     public static <T> ConcurrentClassMap<T> of() {
         return new ConcurrentHashClassMap<>();
     }
     
+    /**
+     * Creates a {@code ConcurrentClassMap} with the given initial capacity.
+     * 
+     * @param <T> the type of the values
+     * @param capacity the initial capacity
+     * @return a ConcurrentClassMap
+     */
     public static <T> ConcurrentClassMap<T> of(int capacity) {
         return new ConcurrentHashClassMap<>(capacity);
     }
     
+    /**
+     * Creates a {@code ConcurrentClassMap} backed by the given map.
+     * 
+     * @param <T> the type of the values
+     * @param map the backing map
+     * @return a ConcurrentClassMap
+     */
     public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
         return new ConcurrentProxiedClassMap<>(map);
     }

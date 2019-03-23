@@ -37,7 +37,7 @@ public class Repeater extends ScheduledThreadPoolExecutor {
      * 
      * @param corePoolSize the number of threads to keep in the pool, even if they 
      *                     are idle, unless allowCoreThreadTimeOut is set
-     * @throws IllegalArgumentException if corePoolSize < 0
+     * @throws IllegalArgumentException if {@code corePoolSize < 0}
      */
     public Repeater(int corePoolSize) {
         super(corePoolSize);

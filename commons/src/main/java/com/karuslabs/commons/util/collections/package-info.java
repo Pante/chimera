@@ -21,36 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.suggestions;
-
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.*;
-
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.command.CommandSender;
-
 
 /**
- * A client-side {@code SuggestionProvider}.
+ * Contains esoteric collections.
  */
-public enum ClientsideProvider implements SuggestionProvider<CommandSender> {
-    
-    ENTITIES,
-    RECIPES,
-    SOUNDS;
-    
-    
-    /**
-     * Returns a {@code CompletableFutre} that contains an empty {@code Suggestions}
-     * 
-     * @param context the context
-     * @param builder the builder
-     * @return an empty suggestions
-     */
-    @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
-        return builder.buildFuture();
-    }
-    
-}
+package com.karuslabs.commons.util.collections;

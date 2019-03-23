@@ -29,40 +29,93 @@ import java.util.*;
 
 
 /**
- * A map that associates a value to the class of the value. The respective primitives
- * and wrappers are considered to be distinct types. Thus different values can be
+ * A map that associates a value with the class of the value. The respective primitives
+ * and wrappers are considered distinct types. Thus different values can be
  * mapped to a primitive and its wrapper class.
  * 
- * @param <T> the parent type that all values extend
+ * @param <T> the type of the values
  */
 public interface ClassMap<T> {
     
+    /**
+     * Creates a {@code ClassMap}.
+     * 
+     * @param <T> the parent type that all values extend
+     * @return the ClassMap
+     */
     public static <T> ClassMap<T> of() {
         return new HashClassMap<>();
     }
     
+    /**
+     * Creates a {@code ClassMap} with the given initial capacity.
+     * 
+     * @param <T> the parent type that all values extend
+     * @param capacity the initial capacity
+     * @return the ClassMap
+     */
     public static <T> ClassMap<T> of(int capacity) {
         return new HashClassMap<>(capacity);
     }
     
+    /**
+     * Creates a {@code ClassMap} backed by the given map.
+     * 
+     * @param <T> the parent type that all values extend
+     * @param map the backing map
+     * @return the ClassMap
+     */
     public static <T> ClassMap<T> of(Map<Class<? extends T>, T> map) {
         return new ProxiedClassMap<>(map);
     }
     
     
+    /**
+     * Returns true if this map contains a mapping for the given type.
+     * 
+     * @param <U> the type
+     * @param type the type
+     * @return true if this map contains a mapping for the given class
+     */
     public default <U extends T> boolean containsKey(Class<U> type) {
         return map().containsKey(type);
     }
     
+    /**
+     * Returns true if this map contains the given value.
+     * 
+     * @param <U> the type of the value
+     * @param value the value
+     * @return true if this map contains the value
+     */
     public default <U extends T> boolean containsValue(U value) {
         return map().containsValue(value);
     }
         
     
+    /**
+     * Returns the value to which the given type is mapped, or {@code null} if this
+     * map contains no mapping for the key.
+     * 
+     * @param <U> the type of the value
+     * @param type the type
+     * @return the value associated with the given type, or null if this map contains
+     *         no mapping for the type
+     */
     public default <U extends T> U get(Class<U> type) {
         return (U) map().get(type);
     }
     
+    /**
+     * Returns the value to which the given type is mapped, or {@code defaultValue}
+     * if the map contains no mapping for the key.
+     * 
+     * @param <U> the type of the value
+     * @param type the type
+     * @param value the default value
+     * @return the value to which the given type is mapped, or defaultValue if this
+     *         map contains no mapping for the type
+     */
     public default <U extends T> U getOrDefault(Class<U> type, U value) {
         var item = map().get(type);
         if (item != null && Primitives.wrap(type).isAssignableFrom(item.getClass())) {
@@ -73,15 +126,42 @@ public interface ClassMap<T> {
         }
     }
     
+    
+    /**
+     * Associates the given value with the given type. If this map previously contained
+     * a mapping for the type, the old value is replaced and returned.
+     * 
+     * @param <U> the type of the value
+     * @param type the type with which the value is to be associated
+     * @param value the value to be associated with the type
+     * @return the previous value associated with the type, or null if there was
+     *         no mapping for the key
+     */
     public default <U extends T> U put(Class<U> type, U value) {
         return (U) map().put(type, value);
     }
     
+    /**
+     * Removes the mapping for type from this map if present. Returns the value
+     * to which this map previously associated the key, pr null if the map contains
+     * no mapping for the key.
+     * 
+     * @param <U> the type of the value
+     * @param type the type whose mapping is to be removed
+     * @return the previous value associated with the type, or null if there was no
+     *         mapping for the type
+     */
     public default <U extends T> U remove(Class<U> type) {
         return (U) map().remove(type);
     }
     
     
+    /**
+     * Returns a {@code Map} view of this {@code ClassMap}. Modifications to the
+     * map view will affect this {@code ClassMap}.
+     * 
+     * @return a Map view
+     */
     public Map<Class<? extends T>, T> map();
     
 }

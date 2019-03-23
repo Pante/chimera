@@ -29,13 +29,25 @@ import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 
+/**
+ * A 3D position in a world and relativity of which.
+ */
 public class Position extends Location {
     
     private static final double EPSILON = 0.000001;
     
     
+    /**
+     * The X axis.
+     */
     public static final int X = 0;
+    /**
+     * The Y axis.
+     */
     public static final int Y = 1;
+    /**
+     * The Z axis.
+     */
     public static final int Z = 2;
     
     
@@ -43,18 +55,46 @@ public class Position extends Location {
     private boolean rotate;
     
     
+    /**
+     * Creates a {@code Position} with no world at {@code 0, 0, 0}.
+     */
     public Position() {
         this(0, 0, 0);
     }
     
+    /**
+     * Creates a {@code Position} with no world at the given coordinates.
+     * 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     */
     public Position(double x, double y, double z) {
         this(null, x, y, z);
     }
     
+    /**
+     * Creates a {@code Position} with the given world and coordinates.
+     * 
+     * @param world the world
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     */
     public Position(World world, double x, double y, double z) {
         this(world, x, y, z, 0, 0);
     }
-
+    
+    /**
+     * Creates a {@code Position} with the given world, coordinates and direction
+     * 
+     * @param world the world
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @param yaw the yaw
+     * @param pitch the pitch
+     */
     public Position(World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
         relative = new boolean[]{ false, false, false };
@@ -62,6 +102,13 @@ public class Position extends Location {
     }
     
     
+    /**
+     * Sets the coordinates of the given location as the absolute coordinates of
+     * this position relative to the {@code origin}.
+     * 
+     * @param to the location this position is to be applied
+     * @param origin the origin
+     */
     public void apply(Location to, Location origin) {
         to.setX(relative[X] ? getX() + origin.getX() : getX());
         to.setY(relative[Y] ? getY() + origin.getY() : getY());
@@ -70,6 +117,13 @@ public class Position extends Location {
         if (rotate) Vectors.rotate(to, origin);
     }
     
+    /**
+     * Sets the coordinates of the given vector as the absolute coordinates of
+     * this position relative to the {@code origin}.
+     * 
+     * @param to the vector this position is to be applied
+     * @param origin the origin
+     */
     public void apply(Vector to, Location origin) {
         to.setX(relative[X] ? getX() + origin.getX() : getX())
           .setY(relative[Y] ? getY() + origin.getY() : getY())
@@ -78,6 +132,12 @@ public class Position extends Location {
         if (rotate) Vectors.rotate(to, origin);
     }
     
+    /**
+     * 
+     * Relativizes this position about the given origin.
+     * 
+     * @param origin the origin
+     */
     public void relativize(Location origin) {
         if (relative[X]) setX(getX() + origin.getX());
         if (relative[Y]) setY(getY() + origin.getY());
@@ -86,6 +146,14 @@ public class Position extends Location {
     }
     
     
+    /**
+     * Sets the coordinate for the given axis.
+     * 
+     * @param axis the axis
+     * @param value the coordinate for the axis
+     * @return this
+     * @throws IllegalArgumentException if an invalid argument was specified
+     */
     public Position set(int axis, double value) {
         switch (axis) {
             case X:
@@ -106,20 +174,44 @@ public class Position extends Location {
     }
     
     
+    /**
+     * Returns whether the coordinate for the given axis is absolute or relative.
+     * 
+     * @param axis the axis
+     * @return true if the coordinate for the given axis is relative
+     */
     public boolean relative(int axis) {
         return relative[axis];
     }
     
+    /**
+     * Sets the relativity of the coordinate for the given axis.
+     * 
+     * @param axis the axis
+     * @param relative true if the coordinate for the axis is relative
+     * @return this
+     */
     public Position relative(int axis, boolean relative) {
         this.relative[axis] = relative;
         return this;
     }
     
     
+    /**
+     * Returns whether this position is to be rotated when applied.
+     * 
+     * @return true if this position is to be rotated
+     */
     public boolean rotate() {
         return rotate;
     }
     
+    /**
+     * Sets whether this position is to be rotated when applied.
+     * 
+     * @param rotate true if this position is to be rotated
+     * @return this
+     */
     public Position rotate(boolean rotate) {
         this.rotate = rotate;
         return this;
