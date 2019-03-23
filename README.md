@@ -15,7 +15,7 @@ Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleedi
 #### Chimera
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/commons/apidocs/overview-summary.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.0.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0-SNAPSHOT/commons/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
