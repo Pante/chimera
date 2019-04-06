@@ -3,7 +3,7 @@
 </p>
 
 
-Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleeding edge version of Chimera, formerly known as Karus-Commons. For a production ready version, please refer to the stable branch.**
+Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleeding edge version of Chimera, For a production ready version, please refer to the stable branch.**
 
 [![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
@@ -15,7 +15,7 @@ Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleedi
 #### Chimera
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-3.1.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/karus-commons-project/3.1.0-SNAPSHOT/commons/apidocs/overview-summary.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.0.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0-SNAPSHOT/commons/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
