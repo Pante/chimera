@@ -38,3 +38,6 @@ Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleedi
   </dependency>
 </dependencies>
 ```
+
+***
+#### Annotations
