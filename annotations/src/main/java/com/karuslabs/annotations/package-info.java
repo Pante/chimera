@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains commonly used annotations.
+ * Contains frequently used annotations.
  */
 package com.karuslabs.annotations;

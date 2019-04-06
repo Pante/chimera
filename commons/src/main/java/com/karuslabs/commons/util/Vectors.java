@@ -239,7 +239,7 @@ public @Static class Vectors {
      * @param vector the vector to rotate
      * @return the vector
      */
-    // To be blunt, my math sucks and I have absolutely no clue what this method does.
+    // To be honest, my math sucks and I have absolutely no clue what this method does.
     public static double angleToXAxis(Vector vector) {
         return atan2(vector.getX(), vector.getY());
     }

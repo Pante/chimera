@@ -43,8 +43,8 @@ import com.karuslabs.commons.command.types.Type;
 
 
 /**
- * A mapper that maps the commands in a {@link com.karuslabs.commons.command.Dispatcher} 
- * to the internal dispatcher that is used by the server.
+ * A mapper that maps the commands in a {@link Dispatcher} to the internal dispatcher 
+ * of the server.
  */
 class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
@@ -62,7 +62,7 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     
     /**
-     * Constructs a {@code DispatcherMapper} with the given {@code CommandDispatcher}.
+     * Creates a {@code DispatcherMapper} with the given {@code dispatcher}.
      * 
      * @param dispatcher the dispatcher
      */
@@ -72,13 +72,12 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     
     /**
-     * Returns either the type or mapped derivative of the given {@code ArgumentCommandNode}
-     * if said argument has a custom type that implements the {@link com.karuslabs.commons.command.types.Type}
-     * interface.
+     * Returns either the type or mapped derivative of the given {@code command}
+     * if it has a custom type that implements {@link Type}.
      * 
      * @param command the command
      * @return the argument type, or mapped derivative if the command has a custom type
-     *         that implements the Type interface
+     *         that implements {@code Type}
      */
     @Override
     protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
@@ -88,11 +87,11 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     
     /**
-     * Returns a predicate that converts a {@code CommandListenerWrapper} to a {@code CommandSender}
-     * before delegation to the requirement of the given command.
+     * Wraps the {@code requirement} of the given {@code command} in a predicate 
+     * that transforms a {@code CommandListenerWrapper} into a {@code CommandSender}.
      * 
      * @param command the command
-     * @return the wrapped predicate
+     * @return the wrapped {@code requirement}
      */
     @Override
     protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
@@ -102,22 +101,22 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
 
     
     /**
-     * Returns a {@code SuggestionProvider} that converts a {@code CommandListenerWrapper}
-     * to a {@code CommandSender} before delegation to a underlying source of suggestions
-     * provided by the given command.
+     * Wraps a source of suggestions provided by the given {@code command} in a
+     * {@code SuggestionProvider} that transforms a {@code CommandListenerWrapper}
+     * into a {@code CommandSender}.
      * 
      * A client-side {@code SuggestionProvider} is returned if the {@code SuggestionProvider}
-     * returned by command is a {@link com.karuslabs.commons.command.suggestions.ClientsideProvider};
+     * returned by {@code command} is a {@link ClientsideProvider};
      * 
-     * Otherwise, if the given command has no custom {@code SuggestionProvider and 
-     * a custom type that implements the {@link com.karuslabs.commons.command.types.Type}
-     * interface, the custom type is treated as the source;
+     * Otherwise, if the given {@code command} has no custom {@code SuggestionProvider} 
+     * but has a custom type that implements {@link Type}, the custom type is treated 
+     * as the source;
      * 
      * Otherwise if the command has neither a custom type nor custom {@code SuggestionProvider},
      * {@code null} is returned.
      * 
-     * @param command the command to provide a underlying source of suggestions
-     * @return a SuggestionProvider, or null if no source was provided
+     * @param command the command which provides a source of suggestions
+     * @return a {@code SuggestionProvider}, or {@code null} if no source was provided
      */
     @Override
     protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
@@ -141,11 +140,11 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     }
     
     /**
-     * Returns a {@code SuggestionProvider} that reparses the given input using this
-     * dispatcher before execution is delegated to the given type.
+     * Wraps the given {@code type} in a {@code SuggestionProvider} that reparses
+     * an input using this {@code dispatcher}.
      * 
      * @param type the type
-     * @return the SuggestionProvider
+     * @return a {@code SuggestionProvider}
      */
     protected SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
         return (context, suggestions) -> {
@@ -156,11 +155,11 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     }
     
     /**
-     * Returns a {@code SuggestionProvider} that reparses the given input using this
-     * dispatcher before execution is delegated to the given {@code SuggestionProvider}.
+     * Wraps the given {@code suggestor} in a {@code SuggestionProvider} that reparses
+     * an input using this {@code dispatcher}.
      * 
-     * @param suggestor the SuggestionProvider
-     * @return the SuggestionProvider
+     * @param suggestor the {@code SuggestionProvider}
+     * @return the {@code SuggestionProvider}
      */
     protected SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
         return (context, suggestions) -> {

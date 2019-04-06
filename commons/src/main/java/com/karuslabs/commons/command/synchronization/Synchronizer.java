@@ -45,24 +45,20 @@ import static java.util.stream.Collectors.toSet;
 
 
 /**
- * A {@code Synchronizer} that facilities synchronization between the internal server
- * {@code CommandDispatcher} and a client.
+ * A {@code Synchronizer} that facilities synchronization between the internal
+ * dispatcher of the server and a client.
  * <br><br>
- * <b>Implementation details:</b><br> 
- * Prior to synchronization between the internal server {@code CommandDispatcher} 
- * and a client, a {@link com.karuslabs.commons.command.Dispatcher} would synchronize 
- * itself with the internal server {@code CommandDispatcher}. Due to a fault in NMS's 
- * command mapping implementation, redirected commands are not mapped and sent to 
- * clients correctly under certain circumstances, hence this {@code Synchronizer} 
- * remaps and resends the commands each time after a {@code PlayerCommanndSendEvent} 
- * is emitted.
- * 
- * To avoid unnecessary remapping and resending across multiple plugins, a single
- * {@link Synchronization} task is shared between plugins. This is achieved via 
- * the {@code ServiceManager}. A plugin would first check if a synchronizer has 
- * been registered and reuses the synchronization task if available. Otherwise, 
- * a synchronizer is created and registered for shared use until the owning plugin 
- * is unloaded.
+ * <b>Implementation details:</b><br>
+ * An issue in Minecraft's command mapping causes redirected commands to not be 
+ * mapped and sent to clients correctly if the name of the redirected command is 
+ * lexicography less than the name of the destination. Hence, this {@code Synchronizer} 
+ * remaps and resends the commands after a {@code PlayerCommanndSendEvent} is emitted.
+ * <br><br>
+ * A {@link Synchronization} is shared across plugins using the {@code ServiceManager}
+ * to avoid duplicate remapping and resending. A {@code Sychronizer} would first
+ * check if a {@code Synchronization} has been registered to the {@code ServiceManager}
+ * and uses it if available. A {@code Synchronization} is otherwise created and 
+ * shared until the owning plugin is unloaded.
  */
 public class Synchronizer implements Listener {
     
@@ -74,10 +70,10 @@ public class Synchronizer implements Listener {
     
     
     /**
-     * Returns a {@code Synchronizer} for the given plugin.
+     * Creates a {@code Synchronizer} for the given plugin.
      * 
      * @param plugin the owning plugin
-     * @return a synchronizer
+     * @return a {@code Synchronizer}
      */
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
@@ -101,8 +97,8 @@ public class Synchronizer implements Listener {
     
     
     /**
-     * Synchronizes the commands in the internal server {@code CommandDispatcher} 
-     * that each player is permitted to use with all currently online players.
+     * Synchronizes the internal dispatcher of the server with all currently online 
+     * players, ignoring commands that the given player is not permitted to use.
      */
     public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
@@ -111,8 +107,8 @@ public class Synchronizer implements Listener {
     }
     
     /**
-     * Synchronizes the commands in the internal server {@code CommandDispatcher} 
-     * that the given player is permitted to use with the player.
+     * Synchronizes the internal dispatcher of the server with the given {@code player},
+     * ignoring commands that the {@code player} is not permitted to use.
      * 
      * @param player the player
      */
@@ -124,11 +120,11 @@ public class Synchronizer implements Listener {
     }
     
     /**
-     * Synchronizes the given commands in the internal {@code CommandDispatcher}
-     * with the given player.
+     * Synchronizes the given {@code commands} in the internal dispatcher of the 
+     * server with the given {@code player}.
      * 
      * @param player the player
-     * @param commands the commands
+     * @param commands the names of the commands
      */
     public void synchronize(Player player, Collection<String> commands) {    
         var entity = ((CraftPlayer) player).getHandle();
@@ -141,11 +137,12 @@ public class Synchronizer implements Listener {
     
     
     /**
-     * Synchronizes the commands in the internal {@code CommandDispatcher} returned 
-     * by the given event with the player returned by the event after the given event
+     * Synchronizes the commands given by the {@code event} in the internal dispatcher
+     * of the server with the player given by the {@code event} after the {@code event}
      * has been fully processed.
      * 
-     * @param event the event
+     * @param event the event which denotes a synchronization between the internal
+     *              dispatcher of the server and a client
      */
     @EventHandler
     protected void synchronize(PlayerCommandSendEvent event) {
@@ -164,10 +161,9 @@ public class Synchronizer implements Listener {
     }
     
     /**
-     * Reloads the flushed internal server {@code CommandDispatcher} when the given
-     * event is emitted.
+     * Sets the dispatcher when the server is started or reloaded.
      * 
-     * @param event the event
+     * @param event the event that denotes the starting and reloading of the server
      */
     @EventHandler
     protected void load(ServerLoadEvent event) {

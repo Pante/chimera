@@ -35,7 +35,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A {@code CommandContext} decorator that supports optional arguments. Overridden
- * operations are delegated to an underlying {@code CommandContext}.
+ * operations are forwarded to an underlying {@code CommandContext}.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * {@code VarHandle}s are used to manipulate the arguments of a {@code CommandContext}.
+ * Hence, an {@code ExceptionInInitializerError} will be thrown if strong module
+ * encapsulation is enabled.
  * 
  * @param <S> the type of the source
  */
@@ -59,9 +64,9 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     
     /**
-     * Constructs a {@code DefaultableContext} with given underlying {@code CommandContext}.
+     * Creates a {@code DefaultableContext} with the given underlying {@code context}.
      * 
-     * @param context the underlying context to which operations are delegated to
+     * @param context the underlying context to which operations are forwarded
      */
     public DefaultableContext(CommandContext<S> context) {
         super(null, null, null, null, null, null, null, null, false);
@@ -71,26 +76,26 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     
     /**
-     * Returns an argument of the given name and type if present.
+     * Returns an argument with the given name and type if present.
      * 
      * @param <V> the type of the argument
      * @param name the name of the argument
      * @param type the the type of the argument
-     * @return the argument if present; otherwise null
+     * @return the argument if present; otherwise {@code null}
      */
     public <V> @Nullable V getOptionalArgument(String name, Class<V> type) {
         return getOptionalArgument(name, type, null);
     }
     
     /**
-     * Returns an argument of the given name and type, or the given default value
-     * if the argument does not exist.
+     * Returns an argument with the given name and type, or {@code value} if the 
+     * argument does not exist.
      * 
      * @param <V> the type of the argument
      * @param name the name of the argument
      * @param type the type of the argument
      * @param value the default value
-     * @return the argument if present; otherwise the default value
+     * @return the argument if present; otherwise {@code value}
      */
     public <V> V getOptionalArgument(String name, Class<V> type, V value) {
         if (arguments == null) {

@@ -24,6 +24,6 @@
 
 /**
  * Contains classes and utilities that facilitate synchronization between the internal 
- * server {@code CommandDispatcher} and a client.
+ * dispatcher of the server and a client.
  */
 package com.karuslabs.commons.command.synchronization;

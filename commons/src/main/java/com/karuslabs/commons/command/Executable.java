@@ -29,7 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 
 /**
- * Represents a command that supports optional arguments when executed.
+ * A {@code Command} that supports optional arguments.
  * 
  * @param <S> the type of the source
  */
@@ -37,21 +37,21 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 public interface Executable<S> extends Command<S> {
     
     /**
-     * Executes this command in the given context.
+     * Executes this {@code Executable} in the given {@code context}.
      * 
      * @param context the context
-     * @throws CommandSyntaxException if the command could not be executed
+     * @throws CommandSyntaxException if this {@code Executable} could not be executed
      */
     public void execute(DefaultableContext<S> context) throws CommandSyntaxException;
     
     
     /**
-     * Delegates execution to {@link #execute(DefaultableContext)} with the given 
-     * context before returning a {@code SINGLE_SUCCESS}.
+     * Forwards execution to {@link #execute(DefaultableContext)} with the given 
+     * {@code context}.
      * 
      * @param context the context
-     * @return a single success
-     * @throws CommandSyntaxException if the command could not be executed
+     * @return {@link SINGLE_SUCCESS}
+     * @throws CommandSyntaxException if this {@code Executable} could not be executed
      */
     @Override
     public default int run(CommandContext<S> context) throws CommandSyntaxException {

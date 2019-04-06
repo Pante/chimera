@@ -36,7 +36,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * This class consists exclusively of static functions that modify a given {@code CommandNode}.
+ * This class consists exclusively of static methods that modify {@code CommandNode}s.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * {@code VarHandle}s are used to manipulate the fields in a {@code CommandNode}.
+ * Hence, an {@code ExceptionInInitializerError} will be thrown if strong module
+ * encapsulation is enabled.
  */
 public @Static class Commands {
 
@@ -57,17 +62,16 @@ public @Static class Commands {
     
     
     /**
-     * Returns a copy of the given {@code CommandNode} with the given alias as the
-     * name. In addition, the returned {@code CommandNode} will be added to the given 
-     * {@code CommandNode} as an alias if said {@code CommandNode} implements the
-     * {@link com.karuslabs.commons.command.tree.nodes.Node} interface.
+     * Copies the given {@code command} with {@code alias} as the name. In addition,
+     * the copy will be added as an alias to the given {@code command} if it implements 
+     * {@link Node}.
      * 
      * @param <T> the type of the source
      * @param command the command to be copied
-     * @param alias the name of the command to be returned
-     * @return a copy of the command with the alias as the name
+     * @param alias the name of the copy
+     * @return a copy of {@code command} with {@code alias} as the name
      * @throws UnsupportedOperationException if the given command is a subclass 
-     *         of neither ArgumentCommandNode nor LiteralCommandNode
+     *         of neither {@code ArgumentCommandNode} nor {@code LiteralCommandNode}
      */
     public static <T> CommandNode<T> alias(CommandNode<T> command, String alias) {
         if (command instanceof ArgumentCommandNode<?, ?>) {
@@ -82,16 +86,15 @@ public @Static class Commands {
     }
     
     /**
-     * Returns a copy of the given {@code ArgumentCommandNode} with the given alias 
-     * as the name. In addition, the returned {@code Argument} will be added to 
-     * the given {@code ArgumentCommandNode} as an alias if said {@code ArguemntCommandNode} 
-     * implements the {@link com.karuslabs.commons.command.tree.nodes.Node} interface.
+     * Copies the given {@code command} with {@code alias} as the name. In addition,
+     * the copy will be added as an alias to the given {@code command} if it implements 
+     * {@link Node}.
      * 
      * @param <T> the type of the source
      * @param <V> the type of the argument
      * @param command the command to be copied
-     * @param alias the name of the command to be returned
-     * @return a copy of the given command with the alias as the name
+     * @param alias the name of the copy
+     * @return a copy of {@code command} with {@code alias} as the name
      */
     public static <T, V> Argument<T, V> alias(ArgumentCommandNode<T, V> command, String alias) {
         var parameter = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
@@ -100,15 +103,14 @@ public @Static class Commands {
 
     
     /**
-     * Returns a copy of the given {@code LiteralCommandNode} with the given alias 
-     * as the name. In addition, the returned {@code Literal} will be added to the 
-     * given {@code LiteralCommandNode} as an alias if said {@code LiteralCommandNode} 
-     * implements the {@link com.karuslabs.commons.command.tree.nodes.Node} interface.
+     * Copies the given {@code command} with {@code alias} as the name. In addition,
+     * the copy will be added as an alias to the given {@code command} if it implements 
+     * {@link Node}.
      * 
      * @param <T> the type of the source
      * @param command the command to be copied
-     * @param alias the name of the command to be returned
-     * @return a copy of the given command with the alias as the name
+     * @param alias the name of the copy
+     * @return a copy of {@code command} with {@code alias} as the name
      */
     public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
         var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
@@ -130,11 +132,11 @@ public @Static class Commands {
     
     
     /**
-     * Sets the {@code Command} of the {@code CommandNode} to the given {@code Command}.
+     * Sets the {@code execution} which the given {@code command} is to execute.
      * 
      * @param <T> the type of the source
-     * @param command the CommandNode
-     * @param execution the Command that the CommandNode is to execute
+     * @param command the command
+     * @param execution the {@code execution} which {@code command} is to execute
      */
     public static <T> void executes(CommandNode<T> command, Command<T> execution) {
         COMMAND.set(command, execution);
@@ -143,14 +145,13 @@ public @Static class Commands {
     
     
     /**
-     * Removes a child with the given name from the given {@code CommandNode} if 
-     * present.
+     * Removes the child from the given {@code command} if present.
      * 
      * @param <S> the type of the source
-     * @param command the command from which the child is to be removed
+     * @param command the command which child is to be removed
      * @param child the name of the child to be removed
-     * @return the child that was removed, or null if there was no child with the 
-     *         given name
+     * @return the child that was removed, or {@code null} if no child with the 
+     *         given name exists
      */
     public static <S> @Nullable CommandNode<S> remove(CommandNode<S> command, String child) {
         var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
@@ -167,14 +168,13 @@ public @Static class Commands {
     }
 
     /**
-     * Remove the children with the given names from the given {@code CommandNode}
-     * if present.
+     * Remove the children from the given {@code command} if present.
      * 
      * @param <S> the type of the source
-     * @param command the command from which the children are to be removed
+     * @param command the command which children are to be removed
      * @param children the names of the children to be removed
-     * @return true if all children with the given names were removed; otherwise
-     *         false
+     * @return {@code true} if all children with the given names were removed; otherwise
+     *         {@code false}
      */
     public static <S> boolean remove(CommandNode<S> command, String... children) {
         var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);

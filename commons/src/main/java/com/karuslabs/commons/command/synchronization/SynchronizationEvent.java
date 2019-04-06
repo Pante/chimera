@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerCommandSendEvent;
 
 /**
  * A {@code PlayerCommandSendEvent} subclass that is emitted when the internal 
- * {@code CommandDispatcher} used by the server and a client are synchronized.
+ * dispatcher of the server and a client are synchronized.
  */
 public class SynchronizationEvent extends PlayerCommandSendEvent {
     
@@ -40,7 +40,7 @@ public class SynchronizationEvent extends PlayerCommandSendEvent {
     
     
     /**
-     * Constructs a {@code SynchronizationEvent} with the given player and commands.
+     * Creates a {@code SynchronizationEvent} with the given player and commands.
      * 
      * @param player the player
      * @param commands the commands to be sent to the player

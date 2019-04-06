@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies that the annotated method is a blocking operation.
+ * Signifies that the annotated target may suspend execution.
  */
 @Documented
 @Retention(RUNTIME)

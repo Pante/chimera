@@ -39,19 +39,20 @@ import org.bukkit.entity.minecart.CommandMinecart;
 
 
 /**
- * This class consists exclusively of static functions whcih handle exceptions that
+ * This class consists exclusively of static methods that handle exceptions which
  * occur when parsing and executing commands.
  * <br><br>
  * <b>Implementation details:</b><br>
- * This class was adapted from Spigot's CommandDispatcher implementation.
+ * This class was adapted from Spigot's {@code CommandDispatcher}.
  */
+// To be honest, I copied the methods in Spigot and I have absolutely no clue what the methods do.
 public @Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
     
     
     /**
-     * Reports the given exception to the sender.
+     * Reports the given exception to the {@code sender}.
      * 
      * @param sender the sender
      * @param exception the exception
@@ -94,7 +95,7 @@ public @Static class Exceptions {
     
     
     /**
-     * Reports the given exception to the sender.
+     * Reports the given exception to the {@code sender}.
      * 
      * @param sender the sender
      * @param exception the exception

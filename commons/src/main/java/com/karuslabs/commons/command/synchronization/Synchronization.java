@@ -30,6 +30,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
+/**
+ * A delayed synchronization task that synchronizes the internal dispatcher of the
+ * server with players.
+ */
 public class Synchronization implements Runnable {
     
     private Synchronizer synchronizer;
@@ -39,6 +43,13 @@ public class Synchronization implements Runnable {
     boolean running;
     
     
+    /**
+     * Creates a {@code Synchronization​} with the given parameters.
+     * 
+     * @param synchronizer the owning {@code Synchronizer}
+     * @param scheduler the scheduler
+     * @param plugin the owning plugin
+     */
     public Synchronization(Synchronizer synchronizer, BukkitScheduler scheduler, Plugin plugin) {
         this.synchronizer = synchronizer;
         this.scheduler = scheduler;
@@ -48,6 +59,13 @@ public class Synchronization implements Runnable {
     }
     
     
+    /**
+     * Schedules a synchronization between the internal dispatcher and the player 
+     * in the given {@code event} if not already scheduled.
+     * 
+     * @param event the event which denotes a synchronization between the internal
+     *              dispatcher of the server and a client
+     */
     public void add(PlayerCommandSendEvent event) {
         if (events.add(event) && !running) {
             scheduler.scheduleSyncDelayedTask(plugin, this);
@@ -56,6 +74,9 @@ public class Synchronization implements Runnable {
     }
     
     
+    /**
+     * Synchronizes the internal dispatcher with the players added via {@link #add(PlayerCommandSendEvent)}.
+     */
     @Override
     public void run() {
         for (var event : events) {

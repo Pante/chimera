@@ -34,25 +34,22 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mapper that maps the commands in the internal server {@code CommandDispatcher}
- * to the type required by an outgoing {@code PacketPlayOutCommands}.
+ * A mapper that maps the commands in the internal dispatcher of the server to the 
+ * type required by an outgoing {@code PacketPlayOutCommands}.
  */
 class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
     static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
     /**
-     * Returns either a wrapped {@code SuggestionProvider} returned by the given
-     * command, or null if the {@code SuggestionProvider} returned by the command
-     * is null.
-     * 
-     * This method relies on an unsafe workaround the generic type system through
-     * abusing raw types. It works only because {@code CommandListenerWrapper} is
-     * the sole implementation of {@code ICompletionProvider}.
+     * Wraps the {@code SuggestionProvider} of the given {@code command} in a
+     * {@code SuggestionProvider} that transforms a {@code ICompletionProvider}
+     * into a {@code CommandListenerWrapper}, or {@code null} if {@code SuggestionProvider}
+     * is {@code null}.
      * 
      * @param command the command
-     * @return the wrapped SuggestionProvider if the SuggestionProvider of the command
-     *         is not null; otherwise null
+     * @return the wrapped {@code SuggestionProvider}, or {@code null} if the {@code SuggestionProvider} 
+     *         is {@code null}
      */
     @Override
     protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {

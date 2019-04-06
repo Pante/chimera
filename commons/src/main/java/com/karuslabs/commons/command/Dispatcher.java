@@ -46,19 +46,17 @@ import org.bukkit.plugin.Plugin;
  * A {@code CommandDispatcher} subclass that facilities the registration of commands
  * between a Spigot plugin and the server.
  * <br><br>
+ * This dispatcher will <b>not</b> automatically synchronize newly registered commands 
+ * except once when the server is started or reloaded to minimize unnecessary synchronizations. 
+ * All otherwise registered commands must be manually synchronized via {@link #update()}.
+ * <br><br>
  * <b>Implementation details:</b><br>
- * This dispatcher holds a reference to the dispatcher,
- * s-dispatcher, that is used internally by the server. The s-dispatcher is flushed 
- * each time the server is restarted or reloaded. In both cases, the flush occurs 
- * after all plugins are enabled. This dispatcher and s-dispatcher are synchronized 
- * by this dispatcher each time the server is restarted and reloaded, or when {@link #update()} 
- * is called. After which, the s-dispatcher and client are then synchronized via
- * a {@link com.karuslabs.commons.command.synchronization.Synchronizer}.
- * 
- * To avoid a performance penalty from unnecessary synchronizations, commands registered
- * to this dispatcher are not immediately synchronized. The changes to this dispatcher
- * will be reflected only after all plugins are enabled during the server start-up 
- * and reload, or when {@link #update()} is called.
+ * This dispatcher holds a reference to the internal dispatcher of the server. The 
+ * internal dispatcher is flushed after all plugins are enabled when the server 
+ * is either started or reloaded. In both cases, this dispatcher and the internal 
+ * dispatcher are synchronized automatically. After synchronization between this 
+ * dispatcher and the internal dispatcher, the internal dispatcher and clients are 
+ * then also automatically synchronized via a {@link Synchronizer}.
  */
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
@@ -72,7 +70,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
      * Creates a {@code Dispatcher} for the given plugin.
      * 
      * @param plugin the plugin
-     * @return a Dispatcher
+     * @return a {@code Dispatcher}
      */
     public static Dispatcher of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
@@ -88,12 +86,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     
     /**
-     * Constructs a {@code Dispatcher} with the given server, root and synchronizer.
+     * Creates a {@code Dispatcher} with the given parameters.
      * 
      * @see #of(Plugin) 
      * 
      * @param server the server
-     * @param root the root
+     * @param root the root for this dispatcher
      * @param synchronizer the synchronizer
      */
     protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer) {
@@ -106,9 +104,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     
     /**
-     * Registers the command built using the given builder. Synchronization of
-     * registered commands will occur after all plugins are enabled during the server 
-     * start-up and reload, or when {@link #update()} is called.
+     * Registers the command built using the given {@code builder}.
      * 
      * @param command the builder used to build the command to be registered
      * @return the built command that was registered
@@ -121,7 +117,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
       
     
     /**
-     * Synchronizes this dispatcher with the server.
+     * Synchronizes this dispatcher with the server and clients.
      */
     public void update() {
         tree.truncate(getRoot(), dispatcher.getRoot());
@@ -130,10 +126,10 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     
     /**
-     * Synchronizes this dispatcher with the server when a {@code ServerLoadEvent}
-     * occurs.
+     * Synchronizes this dispatcher with the server when the server is started or
+     * reloaded.
      * 
-     * @param event an event that denotes either a server reload or restart
+     * @param event the event that denotes the starting and reloading of the server
      */
     @EventHandler
     protected void update(ServerLoadEvent event) {
@@ -145,7 +141,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     /**
      * Returns a {@code Synchronizer}.
      * 
-     * @return a synchronizer
+     * @return a {@code Synchronizer}
      */
     public Synchronizer synchronizer() {
         return synchronizer;

@@ -34,8 +34,10 @@ import org.bukkit.plugin.Plugin;
 
 
 /**
- * A Spigot {@code Command} subclass that delegates execution to a underlying 
- * {@code CommandDispatcher}.
+ * A {@link Command} subclass that forwards execution to a underlying {@code CommandDispatcher}.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * This class was adapted from Spigot's {@code VanillaCommand}.
  */
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     
@@ -44,12 +46,11 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     
     
     /**
-     * Constructs a {@code DispatcherCommand} with the given name plugin, dispatcher,
-     * and an empty description.
+     * Creates a {@code DispatcherCommand} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of this command
      * @param plugin the owning plugin
-     * @param dispatcher the underlying dispatcher to which execution is delegated
+     * @param dispatcher the underlying dispatcher to which execution is forwarded
      * @param usage the example usage for this command
      */
     public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
@@ -57,10 +58,9 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     }
     
     /**
-     * Constructs a {@code DispatcherCommand} with the given name, plugin, dispatcher,
-     * description and usage.
+     * Creates a {@code DispatcherCommand} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of this command
      * @param plugin the owning plugin
      * @param dispatcher the underlying dispatcher to which execution is delegated
      * @param description the description of this command
@@ -74,13 +74,13 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     
     
     /**
-     * Delegates execution with the rejoined label and arguments to the underlying 
-     * {@code CommandDisaptcher} if given sender has sufficient permission.
+     * Forwards execution with the rejoined label and arguments to the underlying 
+     * {@code CommandDisaptcher} if the {@code sender} has sufficient permission.
      * 
      * @param sender the sender
      * @param label the label
      * @param arguments the arguments
-     * @return true
+     * @return {@code true}
      */
     @Override
     public boolean execute(CommandSender sender, String label, String... arguments) {

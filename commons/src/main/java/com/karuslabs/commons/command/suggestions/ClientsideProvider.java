@@ -42,11 +42,11 @@ public enum ClientsideProvider implements SuggestionProvider<CommandSender> {
     
     
     /**
-     * Returns a {@code CompletableFutre} that contains an empty {@code Suggestions}
+     * Creates a {@code CompletableFuture} that contains an empty {@code Suggestions}.
      * 
      * @param context the context
      * @param builder the builder
-     * @return an empty suggestions
+     * @return an empty {@code Suggestions}
      */
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
