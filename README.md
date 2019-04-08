@@ -3,7 +3,8 @@
 </p>
 
 
-Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleeding edge version of Chimera, For a production ready version, please refer to the stable branch.**
+Open source spigot libraries & tools devloped by Karus Labs. 
+**This is a bleeding edge version of Chimera, For a production ready version, please refer to the stable branch.**
 
 [![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
@@ -15,7 +16,7 @@ Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleedi
 #### Chimera
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.0.0--SNAPSHOT-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0-SNAPSHOT/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0/commons/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
@@ -34,10 +35,36 @@ Openn source spigot libraries & tools devloped by Karus Labs. **This is a bleedi
   <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>commons</artifactId>
-      <version>4.0.0-SNAPSHOT</version>
+      <version>4.0.0</version>
   </dependency>
 </dependencies>
 ```
 
 ***
 #### Annotations
+[![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
+[![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
+[![javadoc](https://img.shields.io/badge/javadoc-4.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0/commons/apidocs/index.html)
+```XML
+
+<!-- Stable Builds -->
+<repository>
+  <id>chimera-releases</id>
+  <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
+</repository>
+
+<!-- Nightly Builds -->
+<repository>
+  <id>chimera-snapshots</id>
+  <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
+</repository>
+
+<dependencies>
+  <dependency>
+      <groupId>com.karuslabs</groupId>
+      <artifactId>annotations</artifactId>
+      <version>4.0.0</version>
+  </dependency>
+</dependencies>
+```
+***
