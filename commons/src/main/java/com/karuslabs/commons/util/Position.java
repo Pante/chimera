@@ -23,16 +23,20 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.annotations.ValueBased;
+
 import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.util.Vector;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 /**
  * An optionally relative 3D position in a world.
  */
-public class Position extends Location {
+public @ValueBased class Position extends Location {
     
     private static final double EPSILON = 0.000001;
     
@@ -81,7 +85,7 @@ public class Position extends Location {
      * @param y the y coordinate
      * @param z the z coordinate
      */
-    public Position(World world, double x, double y, double z) {
+    public Position(@Nullable World world, double x, double y, double z) {
         this(world, x, y, z, 0, 0);
     }
     
@@ -95,7 +99,7 @@ public class Position extends Location {
      * @param yaw the yaw
      * @param pitch the pitch
      */
-    public Position(World world, double x, double y, double z, float yaw, float pitch) {
+    public Position(@Nullable World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
         relative = new boolean[]{ false, false, false };
         rotate = false;
