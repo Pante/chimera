@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code CommandNode} implementations.
+ * Provides {@code CommandNode}s.
  */
 package com.karuslabs.commons.command.tree.nodes;

@@ -30,8 +30,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies that the annotated class consists exclusively of static constants and functions.
- * Instances of the annotated class should never be constructed.
+ * Signifies that the annotated class consists exclusively of static constants and
+ * methods. Instances of the annotated class should never be constructed.
  */
 @Documented
 @Retention(RUNTIME)

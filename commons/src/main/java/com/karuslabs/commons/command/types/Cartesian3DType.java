@@ -43,13 +43,12 @@ public abstract class Cartesian3DType<T> extends CartesianType<T> {
     
     
     /**
-     * Suggests the remaining coordinates based on the number of already entered
-     * coordinates contained in the given parts.
+     * Suggests the remaining coordinates based on the number of entered coordinates.
      * 
      * @param builder the builder
      * @param context the context
-     * @param location the location of the block the source is looking at within
-     *                 a 5 block radius
+     * @param location the location of the block that the source is looking at if 
+     *                 within a 5 block radius
      * @param parts the parts of the argument split by a whitespace
      */
     @Override
@@ -74,7 +73,7 @@ public abstract class Cartesian3DType<T> extends CartesianType<T> {
     /**
      * Returns an NMS {@code ArgumentVec3} type. 
      * 
-     * @return the ArgumentVec3 type
+     * @return the {@code ArgumentVec3} type
      */
     @Override
     public ArgumentType<?> mapped() {

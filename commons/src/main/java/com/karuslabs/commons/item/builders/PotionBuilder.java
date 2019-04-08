@@ -29,15 +29,15 @@ import org.bukkit.potion.*;
 
 
 /**
- * A builder for potions.
+ * A potion builder.
  */
 public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
     /**
-     * Returns a {@code PotionBuilder} for the given material.
+     * Creates a {@code PotionBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code PotionBuilder}
      */
     public static PotionBuilder of(Material material) {
         return new PotionBuilder(material);
@@ -56,7 +56,7 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
      * Sets the colour.
      * 
      * @param colour the colour
-     * @return this
+     * @return {@code this}
      */
     public PotionBuilder colour(Color colour) {
         meta.setColor(colour);
@@ -67,7 +67,7 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
      * Sets the base potion data.
      * 
      * @param data the data
-     * @return this
+     * @return {@code this}
      */
     public PotionBuilder data(PotionData data) {
         meta.setBasePotionData(data);
@@ -78,7 +78,7 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
      * Adds the given potion effect.
      * 
      * @param effect the potion effect
-     * @return this
+     * @return {@code this}
      */
     public PotionBuilder effect(PotionEffect effect) {
         meta.addCustomEffect(effect, true);

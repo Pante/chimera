@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code SuggestionProvider}s.
+ * Provides {@code SuggestionProvider}s.
  */
 package com.karuslabs.commons.command.suggestions;

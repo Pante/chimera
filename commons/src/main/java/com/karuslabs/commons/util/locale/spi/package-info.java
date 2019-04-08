@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code LocaleServiceProvider}s that provide custom locales.
+ * Provides {@code LocaleServiceProvider}s that provide custom locales.
  */
 package com.karuslabs.commons.util.locale.spi;

@@ -28,15 +28,15 @@ import org.bukkit.inventory.meta.*;
 
 
 /**
- * A builder for firework effects.
+ * A firework effect builder.
  */
 public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
 
     /**
-     * Returns a {@code FireworkEffectBuilder} for the given material.
+     * Creates a {@code FireworkEffectBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code FireworkEffectBuilder}
      */
     public static FireworkEffectBuilder of(Material material) {
         return new FireworkEffectBuilder(material);
@@ -55,7 +55,7 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkE
      * Sets the main {@code FireworkEffect}.
      * 
      * @param effect the main effect
-     * @return this
+     * @return {@code this}
      */
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);

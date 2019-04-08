@@ -36,29 +36,20 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * Represents a {@code ItemStack} builder.
+ * A {@code ItemStack} builder.
  * 
  * @param <Meta> the type of the ItemMeta
- * @param <Self> the type of this Builder
+ * @param <Self> {@code this}
  */
 public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
-    /**
-     * The {code ItemStack} to build.
-     */
     ItemStack item;
-    /**
-     * The meta of the {@code ItemStack} to build.
-     */
     Meta meta;
-    /**
-     * The lore of the {@code ItemStack} to build.
-     */
     @Nullable List<String> lore;
     
     
     /**
-     * Constructs a {@code Builder} for the given material.
+     * Creates a {@code Builder} for the given material.
      * 
      * @param material the material
      */
@@ -68,7 +59,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     /**
-     * Constructs a copy of the given {@code Builder}.
+     * Creates a copy of the given {@code Builder}.
      * 
      * @param source the builder to copy
      */
@@ -84,7 +75,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Sets the amount.
      * 
      * @param amount the amount
-     * @return this
+     * @return {@code this}
      */
     public Self amount(int amount) {
         item.setAmount(amount);
@@ -95,7 +86,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Sets the durability.
      * 
      * @param durability the durability
-     * @return this
+     * @return {@code this}
      */
     public Self durability(short durability) {
         item.setDurability(durability);
@@ -107,7 +98,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Sets the display name.
      * 
      * @param name the display name
-     * @return this
+     * @return {@code this}
      */
     public Self display(String name) {
         meta.setDisplayName(name);
@@ -118,7 +109,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Sets the localised name.
      * 
      * @param name the name
-     * @return this
+     * @return {@code this}
      */
     public Self localised(String name) {
         meta.setLocalizedName(name);
@@ -127,11 +118,11 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     
     /**
-     * Adds the modifier for the given attribute.
+     * Adds a modifier to the given attribute.
      * 
      * @param attribute the attribute
      * @param modifier the attribute modifier
-     * @return this
+     * @return {@code this}
      */
     public Self attribute(Attribute attribute, AttributeModifier modifier) {
         meta.addAttributeModifier(attribute, modifier);
@@ -143,7 +134,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * 
      * @param enchantment the enchantment
      * @param level the enchantment level; level restrictions are ignored
-     * @return this
+     * @return {@code this}
      */
     public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
@@ -155,7 +146,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Adds the given flags.
      * 
      * @param flags the flags
-     * @return this
+     * @return {@code this}
      */
     public Self flags(Collection<ItemFlag> flags) {
         return flags(flags.toArray(new ItemFlag[0]));
@@ -165,7 +156,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Adds the given flags.
      * 
      * @param flags the flags
-     * @return this
+     * @return {@code this}
      */
     public Self flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
@@ -177,7 +168,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Adds the given lore.
      * 
      * @param lines the lore
-     * @return this
+     * @return {@code this}
      */
     public Self lore(Collection<String> lines) {
         if (lore == null) {
@@ -193,7 +184,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Adds the given lore.
      * 
      * @param lines the lore
-     * @return this
+     * @return {@code this}
      */
     public Self lore(String... lines) {
         if (lore == null) {
@@ -207,14 +198,14 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     
     /**
-     * Sets the value using the {@code ItemTagType} for the given key.
+     * Sets the value of {@code type} for the given key.
      * 
      * @param <T> the underlying, primitive type of the value
      * @param <V> the type of the value
      * @param key the key
      * @param type the mapper for the value
      * @param value the value
-     * @return this
+     * @return {@code this}
      */
     public <T, V> Self tag(NamespacedKey key, ItemTagType<T, V> type, V value) {
         meta.getCustomTagContainer().setCustomTag(key, type, value);
@@ -226,7 +217,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * Sets the breakability.
      * 
      * @param unbreakable the breakability
-     * @return this
+     * @return {@code this}
      */
     public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);
@@ -237,7 +228,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     /**
      * Builds an {@code ItemStack}.
      * 
-     * @return the ItemStack
+     * @return the {@code ItemStack}
      */
     public ItemStack build() {
         meta.setLore(lore);
@@ -247,9 +238,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     
     /**
-     * Returns this builder.
-     * 
-     * @return this
+     * @return {@code this}
      */
     protected abstract Self self();
     

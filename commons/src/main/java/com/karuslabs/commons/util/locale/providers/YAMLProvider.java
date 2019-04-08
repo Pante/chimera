@@ -43,8 +43,8 @@ public class YAMLProvider implements Provider<UUID> {
     
     
     /**
-     * Constructs a {@code YAMLProvider} from the given YAML file and a default
-     * locale defined by {@link Locale#getDefault()}.
+     * Creates a {@code YAMLProvider} from the given YAML file and a default locale 
+     * as defined by {@link Locale#getDefault()}.
      * 
      * @param file the YAML file
      */
@@ -53,7 +53,7 @@ public class YAMLProvider implements Provider<UUID> {
     }
     
     /**
-     * Constructs a {@code YAMLProvider} from the given YAML file and default locale.
+     * Creates a {@code YAMLProvider} from the given YAML file and default locale.
      * 
      * @param file the YAML file
      * @param defaultLocale the default locale to return if this provider contains
@@ -67,11 +67,11 @@ public class YAMLProvider implements Provider<UUID> {
     
     
     /**
-     * Returns the locale associated with the given UUID, or the default locale
-     * if this provider contains no mapping for the UUID.
+     * Returns the locale associated with the given UUID, or {@code locale} if this 
+     * provider contains no mapping for the UUID.
      * 
      * @param key the UUID
-     * @return the locale to which the the given UUID is mapped, or the default locale
+     * @return the locale to which the the given UUID is mapped, or {@code locale}
      *         if this provider contains no mapping for the UUID
      */
     @Override

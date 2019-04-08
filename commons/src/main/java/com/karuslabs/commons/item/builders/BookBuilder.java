@@ -31,7 +31,7 @@ import org.bukkit.inventory.meta.BookMeta.Generation;
 
 
 /**
- * A builder for books.
+ * A book builder.
  */
 public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
@@ -39,10 +39,10 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
     
     /**
-     * Returns a {@code BookBuilder} for the given material.
+     * Creates a {@code BookBuilder} for the given material.
      * 
      * @param material the material
-     * @return this
+     * @return a {@code BookBuilder}
      */
     public static BookBuilder of(Material material) {
         return new BookBuilder(material);
@@ -61,7 +61,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
      * Sets the author.
      * 
      * @param name the author
-     * @return this
+     * @return {@code this}
      */
     public BookBuilder author(String name) {
         meta.setAuthor(name);
@@ -72,7 +72,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
      * Sets the generation.
      * 
      * @param generation the generation
-     * @return this
+     * @return {@code this}
      */
     public BookBuilder generation(Generation generation) {
         meta.setGeneration(generation);
@@ -84,7 +84,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
      * Adds the given pages.
      * 
      * @param pages the pages
-     * @return this
+     * @return {@code this}
      */
     public BookBuilder pages(List<String> pages) {
         return pages(pages.toArray(EMPTY));
@@ -94,7 +94,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
      * Adds the given pages.
      * 
      * @param pages the pages
-     * @return this
+     * @return {@code this}
      */
     public BookBuilder pages(String... pages) {
         meta.addPage(pages);
@@ -106,7 +106,7 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
      * Sets the title.
      * 
      * @param title the title
-     * @return this
+     * @return {@code this}
      */
     public BookBuilder title(String title) {
         meta.setTitle(title);

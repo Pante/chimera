@@ -35,9 +35,9 @@ import static com.karuslabs.commons.util.collections.TokenMap.key;
 
 /**
  * A map that associates a value with a key. Each key contains a name and the class 
- * of the value associated with the key. The respective primitives and wrappers 
- * are considered distinct types. Thus different values can be mapped to a primitive 
- * and its wrapper class.
+ * of the value associated with the key. The respective primitive and boxed types
+ * are considered distinct. Thus different values can be mapped to a primitive 
+ * and its boxed class.
  * 
  * @param <N> the type of the names of keys
  * @param <T> the type of the values
@@ -49,7 +49,7 @@ public interface TokenMap<N, T> {
      * 
      * @param <N> the type of the keys
      * @param <T> the type of the values
-     * @return a TokenMap
+     * @return a {@code TokenMap}
      */
     public static <N, T> TokenMap<N, T> of() {
         return new HashTokenMap<>();
@@ -61,7 +61,7 @@ public interface TokenMap<N, T> {
      * @param <N> the type of the keys
      * @param <T> the type of the values
      * @param capacity the initial capacity
-     * @return a TokenMap
+     * @return a {@code TokenMap}
      */
     public static <N, T> TokenMap<N, T> of(int capacity) {
         return new HashTokenMap<>(capacity);
@@ -73,7 +73,7 @@ public interface TokenMap<N, T> {
      * @param <N> the type of the keys
      * @param <T> the type of the values
      * @param map the backing map
-     * @return a TokenMap
+     * @return a {@code TokenMap}
      */
     public static <N, T> TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
         return new ProxiedTokenMap<>(map);
@@ -81,32 +81,34 @@ public interface TokenMap<N, T> {
     
     
     /**
-     * Returns true if this map contains a mapping for the given name and type.
+     * Returns {@code true} if this map contains a mapping for the given name and 
+     * type.
      * 
      * @param <U> the type
      * @param name the name of the key
      * @param type the type
-     * @return true if this map contains a mapping for the given name and type
+     * @return {@code true} if this map contains a mapping for the given name and 
+     *         type
      */
     public <U extends T> boolean containsKey(N name, Class<U> type);
     
     /**
-     * Returns true if this map contains a mapping for the given key.
+     * Returns {@code true} if this map contains a mapping for the given key.
      * 
      * @param <U> the type
      * @param key the key
-     * @return true if this map contains a mapping for the given key
+     * @return {@code true} if this map contains a mapping for the given key
      */
     public default <U extends T> boolean containsKey(Key<N, U> key) {
         return map().containsKey(key);
     }
     
     /**
-     * Returns true if this map contains the given value.
+     * Returns {@code true} if this map contains the given value.
      * 
      * @param <U> the type of the value
      * @param value the value
-     * @return true if this map contains the value
+     * @return {@code true} if this map contains the value
      */
     public default <U extends T> boolean containsValue(U value) {
         return map().containsValue(value);
@@ -120,8 +122,8 @@ public interface TokenMap<N, T> {
      * @param <U> the type of the value
      * @param name the name of the key
      * @param type the type
-     * @return the value associated with the given name and type, or null if this 
-     *         map contains no mapping for the name and type
+     * @return the value associated with the given name and type, or {@code null} 
+     *         if this map contains no mapping for the name and type
      */
     public <U extends T> U get(N name, Class<U> type);
     
@@ -131,8 +133,8 @@ public interface TokenMap<N, T> {
      * 
      * @param <U> the type of the value
      * @param key the key
-     * @return the value associated with the given key, or null if this map contains
-     *         no mapping for the key
+     * @return the value associated with the given key, or {@code null} if this 
+     *         map contains no mapping for the key
      */
     public default <U extends T> U get(Key<N, U> key) {
         return (U) map().get(key);
@@ -147,7 +149,7 @@ public interface TokenMap<N, T> {
      * @param name the name of the key
      * @param type the type
      * @param value the default value
-     * @return the value to which the given name and type are mapped, or defaultValue 
+     * @return the value to which the given name and type are mapped, or {@code defaultValue} 
      *         if this map contains no mapping for the name and type
      */
     public <U extends T> U getOrDefault(N name, Class<U> type, U value);
@@ -159,8 +161,8 @@ public interface TokenMap<N, T> {
      * @param <U> the type of the value
      * @param key the key
      * @param value the default value
-     * @return the value to which the given key is mapped, or defaultValue if this
-     *         map contains no mapping for the key
+     * @return the value to which the given key is mapped, or {@code defaultValue}
+     *         if this map contains no mapping for the key
      */
     public default <U extends T> U getOrDefault(Key<N, U> key, U value) {
         T item = map().get(key);
@@ -181,8 +183,8 @@ public interface TokenMap<N, T> {
      * @param name the name of the key with which the value is associated
      * @param type the type of the key with which the value is to be associated
      * @param value the value to be associated with the type
-     * @return the previous value associated with the name and type, or null if 
-     *         there was no mapping for the type
+     * @return the previous value associated with the name and type, or {@code null}
+     *         if there was no mapping for the type
      */
     public default <U extends T> U put(N name, Class<U> type, U value) {
         return put(key(name, type), value);
@@ -195,8 +197,8 @@ public interface TokenMap<N, T> {
      * @param <U> the type of the value
      * @param key the key with which the value is to be associated
      * @param value the value to be associated with the type
-     * @return the previous value associated with the key, or null if there was
-     *         no mapping for the key
+     * @return the previous value associated with the key, or {@code null} if there 
+     *         was no mapping for the key
      */
     public default <U extends T> U put(Key<N, U> key, U value) {
         return (U) map().put(key, value);
@@ -205,26 +207,26 @@ public interface TokenMap<N, T> {
     
     /**
      * Removes the mapping for the name and type from this map if present. Returns 
-     * the value to which this map previously associated the name and type, or null 
-     * if the map contains no mapping for the name and type.
+     * the value to which this map previously associated the name and type, or 
+     * {@code null} if the map contains no mapping for the name and type.
      * 
      * @param <U> the type of the value
      * @param name the name of the key
      * @param type the type of the key
-     * @return the previous value associated with the name and type, or null if 
-     *         there was no mapping for the name and type
+     * @return the previous value associated with the name and type, or {@code null}
+     *         if there was no mapping for the name and type
      */
     public <U extends T> U remove(N name, Class<U> type);
     
     /**
      * Removes the mapping for the key from this map if present. Returns the value
-     * to which this map previously associated the key, or null if the map contains
-     * no mapping for the key.
+     * to which this map previously associated the key, or {@code null} if the map 
+     * contains no mapping for the key.
      * 
      * @param <U> the type of the value
      * @param key the key whose mapping is to be removed
-     * @return the previous value associated with the key, or null if there was no
-     *         mapping for the key
+     * @return the previous value associated with the key, or {@code null} if there 
+     *         was no mapping for the key
      */
     public default <U extends T> U remove(Key<N, U> key) {
         return (U) map().remove(key);
@@ -235,7 +237,7 @@ public interface TokenMap<N, T> {
      * Returns a {@code Map} view of this {@code TokenMap}. Modifications to the
      * map view will affect this {@code TokenMap}.
      * 
-     * @return a Map view
+     * @return a {@code Map} view
      */
     public Map<Key<N, ? extends T>, T> map();
     
@@ -247,7 +249,7 @@ public interface TokenMap<N, T> {
      * @param <T> the type of the key
      * @param name the name of the key
      * @param type the type of the key
-     * @return a Key
+     * @return a {@code Key}
      */
     public static <N, T> Key<N, T> key(N name, Class<T> type) {
         return new Key<>(name, type);

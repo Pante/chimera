@@ -37,7 +37,7 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
      * Creates a {@code ConcurrentClassMap}.
      *  
      * @param <T> the type of the values
-     * @return a ConcurrentClassMap
+     * @return a {@code ConcurrentClassMap}
      */
     public static <T> ConcurrentClassMap<T> of() {
         return new ConcurrentHashClassMap<>();
@@ -48,7 +48,7 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
      * 
      * @param <T> the type of the values
      * @param capacity the initial capacity
-     * @return a ConcurrentClassMap
+     * @return a {@code ConcurrentClassMap}
      */
     public static <T> ConcurrentClassMap<T> of(int capacity) {
         return new ConcurrentHashClassMap<>(capacity);
@@ -59,7 +59,7 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
      * 
      * @param <T> the type of the values
      * @param map the backing map
-     * @return a ConcurrentClassMap
+     * @return a {@code ConcurrentClassMap}
      */
     public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
         return new ConcurrentProxiedClassMap<>(map);

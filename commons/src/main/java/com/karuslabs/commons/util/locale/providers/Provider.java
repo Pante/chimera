@@ -53,8 +53,8 @@ public interface Provider<T> {
      * Returns the locale associated with the given key.
      * <br><br>
      * <b>Implementation requirement:</b><br>
-     * Implementations must provide a non-null, default value if it contains no 
-     * mapping for the given key. Implementations should never return {@code null}.
+     * A non-null, default value if it contains no mapping for the given key must 
+     * be provided. {@code null} should never be returned.
      * 
      * @param key the key
      * @return the locale to which the the given key is mapped, or a default value
@@ -63,12 +63,12 @@ public interface Provider<T> {
     public Locale get(T key);
     
     /**
-     * Returns the locale associated with the given key, or given default locale
-     * if this provider contains no mapping for the key.
+     * Returns the locale associated with the given key, or {@code locale} if this 
+     * provider contains no mapping for the key.
      * 
      * @param key the key
      * @param locale the default locale
-     * @return the located associated with the given key, or the default locale if
+     * @return the located associated with the given key, or {@code locale} if
      *         this provider contains no mapping for the key
      */
     public default Locale getOrDefault(T key, Locale locale) {
@@ -78,8 +78,9 @@ public interface Provider<T> {
     
     /**
      * Returns the default locale.
-     * 
-     * The default implementation returns the locale defined by {@link Locale#getDefault()}.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Returns the locale defined by {@link Locale#getDefault()}.
      * 
      * @return the default locale
      */

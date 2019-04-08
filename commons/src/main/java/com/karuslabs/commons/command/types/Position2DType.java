@@ -64,7 +64,7 @@ public class Position2DType extends Cartesian2DType<Position> {
     
     /**
      * Suggests the remaining relativity prefixes based on the number and relativity 
-     * of the already entered coordinates contained in the given parts.
+     * of the entered coordinates.
      * 
      * @param builder the builder
      * @param context the context

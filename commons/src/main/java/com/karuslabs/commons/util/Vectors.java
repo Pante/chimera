@@ -32,42 +32,41 @@ import static java.lang.Math.*;
 
 
 /**
- * This class contains exclusively of static functions to manipulate vector and other
- * associated structures.
+ * This class contains exclusively of static methods to manipulate vector and other
+ * similar structures.
  * 
- * @author adapted from Slikey's EffectLib
+ * @author EffectLib - Slikey
  */
 public @Static class Vectors {
     
     /**
-     * A reduction operation that reduces the given coordinates to the single given 
-     * container.
+     * A reduction operation that reduces the given coordinates to a {@code container}.
      * 
-     * @param <T> the type of the container
+     * @param <T> the type of the {@code container}
      */
     @FunctionalInterface
     public static interface Reducer<T> {
         
         /**
-         * Returns the reduced coordinates in the given container.
+         * Reduces the coordinates to the {@code container}.
          * 
-         * @param container the container
+         * @param container the container to which the coordinates are reduced
          * @param x the X coordinate
          * @param y the Y coordinate
          * @param z the Z coordinate
-         * @return the container
+         * @return the {@code container}
          */
         public T reduce(T container, double x, double y, double z);
         
     }
     
     /**
-     * Reduces the given coordinates to a vector.
+     * Reduces the coordinates to a vector.
      */
     public static Reducer<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
         
     /**
-     * Reduces the given coordinates to a location.
+     * Reduces the coordinates to a location.
      */
     public static Reducer<Location> LOCATION = (location, x, y, z) -> {
         location.setX(x);
@@ -78,7 +77,7 @@ public @Static class Vectors {
 
     
     /**
-     * Returns the vector rotated about the axes using the given radian angles.
+     * Rotates the vector about the axes using the given radian angles.
      * 
      * @param vector the vector
      * @param angleX the radian angle to rotate the angle around the X axis
@@ -95,7 +94,7 @@ public @Static class Vectors {
     }
     
     /**
-     * Returns the vector rotated about the X axis by the given radian angle.
+     * Rotates the vector about the X axis by the given radian angle.
      * 
      * @param vector the vector
      * @param angle the angle
@@ -111,7 +110,7 @@ public @Static class Vectors {
     }
     
     /**
-     * Returns the vector rotated about the Y axis by the given radian angle.
+     * Rotates the vector rotated about the Y axis by the given radian angle.
      * 
      * @param vector the vector
      * @param angle the angle
@@ -127,7 +126,7 @@ public @Static class Vectors {
     }
     
     /**
-     * Returns the vector rotated about the Z axis by the given radian angle.
+     * Rotates the vector about the Z axis by the given radian angle.
      * 
      * @param vector the vector
      * @param angle the angle
@@ -144,7 +143,7 @@ public @Static class Vectors {
     
     
     /**
-     * Returns the vector rotated about the given pivot.
+     * Rotates the vector rotated about the given pivot.
      * 
      * @param vector the vector
      * @param pivot the pivot which the vector is rotated about
@@ -155,7 +154,7 @@ public @Static class Vectors {
     }
     
     /**
-     * Returns the vector rotated about the given yaw and pitch.
+     * Rotates the vector about the given yaw and pitch.
      * 
      * @param vector the vector
      * @param yawDegrees the yaw in degrees
@@ -168,18 +167,18 @@ public @Static class Vectors {
     
     
     /**
-     * Returns the location rotated about the given pivot.
+     * Rotates the location about the given pivot.
      * 
      * @param location the location
-     * @param pivot the pivot which the vector is rotated about
-     * @return the given lcoation
+     * @param pivot the pivot which the location is rotated about
+     * @return the given location
      */
     public static Location rotate(Location location, Location pivot) {
         return rotate(location, pivot.getYaw(), pivot.getPitch());
     }
     
     /**
-     * Returns the location rotated about the given yaw and pitch.
+     * Rotates the location about the given yaw and pitch.
      * 
      * @param location the location
      * @param yawDegrees the yaw in degrees
@@ -237,7 +236,7 @@ public @Static class Vectors {
      * 
      * 
      * @param vector the vector to rotate
-     * @return the vector
+     * @return the angle <i>theta</i>
      */
     // To be honest, my math sucks and I have absolutely no clue what this method does.
     public static double angleToXAxis(Vector vector) {

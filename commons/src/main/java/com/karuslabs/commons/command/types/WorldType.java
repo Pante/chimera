@@ -60,13 +60,12 @@ public class WorldType implements WordType<World> {
     }
     
     /**
-     * Returns the names of worlds that begin with the remaining input of the given 
-     * {@code SuggesitonBuilder}.
+     * Returns the worlds that start with the remaining input of the given {@code SuggesitonBuilder}.
      * 
      * @param <S> the type of the source
      * @param context the context
      * @param builder the builder
-     * @return the world names that begin with the remaining input
+     * @return the world names that start with the remaining input
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

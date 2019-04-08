@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and interfaces commonly useful in concurrent programming.
+ * Contains classes and interfaces useful in concurrent programming.
  */
 package com.karuslabs.commons.util.concurrent;

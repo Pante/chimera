@@ -40,7 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * An {@code LiteralCommandNode} subclass that provides additional convenience methods 
+ * A {@code LiteralCommandNode} subclass that provides additional convenience methods 
  * and support for aliases.
  * 
  * @param <T> the type of the source
@@ -52,9 +52,9 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     
     
     /**
-     * Constructs a {@code Literal} with the given name, command and requirement.
+     * Creates a {@code Literal} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of the command
      * @param command the command to be executed
      * @param requirement the requirement
      */
@@ -63,10 +63,9 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     }
     
     /**
-     * Constructs a {@code Literal} with the given name, command, requirement, redirected 
-     * destination, redirection modifier, and fork.
+     * Creates a {@code Literal} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of the command
      * @param command the command to be executed
      * @param requirement the requirement
      * @param destination the destination to which this literal is redirected
@@ -78,10 +77,9 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     }
     
     /**
-     * Constructs a {@code Literal} with the given name, command, requirement, redirected 
-     * destination, redirection modifier, and fork.
+     * Creates a {@code Literal} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of the command
      * @param aliases the aliases of this literal
      * @param command the command to be executed
      * @param requirement the requirement
@@ -147,22 +145,22 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
 
     
     /**
-     * Returns a builder for a {@code Literal} with the given name.
+     * Creates a {@code Literal} builder with the given name.
      * 
      * @param <T> the type of the source
      * @param name the name
-     * @return a builder
+     * @return a {@code Builder}
      */
     public static <T> Builder<T> builder(String name) {
         return new Builder<>(name);
     }
     
     /**
-     * Returns a builder for a {@code Literal} with {@code CommandSource} as the
-     * type of source and the given name.
+     * Creates a {@code Literal} builder with {@code CommandSender} as the source
+     * type and the given name.
      * 
      * @param name the name
-     * @return a builder
+     * @return a {@code Builder}
      */
     public static Builder<CommandSender> of(String name) {
         return new Builder<>(name);
@@ -181,7 +179,10 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         
         
         /**
-         * Constructs a {@code Builder} with the given name.
+         * Creates a {@code Builder} with the given name.
+         * 
+         * @see #builder(String) 
+         * @see #of(String) 
          * 
          * @param name the name
          */
@@ -195,7 +196,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
          * Adds an alias.
          * 
          * @param alias the alias
-         * @return this
+         * @return {@code this}
          */
         public Builder<T> alias(String alias) {
             aliases.add(alias);
@@ -206,7 +207,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
          * Sets the {@code Command} to be executed.
          * 
          * @param command the command to be executed
-         * @return this
+         * @return {@code this}
          */
         public Builder<T> executes(Executable<T> command) {
             return executes((Command<T>) command);
@@ -214,30 +215,30 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         
         
         /**
-         * Adds an optional child built from the given builder. Optional children are 
-         * appended to both the node to be built and the children of said node.
+         * Adds an optional child built using the given builder. Children of the
+         * optional child are also added to this builder.
          * <br><br>
-         * <b>Note:</b> Due to an issue with how the client processes the children 
-         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
-         * may not displayed correctly.
+         * <b>Note:</b><br>
+         * An issue with the client processing children nodes may cause suggestions
+         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
          * 
-         * @param builder the builder from which the optional child is built
-         * @return this
+         * @param builder the builder which is to build the optional child
+         * @return {@code this}
          */
         public Builder<T> optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }
         
         /**
-         * Adds an optional child. Optional children are appended to both the node
-         * to be built and the children of said node.
+         * Adds an optional child. Children of the optional child are also added 
+         * to this builder.
          * <br><br>
-         * <b>Note:</b> Due to an issue with how the client processes the children 
-         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
-         * may not displayed correctly.
+         * <b>Note:</b><br>
+         * An issue with the client processing children nodes may cause suggestions
+         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
          * 
          * @param node the optional child
-         * @return this
+         * @return {@code this}
          */
         public Builder<T> optionally(CommandNode<T> node) {
             then(node);
@@ -250,9 +251,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         
         
         /**
-         * Returns this.
-         * 
-         * @return this
+         * @return {@code this}
          */
         @Override
         protected Builder<T> getThis() {
@@ -263,7 +262,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         /**
          * Builds the {@code Literal}.
          * 
-         * @return the literal
+         * @return the {@code Literal}
          */
         @Override
         public Literal<T> build() {

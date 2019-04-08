@@ -38,7 +38,7 @@ import org.bukkit.Material;
 
 
 /**
- * A {@code Material} type; legacy materials are unsupported.
+ * A {@code Material} type. Legacy materials are <b>not</b> supported.
  */
 public class MaterialType implements WordType<Material> {
     
@@ -82,13 +82,12 @@ public class MaterialType implements WordType<Material> {
     }
     
     /**
-     * Returns the keys of materials that begin with the remaining input of the 
-     * given {@code SuggesitonBuilder}.
+     * Returns the materials that start with the remaining input of the given {@code SuggesitonBuilder}.
      * 
      * @param <S> the type of the source
      * @param context the context
      * @param builder the builder
-     * @return the world names that begin with the remaining input
+     * @return the material keys that start with the remaining input
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

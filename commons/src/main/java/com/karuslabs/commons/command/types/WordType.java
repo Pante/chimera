@@ -27,7 +27,7 @@ import com.mojang.brigadier.arguments.*;
 
 
 /**
- * A word type that maps to an unquoted {@code StringArgumentType}.
+ * A word type that is mapped to an unquoted {@code StringArgumentType}.
  * 
  * @param <T> the type of the argument
  */
@@ -43,7 +43,7 @@ public interface WordType<T> extends Type<T> {
     /**
      * Returns an unquoted {@code StringArgumentType}.
      * 
-     * @return an unquoted StringArgumentType
+     * @return an unquoted {@code StringArgumentType}
      */
     @Override
     public default StringArgumentType mapped() {

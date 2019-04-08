@@ -27,7 +27,7 @@ import com.mojang.brigadier.arguments.*;
 
 
 /**
- * A string type that maps to a {@code StringArgumentType}.
+ * A string type is mapped to a {@code StringArgumentType}.
  * 
  * @param <T> the type of the argument
  */
@@ -35,7 +35,7 @@ import com.mojang.brigadier.arguments.*;
 public interface StringType<T> extends Type<T> {
     
     /**
-     * A {code StringArgumentType} to which this type is mapped.
+     * A {code StringArgumentType} to which this {@code Type} is mapped.
      */
     public static final StringArgumentType STRING = StringArgumentType.string();
     
@@ -43,7 +43,7 @@ public interface StringType<T> extends Type<T> {
     /**
      * Returns a {@code StringArgumentType}.
      * 
-     * @return a StringArgumentType
+     * @return a {@code StringArgumentType}
      */
     @Override
     public default StringArgumentType mapped() {

@@ -37,11 +37,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public interface Eventual<T> extends Future<T> {
     
     /**
-     * Waits if necessary for the computation to complete, and then retrieves its result.
-     * An empty optional is returned if either a {@code ExecutionException} or
-     * {@code InterruptedException} was thrown.
+     * Waits if necessary for the computation to complete, and then retrieves its
+     * result.
      * 
-     * @return the computed result, or an empty optional if an exception was thrown
+     * @return the computed result, or an empty {@code Optional} if an exception 
+     *         was thrown
      */
     public default Optional<T> acquire() {
         try {
@@ -54,13 +54,12 @@ public interface Eventual<T> extends Future<T> {
     
     /**
      * Waits if necessary for at most the given time for the computation to complete, 
-     * and then retrieves its result, if available. An empty optional is returned 
-     * if either a {@code ExecutionException} or {@code InterruptedException} was 
-     * thrown.
-     *
+     * and then retrieves its result, if available.
+     * 
      * @param timeout the maximum time to wait
      * @param unit the time unit of the timeout argument
-     * @return the computed result, or an empty optional if an exception was thrown
+     * @return the computed result, or an empty {@code Optional} if an exception 
+     *         was thrown
      */
     public default Optional<T> acquire(long timeout, TimeUnit unit) {
         try {
@@ -73,10 +72,10 @@ public interface Eventual<T> extends Future<T> {
     
     
     /**
-     * Waits if necessary for the computation to complete, and then retrieves its result.
-     * Returns null if either a {@code ExecutionException} or {@code InterruptedException} was thrown.
+     * Waits if necessary for the computation to complete, and then retrieves its
+     * result.
      * 
-     * @return the computed result, or null if an exception was thrown
+     * @return the computed result, or {@code null} if an exception was thrown
      */
     public default @Nullable T await() {
         try {
@@ -89,12 +88,11 @@ public interface Eventual<T> extends Future<T> {
     
     /**
      * Waits if necessary for at most the given time for the computation to complete, 
-     * and then retrieves its result, if available. Returns null if either a {@code ExecutionException} 
-     * or {@code InterruptedException} was thrown.
+     * and then retrieves its result, if available.
      *
      * @param timeout the maximum time to wait
      * @param unit the time unit of the timeout argument
-     * @return the computed result, or null if an exception was thrown
+     * @return the computed result, or {@code null} if an exception was thrown
      */
     public default @Nullable T await(long timeout, TimeUnit unit) {
         try {

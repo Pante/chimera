@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code Provider}s that provide locales.
+ * Provides {@code Provider}s that provide locales.
  */
 package com.karuslabs.commons.util.locale.providers;

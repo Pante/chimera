@@ -32,8 +32,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mutable {@code CommandNode} that defines several operation for convenience 
- * to modify the internal state of this {@code Node}.
+ * A mutable {@code Node} that contains several operation to modify the internal
+ * state of itself.
  * 
  * @param <T> the type of the source
  */
@@ -42,47 +42,46 @@ public interface Node<T> {
     /**
      * Returns the aliases of this {@code Node}.
      * 
-     * @return the aliases of this Node
+     * @return the aliases of this {@code Node}
      */
     public List<CommandNode<T>> aliases();
 
     
     /**
-     * Adds the given child to this {@code Node} and the aliases of this {@code Node}. 
+     * Adds the given child to this {@code Node} and its aliases. 
      * <br><br>
      * <b>Implementation requirement:</b><br>
-     * The child must also be added to the aliases of this implementation.
+     * The {@code child} must also be added to its aliases.
      * 
      * @param child the child
      */
     public void addChild(CommandNode<T> child);
     
     /**
-     * Removes the given child from this {@code Node} and the aliases of this {@code Node}.
+     * Removes the given child from this {@code Node} and its aliases.
      * <br><br>
      * <b>Implementation requirement:</b><br>
-     * The child must also be removed from the aliases of this implementation.
+     * The child must also be removed from its aliases.
      * 
      * @param child the child
-     * @return the child that was removed; or null if this node contains no child
-     *         with the given name
+     * @return the child that was removed if present; otherwise {@code null}
      */
     public @Nullable CommandNode<T> removeChild(String child);
     
     
     /**
-     * Returns the {@code Command} to be executed for this {@code Node}.
+     * Returns the {@code Command} to be executed.
      * 
      * @return the command to be executed
      */
     public Command<T> getCommand();
     
     /**
-     * Sets the {@code Command} to be executed for this {@code Node} and the aliases
-     * of this {@code Node}.
+     * Sets the {@code command} as the command to be executed by this {@code Node}
+     * and its aliases.
      * <br><br>
      * <b>Implementation requirement:</b><br>
-     * The child must also be set for the aliases of this implementation.
+     * The {@code command} must also be set for its aliases.
      * 
      * @param command the command to be executed
      */
@@ -90,20 +89,19 @@ public interface Node<T> {
     
     
     /**
-     * Returns the {@code CommandNode} to which this {@code Node} is redirected.
+     * Returns the destination of this {@code Node}, or {@code null} if this
+     * {@code Node} is not redirected.
      * 
-     * @return the node to which this node is redirected, or null if this Node
-     *         is not redirected
+     * @return the destination of this node, or {@code null} if this node is not 
+     *         redirected
      */
     public @Nullable CommandNode<T> getRedirect();
     
     /**
-     * Sets the {@code CommandNode} to which this {@code Node} and the aliases of 
-     * this {@code Node} are redirected.
+     * Sets the destination of this {@code Node} and its aliases when redirected.
      * <br><br>
      * <b>Implementation requirement:</b><br>
-     * The destination of the redirection must also be set for the aliases of this 
-     * implementation.
+     * The destination must also be set for its aliases.
      * 
      * @param destination the node to which this node is redirected
      */

@@ -50,7 +50,7 @@ public class PlayerType implements WordType<Player> {
     
     
     /**
-     *  Constructs a {@code PlayerType}.
+     *  Creates a {@code PlayerType}.
      */
     public PlayerType() {
         this.server = Bukkit.getServer();
@@ -79,12 +79,13 @@ public class PlayerType implements WordType<Player> {
 
     
     /**
-     * Returns the names of online players that begin with the remaining input of 
-     * the given {@code SuggesitonBuilder}. If the source is a player, an additional 
-     * check to determine the visibility of the suggested player to the source. 
-     * Suggested players that are invisible to the source are ignored.
+     * Returns the names of online players that start with the remaining input of 
+     * the given {@code SuggesitonBuilder}. If the source is a player, a check is 
+     * performed to determine the visibility of the suggested player to the source. 
+     * Players that are invisible to the source are not suggested.
      * <br><br>
-     * Execution is delegated to {@link #suggest(SuggestionsBuilder, Player)}.
+     * <b>Implementation details:</b><br>
+     * Suggestion is forwarded to {@link #suggest(SuggestionsBuilder, Player)}.
      * 
      * @param <S> the type of the source
      * @param context the context
@@ -98,12 +99,12 @@ public class PlayerType implements WordType<Player> {
     }
     
     /**
-     * Suggests online players whose names begin with the remaining input of the given
-     * {@code SuggestionBuilder} and are visible to the source if the source is
-     * a player.
+     * Suggests online players whose names start with the remaining input of the given
+     * {@code SuggestionBuilder} and if the source is player, are visible to the 
+     * source.
      * 
      * @param builder the builder
-     * @param source the player, or null if the source was not a player
+     * @param source the source, or {@code null} if the source is not a player
      * @return the player names that begin with the remaining input
      */
     protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {

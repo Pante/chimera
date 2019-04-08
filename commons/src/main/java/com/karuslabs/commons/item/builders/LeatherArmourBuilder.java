@@ -28,15 +28,15 @@ import org.bukkit.inventory.meta.*;
 
 
 /**
- * A builder for leather armour.
+ * A leather armour builder.
  */
 public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
     /**
-     * Returns a {@code LeatherArmourBuilder} for the given material.
+     * Creates a {@code LeatherArmourBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code LeatherArmourBuilder}
      */
     public static LeatherArmourBuilder of(Material material) {
         return new LeatherArmourBuilder(material);
@@ -55,7 +55,7 @@ public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmou
      * Sets the colour.
      * 
      * @param colour the colour
-     * @return this
+     * @return {@code this}
      */
     public LeatherArmourBuilder colour(Color colour) {
         meta.setColor(colour);

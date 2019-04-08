@@ -55,39 +55,36 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
 
     
     /**
-     * Constructs an {@code Argument} with the given name, type, command, requirement
-     * and suggestions.
+     * Creates an {@code Argument} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of the argument
      * @param type the type of the argument
      * @param command the command to be executed
      * @param requirement the requirement
-     * @param suggestions the SuggestionProvider
+     * @param suggestions the {@code SuggestionProvider}
      */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);
     }
     
     /**
-     * Constructs an {@code Argument} with the given name, type, command, requirement,
-     * redirected destination, redirection modifier, fork and suggestions.
+     * Creates an {@code Argument} with the given parameters.
      * 
-     * @param name the name
+     * @param name the name of the argument
      * @param type the type of the argument
      * @param command the command to be executed
      * @param requirement the requirement
      * @param destination the destination to which this argument is redirected
      * @param modifier the redirection modifier
      * @param fork the fork
-     * @param suggestions the SuggestionProvider
+     * @param suggestions the {@code SuggestionProvider}
      */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
     }
     
     /**
-     * Constructs an {@code Argument} with the given name, type, aliases, command, requirement,
-     * redirected destination, redirection modifier, fork and suggestions.
+     * Creates an {@code Argument} with the given parameters.
      * 
      * @param name the name
      * @param type the type of the argument
@@ -97,7 +94,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
      * @param destination the destination to which this argument is redirected
      * @param modifier the redirection modifier
      * @param fork the fork
-     * @param suggestions the SuggestionProvider
+     * @param suggestions the {@code SuggestionProvider}
      */
     public Argument(String name, ArgumentType<V> type, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
@@ -157,26 +154,26 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     
     
     /**
-     * Returns a builder for an {@code Argument} with the given name and type.
+     * Creates an {@code Argument} builder with the given name and type.
      * 
      * @param <T> the type of the source
      * @param <V> the type of the argument
      * @param name the name
      * @param type the type of the argument
-     * @return a builder
+     * @return a {@code Builder}
      */
     public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
     /**
-     * Returns a builder for an {@code Argument} with {@code CommandSource} as the
-     * type of source, the given name and type.
+     * Creates an {@code Argument} builder with {@code CommandSender} as the source
+     * type, and the given name and type.
      * 
      * @param <V> the type of the argument
      * @param name the name
      * @param type the type of the argument
-     * @return a builder
+     * @return a {@code Builder}
      */
     public static <V> Builder<CommandSender, V>of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
@@ -184,7 +181,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     
     
     /**
-     * A {@code Argument} builder.
+     * An {@code Argument} builder.
      * 
      * @param <T> the type of the source
      * @param <V> the type of the argument
@@ -198,7 +195,10 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         
         
         /**
-         * Constructs a {@code Builder} with the given name and type.
+         * Creates a {@code Builder} with the given name and type.
+         * 
+         * @see #builder(String, ArgumentType) 
+         * @see #of(String, ArgumentType) 
          * 
          * @param name the name
          * @param type the type
@@ -214,7 +214,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
          * Adds an alias.
          * 
          * @param alias the alias
-         * @return this
+         * @return {@code this}
          */
         public Builder<T, V> alias(String alias) {
             aliases.add(alias);
@@ -225,17 +225,17 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
          * Sets the {@code Command} to be executed.
          * 
          * @param command the command to be executed
-         * @return this
+         * @return {@code this}
          */
         public Builder<T, V> executes(Executable<T> command) {
             return executes((Command<T>) command);
         }
         
         /**
-         * Sets the {@code SuggestionProvider} to be executed.
+         * Sets the {@code SuggestionProvider}.
          * 
-         * @param suggestions the SuggestionProvider
-         * @return this
+         * @param suggestions the {@code SuggestionProvider}
+         * @return {@code this}
          */
         public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
@@ -244,30 +244,30 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         
         
         /**
-         * Adds an optional child built from the given builder. Optional children are 
-         * appended to both the node to be built and the children of said node.
+         * Adds an optional child built using the given builder. Children of the
+         * optional child are also added to this builder.
          * <br><br>
-         * <b>Note:</b> Due to an issue with how the client processes the children 
-         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
-         * may not displayed correctly.
+         * <b>Note:</b><br>
+         * An issue with the client processing children nodes may cause suggestions
+         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
          * 
-         * @param builder the builder from which the optional child is built
-         * @return this
+         * @param builder the builder which is to build the optional child
+         * @return {@code this}
          */
         public Builder<T, V> optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }
         
         /**
-         * Adds an optional child. Optional children are appended to both the node
-         * to be built and the children of said node.
+         * Adds an optional child. Children of the optional child are also added 
+         * to this builder.
          * <br><br>
-         * <b>Note:</b> Due to an issue with how the client processes the children 
-         * nodes, suggestions from custom {@code SuggestionProvider}s and {@code Type}s 
-         * may not displayed correctly.
+         * <b>Note:</b><br>
+         * An issue with the client processing children nodes may cause suggestions
+         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
          * 
          * @param node the optional child
-         * @return this
+         * @return {@code this}
          */
         public Builder<T, V> optionally(CommandNode<T> node) {
             then(node);
@@ -280,9 +280,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         
         
         /**
-         * Returns this.
-         * 
-         * @return this
+         * @return {@code this}
          */
         @Override
         protected Builder<T, V> getThis() {
@@ -292,7 +290,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         /**
          * Builds the {@code Argument}.
          * 
-         * @return the argument
+         * @return the {@code Argument}
          */
         @Override
         public Argument<T, V> build() {

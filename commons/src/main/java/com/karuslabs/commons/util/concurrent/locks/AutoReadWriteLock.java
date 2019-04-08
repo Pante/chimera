@@ -32,7 +32,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.*;
 
 /**
  * A {@code AutoReadWriteLock} subclass that contains additional methods for automatic 
- * resource management; i.e. automatic releasing of the lock when a try-with-resources 
+ * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
  * block is exited.
  */
 public class AutoReadWriteLock extends ReentrantReadWriteLock {
@@ -42,16 +42,16 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
     
     
     /**
-     * Constructs a non-fair {@code AutoReadWriteLock}.
+     * Creates a non-fair {@code AutoReadWriteLock}.
      */
     public AutoReadWriteLock() {
         this(false);
     }
     
     /**
-     * Constructs a {@code AutoReaderWriteLock} with the specified fairness policy.
+     * Creates a {@code AutoReaderWriteLock} with the specified fairness policy.
      * 
-     * @param fair true if this lock should use a fair ordering policy 
+     * @param fair {@code true} if this lock should use a fair ordering policy 
      */
     public AutoReadWriteLock(boolean fair) {
         super(fair);
@@ -83,9 +83,8 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
     
     /**
      * A {@code ReadLock} decorator that contains additional methods for automatic 
-     * resource management; i.e. automatic releasing of the lock when a try-with-resources 
-     * block is exited. Operations that Overridden operations are delegated to an 
-     * underlying {@code ReadLock}.
+     * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
+     * block is exited. Overridden operations are forwarded to an underlying {@code ReadLock}.
      */
     public static class AutoReadLock extends ReadLock implements Acquirable {
         
@@ -93,11 +92,11 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         private final Mutex mutex;
         
         /**
-         * Constructs a {@code AutoReadLock} with the given owning {@code ReentrantReadWriteLock}
+         * Creates a {@code AutoReadLock} with the given owning {@code ReentrantReadWriteLock}
          * and underlying {@code ReadLock}.
          * 
-         * @param owner the owning ReentrantReadWriteLock
-         * @param lock the underlying ReadLock
+         * @param owner the owning {@code ReentrantReadWriteLock}
+         * @param lock the underlying {@code ReadLock}
          */
         protected AutoReadLock(ReentrantReadWriteLock owner, ReadLock lock) {
             super(owner);
@@ -107,10 +106,10 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
         
         /**
-         * Acquires this lock; automatically releasing this lock when returning from
-         * a try-with-resources block.
+         * Acquires this lock, automatically releasing this lock when returning from
+         * a {@code try-with-resources} block.
          * 
-         * @return a mutex
+         * @return a {@code Mutex}
          */
         @Override
         public Mutex acquire() {
@@ -119,12 +118,13 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         }
 
         /**
-         * Acquires this lock unless the current thread is interrupted; automatically 
-         * releasing this lock when returning from a try-with-resources block.
+         * Acquires this lock unless the current thread is interrupted, automatically 
+         * releasing this lock when returning from a {@code try-with-resources} 
+         * block.
          * 
-         * @return a mutex
-         * @throws InterruptedException if the current thread is interrupted while acquiring 
-         *                              the object
+         * @return a {@code Mutex}
+         * @throws InterruptedException if the current thread is interrupted while 
+         *                              acquiring the object
          */
         @Override
         public Mutex acquireInterruptibly() throws InterruptedException {
@@ -172,9 +172,8 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
     
     /**
      * A {@code WriteLock} decorator that contains additional methods for automatic 
-     * resource management; i.e. automatic releasing of the lock when a try-with-resources 
-     * block is exited. Operations that Overridden operations are delegated to an 
-     * underlying {@code WriteLock}.
+     * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
+     * block is exited. Overridden operations are forwarded to an underlying {@code WriteLock}.
      */
     public static class AutoWriteLock extends WriteLock implements Acquirable {
         
@@ -182,11 +181,11 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         private final Mutex mutex;
         
         /**
-         * Constructs a {@code AutoWriteLock} with the given owning {@code ReentrantReadWriteLock}
+         * Creates a {@code AutoWriteLock} with the given owning {@code ReentrantReadWriteLock}
          * and underlying {@code WriteLock}.
          * 
-         * @param owner the owning ReentrantReadWriteLock
-         * @param lock the underlying WriteLock
+         * @param owner the owning {@code ReentrantReadWriteLock}
+         * @param lock the underlying {@code WriteLock}
          */
         protected AutoWriteLock(ReentrantReadWriteLock owner, WriteLock lock) {
             super(owner);
@@ -196,10 +195,10 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
         
         /**
-         * Acquires this lock; automatically releasing this lock when returning from
-         * a try-with-resources block.
+         * Acquires this lock, automatically releasing this lock when returning from
+         * a {@code try-with-resources} block.
          * 
-         * @return a mutex
+         * @return a {@code Mutex}
          */
         @Override
         public Mutex acquire() {
@@ -208,12 +207,12 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         }
 
         /**
-         * Acquires this lock unless the current thread is interrupted; automatically 
-         * releasing this lock when returning from a try-with-resources block.
+         * Acquires this lock unless the current thread is interrupted, automatically 
+         * releasing this lock when returning from a {@code try-with-resources} block.
          * 
-         * @return a mutex
-         * @throws InterruptedException if the current thread is interrupted while acquiring 
-         *                              the object
+         * @return a {@code Mutex}
+         * @throws InterruptedException if the current thread is interrupted while 
+         *                              acquiring the object
          */
         @Override
         public Mutex acquireInterruptibly() throws InterruptedException {

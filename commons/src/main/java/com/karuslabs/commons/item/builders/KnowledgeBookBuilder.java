@@ -30,15 +30,15 @@ import org.bukkit.inventory.meta.*;
 
 
 /**
- * A builder for knowledge books.
+ * A knowledge book builder.
  */
 public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBookBuilder> {
     
     /**
-     * Returns a {@code KnowledgeBookBuilder} for the given material.
+     * Creates a {@code KnowledgeBookBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code KnowledgeBookBuilder}
      */
     public static KnowledgeBookBuilder of(Material material) {
         return new KnowledgeBookBuilder(material);
@@ -57,7 +57,7 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBo
      * Adds the given recipes.
      * 
      * @param recipes the recipes
-     * @return this
+     * @return {@code this}
      */
     public KnowledgeBookBuilder recipes(NamespacedKey... recipes) {
         meta.addRecipe(recipes);
@@ -68,7 +68,7 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBo
      * Adds the given recipes.
      * 
      * @param recipes the recipes
-     * @return this
+     * @return {@code this}
      */
     public KnowledgeBookBuilder recipes(Collection<NamespacedKey> recipes) {
         meta.addRecipe(recipes.toArray(new NamespacedKey[0]));

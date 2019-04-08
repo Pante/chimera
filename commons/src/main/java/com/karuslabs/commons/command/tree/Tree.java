@@ -35,9 +35,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A tree that recursively maps a given command and its children of type T to type
- * R. Traversal of the command trees and redirections is handled by this tree while
- * the mapping of each individual command is delegated to a underlying {@link Mapper}.
+ * This class recursively maps a command and its children of type {@code T} to type
+ * {@code R}. Traversal of the children and redirected commands is handled by this
+ * {@code Tree} while the mapping of individual commands is forwarded to a {@link Mapper}.
  * 
  * @param <T> the type of a given command
  * @param <R> the resultant type of a mapped command
@@ -48,10 +48,9 @@ public class Tree<T, R> {
     
     
     /**
-     * Constructs a {@code Tree} with the given {@code Mapper} to map each individual
-     * command.
+     * Creates a {@code Tree} with the given underlying {@code Mapper}.
      * 
-     * @param mapper the mapper to map each individual command
+     * @param mapper the mapper that maps individual commands
      */
     public Tree(Mapper<T, R> mapper) {
         this.mapper = mapper;
@@ -59,12 +58,12 @@ public class Tree<T, R> {
     
     
     /**
-     * Removes the children of the target if the source contains the children with
-     * the same names before mapping the children of the source to the target; ignoring
-     * the requirements of the commands.
+     * Maps the children of the {@code source} to the {@code target}, removing the
+     * child from the {@code target} before mapping if present. The {@code requirement}
+     * of a child is ignored.
      * 
-     * @param source the source that contains the commands to be mapped
-     * @param target the target that the source is to be mapped
+     * @param source the source that contains the children to be mapped
+     * @param target the target that the children of the {@code source} are to be mapped
      */
     public void truncate(RootCommandNode<T> source, RootCommandNode<R> target) {
         for (var child : source.getChildren()) {
@@ -77,13 +76,14 @@ public class Tree<T, R> {
     }
     
     /**
-     * Maps the children of the source to the target if the given requirement is
-     * satisfied and the given caller is permitted to use the command.
+     * Maps each child of the {@code source} to the {@code target} if the {@code requirement} 
+     * for the child is satisfied and the {@code caller} is permitted to use the
+     * child.
      * 
-     * @param source the source that contains the commands to be mapped
-     * @param target the target that the source is to be mapped
+     * @param source the source that contains the children to be mapped
+     * @param target the target that the children of the {@code source} are to be mapped
      * @param caller the caller of the commands
-     * @param requirement a requirement that must be satisfied for a command to
+     * @param requirement a requirement that must be satisfied for a child to
      *                    be mapped
      */
     public void map(RootCommandNode<T> source, RootCommandNode<R> target, T caller, Predicate<CommandNode<T>> requirement) {
@@ -99,8 +99,8 @@ public class Tree<T, R> {
     
     
     /**
-     * Returns the recursively mapped command which includes the children and redirections
-     * using a {@code IdentityHashMap} to store prior mapped commands.
+     * Recursively maps the command and its children using a {@code IdentityHashMap}
+     * to lookup previously mapped commands.
      * 
      * @param command the command to be mapped
      * @return the mapped command
@@ -110,45 +110,43 @@ public class Tree<T, R> {
     }
     
     /**
-     * Returns the recursively mapped command which includes the children and redirections
-     * using a {@code IdentityHashMap} to store prior mapped commands, or null if 
-     * the given caller is not permitted to use the command.
+     * Recursively maps the command and its children that the {@code caller} is 
+     * permitted to use, using a {@code IdentityHashMap} to lookup previously mapped
+     * commands. All commands are permitted if {@code caller} is {@code null}.
      * 
      * @param command the command to be mapped
-     * @param caller the caller
-     * @return the mapped command, or null if the caller is not permitted to use
-     *         the command
+     * @param caller the caller, or {@code null} if all commands are permitted
+     * @return the mapped command, or {@code null} if the caller is not permitted to use
+     *         the given {@code command}
      */
     public @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T caller) {
         return map(command, caller, new IdentityHashMap<>());
     }
     
     /**
-     * Returns the recursively mapped command which includes the children and redirections,
-     * or null if the given caller is not permitted to use the command.
+     * Recursively maps the command and its children that the {@code caller} is 
+     * permitted to use, using {@code mappings} to lookup previously mapped commands. 
+     * All commands are permitted if {@code caller} is {@code null}.
      * <br><br>
-     * Caution should be exercised when choosing the {@code Map} implementation to
-     * store the mappings as the resultant mapped command will differ depending on
-     * the chosen implementation. To avoid commands with conflicting names from being
-     * overridden, a map implementation that does identity-based comparisons instead
-     * of equality-based comparison, i.e. {@code IdentityHashMap} should be used.
-     * Otherwise, if conflicting names are of no concern, a equality-based comparison
-     * map implementation, i.e. {@code HashMap} should be used.
+     * <b>Note:</b><br>
+     * Caution should be exercised as different {@code mapping} implementations 
+     * will affect the resultant mapped command. Identity-based maps, i.e.
+     * {@code IdentityHashMap} will prevent commands with conflicting names from
+     * being overridden while equality-based maps, i.e. {@code HashMap} will not.
      * <br><br>
      * <b>Implementation details:</b><br>
-     * This method first checks if the given caller is permitted to use the command,
-     * and immediately returns null if not permitted. Subsequently if the given mappings
-     * contains no mapping for the command, the command is mapped immediately and
-     * added to the mappings before proceeding. This is done to prevent infinite
-     * recursion. After which, mapping of redirected commands are delegated to {@link #redirect(CommandNode, CommandNode, Object, Map)}
-     * and children of the given command delegated to {@link #descend(CommandNode, CommandNode, Object, Map)}.
+     * Returns {@code null} immediately if the {@code caller} is not permitted to
+     * use the command. If not present, the command is then mapped and added to 
+     * {@code mappings} before proceeding to avoid infinite recursion. Mapping of
+     * redirected commands and the children are then forwarded to 
+     * {@link #redirect(CommandNode, CommandNode, Object, Map)} and 
+     * {@link #descend(CommandNode, CommandNode, Object, Map)} respectively.
      * 
      * @param command the command to be mapped
-     * @param caller the caller
-     * @param mappings the mappings of commands that have been mapped prior to the 
-     *                 given command
-     * @return the mapped command, or null if the caller is not permitted to use
-     *         the command
+     * @param caller the caller, or {@code null} if all commands are permitted
+     * @param mappings the commands that have been mapped prior to the given command
+     * @return the mapped command, or {@code null} if the caller is not permitted to use
+     *         the given {@code command}
      */
     public @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
         if (caller != null && command.getRequirement() != null && !command.canUse(caller)) {
@@ -168,18 +166,17 @@ public class Tree<T, R> {
     }
     
     /**
-     * Sets the destination of the given target to the mapped destination of the 
-     * given redirected command; ignoring the given command if is not redirected 
-     * or if target does not implement the {@link Node} interface.
+     * Maps and sets the destination of the redirected {@code command} as the destination
+     * of the {@code target}. Does nothing if the {@code command} is not redirected
+     * or the {@code target} does not implement {@link Node}.
      * <br><br>
      * <b>Implementation details:</b><br>
-     * Mapping of the destination is delegated to {@link #map(CommandNode, Object, Map)}.
+     * Mapping of the destination is forwarded to {@link #map(CommandNode, Object, Map)}.
      * 
-     * @param command the redirected command which destination to be mapped
-     * @param target the target for which the destination is to be mapped
-     * @param caller the caller
-     * @param mappings the mappings of commands that have been mapped prior to the 
-     *                 given command
+     * @param command the redirected command which destination to be mapped 
+     * @param target the target for which the destination is to be set
+     * @param caller the caller, or {@code null} if all commands are permitted
+     * @param mappings the commands that have been mapped prior to the given command
      */
     protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
         if (command.getRedirect() != null && target instanceof Node<?>) {
@@ -189,17 +186,16 @@ public class Tree<T, R> {
     }
     
     /**
-     * Maps the children of the source to the target if the given caller is permitted 
-     * to use the command.
+     * Maps each child of the {@code command} to the {@code target} if the {@code caller} 
+     * is permitted to use the command.
      * <br><br>
      * <b>Implementation details:</b><br>
-     * Mapping of the children are delegated to {@link #map(CommandNode, Object, Map)}.
+     * Mapping of the children is forwarded to {@link #map(CommandNode, Object, Map)}.
      * 
      * @param command the command which children are to be mapped
-     * @param target the target for which the children are to be mapped
-     * @param caller the caller
-     * @param mappings the mappings of commands that have been mapped prior to the 
-     *                 given command
+     * @param target the target that the children of the {@code source} are to be mapped
+     * @param caller the caller, or {@code null} if all commands are permitted
+     * @param mappings the commands that have been mapped prior to the given command
      */
     protected void descend(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
         for (var child : command.getChildren()) {

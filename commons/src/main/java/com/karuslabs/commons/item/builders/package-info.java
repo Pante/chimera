@@ -24,6 +24,6 @@
 
 
 /**
- * Contains {@code Builder}s for {@code ItemStack}s with the various subclasses of {@code ItemMeta}.
+ * Provides {@code ItemStack} builders for the various subclasses of {@code ItemMeta}.
  */
 package com.karuslabs.commons.item.builders;

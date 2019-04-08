@@ -36,7 +36,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A {code RootCommandNode} subclass that facilities the wrapping and registration
- * of {@code CommandNode} to the provided {@code CommandMap}.
+ * of a {@code CommandNode} to a {@code CommandMap}.
  */
 public class Root extends RootCommandNode<CommandSender> {
     
@@ -47,23 +47,22 @@ public class Root extends RootCommandNode<CommandSender> {
     
     
     /**
-     * Constructs a {@code Root} with the given owning plugin name as the fallback
-     * prefix, owning plugin and command map.
+     * Creates a {@code Root} with the given parameters and the name of the given 
+     * plugin as a fallback prefix.
      * 
      * @param plugin the owning plugin
-     * @param map the CommandMap
+     * @param map the {@code CommandMap}
      */
     public Root(Plugin plugin, CommandMap map) {
         this(plugin.getName().toLowerCase(), plugin, map);
     }
     
     /**
-     * Constructs a {@code Root} with the given fallback prefix, owning plugin and 
-     * command map.
+     * Creates a {@code Root} with the given parameters.
      * 
      * @param prefix the fallback prefix
      * @param plugin the owning plugin
-     * @param map the CommandMap
+     * @param map the {@code CommandMap}
      */
     public Root(String prefix, Plugin plugin, CommandMap map) {
         this.prefix = prefix;
@@ -73,8 +72,9 @@ public class Root extends RootCommandNode<CommandSender> {
     
     
     /**
-     * Adds the given command to this {@code Root} before wrapping and registering
-     * the given command to the provided {@code CommandMap}.
+     * Adds the {@code command} if the provided {@code CommandMap} does not contain 
+     * a command with the same name. In addition, a fallback alias of the {@code command} 
+     * is always created and added.
      * 
      * @param command the command to be added
      */
@@ -90,8 +90,8 @@ public class Root extends RootCommandNode<CommandSender> {
     /**
      * Wraps the given {@code CommandNode} in a Spigot {@code Command}.
      * 
-     * @param command the command
-     * @return the wrapped command
+     * @param command the {@code CommandNode}
+     * @return the wrapped {@code Command}
      */
     protected Command wrap(CommandNode<CommandSender> command) {
         return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
@@ -101,8 +101,8 @@ public class Root extends RootCommandNode<CommandSender> {
     /**
      * Returns the {@code CoommandDispatcher} that owns this {@code Root}.
      * 
-     * @return the owning CommandDispatcher, or null if this root has no owning
-     *         CommandDispatcher
+     * @return the owning CommandDispatcher, or {@code null} if this root has no 
+     *         owning {@code CommandDispatcher}
      */
     public @Nullable CommandDispatcher<CommandSender> dispatcher() {
         return dispatcher;
@@ -111,8 +111,8 @@ public class Root extends RootCommandNode<CommandSender> {
     /**
      * Sets the owning {@code CommandDispatcher} of this {@code Root}.
      * 
-     * @param dispatcher the owning CommandDispatcher
-     * @throws IllegalStateException if this root already has an owning CommandDispatcher
+     * @param dispatcher the owning {@code CommandDispatcher}
+     * @throws IllegalStateException if this root already has an owning {@code CommandDispatcher}
      */
     public void dispatcher(CommandDispatcher<CommandSender> dispatcher) {
         if (this.dispatcher == null) {

@@ -31,15 +31,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A {@code Trie} that associates a value with a string. The average time complexity 
- * for look-up {@code O(m)} where {@code m} is the length the string to which a value 
- * is mapped.
+ * for look-up is {@code O(m)} where {@code m} is the length of the string to which 
+ * a value is mapped.
  * <br><br>
  * <b>Implementation details:</b><br>
- * An entry is created for each character in a string and contains an array and map
- * children entries that are lazily initialised. Visible ASCII characters and other
- * characters are use as an index in the array of children entries and as a key in
- * the map of children entries respectively. This makes look-up and other operations
- * constant relative to the length of the string.
+ * An entry is created for each character in a string. It contains an array and 
+ * map of children entries, both of which are lazily initialised. Visible ASCII 
+ * characters are used as an index in the array of children entries while other 
+ * characters are used as a key in the map of children entries. Entries are traversed
+ * based on the next character of a string. This makes the time complexity of look-up 
+ * and other operations constant relative to the length of the string.
  * 
  * @param <V> the type of the values
  */
@@ -100,8 +101,8 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     
     /**
-     * Maps the entries whose keys start with the prefix to the given collection
-     * using the given mapper.
+     * Maps the entries whose keys start with the prefix to the {@code collection}
+     * using the {@code mapper}.
      * 
      * @param <C> the type the collection
      * @param <T> the type of the mapped elements

@@ -29,7 +29,8 @@ import static java.util.UUID.fromString;
 
 
 /**
- * Represents <a href = "https://minecraft.gamepedia.com/Mob_head#Mojang_skins">heads of players</a> whose accounts belong to Mojang.
+ * Represents <a href = "https://minecraft.gamepedia.com/Mob_head#Mojang_skins">
+ * heads of players</a> that belong to Mojang.
  */
 public enum Head {
     

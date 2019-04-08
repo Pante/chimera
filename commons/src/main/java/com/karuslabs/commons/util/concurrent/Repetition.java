@@ -47,7 +47,7 @@ public abstract class Repetition<T> implements Runnable {
     
     
     /**
-     * Constructs a {@code Repetition} to be executed the given number of times.
+     * Creates a {@code Repetition} to be executed the given number of times.
      * 
      * @param times the number of times this repetition is to be executed
      */
@@ -57,9 +57,9 @@ public abstract class Repetition<T> implements Runnable {
     
     
     /**
-     * Delegates execution to {@link #run(Future)} and decreases the number of times
-     * this {@code Repetition} is to be executed if the stipulated number of times
-     * has not been exceeded. Execution is otherwise delegated to {@link #finish(Future)}.
+     * Forwards execution to {@link #run(Future)} and decreases the number of times
+     * this {@code Repetition} is to be executed for the stipulated number of times.
+     * Execution is then forwarded to {@link #finish(Future)}.
      */
     @Override
     public void run() {
@@ -80,8 +80,7 @@ public abstract class Repetition<T> implements Runnable {
     protected abstract void run(Future<T> context);
     
     /**
-     * Called when the number of times this repetition was executed has exceeded
-     * the stipulated number of times.
+     * Called when this repetition has been executed the stipulated number of times.
      * <br><br>
      * <b>Default implementation:</b>
      * Cancels the execution via the given context.

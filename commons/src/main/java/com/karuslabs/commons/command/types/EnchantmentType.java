@@ -75,13 +75,13 @@ public class EnchantmentType implements WordType<Enchantment> {
     }
     
     /**
-     * Returns the names of enchantments that begin with the remaining input of the
-     * given {@code SuggestionBuilder}.
+     * Returns the enchantments that start with the remaining input of the given 
+     * {@code SuggestionBuilder}.
      * 
      * @param <S> the type of the source
      * @param context the context
      * @param builder the builder
-     * @return the enchantment names that begin with the remaining input
+     * @return the enchantment names that start with the remaining input
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

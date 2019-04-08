@@ -35,7 +35,7 @@ import java.util.concurrent.*;
 public class EventualTask<T> extends FutureTask<T> implements Eventual<T> {
     
     /**
-     * Constructs a {@code EventualTask} that will, upon running execute the given
+     * Creates an {@code EventualTask} that will, upon running execute the given
      * callable.
      * 
      * @param callable the callable task
@@ -45,8 +45,8 @@ public class EventualTask<T> extends FutureTask<T> implements Eventual<T> {
     }
     
     /**
-     * Creates a {@code EventualTask} that will, upon running, execute the given 
-     * Runnable, and arrange that get will return the given result on successful 
+     * Creates an {@code EventualTask} that will, upon running, execute the given 
+     * runnable, and arrange that get will return the given result on successful 
      * completion.
      * 
      * @param runnable the runnable task

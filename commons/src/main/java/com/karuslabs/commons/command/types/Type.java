@@ -27,8 +27,10 @@ import com.mojang.brigadier.arguments.ArgumentType;
 
 
 /**
- * An {@code ArgumentType} that has no supported client-side equivalent. An implementation
- * must provide a supported {@code ArgumentType} to which the implementation is mapped.
+ * An {@code ArgumentType} that has no supported client-side equivalent. 
+ * <br><br>
+ * <b>Implementation requirement:</b><br>
+ * A supported {@code ArgumentType} to which this is mapped must be supported.
  * 
  * @param <T> the type of the argument
  */

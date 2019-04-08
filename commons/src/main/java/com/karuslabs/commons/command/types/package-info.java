@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains {@code ArgumentType} implementations.
+ * Provides {@code ArgumentType}s.
  */
 package com.karuslabs.commons.command.types;

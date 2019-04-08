@@ -34,10 +34,10 @@ import org.bukkit.inventory.meta.*;
 public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder> {
     
     /**
-     * Returns a {@code BlockStateBuilder} for the given material.
+     * Creates a {@code BlockStateBuilder} for the given material.
      * 
      * @param material the material
-     * @return this
+     * @return a {@code BlockStateBuilder}
      */
     public static BlockStateBuilder of(Material material) {
         return new BlockStateBuilder(material);
@@ -55,7 +55,7 @@ public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder
      * Sets the block state.
      * 
      * @param state the BlockState
-     * @return this
+     * @return {@code this}
      */
     public BlockStateBuilder state(BlockState state) {
         meta.setBlockState(state);

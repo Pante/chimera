@@ -41,7 +41,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
      * 
      * @param <N> the type of the keys
      * @param <T> the type of the values
-     * @return a ConcurrentTokenMap
+     * @return a {@code ConcurrentTokenMap}
      */
     public static <N, T> ConcurrentTokenMap<N, T> of() {
         return new ConcurrentHashTokenMap<>();
@@ -53,7 +53,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
      * @param <N> the type of the keys
      * @param <T> the type of the values
      * @param capacity the initial capacity
-     * @return a ConcurrentTokenMap
+     * @return a {@code ConcurrentTokenMap}
      */
     public static <N, T> ConcurrentTokenMap<N, T> of(int capacity) {
         return new ConcurrentHashTokenMap<>(capacity);
@@ -65,7 +65,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
      * @param <N> the type of the keys
      * @param <T> the type of the values
      * @param map the backing map
-     * @return a ConcurrentTokenMap
+     * @return a {@code ConcurrentTokenMap}
      */
     public static <N, T> ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
         return new ConcurrentProxiedTokenMap<>(map);

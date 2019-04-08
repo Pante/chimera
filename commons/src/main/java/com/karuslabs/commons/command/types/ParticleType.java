@@ -73,13 +73,12 @@ public class ParticleType implements WordType<Particle> {
     }
     
     /**
-     * Returns the names of particles that begin with the remaining input of the 
-     * given {@code SuggesitonBuilder}.
+     * Returns the particles that start with the remaining input of the given {@code SuggesitonBuilder}.
      * 
      * @param <S> the type of the source
      * @param context the context
      * @param builder the builder
-     * @return the particle names that begin with the remaining input
+     * @return the particle names that start with the remaining input
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

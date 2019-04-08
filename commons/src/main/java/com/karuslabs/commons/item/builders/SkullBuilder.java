@@ -34,15 +34,15 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
 
 
 /**
- * A builder for skulls.
+ * A skull builder.
  */
 public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     
     /**
-     * Returns a {@code SkullBuilder} for the given material.
+     * Creates a {@code SkullBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code SkullBuilder}
      */
     public static SkullBuilder of(Material material) {
         return new SkullBuilder(material);
@@ -61,7 +61,7 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
      * Sets the head.
      * 
      * @param head the head
-     * @return this
+     * @return {@code this}
      */
     public SkullBuilder head(Head head) {
         return head(head.id);
@@ -71,7 +71,7 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
      * Sets the UUID.
      * 
      * @param id the UUID
-     * @return this
+     * @return {@code this}
      */
     public SkullBuilder head(UUID id) {
         return head(getOfflinePlayer(id));
@@ -81,7 +81,7 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
      * Sets the owner of the skull.
      * 
      * @param player the owner of the skull
-     * @return this
+     * @return {@code this}
      */
     public SkullBuilder head(OfflinePlayer player) {
         meta.setOwningPlayer(player);

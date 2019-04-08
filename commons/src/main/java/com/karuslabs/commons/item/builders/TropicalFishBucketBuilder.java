@@ -34,10 +34,10 @@ import org.bukkit.inventory.meta.*;
 public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, TropicalFishBucketBuilder> {
     
     /**
-     * Returns a {@code TropicalFishBucketBuilder} for the given material.
+     * Creates a {@code TropicalFishBucketBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code TropicalFishBucketBuilder}
      */
     public static TropicalFishBucketBuilder of(Material material) {
         return new TropicalFishBucketBuilder(material);
@@ -56,7 +56,7 @@ public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, T
      * Sets the body colour.
      * 
      * @param colour the body colour
-     * @return this
+     * @return {@code this}
      */
     public TropicalFishBucketBuilder body(DyeColor colour) {
         meta.setBodyColor(colour);
@@ -67,7 +67,7 @@ public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, T
      * Sets the pattern.
      * 
      * @param pattern the pattern
-     * @return this
+     * @return {@code this}
      */
     public TropicalFishBucketBuilder pattern(Pattern pattern) {
         meta.setPattern(pattern);
@@ -78,7 +78,7 @@ public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, T
      * Sets the pattern colour.
      * 
      * @param colour the pattern colour
-     * @return this
+     * @return {@code this}
      */
     public TropicalFishBucketBuilder pattern(DyeColor colour) {
         meta.setPatternColor(colour);

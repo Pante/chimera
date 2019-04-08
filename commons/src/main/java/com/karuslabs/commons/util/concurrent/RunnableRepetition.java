@@ -38,8 +38,8 @@ public class RunnableRepetition<T> extends Repetition<T> {
     
     
     /**
-     * Constructs a {@code RunnableRepetition} that will, upon running execute the
-     * runnable for the given umber of times.
+     * Creates a {@code RunnableRepetition} that will, upon running execute the
+     * runnable for the given number of times.
      * 
      * @param runnable the runnable to be executed each time
      * @param times the number of times this repetition is to be executed

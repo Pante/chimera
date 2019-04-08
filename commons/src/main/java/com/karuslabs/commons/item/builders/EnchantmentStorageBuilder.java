@@ -34,10 +34,10 @@ import org.bukkit.inventory.meta.*;
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, EnchantmentStorageBuilder> {
     
     /**
-     * Returns a {@code EnchantmentStoragBuilder} for the given material.
+     * Creates an {@code EnchantmentStoragBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return an {@code EnchantmentStoragBuilder}
      */
     public static EnchantmentStorageBuilder of(Material material) {
         return new EnchantmentStorageBuilder(material);
@@ -57,7 +57,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, E
      * 
      * @param enchantment the enchantment
      * @param level the enchantment level; level restrictions are ignored
-     * @return this
+     * @return {@code this}
      */
     public EnchantmentStorageBuilder stored(Enchantment enchantment, int level) {
         meta.addStoredEnchant(enchantment, level, true);

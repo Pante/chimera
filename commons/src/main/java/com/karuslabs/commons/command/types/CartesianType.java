@@ -40,9 +40,10 @@ import org.bukkit.entity.Player;
 public abstract class CartesianType<T> implements Type<T> {    
     
     /**
-     * Splits the string returned from the builder by whitespaces. The provision of 
-     * suggestions is then delegated to {@link #suggest(SuggestionsBuilder, CommandContext, Location, String[])}
-     * if the source is a {@code Player} and {@link #suggest(SuggestionsBuilder, CommandContext, String[])}.
+     * Splits the remaining string of the builder by a whitespace and forwards providing
+     * suggestions to {@link #suggest(SuggestionsBuilder, CommandContext, Location, String[])}
+     * if the source is a player and the block the player is looking at is within
+     * a 5 block radius. After which, forwards to {@link #suggest(SuggestionsBuilder, CommandContext, String[])}.
      * 
      * @param <S> the type of the source
      * @param context the context
@@ -67,10 +68,10 @@ public abstract class CartesianType<T> implements Type<T> {
     }
     
     /**
-     * Returns the string that was split by whitespaces.
+     * Splits the given string by a whitespace.
      * 
      * @param remaining the string to be split
-     * @return the parts of the string that was split by whitespace
+     * @return the parts of the given string split by a whitespace
      */
     protected String[] split(String remaining) {
         return remaining.split(" ");
@@ -79,16 +80,16 @@ public abstract class CartesianType<T> implements Type<T> {
     
     
     /**
-     * Provides suggestions using the given builder, context, location and argument
-     * parts.
+     * Provides suggestions using the given builder, context, location and parts
+     * of the argument.
      * <br><br>
      * <b>Default implementation:</b><br>
      * Does nothing.
      * 
      * @param builder the builder
      * @param context the context
-     * @param location the location of the block the source is looking at within
-     *                 a 5 block radius
+     * @param location the location of the block that the source is looking at if 
+     *                 within a 5 block radius
      * @param parts the parts of the argument split by a whitespace
      */
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
@@ -96,8 +97,7 @@ public abstract class CartesianType<T> implements Type<T> {
     }
     
     /**
-     * Provides suggestions using the given builder, context and argument parts.
-     * <br><br>
+     * Provides suggestions using the given builder, context and parts of the argument.
      * <b>Default implementation:</b><br>
      * Does nothing.
      * 

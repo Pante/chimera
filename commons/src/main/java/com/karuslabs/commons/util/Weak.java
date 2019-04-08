@@ -35,7 +35,10 @@ import static java.util.stream.Stream.ofNullable;
 
 
 /**
- * An {@code Weak} that holds a weak reference to a value.
+ * A value-based container that holds a weak reference to a value and methods similar
+ * to {@code Optional}.
+ * 
+ * @author Javadoc copied from {@link java.util.Optional}
  * 
  * @param <T> the type of the value
  */
@@ -46,7 +49,7 @@ public @ValueBased interface Weak<T> {
      * 
      * @param <T> the type of the value
      * @param value the value
-     * @return a Weak
+     * @return a {@code Weak}
      */
     public static <T> Weak<T> of(T value) {
         return new WeakValue<>(value);
@@ -56,7 +59,7 @@ public @ValueBased interface Weak<T> {
      * Returns an empty {@code Weak}.
      * 
      * @param <T> the type of the value
-     * @return the Weak
+     * @return the {@code Weak}
      */
     public static <T> Weak<T> empty() {
         return (Weak<T>) EMPTY;
@@ -71,7 +74,7 @@ public @ValueBased interface Weak<T> {
      * @param predicate the predicate to apply to a value, if present
      * @return an {@code Weak} describing the value of this
      *         {@code Weak}, if a value is present and the value matches the
-     *         given predicate, otherwise an empty {@code Weal}
+     *         given predicate, otherwise an empty {@code Weak}
      * @throws NullPointerException if the predicate is {@code null}
      */
     public Weak<T> filter(Predicate<? super T> predicate);

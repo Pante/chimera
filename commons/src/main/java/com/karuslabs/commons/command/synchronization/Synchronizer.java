@@ -49,10 +49,10 @@ import static java.util.stream.Collectors.toSet;
  * dispatcher of the server and a client.
  * <br><br>
  * <b>Implementation details:</b><br>
- * An issue in Minecraft's command mapping causes redirected commands to not be 
- * mapped and sent to clients correctly if the name of the redirected command is 
- * lexicography less than the name of the destination. Hence, this {@code Synchronizer} 
- * remaps and resends the commands after a {@code PlayerCommanndSendEvent} is emitted.
+ * An issue in Minecraft's command mapping causes redirected commands to be incorrectly
+ * mapped and sent to clients  if the name of the redirected command is lexicography 
+ * less than the name of the destination. Hence, this {@code Synchronizer} remaps 
+ * and resends the commands after a {@code PlayerCommanndSendEvent} is emitted.
  * <br><br>
  * A {@link Synchronization} is shared across plugins using the {@code ServiceManager}
  * to avoid duplicate remapping and resending. A {@code Sychronizer} would first

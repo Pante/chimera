@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains parsers for {@code ArgumentType}s.
+ * Provides parsers for {@code ArgumentType}s.
  */
 package com.karuslabs.commons.command.types.parsers;

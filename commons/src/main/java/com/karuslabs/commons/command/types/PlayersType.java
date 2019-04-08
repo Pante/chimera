@@ -38,8 +38,8 @@ import org.bukkit.entity.Player;
 
 
 /**
- * A {@code Player} type that supports a double quotation mark enclosed comma separated 
- * list of player names and the following tags:
+ * A {@code Player} type that supports a comma separated list of player names enclosed 
+ * in double quotation marks in addition to the following tags:
  * <ul>
  * <li>{@code @a} - All online players</li>
  * <li>{@code @r} - A random online player</li>
@@ -58,7 +58,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     /**
-     * Constructs a {@code Player} type.
+     * Creates a {@code Player} type.
      */
     public PlayersType() {
         this.server = Bukkit.getServer();
@@ -66,14 +66,14 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     /**
-     * Returns the players whose names are contained in the string returned by the
-     * given {@code StringReader} or were chosen through the supported tags.
+     * Returns the online players whose names are contained in the string returned 
+     * by the given {@code StringReader} or were chosen through the supported tags.
      * 
      * @param reader the reader
-     * @return the players whose names are contained in the given string or were
-     *         chosen through the supported tags
+     * @return the online players whose names are contained in the given string 
+     *         or were chosen through the supported tags
      * @throws CommandSyntaxException if an unknown tag or player name was given
-     * @throws CommandSyntaxException if @a was used in a comma separated list of
+     *                                or @a was used in a comma separated list of
      *                                arguments
      */
     @Override
@@ -122,12 +122,13 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     /**
-     * Returns the player names and tags that begin with the given input.
+     * Returns the names of online players and tags that start with the given input.
      * 
      * @param <S> the type of the source
      * @param context the context
      * @param builder the builder
-     * @return the player names and tags that begin with the remaining input
+     * @return the names of online players and tags that start with the remaining 
+     *         input
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {

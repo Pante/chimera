@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes and utilities for manipulating the structure of command trees.
+ * Contains classes and utilities for manipulating command trees.
  */
 package com.karuslabs.commons.command.tree;

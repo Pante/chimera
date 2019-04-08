@@ -28,7 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A {@code ReentrantLock} subclass that contains additional methods for automatic 
- * resource management; i.e. automatic releasing of the lock when a try-with-resources 
+ * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
  * block is exited.
  */
 public class AutoLock extends ReentrantLock implements Acquirable {
@@ -37,16 +37,16 @@ public class AutoLock extends ReentrantLock implements Acquirable {
     
     
     /**
-     * Constructs a non-fair {@code AutoLock}.
+     * Creates a non-fair {@code AutoLock}.
      */
     public AutoLock() {
         this(false);
     }
     
     /**
-     * Constructs a {@code AutoLock} with the specified fairness policy.
+     * Creates a {@code AutoLock} with the specified fairness policy.
      * 
-     * @param fair true if this lock should use a fair ordering policy 
+     * @param fair {@code true} if this lock should use a fair ordering policy 
      */
     public AutoLock(boolean fair) {
         super(fair);
@@ -55,10 +55,10 @@ public class AutoLock extends ReentrantLock implements Acquirable {
     
     
     /**
-     * Acquires this lock; automatically releasing this lock when returning from
-     * a try-with-resources block.
+     * Acquires this lock, automatically releasing this lock when returning from
+     * a {@code try-with-resources} block.
      * 
-     * @return a mutex
+     * @return a {@code Mutex}
      */
     @Override
     public Mutex acquire() {
@@ -67,12 +67,12 @@ public class AutoLock extends ReentrantLock implements Acquirable {
     }
     
     /**
-     * Acquires this lock unless the current thread is interrupted; automatically 
-     * releasing this lock when returning from a try-with-resources block.
+     * Acquires this lock unless the current thread is interrupted, automatically 
+     * releasing this lock when returning from a {@code try-with-resources} block.
      * 
-     * @return a mutex
+     * @return a {@code Mutex}
      * @throws InterruptedException if the current thread is interrupted while acquiring 
-     *                              the object
+     *                              the lock
      */
     @Override
     public Mutex acquireInterruptibly() throws InterruptedException {

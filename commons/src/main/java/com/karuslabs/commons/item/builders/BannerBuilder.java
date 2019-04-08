@@ -29,15 +29,15 @@ import org.bukkit.inventory.meta.*;
 
 
 /**
- * A builder for banners.
+ * A banner builder.
  */
 public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     
     /**
-     * Returns a {@code BannerBuilder} for the given material.
+     * Creates a {@code BannerBuilder} for the given material.
      * 
      * @param material the material
-     * @return a builder
+     * @return a {@code BannerBuilder}
      */
     public static BannerBuilder of(Material material) {
         return new BannerBuilder(material);
@@ -56,7 +56,7 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
      * Adds the given pattern.
      * 
      * @param pattern the pattern
-     * @return this
+     * @return {@code this}
      */
     public BannerBuilder pattern(Pattern pattern) {
         meta.addPattern(pattern);
@@ -68,7 +68,7 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
      * 
      * @param index the index
      * @param pattern the pattern
-     * @return this
+     * @return {@code this}
      */
     public BannerBuilder pattern(int index, Pattern pattern) {
         meta.setPattern(index, pattern);

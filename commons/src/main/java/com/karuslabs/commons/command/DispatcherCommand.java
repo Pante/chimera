@@ -62,7 +62,7 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
      * 
      * @param name the name of this command
      * @param plugin the owning plugin
-     * @param dispatcher the underlying dispatcher to which execution is delegated
+     * @param dispatcher the underlying dispatcher to which execution is forwarded
      * @param description the description of this command
      * @param usage the example usage for this command
      */

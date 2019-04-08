@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 
 
 /**
- * A 3D position in a world and relativity of which.
+ * An optionally relative 3D position in a world.
  */
 public class Position extends Location {
     
@@ -86,7 +86,7 @@ public class Position extends Location {
     }
     
     /**
-     * Creates a {@code Position} with the given world, coordinates and direction
+     * Creates a {@code Position} with the given world, coordinates and direction.
      * 
      * @param world the world
      * @param x the x coordinate
@@ -103,10 +103,10 @@ public class Position extends Location {
     
     
     /**
-     * Sets the coordinates of the given location as the absolute coordinates of
-     * this position relative to the {@code origin}.
+     * Sets the optionally relative coordinates of {@code origin} as the coordinates 
+     * of {@code to}.
      * 
-     * @param to the location this position is to be applied
+     * @param to the location to which {@code origin} is applied
      * @param origin the origin
      */
     public void apply(Location to, Location origin) {
@@ -118,10 +118,10 @@ public class Position extends Location {
     }
     
     /**
-     * Sets the coordinates of the given vector as the absolute coordinates of
-     * this position relative to the {@code origin}.
+     * Sets the optionally relative coordinates of {@code origin} as the coordinates 
+     * of {@code to}.
      * 
-     * @param to the vector this position is to be applied
+     * @param to the vector to which {@code origin} is applied
      * @param origin the origin
      */
     public void apply(Vector to, Location origin) {
@@ -133,8 +133,8 @@ public class Position extends Location {
     }
     
     /**
-     * 
-     * Relativizes this position about the given origin.
+     * Sets the optionally relative coordinates of {@code origin} as the coordinates
+     * of this position.
      * 
      * @param origin the origin
      */
@@ -149,10 +149,14 @@ public class Position extends Location {
     /**
      * Sets the coordinate for the given axis.
      * 
+     * @see #X
+     * @see #Y
+     * @see #Z
+     * 
      * @param axis the axis
      * @param value the coordinate for the axis
-     * @return this
-     * @throws IllegalArgumentException if an invalid argument was specified
+     * @return {@code this}
+     * @throws IllegalArgumentException if an invalid axis was specified
      */
     public Position set(int axis, double value) {
         switch (axis) {
@@ -177,8 +181,12 @@ public class Position extends Location {
     /**
      * Returns whether the coordinate for the given axis is absolute or relative.
      * 
+     * @see #X
+     * @see #Y
+     * @see #Z
+     * 
      * @param axis the axis
-     * @return true if the coordinate for the given axis is relative
+     * @return {@code true} if the coordinate for the given axis is relative
      */
     public boolean relative(int axis) {
         return relative[axis];
@@ -187,9 +195,13 @@ public class Position extends Location {
     /**
      * Sets the relativity of the coordinate for the given axis.
      * 
+     * @see #X
+     * @see #Y
+     * @see #Z
+     * 
      * @param axis the axis
-     * @param relative true if the coordinate for the axis is relative
-     * @return this
+     * @param relative {@code true} if the coordinate for the axis is relative
+     * @return {@code this}
      */
     public Position relative(int axis, boolean relative) {
         this.relative[axis] = relative;
@@ -198,19 +210,19 @@ public class Position extends Location {
     
     
     /**
-     * Returns whether this position is to be rotated when applied.
+     * Returns whether this position is to be rotated.
      * 
-     * @return true if this position is to be rotated
+     * @return {@code true} if this position is to be rotated
      */
     public boolean rotate() {
         return rotate;
     }
     
     /**
-     * Sets whether this position is to be rotated when applied.
+     * Sets whether this position is to be rotated.
      * 
-     * @param rotate true if this position is to be rotated
-     * @return this
+     * @param rotate {@code true} if this position is to be rotated
+     * @return {@code this}
      */
     public Position rotate(boolean rotate) {
         this.rotate = rotate;

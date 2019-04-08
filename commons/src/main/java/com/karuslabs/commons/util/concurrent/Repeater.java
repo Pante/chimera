@@ -28,12 +28,14 @@ import java.util.concurrent.*;
 
 /**
  * A {@code ScheduledThreadPoolExecutor} that can additionally schedule repeating
- * tasks that can be executed a given number of times.
+ * tasks which can be executed an arbitrary number of times.
+ * 
+ * @author Javadoc copied from {@link ScheduledThreadPoolExecutor}
  */
 public class Repeater extends ScheduledThreadPoolExecutor {
     
     /**
-     * Constructs a {@code Repeater} with the given core pool size.
+     * Creates a {@code Repeater} with the given core pool size.
      * 
      * @param corePoolSize the number of threads to keep in the pool, even if they 
      *                     are idle, unless allowCoreThreadTimeOut is set
@@ -44,35 +46,35 @@ public class Repeater extends ScheduledThreadPoolExecutor {
     }
     
     /**
-     * Constructs a {@code Repeater} with the given initial parameters.
+     * Creates a {@code Repeater} with the given initial parameters.
      * 
      * @param corePoolSize the number of threads to keep in the pool, even
      *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
      * @param threadFactory the factory to use when the executor
      *        creates a new thread
      * @throws IllegalArgumentException if {@code corePoolSize < 0}
-     * @throws NullPointerException if {@code threadFactory} is null
+     * @throws NullPointerException if {@code threadFactory} is {@code null}
      */
     public Repeater(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
     }
     
     /**
-     * Constructs a {@code Repeater} with the given initial parameters.
+     * Creates a {@code Repeater} with the given initial parameters.
      * 
      * @param corePoolSize the number of threads to keep in the pool, even
      *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
      * @param handler the handler to use when execution is blocked
      *        because the thread bounds and queue capacities are reached
      * @throws IllegalArgumentException if {@code corePoolSize < 0}
-     * @throws NullPointerException if {@code handler} is null
+     * @throws NullPointerException if {@code handler} is {@code null}
      */
     public Repeater(int corePoolSize, RejectedExecutionHandler handler) {
         super(corePoolSize, handler);
     }
     
     /**
-     * Constructs a {@code Repeater} with the given initial parameters.
+     * Creates a {@code Repeater} with the given initial parameters.
      *  
      * @param corePoolSize the number of threads to keep in the pool, even
      *        if they are idle, unless {@code allowCoreThreadTimeOut} is set
@@ -82,7 +84,7 @@ public class Repeater extends ScheduledThreadPoolExecutor {
      *        because the thread bounds and queue capacities are reached
      * @throws IllegalArgumentException if {@code corePoolSize < 0}
      * @throws NullPointerException if {@code threadFactory} or
-     *         {@code handler} is null
+     *         {@code handler} is {@code null}
      */
     public Repeater(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, threadFactory, handler);
@@ -90,8 +92,8 @@ public class Repeater extends ScheduledThreadPoolExecutor {
     
     
     /**
-     * Periodically execute the runnable for the given number of times after the
-     * initial delay.
+     * Periodically execute the runnable for the given number of {@code times} after 
+     * the initial delay.
      * 
      * @param runnable the runnable to be executed
      * @param initial the initial delay
@@ -105,7 +107,7 @@ public class Repeater extends ScheduledThreadPoolExecutor {
     }
     
     /**
-     * Periodically execute the repetition of times after the initial delay.
+     * Periodically execute the repetition after the initial delay.
      * 
      * @param repetition the repetition to be executed
      * @param initial the initial delay

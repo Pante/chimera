@@ -29,7 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * An enumeration that maps primitive types to the wrapper types.
+ * Constants of primitive types and their corresponding boxed types.
  */
 public enum Type {
     
@@ -67,24 +67,24 @@ public enum Type {
     
     
     /**
-     * Returns the type associated with the given object, or {@link #TYPE} if the
-     * given object is neither a primitive nor primitive wrapper.
+     * Returns the {@code Type} of the {@code object}, or {@link #TYPE} if the
+     * {@code object} is neither primitive nor boxed.
      * 
      * @param object the object
-     * @return the associated type of the given object, or TYPE if the given object
-     *         is neither a primitive nor primitive wrapper
+     * @return the {@code Type} of the {@code object}, or {@code TYPE} if the object
+     *         is neither primitive nor boxed
      */
     public static Type of(Object object) {
         return of(object.getClass());
     }
     
     /**
-     * Returns the type associated with the given class, or {@link #TYPE} if the
-     * given type is neither a primitive nor primitive wrapper.
+     * Returns the {@code Type} of the {@code type}, or {@link #TYPE} if the
+     * {@code type} is neither primitive nor boxed.
      * 
-     * @param type the type
-     * @return the associated Type of the given type, or TYPE if the given type
-     *         is neither a primitive nor primitive wrapper
+     * @param type the {@code class}
+     * @return the {@code Type} of the {@code class}, or {@code TYPE} if the object
+     *         is neither primitive nor boxed
      */
     public static Type of(Class<?> type) {
         return TYPES.getOrDefault(type, TYPE);
@@ -92,7 +92,7 @@ public enum Type {
     
     
     /**
-     * The primitive wrapper type.
+     * The boxed type.
      */
     public final @Nullable Class<?> boxed;
     /**

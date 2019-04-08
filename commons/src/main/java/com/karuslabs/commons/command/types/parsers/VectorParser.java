@@ -34,7 +34,7 @@ import org.bukkit.util.Vector;
 
 
 /**
- * This class consists exclusively of functions that parse vector-related structures.
+ * This class consists exclusively of static methods that parse vector-related structures.
  */
 public @Static class VectorParser {
     

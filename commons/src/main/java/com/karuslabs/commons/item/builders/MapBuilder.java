@@ -29,15 +29,15 @@ import org.bukkit.map.MapView;
 
 
 /**
- * A builder for maps.
+ * A map builder.
  */
 public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     
     /**
-     * Returns a {@code MapBuilder} for the given material.
+     * Creates a {@code MapBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return a {@code MapBuilder}
      */
     public static MapBuilder of(Material material) {
         return new MapBuilder(material);
@@ -56,7 +56,7 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
      * Sets the colour.
      * 
      * @param colour the colour
-     * @return this
+     * @return {@code this}
      */
     public MapBuilder colour(Color colour) {
         meta.setColor(colour);
@@ -78,7 +78,7 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
      * Sets the map view.
      * 
      * @param map the map view
-     * @return this
+     * @return {@code this}
      */
     public MapBuilder view(MapView map) {
         meta.setMapView(map);
@@ -89,7 +89,7 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
      * Sets the map scaling.
      * 
      * @param scaling the scaling
-     * @return this
+     * @return {@code this}
      */
     public MapBuilder scaling(boolean scaling) {
         meta.setScaling(scaling);

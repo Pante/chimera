@@ -28,15 +28,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 
 /**
- * A builder for {@code ItemStack}s.
+ * A {@code ItemStack} builder.
  */
 public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     /**
-     * Returns a {@code ItemBuilder} for the given material.
+     * Creates a {@code ItemBuilder} for the given material.
      * 
      * @param material the material
-     * @return the builder
+     * @return an {@code ItemBuilder}
      */
     public static ItemBuilder of(Material material) {
         return new ItemBuilder(material);
@@ -48,108 +48,108 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     
     /**
-     * Returns a {@code BannerBuilder} for this {@code ItemStack}.
+     * Creates a {@code BannerBuilder} for this {@code ItemStack}.
      * 
-     * @return a BannerBuilder
+     * @return a {@code BannerBuilder}
      */
     public BannerBuilder asBanner() {
         return new BannerBuilder(this);
     }
     
     /**
-     * Returns a {@code BlockStateBuilder} for this {@code ItemStack}.
+     * Creates a {@code BlockStateBuilder} for this {@code ItemStack}.
      * 
-     * @return a BlockStateBuilder
+     * @return a {@code BlockStateBuilder}
      */
     public BlockStateBuilder asBlockState() {
         return new BlockStateBuilder(this);
     }
     
     /**
-     * Returns a {@code BookBuilder} for this {@code ItemStack}.
+     * Creates a {@code BookBuilder} for this {@code ItemStack}.
      * 
-     * @return a BookBuilder
+     * @return a {@code BookBuilder}
      */
     public BookBuilder asBook() {
         return new BookBuilder(this);
     }
     
     /**
-     * Returns a {@code EnchantmentStorageBuilder} for this {@code ItemStack}.
+     * Creates an {@code EnchantmentStorageBuilder} for this {@code ItemStack}.
      * 
-     * @return a EnchantmentStorageBuilder
+     * @return an {@code EnchantmentStorageBuilder}
      */
     public EnchantmentStorageBuilder asEnchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
     
     /**
-     * Returns a {@code FireworkBuilder} for this {@code ItemStack}.
+     * Creates a {@code FireworkBuilder} for this {@code ItemStack}.
      * 
-     * @return a FireworkBuilder
+     * @return a {@code FireworkBuilder}
      */
     public FireworkBuilder asFirework() {
         return new FireworkBuilder(this);
     }
     
     /**
-     * Returns a {@code FireworkEffectBuilder} for this {@code ItemStack}.
+     * Creates a {@code FireworkEffectBuilder} for this {@code ItemStack}.
      * 
-     * @return a FireworkEffectBuilder
+     * @return a {@code FireworkEffectBuilder}
      */
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
     /**
-     * Returns a {@code KnowledgeBookBuilder} for this {@code ItemStack}.
+     * Creates a {@code KnowledgeBookBuilder} for this {@code ItemStack}.
      * 
-     * @return a KnowledgeBOokBuilder
+     * @return a {@code KnowledgeBookBuilder}
      */
     public KnowledgeBookBuilder asKnowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
     
     /**
-     * Returns a {@code LeatherArmourBuilder} for this {@code ItemStack}.
+     * Creates a {@code LeatherArmourBuilder} for this {@code ItemStack}.
      * 
-     * @return a LeatherArmourBuilder
+     * @return a {@code LeatherArmourBuilder}
      */
     public LeatherArmourBuilder asLeatherArmour() {
         return new LeatherArmourBuilder(this);
     }
     
     /**
-     * Returns a {@code MapBuilder} for this {@code ItemStack}.
+     * Creates a {@code MapBuilder} for this {@code ItemStack}.
      * 
-     * @return a MapBuilder
+     * @return a {@code MapBuilder}
      */
     public MapBuilder asMap() {
         return new MapBuilder(this);
     }
     
     /**
-     * Returns a {@code PotionBuilder} for this {@code ItemStack}.
+     * Creates a {@code PotionBuilder} for this {@code ItemStack}.
      * 
-     * @return a PotionBuilder
+     * @return a {@code PotionBuilder}
      */
     public PotionBuilder asPotion() {
         return new PotionBuilder(this);
     }
     
     /**
-     * Returns a {@code SkullBuilder} for this {@code ItemStack}.
+     * Creates a {@code SkullBuilder} for this {@code ItemStack}.
      * 
-     * @return a SkullBuilder
+     * @return a {@code SkullBuilder}
      */
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
     }
     
     /**
-     * Returns a {@code TropicalFishBucketBuilder} for this {@code ItemStack}.
+     * Creates a {@code TropicalFishBucketBuilder} for this {@code ItemStack}.
      * 
-     * @return a TropicalFishBucketBuilder
+     * @return a  {@code TropicalFishBucketBuilder}
      */
     public TropicalFishBucketBuilder asBucket() {
         return new TropicalFishBucketBuilder(this);
