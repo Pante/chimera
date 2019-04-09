@@ -3,7 +3,8 @@
 </p>
 
 
-Open source spigot libraries & tools devloped by Karus Labs.<br>
+Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadier command framework to be used in Spigot Plugins.
+
 **This is a bleeding edge version of Chimera, For a production ready version, please refer to the [stable branch](https://github.com/Pante/Chimera/tree/stable). For more information, please read the [wiki](https://github.com/Pante/Chimera/wiki)**
 
 **All projects require Java 11+**
