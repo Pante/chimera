@@ -3,8 +3,11 @@
 </p>
 
 
-Open source spigot libraries & tools devloped by Karus Labs.<br>
-**This is a bleeding edge version of Chimera, For a production ready version, please refer to the stable branch.**
+Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadier command framework to be used in Spigot plugins.
+
+**This is a bleeding edge version of Chimera, For a production ready version, please refer to the [stable branch](https://github.com/Pante/Chimera/tree/stable). For more information, please read the [wiki](https://github.com/Pante/Chimera/wiki)**
+
+**This project requires Java 11+**
 
 [![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
@@ -13,7 +16,7 @@ Open source spigot libraries & tools devloped by Karus Labs.<br>
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
 ***
-#### Annotations
+#### Annotations - Contains useful, general purpose annotations
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
 [![javadoc](https://img.shields.io/badge/javadoc-4.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0/commons/apidocs/index.html)
@@ -41,7 +44,7 @@ Open source spigot libraries & tools devloped by Karus Labs.<br>
 ```
 
 ***
-#### Chimera
+#### Chimera - Contains the command framework and other common utilities for Spigot plugin development
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
 [![javadoc](https://img.shields.io/badge/javadoc-4.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.0.0/commons/apidocs/index.html)
