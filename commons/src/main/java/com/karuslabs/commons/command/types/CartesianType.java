@@ -34,6 +34,9 @@ import org.bukkit.entity.Player;
 
 public abstract class CartesianType<T> implements Type<T> {    
     
+    private static final String[] EMPTY = new String[]{};
+    
+    
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         var source = context.getSource();
@@ -52,7 +55,7 @@ public abstract class CartesianType<T> implements Type<T> {
     }
     
     protected String[] split(String remaining) {
-        return remaining.split(" ");
+        return remaining.isBlank() ? EMPTY : remaining.split(" ");
     }
     
     

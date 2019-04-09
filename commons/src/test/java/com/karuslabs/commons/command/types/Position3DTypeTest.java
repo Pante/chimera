@@ -66,6 +66,8 @@ class Position3DTypeTest {
     static Stream<Arguments> suggest_parameters() {
         return Stream.of(
             of(new String[] {}, new SuggestionsBuilder("", 0).suggest("~").suggest("~ ~").suggest("~ ~ ~")),
+            of(new String[] {}, new SuggestionsBuilder(" ", 0).suggest("~").suggest("~ ~").suggest("~ ~ ~")),
+            of(new String[] {}, new SuggestionsBuilder("  ", 0).suggest("~").suggest("~ ~").suggest("~ ~ ~")),
             of(new String[] {"^1"}, new SuggestionsBuilder("^1", 0).suggest("^1 ^").suggest("^1 ^ ^")),
             of(new String[] {"~1"}, new SuggestionsBuilder("~1", 0).suggest("~1 ~").suggest("~1 ~ ~")),
             of(new String[] {"~1", "2"}, new SuggestionsBuilder("~1 2", 0).suggest("~1 2 ~"))

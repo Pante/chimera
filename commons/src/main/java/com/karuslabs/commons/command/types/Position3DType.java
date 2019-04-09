@@ -47,7 +47,7 @@ public class Position3DType extends Cartesian3DType<Position> {
         
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        if (builder.remaining.isEmpty()) {
+        if (builder.remaining.isBlank()) {
             builder.suggest("~").suggest("~ ~").suggest("~ ~ ~");
             return;
         }
