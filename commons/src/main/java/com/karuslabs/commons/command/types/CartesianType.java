@@ -39,6 +39,9 @@ import org.bukkit.entity.Player;
  */
 public abstract class CartesianType<T> implements Type<T> {    
     
+    private static final String[] EMPTY = new String[]{};
+    
+    
     /**
      * Splits the remaining string of the builder by a whitespace and forwards providing
      * suggestions to {@link #suggest(SuggestionsBuilder, CommandContext, Location, String[])}
@@ -74,7 +77,7 @@ public abstract class CartesianType<T> implements Type<T> {
      * @return the parts of the given string split by a whitespace
      */
     protected String[] split(String remaining) {
-        return remaining.split(" ");
+        return remaining.isBlank() ? EMPTY : remaining.split(" ");
     }
     
     

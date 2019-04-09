@@ -56,7 +56,7 @@ class Cartesian3DTypeTest {
     void suggest_all() {
         when(builder.getRemaining()).thenReturn("");
         type.suggest(builder, null, location, new String[] {});
-        
+    
         verify(builder).suggest("1.0");
         verify(builder).suggest("1.0 2.0");
         verify(builder).suggest("1.0 2.0 3.0");
