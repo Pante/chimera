@@ -7,7 +7,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 
 **This is a bleeding edge version of Chimera, For a production ready version, please refer to the [stable branch](https://github.com/Pante/Chimera/tree/stable). For more information, please read the [wiki](https://github.com/Pante/Chimera/wiki)**
 
-**This project requires Java 11+**
+**This project requires Java 11+ [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 
 [![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
