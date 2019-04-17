@@ -31,9 +31,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD})
-public @interface Bind {
+@Target({TYPE, METHOD})
+@Repeatable(Literals.class)
+public @interface Literal {
     
-    String value();
+    String[] namespace();
+    
+    String[] aliases() default {};
     
 }

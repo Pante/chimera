@@ -135,6 +135,11 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
             this.aliases = new ArrayList<>(0);
         }
         
+                
+        public Builder<T, V> alias(String... aliases) {
+            Collections.addAll(this.aliases, aliases);
+            return this;
+        }
         
         public Builder<T, V> alias(String alias) {
             aliases.add(alias);

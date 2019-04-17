@@ -94,11 +94,16 @@ public @Static class Commands {
         COMMAND.set(command, execution);
     }
     
+    
+    public static <T> Map<String, CommandNode<T>> children(CommandNode<T> command) {
+        return (Map<String, CommandNode<T>>) CHILDREN.get(command);
+    }
+    
         
-    public static <S> @Nullable CommandNode<S> remove(CommandNode<S> command, String child) {
-        var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
-        var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
-        var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
+    public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
+        var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
+        var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
+        var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
 
         var removed = commands.remove(child);
         if (removed != null) {
@@ -109,10 +114,10 @@ public @Static class Commands {
         return removed;
     }
 
-    public static <S> boolean remove(CommandNode<S> command, String... children) {
-        var commands = (Map<String, CommandNode<S>>) CHILDREN.get(command);
-        var literals = (Map<String, LiteralCommandNode<S>>) LITERALS.get(command);
-        var arguments = (Map<String, ArgumentCommandNode<S, ?>>) ARGUMENTS.get(command);
+    public static <T> boolean remove(CommandNode<T> command, String... children) {
+        var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
+        var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
+        var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
         
         var all = true;
             for (var child : children) {

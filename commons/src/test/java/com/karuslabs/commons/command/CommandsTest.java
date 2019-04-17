@@ -90,6 +90,12 @@ class CommandsTest {
     }
     
     
+    @Test
+    void children() {
+        assertTrue(Commands.children(literal).containsKey("a"));
+    }
+    
+    
     @ParameterizedTest
     @MethodSource("child")
     void remove_child(String child, boolean isNull) {
@@ -105,13 +111,13 @@ class CommandsTest {
     
     
     @ParameterizedTest
-    @MethodSource("children")
+    @MethodSource("remove_children_parameters")
     void remove_children(String[] children, boolean all, int size) {
         assertEquals(all, Commands.remove(literal, children));
         assertEquals(size, literal.getChildren().size());
     }
     
-    static Stream<Arguments> children() {
+    static Stream<Arguments> remove_children_parameters() {
         return Stream.of(
             of(new String[] {"a"}, true, 1),
             of(new String[] {"a", "b"}, true, 0),

@@ -106,8 +106,8 @@ class NodeTest {
     static Stream<Node<CommandSender>> node_parameters() {
         var optional = Literal.of("optional").then(Literal.of("optional child"));
         return Stream.of(
-            Literal.of("literal").executes(val -> {}).alias("literal alias").optionally(optional).build(),
-            Argument.of("argument", StringArgumentType.word()).executes(val -> {}).alias("argument alias").optionally(optional).build()
+            Literal.of("literal").executes(val -> {}).alias("literal alias").alias("a", "b").optionally(optional).build(),
+            Argument.of("argument", StringArgumentType.word()).executes(val -> {}).alias("argument alias").alias("a", "b").optionally(optional).build()
         );
     }
 

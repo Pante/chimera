@@ -131,6 +131,11 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         }
         
         
+        public Builder alias(String... aliases) {
+            Collections.addAll(this.aliases, aliases);
+            return this;
+        }
+        
         public Builder<T> alias(String alias) {
             aliases.add(alias);
             return this;
