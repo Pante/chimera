@@ -99,6 +99,10 @@ public @Static class Commands {
         return (Map<String, CommandNode<T>>) CHILDREN.get(command);
     }
     
+    public static <T> void children(CommandNode<T> command, Map<String, CommandNode<T>> children) {
+        CHILDREN.set(command, children);
+    }
+    
         
     public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
         var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
