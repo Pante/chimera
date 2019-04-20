@@ -55,14 +55,31 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, wrap(command))) {
-            super.addChild(command);
+        if (command instanceof Aliasable<?>) {
+            for (var alias : ((Aliasable<CommandSender>) command).aliases()) {
+                register(alias);
+            }
         }
         
-        super.addChild(Commands.alias(command, prefix + ":" + command.getName()));
+        register(command); // Needs to be registered last to avoid plugin:command getting registered again as an alias
     }
     
-    protected Command wrap(CommandNode<CommandSender> command) {
+    protected void register(CommandNode<CommandSender> command) {
+        if (command instanceof LiteralCommandNode<?>) {
+            var literal = (LiteralCommandNode<CommandSender>) command;
+            
+            if (map.register(prefix, wrap(literal))) {
+                super.addChild(command);
+            }
+            
+            super.addChild(Commands.alias(literal, prefix + ":" + command.getName()));
+            
+        } else {
+            throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode");
+        }
+    }
+    
+    protected Command wrap(LiteralCommandNode<CommandSender> command) {
         return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
     }
     

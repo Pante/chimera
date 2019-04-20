@@ -33,7 +33,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
-import java.util.*;
 import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
@@ -41,10 +40,9 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T> {
+public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
 
     private CommandNode<T> destination;
-    private List<CommandNode<T>> aliases;
 
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
@@ -52,47 +50,37 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     }
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
-        this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
-    }
-    
-    public Argument(String name, ArgumentType<V> type, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
-        this.aliases = aliases;
     }
     
     
     @Override
     public void addChild(CommandNode<T> child) {
-        super.addChild(child);
-        for (var alias : aliases) {
-            alias.addChild(child);
+        var current = getChild(child.getName());
+        if (child instanceof Aliasable<?>) {
+            var aliasable = ((Aliasable<T>) child);
+            for (var alias : aliasable.aliases()) {
+                super.addChild(alias);
+            }
+            
+            if (current instanceof Aliasable<?>) {
+                ((Aliasable<T>) current).aliases().addAll(aliasable.aliases());
+            }
         }
+        
+        super.addChild(child);
     }
     
     @Override
     public CommandNode<T> removeChild(String child) {
-        var removed = Commands.remove(this, child);
-        for (var alias : aliases) {
-            Commands.remove(alias, child);
-        }
-        
-        return removed;
-    }
-        
-    
-    @Override
-    public List<CommandNode<T>> aliases() {
-        return aliases;
+        return Commands.remove(this, child);
     }
     
     
     @Override
     public void setCommand(Command<T> command) {
         Commands.executes(this, command);
-        for (var alias : aliases) {
-            Commands.executes(alias, command);
-        }
     }
     
     
@@ -104,11 +92,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     @Override
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
-        for (var alias : aliases) {
-            if (alias instanceof Node<?>) {
-                (((Node<T>) alias)).setRedirect(destination);
-            }
-        }
     }
     
     
@@ -125,25 +108,12 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         
         String name;
         ArgumentType<V> type;
-        List<String> aliases;
         @Nullable SuggestionProvider<T> suggestions;
         
         
         protected Builder(String name, ArgumentType<V> type) {
             this.name = name;
             this.type = type;
-            this.aliases = new ArrayList<>(0);
-        }
-        
-                
-        public Builder<T, V> alias(String... aliases) {
-            Collections.addAll(this.aliases, aliases);
-            return this;
-        }
-        
-        public Builder<T, V> alias(String alias) {
-            aliases.add(alias);
-            return this;
         }
         
         public Builder<T, V> executes(Executable<T> command) {
@@ -180,10 +150,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
             var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
                 parameter.addChild(child);
-            }
-            
-            for (var alias : aliases) {
-                Commands.alias(parameter, alias);
             }
             
             return parameter;

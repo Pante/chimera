@@ -62,8 +62,7 @@ public class CommandAssembler<T> {
             var command = descend(type, "Argument", namespace);
             var name = namespace[namespace.length - 1];
 
-            command.addChild(argument(name, bindings.get(name, ArgumentType.class)).alias(argument.aliases())
-                            .suggests(bindings.get(name, SuggestionProvider.class)).executes(execution).build());
+            command.addChild(argument(name, bindings.get(argument.type(), ArgumentType.class)).suggests(bindings.get(argument.suggestions(), SuggestionProvider.class)).executes(execution).build());
         }
     }
     
@@ -74,12 +73,13 @@ public class CommandAssembler<T> {
         }
         
         var command = container;
-        for (int i = 0; i <= namespace.length; i++) {
+        for (int i = 0; i < namespace.length - 1; i++) {
             var child = command.getChild(namespace[i]);
             if (child == null) {
                 child = literal(namespace[i]).build();
                 command.addChild(child);
             }
+            command = child;
         }
         
         return command;

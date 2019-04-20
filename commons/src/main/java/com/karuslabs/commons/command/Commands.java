@@ -51,42 +51,20 @@ public @Static class Commands {
             throw new ExceptionInInitializerError(e);
         }
     }
-    
-    
-    public static <T> CommandNode<T> alias(CommandNode<T> command, String alias) {
-        if (command instanceof ArgumentCommandNode<?, ?>) {
-            return alias((ArgumentCommandNode<T, ?>) command, alias);
-            
-        } if (command instanceof LiteralCommandNode<?>) {
-            return alias((LiteralCommandNode<T>) command, alias);
-            
-        } else {
-            throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
-        }
-    }
-    
-    public static <T, V> Argument<T, V> alias(ArgumentCommandNode<T, V> command, String alias) {
-        var parameter = new Argument<>(alias, command.getType(), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork(), command.getCustomSuggestions());
-        return alias(command, parameter);
-    }
 
     
     public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
         var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
-        return alias(command, literal);
-    }
-    
-    
-    static <Alias extends CommandNode<T>, T> Alias alias(CommandNode<T> command, Alias alias) {
+ 
         for (var child : command.getChildren()) {
-            alias.addChild(child);
+            literal.addChild(child);
         }
         
-        if (command instanceof Node<?>) {
-            ((Node<T>) command).aliases().add(alias);
+        if (command instanceof Aliasable<?>) {
+            ((Aliasable<T>) command).aliases().add(literal);
         }
         
-        return alias;
+        return literal;
     }
     
     
@@ -110,9 +88,19 @@ public @Static class Commands {
         var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
 
         var removed = commands.remove(child);
-        if (removed != null) {
-            literals.remove(child);
-            arguments.remove(child);
+        if (removed == null) {
+            return null;
+        }
+        
+        literals.remove(child);
+        arguments.remove(child);
+        
+        if (removed instanceof Aliasable<?>) {
+            for (var alias : ((Aliasable<?>) removed).aliases()) {
+                commands.remove(alias.getName());
+                literals.remove(child);
+                arguments.remove(child);
+            }
         }
 
         return removed;
@@ -124,14 +112,22 @@ public @Static class Commands {
         var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
         
         var all = true;
-            for (var child : children) {
+        for (var child : children) {
             var removed = commands.remove(child);
-            if (removed != null) {
-                literals.remove(child);
-                arguments.remove(child);
-                
-            } else {
+            if (removed == null) {
                 all = false;
+                continue;
+            }
+            
+            literals.remove(child);
+            arguments.remove(child);
+            
+            if (removed instanceof Aliasable<?>) {
+                for (var alias : ((Aliasable<?>) removed).aliases()) {
+                    commands.remove(alias.getName());
+                    literals.remove(child);
+                    arguments.remove(child);
+                }
             }
         }
         

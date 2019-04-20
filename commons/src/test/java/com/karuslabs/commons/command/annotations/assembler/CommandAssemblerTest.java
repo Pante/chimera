@@ -24,10 +24,11 @@
 package com.karuslabs.commons.command.annotations.assembler;
 
 import com.karuslabs.commons.command.annotations.*;
-import com.karuslabs.commons.command.annotations.assembler.CommandAssembler;
 import com.karuslabs.commons.util.collections.TokenMap;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import java.util.stream.Stream;
@@ -48,9 +49,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CommandAssemblerTest {
     
-    @Literal(namespace = {"a", "b", "c1"}, aliases = {"c1a", "c1b"})
-    @Argument(namespace = {"a", "b", "c2"}, aliases = {"c2a", "c2b"}, type = "bird")
-    @Argument(namespace = {"a", "b", "c3"}, aliases = {"c3a", "c3b"}, type = "is", suggestions = "the")
+    @Literal(namespace = {"a", "b", "c", "d"}, aliases = {"da"})
+    @Literal(namespace = {"a", "b", "c"}, aliases = {"c1a", "c1b"})
+    @Argument(namespace = {"a", "b", "c3"}, type = "bird")
+    @Argument(namespace = {"a", "b", "c4"}, type = "is", suggestions = "bird")
     static class Type {
         
     }
@@ -61,14 +63,81 @@ class CommandAssemblerTest {
     
     
     @Test
-    void assemble_literals() {
+    void assemble_literal() {
         assembler.assemble(Type.class, Type.class.getAnnotationsByType(Literal.class), execution);
-        var parent = assembler.container.getChild("a").getChild("b");
-        var child = parent.getChild("c1");
         
-        assertEquals(execution, child);
-        assertEquals(execution, parent.getChild("c1a").getCommand());
-        assertEquals(execution, parent.getChild("c1b").getCommand());
+        var c = (com.karuslabs.commons.command.tree.nodes.Literal<Object>) assembler.container.getChild("a").getChild("b").getChild("c");
+        var c1a = c.aliases().get(0);
+        
+        var d = (com.karuslabs.commons.command.tree.nodes.Literal<Object>) c.getChild("d");
+        var da = (com.karuslabs.commons.command.tree.nodes.Literal<Object>) d.aliases().get(0);
+        
+        assertEquals("c", c.getName());
+        assertEquals(2, c.getChildren().size());
+        assertEquals(2, c.aliases().size());
+        assertEquals(execution, c.getCommand());
+        
+        assertEquals("c1a", c1a.getName());
+        assertEquals(2, c1a.getChildren().size());
+        assertEquals(execution, c1a.getCommand());
+        
+        assertEquals("d", d.getName());
+        assertEquals(1, d.aliases().size());
+        
+        assertSame(c1a.getChild("d"), d);
+        assertSame(c1a.getChild("da"), da);
+    }
+    
+    
+    @Test
+    void assemble_argument() {
+        var birdType = mock(ArgumentType.class);
+        var isType = mock(ArgumentType.class);
+        var birdSuggestions = mock(SuggestionProvider.class);
+        
+        assembler.bindings.put("bird", ArgumentType.class, birdType);
+        assembler.bindings.put("is", ArgumentType.class, isType);
+        assembler.bindings.put("bird", SuggestionProvider.class, birdSuggestions);
+        
+        assembler.assemble(Type.class, Type.class.getAnnotationsByType(Argument.class), execution);
+        var b = assembler.container.getChild("a").getChild("b");
+        
+        var c3 = (com.karuslabs.commons.command.tree.nodes.Argument<Object, ?>) b.getChild("c3");
+        
+        assertEquals("c3", c3.getName());
+        assertEquals(birdType, c3.getType());
+        assertNull(c3.createBuilder().getSuggestionsProvider());
+        assertEquals(execution, c3.getCommand());
+        
+        var c4 = (com.karuslabs.commons.command.tree.nodes.Argument<Object, ?>) b.getChild("c4");
+        
+        assertEquals("c4", c4.getName());
+        assertEquals(isType, c4.getType());
+        assertEquals(birdSuggestions, c4.createBuilder().getSuggestionsProvider());
+        assertEquals(execution, c3.getCommand());
+    }
+    
+    
+    @Test
+    void descend() {
+        assembler.container.addChild(literal("a").build());
+        var b = assembler.descend(Type.class, "Literal", new String[] {"a", "b", "c"});
+        
+        assertNotNull(b);
+        assertEquals(assembler.container.getChild("a").getChild("b"), b);
+    }
+    
+    
+    @Test
+    void descend_throws_exception() {
+        assertEquals("Invalid namespace for: @Test in " + Type.class,
+            assertThrows(IllegalArgumentException.class, () -> assembler.descend(Type.class, "Test", new String[] {})).getMessage()
+        );
+    }
+    
+    
+    com.karuslabs.commons.command.tree.nodes.Literal.Builder<Object> literal(String name) {
+        return com.karuslabs.commons.command.tree.nodes.Literal.<Object>builder(name);
     }
     
 } 

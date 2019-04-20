@@ -39,7 +39,7 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
+public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
 
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
@@ -62,10 +62,30 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     
     @Override
     public void addChild(CommandNode<T> child) {
-        super.addChild(child);
+        var current = getChild(child.getName()); // Existing child
+        if (child instanceof Aliasable<?>) {
+            var aliasable = ((Aliasable<T>) child);
+            for (var alias : aliasable.aliases()) {
+                super.addChild(alias);
+                
+                if (current != null) {
+                    for (var grandchild : current.getChildren()) {
+                        alias.addChild(grandchild);
+                    }
+                }
+            }
+            
+            if (current instanceof Aliasable<?>) {
+                ((Aliasable<T>) current).aliases().addAll(aliasable.aliases()); // Add aliases to existing child
+                // Children of existing child not added to aliases
+            }
+        }
+        
         for (var alias : aliases) {
             alias.addChild(child);
         }
+        
+        super.addChild(child);
     }
     
     @Override
@@ -103,8 +123,8 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
         for (var alias : aliases) {
-            if (alias instanceof Node<?>) {
-                (((Node<T>) alias)).setRedirect(destination);
+            if (alias instanceof Mutable<?>) {
+                (((Mutable<T>) alias)).setRedirect(destination);
             }
         }
     }
@@ -131,7 +151,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         }
         
         
-        public Builder alias(String... aliases) {
+        public Builder<T> alias(String... aliases) {
             Collections.addAll(this.aliases, aliases);
             return this;
         }

@@ -26,15 +26,10 @@ package com.karuslabs.commons.command.tree.nodes;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.CommandNode;
 
-import java.util.List;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public interface Node<T> {
-    
-    public List<CommandNode<T>> aliases();
-
+public interface Mutable<T> {
     
     public void addChild(CommandNode<T> child);
     

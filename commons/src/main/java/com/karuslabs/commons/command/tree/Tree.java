@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command.tree;
 
 import com.karuslabs.commons.command.Commands;
-import com.karuslabs.commons.command.tree.nodes.Node;
 
 import com.mojang.brigadier.tree.*;
 
@@ -32,6 +31,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import com.karuslabs.commons.command.tree.nodes.Mutable;
 
 
 public class Tree<T, R> {    
@@ -92,9 +92,9 @@ public class Tree<T, R> {
     }
     
     protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        if (command.getRedirect() != null && target instanceof Node<?>) {
+        if (command.getRedirect() != null && target instanceof Mutable<?>) {
             var destination = map(command.getRedirect(), caller, mappings);
-            ((Node<R>) target).setRedirect(destination);
+            ((Mutable<R>) target).setRedirect(destination);
         }
     }
     

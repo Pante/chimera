@@ -21,24 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.tree.nodes;
 
-import java.lang.annotation.*;
+import com.mojang.brigadier.tree.CommandNode;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.List;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-@Repeatable(Arguments.class)
-public @interface Argument {
+public interface Aliasable<T> {
     
-    String[] namespace();
-    
-    String type();
-    
-    String suggestions() default "";
+    public List<CommandNode<T>> aliases();
     
 }
