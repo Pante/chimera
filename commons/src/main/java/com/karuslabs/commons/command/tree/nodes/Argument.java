@@ -55,21 +55,23 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     }
     
     
-    @Override
     public void addChild(CommandNode<T> child) {
-        var current = getChild(child.getName());
-        if (child instanceof Aliasable<?>) {
-            var aliasable = ((Aliasable<T>) child);
-            for (var alias : aliasable.aliases()) {
-                super.addChild(alias);
-            }
+        var existing = getChild(child.getName());
+        if (existing == null) {
             
-            if (current instanceof Aliasable<?>) {
-                ((Aliasable<T>) current).aliases().addAll(aliasable.aliases());
+            
+        } else {
+            addExistingChild(existing, child);
+        }
+    }
+    
+    protected void addExistingChild(CommandNode<T> existing, CommandNode<T> replacement) {
+        if (existing instanceof Aliasable<?> && replacement instanceof Aliasable<?>) {
+            ((Aliasable<T>) existing).aliases().addAll(((Aliasable<T>) replacement).aliases());
+            for (var alias : aliases) {
+                
             }
         }
-        
-        super.addChild(child);
     }
     
     @Override

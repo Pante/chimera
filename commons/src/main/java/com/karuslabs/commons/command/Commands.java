@@ -87,6 +87,7 @@ public @Static class Commands {
         var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
         var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
 
+        
         var removed = commands.remove(child);
         if (removed == null) {
             return null;
@@ -95,11 +96,18 @@ public @Static class Commands {
         literals.remove(child);
         arguments.remove(child);
         
+        var aliases = command instanceof Aliasable<?> ? ((Aliasable<T>) command).aliases() : null;
         if (removed instanceof Aliasable<?>) {
             for (var alias : ((Aliasable<?>) removed).aliases()) {
                 commands.remove(alias.getName());
                 literals.remove(child);
                 arguments.remove(child);
+                
+                if (aliases != null) {
+                    for (var commandAlias : aliases) {
+                        // TODO
+                    }
+                }
             }
         }
 
@@ -107,6 +115,7 @@ public @Static class Commands {
     }
 
     public static <T> boolean remove(CommandNode<T> command, String... children) {
+        // TODO REWRITE METHOD
         var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
         var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
         var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);

@@ -60,33 +60,34 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     }
     
     
-    @Override
+     @Override
     public void addChild(CommandNode<T> child) {
-        var current = getChild(child.getName()); // Existing child
-        if (child instanceof Aliasable<?>) {
-            var aliasable = ((Aliasable<T>) child);
-            for (var alias : aliasable.aliases()) {
-                super.addChild(alias);
-                
-                if (current != null) {
-                    for (var grandchild : current.getChildren()) {
-                        alias.addChild(grandchild);
-                    }
-                }
-            }
+        var existing = getChild(child.getName());
+        if (existing == null) {
             
-            if (current instanceof Aliasable<?>) {
-                ((Aliasable<T>) current).aliases().addAll(aliasable.aliases()); // Add aliases to existing child
-                // Children of existing child not added to aliases
-            }
+            
+        } else {
+            addExistingChild(existing, child);
         }
-        
-        for (var alias : aliases) {
-            alias.addChild(child);
-        }
-        
         super.addChild(child);
     }
+    
+    protected void addExistingChild(CommandNode<T> existing, CommandNode<T> replacement) {
+        if (existing instanceof Aliasable<?> && replacement instanceof Aliasable<?>) {
+            var existingChildAliases = ((Aliasable<T>) existing).aliases();
+            var newChildAliases = ((Aliasable<T>) replacement).aliases();
+            
+            existingChildAliases.addAll(newChildAliases);
+            for (var newChildAlias : newChildAliases) {
+                super.addChild(newChildAlias);
+                for (var alias : aliases) {
+                    alias.addChild(newChildAlias);
+                }
+            }
+        }
+    }
+    
+    protected addNewChild(CommandNode<T>)
     
     @Override
     public CommandNode<T> removeChild(String child) {
