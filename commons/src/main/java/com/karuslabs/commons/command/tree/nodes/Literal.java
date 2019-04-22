@@ -80,14 +80,24 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             existingChildAliases.addAll(newChildAliases);
             for (var newChildAlias : newChildAliases) {
                 super.addChild(newChildAlias);
-                for (var alias : aliases) {
-                    alias.addChild(newChildAlias);
+            }
+            
+            for (var grandchild : replacement.getChildren()) {
+                existing.addChild(grandchild);
+                for (var existingChildAlias : existingChildAliases) {
+                    existingChildAlias.addChild(grandchild);
                 }
+            }
+                        
+            for (var alias : aliases) {
+                alias.addChild(existing);
             }
         }
     }
     
-    protected addNewChild(CommandNode<T>)
+    protected addNewChild(CommandNode<T>) {
+        
+    }
     
     @Override
     public CommandNode<T> removeChild(String child) {
