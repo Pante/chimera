@@ -54,7 +54,7 @@ public @Static class Commands {
 
     
     public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
-        var literal = new Literal<>(alias, new ArrayList<>(0), command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+        var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
  
         for (var child : command.getChildren()) {
             literal.addChild(child);
@@ -72,15 +72,6 @@ public @Static class Commands {
         COMMAND.set(command, execution);
     }
     
-    
-    public static <T> Map<String, CommandNode<T>> children(CommandNode<T> command) {
-        return (Map<String, CommandNode<T>>) CHILDREN.get(command);
-    }
-    
-    public static <T> void children(CommandNode<T> command, Map<String, CommandNode<T>> children) {
-        CHILDREN.set(command, children);
-    }
-    
         
     public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
         var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
@@ -96,18 +87,11 @@ public @Static class Commands {
         literals.remove(child);
         arguments.remove(child);
         
-        var aliases = command instanceof Aliasable<?> ? ((Aliasable<T>) command).aliases() : null;
         if (removed instanceof Aliasable<?>) {
             for (var alias : ((Aliasable<?>) removed).aliases()) {
                 commands.remove(alias.getName());
                 literals.remove(child);
                 arguments.remove(child);
-                
-                if (aliases != null) {
-                    for (var commandAlias : aliases) {
-                        // TODO
-                    }
-                }
             }
         }
 
@@ -115,7 +99,6 @@ public @Static class Commands {
     }
 
     public static <T> boolean remove(CommandNode<T> command, String... children) {
-        // TODO REWRITE METHOD
         var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
         var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
         var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);

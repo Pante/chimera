@@ -43,6 +43,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
 
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
+    private boolean alias;
     
     
     public Literal(String name, Command<T> command, Predicate<T> requirement) {
@@ -50,54 +51,53 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     }
     
     public Literal(String name, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
-        this(name, new ArrayList<>(0), command, requirement, destination, modifier, fork);
+        this(name, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
     }
     
-    public Literal(String name, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+    public Literal(String name, List<CommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
         this.aliases = aliases;
+        this.alias = alias;
     }
     
     
-     @Override
+    @Override
     public void addChild(CommandNode<T> child) {
         var existing = getChild(child.getName());
-        if (existing == null) {
-            
-            
-        } else {
-            addExistingChild(existing, child);
-        }
-        super.addChild(child);
-    }
-    
-    protected void addExistingChild(CommandNode<T> existing, CommandNode<T> replacement) {
-        if (existing instanceof Aliasable<?> && replacement instanceof Aliasable<?>) {
-            var existingChildAliases = ((Aliasable<T>) existing).aliases();
-            var newChildAliases = ((Aliasable<T>) replacement).aliases();
-            
-            existingChildAliases.addAll(newChildAliases);
-            for (var newChildAlias : newChildAliases) {
-                super.addChild(newChildAlias);
+        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
+        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
+        
+        super.addChild(child); 
+        
+        if (childAliases != null) {
+            for (var alias : childAliases) {
+                super.addChild(alias);
             }
-            
-            for (var grandchild : replacement.getChildren()) {
-                existing.addChild(grandchild);
-                for (var existingChildAlias : existingChildAliases) {
+        }
+                
+        if (!alias && existingAliases != null) {
+            if (childAliases != null) {
+                existingAliases.addAll(childAliases);
+                for (var alias : childAliases) {
+                    for (var grandchild : existing.getChildren()) {
+                        alias.addChild(grandchild);
+                    }
+                }
+            }
+
+            for (var grandchild : child.getChildren()) {
+                for (var existingChildAlias : existingAliases) {
                     existingChildAlias.addChild(grandchild);
                 }
             }
-                        
-            for (var alias : aliases) {
-                alias.addChild(existing);
-            }
+        }
+        
+        for (var alias : aliases) {
+            alias.addChild(child);
         }
     }
     
-    protected addNewChild(CommandNode<T>) {
-        
-    }
     
     @Override
     public CommandNode<T> removeChild(String child) {
@@ -113,6 +113,11 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     @Override
     public List<CommandNode<T>> aliases() {
         return aliases;
+    }
+    
+    @Override
+    public boolean isAlias() {
+        return alias;
     }
     
     

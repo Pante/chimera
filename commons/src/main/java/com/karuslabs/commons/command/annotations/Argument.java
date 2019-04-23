@@ -37,7 +37,7 @@ public @interface Argument {
     
     String[] namespace();
     
-    String type();
+    String type() default "";
     
     String suggestions() default "";
     

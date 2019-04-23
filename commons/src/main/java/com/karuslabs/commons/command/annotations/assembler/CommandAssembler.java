@@ -61,8 +61,11 @@ public class CommandAssembler<T> {
             var namespace = argument.namespace();
             var command = descend(type, "Argument", namespace);
             var name = namespace[namespace.length - 1];
-
-            command.addChild(argument(name, bindings.get(argument.type(), ArgumentType.class)).suggests(bindings.get(argument.suggestions(), SuggestionProvider.class)).executes(execution).build());
+            
+            command.addChild(argument(name, bindings.get(argument.type().isEmpty() ? name : argument.type(), ArgumentType.class))
+                            .suggests(bindings.get(argument.suggestions().isEmpty() ? name : argument.suggestions(), SuggestionProvider.class))
+                            .executes(execution).build()
+                            );
         }
     }
     

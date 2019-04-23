@@ -56,6 +56,7 @@ class CommandsTest {
         var alias = Commands.alias(literal, "alias");
         
         assertEquals("alias", alias.getName());
+        assertTrue(alias.isAlias());
         assertEquals(literal.getCommand(), alias.getCommand());
         assertEquals(4, alias.getChildren().size());
         assertTrue(literal.aliases().contains(alias));
@@ -67,19 +68,6 @@ class CommandsTest {
         Command<Object> command = val -> 1;
         Commands.executes(literal, command);
         assertSame(command, literal.getCommand());
-    }
-    
-    
-    @Test
-    void children_get() {
-        assertTrue(Commands.children(literal).containsKey("a"));
-    }
-    
-    
-    @Test
-    void children_set() {
-        Commands.children(literal, Map.of());
-        assertTrue(literal.getChildren().isEmpty());
     }
     
     

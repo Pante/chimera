@@ -69,10 +69,9 @@ public class Assembler<T> {
             assembler.assemble(type, type.getAnnotationsByType(Argument.class), null);
             generate(annotated);
             
-            return Commands.children(container);
+            return null;
           
         } finally {
-            Commands.children(container, new HashMap<>());
             bindings.map().clear();
         }
     }
@@ -94,7 +93,9 @@ public class Assembler<T> {
                 }
                 
                 var keyType = type.isAssignableFrom(ArgumentType.class) ? ArgumentType.class : SuggestionProvider.class;
-                if (bindings.map().put(TokenMap.key(annotation.value(), keyType), field.get(annotated)) != null) {
+                var name = annotation.value().isEmpty() ? field.getName() : annotation.value();
+                
+                if (bindings.map().put(TokenMap.key(name, keyType), field.get(annotated)) != null) {
                     throw new IllegalArgumentException("@Bind(" + annotation.value() + ") on the same type already exists");
                 }
             }

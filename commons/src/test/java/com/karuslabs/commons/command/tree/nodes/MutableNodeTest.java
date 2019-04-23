@@ -43,23 +43,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MutableNodeTest {
     
-    @ParameterizedTest
-    @MethodSource("mutable_parameters")
-    void addChild(Mutable<CommandSender> mutable) {
-        var child = Literal.of("child").alias("child1").build();
-        
-        mutable.addChild(child);
-        var node = ((CommandNode<?>) mutable);
-        
-        assertEquals(4, node.getChildren().size());
-        assertEquals(child, node.getChild("child"));
-        assertEquals(child.aliases().get(0), node.getChild("child1"));
-        
-        if (mutable instanceof Aliasable<?>) {
-            assertEquals(child, ((Aliasable<CommandSender>) mutable).aliases().get(0).getChild("child"));
-        }
-    }
-    
     
     @ParameterizedTest
     @MethodSource("mutable_parameters")

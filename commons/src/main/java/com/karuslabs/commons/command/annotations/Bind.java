@@ -34,6 +34,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 public @interface Bind {
     
-    String value();
+    String value() default "";
     
 }

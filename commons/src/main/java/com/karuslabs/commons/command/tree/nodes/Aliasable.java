@@ -32,4 +32,6 @@ public interface Aliasable<T> {
     
     public List<CommandNode<T>> aliases();
     
+    public boolean isAlias();
+    
 }
