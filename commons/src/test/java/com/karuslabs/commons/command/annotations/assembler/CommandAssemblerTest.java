@@ -49,30 +49,30 @@ class CommandAssemblerTest {
     }
     
     
-    CommandAssembler<Object> assembler = new CommandAssembler<>(new RootCommandNode<>(), TokenMap.of());
-    Command<Object> execution = context -> 0;
-    
-    
-    @Test
-    void descend() {
-        assembler.container.addChild(literal("a").build());
-        var b = assembler.descend(Type.class, "Literal", new String[] {"a", "b", "c"});
-        
-        assertNotNull(b);
-        assertEquals(assembler.container.getChild("a").getChild("b"), b);
-    }
-    
-    
-    @Test
-    void descend_throws_exception() {
-        assertEquals("Invalid namespace for: @Test in " + Type.class,
-            assertThrows(IllegalArgumentException.class, () -> assembler.descend(Type.class, "Test", new String[] {})).getMessage()
-        );
-    }
-    
-    
-    com.karuslabs.commons.command.tree.nodes.Literal.Builder<Object> literal(String name) {
-        return com.karuslabs.commons.command.tree.nodes.Literal.<Object>builder(name);
-    }
+//    CommandAssembler<Object> assembler = new CommandAssembler<>(new RootCommandNode<>(), TokenMap.of());
+//    Command<Object> execution = context -> 0;
+//    
+//    
+//    @Test
+//    void descend() {
+//        assembler.container.addChild(literal("a").build());
+//        var b = assembler.descend(Type.class, "Literal", new String[] {"a", "b", "c"});
+//        
+//        assertNotNull(b);
+//        assertEquals(assembler.container.getChild("a").getChild("b"), b);
+//    }
+//    
+//    
+//    @Test
+//    void descend_throws_exception() {
+//        assertEquals("Invalid namespace for: @Test in " + Type.class,
+//            assertThrows(IllegalArgumentException.class, () -> assembler.descend(Type.class, "Test", new String[] {})).getMessage()
+//        );
+//    }
+//    
+//    
+//    com.karuslabs.commons.command.tree.nodes.Literal.Builder<Object> literal(String name) {
+//        return com.karuslabs.commons.command.tree.nodes.Literal.<Object>builder(name);
+//    }
     
 } 

@@ -41,6 +41,8 @@ import java.util.*;
 
 public class Assembler<T> {
     
+    static final Lookup LOOKUP = MethodHandles.lookup();
+    
     static final MethodType COMMAND_SIGNATURE = MethodType.methodType(int.class, CommandContext.class);
     static final Class<?>[] COMMAND_PARAMETERS = new Class<?>[] {CommandContext.class};
     
@@ -48,31 +50,30 @@ public class Assembler<T> {
     static final Class<?>[] EXECUTABLE_PARAMETERS = new Class<?>[] {DefaultableContext.class};
     
     
-    private Lookup lookup;
     private CommandAssembler assembler;
-    private RootCommandNode<T> container;
     private TokenMap<String, Object> bindings;
+    private Map<String, Node<T>> commands;
     
     
     public Assembler() {
-        lookup = MethodHandles.lookup();
-        assembler = new CommandAssembler(container = new RootCommandNode<>(), bindings = TokenMap.of());
+        this.assembler = new CommandAssembler<>(bindings = TokenMap.of(), commands = new HashMap<>());
     }
     
     
-    public Map<String, CommandNode<T>> assemble(Object annotated) {
+    public Map<String, ? extends CommandNode<T>> assemble(Object annotated) {
         try {
             var type = annotated.getClass();
             
             bind(annotated);
+            generate(annotated);
             assembler.assemble(type, type.getAnnotationsByType(Literal.class), null);
             assembler.assemble(type, type.getAnnotationsByType(Argument.class), null);
-            generate(annotated);
             
-            return null;
-          
+            return assembler.assemble();
+            
         } finally {
             bindings.map().clear();
+            commands.clear();
         }
     }
     
@@ -141,9 +142,9 @@ public class Assembler<T> {
     
     protected Command<T> emit(Object annotated, Method method, MethodType signature, Class<?> target, String targetMethod) {
         try {
-            var handle = lookup.unreflect(method);
+            var handle = LOOKUP.unreflect(method);
             var conversion = MethodType.methodType(target, annotated.getClass());
-            var lambda = LambdaMetafactory.metafactory(lookup, targetMethod, conversion, signature, handle, signature).getTarget();
+            var lambda = LambdaMetafactory.metafactory(LOOKUP, targetMethod, conversion, signature, handle, signature).getTarget();
             
             return (Command<T>) lambda.invoke(annotated);
             

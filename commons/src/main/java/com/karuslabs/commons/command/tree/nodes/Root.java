@@ -61,7 +61,7 @@ public class Root extends RootCommandNode<CommandSender> {
             }
         }
         
-        register(command); // Needs to be registered last to avoid plugin:command getting registered again as an alias
+        register(command); //Registered last to avoid <plugin>:<command> getting registered again as an alias
     }
     
     protected void register(CommandNode<CommandSender> command) {

@@ -29,72 +29,100 @@ import com.karuslabs.commons.util.collections.TokenMap;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.*;
+import com.mojang.brigadier.tree.CommandNode;
+
+import java.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class CommandAssembler<T> {
     
-    CommandNode<T> container;
-    TokenMap<String, Object> bindings;
+    private TokenMap<String, Object> bindings;
+    private Map<String, Node<T>> nodes;
     
     
-    public CommandAssembler(RootCommandNode<T> container, TokenMap<String, Object> bindings) {
-        this.container = container;
+    public CommandAssembler(TokenMap<String, Object> bindings, Map<String, Node<T>> nodes) {
         this.bindings = bindings;
+        this.nodes = nodes;
+    }
+    
+    
+    public Map<String, CommandNode<T>> assemble() {
+        var commands = new HashMap<String, CommandNode<T>>();
+        for (var node : nodes.values()) {
+            commands.put(node.name(), node.get());
+        }
+        
+        return commands;
+    }
+    
+    protected CommandNode<T> map(Node<T> node) {
+        var command = node.get();
+        if (command == null) {
+            command = literal(node.name()).build();
+        }
+        
+        for (var child : node.children().values()) {
+            command.addChild(map(child));
+        }
+        
+        return command;
     }
     
     
     public void assemble(Class<?> type, Literal[] literals, @Nullable Command<T> execution) {
         for (var literal : literals) {
             var namespace = literal.namespace();
-            var command = descend(type, "Literal", namespace);
+            var node = descend(type, "Literal", namespace);
             
-            command.addChild(literal(namespace[namespace.length - 1]).alias(literal.aliases()).executes(execution).build());
+            node.set(literal(namespace[namespace.length - 1]).alias(literal.aliases()).executes(execution).build());
         }
     }
-
+    
     
     public void assemble(Class<?> type, Argument[] arguments, @Nullable Command<T> execution) {
         for (var argument : arguments) {
             var namespace = argument.namespace();
-            var command = descend(type, "Argument", namespace);
+            var node = descend(type, "Argument", namespace);
             var name = namespace[namespace.length - 1];
-            
-            command.addChild(argument(name, bindings.get(argument.type().isEmpty() ? name : argument.type(), ArgumentType.class))
-                            .suggests(bindings.get(argument.suggestions().isEmpty() ? name : argument.suggestions(), SuggestionProvider.class))
-                            .executes(execution).build()
-                            );
+      
+            node.set(argument(name, bindings.get(argument.type().isEmpty() ? name : argument.type(), ArgumentType.class))
+                    .suggests(bindings.get(argument.suggestions().isEmpty() ? name : argument.suggestions(), SuggestionProvider.class))
+                    .executes(execution).build()
+            );
         }
     }
     
     
-    protected CommandNode<T> descend(Class<?> type, String annotation, String[] namespace) {
+    protected Node<T> descend(Class<?> type, String annotation, String... namespace) {
         if (namespace.length == 0) {
-            throw new IllegalArgumentException("Invalid namespace for: @" + annotation + " in " + type);
+            throw new IllegalArgumentException("Invalid namespace for @" + annotation + " in " + type);
         }
         
-        var command = container;
-        for (int i = 0; i < namespace.length - 1; i++) {
-            var child = command.getChild(namespace[i]);
-            if (child == null) {
-                child = literal(namespace[i]).build();
-                command.addChild(child);
+        Node<T> node = null;
+        var commands = this.nodes;
+        
+        for (var name : namespace) {
+            node = commands.get(name);
+            if (node == null) {
+                node = new Node<>(name);
+                commands.put(name, node);
             }
-            command = child;
+            
+            commands = node.children();
         }
         
-        return command;
+        return node;
     }
 
     
-    private com.karuslabs.commons.command.tree.nodes.Argument.Builder<T, ?> argument(String name, ArgumentType<Object> type) {
-        return com.karuslabs.commons.command.tree.nodes.Argument.<T, Object>builder(name, type);
-    }
-    
     private com.karuslabs.commons.command.tree.nodes.Literal.Builder<T> literal(String name) {
         return com.karuslabs.commons.command.tree.nodes.Literal.<T>builder(name);
+    }
+    
+    private com.karuslabs.commons.command.tree.nodes.Argument.Builder<T, ?> argument(String name, ArgumentType<Object> type) {
+        return com.karuslabs.commons.command.tree.nodes.Argument.<T, Object>builder(name, type);
     }
     
 }

@@ -40,7 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
-
+    
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
     private boolean alias;
@@ -179,6 +179,11 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         
         public Builder<T> executes(Executable<T> command) {
             return executes((Command<T>) command);
+        }
+        
+        
+        public Builder<T> then(Object annotated, String name) {
+            return then(Commands.from(annotated, name));
         }
         
         

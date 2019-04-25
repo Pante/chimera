@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.command.annotations.assembler.Assembler;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
@@ -36,7 +37,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public @Static class Commands {
-
+    
+    static final Assembler<?> ASSEMBLER = new Assembler<>();
     static final VarHandle COMMAND = field("command", Command.class);
     static final VarHandle CHILDREN = field("children", Map.class);
     static final VarHandle LITERALS = field("literals", Map.class);
@@ -50,6 +52,16 @@ public @Static class Commands {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    
+    public static <T> CommandNode<T> from(Object annotated, String name) {
+        return Commands.<T>from(annotated).get(name);
+    }
+    
+    
+    public static <T> Map<String, CommandNode<T>> from(Object annotated) {
+        return (Map<String, CommandNode<T>>) ASSEMBLER.assemble(annotated);
     }
 
     

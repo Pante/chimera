@@ -142,6 +142,11 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         }
         
         
+        public Builder<T, V> then(Object annotated, String name) {
+            return then(Commands.from(annotated, name));
+        }
+        
+        
         public Builder<T, V> optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }
