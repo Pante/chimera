@@ -38,8 +38,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class CommandAssembler<T> {
     
-    private TokenMap<String, Object> bindings;
-    private Map<String, Node<T>> nodes;
+    TokenMap<String, Object> bindings;
+    Map<String, Node<T>> nodes;
     
     
     public CommandAssembler(TokenMap<String, Object> bindings, Map<String, Node<T>> nodes) {
@@ -51,7 +51,7 @@ public class CommandAssembler<T> {
     public Map<String, CommandNode<T>> assemble() {
         var commands = new HashMap<String, CommandNode<T>>();
         for (var node : nodes.values()) {
-            commands.put(node.name(), node.get());
+            commands.put(node.name(), map(node));
         }
         
         return commands;
@@ -88,7 +88,7 @@ public class CommandAssembler<T> {
             var name = namespace[namespace.length - 1];
       
             node.set(argument(name, bindings.get(argument.type().isEmpty() ? name : argument.type(), ArgumentType.class))
-                    .suggests(bindings.get(argument.suggestions().isEmpty() ? name : argument.suggestions(), SuggestionProvider.class))
+                    .suggests(bindings.get(argument.suggestions(), SuggestionProvider.class))
                     .executes(execution).build()
             );
         }
