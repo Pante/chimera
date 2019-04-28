@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
+import com.karuslabs.commons.command.annotations.assembler.TestCommand;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
@@ -140,6 +142,13 @@ class LiteralTest {
         
         assertSame(extensive, literal.getChild("child"));
         assertEquals(3, extensive.getChildren().size());
+    }
+    
+    
+    @Test
+    void then() {
+        var command = new TestCommand();
+        TestCommand.assertCommand(command, Literal.of("argument").then(command, "a").build().getChild("a"));
     }
 
 } 

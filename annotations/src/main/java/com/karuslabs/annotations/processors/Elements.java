@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2019 Matthias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.splint.lint;
+package com.karuslabs.annotations.processors;
+
+import com.karuslabs.annotations.Static;
+
+import java.util.*;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.*;
+
+import static java.util.stream.Collectors.toSet;
 
 
-public class Lint {
+public @Static class Elements {
+    
+    public static Set<? extends Element> annotated(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        return annotations.stream().map(environment::getElementsAnnotatedWith).flatMap(Collection::stream).collect(toSet());
+    }
     
 }

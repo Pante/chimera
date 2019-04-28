@@ -50,9 +50,9 @@ public class Assembler<T> {
     static final Class<?>[] EXECUTABLE_PARAMETERS = new Class<?>[] {DefaultableContext.class};
     
     
-    private CommandAssembler assembler;
-    private TokenMap<String, Object> bindings;
-    private Map<String, Node<T>> commands;
+    CommandAssembler assembler;
+    TokenMap<String, Object> bindings;
+    Map<String, Node<T>> commands;
     
     
     public Assembler() {
@@ -89,15 +89,15 @@ public class Assembler<T> {
                 }
                 
                 var type = field.getType();
-                if (!type.isAssignableFrom(ArgumentType.class) && !type.isAssignableFrom(SuggestionProvider.class)) {
-                    throw new IllegalArgumentException("Invalid @Bind annotated field:  " + field.getName() + ", field must be an ArgumentType or SuggestionProvider");
+                if (!ArgumentType.class.isAssignableFrom(type) && !SuggestionProvider.class.isAssignableFrom(type)) {
+                    throw new IllegalArgumentException("Invalid @Bind annotated field: " + field.getName() + ", field must be an ArgumentType or SuggestionProvider");
                 }
                 
-                var keyType = type.isAssignableFrom(ArgumentType.class) ? ArgumentType.class : SuggestionProvider.class;
+                var keyType = ArgumentType.class.isAssignableFrom(type) ? ArgumentType.class : SuggestionProvider.class;
                 var name = annotation.value().isEmpty() ? field.getName() : annotation.value();
                 
                 if (bindings.map().put(TokenMap.key(name, keyType), field.get(annotated)) != null) {
-                    throw new IllegalArgumentException("@Bind(" + annotation.value() + ") on the same type already exists");
+                    throw new IllegalArgumentException("@Bind(\"" + annotation.value() + "\") " + field.getName() + " already exists");
                 }
             }
             

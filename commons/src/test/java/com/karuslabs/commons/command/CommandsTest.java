@@ -23,11 +23,11 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.annotations.assembler.TestCommand;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.*;
 
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -49,6 +49,13 @@ class CommandsTest {
     Argument<Object, String> argument = Argument.builder("b", word()).executes(command).then(Argument.builder("b1", word())).build();
     Literal<Object> literal = Literal.builder("name").executes(command).then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
 
+    
+    @Test
+    void from() {
+        var command = new TestCommand();
+        TestCommand.assertCommand(command, Commands.from(command, "a"));
+    }
+    
     
     
     @Test

@@ -66,8 +66,4 @@ public class Node<T> {
         return children;
     }
     
-    public void children(Map<String, Node<T>> children) {
-        this.children = children;
-    }
-    
 }

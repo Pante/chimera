@@ -23,24 +23,159 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
-import java.util.stream.Stream;
+import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.commons.command.annotations.*;
+import com.karuslabs.commons.command.types.EnchantmentType;
+
+import com.mojang.brigadier.arguments.*;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class AssemblerTest {
     
+    Assembler<String> assembler = new Assembler<>();
     
+    
+    @Test
+    void assemble() {
+        var command = new TestCommand();
+
+        TestCommand.assertCommand(command, assembler.assemble(command).get("a"));
+    }
+    
+    
+    @Test
+    void bind() {
+        var binded = new Binded();
+        assembler.bind(binded);
+        var bindings = assembler.bindings;
+        
+        assertEquals(3, bindings.map().size());
+        assertSame(binded.a, bindings.get("a", ArgumentType.class));
+        assertSame(binded.b, bindings.get("something", SuggestionProvider.class));
+        assertSame(binded.c, bindings.get("c", ArgumentType.class));
+    }
+    
+    
+    static class Binded {
+        
+        private @Bind EnchantmentType a = new EnchantmentType();
+        private @Bind("something") SuggestionProvider b = (context, builder) -> builder.buildFuture();
+        private static @Bind ArgumentType<String> c = StringArgumentType.word();
+        private ArgumentType<String> unbinded = StringArgumentType.word();
+        
+    }
+    
+    
+    @Test
+    void bind_existing_throws_exception() {
+        assertEquals(
+            "@Bind(\"a\") b already exists",
+            assertThrows(IllegalArgumentException.class, () -> assembler.bind(new Duplicate())).getMessage()
+        );
+    }
+    
+    
+    static class Duplicate {
+        
+        @Bind ArgumentType<String> a = StringArgumentType.word();
+        @Bind("a") ArgumentType<String> b = StringArgumentType.word();
+        
+    }
+    
+    
+    @Test
+    void bind_invalid_type_throws_exception() {
+        assertEquals(
+            "Invalid @Bind annotated field: invalid_field, field must be an ArgumentType or SuggestionProvider",
+            assertThrows(IllegalArgumentException.class, () -> assembler.bind(new InvalidType())).getMessage()
+        );
+        
+    }
+    
+    
+    static class InvalidType {
+        
+        private @Bind String invalid_field;
+        
+    }
+    
+    
+    @Test
+    void generate() throws CommandSyntaxException {
+        var object = new Generate();
+        
+        assembler.generate(object);
+        var a = assembler.commands.get("a").get();
+        var b = assembler.commands.get("b").get();
+        
+        a.getCommand().run(null);
+        assertEquals(1, object.command);
+        
+        b.getCommand().run(null);
+        assertEquals(1, object.executable);
+    }
+    
+    
+    static class Generate {
+        
+        static int method = 0;
+        
+        int command = 0;
+        int executable = 0;
+        
+        
+        @Literal(namespace = {"a"})
+        int command(CommandContext<String> context) {
+            command++;
+            return 1;
+        }
+        
+        
+        @Literal(namespace = {"b"})
+        void executable(DefaultableContext<String> context) {
+            executable++;
+        }
+        
+    }
+    
+    
+    @Test
+    void generate_throws_exception() {
+        assertEquals(
+            "Invalid signature: method in class com.karuslabs.commons.command.annotations.assembler.AssemblerTest$InvalidSignature, signaure must match Command or Executable",
+            assertThrows(IllegalArgumentException.class, () -> assembler.generate(new InvalidSignature())).getMessage()
+        );
+        
+    }
+        
+    
+    static class InvalidSignature {
+        
+        @Literal(namespace = {"a"})
+        int method(DefaultableContext<String> context) {
+            return 1;
+        }
+        
+    }
+    
+    
+    @Test
+    void emit_throws_exception() throws NoSuchMethodException {
+        assertEquals(
+            "Failed to generate lambda from " + assembler.getClass(),
+            assertThrows (RuntimeException.class, () -> assembler.emit(assembler, AssemblerTest.class.getDeclaredMethod("emit_throws_exception"), Assembler.COMMAND_SIGNATURE, InvalidSignature.class, "idk")).getMessage()
+        );
+        
+    }
 
 } 

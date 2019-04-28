@@ -54,7 +54,9 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return false;
     }
     
-    protected abstract boolean process(Element element);
+    protected void process(Element element) {
+        
+    }
     
     
     protected void error(Element element, String message) {

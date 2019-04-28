@@ -24,7 +24,6 @@
     <modules>
         <module>annotations</module>
         <module>commons</module>
-        <module>splint</module>
     </modules>
   
         
