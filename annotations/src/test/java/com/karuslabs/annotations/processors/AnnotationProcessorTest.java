@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,15 +45,22 @@ class AnnotationProcessorTest {
     
     AnnotationProcessor processor = spy(new AnnotationProcessor() {});
     Messager messager = mock(Messager.class);
-    ProcessingEnvironment environnment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
+    Elements elements = mock(Elements.class);
+    Types types = mock(Types.class);
+    ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     
     
     
     @Test
     void process() {
+        when(environment.getElementUtils()).thenReturn(elements);
+        when(environment.getTypeUtils()).thenReturn(types);
+        
+        processor.init(environment);
+        
         var element = mock(TypeElement.class);
         RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
-    
+        
         assertFalse(processor.process(Set.of(), environment));
     }
     
@@ -60,7 +68,7 @@ class AnnotationProcessorTest {
     @Test
     void messsage() {
         var element = mock(Element.class);
-        processor.init(environnment);
+        processor.init(environment);
         
         processor.error(element, "Error");
         verify(messager).printMessage(ERROR, "Error", element);

@@ -136,7 +136,7 @@ public class Assembler<T> {
             return emit(annotated, method, EXECUTABLE_SIGNATURE, Executable.class, "execute");
             
         } else {
-            throw new IllegalArgumentException("Invalid signature: " + method.getName() + " in " + annotated.getClass() + ", signaure must match Command or Executable");
+            throw new IllegalArgumentException("Invalid signature for " + method.getName() + " in " + annotated.getClass() + ", signaure must match Command or Executable");
         }
     }
     

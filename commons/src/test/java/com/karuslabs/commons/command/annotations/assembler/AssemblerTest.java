@@ -150,10 +150,12 @@ class AssemblerTest {
     
     
     @Test
-    void generate_throws_exception() {
+    void emit() throws ReflectiveOperationException {
+       var signature = new InvalidSignature();
+       var method = signature.getClass().getDeclaredMethods()[0];
         assertEquals(
-            "Invalid signature: method in class com.karuslabs.commons.command.annotations.assembler.AssemblerTest$InvalidSignature, signaure must match Command or Executable",
-            assertThrows(IllegalArgumentException.class, () -> assembler.generate(new InvalidSignature())).getMessage()
+            "Invalid signature for method in class com.karuslabs.commons.command.annotations.assembler.AssemblerTest$InvalidSignature, signaure must match Command or Executable",
+            assertThrows(IllegalArgumentException.class, () -> assembler.emit(signature, method)).getMessage()
         );
         
     }
@@ -161,7 +163,6 @@ class AssemblerTest {
     
     static class InvalidSignature {
         
-        @Literal(namespace = {"a"})
         int method(DefaultableContext<String> context) {
             return 1;
         }
@@ -173,7 +174,7 @@ class AssemblerTest {
     void emit_throws_exception() throws NoSuchMethodException {
         assertEquals(
             "Failed to generate lambda from " + assembler.getClass(),
-            assertThrows (RuntimeException.class, () -> assembler.emit(assembler, AssemblerTest.class.getDeclaredMethod("emit_throws_exception"), Assembler.COMMAND_SIGNATURE, InvalidSignature.class, "idk")).getMessage()
+            assertThrows (RuntimeException.class, () -> assembler.emit(assembler, AssemblerTest.class.getDeclaredMethod("emit_throws_exception"), Assembler.COMMAND_SIGNATURE, AssemblerTest.class, "idk")).getMessage()
         );
         
     }
