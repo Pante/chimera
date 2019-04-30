@@ -152,7 +152,7 @@ class AssemblerTest {
     @Test
     void emit() throws ReflectiveOperationException {
        var signature = new InvalidSignature();
-       var method = signature.getClass().getDeclaredMethods()[0];
+       var method = signature.getClass().getDeclaredMethod("method", DefaultableContext.class);
         assertEquals(
             "Invalid signature for method in class com.karuslabs.commons.command.annotations.assembler.AssemblerTest$InvalidSignature, signaure must match Command or Executable",
             assertThrows(IllegalArgumentException.class, () -> assembler.emit(signature, method)).getMessage()
