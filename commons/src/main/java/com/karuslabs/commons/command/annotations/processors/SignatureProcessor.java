@@ -39,7 +39,6 @@ import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleElementVisitor9;
 
 
-
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes({
