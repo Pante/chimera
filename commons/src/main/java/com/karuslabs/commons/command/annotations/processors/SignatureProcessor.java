@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
+import com.karuslabs.annotations.Ignored;
 import com.karuslabs.annotations.processors.AnnotationProcessor;
 import com.karuslabs.commons.command.DefaultableContext;
 
@@ -77,15 +78,15 @@ public class SignatureProcessor extends AnnotationProcessor {
         
         
         @Override
-        public Void visitExecutable(ExecutableElement element, Void ignored) {
+        public Void visitExecutable(ExecutableElement element, @Ignored Void parameter) {
             var modifiers = element.getModifiers();
-            if (modifiers.contains(Modifier.STATIC)) {
-                error(element, "Invalid modifiers for method: " + element.getSimpleName() + ", method must not be private or static");
+            if (modifiers.contains(Modifier.STATIC) || modifiers.contains(Modifier.PRIVATE)) {
+                error(element, "Invalid method: " + element.getSimpleName() + ", method cannot be private or static");
             }
             
             var parameters = element.getParameters();
             if (parameters.size() != 1 || !signature(element.getReturnType(), parameters)) {
-                error(element, "Invalid signature for method: " + element.getSimpleName() + ", signature must match either CommandContext or DefaultableContext");   
+                error(element, "Invalid method: " + element.getSimpleName() + ", method signature must match either Command or Executable");   
             }
 
             return null;

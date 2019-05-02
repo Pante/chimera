@@ -24,19 +24,15 @@
 package com.karuslabs.commons.command.annotations.processors;
 
 import com.karuslabs.annotations.processors.AnnotationProcessor;
-import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.annotations.visitors.ClassVisitor;
+import com.karuslabs.commons.command.annotations.*;
 
 import com.google.auto.service.AutoService;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import java.util.List;
+import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
-import javax.lang.model.type.*;
-import javax.lang.model.util.SimpleElementVisitor9;
 
 
 @AutoService(Processor.class)
@@ -45,6 +41,78 @@ import javax.lang.model.util.SimpleElementVisitor9;
     "com.karuslabs.commons.command.annotations.Literal", "com.karuslabs.commons.command.annotations.Literals",
     "com.karuslabs.commons.command.annotations.Argument", "com.karuslabs.commons.command.annotations.Arguments"
 })
-public class NamespaceProcessor {
+public class NamespaceProcessor extends AnnotationProcessor {
+    
+    private static final TypeElement[] ARRAY = new TypeElement[0];
+    
+    
+    private Map<String, Set<List<String>>> namespaces;
+    private Set<String> existing;
+    
+    
+    public NamespaceProcessor() {
+        namespaces = new HashMap<>();
+        existing = new HashSet<>();
+    }
+    
+    
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        for (var element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
+            process(element, namespaces(element));
+        }
+        
+        namespaces.clear();
+        
+        return false;
+    }
+    
+    protected Set<List<String>> namespaces(Element element) {
+        var type = element.accept(ClassVisitor.VISITOR, null).asType().toString();
+        var visitor = namespaces.get(type);
+        
+        if (visitor == null) {
+            visitor = new HashSet<>();
+            namespaces.put(type, visitor);
+        }
+        
+        return visitor;
+    }
+    
+    
+    protected void process(Element element, Set<List<String>> namespaces) {
+        for (var literal : element.getAnnotationsByType(Literal.class)) {
+            process(element, "Literal", literal.namespace(), literal.aliases());
+            process(element, namespaces, "Literal", literal.namespace());
+        }
+        
+        for (var argument : element.getAnnotationsByType(Argument.class)) {
+            process(element, namespaces, "Argument", argument.namespace());
+        }
+    }
+    
+    protected void process(Element element, String annotation, String[] namespace, String[] aliases) {
+        if (namespace.length > 0 && aliases.length > 0) {
+            aliases = Arrays.copyOf(aliases, aliases.length + 1);
+            aliases[aliases.length - 1] = namespace[namespace.length - 1];
+            
+            for (var alias : aliases) {
+                if (!existing.add(alias)) {
+                    warn(element, "Duplicate alias: " + alias);
+                }
+            }
+            
+            existing.clear();
+        }
+    }
+    
+    protected void process(Element element, Set<List<String>> namespaces, String annotation, String[] namespace) {
+        if (namespace.length == 0) {
+            error(element, "Invalid namespace for @" + annotation + ", namespace cannot be empty");
+            
+        } else if (!namespaces.add(List.of(namespace))) {
+            error(element, "Invalid namespace for @" + annotation + "" + Arrays.toString(namespace) + ", namespace already exists");
+        }
+    }
     
 }

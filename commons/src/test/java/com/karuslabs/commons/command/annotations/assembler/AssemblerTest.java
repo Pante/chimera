@@ -94,10 +94,13 @@ class AssemblerTest {
     
     
     @Test
-    void bind_invalid_type_throws_exception() {
+    void bind_invalid_type_throws_exception() throws ReflectiveOperationException {
+        var invalid_field = InvalidType.class.getDeclaredField("invalid_field");
+        var field = InvalidType.class.getDeclaredField("field");
+
         assertEquals(
             "Invalid @Bind annotated field: invalid_field, field must be an ArgumentType or SuggestionProvider",
-            assertThrows(IllegalArgumentException.class, () -> assembler.bind(new InvalidType())).getMessage()
+            assertThrows(IllegalArgumentException.class, () -> assembler.bind(new InvalidType(), invalid_field, field.getAnnotation(Bind.class))).getMessage()
         );
         
     }
@@ -105,7 +108,8 @@ class AssemblerTest {
     
     static class InvalidType {
         
-        private @Bind String invalid_field;
+        private @Bind ArgumentType<?> field;
+        private String invalid_field;
         
     }
     

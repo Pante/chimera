@@ -51,6 +51,11 @@ class CommandAssemblerTest {
     @Argument(namespace = {"a", "b", "c5"})
     static class Type {
         
+        static @Bind ArgumentType<?> bird;
+        static @Bind("bird") SuggestionProvider<?> provider;
+        static @Bind ArgumentType<?> is;
+        static @Bind ArgumentType<?> c5;
+        
     }
     
     

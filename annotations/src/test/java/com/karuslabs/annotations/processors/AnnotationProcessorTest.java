@@ -73,7 +73,7 @@ class AnnotationProcessorTest {
         processor.error(element, "Error");
         verify(messager).printMessage(ERROR, "Error", element);
         
-        processor.warning(element, "Warning");
+        processor.warn(element, "Warning");
         verify(messager).printMessage(WARNING, "Warning", element);
         
         processor.note(element, "Note");

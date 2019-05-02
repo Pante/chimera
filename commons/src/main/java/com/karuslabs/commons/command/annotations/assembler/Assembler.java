@@ -35,6 +35,7 @@ import com.mojang.brigadier.tree.*;
 
 import java.lang.invoke.*;
 import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -84,25 +85,26 @@ public class Assembler<T> {
                 field.setAccessible(true);
                 
                 var annotation = field.getAnnotation(Bind.class);
-                if (annotation == null) {
-                    continue;
-                }
-                
-                var type = field.getType();
-                if (!ArgumentType.class.isAssignableFrom(type) && !SuggestionProvider.class.isAssignableFrom(type)) {
-                    throw new IllegalArgumentException("Invalid @Bind annotated field: " + field.getName() + ", field must be an ArgumentType or SuggestionProvider");
-                }
-                
-                var keyType = ArgumentType.class.isAssignableFrom(type) ? ArgumentType.class : SuggestionProvider.class;
-                var name = annotation.value().isEmpty() ? field.getName() : annotation.value();
-                
-                if (bindings.map().put(TokenMap.key(name, keyType), field.get(annotated)) != null) {
-                    throw new IllegalArgumentException("@Bind(\"" + annotation.value() + "\") " + field.getName() + " already exists");
+                if (annotation != null) {
+                    bind(annotated, field, annotation);;
                 }
             }
-            
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Failed to access fields in: " + annotated.getClass(), e);
+        }
+    }
+    
+    protected void bind(Object annotated, Field field, Bind annotation) throws ReflectiveOperationException {
+        var type = field.getType();
+        if (!ArgumentType.class.isAssignableFrom(type) && !SuggestionProvider.class.isAssignableFrom(type)) {
+            throw new IllegalArgumentException("Invalid @Bind annotated field: " + field.getName() + ", field must be an ArgumentType or SuggestionProvider");
+        }
+
+        var keyType = ArgumentType.class.isAssignableFrom(type) ? ArgumentType.class : SuggestionProvider.class;
+        var name = annotation.value().isEmpty() ? field.getName() : annotation.value();
+
+        if (bindings.map().put(TokenMap.key(name, keyType), field.get(annotated)) != null) {
+            throw new IllegalArgumentException("@Bind(\"" + annotation.value() + "\") " + field.getName() + " already exists");
         }
     }
     
