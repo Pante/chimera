@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.annotations.processors;
 
 import com.karuslabs.annotations.processors.AnnotationProcessor;
-import com.karuslabs.annotations.visitors.ClassVisitor;
+import com.karuslabs.annotations.filters.ClassFilter;
 import com.karuslabs.commons.command.annotations.*;
 
 import com.google.auto.service.AutoService;
@@ -68,7 +68,7 @@ public class NamespaceProcessor extends AnnotationProcessor {
     }
     
     protected Set<List<String>> namespaces(Element element) {
-        var type = element.accept(ClassVisitor.VISITOR, null).asType().toString();
+        var type = element.accept(ClassFilter.FILTER, null).asType().toString();
         var visitor = namespaces.get(type);
         
         if (visitor == null) {

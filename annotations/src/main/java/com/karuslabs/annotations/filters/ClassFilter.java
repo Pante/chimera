@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.visitors;
+package com.karuslabs.annotations.filters;
 
 import com.karuslabs.annotations.Ignored;
 
@@ -31,9 +31,9 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class ClassVisitor extends SimpleElementVisitor9<Element, Void> {
+public class ClassFilter extends SimpleElementVisitor9<Element, Void> {
     
-    public static final ClassVisitor VISITOR = new ClassVisitor();
+    public static final ClassFilter FILTER = new ClassFilter();
     
     
     @Override
