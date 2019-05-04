@@ -33,7 +33,7 @@ import static javax.tools.Diagnostic.Kind.*;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
-    private static final TypeElement[] ARRAY = new TypeElement[0];
+    protected static final TypeElement[] ARRAY = new TypeElement[0];
     
     
     protected Elements elements;
@@ -64,15 +64,15 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     }
     
     
-    protected void error(Element element, String message) {
+    public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);
     }
     
-    protected void warn(Element element, String message) {
+    public void warn(Element element, String message) {
         messager.printMessage(WARNING, message, element);
     }
     
-    protected void note(Element element, String message) {
+    public void note(Element element, String message) {
         messager.printMessage(NOTE, message, element);
     }
     

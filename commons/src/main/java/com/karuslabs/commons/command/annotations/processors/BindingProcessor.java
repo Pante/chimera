@@ -51,15 +51,15 @@ import javax.lang.model.util.SimpleElementVisitor9;
 })
 public class BindingProcessor extends AnnotationProcessor {
     
-    private Map<String, Visitor> visitors;
-    private Set<Class<? extends Annotation>> arguments;
-    private TypeMirror argument;
-    private TypeMirror suggestions;
+    static final Set<Class<? extends Annotation>> ARGUMENTS = Set.of(Argument.class, Arguments.class);
+    
+    Map<String, Visitor> visitors;
+    TypeMirror argument;
+    TypeMirror suggestions;
     
     
     public BindingProcessor() {
         visitors = new HashMap<>();
-        arguments = Set.of(Argument.class, Arguments.class);
     }
     
     
@@ -77,7 +77,7 @@ public class BindingProcessor extends AnnotationProcessor {
             element.accept(visitor(element), null);
         }
         
-        for (var element : environment.getElementsAnnotatedWithAny(arguments)) {
+        for (var element : environment.getElementsAnnotatedWithAny(ARGUMENTS)) {
             element.accept(visitor(element), null);
         }
         
@@ -98,9 +98,10 @@ public class BindingProcessor extends AnnotationProcessor {
     }
     
     
+    
     public class Visitor extends SimpleElementVisitor9<Void, Void> {
         
-        private TokenMap<String, Object> bindings;
+        TokenMap<String, Object> bindings;
         
         
         public Visitor() {

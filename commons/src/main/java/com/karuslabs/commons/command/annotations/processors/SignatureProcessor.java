@@ -48,10 +48,10 @@ import javax.lang.model.util.SimpleElementVisitor9;
 })
 public class SignatureProcessor extends AnnotationProcessor {
     
-    private Visitor visitor;
-    private TypeMirror context;
-    private TypeMirror defaultable;
-    private TypeMirror exception;
+    Visitor visitor;
+    TypeMirror context;
+    TypeMirror defaultable;
+    TypeMirror exception;
     
     
     public SignatureProcessor() {
@@ -76,7 +76,6 @@ public class SignatureProcessor extends AnnotationProcessor {
     
     public class Visitor extends SimpleElementVisitor9<Void, Void> {
         
-        
         @Override
         public Void visitExecutable(ExecutableElement element, @Ignored Void parameter) {
             var modifiers = element.getModifiers();
@@ -100,7 +99,7 @@ public class SignatureProcessor extends AnnotationProcessor {
         }
         
         protected boolean exceptions(List<? extends TypeMirror> thrown) {
-            return thrown.isEmpty() || (thrown.size() == 1 && types.isSubtype(thrown.get(1), exception));
+            return thrown.isEmpty() || (thrown.size() == 1 && types.isSubtype(thrown.get(0), exception));
         }
         
     }

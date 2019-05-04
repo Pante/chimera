@@ -50,16 +50,13 @@ class AnnotationProcessorTest {
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     
     
-    
     @Test
     void process() {
         when(environment.getElementUtils()).thenReturn(elements);
         when(environment.getTypeUtils()).thenReturn(types);
         
-        processor.init(environment);
-        
-        var element = mock(TypeElement.class);
-        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
+        RoundEnvironment environment = mock(RoundEnvironment.class);
+        doReturn(Set.of(mock(TypeElement.class))).when(environment).getElementsAnnotatedWithAny(any(TypeElement[].class));
         
         assertFalse(processor.process(Set.of(), environment));
     }

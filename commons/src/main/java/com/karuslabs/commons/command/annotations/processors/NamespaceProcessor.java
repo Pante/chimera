@@ -43,15 +43,12 @@ import javax.lang.model.element.*;
 })
 public class NamespaceProcessor extends AnnotationProcessor {
     
-    private static final TypeElement[] ARRAY = new TypeElement[0];
-    
-    
-    private Map<String, Set<List<String>>> namespaces;
-    private Set<String> existing;
+    Map<String, Set<List<String>>> scopes;
+    Set<String> existing;
     
     
     public NamespaceProcessor() {
-        namespaces = new HashMap<>();
+        scopes = new HashMap<>();
         existing = new HashSet<>();
     }
     
@@ -59,37 +56,38 @@ public class NamespaceProcessor extends AnnotationProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         for (var element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
-            process(element, namespaces(element));
+            process(element, scope(element));
         }
         
-        namespaces.clear();
+        scopes.clear();
         
         return false;
     }
     
-    protected Set<List<String>> namespaces(Element element) {
+    protected Set<List<String>> scope(Element element) {
         var type = element.accept(ClassFilter.FILTER, null).asType().toString();
-        var visitor = namespaces.get(type);
+        var scope = scopes.get(type);
         
-        if (visitor == null) {
-            visitor = new HashSet<>();
-            namespaces.put(type, visitor);
+        if (scope == null) {
+            scope = new HashSet<>();
+            scopes.put(type, scope);
         }
         
-        return visitor;
+        return scope;
     }
     
     
-    protected void process(Element element, Set<List<String>> namespaces) {
+    protected void process(Element element, Set<List<String>> scope) {
         for (var literal : element.getAnnotationsByType(Literal.class)) {
             process(element, "Literal", literal.namespace(), literal.aliases());
-            process(element, namespaces, "Literal", literal.namespace());
+            process(element, scope, "Literal", literal.namespace());
         }
         
         for (var argument : element.getAnnotationsByType(Argument.class)) {
-            process(element, namespaces, "Argument", argument.namespace());
+            process(element, scope, "Argument", argument.namespace());
         }
     }
+    
     
     protected void process(Element element, String annotation, String[] namespace, String[] aliases) {
         if (namespace.length > 0 && aliases.length > 0) {
@@ -106,12 +104,12 @@ public class NamespaceProcessor extends AnnotationProcessor {
         }
     }
     
-    protected void process(Element element, Set<List<String>> namespaces, String annotation, String[] namespace) {
+    protected void process(Element element, Set<List<String>> scope, String annotation, String[] namespace) {
         if (namespace.length == 0) {
             error(element, "Invalid namespace for @" + annotation + ", namespace cannot be empty");
             
-        } else if (!namespaces.add(List.of(namespace))) {
-            error(element, "Invalid namespace for @" + annotation + "" + Arrays.toString(namespace) + ", namespace already exists");
+        } else if (!scope.add(List.of(namespace))) {
+            error(element, "Invalid namespace for @" + annotation + Arrays.toString(namespace) + ", namespace already exists");
         }
     }
     
