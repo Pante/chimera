@@ -51,7 +51,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class SingatureProcessorTest {
+class SignatureProcessorTest {
     
     SignatureProcessor processor = new SignatureProcessor();
     ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
