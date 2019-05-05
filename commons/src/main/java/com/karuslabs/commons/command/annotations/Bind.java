@@ -21,8 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.command.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 
 /**
- * Contains frequently used annotations.
+ * Signifies that annotated field is bound.
  */
-package com.karuslabs.annotations;
+@Documented
+@Retention(RUNTIME)
+@Target({FIELD})
+public @interface Bind {
+    
+    /**
+     * The name to which the annotated field is bound.
+     * 
+     * @return the name 
+     */
+    String value() default "";
+    
+}

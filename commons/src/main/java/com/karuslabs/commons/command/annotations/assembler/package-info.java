@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains frequently used annotations.
+ * Contains classes that create {@code CommandNode}s from annotated objects.
  */
-package com.karuslabs.annotations;
+package com.karuslabs.commons.command.annotations.assembler;

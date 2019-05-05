@@ -26,26 +26,15 @@ package com.karuslabs.commons.command.tree.nodes;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.CommandNode;
 
-import java.util.List;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mutable {@code Node} that contains several operation to modify the internal
- * state of itself.
+ * A mutable node that contains operations to modify itself.
  * 
  * @param <T> the type of the source
  */
-public interface Node<T> {
-    
-    /**
-     * Returns the aliases of this {@code Node}.
-     * 
-     * @return the aliases of this {@code Node}
-     */
-    public List<CommandNode<T>> aliases();
-
+public interface Mutable<T> {
     
     /**
      * Adds the given child to this {@code Node} and its aliases. 

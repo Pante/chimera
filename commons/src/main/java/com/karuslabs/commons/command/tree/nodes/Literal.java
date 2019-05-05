@@ -45,10 +45,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * 
  * @param <T> the type of the source
  */
-public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
-
+public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
+    
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
+    private boolean alias;
     
     
     /**
@@ -73,7 +74,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
      * @param fork the fork
      */
     public Literal(String name, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
-        this(name, new ArrayList<>(0), command, requirement, destination, modifier, fork);
+        this(name, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
     }
     
     /**
@@ -81,22 +82,52 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
      * 
      * @param name the name of the command
      * @param aliases the aliases of this literal
+     * @param alias {@code true} if this {@code Literal} is an alias
      * @param command the command to be executed
      * @param requirement the requirement
      * @param destination the destination to which this literal is redirected
      * @param modifier the redirection modifier
      * @param fork the fork
      */
-    public Literal(String name, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+    public Literal(String name, List<CommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
         this.aliases = aliases;
+        this.alias = alias;
     }
     
     
     @Override
     public void addChild(CommandNode<T> child) {
-        super.addChild(child);
+        var existing = getChild(child.getName());
+        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
+        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
+        
+        super.addChild(child); 
+        
+        if (childAliases != null) {
+            for (var alias : childAliases) {
+                super.addChild(alias);
+            }
+        }
+                
+        if (!alias && existingAliases != null) {
+            if (childAliases != null) {
+                existingAliases.addAll(childAliases);
+                for (var alias : childAliases) {
+                    for (var grandchild : existing.getChildren()) {
+                        alias.addChild(grandchild);
+                    }
+                }
+            }
+
+            for (var grandchild : child.getChildren()) {
+                for (var existingChildAlias : existingAliases) {
+                    existingChildAlias.addChild(grandchild);
+                }
+            }
+        }
+        
         for (var alias : aliases) {
             alias.addChild(child);
         }
@@ -118,6 +149,11 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         return aliases;
     }
     
+    @Override
+    public boolean isAlias() {
+        return alias;
+    }
+    
     
     @Override
     public void setCommand(Command<T> command) {
@@ -137,8 +173,8 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
         for (var alias : aliases) {
-            if (alias instanceof Node<?>) {
-                (((Node<T>) alias)).setRedirect(destination);
+            if (alias instanceof Mutable<?>) {
+                (((Mutable<T>) alias)).setRedirect(destination);
             }
         }
     }
@@ -192,6 +228,18 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
         }
         
         
+        
+        /**
+         * Adds the given aliases.
+         * 
+         * @param aliases the aliases
+         * @return {@code this}
+         */
+        public Builder<T> alias(String... aliases) {
+            Collections.addAll(this.aliases, aliases);
+            return this;
+        }
+        
         /**
          * Adds an alias.
          * 
@@ -211,6 +259,18 @@ public class Literal<T> extends LiteralCommandNode<T> implements Node<T> {
          */
         public Builder<T> executes(Executable<T> command) {
             return executes((Command<T>) command);
+        }
+        
+        
+        /**
+         * Adds a child with the given name derived from the annotated object.
+         * 
+         * @param annotated the annotated object
+         * @param name the name of the derived command
+         * @return {@code this}
+         */
+        public Builder<T> then(Object annotated, String name) {
+            return then(Commands.from(annotated, name));
         }
         
         

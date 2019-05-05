@@ -33,7 +33,6 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
-import java.util.*;
 import java.util.function.Predicate;
 
 import org.bukkit.command.CommandSender;
@@ -48,10 +47,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <T> the type of the source
  * @param <V> the type of the argument
  */
-public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T> {
+public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
 
     private CommandNode<T> destination;
-    private List<CommandNode<T>> aliases;
 
     
     /**
@@ -80,60 +78,20 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
      * @param suggestions the {@code SuggestionProvider}
      */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
-        this(name, type, new ArrayList<>(0), command, requirement, destination, modifier, fork, suggestions);
-    }
-    
-    /**
-     * Creates an {@code Argument} with the given parameters.
-     * 
-     * @param name the name
-     * @param type the type of the argument
-     * @param aliases the aliases of this argument
-     * @param command the command to be executed
-     * @param requirement the requirement
-     * @param destination the destination to which this argument is redirected
-     * @param modifier the redirection modifier
-     * @param fork the fork
-     * @param suggestions the {@code SuggestionProvider}
-     */
-    public Argument(String name, ArgumentType<V> type, List<CommandNode<T>> aliases, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
-        this.aliases = aliases;
     }
-    
-    
-    @Override
-    public void addChild(CommandNode<T> child) {
-        super.addChild(child);
-        for (var alias : aliases) {
-            alias.addChild(child);
-        }
-    }
+
     
     @Override
     public @Nullable CommandNode<T> removeChild(String child) {
-        var removed = Commands.remove(this, child);
-        for (var alias : aliases) {
-            Commands.remove(alias, child);
-        }
-        
-        return removed;
-    }
-        
-    
-    @Override
-    public List<CommandNode<T>> aliases() {
-        return aliases;
+        return Commands.remove(this, child);
     }
     
     
     @Override
     public void setCommand(Command<T> command) {
         Commands.executes(this, command);
-        for (var alias : aliases) {
-            Commands.executes(alias, command);
-        }
     }
     
     
@@ -145,11 +103,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
     @Override
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
-        for (var alias : aliases) {
-            if (alias instanceof Node<?>) {
-                (((Node<T>) alias)).setRedirect(destination);
-            }
-        }
     }
     
     
@@ -190,7 +143,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         
         String name;
         ArgumentType<V> type;
-        List<String> aliases;
         @Nullable SuggestionProvider<T> suggestions;
         
         
@@ -206,19 +158,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         protected Builder(String name, ArgumentType<V> type) {
             this.name = name;
             this.type = type;
-            this.aliases = new ArrayList<>(0);
-        }
-        
-        
-        /**
-         * Adds an alias.
-         * 
-         * @param alias the alias
-         * @return {@code this}
-         */
-        public Builder<T, V> alias(String alias) {
-            aliases.add(alias);
-            return this;
         }
         
         /**
@@ -240,6 +179,18 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
         public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
             return getThis();
+        }
+        
+        
+        /**
+         * Adds a child with the given name derived from the annotated object.
+         * 
+         * @param annotated the annotated object
+         * @param name the name of the derived command
+         * @return {@code this}
+         */
+        public Builder<T, V> then(Object annotated, String name) {
+            return then(Commands.from(annotated, name));
         }
         
         
@@ -297,10 +248,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Node<T>
             var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
                 parameter.addChild(child);
-            }
-            
-            for (var alias : aliases) {
-                Commands.alias(parameter, alias);
             }
             
             return parameter;

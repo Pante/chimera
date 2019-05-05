@@ -21,8 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.command.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 
 /**
- * Contains frequently used annotations.
+ * Signifies an {@link com.karuslabs.commons.command.tree.nodes.Argument}.
  */
-package com.karuslabs.annotations;
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+@Repeatable(Arguments.class)
+public @interface Argument {
+    
+    /**
+     * The {@code Argument} namespace.
+     * 
+     * @return the namespace
+     */
+    String[] namespace();
+    
+    /**
+     * The name of the {@code ArgumentType} to which this {@code Argument} is bound.
+     * 
+     * @return the name of the bound {@code ArgumentType}.
+     */
+    String type() default "";
+    
+    /**
+     * The name of the {@code SuggestionProvider} to which this {@code Argument}
+     * is bound.
+     * 
+     * @return the name
+     */
+    String suggestions() default "";
+    
+}

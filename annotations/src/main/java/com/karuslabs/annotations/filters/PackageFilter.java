@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2019 Matthias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.annotations.filters;
 
-/**
- * Contains frequently used annotations.
- */
-package com.karuslabs.annotations;
+import com.karuslabs.annotations.Ignored;
+
+import javax.lang.model.element.*;
+import javax.lang.model.util.SimpleElementVisitor9;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+
+public class PackageFilter extends SimpleElementVisitor9<Element, Void> {
+    
+    public static final PackageFilter FILTER = new PackageFilter();
+    
+    
+    @Override
+    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+        return DEFAULT_VALUE;
+    }
+    
+    
+    @Override
+    public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
+        return element;
+    }
+    
+    
+    @Override
+    protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
+        var enclosing = element.getEnclosingElement();
+        return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
+    }
+    
+}

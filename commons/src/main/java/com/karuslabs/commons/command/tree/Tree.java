@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.tree;
 
 import com.karuslabs.commons.command.Commands;
-import com.karuslabs.commons.command.tree.nodes.Node;
+import com.karuslabs.commons.command.tree.nodes.Mutable;
 
 import com.mojang.brigadier.tree.*;
 
@@ -168,7 +168,7 @@ public class Tree<T, R> {
     /**
      * Maps and sets the destination of the redirected {@code command} as the destination
      * of the {@code target}. Does nothing if the {@code command} is not redirected
-     * or the {@code target} does not implement {@link Node}.
+     * or the {@code target} does not implement {@link Mutable}.
      * <br><br>
      * <b>Implementation details:</b><br>
      * Mapping of the destination is forwarded to {@link #map(CommandNode, Object, Map)}.
@@ -179,9 +179,9 @@ public class Tree<T, R> {
      * @param mappings the commands that have been mapped prior to the given command
      */
     protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        if (command.getRedirect() != null && target instanceof Node<?>) {
+        if (command.getRedirect() != null && target instanceof Mutable<?>) {
             var destination = map(command.getRedirect(), caller, mappings);
-            ((Node<R>) target).setRedirect(destination);
+            ((Mutable<R>) target).setRedirect(destination);
         }
     }
     

@@ -41,61 +41,56 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class NodeTest {
+class MutableNodeTest {
+    
     
     @ParameterizedTest
-    @MethodSource("node_parameters")
-    void addChild_aliases(Node<CommandSender> node) {
-        var child = Literal.of("child").build();
+    @MethodSource("mutable_parameters")
+    void removeChild(Mutable<CommandSender> mutable) {
+        var child = Literal.of("child").alias("child1").build();
         
-        node.addChild(child);
+        mutable.addChild(child);
+        mutable.removeChild("child");
         
-        assertEquals(child, ((CommandNode<?>) node).getChild("child"));
-        assertEquals(child, node.aliases().get(0).getChild("child"));
+        assertEquals(2, ((CommandNode<?>) mutable).getChildren().size());
+        if (mutable instanceof Aliasable<?>) {
+            assertEquals(2, ((Aliasable<CommandSender>) mutable).aliases().get(0).getChildren().size());
+        }
     }
     
     
     @ParameterizedTest
-    @MethodSource("node_parameters")
-    void removeChild_aliases(Node<CommandSender> node) {
-        var child = Literal.of("child").build();
-        
-        node.addChild(child);
-        node.removeChild("child");
-        
-        assertEquals(2, ((CommandNode<?>) node).getChildren().size());
-        assertEquals(2, node.aliases().get(0).getChildren().size());
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("node_parameters")
-    void setCommand_aliases(Node<CommandSender> node) {
+    @MethodSource("mutable_parameters")
+    void setCommand(Mutable<CommandSender> mutable) {
         Command command = val -> 0;
         
-        node.setCommand(command);
+        mutable.setCommand(command);
         
-        assertEquals(command, ((CommandNode<?>) node).getCommand());
-        assertEquals(command, node.aliases().get(0).getCommand());
+        assertEquals(command, ((CommandNode<?>) mutable).getCommand());
+        if (mutable instanceof Aliasable<?>) {
+            assertEquals(command, ((Aliasable<CommandSender>) mutable).aliases().get(0).getCommand());
+        }
     }
     
     
     @ParameterizedTest
-    @MethodSource("node_parameters")
-    void setRedirect_aliases(Node<CommandSender> node) {
+    @MethodSource("mutable_parameters")
+    void setRedirect(Mutable<CommandSender> mutable) {
         var destination = Literal.of("child").build();
         
-        node.setRedirect(destination);
+        mutable.setRedirect(destination);
         
-        assertEquals(destination, ((CommandNode<?>) node).getRedirect());
-        assertEquals(destination, node.aliases().get(0).getRedirect());
+        assertEquals(destination, ((CommandNode<?>) mutable).getRedirect());
+        if (mutable instanceof Aliasable<?>) {
+            assertEquals(destination, ((Aliasable<CommandSender>) mutable).aliases().get(0).getRedirect());
+        }
     }
     
     
     @ParameterizedTest
-    @MethodSource("node_parameters")
-    void optionally(Node<CommandSender> node) {
-        var command = (CommandNode<?>) node;
+    @MethodSource("mutable_parameters")
+    void optionally(Mutable<CommandSender> mutable) {
+        var command = (CommandNode<?>) mutable;
 
         assertEquals(2, command.getChildren().size());
         assertNotNull(command.getChild("optional"));
@@ -103,11 +98,11 @@ class NodeTest {
     }
     
     
-    static Stream<Node<CommandSender>> node_parameters() {
+    static Stream<Mutable<CommandSender>> mutable_parameters() {
         var optional = Literal.of("optional").then(Literal.of("optional child"));
         return Stream.of(
-            Literal.of("literal").executes(val -> {}).alias("literal alias").optionally(optional).build(),
-            Argument.of("argument", StringArgumentType.word()).executes(val -> {}).alias("argument alias").optionally(optional).build()
+            Literal.of("literal").alias("literal alias").alias("a", "b").executes(val -> {val.getSource().getName();}).optionally(optional).build(),
+            Argument.of("argument", StringArgumentType.word()).executes(val -> {val.getSource().getName();}).optionally(optional).build()
         );
     }
 

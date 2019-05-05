@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.0.1</version>
+        <version>4.1.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>commons</artifactId>
@@ -48,6 +48,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc5</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     
     
@@ -56,7 +63,7 @@
         <plugins>  
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${source}</source>
                     <target>${target}</target>
@@ -87,7 +94,7 @@
     
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>2.22.2</version>
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
@@ -96,7 +103,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>2.22.2</version>
                 <executions>
                     <execution>
                         <goals>

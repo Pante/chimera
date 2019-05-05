@@ -74,17 +74,45 @@ public class Root extends RootCommandNode<CommandSender> {
     /**
      * Adds the {@code command} if the provided {@code CommandMap} does not contain 
      * a command with the same name. In addition, a fallback alias of the {@code command} 
-     * is always created and added.
+     * is always created and added. If the {@code command} implements {@link Aliasable},
+     * the aliases and the fallback of the aliases are also added.
      * 
      * @param command the command to be added
+     * @throws IllegalArgumentException if the {@code command} is not a {@code LiteralCommandNode}
      */
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (map.register(prefix, wrap(command))) {
-            super.addChild(command);
+        if (command instanceof Aliasable<?>) {
+            for (var alias : ((Aliasable<CommandSender>) command).aliases()) {
+                register(alias);
+            }
         }
         
-        super.addChild(Commands.alias(command, prefix + ":" + command.getName()));
+        register(command); //Registered last to avoid <plugin>:<command> getting registered again as an alias
+    }
+    
+    
+    /**
+     * Adds the {@code command} if the provided {@code CommandMap} does not contain 
+     * a command with the same name. In addition, a fallback alias of the {@code command} 
+     * is always created and added.
+     * 
+     * @param command the command to be added
+     * @throws IllegalArgumentException if the {@code command} is not a {@code LiteralCommandNode}
+     */
+    protected void register(CommandNode<CommandSender> command) {
+        if (command instanceof LiteralCommandNode<?>) {
+            var literal = (LiteralCommandNode<CommandSender>) command;
+            
+            if (map.register(prefix, wrap(literal))) {
+                super.addChild(command);
+            }
+            
+            super.addChild(Commands.alias(literal, prefix + ":" + command.getName()));
+            
+        } else {
+            throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode");
+        }
     }
     
     /**
@@ -93,7 +121,7 @@ public class Root extends RootCommandNode<CommandSender> {
      * @param command the {@code CommandNode}
      * @return the wrapped {@code Command}
      */
-    protected Command wrap(CommandNode<CommandSender> command) {
+    protected Command wrap(LiteralCommandNode<CommandSender> command) {
         return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
     }
     

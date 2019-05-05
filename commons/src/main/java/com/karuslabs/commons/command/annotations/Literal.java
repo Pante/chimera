@@ -21,8 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.command.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 
 /**
- * Contains frequently used annotations.
+ * Signifies a {@link com.karuslabs.commons.command.tree.nodes.Literal}.
  */
-package com.karuslabs.annotations;
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+@Repeatable(Literals.class)
+public @interface Literal {
+    
+    /**
+     * The {@code Literal} namespace.
+     * 
+     * @return the namespace
+     */
+    String[] namespace();
+    
+    /**
+     * The aliases for this {@code Literal}.
+     * 
+     * @return the aliases
+     */
+    String[] aliases() default {};
+    
+}

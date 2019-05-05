@@ -23,10 +23,10 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.annotations.assembler.TestCommand;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.stream.Stream;
 
@@ -40,7 +40,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -48,37 +47,26 @@ class CommandsTest {
     
     Command<Object> command = val -> 1;
     Argument<Object, String> argument = Argument.builder("b", word()).executes(command).then(Argument.builder("b1", word())).build();
-    Literal<Object> literal = Literal.builder("name").executes(command).then(Literal.builder("a")).then(argument).build();
+    Literal<Object> literal = Literal.builder("name").executes(command).then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
 
     
-    
-    @ParameterizedTest
-    @MethodSource("node")
-    void alias_node(CommandNode<Object> command) {
-        var alias = Commands.alias(command, "alias");
-        
-        assertEquals("alias", alias.getName());
-        assertEquals(command.getCommand(), alias.getCommand());
-        assertEquals(1, alias.getChildren().size());
-        assertTrue(((Node<Object>) command).aliases().contains(alias));
+    @Test
+    void from() {
+        var command = new TestCommand();
+        TestCommand.assertCommand(command, Commands.from(command, "a"));
     }
     
-    static Stream<CommandNode<Object>> node() {
-        return Stream.of(
-            Literal.builder("name").executes(val -> 1).then(Literal.builder("a")).build(),
-            Argument.builder("name", word()).executes(val -> 1).then(Literal.builder("a")).build()
-        );
-    }
     
     
     @Test
-    void alias_exception() {
-        CommandNode<Object> invalid = when(mock(CommandNode.class).getName()).thenReturn("invalid").getMock();
+    void alias() {
+        var alias = Commands.alias(literal, "alias");
         
-        assertEquals(
-            "Unsupported command, 'invalid' of type: " + invalid.getClass().getName(),
-            assertThrows(UnsupportedOperationException.class, () -> Commands.alias(invalid, "alias")).getMessage()
-        );
+        assertEquals("alias", alias.getName());
+        assertTrue(alias.isAlias());
+        assertEquals(literal.getCommand(), alias.getCommand());
+        assertEquals(4, alias.getChildren().size());
+        assertTrue(literal.aliases().contains(alias));
     }
     
     
@@ -92,30 +80,32 @@ class CommandsTest {
     
     @ParameterizedTest
     @MethodSource("child")
-    void remove_child(String child, boolean isNull) {
-        assertEquals(isNull, Commands.remove(literal, child) == null);
+    void remove_child(String child, boolean removed, int size) {
+        assertEquals(removed, Commands.remove(literal, child) != null);
+        assertEquals(size, literal.getChildren().size());
     }
     
     static Stream<Arguments> child() {
         return Stream.of(
-            of("a", false),
-            of("c", true)
+            of("a", true, 1),
+            of("c", false, 4)
         );
     }
     
     
     @ParameterizedTest
-    @MethodSource("children")
+    @MethodSource("remove_children_parameters")
     void remove_children(String[] children, boolean all, int size) {
         assertEquals(all, Commands.remove(literal, children));
         assertEquals(size, literal.getChildren().size());
     }
     
-    static Stream<Arguments> children() {
+    static Stream<Arguments> remove_children_parameters() {
         return Stream.of(
             of(new String[] {"a"}, true, 1),
             of(new String[] {"a", "b"}, true, 0),
-            of(new String[] {"a", "b", "c"}, false, 0)
+            of(new String[] {"a", "b", "c"}, false, 0),
+            of(new String[] {"other"}, false, 4)
         );
     }
     

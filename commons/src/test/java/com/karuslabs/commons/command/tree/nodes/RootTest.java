@@ -24,14 +24,21 @@
 package com.karuslabs.commons.command.tree.nodes;
 
 import com.karuslabs.commons.command.DispatcherCommand;
+import com.karuslabs.commons.command.types.EnchantmentType;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.*;
+
+import java.util.stream.Stream;
 
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,14 +55,29 @@ class RootTest {
     
     @Test
     void addChild() {
-        var literal = Literal.of("a").build();
+        var literal = Literal.of("a").alias("a1").build();
         doReturn(true).when(map).register(any(String.class), any(Command.class));
         
         root.addChild(literal);
         
-        verify(map).register(eq("test"), any(DispatcherCommand.class));
+        verify(map, times(2)).register(eq("test"), any(DispatcherCommand.class));
         assertNotNull(root.getChild("a"));
         assertNotNull(root.getChild("test:a"));
+        assertNotNull(root.getChild("a1"));
+        assertNotNull(root.getChild("test:a1"));
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("addChild_throws_exception_parameters")
+    void addChild_throws_exception(CommandNode<CommandSender> command) {
+        assertEquals("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode", 
+            assertThrows(IllegalArgumentException.class, () -> root.addChild(command)).getMessage()
+        );
+    }
+    
+    static Stream<CommandNode<CommandSender>> addChild_throws_exception_parameters() {
+        return Stream.of(new RootCommandNode<>(), Argument.of("name", new EnchantmentType()).build());
     }
     
     

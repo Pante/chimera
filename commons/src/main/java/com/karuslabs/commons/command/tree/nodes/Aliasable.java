@@ -21,8 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.command.tree.nodes;
+
+import com.mojang.brigadier.tree.CommandNode;
+
+import java.util.List;
+
 
 /**
- * Contains frequently used annotations.
+ * A node that has aliases and may itself be an alias.
+ * 
+ * @param <T> the type of the source
  */
-package com.karuslabs.annotations;
+public interface Aliasable<T> {
+    
+    /**
+     * Returns the aliases of this node.
+     * 
+     * @return the aliases of this node
+     */
+    public List<CommandNode<T>> aliases();
+    
+    /**
+     * Returns whether this node is an alias.
+     * 
+     * @return {@code true} if this node is an alias; otherwise {@code false}
+     */
+    public boolean isAlias();
+    
+}

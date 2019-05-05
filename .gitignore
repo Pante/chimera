@@ -59,3 +59,4 @@ Temporary Items
 /command-lint-maven-plugin/target/
 /plugin-lint-maven-plugin/target/
 /commons/nbproject/
+/splint/parser/target/
