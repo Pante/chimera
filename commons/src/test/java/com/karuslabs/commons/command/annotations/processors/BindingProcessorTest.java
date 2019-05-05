@@ -135,7 +135,7 @@ class BindingProcessorTest {
         when(types.isSubtype(eq(erasured), any())).thenReturn(false);
         
         assertNull(visitor.visitVariable(variable, null));
-        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Invalid binded type: " + name + ", field must be either an ArgumentType or SuggestionProvider", variable);
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Invalid bound type: " + name + ", field must be either an ArgumentType or SuggestionProvider", variable);
     }
     
     
@@ -157,7 +157,7 @@ class BindingProcessorTest {
         visitor.bindings.put("name", ArgumentType.class, mock(ArgumentType.class));
         
         assertNull(visitor.visitVariable(variable, null));
-        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Duplicate binded type: " + name + ", a binding with the same name already exists", variable);
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Duplicate bound type: " + name + ", a binding with the same name already exists", variable);
     }
     
     
@@ -209,8 +209,8 @@ class BindingProcessorTest {
         
         visitor.visitArgument(element);
         
-        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Unknown type: t, t must be a binded field", element);
-        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Unknown suggestions: s, s must be a binded field", element);
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Unknown type: t, t must be a bound field", element);
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Unknown suggestions: s, s must be a bound field", element);
     }
 
 } 

@@ -55,14 +55,14 @@ class AssemblerTest {
     
     @Test
     void bind() {
-        var binded = new Binded();
-        assembler.bind(binded);
+        var bound = new Binded();
+        assembler.bind(bound);
         var bindings = assembler.bindings;
         
         assertEquals(3, bindings.map().size());
-        assertSame(binded.a, bindings.get("a", ArgumentType.class));
-        assertSame(binded.b, bindings.get("something", SuggestionProvider.class));
-        assertSame(binded.c, bindings.get("c", ArgumentType.class));
+        assertSame(bound.a, bindings.get("a", ArgumentType.class));
+        assertSame(bound.b, bindings.get("something", SuggestionProvider.class));
+        assertSame(bound.c, bindings.get("c", ArgumentType.class));
     }
     
     
@@ -71,7 +71,7 @@ class AssemblerTest {
         private @Bind EnchantmentType a = new EnchantmentType();
         private @Bind("something") SuggestionProvider b = (context, builder) -> builder.buildFuture();
         private static @Bind ArgumentType<String> c = StringArgumentType.word();
-        private ArgumentType<String> unbinded = StringArgumentType.word();
+        private ArgumentType<String> unbound = StringArgumentType.word();
         
     }
     

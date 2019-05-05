@@ -98,7 +98,6 @@ public class BindingProcessor extends AnnotationProcessor {
     }
     
     
-    
     public class Visitor extends SimpleElementVisitor9<Void, Void> {
         
         TokenMap<String, Object> bindings;
@@ -113,7 +112,7 @@ public class BindingProcessor extends AnnotationProcessor {
         public Void visitVariable(VariableElement element, @Ignored Void parameter) {
             var type = types.erasure(element.asType());
             if (!types.isSubtype(type, argument) && !types.isSubtype(type, suggestions)) {
-                error(element, "Invalid binded type: " + element.getSimpleName() + ", field must be either an ArgumentType or SuggestionProvider");
+                error(element, "Invalid bound type: " + element.getSimpleName() + ", field must be either an ArgumentType or SuggestionProvider");
                 return null;
             }
             
@@ -121,7 +120,7 @@ public class BindingProcessor extends AnnotationProcessor {
             var name = value.isEmpty() ? element.getSimpleName().toString() : value;
             var bound = types.isSubtype(type, argument) ? ArgumentType.class : SuggestionProvider.class;
             if (bindings.put(name, bound, null) != null) {
-                error(element, "Duplicate binded type: " + element.getSimpleName() + ", a binding with the same name already exists");
+                error(element, "Duplicate bound type: " + element.getSimpleName() + ", a binding with the same name already exists");
             }
             
             return null;
@@ -146,11 +145,11 @@ public class BindingProcessor extends AnnotationProcessor {
                 var type = namespace.length > 0 && argument.type().isEmpty() ? namespace[namespace.length - 1] : argument.type();
                 
                 if (!bindings.containsKey(type, ArgumentType.class)) {
-                    error(element, "Unknown type: " + type + ", " + type + " must be a binded field");
+                    error(element, "Unknown type: " + type + ", " + type + " must be a bound field");
                 }
                 
                 if (!argument.suggestions().isEmpty() && !bindings.containsKey(argument.suggestions(), SuggestionProvider.class)) {
-                    error(element, "Unknown suggestions: " + argument.suggestions() + ", " + argument.suggestions() + " must be a binded field");
+                    error(element, "Unknown suggestions: " + argument.suggestions() + ", " + argument.suggestions() + " must be a bound field");
                 }
             }
         }

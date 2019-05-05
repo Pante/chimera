@@ -86,7 +86,7 @@ public class Assembler<T> {
                 
                 var annotation = field.getAnnotation(Bind.class);
                 if (annotation != null) {
-                    bind(annotated, field, annotation);;
+                    bind(annotated, field, annotation);
                 }
             }
         } catch (ReflectiveOperationException e) {
