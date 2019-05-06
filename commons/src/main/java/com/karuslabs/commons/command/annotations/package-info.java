@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains annotations from which a {@code CommandNode} can be derived.
+ * Contains annotations from which {@code CommandNode}s are created.
  */
 package com.karuslabs.commons.command.annotations;

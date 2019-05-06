@@ -31,23 +31,51 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A filter that recursively traverses elements to find an enclosing package.
+ */
 public class PackageFilter extends SimpleElementVisitor9<Element, Void> {
     
+    /**
+     * A {@code PackageFilter}.
+     */
     public static final PackageFilter FILTER = new PackageFilter();
     
     
+    /**
+     * Returns {@link #DEFAULT_VALUE}.
+     * 
+     * @param element the module
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE}
+     */
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
     
+    /**
+     * Returns the given package.
+     * 
+     * @param element the package
+     * @param parameter an ignored parameter
+     * @return the given package
+     */
     @Override
     public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
         return element;
     }
     
     
+    /**
+     * Recursively visits the enclosing element if present.
+     * 
+     * @param element the element
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE} if no enclosing package was found; otherwise
+     *         a element that represents the enclosing module
+     */
     @Override
     protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();

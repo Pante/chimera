@@ -36,7 +36,9 @@ import javax.lang.model.element.*;
 
 
 /**
- * A processor that determines if a namespace is unique and not empty.
+ * A processor that ensures the {@code namespace} field in {@code @Literal}s and
+ * {@code Argument}s is unique and not empty. In addition, this processor also
+ * warns if a {@code aliases} field contain duplicates.
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -71,8 +73,8 @@ public class NamespaceProcessor extends AnnotationProcessor {
     }
     
     /**
-     * Returns the scope associated with the enclosing type of the element, creating
-     * it if necessary.
+     * Returns the scope associated with the enclosing type of the given element, 
+     * creating it if necessary.
      * 
      * @param element the element
      * @return the scope associated with the enclosing type of the element
@@ -91,8 +93,9 @@ public class NamespaceProcessor extends AnnotationProcessor {
     
     
     /**
-     * Checks if the namespaces of the annotations on the given element are unique
-     * and not empty.
+     * Raises an error if the {@code @Argument} and {@code @Literal} annotations
+     * contain empty or duplicate {@code namespace}s. In addition, warns if the namespaces
+     * and aliases of a {@code @Literal} annotation contains duplicates.
      * 
      * @param element the element
      * @param scope the scope which the element is in
@@ -110,7 +113,7 @@ public class NamespaceProcessor extends AnnotationProcessor {
     
     
     /**
-     * Warns if the given aliases contains duplicates.
+     * Warns if the given namespaces and aliases contain duplicates.
      * 
      * @param element the annotated element
      * @param annotation the annotation
@@ -133,11 +136,11 @@ public class NamespaceProcessor extends AnnotationProcessor {
     }
     
     /**
-     * Raises an error if either the namespace is empty or if the scope contains
-     * a duplicate namespace.
+     * Raises an error if the namespace is either empty or a duplicate of another
+     * namespace in the scope.
      * 
      * @param element the element
-     * @param scope the scope the element is in
+     * @param scope the scope in which the element is
      * @param annotation the annotation
      * @param namespace the namespace
      */

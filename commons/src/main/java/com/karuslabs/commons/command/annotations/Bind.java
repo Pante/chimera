@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies that annotated field is bound.
+ * Binds the annotated field to a name.
  */
 @Documented
 @Retention(RUNTIME)
@@ -38,7 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Bind {
     
     /**
-     * The name to which the annotated field is bound.
+     * An optional name to which the annotated field is bound.
      * 
      * @return the name 
      */

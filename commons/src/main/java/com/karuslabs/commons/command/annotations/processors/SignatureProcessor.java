@@ -41,8 +41,9 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 
 /**
- * A processor that determines if the signature of annotated methods match either
- * {@link com.mojang.brigadier.Command#run(CommandContext)} or {@link com.karuslabs.commons.command.Executable#execute(DefaultableContext)}.
+ * A processor that ensures the signatures of methods annotated with {@code @Literal}
+ * and {@code Argument} match either {@link com.mojang.brigadier.Command#run(CommandContext)} 
+ * or {@link com.karuslabs.commons.command.Executable#execute(DefaultableContext)}.
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -82,17 +83,17 @@ public class SignatureProcessor extends AnnotationProcessor {
     
     
     /**
-     * A visitor that determines if an annotated method has a valid signature.
+     * A visitor that ensures the correctness of an annotated element.
      */
     public class Visitor extends SimpleElementVisitor9<Void, Void> {
         
         /**
-         * Raises an error if either the method is private or static, or if
-         * the method signature does not match either {@link com.mojang.brigadier.Command#run(CommandContext)} 
-         * or {@link com.karuslabs.commons.command.Executable#execute(DefaultableContext)}.
+         * Raises an error if either the method is private or static, or if its
+         * signature does not match {@link com.mojang.brigadier.Command#run(CommandContext)} 
+         * and {@link com.karuslabs.commons.command.Executable#execute(DefaultableContext)}.
          * 
          * @param element the executable
-         * @param parameter the parameter
+         * @param parameter an ignored parameter
          * @return {@code null}
          */
         @Override

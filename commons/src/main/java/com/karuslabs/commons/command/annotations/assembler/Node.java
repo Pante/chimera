@@ -31,7 +31,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * An intermediate representation when creating {@code CommandNode}s from annotated 
+ * An intermediate representation of {@code CommandNode}s created from annotated
  * objects.
  * 
  * @param <T> the type of the source
@@ -43,10 +43,21 @@ public class Node<T> {
     private Map<String, Node<T>> children;
     
     
+    /**
+     * Creates a {@code Node} with the given name and no {@code Command}.
+     * 
+     * @param name the name
+     */
     public Node(String name) {
         this(name, null);
     }
     
+    /**
+     * Creates a {@code Node} with the given name and {@code Command}.
+     * 
+     * @param name the name
+     * @param command the command to be executed
+     */
     public Node(String name, @Nullable CommandNode<T> command) {
         this.name = name;
         this.command = command;
@@ -54,20 +65,40 @@ public class Node<T> {
     }
     
     
+    /**
+     * Returns the name of this {@code Node}.
+     * 
+     * @return the name
+     */
     public String name() {
         return name;
     }
     
     
+    /**
+     * Returns a {@code CommandNode} which this {@code Node} represents.
+     * 
+     * @return a {@code CommandNode}
+     */
     public @Nullable CommandNode<T> get() {
         return command;
     }
     
+    /**
+     * Sets the {@code CommandNode} which this {@code Node} represents.
+     * 
+     * @param command the command to be executed
+     */
     public void set(CommandNode<T> command) {
         this.command = command;
     }
     
     
+    /**
+     * Returns the children of this {@code Node}.
+     * 
+     * @return the children
+     */
     public Map<String, Node<T>> children() {
         return children;
     }

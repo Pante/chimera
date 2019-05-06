@@ -30,7 +30,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mutable node that contains operations to modify itself.
+ * A mutable node that contains self-modification operations.
  * 
  * @param <T> the type of the source
  */

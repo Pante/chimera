@@ -44,10 +44,10 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 
 /**
- * A processor that determines if a bound field in a enclosing type is either a 
- * unique {@code ArgumentType} or {@code SuggestionProvider}. In addition, the
- * processor also determines if the {@code type} and {@code suggestions} of 
- * {@code @Argument} refer to a known bound field.
+ * A processor that ensures that fields annotated with {@code @Bind} are bound to
+ * unique names and inherit from either {@code ArgumentType} or {@code SuggestionProvider}.
+ * In addition, this processor also ensures that the {@code type} and {@code suggestions}
+ * fields in a {@code @Argument} are known bound fields.
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -96,8 +96,8 @@ public class BindingProcessor extends AnnotationProcessor {
     }
     
     /**
-     * Returns the {@code Visitor} associated with the enclosing type of the element,
-     * creating it if necessary.
+     * Returns the {@code Visitor} associated with the enclosing type of the given
+     * element, creating it if necessary.
      * 
      * @param element the element
      * @return the {@code Visitor} associated with the enclosing type of the element
@@ -115,7 +115,7 @@ public class BindingProcessor extends AnnotationProcessor {
     
     
     /**
-     * A visitor that determines if an annotated element is valid.
+     * A visitor that ensures the correctness of an annotated element.
      */
     public class Visitor extends SimpleElementVisitor9<Void, Void> {
         
@@ -131,11 +131,11 @@ public class BindingProcessor extends AnnotationProcessor {
         
         
         /**
-         * Checks if the visited {@code VariableElement} is a unique {@code ArgumentType}
-         * or {@code SuggestionProvider}.
+         * Raises an error if the given variable is not bound to a unique name,
+         * or is neither a {@code ArgumentType} nor {@code SuggestionProvider}.
          * 
          * @param element the variable
-         * @param parameter the parameter
+         * @param parameter an ignored parameter
          * @return {@code null}
          */
         @Override
@@ -158,11 +158,12 @@ public class BindingProcessor extends AnnotationProcessor {
         
         
         /**
-         * Checks if the {@code @Argument} annotation on the {@code TypeElement}
-         * contains a known type and suggestions.
+         * Raises an error if the {@code @Argument} annotations on the given type
+         * contain {@code type} or {@code suggesitons} fields that are unbound or 
+         * unknown.
          * 
          * @param element the type
-         * @param parameter the parameter
+         * @param parameter an ignored parameter
          * @return {@code null}
          */
         @Override
@@ -172,11 +173,12 @@ public class BindingProcessor extends AnnotationProcessor {
         }
         
         /**
-         * Checks if the {@code @Argument} annotation on the {@code ExecutableElement}
-         * contains a known type and suggestions.
+         * Raises an error if the {@code @Argument} annotations on the given executable
+         * contain {@code type} or {@code suggesitons} fields that are unbound or
+         * unknown.
          * 
          * @param element the executable
-         * @param parameter the parameter
+         * @param parameter an ignored parameter
          * @return {@code null}
          */
         @Override
@@ -186,10 +188,11 @@ public class BindingProcessor extends AnnotationProcessor {
         }
         
         /**
-         * Checks if the {@code @Argument} annotation on the {@code Element} contains
-         * a known type and suggestions.
+         * Raises an error if the {@code @Argument} annotations on the given element
+         * contain {@code type} or {@code suggesitons} fields that are unbound or
+         * unknown.
          * 
-         * @param element the executable
+         * @param element the element
          */
         protected void visitArgument(Element element) {
             for (var argument : element.getAnnotationsByType(Argument.class)) {

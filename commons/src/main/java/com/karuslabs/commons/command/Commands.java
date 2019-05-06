@@ -64,7 +64,7 @@ public @Static class Commands {
 
     
     /**
-     * Returns a {@code CommandNode} with the given name, created from the annotated 
+     * Returns a {@code CommandNode} with the given name, created from the annotated
      * object.
      * 
      * @see com.karuslabs.commons.command.annotations
@@ -72,7 +72,7 @@ public @Static class Commands {
      * @param <T> the type of the source
      * @param annotated the annotated object
      * @param name the name of the command
-     * @return the {@code CommandNode} with {@code name}, created from the annotated
+     * @return a {@code CommandNode} with given name, created from the annotated
      *         object
      */
     public static <T> CommandNode<T> from(Object annotated, String name) {
@@ -81,11 +81,14 @@ public @Static class Commands {
     
     
     /**
-     * Creates {@code CommandNode}s derived from the annotated object.
+     * Returns a map that associates root commands created from the annotated object
+     * with their names.
+     * 
+     * @see com.karuslabs.commons.command.annotations
      * 
      * @param <T> the type of the source
      * @param annotated the annotated object
-     * @return the {@code CommandNode}s derived from the annotated object
+     * @return a map that associates the created root commands with their names
      */
     public static <T> Map<String, CommandNode<T>> from(Object annotated) {
         return (Map<String, CommandNode<T>>) ASSEMBLER.assemble(annotated);

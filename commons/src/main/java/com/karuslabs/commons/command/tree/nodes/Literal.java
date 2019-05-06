@@ -263,10 +263,10 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         
         
         /**
-         * Adds a child with the given name derived from the annotated object.
+         * Adds a child with the given name created from the annotated object.
          * 
          * @param annotated the annotated object
-         * @param name the name of the derived command
+         * @param name the name of the child to be created
          * @return {@code this}
          */
         public Builder<T> then(Object annotated, String name) {

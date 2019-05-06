@@ -75,7 +75,7 @@ public class Root extends RootCommandNode<CommandSender> {
      * Adds the {@code command} if the provided {@code CommandMap} does not contain 
      * a command with the same name. In addition, a fallback alias of the {@code command} 
      * is always created and added. If the {@code command} implements {@link Aliasable},
-     * the aliases and the fallback of the aliases are also added.
+     * the aliases and the fallback of the aliases are also added in a similar fashion.
      * 
      * @param command the command to be added
      * @throws IllegalArgumentException if the {@code command} is not a {@code LiteralCommandNode}

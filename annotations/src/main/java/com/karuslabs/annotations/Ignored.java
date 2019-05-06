@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Signifies that the annotated parameter is ignored.
- * Usage of this annotation should be limited to overriding constructors and methods.
+ * Usage of this annotation should be limited to overridden constructors and methods.
  */
 @Documented
 @Retention(RUNTIME)

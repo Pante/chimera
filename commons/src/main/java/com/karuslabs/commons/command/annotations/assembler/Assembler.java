@@ -70,14 +70,15 @@ public class Assembler<T> {
     
     
     /**
-     * Creates {@code CommandNode}s from the given annotated object.
+     * Returns a map that associates root commands created from the annotated object
+     * with their names.
      * 
      * @param annotated the annotated object
      * @return a map that associates the created root commands with the names of 
      *         the root commands
-     * @throws IllegalArgumentException if the given object could not be resolved
-     * @throws IllegalStateException if the given object could not be resolved
-     * @throws RuntimeException if the given object could not be resolved
+     * @throws IllegalArgumentException if the annotated object could not be resolved
+     * @throws IllegalStateException if the annotated object could not be resolved
+     * @throws RuntimeException if the annotated object could not be resolved
      */
     public Map<String, ? extends CommandNode<T>> assemble(Object annotated) {
         try {
@@ -98,12 +99,12 @@ public class Assembler<T> {
     
     
     /**
-     * Resolves the fields in the given object annotated with {@code @Bind}.
+     * Resolves the fields annotated with {@code @Bind} in the given object.
      * 
      * @param annotated the annotated object
      * @throws IllegalArgumentException if the given object contains duplicate fields 
-     *                                  bound to the same name or if the field is 
-     *                                  not an {@code ArgumentType} or {@code SuggestionProvider}
+     *                                  bound to the same name or is neither an {@code ArgumentType} 
+     *                                  nor {@code SuggestionProvider}
      * @throws IllegalStateException if the fields cannot be accessed
      */
     protected void bind(Object annotated) {
@@ -122,15 +123,15 @@ public class Assembler<T> {
     }
     
     /**
-     * Resolves the {@code field} and annotation.
+     * Resolves the given {@code field} and {@code annotation}.
      * 
      * @param annotated the enclosing object 
      * @param field the annotated field
      * @param annotation the annotation
-     * @throws ReflectiveOperationException if the given field cannot be accessed
+     * @throws ReflectiveOperationException if the {@code field} cannot be accessed
      * @throws IllegalArgumentException if the given object contains duplicate fields 
-     *                                  bound to the same name or if the field is 
-     *                                  not an {@code ArgumentType} or {@code SuggestionProvider}
+     *                                  bound to the same name or is neither an {@code ArgumentType}
+     *                                  nor {@code SuggestionProvider}
      */
     protected void bind(Object annotated, Field field, Bind annotation) throws ReflectiveOperationException {
         var type = field.getType();
@@ -148,14 +149,14 @@ public class Assembler<T> {
     
     
     /**
-     * Resolves the methods in the given object annotated with {@code @Literal}
-     * and {@code Argument}.
+     * Resolves the methods annotated with {@code @Literal} and {@code Argument}
+     * in the given object.
      * 
      * @param annotated the annotated object
      * @throws IllegalArgumentException if the method signature matches neither
      *                                  {@link Command#run(CommandContext)} nor 
      *                                  {@link Executable#execute(DefaultableContext)}. 
-     * @throws RuntimeException if a lambda expression could not be generated
+     * @throws RuntimeException if a lambda could not be created
      */
     protected void generate(Object annotated) {
         var type = annotated.getClass();
@@ -176,8 +177,8 @@ public class Assembler<T> {
     
     
     /**
-     * Creates a {@code Command} from the {@code method} if its signature matches
-     * either {@link Command#run(CommandContext)} or {@link Executable#execute(DefaultableContext)}. 
+     * Creates a {@code Command} from the given {@code method} if its signature
+     * matches either {@link Command#run(CommandContext)} or {@link Executable#execute(DefaultableContext)}. 
      * 
      * @param annotated the enclosing object
      * @param method the method
@@ -185,7 +186,7 @@ public class Assembler<T> {
      * @throws IllegalArgumentException if the method signature matches neither
      *                                  {@link Command#run(CommandContext)} nor 
      *                                  {@link Executable#execute(DefaultableContext)}. 
-     * @throws RuntimeException if a lambda expression could not be generated
+     * @throws RuntimeException if the annotated object could not be resolved
      */
     protected Command<T> emit(Object annotated, Method method) {
         var returned = method.getReturnType();
@@ -203,18 +204,18 @@ public class Assembler<T> {
     }
     
     /**
-     * Creates a lambda expression from the given parameters.
+     * Creates a lambda with a signature compatible to {@code Command} from the
+     * given parameters.
      * 
      * @param annotated the annotated object which lexical scope is bound to the
-     *                  created lambda expression
-     * @param method the method to be converted into a lambda expression
-     * @param signature the signature of the created lambda expression
-     * @param target the type of the created lambda expression that should be a
-     *               subtype of {@code Command}
+     *                  created lambda
+     * @param method the method to be converted into a lambda
+     * @param signature the signature of the created lambda
+     * @param target the type of the created lambda
      * @param targetMethod the name of the target method which signature the created
-     *                     lambda expression should match
+     *                     lambda should match
      * @return the {@code Command}
-     * @throws RuntimeException if the lambda expression could not be generated
+     * @throws RuntimeException if the lambda could not be created
      */
     protected Command<T> emit(Object annotated, Method method, MethodType signature, Class<?> target, String targetMethod) {
         try {

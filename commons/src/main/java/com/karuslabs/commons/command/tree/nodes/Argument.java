@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An {@code ArgumentCommandNode} subclass that provides additional convenience
- * methods and support for aliases.
+ * methods.
  * 
  * @param <T> the type of the source
  * @param <V> the type of the argument
@@ -216,10 +216,10 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         
         
         /**
-         * Adds a child with the given name derived from the annotated object.
+         * Adds a child with the given name created from the annotated object.
          * 
          * @param annotated the annotated object
-         * @param name the name of the derived command
+         * @param name the name of the child to be created
          * @return {@code this}
          */
         public Builder<T, V> then(Object annotated, String name) {

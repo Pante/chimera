@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2019 Matthias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 
 /**
- * An annotation from which an {@link com.karuslabs.commons.command.tree.nodes.Argument}
- * can be created.
+ * Provides {@code Processor}s.
  */
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-@Repeatable(Arguments.class)
-public @interface Argument {
-    
-    /**
-     * The namespace in which the {@code Argument} is to be created.
-     * 
-     * @return the namespace
-     */
-    String[] namespace();
-    
-    /**
-     * An optional name of the {@code ArgumentType} to which the {@code Argument} 
-     * to be created is bound.
-     * 
-     * @return the name of the bound {@code ArgumentType}.
-     */
-    String type() default "";
-    
-    /**
-     * An optional name of the {@code SuggestionProvider} to which the {@code Argument}
-     * to be created is bound.
-     * 
-     * @return the name
-     */
-    String suggestions() default "";
-    
-}
+package com.karuslabs.annotations.processors;

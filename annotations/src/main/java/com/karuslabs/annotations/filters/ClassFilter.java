@@ -31,27 +31,62 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A filter that recursively traverses elements to find an enclosing class.
+ */
 public class ClassFilter extends SimpleElementVisitor9<Element, Void> {
     
+    /**
+     * A {@code ClassFilter}.
+     */
     public static final ClassFilter FILTER = new ClassFilter();
     
     
+    /**
+     * Returns {@link #DEFAULT_VALUE}.
+     * 
+     * @param element the module
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE}
+     */
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
+    /**
+     * Returns {@link #DEFAULT_VALUE}.
+     * 
+     * @param element the package
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE}
+     */
     @Override
     public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
+    /**
+     * Returns the given type.
+     * 
+     * @param element the type
+     * @param parameter an ignored parameter
+     * @return the given type
+     */
     @Override
     public Element visitType(TypeElement element, @Ignored Void parameter) {
         return element;
     }
     
     
+    /**
+     * Recursively visits the enclosing element if present.
+     * 
+     * @param element the element
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE} if no enclosing class was found; otherwise
+     *         a element that represents the enclosing class
+     */
     @Override
     protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();

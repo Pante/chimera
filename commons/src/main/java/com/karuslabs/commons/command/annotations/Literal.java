@@ -30,7 +30,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies a {@link com.karuslabs.commons.command.tree.nodes.Literal}.
+ * An annotation from which a {@link com.karuslabs.commons.command.tree.nodes.Literal}
+ * can be created.
  */
 @Documented
 @Retention(RUNTIME)
@@ -39,14 +40,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Literal {
     
     /**
-     * The {@code Literal} namespace.
+     * The namespace in which the {@code Literal} is to be created.
      * 
      * @return the namespace
      */
     String[] namespace();
     
     /**
-     * The aliases for this {@code Literal}.
+     * The aliases of the {@code Literal} to be created.
      * 
      * @return the aliases
      */

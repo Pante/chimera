@@ -24,6 +24,8 @@
 
 /**
  * Provides annotation processors that perform static analysis on the annotations 
- * from which commands are derived.
+ * from which {@code CommandNode}s are created.
+ * 
+ * @see com.karuslabs.commons.command.annotations
  */
 package com.karuslabs.commons.command.annotations.processors;

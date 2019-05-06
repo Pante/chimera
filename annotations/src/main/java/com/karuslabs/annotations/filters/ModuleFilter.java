@@ -31,17 +31,38 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A filter that recursively traverses elements to find an enclosing module.
+ */
 public class ModuleFilter extends SimpleElementVisitor9<Element, Void> {
     
+    /**
+     * A {@code ModuleFilter}.
+     */
     public static final ModuleFilter FILTER = new ModuleFilter();
     
     
+    /**
+     * Returns the given module.
+     * 
+     * @param element the module
+     * @param parameter an ignored parameter
+     * @return the given module
+     */
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
         return element;
     }
     
     
+    /**
+     * Recursively visits the enclosing element if present.
+     * 
+     * @param element the element
+     * @param parameter an ignored parameter
+     * @return {@link #DEFAULT_VALUE} if no enclosing module was found; otherwise
+     *         a element that represents the enclosing module
+     */
     @Override
     protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();

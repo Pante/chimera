@@ -37,7 +37,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * An assembler that creates {@code CommandNode}s from annotated objects.
+ * An assembler that creates {@code CommandNode}s from the intermediate representation
+ * {@code Node}s.
  * 
  * @param <T> the type of the source
  */
@@ -60,10 +61,10 @@ public class CommandAssembler<T> {
     
     
     /**
-     * Creates {@code CommandNode}s from a previously created intermediate representation.
+     * Creates {@code CommandNode}s from the previously created intermediate 
+     * representation nodes.
      * 
-     * @return a map that associates the created root commands with the names of 
-     *         the root commands
+     * @return a map that associates the created root commands with their names
      * @throws IllegalArgumentException if the given object could not be resolved
      * @throws IllegalStateException if the given object could not be resolved
      * @throws RuntimeException if the given object could not be resolved
@@ -98,12 +99,12 @@ public class CommandAssembler<T> {
     
     
     /**
-     * Creates a intermediate representation from the given {@code Literal}s.
+     * Creates intermediate representation nodes from the given {@code @Literal}s.
      * 
      * @param type the enclosing type
      * @param literals the literals
      * @param execution the {@code Command} to be executed
-     * @throws IllegalArgumentException if the namespace of an {@code Literal} is 
+     * @throws IllegalArgumentException if the namespace of a {@code @Literal} is 
      *                                  empty
      */
     public void assemble(Class<?> type, Literal[] literals, @Nullable Command<T> execution) {
@@ -117,12 +118,12 @@ public class CommandAssembler<T> {
     
     
     /**
-     * Creates a intermediate representation from the given {@code Argument}s.
+     * Creates the intermediate representation nodes from the given {@code @Argument}s.
      * 
      * @param type the enclosing type
      * @param arguments the arguments
      * @param execution the {@code Command} to be executed
-     * @throws IllegalArgumentException if the namespace of an {@code Argument} 
+     * @throws IllegalArgumentException if the namespace of an {@code @Argument} 
      *                                  is empty
      */
     public void assemble(Class<?> type, Argument[] arguments, @Nullable Command<T> execution) {
@@ -141,12 +142,12 @@ public class CommandAssembler<T> {
     
     /**
      * Traverses the intermediate representation tree following the given namespace,
-     * creating {@code Node}s when necessary.
+     * creating {@code Node}s if necessary.
      * 
      * @param type the enclosing type
      * @param annotation the annotation
      * @param namespace the namespace
-     * @return the leaf {@code Node}
+     * @return the leaf {@code Node} of the given namespace
      * @throws IllegalArgumentException if {@code namespace} is empty
      */
     protected Node<T> descend(Class<?> type, String annotation, String... namespace) {
