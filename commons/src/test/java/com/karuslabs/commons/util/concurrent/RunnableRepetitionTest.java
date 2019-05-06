@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RunnableRepetitionTest {
     
-    Runnable runnable = mock(Runnable.class);;
+    Runnable runnable = mock(Runnable.class);
     Repetition<String> continual = new RunnableRepetition<>(runnable, 0);
     Future<String> context = mock(Future.class);
     
