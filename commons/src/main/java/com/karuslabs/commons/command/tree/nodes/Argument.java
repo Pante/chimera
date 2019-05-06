@@ -81,7 +81,40 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
     }
+    
+    
+    @Override
+    public void addChild(CommandNode<T> child) {
+        var existing = getChild(child.getName());
+        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
+        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
+        
+        super.addChild(child); 
+        
+        if (childAliases != null) {
+            for (var alias : childAliases) {
+                super.addChild(alias);
+            }
+        }
+        
+        if (existingAliases != null) {
+            if (childAliases != null) {
+                existingAliases.addAll(childAliases);
+                for (var alias : childAliases) {
+                    for (var grandchild : existing.getChildren()) {
+                        alias.addChild(grandchild);
+                    }
+                }
+            }
 
+            for (var grandchild : child.getChildren()) {
+                for (var existingChildAlias : existingAliases) {
+                    existingChildAlias.addChild(grandchild);
+                }
+            }
+        }
+    }
+    
     
     @Override
     public @Nullable CommandNode<T> removeChild(String child) {
