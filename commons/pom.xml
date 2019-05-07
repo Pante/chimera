@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.karuslabs</groupId>
             <artifactId>lingua-franca</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.4</version>
             <scope>compile</scope>
         </dependency>
         
@@ -65,8 +65,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${source}</source>
-                    <target>${target}</target>
+                    <release>${release}</release>
                 </configuration>
             </plugin>
     
