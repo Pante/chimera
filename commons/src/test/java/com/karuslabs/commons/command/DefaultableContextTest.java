@@ -45,13 +45,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DefaultableContextTest {
     
-    static final Object OBJECT = new Object();
+    static final Object SOURCE = new Object();
     static final Command<Object> COMMAND = context -> 1;
     static final StringRange RANGE = new StringRange(0, 0);
     static final RedirectModifier<Object> MODIFIER = context -> List.of();
     
     
-    CommandContext<Object> context = new CommandContext<>(OBJECT, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, Map.of(), RANGE, null, MODIFIER, false);
+    CommandContext<Object> context = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, null, List.of(), RANGE, null, MODIFIER, false);
     DefaultableContext<Object> defaultable = new DefaultableContext<>(context);
     
     CommandContext<Object> mock = mock(CommandContext.class);
@@ -134,7 +134,7 @@ class DefaultableContextTest {
     
     
     static Stream<Arguments> equality_provider() {
-        var context = new CommandContext<>(OBJECT, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, Map.of(), RANGE, null, MODIFIER, false);
+        var context = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, null, List.of(), RANGE, null, MODIFIER, false);
         var other = new DefaultableContext<>(context);
         return Stream.of(
             of(other, true),

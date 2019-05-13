@@ -27,11 +27,11 @@ import com.karuslabs.commons.command.tree.Tree;
 
 import java.util.List;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.*;
 
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_13_R2.scheduler.CraftScheduler;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.*;
@@ -50,7 +50,7 @@ class SynchronizerTest {
     Synchronizer synchronizer;
     Plugin plugin = mock(Plugin.class);
     CraftServer craftserver = mock(CraftServer.class);
-    MinecraftServer server = mock(MinecraftServer.class);
+    DedicatedServer server = mock(DedicatedServer.class);
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
     ServicesManager services = mock(ServicesManager.class);

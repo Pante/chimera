@@ -47,12 +47,12 @@ public class Position3DType extends Cartesian3DType<Position> {
         
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        if (builder.remaining.isBlank()) {
+        if (builder.getRemaining().isBlank()) {
             builder.suggest("~").suggest("~ ~").suggest("~ ~ ~");
             return;
         }
         
-        var prefix = builder.remaining.charAt(0) == '^' ? '^' : '~';
+        var prefix = builder.getRemaining().charAt(0) == '^' ? '^' : '~';
         if (parts.length == 1) {
             builder.suggest(parts[0] + " " + prefix)
                    .suggest(parts[0] + " " + prefix + " " + prefix);

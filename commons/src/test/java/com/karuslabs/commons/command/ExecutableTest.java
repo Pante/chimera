@@ -46,7 +46,7 @@ class ExecutableTest {
     
     @Test
     void run() throws CommandSyntaxException {
-        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, false);
+        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, null, false);
         
         assertEquals(SINGLE_SUCCESS, executable.run(context));
     }

@@ -27,7 +27,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.minecraft.server.v1_13_R2.ArgumentVec3;
+import net.minecraft.server.v1_14_R1.ArgumentVec3;
 
 import org.bukkit.Location;
 
