@@ -81,7 +81,6 @@ class MaterialTypeTest {
         type.listSuggestions(null, when(builder.getRemaining()).thenReturn("cactu").getMock());
         
         verify(builder).suggest("cactus");
-        verify(builder).suggest("cactus_green");
     }
     
     
