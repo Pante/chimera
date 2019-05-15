@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.ValueBased;
 
 import java.util.*;
 
@@ -31,9 +30,10 @@ import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import com.karuslabs.annotations.ValueType;
 
 
-public @ValueBased class Position extends Location {
+public @ValueType class Position extends Location {
     
     private static final double EPSILON = 0.000001;
     

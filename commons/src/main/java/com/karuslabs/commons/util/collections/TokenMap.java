@@ -25,12 +25,12 @@ package com.karuslabs.commons.util.collections;
 
 import com.google.common.primitives.Primitives;
 
-import com.karuslabs.annotations.ValueBased;
 import com.karuslabs.commons.util.collections.TokenMap.Key;
 
 import java.util.*;
 
 import static com.karuslabs.commons.util.collections.TokenMap.key;
+import com.karuslabs.annotations.ValueType;
 
 
 public interface TokenMap<N, T> {
@@ -101,7 +101,7 @@ public interface TokenMap<N, T> {
         return new Key<>(name, type);
     }
     
-    public @ValueBased final class Key<N, T> {
+    public @ValueType final class Key<N, T> {
 
         N name;
         Class<? extends T> type;

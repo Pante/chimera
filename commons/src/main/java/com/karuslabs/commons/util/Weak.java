@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.ValueBased;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -32,9 +31,10 @@ import java.util.stream.Stream;
 
 import static com.karuslabs.commons.util.WeakValue.EMPTY;
 import static java.util.stream.Stream.ofNullable;
+import com.karuslabs.annotations.ValueType;
 
 
-public @ValueBased interface Weak<T> {
+public @ValueType interface Weak<T> {
     
     public static <T> Weak<T> of(T value) {
         return new WeakValue<>(value);
@@ -76,7 +76,7 @@ public @ValueBased interface Weak<T> {
 }
 
 
-@ValueBased final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
+@ValueType final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     static final Weak<?> EMPTY = new WeakValue<>(null);
     
