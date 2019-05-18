@@ -31,9 +31,9 @@ import com.karuslabs.commons.command.tree.nodes.Literal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.*;
 
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;

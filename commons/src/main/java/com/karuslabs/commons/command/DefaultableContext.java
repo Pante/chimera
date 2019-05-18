@@ -25,10 +25,9 @@ package com.karuslabs.commons.command;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.*;
-import com.mojang.brigadier.tree.CommandNode;
 
 import java.lang.invoke.*;
-import java.util.Map;
+import java.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -69,7 +68,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
      * @param context the underlying context to which operations are forwarded
      */
     public DefaultableContext(CommandContext<S> context) {
-        super(null, null, null, null, null, null, null, null, false);
+        super(null, null, null, null, null, null, null, null, null, false);
         this.context = context;
         this.arguments = null;
     }
@@ -158,7 +157,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
 
     @Override
-    public Map<CommandNode<S>, StringRange> getNodes() {
+    public List<ParsedCommandNode<S>> getNodes() {
         return context.getNodes();
     }
 

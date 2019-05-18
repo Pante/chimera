@@ -72,7 +72,7 @@ public class Position2DType extends Cartesian2DType<Position> {
      */
     @Override
     protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
-        if (builder.remaining.isBlank()) {
+        if (builder.getRemaining().isBlank()) {
             builder.suggest("~").suggest("~ ~");
             
         } else if (parts.length == 1) {

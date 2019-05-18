@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.ValueBased;
+import com.karuslabs.annotations.ValueType;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * An optionally relative 3D position in a world.
  */
-public @ValueBased class Position extends Location {
+public @ValueType class Position extends Location {
     
     private static final double EPSILON = 0.000001;
     

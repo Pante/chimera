@@ -28,13 +28,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.stream.Stream;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.*;
 
 import org.bukkit.command.*;
 
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.command.*;
-import org.bukkit.craftbukkit.v1_13_R2.entity.*;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.command.*;
+import org.bukkit.craftbukkit.v1_14_R1.entity.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +83,7 @@ class ExceptionsTest {
         CommandBlockListenerAbstract commandblock = when(mock(CommandBlockListenerAbstract.class).getWrapper()).thenReturn(LISTENER).getMock();
         EntityMinecartCommandBlock minecart = when(mock(EntityMinecartCommandBlock.class).getCommandBlock()).thenReturn(commandblock).getMock();
         
-        MinecraftServer server = when(mock(MinecraftServer.class).getServerCommandListener()).thenReturn(LISTENER).getMock();
+        DedicatedServer server = when(mock(DedicatedServer.class).getServerCommandListener()).thenReturn(LISTENER).getMock();
         CraftServer craftserver = when(mock(CraftServer.class).getServer()).thenReturn(server).getMock();
         
         return Stream.of(

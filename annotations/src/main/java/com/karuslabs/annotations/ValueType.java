@@ -35,6 +35,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
-public @interface ValueBased {
+public @interface ValueType {
     
 }
