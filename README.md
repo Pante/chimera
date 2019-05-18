@@ -15,17 +15,17 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Chimera/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-| Chimera Version            | Minecraft Version |
-|----------------------------|-------------------|
-| 4.1.0                      | 1.13.2            |
-| 4.2.0-SNAPSHOT             | 1.14              |
-| 4.2.0-SNAPSHOT             | 1.14.1            |
+| Chimera Version | Minecraft Version |
+|-----------------|-------------------|
+| 4.1.0           | 1.13.2            |
+| 4.2.0           | 1.14              |
+| 4.2.0           | 1.14.1            |
 
 ***
 #### Annotations - Contains useful, general purpose annotations
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.1.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.1.0/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.2.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.2.0/commons/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
@@ -44,7 +44,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
   <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>annotations</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
   </dependency>
 </dependencies>
 ```
@@ -53,7 +53,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 #### Chimera - Contains the command framework and other common utilities for Spigot plugin development
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.1.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.1.0/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.2.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.2.0/commons/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
@@ -72,7 +72,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
   <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>commons</artifactId>
-      <version>4.1.0</version>
+      <version>4.2.0</version>
   </dependency>
 </dependencies>
 ```
