@@ -18,8 +18,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
 | 4.1.0           | 1.13.2            |
-| 4.2.0           | 1.14              |
-| 4.2.0           | 1.14.1            |
+| 4.2.0           | 1.14, 1.14.1      |
 
 ***
 #### Annotations - Contains useful, general purpose annotations
