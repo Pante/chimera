@@ -60,3 +60,4 @@ Temporary Items
 /plugin-lint-maven-plugin/target/
 /commons/nbproject/
 /splint/parser/target/
+/sprint/client/target/
