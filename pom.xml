@@ -23,7 +23,7 @@
     <modules>
         <module>annotations</module>
         <module>commons</module>
-        <module>sprint</module>
+        <module>spigot-sprinters</module>
     </modules>
   
         
