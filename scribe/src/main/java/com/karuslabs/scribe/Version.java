@@ -21,19 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+package com.karuslabs.scribe;
 
 
-@Documented
-@Retention(SOURCE)
-@Target({TYPE})
-public @interface Permissions {
+public enum Version {
     
-    Permission[] value();
+    V1_13, V1_14;
     
 }

@@ -21,19 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
+package com.karuslabs.scribe.imperative;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import com.karuslabs.scribe.Default;
 
 
-@Documented
-@Retention(SOURCE)
-@Target({TYPE})
-public @interface Permissions {
+public class Permission {
     
-    Permission[] value();
+    private static final Permission[] EMPTY = new Permission[] {};
+    
+    
+    private String name;
+    private String description;
+    private Default implicit;
+    private Permission[] children;
+    
+    
+    public Permission(String name) {
+        this.name = name;
+        description = "";
+        implicit = Default.OP;
+        children = EMPTY;
+    }
+    
+    
+    public Permission description(String description) {
+        this.description = description;
+        return this;
+    }
+    
+    public Permission implicit(Default value) {
+        this.implicit = value;
+        return this;
+    }
+    
+    public Permission children(Permission... children) {
+        this.children = children;
+        return this;
+    }
+
+    
+    public String name() {
+        return name;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public Default implicit() {
+        return implicit;
+    }
+
+    public Permission[] children() {
+        return children;
+    }
     
 }

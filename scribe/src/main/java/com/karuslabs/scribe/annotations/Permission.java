@@ -23,7 +23,9 @@
  */
 package com.karuslabs.scribe.annotations;
 
+import com.karuslabs.scribe.Default;
 import java.lang.annotation.*;
+
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
@@ -40,6 +42,6 @@ public @interface Permission {
     
     Default implicit() default Default.OP;
     
-    String inherit() default "";
+    String[] children() default "";
     
 }

@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
+package com.karuslabs.scribe.imperative;
 
 
-public enum Phase {
+public class Information {
     
-    STARTUP, POSTWORLD;
+    private String[] authors;
     
 }
