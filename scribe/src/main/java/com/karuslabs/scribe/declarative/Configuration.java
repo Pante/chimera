@@ -21,65 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.imperative;
+package com.karuslabs.scribe.declarative;
 
-import com.karuslabs.scribe.Phase;
+import java.lang.annotation.*;
 
-
-public class Load {
-    
-    private static final String[] EMPTY = new String[] {};
-    
-    
-    private Phase during;
-    private String[] before;
-    private String[] after;
-    private String[] optionallyAfter;
-    
-    
-    public Load() {
-        during = Phase.POSTWORLD;
-        before = EMPTY;
-        after = EMPTY;
-        optionallyAfter = EMPTY;
-    }
-    
-    
-    public Load during(Phase phase) {
-        during = phase;
-        return this;
-    }
-    
-    public Load before(String... plugins) {
-        before = plugins;
-        return this;
-    }
-    
-    public Load after(String... plugins) {
-        after = plugins;
-        return this;
-    }
-    
-    public Load optionallyAfter(String... plugins) {
-        optionallyAfter = plugins;
-        return this;
-    }
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-    public Phase during() {
-        return during;
-    }
-
-    public String[] before() {
-        return before;
-    }
-
-    public String[] after() {
-        return after;
-    }
-
-    public String[] optionallyAfter() {
-        return optionallyAfter;
-    }
+@Documented
+@Retention(SOURCE)
+@Target({FIELD})
+public @interface Configuration {
     
 }

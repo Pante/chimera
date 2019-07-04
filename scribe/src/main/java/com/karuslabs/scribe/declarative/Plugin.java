@@ -21,80 +21,87 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.imperative;
+package com.karuslabs.scribe.declarative;
+
+import com.karuslabs.scribe.Version;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Command {
-    
-    private static final String[] EMPTY = new String[] {};
-    
+public class Plugin {
     
     private String name;
-    private String[] aliases;
-    private String description;
-    private String syntax;
-    private String permission;
-    private String message;
+    private String version;
+    private @Nullable Version api;
+    private Information information;
+    private Load load;
+    private Command[] commands;
+    private Permission[] permissions;
     
     
-    public Command(String name) {
+    public Plugin(String name, String version) {
         this.name = name;
-        aliases = EMPTY;
-        description = "";
-        syntax = "";
-        permission = "";
-        message = "";
+        this.version = version;
+        api = null;
+        information = new Information();
+        load = new Load();
+        commands = new Command[] {};
+        permissions = new Permission[] {};
     }
     
     
-    public Command aliases(String... aliases) {
-        this.aliases = aliases;
+    public Plugin api(Version version) {
+        api = version;
         return this;
     }
     
-    public Command description(String description) {
-        this.description = description;
+    public Plugin information(Information information) {
+        this.information = information;
         return this;
     }
     
-    public Command syntax(String syntax) {
-        this.syntax = syntax;
+    public Plugin load(Load load) {
+        this.load = load;
         return this;
     }
     
-    public Command permission(String permission) {
-        this.permission = permission;
+    public Plugin commands(Command... commands) {
+        this.commands = commands;
         return this;
     }
     
-    public Command message(String message) {
-        this.message = message;
+    public Plugin permissions(Permission... permissions) {
+        this.permissions = permissions;
         return this;
     }
-    
+
 
     public String name() {
         return name;
     }
 
-    public String[] aliases() {
-        return aliases;
+    public String version() {
+        return version;
     }
 
-    public String description() {
-        return description;
+    public @Nullable Version api() {
+        return api;
+    }
+    
+    public Information information() {
+        return information;
+    }
+    
+    public Load load() {
+        return load;
     }
 
-    public String syntax() {
-        return syntax;
+    public Command[] commands() {
+        return commands;
     }
 
-    public String permission() {
-        return permission;
-    }
-
-    public String message() {
-        return message;
+    public Permission[] permissions() {
+        return permissions;
     }
     
 }

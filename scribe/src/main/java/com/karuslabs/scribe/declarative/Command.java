@@ -21,60 +21,80 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.imperative;
-
-import com.karuslabs.scribe.Default;
+package com.karuslabs.scribe.declarative;
 
 
-public class Permission {
+public class Command {
     
-    private static final Permission[] EMPTY = new Permission[] {};
+    private static final String[] EMPTY = new String[] {};
     
     
     private String name;
+    private String[] aliases;
     private String description;
-    private Default implicit;
-    private Permission[] children;
+    private String syntax;
+    private String permission;
+    private String message;
     
     
-    public Permission(String name) {
+    public Command(String name) {
         this.name = name;
+        aliases = EMPTY;
         description = "";
-        implicit = Default.OP;
-        children = EMPTY;
+        syntax = "";
+        permission = "";
+        message = "";
     }
     
     
-    public Permission description(String description) {
+    public Command aliases(String... aliases) {
+        this.aliases = aliases;
+        return this;
+    }
+    
+    public Command description(String description) {
         this.description = description;
         return this;
     }
     
-    public Permission implicit(Default value) {
-        this.implicit = value;
+    public Command syntax(String syntax) {
+        this.syntax = syntax;
         return this;
     }
     
-    public Permission children(Permission... children) {
-        this.children = children;
+    public Command permission(String permission) {
+        this.permission = permission;
         return this;
     }
+    
+    public Command message(String message) {
+        this.message = message;
+        return this;
+    }
+    
 
-    
     public String name() {
         return name;
+    }
+
+    public String[] aliases() {
+        return aliases;
     }
 
     public String description() {
         return description;
     }
 
-    public Default implicit() {
-        return implicit;
+    public String syntax() {
+        return syntax;
     }
 
-    public Permission[] children() {
-        return children;
+    public String permission() {
+        return permission;
+    }
+
+    public String message() {
+        return message;
     }
     
 }

@@ -21,76 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.imperative;
-
-import com.karuslabs.scribe.Version;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+package com.karuslabs.scribe.declarative;
 
 
-public class Plugin {
+public class Information {
     
-    private String name;
-    private String version;
-    private @Nullable Version api;
-    private Information information;
-    private Command[] commands;
-    private Permission[] permissions;
+    private String[] authors;
+    private String description;
+    private String url;
+    private String prefix;
     
     
-    public Plugin(String name, String version) {
-        this.name = name;
-        this.version = version;
-        api = null;
-        information = new Information();
-        commands = new Command[] {};
-        permissions = new Permission[] {};
+    public Information() {
+        authors = new String[] {};
+        description = "";
+        url = "";
+        prefix = "";
     }
     
     
-    public Plugin api(Version version) {
-        api = version;
+    public Information authors(String... authors) {
+        this.authors = authors;
         return this;
     }
     
-    public Plugin information(Information information) {
-        this.information = information;
+    public Information description(String description) {
+        this.description = description;
         return this;
     }
     
-    public Plugin commands(Command... commands) {
-        this.commands = commands;
+    public Information url(String url) {
+        this.url = url;
         return this;
     }
     
-    public Plugin permissions(Permission... permissions) {
-        this.permissions = permissions;
+    public Information prefix(String prefix) {
+        this.prefix = prefix;
         return this;
     }
 
-
-    public String name() {
-        return name;
-    }
-
-    public String version() {
-        return version;
-    }
-
-    public @Nullable Version api() {
-        return api;
-    }
     
-    public Information information() {
-        return information;
+    public String[] authors() {
+        return authors;
     }
 
-    public Command[] commands() {
-        return commands;
+    public String description() {
+        return description;
     }
 
-    public Permission[] permissions() {
-        return permissions;
+    public String url() {
+        return url;
+    }
+
+    public String prefix() {
+        return prefix;
     }
     
 }
