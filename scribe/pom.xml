@@ -13,6 +13,22 @@
     <name>Scribe</name>
     <description>Karus Lab's compile time plugin.yml generator</description>
     
+    <dependencies>
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc5</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+    
     <build>
         <defaultGoal>clean package install</defaultGoal>
         <plugins>  

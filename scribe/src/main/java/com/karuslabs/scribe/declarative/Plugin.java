@@ -28,10 +28,12 @@ import com.karuslabs.scribe.Version;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Plugin {
+@Configuration
+public abstract class Plugin {
     
-    private String name;
-    private String version;
+    private @Nullable String name;
+    private @Nullable String version;
+    private @Nullable String main;
     private @Nullable Version api;
     private Information information;
     private Load load;
@@ -39,9 +41,10 @@ public class Plugin {
     private Permission[] permissions;
     
     
-    public Plugin(String name, String version) {
-        this.name = name;
-        this.version = version;
+    public Plugin() {
+        name = null;
+        version = null;
+        main = null;
         api = null;
         information = new Information();
         load = new Load();
@@ -49,6 +52,28 @@ public class Plugin {
         permissions = new Permission[] {};
     }
     
+    
+    public abstract void build();
+    
+    
+    public Plugin name(String name) {
+        this.name = name;
+        return this;
+    }
+    
+    public Plugin version(String version) {
+        this.version = version;
+        return this;
+    }
+    
+    public Plugin main(Class<?> main) {
+        return main(main.getCanonicalName());
+    }
+    
+    public Plugin main(String main) {
+        this.main = main;
+        return this;
+    }
     
     public Plugin api(Version version) {
         api = version;
@@ -76,12 +101,16 @@ public class Plugin {
     }
 
 
-    public String name() {
+    public @Nullable String name() {
         return name;
     }
 
-    public String version() {
+    public @Nullable String version() {
         return version;
+    }
+    
+    public @Nullable String main() {
+        return main;
     }
 
     public @Nullable Version api() {

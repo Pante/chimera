@@ -21,18 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative;
+package com.karuslabs.scribe.declarative.processors;
 
-import java.lang.annotation.*;
+import com.google.auto.service.AutoService;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 
-
-@Documented
-@Retention(SOURCE)
-@Target({TYPE})
-@Inherited
-public @interface Configuration {
+@AutoService(Processor.class)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
+@SupportedAnnotationTypes("com.karuslabs.scribe.declarative.Configuration")
+public class DeclarativeProcessor {
     
 }

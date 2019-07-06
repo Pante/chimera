@@ -21,18 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative;
+package com.karuslabs.scribe.annotations.processors;
 
-import java.lang.annotation.*;
+import com.google.auto.service.AutoService;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import com.karuslabs.annotations.processors.AnnotationProcessor;
+
+import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 
 
-@Documented
-@Retention(SOURCE)
-@Target({TYPE})
-@Inherited
-public @interface Configuration {
+@AutoService(Processor.class)
+@SupportedSourceVersion(SourceVersion.RELEASE_11)
+@SupportedAnnotationTypes({
+    "com.karuslabs.scribe.annotations.API", "com.karuslabs.scribe.annotations.Command",
+    "com.karuslabs.scribe.annotations.Commands", "com.karuslabs.scribe.annotations.Information",
+    "com.karuslabs.scribe.annotations.Load", "com.karuslabs.scribe.annotations.Permission",
+    "com.karuslabs.scribe.annotations.Permissions", "com.karuslabs.scribe.annotations.Plugin"
+})
+public class PluginProcessor extends AnnotationProcessor {
     
 }
