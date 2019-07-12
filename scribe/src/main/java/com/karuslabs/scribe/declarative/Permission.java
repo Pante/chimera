@@ -25,23 +25,22 @@ package com.karuslabs.scribe.declarative;
 
 import com.karuslabs.scribe.Default;
 
+import java.util.*;
+
 
 public class Permission {
-    
-    private static final Permission[] EMPTY = new Permission[] {};
-    
     
     private String name;
     private String description;
     private Default implicit;
-    private Permission[] children;
+    private Map<String, Permission> children;
     
     
     public Permission(String name) {
         this.name = name;
         description = "";
         implicit = Default.OP;
-        children = EMPTY;
+        children = new HashMap<>();
     }
     
     
@@ -56,7 +55,9 @@ public class Permission {
     }
     
     public Permission children(Permission... children) {
-        this.children = children;
+        for (var child : children) {
+            this.children.put(child.name(), child);
+        } 
         return this;
     }
 
@@ -73,7 +74,7 @@ public class Permission {
         return implicit;
     }
 
-    public Permission[] children() {
+    public Map<String, Permission> children() {
         return children;
     }
     

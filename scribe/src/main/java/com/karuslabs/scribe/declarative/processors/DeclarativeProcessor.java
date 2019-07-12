@@ -25,12 +25,62 @@ package com.karuslabs.scribe.declarative.processors;
 
 import com.google.auto.service.AutoService;
 
+import com.karuslabs.annotations.processors.AnnotationProcessor;
+import com.karuslabs.scribe.declarative.Plugin;
+
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+
 
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes("com.karuslabs.scribe.declarative.Configuration")
-public class DeclarativeProcessor {
+public class DeclarativeProcessor extends AnnotationProcessor {
+    
+    TypeMirror type;
+    
+    
+    @Override
+    public void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        type = elements.getTypeElement(Plugin.class.getName()).asType();
+    }
+    
+    
+    @Override
+    protected void process(Element element) {
+        if (!types.isAssignable(element.asType(), type)) {
+            error(element, "Invalid annotated type: " + element.getSimpleName() + ", type must extend " + Plugin.class.getName());
+            return;
+            
+        }
+        
+        if (element.getModifiers().contains(Modifier.ABSTRACT)) {
+            error(element, "Invalid type: " + element.getSimpleName() + ", type cannot be abstract");
+            return;
+        }
+
+        try {
+            var type = Class.forName(element.asType().toString());
+            var constructor = type.getConstructor();
+            constructor.setAccessible(true);
+            
+            var plugin = (Plugin) constructor.newInstance();
+            plugin.build();
+            resolve(plugin);
+            
+        } catch (ClassNotFoundException e) {
+            error(element, "No such class: " + element.asType() + ", class could not be loaded");
+            
+        } catch (ReflectiveOperationException e) {
+            error(element, "Unable to instantiate: " + element.asType() + ", class must declare a constructor with no arguments");
+        }
+    }
+    
+    protected void resolve(Plugin plugin) {
+        
+    }
     
 }

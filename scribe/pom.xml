@@ -13,6 +13,14 @@
     <name>Scribe</name>
     <description>Karus Lab's compile time plugin.yml generator</description>
     
+    <repositories>
+        <repository>
+            <id>Sonatype-public</id>
+            <name>SnakeYAML repository</name>
+            <url>http://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -26,6 +34,13 @@
             <artifactId>auto-service</artifactId>
             <version>1.0-rc5</version>
             <optional>true</optional>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.snakeyaml</groupId>
+            <artifactId>snakeyaml-engine</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     
