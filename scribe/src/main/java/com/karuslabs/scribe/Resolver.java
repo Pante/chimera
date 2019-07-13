@@ -23,17 +23,30 @@
  */
 package com.karuslabs.scribe;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+import javax.annotation.processing.Messager;
 
-public enum Default {
+
+public abstract class Resolver<T> {
     
-    TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
+    public static final Pattern COMMAND = Pattern.compile("^ ");
+    public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
+    public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
+    public static final Pattern WORD = Pattern.compile("\\w+");
+    
+    protected Messager messager;
     
     
-    public final String value;
+    public Resolver(Messager messager) {
+        this.messager = messager;
+    }
     
     
-    private Default(String value) {
-        this.value = value;
+    public abstract void resolve(T element, Map<String, Object> map);
+    
+    public void close() {
+        
     }
     
 }

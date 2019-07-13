@@ -26,6 +26,13 @@ package com.karuslabs.scribe;
 
 public enum Version {
     
-    V1_13, V1_14;
+    V1_13("1.13"), V1_14("1.14");
+    
+    
+    public final String version;
+    
+    private Version(String version) {
+        this.version = version;
+    }
     
 }

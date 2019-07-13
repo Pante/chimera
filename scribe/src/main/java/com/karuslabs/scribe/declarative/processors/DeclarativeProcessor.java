@@ -26,8 +26,11 @@ package com.karuslabs.scribe.declarative.processors;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processors.AnnotationProcessor;
+import com.karuslabs.scribe.*;
 import com.karuslabs.scribe.declarative.Plugin;
+import com.karuslabs.scribe.declarative.resolvers.*;
 
+import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
@@ -40,12 +43,27 @@ import javax.lang.model.type.TypeMirror;
 public class DeclarativeProcessor extends AnnotationProcessor {
     
     TypeMirror type;
+    List<Resolver<Plugin>> resolvers;
+    YAMLWriter writer;
+    
+    
+    public DeclarativeProcessor() {
+        resolvers = new ArrayList<>();
+    }
     
     
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
         type = elements.getTypeElement(Plugin.class.getName()).asType();
+        
+        resolvers.add(new PluginResolver(messager));
+        resolvers.add(new InformationResolver(messager));
+        resolvers.add(new LoadResolver(messager));
+        resolvers.add(new CommandResolver(messager));
+        resolvers.add(new PermissionResolver(messager));
+        
+        writer = new YAMLWriter(environment.getFiler(), messager);
     }
     
     
@@ -54,7 +72,6 @@ public class DeclarativeProcessor extends AnnotationProcessor {
         if (!types.isAssignable(element.asType(), type)) {
             error(element, "Invalid annotated type: " + element.getSimpleName() + ", type must extend " + Plugin.class.getName());
             return;
-            
         }
         
         if (element.getModifiers().contains(Modifier.ABSTRACT)) {
@@ -69,7 +86,7 @@ public class DeclarativeProcessor extends AnnotationProcessor {
             
             var plugin = (Plugin) constructor.newInstance();
             plugin.build();
-            resolve(plugin);
+            writer.write(resolve(plugin));
             
         } catch (ClassNotFoundException e) {
             error(element, "No such class: " + element.asType() + ", class could not be loaded");
@@ -79,8 +96,14 @@ public class DeclarativeProcessor extends AnnotationProcessor {
         }
     }
     
-    protected void resolve(Plugin plugin) {
+    protected Map<String, ?> resolve(Plugin plugin) {
+        var map = new HashMap<String, Object>();
+        for (var resolver : resolvers) {
+            resolver.resolve(plugin, map);
+            resolver.close();
+        }
         
+        return map;
     }
     
 }

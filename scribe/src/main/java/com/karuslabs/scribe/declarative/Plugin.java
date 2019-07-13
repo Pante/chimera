@@ -28,7 +28,6 @@ import com.karuslabs.scribe.Version;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-@Configuration
 public abstract class Plugin {
     
     private @Nullable String name;
