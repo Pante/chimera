@@ -15,10 +15,10 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Chimera/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-| Chimera Version | Minecraft Version                |
-|-----------------|----------------------------------|
+| Chimera Version | Minecraft Version                        |
+|-----------------|------------------------------------------|
 | 4.1.0           | 1.13.2                           |
-| 4.2.0           | 1.14, 1.14.1, 1.4.2, 1.14.3      |
+| 4.2.0           | 1.14, 1.14.1, 1.4.2, 1.14.3, 1.14.4      |
 
 ***
 #### Annotations - Contains useful, general purpose annotations
