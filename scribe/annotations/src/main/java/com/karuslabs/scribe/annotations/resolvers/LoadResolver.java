@@ -21,19 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative.resolvers;
+package com.karuslabs.scribe.annotations.resolvers;
 
-import com.karuslabs.scribe.Resolver;
-import com.karuslabs.scribe.declarative.Plugin;
+import com.karuslabs.scribe.annotations.Load;
+import com.karuslabs.scribe.annotations.processor.Resolver;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class LoadResolver extends Resolver<Plugin> {
+public class LoadResolver extends Resolver {
 
     public LoadResolver(Messager messager) {
         super(messager);
@@ -41,25 +42,28 @@ public class LoadResolver extends Resolver<Plugin> {
 
     
     @Override
-    public void resolve(Plugin plugin, Map<String, Object> map) {
-        var load = plugin.load();
+    protected void resolve(Element element, Map<String, Object> results) {
+        var load = element.getAnnotation(Load.class);
         var matcher = WORD.matcher("");
         
-        check(matcher, load.before(), "Load.before(...)");
-        map.put("loadbefore", load.before());
+        check(element, matcher, load.before());
+        results.put("loadbefore", load.before());
         
-        check(matcher, load.optionallyAfter(), "Load.optionallyAfter(...)");
-        map.put("softdepend", load.optionallyAfter());
+        check(element, matcher, load.optionallyAfter());
+        results.put("softdepend", load.optionallyAfter());
         
-        check(matcher, load.after(), "Load.after(...)");
-        map.put("depend", load.after());
+        check(element, matcher, load.after());
+        results.put("depend", load.after());
     }
     
-    protected void check(Matcher matcher, String[] names, String context) {
+    protected void check(Element element, Matcher matcher, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
-                messager.printMessage(ERROR, "Invalid name: '" + name + "' in " + context + ", "
-                                           + "name must contain only alphanumeric characters and '_'");
+                messager.printMessage(
+                    ERROR, 
+                    "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'", 
+                    element
+                );
             }
         }
     }

@@ -23,8 +23,7 @@
  */
 package com.karuslabs.scribe.annotations;
 
-import com.karuslabs.scribe.Phase;
-
+import com.karuslabs.scribe.annotations.constants.Default;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -34,14 +33,15 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target({TYPE})
-public @interface Load {
+@Repeatable(Permissions.class)
+public @interface Permission {
     
-    Phase during() default Phase.POSTWORLD;
+    String value();
     
-    String[] before() default {};
+    String description() default "";
     
-    String[] after() default {};
+    Default implicit() default Default.OP;
     
-    String[] optionallyAfter() default {};
+    String[] children() default {};
     
 }

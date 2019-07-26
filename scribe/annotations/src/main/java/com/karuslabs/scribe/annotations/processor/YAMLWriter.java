@@ -21,17 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe;
+package com.karuslabs.scribe.annotations.processor;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.annotation.processing.*;
 import javax.tools.*;
 
 import org.snakeyaml.engine.v1.api.*;
 import org.snakeyaml.engine.v1.common.FlowStyle;
 import org.snakeyaml.engine.v1.common.ScalarStyle;
+
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 public class YAMLWriter {
@@ -42,7 +44,7 @@ public class YAMLWriter {
     
     
     public YAMLWriter(Filer filer, Messager messager) {
-        this(filer, messager, new Dump(new DumpSettingsBuilder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.DOUBLE_QUOTED).build()));
+        this(filer, messager, new Dump(new DumpSettingsBuilder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
     }
     
     public YAMLWriter(Filer filer, Messager messager, Dump dump) {
@@ -54,11 +56,12 @@ public class YAMLWriter {
     
     public void write(Object object) {
         try (var writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml").openWriter()) {
-            writer.append("# This file was generated using Scribe 4.3.0 at: " + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+            writer.append("# This file was generated using Scribe Annotations 4.3.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
                   .append(dump.dumpToString(object));
             
         } catch (IOException e) {
-            messager.printMessage(Diagnostic.Kind.ERROR, "Failed to create plugin.yml");
+            messager.printMessage(ERROR, "Failed to create plugin.yml");
+            messager.printMessage(ERROR, e.getMessage());
         }
     }
             

@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe;
+package com.karuslabs.scribe.annotations.processor;
 
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 
-public abstract class Resolver<T> {
+public abstract class Resolver {
     
     public static final Pattern COMMAND = Pattern.compile("^ ");
     public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
@@ -43,9 +44,25 @@ public abstract class Resolver<T> {
     }
     
     
-    public abstract void resolve(T element, Map<String, Object> map);
+    public void resolve(Set<? extends Element> elements, Map<String, Object> results) {
+        if (!validate(elements, results)) {
+            return;
+        }
+        
+        for (var element : elements) {
+            resolve(element, results);
+        }
+        
+        clear();
+    }
     
-    public void close() {
+    protected boolean validate(Set<? extends Element> elements, Map<String, Object> results) {
+        return true;
+    }
+            
+    protected abstract void resolve(Element element, Map<String, Object> results);
+    
+    protected void clear() {
         
     }
     

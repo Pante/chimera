@@ -21,60 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative;
+package com.karuslabs.scribe.annotations.constants;
 
 
-public class Information {
+public enum Default {
     
-    private String[] authors;
-    private String description;
-    private String url;
-    private String prefix;
+    TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
     
     
-    public Information() {
-        authors = new String[] {};
-        description = "";
-        url = "";
-        prefix = "";
-    }
+    public final String value;
     
     
-    public Information authors(String... authors) {
-        this.authors = authors;
-        return this;
-    }
-    
-    public Information description(String description) {
-        this.description = description;
-        return this;
-    }
-    
-    public Information url(String url) {
-        this.url = url;
-        return this;
-    }
-    
-    public Information prefix(String prefix) {
-        this.prefix = prefix;
-        return this;
-    }
-
-    
-    public String[] authors() {
-        return authors;
-    }
-
-    public String description() {
-        return description;
-    }
-
-    public String url() {
-        return url;
-    }
-
-    public String prefix() {
-        return prefix;
+    private Default(String value) {
+        this.value = value;
     }
     
 }

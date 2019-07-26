@@ -21,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative;
+package com.karuslabs.scribe.annotations;
+
+import com.karuslabs.scribe.annotations.constants.Version;
 
 import java.lang.annotation.*;
 
@@ -32,7 +34,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target({TYPE})
-@Inherited
-public @interface Configuration {
+public @interface API {
+    
+    Version value();
     
 }

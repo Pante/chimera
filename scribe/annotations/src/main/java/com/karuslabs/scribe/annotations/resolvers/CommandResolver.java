@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative.resolvers;
+package com.karuslabs.scribe.annotations.resolvers;
 
-import com.karuslabs.scribe.Resolver;
-import com.karuslabs.scribe.declarative.*;
+import com.karuslabs.scribe.annotations.processor.Resolver;
+import com.karuslabs.scribe.annotations.Command;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -32,11 +32,12 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import javax.annotation.processing.Messager;
 
-import static com.karuslabs.scribe.declarative.resolvers.CommandResolver.Type.*;
+import static com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type.*;
+import javax.lang.model.element.Element;
 import static javax.tools.Diagnostic.Kind.*;
 
 
-public class CommandResolver extends Resolver<Plugin> {
+public class CommandResolver extends Resolver {
     
     public static enum Type {
         NAME("name"), ALIAS("alias");
@@ -59,20 +60,20 @@ public class CommandResolver extends Resolver<Plugin> {
 
     
     @Override
-    public void resolve(Plugin plugin, Map<String, Object> map) {
+    protected void resolve(Element element, Map<String, Object> results) {
         var matcher = COMMAND.matcher("");
         var commands = new HashMap<String, Object>();
         
-        for (var command : plugin.commands()) {
-            check(matcher, command);
-            map.put(command.name(), resolve(command));
+        for (var command : element.getAnnotationsByType(Command.class)) {
+            check(element, matcher, command);
+            results.put(command.name(), resolve(element, command));
         }
         
-        map.put("commands", commands);
+        results.put("commands", commands);
     }
     
     
-    protected void check(Matcher matcher, Command command) {
+    protected void check(Element element, Matcher matcher, Command command) {
         check(matcher, command, command.name(), NAME);
         for (var alias : command.aliases()) {
             check(matcher, command, alias, ALIAS);
@@ -101,27 +102,27 @@ public class CommandResolver extends Resolver<Plugin> {
     }
     
     
-    protected Map<String, Object> resolve(Command command) {
+    protected Map<String, Object> resolve(Element element, Command command) {
         var map = new HashMap<String, Object>();
         
         map.put("aliases", command.aliases());
         
-        if (command.description() != null) {
+        if (!command.description().isEmpty()) {
             map.put("description", command.description());
         }
         
-        if (command.syntax() != null) {
+        if (!command.syntax().isEmpty()) {
             map.put("usage", command.syntax());
         }
         
-        if (command.permission() != null) {
+        if (!command.permission().isEmpty()) {
             if (!PERMISSION.matcher(command.permission()).matches()) {
-                messager.printMessage(WARNING, "Potentially malformed command permission: " + command.permission());
+                messager.printMessage(MANDATORY_WARNING, "Potentially malformed command permission: " + command.permission(), element);
             }
             map.put("permission", command.permission());
         }
         
-        if (command.message() != null) {
+        if (!command.message().isEmpty()) {
             map.put("permission-message", command.message());
         }
         
@@ -130,7 +131,7 @@ public class CommandResolver extends Resolver<Plugin> {
     
     
     @Override
-    public void close() {
+    protected void clear() {
         names.clear();
     }
     

@@ -21,19 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe;
+package com.karuslabs.scribe.annotations;
+
+import com.karuslabs.scribe.annotations.constants.Phase;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-public enum Default {
+@Documented
+@Retention(SOURCE)
+@Target({TYPE})
+public @interface Load {
     
-    TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
+    Phase during() default Phase.POSTWORLD;
     
+    String[] before() default {};
     
-    public final String value;
+    String[] after() default {};
     
-    
-    private Default(String value) {
-        this.value = value;
-    }
+    String[] optionallyAfter() default {};
     
 }

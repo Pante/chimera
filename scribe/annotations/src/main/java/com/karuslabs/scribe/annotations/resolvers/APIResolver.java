@@ -21,27 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
+package com.karuslabs.scribe.annotations.resolvers;
 
-import com.karuslabs.scribe.Default;
-import java.lang.annotation.*;
+import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.scribe.annotations.processor.Resolver;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import java.util.Map;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 
-@Documented
-@Retention(SOURCE)
-@Target({TYPE})
-@Repeatable(Permissions.class)
-public @interface Permission {
-    
-    String value();
-    
-    String description() default "";
-    
-    Default implicit() default Default.OP;
-    
-    String[] children() default "";
+public class APIResolver extends Resolver {
+
+    public APIResolver(Messager messager) {
+        super(messager);
+    }
+
+    @Override
+    protected void resolve(Element element, Map<String, Object> results) {
+        var api = element.getAnnotation(API.class);
+        results.put("api-version", api.value().version);
+    }
     
 }

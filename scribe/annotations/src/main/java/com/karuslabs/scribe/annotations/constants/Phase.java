@@ -21,41 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.declarative.resolvers;
-
-import com.karuslabs.scribe.Resolver;
-import com.karuslabs.scribe.declarative.Plugin;
-
-import java.util.Map;
-import javax.annotation.processing.Messager;
+package com.karuslabs.scribe.annotations.constants;
 
 
-public class InformationResolver extends Resolver<Plugin> {
-
-    public InformationResolver(Messager messager) {
-        super(messager);
-    }
-
+public enum Phase {
     
-    @Override
-    public void resolve(Plugin plugin, Map<String, Object> map) {
-        var info = plugin.information();
-                
-        if (info.authors().length > 0) {
-            map.put("authors", info.authors());
-        }
-        
-        if (info.description() != null) {
-            map.put("description", info.description());
-        }
-        
-        if (info.url() != null) {
-            map.put("website", info.url());
-        }
-        
-        if (info.prefix() != null) {
-            map.put("prefix", info.prefix());
-        }
-    }
+    STARTUP, POSTWORLD;
     
 }

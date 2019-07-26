@@ -21,11 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe;
+package com.karuslabs.scribe.annotations.resolvers;
+
+import com.karuslabs.scribe.annotations.Information;
+import com.karuslabs.scribe.annotations.processor.Resolver;
+
+import java.util.Map;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 
-public enum Phase {
+public class InformationResolver extends Resolver {
+
+    public InformationResolver(Messager messager) {
+        super(messager);
+    }
     
-    STARTUP, POSTWORLD;
+
+    @Override
+    protected void resolve(Element element, Map<String, Object> results) {
+        var information = element.getAnnotation(Information.class);
+                
+        if (information.authors().length > 0) {
+            results.put("authors", information.authors());
+        }
+        
+        if (!information.description().isEmpty()) {
+            results.put("description", information.description());
+        }
+        
+        if (!information.url().isEmpty()) {
+            results.put("website", information.url());
+        }
+        
+        if (!information.prefix().isEmpty()) {
+            results.put("prefix", information.prefix());
+        }
+    }
     
 }
