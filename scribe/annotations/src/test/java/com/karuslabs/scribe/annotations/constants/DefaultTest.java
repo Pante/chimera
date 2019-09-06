@@ -21,21 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
+package com.karuslabs.scribe.annotations.constants;
 
-import com.karuslabs.scribe.annotations.constants.Version;
+import java.util.stream.Stream;
 
-import java.lang.annotation.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE})
-public @interface API {
+@ExtendWith(MockitoExtension.class)
+class DefaultTest {
     
-    Version value();
+    @ParameterizedTest
+    @MethodSource("values_parameters")
+    void values(Default value, String expected) {
+        assertEquals(expected, value.value);
+    }
     
-}
+    static Stream<Arguments> values_parameters() {
+        return Stream.of(
+            of(Default.TRUE, "true"),
+            of(Default.FALSE, "false"),
+            of(Default.OP, "op"),
+            of(Default.NOT_OP, "not op")
+        );
+    }
+
+} 

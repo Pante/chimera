@@ -21,21 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
+package com.karuslabs.scribe.annotations.resolvers;
 
+import com.karuslabs.scribe.annotations.API;
 import com.karuslabs.scribe.annotations.constants.Version;
 
-import java.lang.annotation.*;
+import java.util.HashMap;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE})
-public @interface API {
+@ExtendWith(MockitoExtension.class)
+@API(Version.V1_13)
+class APIResolverTest {
     
-    Version value();
+    Messager messager = mock(Messager.class);
+    APIResolver resolver = new APIResolver(messager);
+    Element element = mock(Element.class);
     
-}
+    
+    @Test
+    void resolve() {
+        when(element.getAnnotation(API.class)).thenReturn(getClass().getAnnotation(API.class));
+        var results = new HashMap<String, Object>();
+        resolver.resolve(element, results);
+        
+        assertEquals(1, results.size());
+        assertEquals("1.13", results.get("api-version"));
+    }
+
+} 
