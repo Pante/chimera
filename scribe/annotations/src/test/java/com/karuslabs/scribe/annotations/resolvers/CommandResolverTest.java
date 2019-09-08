@@ -41,6 +41,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CommandResolverTest {
     
-    
+    @Test
+    void types() {
+        
+    }
 
 } 
