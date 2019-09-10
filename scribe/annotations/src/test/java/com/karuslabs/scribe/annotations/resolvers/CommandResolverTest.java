@@ -23,6 +23,8 @@
  */
 package com.karuslabs.scribe.annotations.resolvers;
 
+import com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type;
+
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -41,9 +43,17 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CommandResolverTest {
     
-    @Test
-    void types() {
-        
+    @ParameterizedTest
+    @MethodSource("values_parameters")
+    void values(Type type, String name) {
+        assertEquals(name, type.name);
+    }
+    
+    static Stream<Arguments> values_parameters() {
+        return Stream.of(
+            of(Type.NAME, "name"),
+            of(Type.ALIAS, "alias")
+        );
     }
 
 } 
