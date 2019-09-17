@@ -1,5 +1,6 @@
 language: java
 sudo: required
+distro: bionic
 jdk:
   - openjdk11
 
