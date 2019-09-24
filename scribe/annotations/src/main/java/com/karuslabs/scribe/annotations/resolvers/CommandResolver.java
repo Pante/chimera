@@ -31,9 +31,9 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 import static com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type.*;
-import javax.lang.model.element.Element;
 import static javax.tools.Diagnostic.Kind.*;
 
 
@@ -66,7 +66,7 @@ public class CommandResolver extends Resolver {
         
         for (var command : element.getAnnotationsByType(Command.class)) {
             check(element, matcher, command);
-            results.put(command.name(), resolve(element, command));
+            commands.put(command.name(), resolve(element, command));
         }
         
         results.put("commands", commands);
@@ -74,30 +74,36 @@ public class CommandResolver extends Resolver {
     
     
     protected void check(Element element, Matcher matcher, Command command) {
-        check(matcher, command, command.name(), NAME);
+        check(element, matcher, command, command.name(), NAME);
         for (var alias : command.aliases()) {
-            check(matcher, command, alias, ALIAS);
+            check(element, matcher, command, alias, ALIAS);
         }
     }
     
-    protected void check(Matcher matcher, Command command, String name, Type type) {
-        if (!matcher.reset(name).matches()) {
-            messager.printMessage(ERROR, "Invalid command " + type.name + ": " + name + ", " + type.name + " cannot contain whitespaces");
+    protected void check(Element element, Matcher matcher, Command command, String name, Type type) {
+        if (matcher.reset(name).matches()) {
+            messager.printMessage(ERROR, "Invalid command " + type.name + ": " + name + ", " + type.name + " cannot contain whitespaces", element);
+            return;
+            
+        } else if (name.isEmpty()) {
+            messager.printMessage(ERROR, "Invalid command " + type.name + ": " + name + ", " + type.name + " cannot be empty", element);
+            return;
         }
         
-        var entry = names.get(command.name());
+        
+        var entry = names.get(name);
         if (entry == null) {
-            names.put(command.name(), new SimpleEntry<>(command, type));
+            names.put(name, new SimpleEntry<>(command, type));
             
         } else if (type == NAME && entry.getValue() == NAME) {
-            messager.printMessage(ERROR, "Conflicting command names: " + name + ", command names must be unique");
+            messager.printMessage(ERROR, "Conflicting command names: " + name + ", command names must be unique", element);
             
         } else if (type == ALIAS && entry.getValue() == ALIAS) {
             messager.printMessage(ERROR, "Conflicting command aliases: " + name + " for " + command.name() + " and " 
-                                       + entry.getKey().name() + ", command aliases must be unique");
+                                       + entry.getKey().name() + ", command aliases must be unique", element);
         } else {
-            messager.printMessage(ERROR, "Conflicting command name and alias: " + name + " and alias for " + entry.getKey().name() + ", " 
-                                       + ", command names and aliases must be unique");
+            messager.printMessage(ERROR, "Conflicting command name and alias: " + name + " and alias for " + entry.getKey().name()
+                                       + ", command names and aliases must be unique", element);
         }
     }
     

@@ -21,49 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.annotations.resolvers;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import com.karuslabs.scribe.annotations.Information;
+
+import java.util.HashMap;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public abstract class Resolver {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
+@Information(authors = {"Pante"}, description = "description", url = "url", prefix = "prefix")
+class InformationResolverTest {
     
-    public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
-    public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
-    public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
-    public static final Pattern WORD = Pattern.compile("\\w+");
-    
-    protected Messager messager;
-    
-    
-    public Resolver(Messager messager) {
-        this.messager = messager;
-    }
+    Element element = when(mock(Element.class).getAnnotation(Information.class)).thenReturn(InformationResolverTest.class.getAnnotation(Information.class)).getMock();
+    Messager messager = mock(Messager.class);
+    InformationResolver resolver = new InformationResolver(messager);
     
     
-    public void resolve(Set<? extends Element> elements, Map<String, Object> results) {
-        if (!validate(elements, results)) {
-            return;
-        }
+    @Test
+    void resolve() {
+        var results = new HashMap<String, Object>();
         
-        for (var element : elements) {
-            resolve(element, results);
-        }
+        resolver.resolve(element, results);
         
-        clear();
+        assertArrayEquals(new String[] {"Pante"}, (String[]) results.get("authors"));
+        assertEquals("description", results.get("description"));
+        assertEquals("url", results.get("website"));
+        assertEquals("prefix", results.get("prefix"));
     }
-    
-    protected boolean validate(Set<? extends Element> elements, Map<String, Object> results) {
-        return true;
-    }
-            
-    protected abstract void resolve(Element element, Map<String, Object> results);
-    
-    protected void clear() {
-        
-    }
-    
-}
+
+} 
