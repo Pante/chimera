@@ -28,6 +28,7 @@ import com.karuslabs.scribe.annotations.Plugin;
 import com.karuslabs.scribe.annotations.processor.Resolver;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
@@ -42,7 +43,7 @@ public class PluginResolver extends Resolver {
     Types types;
     TypeMirror type;
     Visitor visitor;
-    
+    Matcher matcher;
     
     
     public PluginResolver(Elements elements, Types types, Messager messager) {
@@ -50,26 +51,34 @@ public class PluginResolver extends Resolver {
         this.types = types;
         type = elements.getTypeElement(org.bukkit.plugin.Plugin.class.getName()).asType();
         visitor = new Visitor();
+        matcher = WORD.matcher("");
     }
     
     
     @Override
-    protected boolean validate(Set<? extends Element> elements, Map<String, Object> results) {
-        if (elements.size() != 1) {
+    protected boolean check(Set<? extends Element> elements) {
+        if (elements.isEmpty()) {
+            messager.printMessage(ERROR, "No @Plugin annotation found, plugin must contain a @Plugin annotation");
+            return false;
+            
+        } else if (elements.size() > 1) {
             for (var element : elements) {
                 messager.printMessage(ERROR, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation", element);
             }
             return false;
+            
+        } else {
+            return elements.toArray(new Element[] {})[0].accept(visitor, false); 
         }
-        
-        return elements.toArray(new Element[] {})[0].accept(visitor, false);
     }
     
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var plugin = element.getAnnotation(Plugin.class);
-                
-        if (!WORD.matcher(plugin.name()).matches()) {
+        
+        results.put("main", element.asType().toString());
+        
+        if (!matcher.reset(plugin.name()).matches()) {
             messager.printMessage(ERROR, "Invalid name: '" + plugin.name() + "', name must contain only alphanumeric characters and '_'", element);
         }
         results.put("name", plugin.name());
@@ -103,7 +112,7 @@ public class PluginResolver extends Resolver {
             if (!types.isAssignable(element.asType(), type)) {
                 messager.printMessage(
                     ERROR, 
-                    "Invalid main class: " + element.asType() + ", main class must inherit from " + org.bukkit.plugin.Plugin.class.getName(),
+                    "Invalid main class: '" + element.asType() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'",
                     element
                 );
                 valid = false;
@@ -121,7 +130,7 @@ public class PluginResolver extends Resolver {
             if (element.getKind() == CONSTRUCTOR && !element.getParameters().isEmpty()) {
                 messager.printMessage(
                     ERROR, 
-                    "Invalid main class: " + element.getEnclosedElements() + ", main class cannot contain constructors with parameters",
+                    "Invalid main class: '" + element.getEnclosingElement() + "', main class cannot contain constructors with parameters",
                     element
                 );
                 return false;

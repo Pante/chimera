@@ -51,21 +51,22 @@ public class CommandResolver extends Resolver {
     
     
     Map<String, Entry<Command, Type>> names;
+    Matcher matcher;
     
     
     public CommandResolver(Messager messager) {
         super(messager);
         names = new HashMap<>();
+        matcher = COMMAND.matcher("");
     }
 
     
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
-        var matcher = COMMAND.matcher("");
         var commands = new HashMap<String, Object>();
         
         for (var command : element.getAnnotationsByType(Command.class)) {
-            check(element, matcher, command);
+            check(element, command);
             commands.put(command.name(), resolve(element, command));
         }
         
@@ -73,20 +74,20 @@ public class CommandResolver extends Resolver {
     }
     
     
-    protected void check(Element element, Matcher matcher, Command command) {
-        check(element, matcher, command, command.name(), NAME);
+    protected void check(Element element, Command command) {
+        check(element, command, command.name(), NAME);
         for (var alias : command.aliases()) {
-            check(element, matcher, command, alias, ALIAS);
+            check(element, command, alias, ALIAS);
         }
     }
     
-    protected void check(Element element, Matcher matcher, Command command, String name, Type type) {
+    protected void check(Element element, Command command, String name, Type type) {
         if (matcher.reset(name).matches()) {
-            messager.printMessage(ERROR, "Invalid command " + type.name + ": " + name + ", " + type.name + " cannot contain whitespaces", element);
+            messager.printMessage(ERROR, "Invalid command " + type.name + ": '" + name + "', " + type.name + " cannot contain whitespaces", element);
             return;
             
         } else if (name.isEmpty()) {
-            messager.printMessage(ERROR, "Invalid command " + type.name + ": " + name + ", " + type.name + " cannot be empty", element);
+            messager.printMessage(ERROR, "Invalid command " + type.name + ": '" + name + "', " + type.name + " cannot be empty", element);
             return;
         }
         
@@ -96,14 +97,14 @@ public class CommandResolver extends Resolver {
             names.put(name, new SimpleEntry<>(command, type));
             
         } else if (type == NAME && entry.getValue() == NAME) {
-            messager.printMessage(ERROR, "Conflicting command names: " + name + ", command names must be unique", element);
+            messager.printMessage(ERROR, "Conflicting command names: '" + name + "', command names must be unique", element);
             
         } else if (type == ALIAS && entry.getValue() == ALIAS) {
-            messager.printMessage(ERROR, "Conflicting command aliases: " + name + " for " + command.name() + " and " 
-                                       + entry.getKey().name() + ", command aliases must be unique", element);
+            messager.printMessage(ERROR, "Conflicting command aliases: '" + name + "' for '" + command.name() + "' and '" 
+                                       + entry.getKey().name() + "', command aliases must be unique", element);
         } else {
-            messager.printMessage(ERROR, "Conflicting command name and alias: " + name + " and alias for " + entry.getKey().name()
-                                       + ", command names and aliases must be unique", element);
+            messager.printMessage(ERROR, "Conflicting command name and alias: '" + name + "' and alias for '" + entry.getKey().name()
+                                       + "', command names and aliases must be unique", element);
         }
     }
     
@@ -123,7 +124,7 @@ public class CommandResolver extends Resolver {
         
         if (!command.permission().isEmpty()) {
             if (!PERMISSION.matcher(command.permission()).matches()) {
-                messager.printMessage(MANDATORY_WARNING, "Potentially malformed command permission: " + command.permission(), element);
+                messager.printMessage(MANDATORY_WARNING, "Potentially malformed command permission: '" + command.permission() + "'", element);
             }
             map.put("permission", command.permission());
         }

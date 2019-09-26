@@ -45,7 +45,7 @@ public abstract class Resolver {
     
     
     public void resolve(Set<? extends Element> elements, Map<String, Object> results) {
-        if (!validate(elements, results)) {
+        if (!check(elements)) {
             return;
         }
         
@@ -56,7 +56,7 @@ public abstract class Resolver {
         clear();
     }
     
-    protected boolean validate(Set<? extends Element> elements, Map<String, Object> results) {
+    protected boolean check(Set<? extends Element> elements) {
         return true;
     }
             

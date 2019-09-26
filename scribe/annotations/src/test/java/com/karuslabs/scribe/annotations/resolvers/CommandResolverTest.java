@@ -39,8 +39,6 @@ import org.junit.jupiter.params.provider.*;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.karuslabs.scribe.annotations.processor.Resolver.COMMAND;
-
 import static javax.tools.Diagnostic.Kind.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -98,25 +96,25 @@ class CommandResolverTest {
     
     @Test
     void check_whitespaced_name() {
-        resolver.check(element, COMMAND.matcher(""), command, "invalid name", Type.NAME);
+        resolver.check(element, command, "invalid name", Type.NAME);
         
-        verify(messager).printMessage(ERROR, "Invalid command name: invalid name, name cannot contain whitespaces", element);
+        verify(messager).printMessage(ERROR, "Invalid command name: 'invalid name', name cannot contain whitespaces", element);
         assertTrue(resolver.names.isEmpty());
     }
     
     
     @Test
     void check_empty_name() {
-        resolver.check(element, COMMAND.matcher(""), command, "", Type.NAME);
+        resolver.check(element, command, "", Type.NAME);
         
-        verify(messager).printMessage(ERROR, "Invalid command name: , name cannot be empty", element);
+        verify(messager).printMessage(ERROR, "Invalid command name: '', name cannot be empty", element);
         assertTrue(resolver.names.isEmpty());
     }
     
     
     @Test
     void check_adds_name() {
-        resolver.check(element, COMMAND.matcher(""), command, "alias", Type.ALIAS);
+        resolver.check(element, command, "alias", Type.ALIAS);
         var entry = resolver.names.get("alias");
         
         verifyZeroInteractions(messager);
@@ -130,16 +128,16 @@ class CommandResolverTest {
     void check_duplicate_namespace(Type current, Type previous, String expected) {
         resolver.names.put("something", new SimpleEntry<>(command, previous));
         
-        resolver.check(element, COMMAND.matcher(""), command, "something", current);
+        resolver.check(element, command, "something", current);
         
         verify(messager).printMessage(ERROR, expected, element);
     }
     
     static Stream<Arguments> check_duplicate_namespace_parameters() {
         return Stream.of(
-            of(Type.NAME, Type.NAME, "Conflicting command names: something, command names must be unique"),
-            of(Type.ALIAS, Type.ALIAS, "Conflicting command aliases: something for name and name, command aliases must be unique"),
-            of(Type.NAME, Type.ALIAS, "Conflicting command name and alias: something and alias for name, command names and aliases must be unique")
+            of(Type.NAME, Type.NAME, "Conflicting command names: 'something', command names must be unique"),
+            of(Type.ALIAS, Type.ALIAS, "Conflicting command aliases: 'something' for 'name' and 'name', command aliases must be unique"),
+            of(Type.NAME, Type.ALIAS, "Conflicting command name and alias: 'something' and alias for 'name', command names and aliases must be unique")
         );
     }
     
@@ -163,7 +161,7 @@ class CommandResolverTest {
     void resolve_warning() {
         var results = resolver.resolve(element, MalformedPermission.class.getAnnotation(Command.class));
         
-        verify(messager).printMessage(MANDATORY_WARNING, "Potentially malformed command permission: a?s", element);
+        verify(messager).printMessage(MANDATORY_WARNING, "Potentially malformed command permission: 'a?s'", element);
         assertEquals(2, results.size());  
     }
     

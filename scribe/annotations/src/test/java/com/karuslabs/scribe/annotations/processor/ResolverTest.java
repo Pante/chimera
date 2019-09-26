@@ -60,7 +60,7 @@ class ResolverTest {
     
     @Test
     void resolve_nothing() {
-        doReturn(false).when(resolver).validate(elements, Map.of());
+        doReturn(false).when(resolver).check(elements);
         
         resolver.resolve(elements, Map.of());
         
@@ -70,7 +70,7 @@ class ResolverTest {
     
     @Test
     void validate() {
-        assertTrue(resolver.validate(Set.of(), Map.of()));
+        assertTrue(resolver.check(Set.of()));
     }
 
 } 

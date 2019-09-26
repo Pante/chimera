@@ -35,28 +35,33 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 public class LoadResolver extends Resolver {
-
+    
+    private Matcher matcher;
+    
+    
     public LoadResolver(Messager messager) {
         super(messager);
+        matcher = WORD.matcher("");
     }
 
     
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var load = element.getAnnotation(Load.class);
-        var matcher = WORD.matcher("");
         
-        check(element, matcher, load.before());
+        results.put("load", load.during().toString());
+        
+        check(element, load.before());
         results.put("loadbefore", load.before());
         
-        check(element, matcher, load.optionallyAfter());
+        check(element, load.optionallyAfter());
         results.put("softdepend", load.optionallyAfter());
         
-        check(element, matcher, load.after());
+        check(element, load.after());
         results.put("depend", load.after());
     }
     
-    protected void check(Element element, Matcher matcher, String[] names) {
+    protected void check(Element element, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
                 messager.printMessage(

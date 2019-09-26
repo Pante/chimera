@@ -36,57 +36,58 @@ import static javax.tools.Diagnostic.Kind.*;
 
 public class PermissionResolver extends Resolver {
     
-    private Set<String> names;
+    Set<String> names;
+    Matcher matcher;
     
     
     public PermissionResolver(Messager messager) {
         super(messager);
         names = new HashSet<>();
+        matcher = PERMISSION.matcher("");
     }
 
     
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var permissions = new HashMap<String, Object>();
-        var matcher = PERMISSION.matcher("");
         
         for (var permission : element.getAnnotationsByType(Permission.class)) {
-            check(element, matcher, permission);
-            resolve(element, permission, permissions);
+            check(element, permission);
+            resolve(permission, permissions);
         }
         
         results.put("permissions", permissions);
     }
     
-    protected void check(Element element, Matcher matcher, Permission permission) {
+    protected void check(Element element, Permission permission) {
         String name = permission.value();
         
-        checkMalformed(element, matcher, permission);
+        checkMalformed(element, permission);
         
         if (Set.of(permission.children()).contains(name)) {
-            messager.printMessage(MANDATORY_WARNING, "Self-inheriting permission: " + name, element);
+            messager.printMessage(MANDATORY_WARNING, "Self-inheriting permission: '" + name + "'", element);
         }
         
         if (!names.add(name)) {
-            messager.printMessage(ERROR, "Conflicting permission: " + name + ", permissions must be unique", element);
+            messager.printMessage(ERROR, "Conflicting permissions: '" + name + "', permissions must be unique", element);
         }
     }
     
-    protected void checkMalformed(Element element, Matcher matcher, Permission permission) {
+    protected void checkMalformed(Element element, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
-            messager.printMessage(MANDATORY_WARNING, "Potentially malformed permission: " + name, element);
+            messager.printMessage(MANDATORY_WARNING, "Potentially malformed permission: '" + name + "'", element);
         }
         
         for (var child : permission.children()) {
             if (!matcher.reset(child).matches()) {
-                messager.printMessage(MANDATORY_WARNING, "Potentially malformed child permission: " + child, element);
+                messager.printMessage(MANDATORY_WARNING, "Potentially malformed child permission: '" + child + "'", element);
             }
         }
     }
     
     
-    protected void resolve(Element elemenT, Permission permission, Map<String, Object> permissions) {
+    protected void resolve(Permission permission, Map<String, Object> permissions) {
         var information = new HashMap<String, Object>();
         
         if (!permission.description().isEmpty()) {
@@ -105,6 +106,12 @@ public class PermissionResolver extends Resolver {
         }
         
         permissions.put(permission.value(), information);
+    }
+    
+    
+    @Override
+    public void clear() {
+        names.clear();
     }
     
 }

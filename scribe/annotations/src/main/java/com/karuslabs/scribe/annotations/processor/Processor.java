@@ -41,8 +41,8 @@ import javax.lang.model.element.TypeElement;
 @SupportedAnnotationTypes("com.karuslabs.scribe.annotations.*")
 public class Processor extends AnnotationProcessor {
     
-    protected Map<Class<? extends Annotation>, Resolver> resolvers;
-    protected YAMLWriter writer;
+    Map<Class<? extends Annotation>, Resolver> resolvers;
+    YAMLWriter writer;
     
     
     public Processor() {
@@ -71,7 +71,12 @@ public class Processor extends AnnotationProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        if (environment.getElementsAnnotatedWithAny(resolvers.keySet()).isEmpty()) {
+            return false;
+        }
+        
         var results = new HashMap<String, Object>();
+        
         for (var entry : resolvers.entrySet()) {
             entry.getValue().resolve(environment.getElementsAnnotatedWith(entry.getKey()), results);
         }
