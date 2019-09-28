@@ -51,12 +51,9 @@ Temporary Items
 .idea/
 /nbproject/
 /commons/target/
-/command-validator-maven-plugin/target/
-/plugin-annotations-maven-plugin/target/
-/plugin-validator-maven-plugin/target/
 /annotations/target/
-/Report/target/
-/command-lint-maven-plugin/target/
-/plugin-lint-maven-plugin/target/
 /commons/nbproject/
-/splint/parser/target/
+/scribe/target/
+/scribe/f/target/
+/scribe/annotations/target/
+/scribe/scribe-maven-plugin/target/
