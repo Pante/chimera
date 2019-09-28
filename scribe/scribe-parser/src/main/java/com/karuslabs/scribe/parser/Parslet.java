@@ -30,6 +30,6 @@ import javax.tools.Diagnostic.Kind;
 @FunctionalInterface
 public interface Parslet {
     
-    public void parse(Map<String, Object> source, Map<String, Kind> results);
+    public void parse(Map<String, Object> source, Map<String, Kind> errors);
     
 }

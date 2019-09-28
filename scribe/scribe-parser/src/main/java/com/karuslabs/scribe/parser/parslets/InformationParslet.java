@@ -25,19 +25,31 @@ package com.karuslabs.scribe.parser.parslets;
 
 import com.karuslabs.scribe.parser.Parslet;
 
-import java.util.Map;
-import javax.tools.Diagnostic;
+import java.util.*;
+import javax.tools.Diagnostic.Kind;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class APIParslet implements Parslet {
+public class InformationParslet implements Parslet {
 
     @Override
-    public void parse(Map<String, Object> source, Map<String, Diagnostic.Kind> results) {
-        var version = (String) source.get("api-version");
-        if (version != null && (!version.equals("1.13") || !version.equals("1.14"))) {
-            results.put("Invalid version: '" + version + "', version must be either '1.13' or '1.14'", ERROR);
+    public void parse(Map<String, Object> source, Map<String, Kind> errors) {
+       parseAuthor(source, errors);
+       parseAuthors(source, errors);
+    }
+    
+    protected void parseAuthor(Map<String, Object> source, Map<String, Kind> errors) {
+        var author = source.get("author");
+        if (author != null && !(author instanceof String)) {
+            errors.put("Wrong type for 'permission', expected: 'String', actual: '" +  author.getClass() + "'", ERROR);
+        }
+    }
+    
+    protected void parseAuthors(Map<String, Object> source, Map<String, Kind> errors) {
+        var authors = source.get("authors");
+        if (authors != null && !(authors instanceof List<?>)) {
+            errors.put("Wrong type for 'permission', expected: 'List<String>', actual: '" +  authors.getClass() + "'", ERROR);
         }
     }
     

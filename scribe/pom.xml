@@ -15,9 +15,6 @@
     
     <modules>
         <module>annotations</module>
-        <module>scribe-maven-plugin</module>
-        <module>scribe-gradle-plugin</module>
-        <module>scribe-parser</module>
     </modules>
     
 </project>
