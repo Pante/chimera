@@ -21,19 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.constants;
+package com.karuslabs.scribe.annotations;
 
 
-public enum Default {
+public enum Version {
     
-    TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
-    
-    
-    public final String value;
+    V1_13("1.13"), V1_14("1.14");
     
     
-    private Default(String value) {
-        this.value = value;
+    public final String version;
+    
+    private Version(String version) {
+        this.version = version;
     }
     
 }

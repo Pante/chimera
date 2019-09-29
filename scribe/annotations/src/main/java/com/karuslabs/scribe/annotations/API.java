@@ -23,7 +23,6 @@
  */
 package com.karuslabs.scribe.annotations;
 
-import com.karuslabs.scribe.annotations.constants.Version;
 
 import java.lang.annotation.*;
 

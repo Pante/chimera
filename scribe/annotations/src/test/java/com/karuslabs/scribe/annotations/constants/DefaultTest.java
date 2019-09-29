@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.annotations.constants;
 
+import com.karuslabs.scribe.annotations.Default;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtendWith;
