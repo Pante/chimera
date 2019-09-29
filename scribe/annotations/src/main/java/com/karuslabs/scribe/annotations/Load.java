@@ -31,17 +31,43 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies the optional loading phase and sequence of this plugin.
+ */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface Load {
     
+    /**
+     * The phase of the server initialization in which this plugin is loaded.
+     * 
+     * @return the phase
+     */
     Phase during() default Phase.POSTWORLD;
     
+    /**
+     * The names of plugins to be loaded <b>after</b> this plugin. Specified plugins 
+     * are ignored if unavailable at runtime.
+     * 
+     * @return the plugins to be loaded after this plugin
+     */
     String[] before() default {};
     
+    /**
+     * The names of plugins to be loaded <b>before</b> this plugin. This plugin
+     * will not load if any of the specified plugins is unavailable at runtime.
+     * 
+     * @return the plugins to be loaded before this plugin
+     */
     String[] after() default {};
     
+    /**
+     * The names of plugins to be optionally loaded <b>before</b> this plugin. 
+     * Specified plugins are ignored if unavailable at runtime.
+     * 
+     * @return the plugins to be optionally loaded before this plugin
+     */
     String[] optionallyAfter() default {};
     
 }

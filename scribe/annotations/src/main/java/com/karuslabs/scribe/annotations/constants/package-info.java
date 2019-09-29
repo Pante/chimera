@@ -21,52 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations;
-
-import com.karuslabs.scribe.annotations.constants.Default;
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 
 /**
- * Signifies an optional {@code permission} attribute and its description, default
- * value and children.
+ * Contains constant values.
  */
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE})
-@Repeatable(Permissions.class)
-public @interface Permission {
-    
-    /**
-     * The permission.
-     * 
-     * @return the permission
-     */
-    String value();
-    
-    /**
-     * A description of this permission.
-     * 
-     * @return a description of this permission
-     */
-    String description() default "";
-    
-    /**
-     * The default value of this permission.
-     * 
-     * @return the default value of this permission
-     */
-    Default implicit() default Default.OP;
-    
-    /**
-     * The children of this permission. Each child inherits its default value from
-     * this parent permission.
-     * 
-     * @return the children of this permission
-     */
-    String[] children() default {};
-    
-}
+package com.karuslabs.scribe.annotations.constants;

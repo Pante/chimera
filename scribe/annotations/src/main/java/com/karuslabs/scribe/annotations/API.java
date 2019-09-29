@@ -31,11 +31,19 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies an optional {@code api-version} attribute.
+ */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface API {
     
+    /**
+     * The version of the Spigot API which this plugin uses.
+     * 
+     * @return the version of the Spigot API
+     */
     Version value();
     
 }

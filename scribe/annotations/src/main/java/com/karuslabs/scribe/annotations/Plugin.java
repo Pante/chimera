@@ -29,13 +29,28 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies the mandatory information of this plugin such as its name and version.
+ * The annotated class is used to derive the {@code main} attribute and must extend
+ * either {@code Plugin} or {@code JavaPlugin}.
+ */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface Plugin {
     
+    /**
+     * The name of this plugin.
+     * 
+     * @return the name
+     */
     String name();
     
+    /**
+     * The version of this plugin.
+     * 
+     * @return the version
+     */
     String version();
     
 }
