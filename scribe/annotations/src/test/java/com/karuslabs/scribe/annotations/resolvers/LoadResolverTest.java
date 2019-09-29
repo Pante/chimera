@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.karuslabs.scribe.annotations.constants.Phase.*;
+import static com.karuslabs.scribe.annotations.Phase.*;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 import static org.junit.jupiter.api.Assertions.*;

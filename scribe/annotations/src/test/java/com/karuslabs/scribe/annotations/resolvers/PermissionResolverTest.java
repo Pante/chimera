@@ -24,7 +24,7 @@
 package com.karuslabs.scribe.annotations.resolvers;
 
 import com.karuslabs.scribe.annotations.Permission;
-import com.karuslabs.scribe.annotations.constants.Default;
+import com.karuslabs.scribe.annotations.Default;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.karuslabs.scribe.annotations.constants.Default.*;
+import static com.karuslabs.scribe.annotations.Default.*;
 import static javax.tools.Diagnostic.Kind.*;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -24,7 +24,7 @@
 package com.karuslabs.scribe.annotations.resolvers;
 
 import com.karuslabs.scribe.annotations.API;
-import com.karuslabs.scribe.annotations.constants.Version;
+import com.karuslabs.scribe.annotations.Version;
 
 import java.util.HashMap;
 import javax.annotation.processing.Messager;

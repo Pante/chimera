@@ -21,18 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.constants;
+package com.karuslabs.scribe.annotations;
+
+import com.karuslabs.scribe.annotations.Version;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-public enum Version {
+@ExtendWith(MockitoExtension.class)
+class VersionTest {
     
-    V1_13("1.13"), V1_14("1.14");
-    
-    
-    public final String version;
-    
-    private Version(String version) {
-        this.version = version;
+    @ParameterizedTest
+    @MethodSource("values_parameters")
+    void values(Version version, String value) {
+        assertEquals(value, version.version);
     }
     
-}
+    
+    static Stream<Arguments> values_parameters() {
+        return Stream.of(
+            of(Version.V1_13, "1.13"),
+            of(Version.V1_14, "1.14")
+        );
+    }
+
+} 
