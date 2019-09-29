@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.constants;
+package com.karuslabs.scribe.annotations;
 
-import com.karuslabs.scribe.annotations.Version;
+import com.karuslabs.scribe.annotations.Default;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,19 +37,20 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @ExtendWith(MockitoExtension.class)
-class VersionTest {
+class DefaultTest {
     
     @ParameterizedTest
     @MethodSource("values_parameters")
-    void values(Version version, String value) {
-        assertEquals(value, version.version);
+    void values(Default value, String expected) {
+        assertEquals(expected, value.value);
     }
-    
     
     static Stream<Arguments> values_parameters() {
         return Stream.of(
-            of(Version.V1_13, "1.13"),
-            of(Version.V1_14, "1.14")
+            of(Default.TRUE, "true"),
+            of(Default.FALSE, "false"),
+            of(Default.OP, "op"),
+            of(Default.NOT_OP, "not op")
         );
     }
 
