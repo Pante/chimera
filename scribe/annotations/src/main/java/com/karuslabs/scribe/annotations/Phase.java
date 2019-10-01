@@ -24,6 +24,9 @@
 package com.karuslabs.scribe.annotations;
 
 
+/**
+ * Represents the phases of server initialization.
+ */
 public enum Phase {
     
     STARTUP, POSTWORLD;

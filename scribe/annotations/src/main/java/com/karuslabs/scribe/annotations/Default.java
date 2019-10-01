@@ -24,11 +24,17 @@
 package com.karuslabs.scribe.annotations;
 
 
+/**
+ * Represents the possible default values of a permission.
+ */
 public enum Default {
     
     TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
     
     
+    /**
+     * A string representation of this default value.
+     */
     public final String value;
     
     

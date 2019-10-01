@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains constant values.
+ * Contains classes to create a plugin.yml from the annotations defined in {@link com.karuslabs.scribe.annotations}.
  */
-package com.karuslabs.scribe.annotations.constants;
+package com.karuslabs.scribe.annotations.processor;

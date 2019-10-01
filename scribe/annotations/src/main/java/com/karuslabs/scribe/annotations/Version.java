@@ -24,11 +24,17 @@
 package com.karuslabs.scribe.annotations;
 
 
+/**
+ * Represents the supported API versions for the {@code api-version} attributes.
+ */
 public enum Version {
     
     V1_13("1.13"), V1_14("1.14");
     
     
+    /**
+     * A string representation of this version.
+     */
     public final String version;
     
     private Version(String version) {

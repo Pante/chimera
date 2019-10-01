@@ -36,6 +36,9 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 
 
+/**
+ * A processor that emits a plugin.yml from annotations defined in {@link com.karuslabs.scribe.annotations}.
+ */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes("com.karuslabs.scribe.annotations.*")
@@ -45,6 +48,9 @@ public class Processor extends AnnotationProcessor {
     YAMLWriter writer;
     
     
+    /**
+     * Creates a {@code Processor}.
+     */
     public Processor() {
         resolvers = new HashMap<>();
     }

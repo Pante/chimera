@@ -36,6 +36,9 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
+/**
+ * A writer that serializes objects to a YAML file.
+ */
 public class YAMLWriter {
     
     Filer filer;
@@ -43,10 +46,23 @@ public class YAMLWriter {
     Dump dump;
     
     
+    /**
+     * Creates a {@code YAMLWriter} with the given filer and messager.
+     * 
+     * @param filer the filer used to create the YAML file
+     * @param messager the messager
+     */
     public YAMLWriter(Filer filer, Messager messager) {
         this(filer, messager, new Dump(new DumpSettingsBuilder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
     }
     
+    /**
+     * Creates a {@code YAMLWriter} with the given filer, messager and dump.
+     * 
+     * @param filer the filer used to create the YAML file
+     * @param messager the messager
+     * @param dump the dump used to serialize objects to YAML
+     */
     public YAMLWriter(Filer filer, Messager messager, Dump dump) {
         this.filer = filer;
         this.messager = messager;
@@ -54,6 +70,11 @@ public class YAMLWriter {
     }
     
     
+    /**
+     * Serializes the given object to a YAML file.
+     * 
+     * @param object the object to be serialized
+     */
     public void write(Object object) {
         try (var writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml").openWriter()) {
             writer.append("# This file was generated using Scribe Annotations 4.3.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
