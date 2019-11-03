@@ -28,9 +28,9 @@ import java.time.LocalDateTime;
 import javax.annotation.processing.*;
 import javax.tools.*;
 
-import org.snakeyaml.engine.v1.api.*;
-import org.snakeyaml.engine.v1.common.FlowStyle;
-import org.snakeyaml.engine.v1.common.ScalarStyle;
+import org.snakeyaml.engine.v2.api.*;
+import org.snakeyaml.engine.v2.common.FlowStyle;
+import org.snakeyaml.engine.v2.common.ScalarStyle;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static javax.tools.Diagnostic.Kind.ERROR;
@@ -53,7 +53,7 @@ public class YAMLWriter {
      * @param messager the messager
      */
     public YAMLWriter(Filer filer, Messager messager) {
-        this(filer, messager, new Dump(new DumpSettingsBuilder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
+        this(filer, messager, new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
     }
     
     /**
