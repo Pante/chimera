@@ -24,7 +24,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 #### Annotations - Contains general purpose annotations
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.2.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.2.0/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.2.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.2.0/annotations/apidocs/index.html)
 ```XML
 
 <!-- Stable Builds -->
