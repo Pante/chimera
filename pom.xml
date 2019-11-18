@@ -55,12 +55,12 @@
             <distributionManagement>
                 <repository>
                     <id>chimera-github</id>
-                    <url>https://maven.pkg.github.com/Pante</url>
+                    <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </repository>
 
                 <snapshotRepository>
                     <id>chimera-github</id>
-                    <url>https://maven.pkg.github.com/Pante</url>
+                    <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
