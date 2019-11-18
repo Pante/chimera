@@ -22,24 +22,49 @@
         <module>commons</module>
         <module>scribe</module>
     </modules>
-          
-    <distributionManagement>
-        <repository>
+    
+    <profiles>
+        <profile>
             <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
-        </repository>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>karus</id>
+                    <url>https://repo.karuslabs.com/repository/chimera-releases</url>
+                </repository>
+
+                <snapshotRepository>
+                    <id>karus</id>
+                    <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
+                </snapshotRepository>
+
+                <site>
+                    <id>karus</id>
+                    <url>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</url>
+                </site>
+            </distributionManagement>
+        </profile>
         
-        <snapshotRepository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
-        </snapshotRepository>
-        
-        <site>
-            <id>karus</id>
-            <url>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</url>
-        </site>
-    </distributionManagement>
-   
+        <profile>
+            <id>chimera-github</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>chimera-github</id>
+                    <url>https://maven.pkg.github.com/Pante</url>
+                </repository>
+
+                <snapshotRepository>
+                    <id>chimera-github</id>
+                    <url>https://maven.pkg.github.com/Pante</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
     
     <repositories>
         <repository>
