@@ -31,13 +31,27 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
 
+/**
+ * A resolver that transforms an {@link Information} annotation into meta key-value pairs.
+ */
 public class InformationResolver extends Resolver {
-
+    
+    /**
+     * Creates an {@code InformationResolver} with the given messager.
+     * 
+     * @param messager the messager
+     */
     public InformationResolver(Messager messager) {
         super(messager);
     }
     
-
+    
+    /**
+     * Resolves and adds the element to the given results.
+     * 
+     * @param element the element to be resolved
+     * @param results the results which includes this resolution
+     */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var information = element.getAnnotation(Information.class);

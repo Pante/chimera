@@ -21,42 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
-
-import com.karuslabs.scribe.annotations.API;
-import com.karuslabs.scribe.annotations.processor.Resolver;
-
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
-
 
 /**
- * A resolver that transforms an {@link API} annotation into a {@code api-version} 
- * key-value pair.
+ * Contains resolvers that transform annotations into sections of a plugin.yml.
  */
-public class APIResolver extends Resolver {
-    
-    
-    /**
-     * Creates an {@code APIResolver} with the given messager.
-     * 
-     * @param messager the messager
-     */
-    public APIResolver(Messager messager) {
-        super(messager);
-    }
-    
-    /**
-     * Resolves and adds the element to the given {@code results}.
-     * 
-     * @param element the element to be resolved
-     * @param results the results which includes this resolution
-     */
-    @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
-    }
-    
-}
+package com.karuslabs.scribe.annotations.resolvers;

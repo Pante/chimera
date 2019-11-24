@@ -38,6 +38,23 @@ import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.tools.Diagnostic.Kind.*;
 
 
+/**
+ * A resolver that transforms a {@code Plugin} annotation into bootstrapping related
+ * key-value pairs.
+ * 
+ * Validation is performed to enforce the following constraints:
+ * <ul>
+ * <li>The existence of a single {@code @Plugin} annotation</li>
+ * <li>The plugin name contains only alphanumeric and {@code _} characters</li>
+ * <li>The main class inherits from {@link org.bukkit.plugin.Plugin}</li>
+ * <li>The main class does not provide a constructor with parameters</li>
+ * </ul>
+ * 
+ * In addition, a compile-time warning will be issued in the following circumstances:
+ * <ul>
+ * <li>The version does not follow <a href = "https://semver.org/">SemVer 2.0.0</a></li>
+ * </ul>
+ */
 public class PluginResolver extends Resolver {
     
     Types types;
@@ -46,6 +63,13 @@ public class PluginResolver extends Resolver {
     Matcher matcher;
     
     
+    /**
+     * Creates a {@code PluginResolver} with the given elements, types and messager.
+     * 
+     * @param elements the elements
+     * @param types the types
+     * @param messager the messager
+     */
     public PluginResolver(Elements elements, Types types, Messager messager) {
         super(messager);
         this.types = types;
@@ -55,6 +79,12 @@ public class PluginResolver extends Resolver {
     }
     
     
+    /**
+     * Determines if the given elements satisfy the constraints.
+     * 
+     * @param elements the elements
+     * @return {@code true} if all elements satisfy the constraints; else {@code false}
+     */
     @Override
     protected boolean check(Set<? extends Element> elements) {
         if (elements.isEmpty()) {
@@ -72,6 +102,12 @@ public class PluginResolver extends Resolver {
         }
     }
     
+    /**
+     * Resolves and adds the element to the given results.
+     * 
+     * @param element the element to be resolved
+     * @param results the results which includes this resolution
+     */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var plugin = element.getAnnotation(Plugin.class);
@@ -95,13 +131,28 @@ public class PluginResolver extends Resolver {
     }
     
     
+    /**
+     * A visitor that recursively determines if a visited type and its constructors
+     * satisfy the constraints. Nested types are ignored.
+     */
     public class Visitor extends SimpleElementVisitor9<Boolean, Boolean> {
         
+        /**
+         * Creates a {@code Visitor}.
+         */
         public Visitor() {
             super(true);
         }
         
         
+        /**
+         * Determines if the given type and its constructors satisfy the constraints.
+         * 
+         * @param element the type to be visited
+         * @param nested whether the given type is nested within another type
+         * @return {@code true} if the type is nested or satisfies the constraints;
+         *         else {@code false}
+         */
         @Override
         public Boolean visitType(TypeElement element, Boolean nested) {
             if (nested) {
@@ -125,6 +176,14 @@ public class PluginResolver extends Resolver {
             return valid;
         }
         
+        /**
+         * Determines if the executable is a constructor and satisfies the constraints.
+         * 
+         * @param element the executable to be visited
+         * @param nested ignored
+         * @return {@code true} if this executable is either not a constructor or a no-args
+         *         constructor; else {@code false}
+         */
         @Override
         public Boolean visitExecutable(ExecutableElement element, @Ignored Boolean nested) {
             if (element.getKind() == CONSTRUCTOR && !element.getParameters().isEmpty()) {

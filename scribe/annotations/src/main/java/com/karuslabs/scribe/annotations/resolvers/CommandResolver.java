@@ -37,11 +37,32 @@ import static com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type.*;
 import static javax.tools.Diagnostic.Kind.*;
 
 
+/**
+ * A resolver that transforms a {@link Command} annotation into a {@code command}
+ * section. 
+ * 
+ * Validation is performed to enforce the following constraints:
+ * <ul>
+ * <li>A command name is neither empty nor contains whitespaces</li>
+ * <li>All command aliases and names are unique</li>
+ * </ul>
+ * 
+ * In addition, a compile-time warning will be issued in the following circumstances:
+ * <ul>
+ * <li>A permission does not match {@code \w+(\.\w+)*(.\*)?}</li>
+ * </ul>
+ */
 public class CommandResolver extends Resolver {
     
+    /**
+     * Denotes if a given string is an alias or name.
+     */
     public static enum Type {
         NAME("name"), ALIAS("alias");
         
+        /**
+         * The name of this type.
+         */
         public final String name;
         
         private Type(String type) {
@@ -54,6 +75,11 @@ public class CommandResolver extends Resolver {
     Matcher matcher;
     
     
+    /**
+     * Creates a {@code CommandResolver} with the given messager.
+     * 
+     * @param messager the messager
+     */
     public CommandResolver(Messager messager) {
         super(messager);
         names = new HashMap<>();
@@ -61,6 +87,13 @@ public class CommandResolver extends Resolver {
     }
 
     
+    /**
+     * Validates, resolves and adds the element to the {@code commands} section in the 
+     * given results.
+     * 
+     * @param element the elements to be resolved
+     * @param results the results which includes this resolution
+     */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var commands = new HashMap<String, Object>();
@@ -74,6 +107,12 @@ public class CommandResolver extends Resolver {
     }
     
     
+    /**
+     * Determines if the aliases and name of the given command satisfy the constraints.
+     * 
+     * @param element the element
+     * @param command the command
+     */
     protected void check(Element element, Command command) {
         check(element, command, command.name(), NAME);
         for (var alias : command.aliases()) {
@@ -81,6 +120,14 @@ public class CommandResolver extends Resolver {
         }
     }
     
+    /**
+     * Determines if the given element, command, name and type satisfies the constraints.
+     * 
+     * @param element the element
+     * @param command the command
+     * @param name the name
+     * @param type the type
+     */
     protected void check(Element element, Command command, String name, Type type) {
         if (matcher.reset(name).matches()) {
             messager.printMessage(ERROR, "Invalid command " + type.name + ": '" + name + "', " + type.name + " cannot contain whitespaces", element);
@@ -109,6 +156,13 @@ public class CommandResolver extends Resolver {
     }
     
     
+    /**
+     * Resolves the given command to a {@code command} section.
+     * 
+     * @param element the element
+     * @param command the command
+     * @return a command section
+     */
     protected Map<String, Object> resolve(Element element, Command command) {
         var map = new HashMap<String, Object>();
         
@@ -137,6 +191,9 @@ public class CommandResolver extends Resolver {
     }
     
     
+    /**
+     * Clears the namespace for command aliases and names.
+     */
     @Override
     protected void clear() {
         names.clear();

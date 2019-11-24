@@ -34,9 +34,21 @@ import javax.lang.model.element.Element;
  */
 public abstract class Resolver {
     
+    /**
+     * A pattern to which command aliases and names must adhere.
+     */
     public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
+    /**
+     * A pattern to which permissions should adhere.
+     */
     public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
+    /**
+     * A pattern that corresponds to SemVer 2.0.0 to which versions should adhere.
+     */
     public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
+    /**
+     * A pattern that represents a word.
+     */
     public static final Pattern WORD = Pattern.compile("\\w+");
     
     /**

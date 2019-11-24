@@ -34,12 +34,32 @@ import javax.lang.model.element.Element;
 import static javax.tools.Diagnostic.Kind.*;
 
 
+/**
+ * A resolver that transforms a {@link Permission} annotation into a {@code permission}
+ * section. 
+ * 
+ * Validation is performed to enforce the following constraints:
+ * <ul>
+ * <li>All permissions are unique</li>
+ * </ul>
+ * 
+ * In addition, a compile-time warning will be issued in the following circumstances:
+ * <ul>
+ * <li>A permission inherits itself</li>
+ * <li>A permission or its children does not match {@code \w+(\.\w+)*(.\*)?}</li>
+ * </ul>
+ */
 public class PermissionResolver extends Resolver {
     
     Set<String> names;
     Matcher matcher;
     
     
+    /**
+     * Creates a {@code PermissionResolver} with the given messager.
+     * 
+     * @param messager the messager
+     */
     public PermissionResolver(Messager messager) {
         super(messager);
         names = new HashSet<>();
@@ -47,6 +67,13 @@ public class PermissionResolver extends Resolver {
     }
 
     
+    /**
+     * Validates, resolves and adds the element to the {@code permissions} section in the 
+     * given results.
+     * 
+     * @param element the elements to be resolved
+     * @param results the results which includes this resolution
+     */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var permissions = new HashMap<String, Object>();
@@ -59,6 +86,12 @@ public class PermissionResolver extends Resolver {
         results.put("permissions", permissions);
     }
     
+    /**
+     * Determines if the given permission satisfies the constraints.
+     * 
+     * @param element the element
+     * @param permission the permission
+     */
     protected void check(Element element, Permission permission) {
         String name = permission.value();
         
@@ -73,6 +106,12 @@ public class PermissionResolver extends Resolver {
         }
     }
     
+    /**
+     * Determines if the given permission and its children are malformed.
+     * 
+     * @param element the element
+     * @param permission the permission
+     */
     protected void checkMalformed(Element element, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
@@ -87,6 +126,12 @@ public class PermissionResolver extends Resolver {
     }
     
     
+    /**
+     * Resolves and adds the permission to the given permissions.
+     * 
+     * @param permission the permission to be resolved
+     * @param permissions the permissions which includes this resolution
+     */
     protected void resolve(Permission permission, Map<String, Object> permissions) {
         var information = new HashMap<String, Object>();
         
@@ -109,6 +154,9 @@ public class PermissionResolver extends Resolver {
     }
     
     
+    /**
+     * Clears the namespace for permissions.
+     */
     @Override
     public void clear() {
         names.clear();

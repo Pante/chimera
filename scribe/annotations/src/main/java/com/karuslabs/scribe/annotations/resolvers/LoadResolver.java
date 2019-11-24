@@ -34,17 +34,37 @@ import javax.lang.model.element.Element;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
+/**
+ * A resolver that transforms a {@link Load} annotation into plugin load ordering
+ * related key-value pairs.
+ * 
+ * Validation is performed to enforce the following constraints:
+ * <ul>
+ * <li>A plugin name contain only alphanumeric and {@code _} characters</li>
+ * </ul>
+ */
 public class LoadResolver extends Resolver {
     
     private Matcher matcher;
     
     
+    /**
+     * Creates a {@code LoadResolver} with the given messager.
+     * 
+     * @param messager the messager
+     */
     public LoadResolver(Messager messager) {
         super(messager);
         matcher = WORD.matcher("");
     }
 
     
+    /**
+     * Resolves and adds this element to the given results.
+     * 
+     * @param element the element to be resolved
+     * @param results the results which includes this resolution
+     */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
         var load = element.getAnnotation(Load.class);
@@ -61,6 +81,12 @@ public class LoadResolver extends Resolver {
         results.put("depend", load.after());
     }
     
+    /**
+     * Determines if the given plugin names satisfy the constraints.
+     * 
+     * @param element the element
+     * @param names the plugin names
+     */
     protected void check(Element element, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
