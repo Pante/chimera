@@ -50,7 +50,8 @@
         <profile>
             <id>chimera-github</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <!-- Pending GitHub Package Registry's support for mutable packages !-->
+                <activeByDefault>false</activeByDefault>
             </activation>
             <distributionManagement>
                 <repository>
