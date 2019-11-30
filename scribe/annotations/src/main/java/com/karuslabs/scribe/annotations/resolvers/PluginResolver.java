@@ -45,7 +45,7 @@ import static javax.tools.Diagnostic.Kind.*;
  * The following constraints are enforced:
  * <ul>
  * <li>The existence of a <b>single</b> {@code @Plugin} annotation</li>
- * <li>The plugin name contains only alphanumeric and underscore (@code _}) characters</li>
+ * <li>The plugin name contains only alphanumeric and underscore ({@code _}) characters</li>
  * <li>The main class inherits from either {@link org.bukkit.plugin.Plugin} or {@link org.bukkit.plugin.java.JavaPlugin}</li>
  * <li>The main class has no constructors with parameters</li>
  * </ul>
