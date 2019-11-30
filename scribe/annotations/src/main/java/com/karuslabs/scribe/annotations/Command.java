@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies an optional {@code command} attribute and its aliases, description,
+ * Signifies a {@code command} section which includes the command's aliases, description,
  * syntax, permission and permission message.
  */
 @Documented
@@ -40,46 +40,47 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Command {
     
     /**
-     * The name of this command which can neither be empty nor contain spaces.
+     * The name of this command which can neither be empty nor contain whitespaces.
      * 
-     * @return the command name
+     * @return the command's name
      */
     String name();
     
     /**
-     * The aliases of this command which can neither be empty nor contain spaces.
+     * The aliases of this command. An alias can neither be empty nor contain whitespaces.
      * 
-     * @return the command aliases
+     * @return the command's aliases
      */
     String[] aliases() default {};
     
     /**
      * A description of this command. 
      * 
-     * @return the description of this command
+     * @return a description
      */
     String description() default "";
     
     /**
-     * The syntax of this command.
+     * The command's syntax.
      * 
-     * @return the syntax of this command
+     * @return the command's syntax
      */
     String syntax() default "";
     
     
     /**
-     * The permission necessary to execute this command.
+     * The permission required to execute this command.
      * 
-     * @return the permission necessary to execute this command
+     * @return the permission
      */
     String permission() default "";
     
     /**
-     * A message to be displayed when the command is executed without the necessary 
-     * permission defined by {@link #permission()}.
+     * A message to display when this command is executed without the required permission.
      * 
-     * @return the message to be displayed when this command is executed unpermitted
+     * @return the message
+     * 
+     * @see #permission()
      */
     String message() default "";
     

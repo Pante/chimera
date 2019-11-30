@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains classes to create a plugin.yml from the annotations defined in {@link com.karuslabs.scribe.annotations}.
+ * Contains classes that builds a {@code plugin.yml} using the annotations in {@link com.karuslabs.scribe.annotations}.
  */
 package com.karuslabs.scribe.annotations.processor;

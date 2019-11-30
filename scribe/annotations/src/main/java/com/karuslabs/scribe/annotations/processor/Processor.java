@@ -37,7 +37,7 @@ import javax.lang.model.element.TypeElement;
 
 
 /**
- * A processor that emits a plugin.yml from annotations defined in {@link com.karuslabs.scribe.annotations}.
+ * A processor that builds a {@code plugin.yml} using annotations in {@link com.karuslabs.scribe.annotations}.
  */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
@@ -75,6 +75,14 @@ public class Processor extends AnnotationProcessor {
     }
     
     
+    /**
+     * Delegates processing of the given annotations to a resolver and builds a
+     * {@code plugin.yml}.
+     * 
+     * @param annotations the annotations used to build a {@code plugin.yml}
+     * @param environment the environment
+     * @return {@code false}
+     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
         if (environment.getElementsAnnotatedWithAny(resolvers.keySet()).isEmpty()) {

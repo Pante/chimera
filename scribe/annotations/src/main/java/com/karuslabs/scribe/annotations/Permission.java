@@ -30,8 +30,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies an optional {@code permission} attribute and its description, default
- * value and children.
+ * Signifies a {@code permission} section which includes the permission's description, 
+ * default value and children.
  */
 @Documented
 @Retention(RUNTIME)
@@ -49,22 +49,22 @@ public @interface Permission {
     /**
      * A description of this permission.
      * 
-     * @return a description of this permission
+     * @return a description
      */
     String description() default "";
     
     /**
      * The default value of this permission.
      * 
-     * @return the default value of this permission
+     * @return the default value
      */
     Default implicit() default Default.OP;
     
     /**
-     * The children of this permission. Each child inherits its default value from
-     * this parent permission.
+     * The permission's children. This permission's default value is inherited
+     * by its children.
      * 
-     * @return the children of this permission
+     * @return the permission's children
      */
     String[] children() default {};
     

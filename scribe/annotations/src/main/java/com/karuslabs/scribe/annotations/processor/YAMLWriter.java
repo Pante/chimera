@@ -37,7 +37,7 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 
 /**
- * A writer that serializes objects to a YAML file.
+ * A writer that serializes an object to a YAML file.
  */
 public class YAMLWriter {
     
@@ -50,7 +50,7 @@ public class YAMLWriter {
      * Creates a {@code YAMLWriter} with the given filer and messager.
      * 
      * @param filer the filer used to create the YAML file
-     * @param messager the messager
+     * @param messager the messager used to emit warnings and errors
      */
     public YAMLWriter(Filer filer, Messager messager) {
         this(filer, messager, new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
@@ -60,7 +60,7 @@ public class YAMLWriter {
      * Creates a {@code YAMLWriter} with the given filer, messager and dump.
      * 
      * @param filer the filer used to create the YAML file
-     * @param messager the messager
+     * @param messager the messager used to emit warnings and errors
      * @param dump the dump used to serialize objects to YAML
      */
     public YAMLWriter(Filer filer, Messager messager, Dump dump) {

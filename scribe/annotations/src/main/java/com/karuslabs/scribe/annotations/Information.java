@@ -30,8 +30,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies the optional information of a plugin such as its authors, description,
- * website URL and prefix.
+ * Signifies a plugin's information which includes its authors, description,
+ * website and prefix.
  */
 @Documented
 @Retention(RUNTIME)
@@ -53,7 +53,7 @@ public @interface Information {
     String description() default "";
     
     /**
-     * The website for this plugin.
+     * The plugin's website.
      * 
      * @return the website
      */

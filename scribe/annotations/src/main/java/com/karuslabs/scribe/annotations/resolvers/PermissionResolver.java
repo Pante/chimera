@@ -38,11 +38,11 @@ import static javax.tools.Diagnostic.Kind.*;
  * A resolver that transforms a {@link Permission} annotation into a {@code permission}
  * section. 
  * 
- * Validation is performed to enforce the following constraints:
+ * The following constraints are enforced:
  * <ul>
  * <li>All permissions are unique</li>
  * </ul>
- * 
+ * <br>
  * In addition, a compile-time warning will be issued in the following circumstances:
  * <ul>
  * <li>A permission inherits itself</li>
@@ -68,11 +68,11 @@ public class PermissionResolver extends Resolver {
 
     
     /**
-     * Validates, resolves and adds the element to the {@code permissions} section in the 
-     * given results.
+     * Validates, processes and adds the element to the {@code permissions} section 
+     * in the given results.
      * 
-     * @param element the elements to be resolved
-     * @param results the results which includes this resolution
+     * @param element the elements
+     * @param results the results
      */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
@@ -87,9 +87,9 @@ public class PermissionResolver extends Resolver {
     }
     
     /**
-     * Determines if the given permission satisfies the constraints.
+     * Determines if the given permission and element satisfies the constraints.
      * 
-     * @param element the element
+     * @param element the element that represents the permission
      * @param permission the permission
      */
     protected void check(Element element, Permission permission) {
@@ -109,7 +109,7 @@ public class PermissionResolver extends Resolver {
     /**
      * Determines if the given permission and its children are malformed.
      * 
-     * @param element the element
+     * @param element the element that represents the permission
      * @param permission the permission
      */
     protected void checkMalformed(Element element, Permission permission) {
@@ -127,10 +127,10 @@ public class PermissionResolver extends Resolver {
     
     
     /**
-     * Resolves and adds the permission to the given permissions.
+     * Processes and adds the permission to the given permissions.
      * 
-     * @param permission the permission to be resolved
-     * @param permissions the permissions which includes this resolution
+     * @param permission the permission
+     * @param permissions the permissions
      */
     protected void resolve(Permission permission, Map<String, Object> permissions) {
         var information = new HashMap<String, Object>();

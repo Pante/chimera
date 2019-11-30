@@ -41,12 +41,12 @@ import static javax.tools.Diagnostic.Kind.*;
  * A resolver that transforms a {@link Command} annotation into a {@code command}
  * section. 
  * 
- * Validation is performed to enforce the following constraints:
+ * The following constraints are enforced:
  * <ul>
- * <li>A command name is neither empty nor contains whitespaces</li>
+ * <li>All command aliases and names are neither empty nor contain whitespaces</li>
  * <li>All command aliases and names are unique</li>
  * </ul>
- * 
+ * <br>
  * In addition, a compile-time warning will be issued in the following circumstances:
  * <ul>
  * <li>A permission does not match {@code \w+(\.\w+)*(.\*)?}</li>
@@ -55,7 +55,7 @@ import static javax.tools.Diagnostic.Kind.*;
 public class CommandResolver extends Resolver {
     
     /**
-     * Denotes if a given string is an alias or name.
+     * Denotes if a string is an alias or name.
      */
     public static enum Type {
         NAME("name"), ALIAS("alias");
@@ -88,11 +88,11 @@ public class CommandResolver extends Resolver {
 
     
     /**
-     * Validates, resolves and adds the element to the {@code commands} section in the 
+     * Validates, processes and adds the element to the {@code commands} section in the 
      * given results.
      * 
-     * @param element the elements to be resolved
-     * @param results the results which includes this resolution
+     * @param element the elements
+     * @param results the results
      */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
@@ -110,7 +110,7 @@ public class CommandResolver extends Resolver {
     /**
      * Determines if the aliases and name of the given command satisfy the constraints.
      * 
-     * @param element the element
+     * @param element the element that represents the command
      * @param command the command
      */
     protected void check(Element element, Command command) {
@@ -123,8 +123,8 @@ public class CommandResolver extends Resolver {
     /**
      * Determines if the given element, command, name and type satisfies the constraints.
      * 
-     * @param element the element
-     * @param command the command
+     * @param element the element that represents the command
+     * @param command the command 
      * @param name the name
      * @param type the type
      */
@@ -157,9 +157,9 @@ public class CommandResolver extends Resolver {
     
     
     /**
-     * Resolves the given command to a {@code command} section.
+     * Resolves the given command and element to a {@code command} section.
      * 
-     * @param element the element
+     * @param element the element that represents the command
      * @param command the command
      * @return a command section
      */

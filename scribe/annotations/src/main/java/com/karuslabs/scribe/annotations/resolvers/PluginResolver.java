@@ -42,14 +42,14 @@ import static javax.tools.Diagnostic.Kind.*;
  * A resolver that transforms a {@code Plugin} annotation into bootstrapping related
  * key-value pairs.
  * 
- * Validation is performed to enforce the following constraints:
+ * The following constraints are enforced:
  * <ul>
- * <li>The existence of a single {@code @Plugin} annotation</li>
- * <li>The plugin name contains only alphanumeric and {@code _} characters</li>
- * <li>The main class inherits from {@link org.bukkit.plugin.Plugin}</li>
- * <li>The main class does not provide a constructor with parameters</li>
+ * <li>The existence of a <b>single</b> {@code @Plugin} annotation</li>
+ * <li>The plugin name contains only alphanumeric and underscore (@code _}) characters</li>
+ * <li>The main class inherits from either {@link org.bukkit.plugin.Plugin} or {@link org.bukkit.plugin.java.JavaPlugin}</li>
+ * <li>The main class has no constructors with parameters</li>
  * </ul>
- * 
+ * <br>
  * In addition, a compile-time warning will be issued in the following circumstances:
  * <ul>
  * <li>The version does not follow <a href = "https://semver.org/">SemVer 2.0.0</a></li>
@@ -103,10 +103,10 @@ public class PluginResolver extends Resolver {
     }
     
     /**
-     * Resolves and adds the element to the given results.
+     * Processes and adds the element to the results.
      * 
-     * @param element the element to be resolved
-     * @param results the results which includes this resolution
+     * @param element the element
+     * @param results the results
      */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {
@@ -132,7 +132,7 @@ public class PluginResolver extends Resolver {
     
     
     /**
-     * A visitor that recursively determines if a visited type and its constructors
+     * A recursive descent visitor that determines if a type and its constructors
      * satisfy the constraints. Nested types are ignored.
      */
     public class Visitor extends SimpleElementVisitor9<Boolean, Boolean> {

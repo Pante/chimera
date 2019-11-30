@@ -48,10 +48,10 @@ public class APIResolver extends Resolver {
     }
     
     /**
-     * Resolves and adds the element to the given {@code results}.
+     * Processes and adds the element to the given results.
      * 
-     * @param element the element to be resolved
-     * @param results the results which includes this resolution
+     * @param element the element
+     * @param results the results
      */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {

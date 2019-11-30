@@ -30,9 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies the mandatory information of this plugin such as its name and version.
- * The annotated class is used to derive the {@code main} attribute and must extend
- * either {@code Plugin} or {@code JavaPlugin}.
+ * Signifies the information needed to bootstrap a plugin which includes its name 
+ * and version. The {@code main} key-value pair is derived from the annotated class
+ * which must extend either {@link org.bukkit.plugin.Plugin} or {@link org.bukkit.plugin.java.JavaPlugin}.
  */
 @Documented
 @Retention(RUNTIME)
@@ -40,14 +40,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Plugin {
     
     /**
-     * The name of this plugin.
+     * The plugin's name.
      * 
      * @return the name
      */
     String name();
     
     /**
-     * The version of this plugin.
+     * The plugin's version.
      * 
      * @return the version
      */

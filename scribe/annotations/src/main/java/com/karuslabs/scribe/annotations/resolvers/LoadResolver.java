@@ -38,9 +38,9 @@ import static javax.tools.Diagnostic.Kind.ERROR;
  * A resolver that transforms a {@link Load} annotation into plugin load ordering
  * related key-value pairs.
  * 
- * Validation is performed to enforce the following constraints:
+ * The following constraints are enforced:
  * <ul>
- * <li>A plugin name contain only alphanumeric and {@code _} characters</li>
+ * <li>A plugin name contain only alphanumeric and underscore ({@code _}) characters</li>
  * </ul>
  */
 public class LoadResolver extends Resolver {
@@ -60,10 +60,10 @@ public class LoadResolver extends Resolver {
 
     
     /**
-     * Resolves and adds this element to the given results.
+     * Processes and adds this element to the given results.
      * 
-     * @param element the element to be resolved
-     * @param results the results which includes this resolution
+     * @param element the element
+     * @param results the results
      */
     @Override
     protected void resolve(Element element, Map<String, Object> results) {

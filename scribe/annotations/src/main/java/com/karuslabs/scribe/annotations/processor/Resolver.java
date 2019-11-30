@@ -30,20 +30,20 @@ import javax.lang.model.element.Element;
 
 
 /**
- * A resolver that resolves annotations into sections of a plugin.yml.
+ * A resolver that transforms an annotation into parts of a {@code plugin.yml}.
  */
 public abstract class Resolver {
     
     /**
-     * A pattern to which command aliases and names must adhere.
+     * A pattern that command aliases and names must adhere.
      */
     public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
     /**
-     * A pattern to which permissions should adhere.
+     * A pattern that permissions should adhere.
      */
     public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
     /**
-     * A pattern that corresponds to SemVer 2.0.0 to which versions should adhere.
+     * A pattern corresponding to SemVer 2.0.0 that versions should adhere.
      */
     public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
     /**
@@ -52,7 +52,7 @@ public abstract class Resolver {
     public static final Pattern WORD = Pattern.compile("\\w+");
     
     /**
-     * A messager.
+     * A messager used to emit warnings and errors.
      */
     protected Messager messager;
     
@@ -68,13 +68,14 @@ public abstract class Resolver {
     
     
     /**
-     * Resolves the elements to the given results.
+     * Processes and adds the elements to the given results.
+     * <br>
      * <br>
      * <b>Default implementation: </b>
      * <br>
-     * Delegates validation of the elements to {@link #check(Set)}. If all elements
-     * are valid, delegates resolution of each element to {@link #resolve(Element, java.util.Map)}.
-     * After which, delegates clean-up to {@link #clear()}.
+     * Delegates validation of elements to {@link #check(Set)}. If all elements are 
+     * valid, delegates processing of each element to {@link #resolve(Element, Map)}.
+     * After which, delegates cleaning up to {@link #clear()}.
      * 
      * @param elements the elements to be resolved
      * @param results the results of this resolution
@@ -94,9 +95,10 @@ public abstract class Resolver {
     /**
      * Validates the given elements.
      * <br>
+     * <br>
      * <b>Default implementation: </b>
      * <br>
-     * Does nothing.
+     * Always returns {@code true}.
      * 
      * @param elements the elements to be validated
      * @return {@code true} if the given elements are valid; else {@code false}
@@ -106,15 +108,16 @@ public abstract class Resolver {
     }
     
     /**
-     * Resolves the element to the given results.
+     * Processes and adds the element to the given results.
      * 
-     * @param element the element to be resolved
-     * @param results the results to which the element is resolved
+     * @param element the element
+     * @param results the results
      */
     protected abstract void resolve(Element element, Map<String, Object> results);
     
     /**
      * Releases acquired resources and resets this resolver to its initial state.
+     * <br>
      * <br>
      * <b>Default implementation: </b>
      * <br>

@@ -25,7 +25,7 @@ package com.karuslabs.scribe.annotations;
 
 
 /**
- * Represents the possible default values of a permission.
+ * Possible default values for a permission.
  */
 public enum Default {
     
@@ -33,7 +33,7 @@ public enum Default {
     
     
     /**
-     * A string representation of this default value.
+     * A string representation of this value.
      */
     public final String value;
     

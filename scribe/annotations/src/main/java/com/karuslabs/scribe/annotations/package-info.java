@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains annotations that describe a plugin.
+ * Contains annotations used to build a {@code plugin.yml}.
 */
 package com.karuslabs.scribe.annotations;

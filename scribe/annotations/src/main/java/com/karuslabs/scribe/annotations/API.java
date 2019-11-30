@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies an optional {@code api-version} attribute.
+ * Signifies the {@code api-version} key-value pair.
  */
 @Documented
 @Retention(RUNTIME)
@@ -39,9 +39,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface API {
     
     /**
-     * The version of the Spigot API which this plugin uses.
+     * The Spigot API version to use.
      * 
-     * @return the version of the Spigot API
+     * @return the version
      */
     Version value();
     

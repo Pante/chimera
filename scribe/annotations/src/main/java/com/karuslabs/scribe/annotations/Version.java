@@ -25,7 +25,7 @@ package com.karuslabs.scribe.annotations;
 
 
 /**
- * Represents the supported API versions for the {@code api-version} attributes.
+ * Supported versions for the {@code api-version} key-value pair.
  */
 public enum Version {
     

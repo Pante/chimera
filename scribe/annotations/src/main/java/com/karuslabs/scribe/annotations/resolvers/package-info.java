@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains resolvers that transform annotations into sections of a plugin.yml.
+ * Contains resolvers that transform annotations into parts of a {@code plugin.yml}.
  */
 package com.karuslabs.scribe.annotations.resolvers;

@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * Signifies the optional loading phase and sequence of this plugin.
+ * Signifies a plugin's loading phase and sequence.
  */
 @Documented
 @Retention(RUNTIME)
@@ -39,33 +39,35 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Load {
     
     /**
-     * The phase of the server initialization in which this plugin is loaded.
+     * The server initialization phase in which to load this plugin.
      * 
      * @return the phase
      */
     Phase during() default Phase.POSTWORLD;
     
     /**
-     * The names of plugins to be loaded <b>after</b> this plugin. Specified plugins 
-     * are ignored if unavailable at runtime.
+     * The names of plugins to be loaded <b>after</b> this plugin if available at 
+     * runtime. Unavailable plugins will be skipped. A plugin's name can neither 
+     * be empty nor contain whitespaces.
      * 
-     * @return the plugins to be loaded after this plugin
+     * @return the names of other plugins
      */
     String[] before() default {};
     
     /**
-     * The names of plugins to be loaded <b>before</b> this plugin. This plugin
-     * will not load if any of the specified plugins is unavailable at runtime.
+     * The names of plugins to be loaded <b>before</b> this plugin if available at
+     * runtime. Unavailable plugins will prevent this plugin from fully loading.
      * 
-     * @return the plugins to be loaded before this plugin
+     * @return the names of other plugins
      */
     String[] after() default {};
     
     /**
-     * The names of plugins to be optionally loaded <b>before</b> this plugin. 
-     * Specified plugins are ignored if unavailable at runtime.
+     * The names of plugins to be loaded optionally <b>before</b> this plugin if 
+     * available at runtime. 
+     * Unavailable plugins will be skipped.
      * 
-     * @return the plugins to be optionally loaded before this plugin
+     * @return the names of other plugins
      */
     String[] optionallyAfter() default {};
     
