@@ -40,14 +40,15 @@ import static javax.tools.Diagnostic.Kind.*;
 /**
  * A resolver that transforms a {@link Command} annotation into a {@code command}
  * section. 
- * 
+ * <br>
+ * <br>
  * The following constraints are enforced:
  * <ul>
- * <li>All command aliases and names are neither empty nor contain whitespaces</li>
- * <li>All command aliases and names are unique</li>
+ * <li>All command aliases and names must be neither empty nor contain whitespaces</li>
+ * <li>All command aliases and names must be unique</li>
  * </ul>
  * <br>
- * In addition, a compile-time warning will be issued in the following circumstances:
+ * In addition, a compile-time warning will be issued under the following circumstances:
  * <ul>
  * <li>A permission does not match {@code \w+(\.\w+)*(.\*)?}</li>
  * </ul>

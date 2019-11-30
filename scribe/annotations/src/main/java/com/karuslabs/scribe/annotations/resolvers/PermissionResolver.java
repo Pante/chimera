@@ -37,13 +37,14 @@ import static javax.tools.Diagnostic.Kind.*;
 /**
  * A resolver that transforms a {@link Permission} annotation into a {@code permission}
  * section. 
- * 
+ * <br>
+ * <br>
  * The following constraints are enforced:
  * <ul>
- * <li>All permissions are unique</li>
+ * <li>All permissions must be unique</li>
  * </ul>
  * <br>
- * In addition, a compile-time warning will be issued in the following circumstances:
+ * In addition, a compile-time warning will be issued under the following circumstances:
  * <ul>
  * <li>A permission inherits itself</li>
  * <li>A permission or its children does not match {@code \w+(\.\w+)*(.\*)?}</li>

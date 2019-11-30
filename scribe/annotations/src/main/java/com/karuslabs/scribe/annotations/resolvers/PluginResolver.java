@@ -41,7 +41,8 @@ import static javax.tools.Diagnostic.Kind.*;
 /**
  * A resolver that transforms a {@code Plugin} annotation into bootstrapping related
  * key-value pairs.
- * 
+ * <br>
+ * <br>
  * The following constraints are enforced:
  * <ul>
  * <li>The existence of a <b>single</b> {@code @Plugin} annotation</li>
@@ -50,7 +51,7 @@ import static javax.tools.Diagnostic.Kind.*;
  * <li>The main class has no constructors with parameters</li>
  * </ul>
  * <br>
- * In addition, a compile-time warning will be issued in the following circumstances:
+ * In addition, a compile-time warning will be issued under the following circumstances:
  * <ul>
  * <li>The version does not follow <a href = "https://semver.org/">SemVer 2.0.0</a></li>
  * </ul>

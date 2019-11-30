@@ -37,7 +37,8 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 /**
  * A resolver that transforms a {@link Load} annotation into plugin load ordering
  * related key-value pairs.
- * 
+ * <br>
+ * <br>
  * The following constraints are enforced:
  * <ul>
  * <li>A plugin name contain only alphanumeric and underscore ({@code _}) characters</li>
