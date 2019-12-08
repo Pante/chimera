@@ -9,7 +9,8 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 
 **This project requires Java 11+ [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 
-[![Travis-CI](https://travis-ci.org/Pante/Chimera.svg?branch=master)](https://travis-ci.org/Pante/Chimera)
+[![Travis-CI](https://img.shields.io/travis/pante/chimera/master?logo=travis)](https://travis-ci.org/Pante/Chimera)
+[![Funding](https://img.shields.io/badge/%F0%9F%A4%8D%20-sponsorship-ff69b4?style=flat-square)](https://github.com/sponsors/Pante)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
 [![Codecov](https://codecov.io/gh/Pante/Chimera/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/Chimera)
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Chimera/tree/stable)
@@ -17,7 +18,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 
 | Chimera Version | Minecraft Version                        |
 |-----------------|------------------------------------------|
-| 4.1.0           | 1.13.2                           |
+| 4.1.0           | 1.13.2                                   |
 | 4.2.0           | 1.14, 1.14.1, 1.4.2, 1.14.3, 1.14.4      |
 | 4.3.0           | 1.14, 1.14.1, 1.4.2, 1.14.3, 1.14.4      |
 
