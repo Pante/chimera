@@ -12,7 +12,7 @@
     </server>
 	
 	<server>
-      <id>chimera-github</id>
+      <id>github-packages</id>
       <username>${env.GITHUB_USERNAME}</username>
       <password>${env.GITHUB_TOKEN}</password>
     </server>
