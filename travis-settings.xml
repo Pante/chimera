@@ -11,8 +11,8 @@
       <password>${env.SONATYPE_PASSWORD}</password>
     </server>
 	
-    <server>
-      <id>chimera-github</id>
+	<server>
+      <id>github-packages</id>
       <username>${env.GITHUB_USERNAME}</username>
       <password>${env.GITHUB_TOKEN}</password>
     </server>

@@ -48,19 +48,19 @@
         </profile>
         
         <profile>
-            <id>chimera-github</id>
+            <id>github-packages</id>
             <activation>
                 <!-- Pending GitHub Package Registry's support for mutable packages !-->
                 <activeByDefault>false</activeByDefault>
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>chimera-github</id>
+                    <id>github-packages</id>
                     <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </repository>
 
                 <snapshotRepository>
-                    <id>chimera-github</id>
+                    <id>github-packages</id>
                     <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </snapshotRepository>
             </distributionManagement>
