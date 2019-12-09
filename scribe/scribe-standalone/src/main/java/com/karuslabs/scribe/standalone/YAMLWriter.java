@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.standalone;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,8 +29,7 @@ import javax.annotation.processing.*;
 import javax.tools.*;
 
 import org.snakeyaml.engine.v2.api.*;
-import org.snakeyaml.engine.v2.common.FlowStyle;
-import org.snakeyaml.engine.v2.common.ScalarStyle;
+import org.snakeyaml.engine.v2.common.*;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static javax.tools.Diagnostic.Kind.ERROR;

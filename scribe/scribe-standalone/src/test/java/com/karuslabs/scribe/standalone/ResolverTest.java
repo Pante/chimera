@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.Information;
-
-import java.util.HashMap;
+import java.util.*;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
@@ -38,39 +36,41 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@Information(authors = {"Pante"}, description = "description", url = "url", prefix = "prefix")
-class InformationResolverTest {
+class ResolverTest {
     
     Element element = mock(Element.class);
+    Set<Element> elements = Set.of(element);
     Messager messager = mock(Messager.class);
-    InformationResolver resolver = new InformationResolver(messager);
+    Resolver resolver = spy(new Resolver(messager) {
+        @Override
+        protected void resolve(Element element, Map<String, Object> results) {
+            
+        }
+    });
     
     
     @Test
     void resolve() {
-        when(element.getAnnotation(Information.class)).thenReturn(InformationResolverTest.class.getAnnotation(Information.class));
-        var results = new HashMap<String, Object>();
+        resolver.resolve(elements, Map.of());
         
-        resolver.resolve(element, results);
-        
-        assertArrayEquals(new String[] {"Pante"}, (String[]) results.get("authors"));
-        assertEquals("description", results.get("description"));
-        assertEquals("url", results.get("website"));
-        assertEquals("prefix", results.get("prefix"));
+        verify(resolver).resolve(element, Map.of());
+        verify(resolver).clear();
     }
     
     
     @Test
-    void resolve_empty() {
-        when(element.getAnnotation(Information.class)).thenReturn(EmptyInformation.class.getAnnotation(Information.class));
-        var results = new HashMap<String, Object>();
+    void resolve_nothing() {
+        doReturn(false).when(resolver).check(elements);
         
-        resolver.resolve(element, results);
+        resolver.resolve(elements, Map.of());
+        
+        verify(resolver, times(0)).resolve(element, Map.of());
     }
     
-    @Information
-    static class EmptyInformation {
-        
+    
+    @Test
+    void validate() {
+        assertTrue(resolver.check(Set.of()));
     }
 
 } 

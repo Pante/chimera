@@ -21,40 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.API;
-import com.karuslabs.scribe.annotations.Version;
-
-import java.util.HashMap;
+import java.util.*;
+import java.util.regex.Pattern;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-
-@ExtendWith(MockitoExtension.class)
-@API(Version.V1_13)
-class APIResolverTest {
+public abstract class Resolver {
     
-    Messager messager = mock(Messager.class);
-    APIResolver resolver = new APIResolver(messager);
-    Element element = mock(Element.class);
+    public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
+    public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
+    public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
+    public static final Pattern WORD = Pattern.compile("\\w+");
+    
+    protected Messager messager;
     
     
-    @Test
-    void resolve() {
-        when(element.getAnnotation(API.class)).thenReturn(getClass().getAnnotation(API.class));
-        var results = new HashMap<String, Object>();
-        resolver.resolve(element, results);
-        
-        assertEquals(1, results.size());
-        assertEquals("1.13", results.get("api-version"));
+    public Resolver(Messager messager) {
+        this.messager = messager;
     }
-
-} 
+    
+    
+    public void resolve(Set<? extends Element> elements, Map<String, Object> results) {
+        if (!check(elements)) {
+            return;
+        }
+        
+        for (var element : elements) {
+            resolve(element, results);
+        }
+        
+        clear();
+    }
+    
+    protected boolean check(Set<? extends Element> elements) {
+        return true;
+    }
+            
+    protected abstract void resolve(Element element, Map<String, Object> results);
+    
+    protected void clear() {
+        
+    }
+    
+}

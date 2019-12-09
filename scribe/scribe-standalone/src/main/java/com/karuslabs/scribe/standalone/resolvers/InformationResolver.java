@@ -21,49 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.standalone.resolvers;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import com.karuslabs.scribe.annotations.Information;
+import com.karuslabs.scribe.standalone.Resolver;
+
+import java.util.Map;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
 
-public abstract class Resolver {
-    
-    public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
-    public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
-    public static final Pattern VERSIONING = Pattern.compile("(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z\\d][-a-zA-Z.\\d]*)?(\\+[a-zA-Z\\d][-a-zA-Z.\\d]*)?$");
-    public static final Pattern WORD = Pattern.compile("\\w+");
-    
-    protected Messager messager;
-    
-    
-    public Resolver(Messager messager) {
-        this.messager = messager;
+public class InformationResolver extends Resolver {
+
+    public InformationResolver(Messager messager) {
+        super(messager);
     }
     
-    
-    public void resolve(Set<? extends Element> elements, Map<String, Object> results) {
-        if (!check(elements)) {
-            return;
+
+    @Override
+    protected void resolve(Element element, Map<String, Object> results) {
+        var information = element.getAnnotation(Information.class);
+                
+        if (information.authors().length > 0) {
+            results.put("authors", information.authors());
         }
         
-        for (var element : elements) {
-            resolve(element, results);
+        if (!information.description().isEmpty()) {
+            results.put("description", information.description());
         }
         
-        clear();
-    }
-    
-    protected boolean check(Set<? extends Element> elements) {
-        return true;
-    }
-            
-    protected abstract void resolve(Element element, Map<String, Object> results);
-    
-    protected void clear() {
+        if (!information.url().isEmpty()) {
+            results.put("website", information.url());
+        }
         
+        if (!information.prefix().isEmpty()) {
+            results.put("prefix", information.prefix());
+        }
     }
     
 }

@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.standalone;
+
 
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processors.AnnotationProcessor;
 import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.annotations.resolvers.*;
+import com.karuslabs.scribe.standalone.resolvers.*;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

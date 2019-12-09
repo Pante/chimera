@@ -21,76 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone.resolvers;
 
-import com.karuslabs.scribe.annotations.Load;
+import com.karuslabs.scribe.annotations.Information;
 
 import java.util.HashMap;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
-import javax.tools.Diagnostic.Kind;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static com.karuslabs.scribe.annotations.Phase.*;
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@Load(during = STARTUP, before = {"a"}, optionallyAfter = {"b"}, after = {"c"})
-class LoadResolverTest {
+@Information(authors = {"Pante"}, description = "description", url = "url", prefix = "prefix")
+class InformationResolverTest {
     
     Element element = mock(Element.class);
     Messager messager = mock(Messager.class);
-    LoadResolver resolver = new LoadResolver(messager);
+    InformationResolver resolver = new InformationResolver(messager);
     
     
     @Test
     void resolve() {
-        when(element.getAnnotation(Load.class)).thenReturn(LoadResolverTest.class.getAnnotation(Load.class));
+        when(element.getAnnotation(Information.class)).thenReturn(InformationResolverTest.class.getAnnotation(Information.class));
         var results = new HashMap<String, Object>();
         
         resolver.resolve(element, results);
         
-        assertEquals(4, results.size());
-        assertEquals("STARTUP", results.get("load"));
-        assertArrayEquals(new String[] {"a"}, (String[]) results.get("loadbefore"));
-        assertArrayEquals(new String[] {"b"}, (String[]) results.get("softdepend"));
-        assertArrayEquals(new String[] {"c"}, (String[]) results.get("depend"));
+        assertArrayEquals(new String[] {"Pante"}, (String[]) results.get("authors"));
+        assertEquals("description", results.get("description"));
+        assertEquals("url", results.get("website"));
+        assertEquals("prefix", results.get("prefix"));
     }
     
     
     @Test
     void resolve_empty() {
-        when(element.getAnnotation(Load.class)).thenReturn(EmptyLoad.class.getAnnotation(Load.class));
+        when(element.getAnnotation(Information.class)).thenReturn(EmptyInformation.class.getAnnotation(Information.class));
         var results = new HashMap<String, Object>();
         
         resolver.resolve(element, results);
-        
-        assertEquals(4, results.size());
-        assertEquals("POSTWORLD", results.get("load"));
-        assertArrayEquals(new String[] {}, (String[]) results.get("loadbefore"));
-        assertArrayEquals(new String[] {}, (String[]) results.get("softdepend"));
-        assertArrayEquals(new String[] {}, (String[]) results.get("depend"));
     }
     
-    @Load
-    static class EmptyLoad {
+    @Information
+    static class EmptyInformation {
         
-    }
-    
-    @Test
-    void check_errors() {
-        resolver.check(element, new String[] {"a1", "hey!", "sp ace"});
-        
-        verify(messager, times(2)).printMessage(any(Kind.class), any(String.class), any(Element.class));
-        verify(messager).printMessage(ERROR, "Invalid name: 'hey!', name must contain only alphanumeric characters and '_'", element);
-        verify(messager).printMessage(ERROR, "Invalid name: 'sp ace', name must contain only alphanumeric characters and '_'", element);
     }
 
 } 

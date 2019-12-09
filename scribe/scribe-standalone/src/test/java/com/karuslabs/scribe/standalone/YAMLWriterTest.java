@@ -21,56 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.standalone;
 
-import java.util.*;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.io.*;
+import java.util.Map;
+import javax.annotation.processing.*;
+import javax.tools.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ResolverTest {
+class YAMLWriterTest {
     
-    Element element = mock(Element.class);
-    Set<Element> elements = Set.of(element);
+    FileObject file = mock(FileObject.class);
+    Filer filer = mock(Filer.class);
     Messager messager = mock(Messager.class);
-    Resolver resolver = spy(new Resolver(messager) {
-        @Override
-        protected void resolve(Element element, Map<String, Object> results) {
-            
-        }
-    });
+    YAMLWriter writer = new YAMLWriter(filer, messager);
     
     
     @Test
-    void resolve() {
-        resolver.resolve(elements, Map.of());
+    void write() throws IOException {
+        var writer = mock(Writer.class);
+        when(writer.append(any(CharSequence.class))).thenReturn(writer);
+        when(file.openWriter()).thenReturn(writer);
+        when(filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml")).thenReturn(file);
         
-        verify(resolver).resolve(element, Map.of());
-        verify(resolver).clear();
+        this.writer.write(Map.of("k", "v"));
+        
+        verify(writer, times(2)).append(any(CharSequence.class));
+        verify(writer).append("k: v\n");
     }
     
     
     @Test
-    void resolve_nothing() {
-        doReturn(false).when(resolver).check(elements);
+    void write_throws_exception() throws IOException {
+        when(filer.createResource(any(), any(), any(), any())).thenThrow(new IOException("message"));
         
-        resolver.resolve(elements, Map.of());
+        writer.write("Hi");
         
-        verify(resolver, times(0)).resolve(element, Map.of());
-    }
-    
-    
-    @Test
-    void validate() {
-        assertTrue(resolver.check(Set.of()));
+        verify(messager).printMessage(ERROR, "Failed to create plugin.yml");
+        verify(messager).printMessage(ERROR, "message");
     }
 
 } 

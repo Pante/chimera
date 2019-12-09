@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone.resolvers;
 
-import com.karuslabs.scribe.annotations.Permission;
-import com.karuslabs.scribe.annotations.Default;
+import com.karuslabs.scribe.annotations.*;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

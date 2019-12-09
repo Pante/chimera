@@ -21,52 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.processor;
+package com.karuslabs.scribe.standalone.resolvers;
 
-import java.io.*;
-import java.util.Map;
-import javax.annotation.processing.*;
-import javax.tools.*;
+import com.karuslabs.scribe.annotations.*;
+
+import java.util.HashMap;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class YAMLWriterTest {
+@API(Version.V1_13)
+class APIResolverTest {
     
-    FileObject file = mock(FileObject.class);
-    Filer filer = mock(Filer.class);
     Messager messager = mock(Messager.class);
-    YAMLWriter writer = new YAMLWriter(filer, messager);
+    APIResolver resolver = new APIResolver(messager);
+    Element element = mock(Element.class);
     
     
     @Test
-    void write() throws IOException {
-        var writer = mock(Writer.class);
-        when(writer.append(any(CharSequence.class))).thenReturn(writer);
-        when(file.openWriter()).thenReturn(writer);
-        when(filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml")).thenReturn(file);
+    void resolve() {
+        when(element.getAnnotation(API.class)).thenReturn(getClass().getAnnotation(API.class));
+        var results = new HashMap<String, Object>();
+        resolver.resolve(element, results);
         
-        this.writer.write(Map.of("k", "v"));
-        
-        verify(writer, times(2)).append(any(CharSequence.class));
-        verify(writer).append("k: v\n");
-    }
-    
-    
-    @Test
-    void write_throws_exception() throws IOException {
-        when(filer.createResource(any(), any(), any(), any())).thenThrow(new IOException("message"));
-        
-        writer.write("Hi");
-        
-        verify(messager).printMessage(ERROR, "Failed to create plugin.yml");
-        verify(messager).printMessage(ERROR, "message");
+        assertEquals(1, results.size());
+        assertEquals("1.13", results.get("api-version"));
     }
 
 } 

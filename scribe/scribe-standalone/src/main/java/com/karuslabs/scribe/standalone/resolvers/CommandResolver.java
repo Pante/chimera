@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone.resolvers;
 
-import com.karuslabs.scribe.annotations.processor.Resolver;
 import com.karuslabs.scribe.annotations.Command;
+import com.karuslabs.scribe.standalone.Resolver;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -33,7 +33,7 @@ import java.util.regex.Matcher;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type.*;
+import static com.karuslabs.scribe.standalone.resolvers.CommandResolver.Type.*;
 import static javax.tools.Diagnostic.Kind.*;
 
 

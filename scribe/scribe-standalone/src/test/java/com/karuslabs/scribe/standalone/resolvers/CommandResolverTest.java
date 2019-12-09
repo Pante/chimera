@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone.resolvers;
 
 import com.karuslabs.scribe.annotations.Command;
-import com.karuslabs.scribe.annotations.resolvers.CommandResolver.Type;
+import com.karuslabs.scribe.standalone.resolvers.CommandResolver.Type;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;

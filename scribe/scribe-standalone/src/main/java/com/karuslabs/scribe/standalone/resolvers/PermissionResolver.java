@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.annotations.resolvers;
+package com.karuslabs.scribe.standalone.resolvers;
 
 import com.karuslabs.scribe.annotations.Permission;
-import com.karuslabs.scribe.annotations.processor.Resolver;
+import com.karuslabs.scribe.standalone.Resolver;
 
 import java.util.*;
 import java.util.regex.Matcher;
