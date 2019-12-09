@@ -58,3 +58,5 @@ Temporary Items
 /scribe/annotations/target/
 /scribe/scribe-maven-plugin/target/
 /scribe/scribe-standalone/target/
+/scribe/scribe-annotations/target/
+/scribe/standalone/target/

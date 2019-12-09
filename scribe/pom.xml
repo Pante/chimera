@@ -11,11 +11,11 @@
     <packaging>pom</packaging>
     
     <name>Scribe</name>
-    <description>Compile-time plugin.yml generator and linters</description>
+    <description>Compile-time plugin.yml generators</description>
     
     <modules>
         <module>annotations</module>
-        <module>scribe-standalone</module>
+        <module>standalone</module>
     </modules>
     
 </project>
