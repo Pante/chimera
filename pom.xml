@@ -8,7 +8,7 @@
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
-    <description>A collection of Karus Lab's libraries and build-tools</description>
+    <description>A collection of Karus Lab's libraries and development tools</description>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

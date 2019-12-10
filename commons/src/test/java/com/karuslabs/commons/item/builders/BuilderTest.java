@@ -25,10 +25,8 @@ package com.karuslabs.commons.item.builders;
 
 import java.util.*;
 
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.ItemTagType;
+import org.bukkit.inventory.meta.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,29 +66,21 @@ class BuilderTest {
     @Test
     void build() {
         builder.item = item;
-        builder.amount(10).durability((short) 20)
+        builder.amount(10).model(3).damage(20)
                .display("display name").localised("localised name")
                .enchantment(CHANNELING, 1).flags(Set.of(HIDE_DESTROYS))
                .unbreakable(true).build();
         
         verify(item).setAmount(10);
-        verify(item).setDurability((short) 20);
+        verify((Damageable) meta).setDamage(20);
         verify(meta).setDisplayName("display name");
         verify(meta).setLocalizedName("localised name");
         verify(meta).addEnchant(CHANNELING, 1, true);
         verify(meta).addItemFlags(HIDE_DESTROYS);
+        verify(meta).setCustomModelData(3);
         verify(meta).setUnbreakable(true);
         verify(meta).setLore(null);
         verify(item).setItemMeta(meta);
-    }
-    
-    
-    @Test
-    void tag() {
-        NamespacedKey key = mock(NamespacedKey.class);
-        var builder = ItemBuilder.of(APPLE).tag(key, ItemTagType.INTEGER, 0);
-        
-        verify(builder.meta.getCustomTagContainer()).setCustomTag(key, ItemTagType.INTEGER, 0);
     }
     
 }

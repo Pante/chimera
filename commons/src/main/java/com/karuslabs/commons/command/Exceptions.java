@@ -109,7 +109,7 @@ public @Static class Exceptions {
             return ((EntityMinecartCommandBlock) ((CraftMinecartCommand) sender).getHandle()).getCommandBlock().getWrapper();
             
         } else if (sender instanceof RemoteConsoleCommandSender) {
-            return ((DedicatedServer) MinecraftServer.getServer()).remoteControlCommandListener.f();
+            return ((DedicatedServer) MinecraftServer.getServer()).remoteControlCommandListener.getWrapper();
             
         } else if (sender instanceof ConsoleCommandSender) {
             return ((CraftServer) sender.getServer()).getServer().getServerCommandListener();

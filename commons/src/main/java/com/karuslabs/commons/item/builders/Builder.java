@@ -29,8 +29,7 @@ import org.bukkit.*;
 import org.bukkit.attribute.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.ItemTagType;
+import org.bukkit.inventory.meta.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -60,8 +59,8 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         return self();
     }
     
-    public Self durability(short durability) {
-        item.setDurability(durability);
+    public Self damage(int damage) {
+        ((Damageable) meta).setDamage(damage);
         return self();
     }
     
@@ -79,6 +78,11 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     public Self attribute(Attribute attribute, AttributeModifier modifier) {
         meta.addAttributeModifier(attribute, modifier);
+        return self();
+    }
+    
+    public Self model(@Nullable Integer data) {
+        meta.setCustomModelData(data);
         return self();
     }
     
@@ -117,13 +121,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
 
         return self();
     }
-    
-    
-    public <T, V> Self tag(NamespacedKey key, ItemTagType<T, V> type, V value) {
-        meta.getCustomTagContainer().setCustomTag(key, type, value);
-        return self();
-    }
-    
     
     public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import java.util.function.Function;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -48,6 +49,10 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     public BookBuilder asBook() {
         return new BookBuilder(this);
+    }
+    
+    public CrossbowBuilder asCrossbow() {
+        return new CrossbowBuilder(this);
     }
     
     public EnchantmentStorageBuilder asEnchantmentStorage() {
@@ -80,6 +85,10 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
+    }
+    
+    public SuspiciousStewBuilder asStew() {
+        return new SuspiciousStewBuilder(this);
     }
     
     public TropicalFishBucketBuilder asBucket() {

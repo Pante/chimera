@@ -26,20 +26,20 @@
             <groupId>com.karuslabs</groupId>
             <artifactId>lingua-franca</artifactId>
             <version>1.0.7</version>
-            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         
@@ -58,7 +58,7 @@
         
         <dependency>
             <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
+            <artifactId>auto-service-annotations</artifactId>
             <version>1.0-rc6</version>
             <optional>true</optional>
         </dependency>
@@ -73,6 +73,13 @@
                 <version>3.8.1</version>
                 <configuration>
                     <release>${release}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>1.0-rc6</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
     
