@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import java.util.function.Function;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 

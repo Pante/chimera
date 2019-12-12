@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.FireworkBuilder;
 import java.util.Set;
 
 import org.bukkit.FireworkEffect;

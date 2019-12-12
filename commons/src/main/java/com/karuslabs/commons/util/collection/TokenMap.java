@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.collections;
+package com.karuslabs.commons.util.collection;
 
 import com.google.common.primitives.Primitives;
 
-import com.karuslabs.commons.util.collections.TokenMap.Key;
+import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import java.util.*;
 
-import static com.karuslabs.commons.util.collections.TokenMap.key;
+import static com.karuslabs.commons.util.collection.TokenMap.key;
 import com.karuslabs.annotations.ValueType;
 
 

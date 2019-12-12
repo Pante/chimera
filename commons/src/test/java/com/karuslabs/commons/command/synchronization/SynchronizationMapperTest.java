@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.synchronization;
 
 import com.karuslabs.commons.command.tree.nodes.Argument;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_15_R1.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

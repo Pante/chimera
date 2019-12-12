@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.util.collections;
+package com.karuslabs.commons.util.collection;
 
 import java.util.*;
 import java.util.stream.Stream;

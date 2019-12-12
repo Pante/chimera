@@ -41,7 +41,7 @@ class MinecraftLocaleProviderTest {
         new Locale("en", "UD"),
         new Locale("enp"),
         new Locale("en", "WS"),
-        new Locale("lol", "US")
+        new Locale("lol", "US"),
     };
     
     

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.collections;
+package com.karuslabs.commons.util.collection;
 
 import java.util.Objects;
 import java.util.stream.Stream;

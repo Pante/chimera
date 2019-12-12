@@ -94,7 +94,7 @@ public @Static class VectorParser {
 
                 case '~':
                     position.relative(axis, true);
-                    reader.skip();
+                    reader.skip(); // fallthrough
 
                 default:
                     return position.set(axis, reader.readDouble());

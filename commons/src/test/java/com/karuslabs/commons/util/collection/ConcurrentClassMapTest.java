@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,55 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.collections;
 
-import java.util.*;
+package com.karuslabs.commons.util.collection;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class TrieSet extends AbstractSet<String> {
+@ExtendWith(MockitoExtension.class)
+class ConcurrentClassMapTest {
     
-    static final Object PRESENT = new Object();
-    
-    
-    Trie<Object> trie;
-    
-    
-    public TrieSet() {
-        trie = new Trie<>();
+    @Test
+    void of() {
+        var map = ConcurrentClassMap.of();
+        assertNotNull(map);
     }
     
-    
-    public Set<String> startsWith(String prefix) {
-        return trie.prefixedKeys(prefix);
-    }
-    
-        
-    @Override
-    public boolean add(String string) {
-        return trie.put(string, PRESENT) == null;
-    }
-    
-    
-    @Override
-    public boolean contains(Object object) {
-        return trie.containsKey(object);
-    }
-    
-    
-    @Override
-    public boolean remove(Object object) {
-        return trie.remove(object, PRESENT);
-    }
-    
-    
-    @Override
-    public Iterator<String> iterator() {
-        return trie.keySet().iterator();
-    }
+}
 
-    @Override
-    public int size() {
-        return trie.size();
+
+@ExtendWith(MockitoExtension.class)
+class ConcurrentHashClassMapTest {
+    
+    @Test
+    void map() {
+        var map = ConcurrentClassMap.of(1);
+        assertSame(map, map.map());
+    }
+    
+}
+
+
+@ExtendWith(MockitoExtension.class)
+class ConcurrentProxiedClassMapTest {
+    
+    @Test
+    void map() {
+        var proxied = new ConcurrentHashMap<Class<? extends Object>, Object>(0);
+        var map = ConcurrentClassMap.of(proxied);
+        assertSame(proxied, map.map());
     }
     
 }

@@ -27,7 +27,7 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.minecraft.server.v1_14_R1.ArgumentVec3;
+import net.minecraft.server.v1_15_R1.ArgumentVec3;
 
 import org.bukkit.Location;
 

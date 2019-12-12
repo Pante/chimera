@@ -27,7 +27,6 @@ import com.karuslabs.commons.command.DispatcherCommand;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.*;
 
 import java.util.stream.Stream;

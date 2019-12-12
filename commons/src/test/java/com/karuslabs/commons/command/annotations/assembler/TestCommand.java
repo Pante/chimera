@@ -35,7 +35,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@Literal(namespace = "a", aliases = {"a1"})
+@Literal(namespace = "a", aliases = "a1")
 @Argument(namespace = {"a", "b"})
 public class TestCommand {
     
@@ -45,7 +45,7 @@ public class TestCommand {
     EnchantmentType argument = new EnchantmentType();
     
     
-    @Literal(namespace = {"a", "b", "c1"}, aliases = {"c1a"})
+    @Literal(namespace = {"a", "b", "c1"}, aliases = "c1a")
     int c1(CommandContext<String> context) {
         return 1;
     }

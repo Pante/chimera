@@ -28,7 +28,6 @@ import com.karuslabs.commons.util.Position;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import org.bukkit.*;
@@ -60,7 +59,7 @@ class VectorParserTest {
             field.set(null, server);
 
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-
+            // ignored
         }
         
         assertEquals(world, VectorParser.parseWorld(new StringReader("world_name")));

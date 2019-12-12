@@ -28,7 +28,7 @@ import com.karuslabs.commons.command.tree.Mapper;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_15_R1.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

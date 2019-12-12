@@ -77,8 +77,8 @@ class NamespaceProcessorTest {
         processor.process(element, new HashSet<>());
     }
     
-    @Literal(namespace = {"a"})
-    @Argument(namespace = {"b"})
+    @Literal(namespace = "a")
+    @Argument(namespace = "b")
     static class Namespace {
         
         static @Bind ArgumentType<?> b;

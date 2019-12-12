@@ -132,20 +132,20 @@ class AssemblerTest {
     
     static class Generate {
         
-        static int method = 0;
+        static int method;
         
-        int command = 0;
-        int executable = 0;
+        int command;
+        int executable;
         
         
-        @Literal(namespace = {"a"})
+        @Literal(namespace = "a")
         int command(CommandContext<String> context) {
             command++;
             return 1;
         }
         
         
-        @Literal(namespace = {"b"})
+        @Literal(namespace = "b")
         void executable(DefaultableContext<String> context) {
             executable++;
         }

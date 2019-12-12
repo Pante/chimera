@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,59 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.collections;
+package com.karuslabs.commons.util.collection;
 
-import java.util.concurrent.*;
+import java.util.*;
 
 
-public interface ConcurrentClassMap<T> extends ClassMap<T> {
+public class TrieSet extends AbstractSet<String> {
     
-    public static <T> ConcurrentClassMap<T> of() {
-        return new ConcurrentHashClassMap<>();
+    static final Object PRESENT = new Object();
+    
+    
+    Trie<Object> trie;
+    
+    
+    public TrieSet() {
+        trie = new Trie<>();
     }
     
-    public static <T> ConcurrentClassMap<T> of(int capacity) {
-        return new ConcurrentHashClassMap<>(capacity);
+    
+    public Set<String> startsWith(String prefix) {
+        return trie.prefixedKeys(prefix);
     }
     
-    public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
-        return new ConcurrentProxiedClassMap<>(map);
+        
+    @Override
+    public boolean add(String string) {
+        return trie.put(string, PRESENT) == null;
     }
     
     
     @Override
-    public ConcurrentMap<Class<? extends T>, T> map();
-    
-}
-
-
-class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T> implements ConcurrentClassMap<T> {
-
-    ConcurrentHashClassMap() {}
-    
-    ConcurrentHashClassMap(int capacity) {
-        super(capacity);
+    public boolean contains(Object object) {
+        return trie.containsKey(object);
     }
+    
     
     @Override
-    public ConcurrentMap<Class<? extends T>, T> map() {
-        return this;
+    public boolean remove(Object object) {
+        return trie.remove(object, PRESENT);
     }
     
-}
-
-class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
-
-    private ConcurrentMap<Class<? extends T>, T> map;
     
-    
-    ConcurrentProxiedClassMap(ConcurrentMap<Class<? extends T>, T> map) {
-        this.map = map;
+    @Override
+    public Iterator<String> iterator() {
+        return trie.keySet().iterator();
     }
 
     @Override
-    public ConcurrentMap<Class<? extends T>, T> map() {
-        return map;
+    public int size() {
+        return trie.size();
     }
     
 }

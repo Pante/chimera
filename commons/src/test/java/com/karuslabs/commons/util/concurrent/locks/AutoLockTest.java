@@ -57,9 +57,7 @@ class AutoLockTest {
     
     @Test
     void close() {
-        try (var acquired = lock.acquire()) {
-            // Do nothing
-        }
+        try (var acquired = lock.acquire()) {}
         
         assertEquals(0, lock.getHoldCount());
     }

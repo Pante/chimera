@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.annotations.assembler;
 
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.tree.nodes.Aliasable;
-import com.karuslabs.commons.util.collections.TokenMap;
+import com.karuslabs.commons.util.collection.TokenMap;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 class CommandAssemblerTest {
     
-    @Literal(namespace = {"a", "b", "c", "d"}, aliases = {"da"})
+    @Literal(namespace = {"a", "b", "c", "d"}, aliases = "da")
     @Literal(namespace = {"a", "b", "c"}, aliases = {"c1a", "c1b"})
     @Argument(namespace = {"a", "b", "c3"}, type = "bird")
     @Argument(namespace = {"a", "b", "c4"}, type = "is", suggestions = "bird")

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.EnchantmentStorageBuilder;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.jupiter.api.Test;

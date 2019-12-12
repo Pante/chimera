@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.commons.util.collections;
+package com.karuslabs.commons.util.collection;
 
-import com.karuslabs.commons.util.collections.TokenMap.Key;
+import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import java.util.concurrent.*;
 import java.util.stream.Stream;

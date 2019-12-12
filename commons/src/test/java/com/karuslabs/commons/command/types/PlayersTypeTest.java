@@ -69,7 +69,7 @@ class PlayersTypeTest {
             field.set(null, server);
             
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            
+            // ignored
         }
     }
     

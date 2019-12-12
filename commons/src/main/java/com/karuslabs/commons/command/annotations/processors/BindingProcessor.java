@@ -27,7 +27,7 @@ import com.karuslabs.annotations.*;
 import com.karuslabs.annotations.processors.AnnotationProcessor;
 import com.karuslabs.annotations.filters.ClassFilter;
 import com.karuslabs.commons.command.annotations.*;
-import com.karuslabs.commons.util.collections.TokenMap;
+import com.karuslabs.commons.util.collection.TokenMap;
 
 import com.google.auto.service.AutoService;
 

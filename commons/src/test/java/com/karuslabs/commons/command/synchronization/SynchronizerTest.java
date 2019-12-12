@@ -27,11 +27,11 @@ import com.karuslabs.commons.command.tree.Tree;
 
 import java.util.List;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_15_R1.*;
 
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_14_R1.scheduler.CraftScheduler;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.*;
