@@ -86,7 +86,7 @@
                     <links>
                         <link>https://repo.karuslabs.com/repository/brigadier/</link>
                         <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
-                        <link>https://hub.spigotmc.org/javadocs/bukkit</link>
+                        <link>https://hub.spigotmc.org/javadocs/spigot</link>
                     </links>
                 </configuration>
                 <executions>
