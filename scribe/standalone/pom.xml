@@ -104,6 +104,37 @@
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
             </plugin>
+            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <additionalOptions>-html5</additionalOptions>
+                    <links>
+                        <link>https://repo.karuslabs.com/repository/brigadier/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
+                        <link>https://hub.spigotmc.org/javadocs/bukkit</link>
+                    </links>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-javadoc</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals> 
+                    </execution>
+                </executions> 
+            </plugin>
            
             <plugin>
                 <groupId>org.jacoco</groupId>
