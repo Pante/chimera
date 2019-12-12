@@ -52,7 +52,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 ```
 
 ***
-#### Chimera - Contains the command framework and other common utilities for Spigot plugin development
+#### Commons - Contains the command framework and other common utilities for Spigot plugin development
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/commons)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/commons)
 [![javadoc](https://img.shields.io/badge/javadoc-4.4.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.4.0/commons/apidocs/index.html)
@@ -80,14 +80,14 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
 ```
 
 ***
-#### Scribe - A collection of compile-time annotation processors that generates a plugin.yml
+### Scribe - A collection of compile-time annotation processors that generates a plugin.yml
 
 #### Scribe Annotations - Contains annotations that other scribe projects use to generate a plugin.yml
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/scribe-annotations/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/scribe-annotations)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/scribe-annotations/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/scribe-annotations)
 [![javadoc](https://img.shields.io/badge/javadoc-4.4.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.4.0/scribe/scribe-annotations/apidocs/index.html)
 
-**Since `scribe-annotations` 4.4.0, the annotation processors are packaged separately under `scribe-standalone`**
+**Since 4.4.0, the annotation processors are packaged separately under `scribe-standalone`.**
 ```XML
 
 <!-- Stable Builds -->
@@ -110,7 +110,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
   </dependency>
 </dependencies>
 ```
-
+***
 
 #### Scribe Standalone
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/scribe-standalone/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/scribe-standalone)
@@ -139,4 +139,4 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
   </dependency>
 </dependencies>
 ```
-
+***
