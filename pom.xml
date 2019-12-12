@@ -75,7 +75,7 @@
                 
         <repository>
             <id>noti-spigot-mirror</id>
-            <url>https://repo.karuslabs.com/repository/spigot</url>
+            <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
               
         <repository>
