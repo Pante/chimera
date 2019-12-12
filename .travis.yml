@@ -7,7 +7,7 @@ jdk:
 install: true
 
 script: 
-  - mvn deploy --settings travis-settings.xml
+  - mvn deploy -Dhttps.protocols=TLSv1.2 --settings travis-settings.xml
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
