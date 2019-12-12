@@ -32,12 +32,12 @@
             <distributionManagement>
                 <repository>
                     <id>karus</id>
-                    <url>http://144.217.92.68/repository/chimera-releases</url>
+                    <url>http://repo.karuslabs.com/repository/chimera-releases</url>
                 </repository>
 
                 <snapshotRepository>
                     <id>karus</id>
-                    <url>http://144.217.92.68/repository/chimera-snapshots</url>
+                    <url>http://repo.karuslabs.com/repository/chimera-snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>

@@ -4,8 +4,10 @@ distro: bionic
 jdk:
   - openjdk11
 
+install: true
+
 script: 
-  - mvn clean install deploy --settings travis-settings.xml
+  - mvn deploy --settings travis-settings.xml
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
