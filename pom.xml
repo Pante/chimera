@@ -39,6 +39,11 @@
                     <id>karus</id>
                     <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
                 </snapshotRepository>
+                
+                <site>
+                    <id>karus</id>
+                    <url>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</url>
+                </site>
             </distributionManagement>
         </profile>
         
