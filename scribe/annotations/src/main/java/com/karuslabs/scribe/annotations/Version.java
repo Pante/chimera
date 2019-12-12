@@ -28,7 +28,8 @@ public enum Version {
     
     INFERRED("1.13"),
     V1_13("1.13"), 
-    V1_14("1.14");
+    V1_14("1.14"),
+    V1_15("1.15");
     
     
     public final String version;
