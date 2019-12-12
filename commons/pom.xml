@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.3.0</version>
+        <version>4.4.0</version>
     </parent>
     
     <artifactId>commons</artifactId>
@@ -25,21 +25,14 @@
         <dependency>
             <groupId>com.karuslabs</groupId>
             <artifactId>lingua-franca</artifactId>
-            <version>1.0.6</version>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>1.0.7</version>
+            <optional>true</optional>
         </dependency>
         
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
+            <version>1.15-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         
@@ -58,7 +51,7 @@
         
         <dependency>
             <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
+            <artifactId>auto-service-annotations</artifactId>
             <version>1.0-rc6</version>
             <optional>true</optional>
         </dependency>
@@ -73,6 +66,13 @@
                 <version>3.8.1</version>
                 <configuration>
                     <release>${release}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>1.0-rc6</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
     
@@ -104,20 +104,6 @@
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
            
             <plugin>

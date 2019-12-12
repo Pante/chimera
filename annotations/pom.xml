@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.3.0</version>
+        <version>4.4.0</version>
     </parent>
     
     <artifactId>annotations</artifactId>
@@ -28,6 +28,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>shaded</shadedClassifierName>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -36,14 +40,6 @@
                         </goals>
                     </execution>
                 </executions>
-
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                    </transformers>
-                </configuration>
             </plugin>
     
             <plugin>
@@ -52,20 +48,6 @@
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
            
             <plugin>

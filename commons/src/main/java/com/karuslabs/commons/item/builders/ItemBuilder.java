@@ -75,6 +75,15 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     /**
+     * Creates a {@code CrossBowBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code CrossBowBuilder}
+     */
+    public CrossbowBuilder asCrossbow() {
+        return new CrossbowBuilder(this);
+    }
+    
+    /**
      * Creates an {@code EnchantmentStorageBuilder} for this {@code ItemStack}.
      * 
      * @return an {@code EnchantmentStorageBuilder}
@@ -144,6 +153,15 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
      */
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
+    }
+    
+    /**
+     * Creates a {@code SuspiciousStewBuilder} for this {@code ItemStack}.
+     * 
+     * @return a  {@code SuspiciousStewBuilder}
+     */
+    public SuspiciousStewBuilder asStew() {
+        return new SuspiciousStewBuilder(this);
     }
     
     /**

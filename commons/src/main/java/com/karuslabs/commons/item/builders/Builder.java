@@ -29,8 +29,7 @@ import org.bukkit.*;
 import org.bukkit.attribute.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.ItemTagType;
+import org.bukkit.inventory.meta.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -83,13 +82,13 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     /**
-     * Sets the durability.
+     * Sets the damage.
      * 
-     * @param durability the durability
+     * @param damage the damage
      * @return {@code this}
      */
-    public Self durability(short durability) {
-        item.setDurability(durability);
+    public Self damage(int damage) {
+        ((Damageable) meta).setDamage(damage);
         return self();
     }
     
@@ -130,12 +129,15 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     /**
-     * Adds an enchantment with the given level.
+     * Set the custom model data.
      * 
-     * @param enchantment the enchantment
-     * @param level the enchantment level; level restrictions are ignored
+     * @param data the custom model data
      * @return {@code this}
      */
+    public Self model(@Nullable Integer data) {
+        meta.setCustomModelData(data);
+        return self();
+    }
     public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
         return self();
@@ -193,22 +195,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         
         lore.addAll(List.of(lines));
 
-        return self();
-    }
-    
-    
-    /**
-     * Sets the value of {@code type} for the given key.
-     * 
-     * @param <T> the underlying, primitive type of the value
-     * @param <V> the type of the value
-     * @param key the key
-     * @param type the mapper for the value
-     * @param value the value
-     * @return {@code this}
-     */
-    public <T, V> Self tag(NamespacedKey key, ItemTagType<T, V> type, V value) {
-        meta.getCustomTagContainer().setCustomTag(key, type, value);
         return self();
     }
     

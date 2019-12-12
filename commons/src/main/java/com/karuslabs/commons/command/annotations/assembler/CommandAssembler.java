@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.annotations.assembler;
 
 import com.karuslabs.commons.command.annotations.*;
-import com.karuslabs.commons.util.collections.TokenMap;
+import com.karuslabs.commons.util.collection.TokenMap;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;

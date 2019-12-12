@@ -28,8 +28,7 @@ import java.util.UUID;
 
 import org.bukkit.*;
 import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+import org.bukkit.inventory.meta.*;
 
 import static org.mockito.Mockito.*;
 
@@ -51,12 +50,9 @@ class StubBukkit {
     
     public static <T extends ItemMeta> T meta(Class<T> type) {
         try {
-            T meta = mock(type);
+            T meta = mock(type, withSettings().extraInterfaces(Damageable.class));
             ItemFactory factory = when(mock(ItemFactory.class).getItemMeta(any())).thenReturn(meta).getMock();
             Server server = when(mock(Server.class).getItemFactory()).thenReturn(factory).getMock();
-            
-            CustomItemTagContainer container = mock(CustomItemTagContainer.class);
-            when(meta.getCustomTagContainer()).thenReturn(container);
             
             SERVER.set(null, server);
             return meta;

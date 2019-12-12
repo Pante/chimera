@@ -4,11 +4,11 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.3.0</version>
+    <version>4.4.0</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
-    <description>A collection of Karus Lab's libraries and build-tools</description>
+    <description>A collection of Karus Lab's libraries and development tools</description>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -75,7 +75,7 @@
                 
         <repository>
             <id>noti-spigot-mirror</id>
-            <url>https://repo.karuslabs.com/repository/spigot</url>
+            <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
                        
         <repository>
@@ -150,9 +150,32 @@
         </dependency>
     </dependencies>
     
-    
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.27</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -196,8 +219,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.0.0</version>
-            </plugin>         
-        </plugins>
+            </plugin>    
+        </plugins>             
     </build>
     
 </project>

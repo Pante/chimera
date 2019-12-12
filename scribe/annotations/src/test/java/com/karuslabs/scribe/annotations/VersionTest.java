@@ -23,7 +23,6 @@
  */
 package com.karuslabs.scribe.annotations;
 
-import com.karuslabs.scribe.annotations.Version;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +47,7 @@ class VersionTest {
     
     static Stream<Arguments> values_parameters() {
         return Stream.of(
+            of(Version.INFERRED, "1.13"),
             of(Version.V1_13, "1.13"),
             of(Version.V1_14, "1.14")
         );

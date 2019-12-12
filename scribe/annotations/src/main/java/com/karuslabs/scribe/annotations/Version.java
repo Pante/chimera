@@ -29,7 +29,9 @@ package com.karuslabs.scribe.annotations;
  */
 public enum Version {
     
-    V1_13("1.13"), V1_14("1.14");
+    INFERRED("1.13"),
+    V1_13("1.13"), 
+    V1_14("1.14");
     
     
     /**

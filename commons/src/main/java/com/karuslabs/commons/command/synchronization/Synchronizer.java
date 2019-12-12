@@ -31,9 +31,9 @@ import com.mojang.brigadier.tree.*;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 
-import net.minecraft.server.v1_14_R1.*;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_15_R1.*;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;

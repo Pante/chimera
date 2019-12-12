@@ -27,7 +27,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import net.minecraft.server.v1_14_R1.ArgumentVec2;
+import net.minecraft.server.v1_15_R1.ArgumentVec2;
 
 import org.bukkit.Location;
 
@@ -62,6 +62,8 @@ public abstract class Cartesian2DType<T> extends CartesianType<T> {
             case 1:
                 builder.suggest(parts[0] + " " + location.getZ());
                 break;
+                
+            default: // Does nothing
         }
     }
     

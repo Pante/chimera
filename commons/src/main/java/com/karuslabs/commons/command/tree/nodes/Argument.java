@@ -161,7 +161,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
      * @param type the type of the argument
      * @return a {@code Builder}
      */
-    public static <V> Builder<CommandSender, V>of(String name, ArgumentType<V> type) {
+    public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     

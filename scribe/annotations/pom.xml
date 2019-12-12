@@ -4,52 +4,14 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>scribe</artifactId>
-        <version>4.3.0</version>
+        <version>4.4.0</version>
     </parent>
     
     <artifactId>scribe-annotations</artifactId>
     <packaging>jar</packaging>
     
     <name>Scribe Annotations</name>
-    <description>Karus Lab's compile time plugin.yml generator</description>
-    
-    <repositories>
-        <repository>
-            <id>Sonatype-public</id>
-            <name>SnakeYAML repository</name>
-            <url>http://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-    </repositories>
-    
-    <dependencies>
-        <dependency>
-            <groupId>com.karuslabs</groupId>
-            <artifactId>annotations</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <version>1.0-rc6</version>
-            <optional>true</optional>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.snakeyaml</groupId>
-            <artifactId>snakeyaml-engine</artifactId>
-            <version>2.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+    <description>Annotations for other Scribe projects</description>
     
     <build>
         <defaultGoal>clean package install</defaultGoal>
@@ -59,28 +21,6 @@
                 <version>3.8.1</version>
                 <configuration>
                     <release>${release}</release>
-                </configuration>
-            </plugin>
-    
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                    </transformers>
                 </configuration>
             </plugin>
     

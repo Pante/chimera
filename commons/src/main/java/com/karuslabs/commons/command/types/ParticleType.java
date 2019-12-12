@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.util.collections.Trie;
+import com.karuslabs.commons.util.collection.Trie;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;

@@ -4,17 +4,18 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.3.0</version>
+        <version>4.4.0</version>
     </parent>
     
     <artifactId>scribe</artifactId>
     <packaging>pom</packaging>
     
     <name>Scribe</name>
-    <description>Compile-time plugin.yml generator and linters</description>
+    <description>Compile-time plugin.yml generators</description>
     
     <modules>
         <module>annotations</module>
+        <module>standalone</module>
     </modules>
     
 </project>

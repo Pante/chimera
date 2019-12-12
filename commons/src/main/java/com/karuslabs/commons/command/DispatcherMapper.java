@@ -34,7 +34,7 @@ import com.mojang.brigadier.tree.*;
 import java.util.*;
 import java.util.function.Predicate;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_15_R1.*;
 
 import org.bukkit.command.CommandSender;
 

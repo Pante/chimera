@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.LeatherArmourBuilder;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import org.junit.jupiter.api.Test;

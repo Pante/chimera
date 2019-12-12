@@ -23,20 +23,6 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.item.builders.Builder;
-import com.karuslabs.commons.item.builders.MapBuilder;
-import com.karuslabs.commons.item.builders.LeatherArmourBuilder;
-import com.karuslabs.commons.item.builders.PotionBuilder;
-import com.karuslabs.commons.item.builders.EnchantmentStorageBuilder;
-import com.karuslabs.commons.item.builders.BannerBuilder;
-import com.karuslabs.commons.item.builders.ItemBuilder;
-import com.karuslabs.commons.item.builders.SkullBuilder;
-import com.karuslabs.commons.item.builders.TropicalFishBucketBuilder;
-import com.karuslabs.commons.item.builders.KnowledgeBookBuilder;
-import com.karuslabs.commons.item.builders.BlockStateBuilder;
-import com.karuslabs.commons.item.builders.FireworkBuilder;
-import com.karuslabs.commons.item.builders.BookBuilder;
-import com.karuslabs.commons.item.builders.FireworkEffectBuilder;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -71,6 +57,7 @@ class ItemBuilderTest {
             of(BannerMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBanner(), BannerBuilder.class),
             of(BlockStateMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBlockState(), BlockStateBuilder.class),
             of(BookMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBook(), BookBuilder.class),
+            of(CrossbowMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asCrossbow(), CrossbowBuilder.class),
             of(EnchantmentStorageMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asEnchantmentStorage(), EnchantmentStorageBuilder.class),
             of(FireworkMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asFirework(), FireworkBuilder.class),
             of(FireworkEffectMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asFireworkEffect(), FireworkEffectBuilder.class),
@@ -79,6 +66,7 @@ class ItemBuilderTest {
             of(MapMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asMap(), MapBuilder.class),
             of(PotionMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asPotion(), PotionBuilder.class),
             of(SkullMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asSkull(), SkullBuilder.class),
+            of(SuspiciousStewMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asStew(), SuspiciousStewBuilder.class),
             of(TropicalFishBucketMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBucket(), TropicalFishBucketBuilder.class)
         );
     }
