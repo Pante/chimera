@@ -130,7 +130,7 @@ Open source spigot libraries & tools devloped by Karus Labs. Allows the Brigadie
   <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
 </repository>
 
-<!-- Standalone annotation processor, provides scribe-annotations as a transitive dependency>
+<!-- Standalone annotation processor, provides scribe-annotations as a transitive dependency -->
 <dependencies>
   <dependency>
       <groupId>com.karuslabs</groupId>
