@@ -35,7 +35,6 @@
         <module name="MissingSwitchDefault"/>
         <module name="NoClone"/>
         <module name="NoFinalizer"/>
-        <module name="NonEmptyAtclauseDescription"/>
         <module name="RedundantImport"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
