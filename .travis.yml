@@ -5,7 +5,7 @@ jdk:
   - openjdk11
 
 script: 
-  - mvn --settings travis-settings.xml deploy
+  - mvn clean install deploy --settings travis-settings.xml
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

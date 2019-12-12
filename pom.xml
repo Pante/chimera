@@ -37,7 +37,7 @@
 
                 <snapshotRepository>
                     <id>karus</id>
-                    <url>http://144.217.92.68repository/chimera-snapshots</url>
+                    <url>http://144.217.92.68/repository/chimera-snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
