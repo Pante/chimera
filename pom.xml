@@ -32,12 +32,12 @@
             <distributionManagement>
                 <repository>
                     <id>karus</id>
-                    <url>http://repo.karuslabs.com/repository/chimera-releases</url>
+                    <url>https://repo.karuslabs.com/repository/chimera-releases</url>
                 </repository>
 
                 <snapshotRepository>
                     <id>karus</id>
-                    <url>http://repo.karuslabs.com/repository/chimera-snapshots</url>
+                    <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
         </profile>
@@ -70,17 +70,17 @@
                 
         <repository>
             <id>noti-spigot-mirror</id>
-            <url>http://repo.karuslabs.com/repository/spigot/</url>
+            <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
               
         <repository>
             <id>minecraft-libraries</id>
-            <url>http://libraries.minecraft.net</url>
+            <url>https://libraries.minecraft.net</url>
         </repository>
             
         <repository>
             <id>lingua-releases</id>
-            <url>http://repo.karuslabs.com/repository/lingua-franca-releases/</url>
+            <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
         </repository>
     </repositories>
     
