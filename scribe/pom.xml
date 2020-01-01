@@ -15,7 +15,10 @@
     
     <modules>
         <module>annotations</module>
+        <module>gradle-plugin</module>
+        <module>maven-plugin</module>
         <module>standalone</module>
+        <module>core</module>
     </modules>
     
 </project>
