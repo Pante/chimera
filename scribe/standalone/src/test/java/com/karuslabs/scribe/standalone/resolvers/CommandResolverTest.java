@@ -80,7 +80,7 @@ class CommandResolverTest {
         var commands = (Map<String, Object>) results.get("commands");
         var command = (Map<String, Object>) commands.get("name");
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
         
         assertEquals(1, results.size());
         assertEquals(1, commands.size());
@@ -117,7 +117,7 @@ class CommandResolverTest {
         resolver.check(element, command, "alias", Type.ALIAS);
         var entry = resolver.names.get("alias");
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
         assertEquals(command, entry.getKey());
         assertEquals(Type.ALIAS, entry.getValue());
     }
@@ -146,7 +146,7 @@ class CommandResolverTest {
     void resolve_map() {
         var results = resolver.resolve(element, command);
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
         
         assertEquals(5, results.size());
         assertArrayEquals(new String[] {"a", "b"}, (String[]) results.get("aliases"));

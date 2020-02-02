@@ -35,6 +35,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.*;
 
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
+import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.*;
 
 
@@ -109,6 +110,11 @@ public class PluginResolver extends Resolver {
             }
             
             var valid = true;
+            
+            if (element.getModifiers().contains(ABSTRACT)) {
+                messager.printMessage(ERROR, "Invalid main class: " + element.asType() + ", main class cannot be abstract", element);
+            }
+            
             if (!types.isAssignable(element.asType(), type)) {
                 messager.printMessage(
                     ERROR, 

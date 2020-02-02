@@ -49,6 +49,7 @@ public abstract class Resolver {
             return;
         }
         
+        
         for (var element : elements) {
             resolve(element, results);
         }

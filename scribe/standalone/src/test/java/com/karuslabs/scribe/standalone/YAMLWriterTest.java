@@ -63,7 +63,7 @@ class YAMLWriterTest {
     void write_throws_exception() throws IOException {
         when(filer.createResource(any(), any(), any(), any())).thenThrow(new IOException("message"));
         
-        writer.write("Hi");
+        writer.write(Map.of());
         
         verify(messager).printMessage(ERROR, "Failed to create plugin.yml");
         verify(messager).printMessage(ERROR, "message");

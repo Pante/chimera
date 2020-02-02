@@ -25,6 +25,7 @@ package com.karuslabs.scribe.standalone.resolvers;
 
 import com.karuslabs.scribe.annotations.Information;
 
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -33,35 +34,81 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@Information(authors = {"Pante"}, description = "description", url = "url", prefix = "prefix")
+@Information(authors = {"Pante"}, description = "description", url = "http://wwww.repo.karuslabs.com", prefix = "prefix")
 class InformationResolverTest {
     
-    Element element = mock(Element.class);
+    Element element = when(mock(Element.class).getAnnotation(Information.class)).thenReturn(InformationResolverTest.class.getAnnotation(Information.class)).getMock();
     Messager messager = mock(Messager.class);
     InformationResolver resolver = new InformationResolver(messager);
+    Information invalid = new Information() {
+        @Override
+        public String[] authors() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String description() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String url() {
+            return "htt://wwww.repo.karuslabs.com";
+        }
+
+        @Override
+        public String prefix() {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        }
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    };
     
     
     @Test
-    void resolve() {
-        when(element.getAnnotation(Information.class)).thenReturn(InformationResolverTest.class.getAnnotation(Information.class));
+    void resolve_element() {
         var results = new HashMap<String, Object>();
         
         resolver.resolve(element, results);
         
         assertArrayEquals(new String[] {"Pante"}, (String[]) results.get("authors"));
         assertEquals("description", results.get("description"));
-        assertEquals("url", results.get("website"));
+        assertEquals("http://wwww.repo.karuslabs.com", results.get("website"));
         assertEquals("prefix", results.get("prefix"));
     }
     
     
     @Test
-    void resolve_empty() {
+    void check() {
+        resolver.check(invalid, element);
+        verify(messager).printMessage(ERROR, "Invalid URL: htt://wwww.repo.karuslabs.com, htt://wwww.repo.karuslabs.com is not a valid URL", element);
+    }
+    
+    
+    @Test
+    void resolve_information() {
+        var results = new HashMap<String, Object>();
+        
+        resolver.resolve(element.getAnnotation(Information.class), results);
+        
+        assertArrayEquals(new String[] {"Pante"}, (String[]) results.get("authors"));
+        assertEquals("description", results.get("description"));
+        assertEquals("http://wwww.repo.karuslabs.com", results.get("website"));
+        assertEquals("prefix", results.get("prefix"));
+    }
+    
+    
+    @Test
+    void resolve_information_empty() {
         when(element.getAnnotation(Information.class)).thenReturn(EmptyInformation.class.getAnnotation(Information.class));
         var results = new HashMap<String, Object>();
         

@@ -92,7 +92,7 @@ class ProcessorTest {
         
         assertFalse(processor.process(Set.of(), environment));
         
-        verifyZeroInteractions(processor.writer);
+        verifyNoInteractions(processor.writer);
     }
 
 } 

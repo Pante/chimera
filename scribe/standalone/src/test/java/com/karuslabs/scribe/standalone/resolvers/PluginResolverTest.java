@@ -38,6 +38,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static javax.lang.model.element.Modifier.ABSTRACT;
 import static javax.tools.Diagnostic.Kind.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +94,7 @@ class PluginResolverTest {
         
         assertTrue(resolver.check(Set.of(element)));
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
         verify(element).accept(resolver.visitor, false);
     }
     
@@ -129,7 +130,7 @@ class PluginResolverTest {
         
         resolver.resolve(element, results);
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
         
         assertEquals(3, results.size());
         assertEquals(TestPlugin.class.getName(), results.get("main"));
@@ -163,6 +164,16 @@ class PluginResolverTest {
         when(type.getEnclosedElements()).thenReturn(List.of());
         
         assertTrue(resolver.visitor.visitType(type, false));
+    }
+    
+    
+    @Test
+    void visitor_visitType_abstract() {
+        when(type.getModifiers()).thenReturn(Set.of(ABSTRACT));
+        
+        resolver.visitor.visitType(type, false);
+        
+        verify(messager).printMessage(ERROR, "Invalid main class: " + type.asType() +", main class cannot be abstract", type);
     }
     
     
@@ -205,7 +216,7 @@ class PluginResolverTest {
         
         assertTrue(resolver.visitor.visitExecutable(executable, false));
         
-        verifyZeroInteractions(messager);
+        verifyNoInteractions(messager);
     }
     
     
