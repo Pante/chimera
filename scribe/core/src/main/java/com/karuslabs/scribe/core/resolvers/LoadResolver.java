@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,55 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core.resolvers;
 
 import com.karuslabs.scribe.annotations.Load;
 
-import java.util.Map;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 import java.util.regex.Matcher;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
-
-import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class LoadResolver extends SingleResolver {
+public class LoadResolver<T> extends UniqueResolver<T> {
     
     private Matcher matcher;
     
     
-    public LoadResolver(Messager messager) {
-        super(messager, "");
+    public LoadResolver(Set<Class<? extends Annotation>> annotations, String name) {
+        super(annotations, name);
         matcher = WORD.matcher("Load");
     }
 
-    
     @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var load = element.getAnnotation(Load.class);
+    protected void resolve(T type) {
+        var load = extractor.single(type, Load.class);
+        var mapping = resolution.mapping();
         
-        results.put("load", load.during().toString());
+        mapping.put("load", load.during().toString());
         
-        check(element, load.before());
-        results.put("loadbefore", load.before());
+        check(type, load.before());
+        mapping.put("loadbefore", load.before());
         
-        check(element, load.optionallyAfter());
-        results.put("softdepend", load.optionallyAfter());
+        check(type, load.optionallyAfter());
+        mapping.put("softdepend", load.optionallyAfter());
         
-        check(element, load.after());
-        results.put("depend", load.after());
+        check(type, load.after());
+        mapping.put("depend", load.after());
     }
     
-    protected void check(Element element, String[] names) {
+    protected void check(T type, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
-                messager.printMessage(
-                    ERROR, 
-                    "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'", 
-                    element
-                );
+                resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
             }
         }
     }
-    
+
 }

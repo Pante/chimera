@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,53 +23,40 @@
  */
 package com.karuslabs.scribe.standalone.resolvers;
 
-import com.karuslabs.scribe.annotations.Load;
+import com.karuslabs.scribe.standalone.Resolver;
 
-import java.util.Map;
-import java.util.regex.Matcher;
+import java.util.Set;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class LoadResolver extends SingleResolver {
+public abstract class SingleResolver extends Resolver {
     
-    private Matcher matcher;
+    protected String annotation;
     
     
-    public LoadResolver(Messager messager) {
-        super(messager, "");
-        matcher = WORD.matcher("Load");
+    public SingleResolver(Messager messager, String annotation) {
+        super(messager);
+        this.annotation = annotation;
     }
-
+    
     
     @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var load = element.getAnnotation(Load.class);
-        
-        results.put("load", load.during().toString());
-        
-        check(element, load.before());
-        results.put("loadbefore", load.before());
-        
-        check(element, load.optionallyAfter());
-        results.put("softdepend", load.optionallyAfter());
-        
-        check(element, load.after());
-        results.put("depend", load.after());
-    }
-    
-    protected void check(Element element, String[] names) {
-        for (var name : names) {
-            if (!matcher.reset(name).matches()) {
+    protected boolean check(Set<? extends Element> elements) {
+        var single = elements.size() <= 1;
+        if (!single) {
+            for (var element : elements) {
                 messager.printMessage(
                     ERROR, 
-                    "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'", 
+                    "Invalid number of @" + annotation + " annotations, plugin must contain only one @" + annotation + " annotation", 
                     element
                 );
             }
         }
+        
+        return single;
     }
-    
+
 }

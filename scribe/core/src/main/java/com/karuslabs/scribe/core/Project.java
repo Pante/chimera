@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.annotations.*;
 
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.util.List;
 
 
-public class APIResolver extends SingleResolver {
-
-    public APIResolver(Messager messager) {
-        super(messager, "API");
-    }
+public @ValueType class Project {
     
-    @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
+    public static Project EMPTY = new Project("", "", List.of(), "", "", "");
+    
+    
+    public final String name;
+    public final String version;
+    public final @Immutable List<String> authors;
+    public final String api;
+    public final String description;
+    public final String url;
+    
+    
+    public Project(String name, String version, List<String> authors, String api, String description, String url) {
+        this.name = name;
+        this.version = version;
+        this.authors = authors;
+        this.api = api;
+        this.description = description;
+        this.url = url;
     }
     
 }

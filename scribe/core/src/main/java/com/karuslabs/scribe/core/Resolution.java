@@ -21,52 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.scribe.core;
+
+import com.karuslabs.scribe.core.Message.Type;
 
 import java.util.*;
 
 
-public class Resolution {
+public class Resolution<T> {
     
-    private Map<String, Object> mapping;
-    private List<String> warnings;
-    private List<String> errors;
-    
+    Map<String, Object> mapping;
+    List<Message<T>> messages;
     
     
     public Resolution() {
-        this(new HashMap<>(), new ArrayList<>(), new ArrayList<>());
-    }
-    
-    public Resolution(Map<String, Object> mapping, List<String> warnings, List<String> errors) {
-        this.mapping = mapping;
-        this.warnings = warnings;
-        this.errors = errors;
+        mapping = new HashMap<>();
+        messages = new ArrayList<>();
     }
     
     
-    public Resolution warn(String warning) {
-        warnings.add(warning);
+    public Resolution error(T location, String message) {
+        messages.add(Message.error(location, message));
         return this;
     }
     
-    public Resolution error(String error) {
-        errors.add(error);
+    public Resolution error(String message) {
+        messages.add(new Message(message, Type.ERROR));
         return this;
-    } 
+    }
+    
+    
+    public Resolution warning(T location, String message) {
+        messages.add(Message.warning(location, message));
+        return this;
+    }
+    
+    public Resolution warning(String message) {
+        messages.add(new Message(message, Type.WARNING));
+        return this;
+    }
+    
+    
+    public Resolution info(T location, String message) {
+        messages.add(Message.info(location, message));
+        return this;
+    }
+    
+    public Resolution info(String message) {
+        messages.add(new Message(message, Type.INFO));
+        return this;
+    }
     
     
     public Map<String, Object> mapping() {
         return mapping;
-    }
-    
-    public List<String> warnings() {
-        return warnings;
-    }
-    
-    public List<String> errors() {
-        return errors;
     }
     
 }

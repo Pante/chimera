@@ -72,6 +72,32 @@ class InformationResolverTest {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     };
+    Information empty = new Information() {
+        @Override
+        public String[] authors() {
+            return new String[]{};
+        }
+
+        @Override
+        public String description() {
+            return "";
+        }
+
+        @Override
+        public String url() {
+            return "";
+        }
+
+        @Override
+        public String prefix() {
+            return "";
+        }
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return Information.class;
+        }
+    };
     
     
     @Test
@@ -109,15 +135,10 @@ class InformationResolverTest {
     
     @Test
     void resolve_information_empty() {
-        when(element.getAnnotation(Information.class)).thenReturn(EmptyInformation.class.getAnnotation(Information.class));
+        when(element.getAnnotation(Information.class)).thenReturn(empty);
         var results = new HashMap<String, Object>();
         
         resolver.resolve(element, results);
     }
-    
-    @Information
-    static class EmptyInformation {
-        
-    }
 
-} 
+}

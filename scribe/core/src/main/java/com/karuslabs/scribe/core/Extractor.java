@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.annotations.API;
-
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 
-public class APIResolver extends SingleResolver {
-
-    public APIResolver(Messager messager) {
-        super(messager, "API");
-    }
+public interface Extractor<T> {
     
-    @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
-    }
+    public <A extends Annotation> List<A> all(T type, Class<A> annotation);
+    
+    public <A extends Annotation> A single(T type, Class<A> annotation);
     
 }

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.standalone.resolvers;
 
-import com.karuslabs.scribe.annotations.Load;
+import com.karuslabs.scribe.annotations.*;
 
 import java.util.HashMap;
 import javax.annotation.processing.Messager;
@@ -35,6 +35,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.karuslabs.scribe.annotations.Phase.*;
+import java.lang.annotation.Annotation;
+
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,6 +50,33 @@ class LoadResolverTest {
     Element element = mock(Element.class);
     Messager messager = mock(Messager.class);
     LoadResolver resolver = new LoadResolver(messager);
+    Load empty = new Load() {
+        @Override
+        public Phase during() {
+            return Phase.POSTWORLD;
+        }
+
+        @Override
+        public String[] before() {
+            return new String[] {};
+        }
+
+        @Override
+        public String[] after() {
+            return new String[] {};
+        }
+
+        @Override
+        public String[] optionallyAfter() {
+            return new String[] {};
+        }
+
+        @Override
+        public Class<? extends Annotation> annotationType() {
+            return Load.class;
+        }
+    
+    };
     
     
     @Test
@@ -67,7 +96,7 @@ class LoadResolverTest {
     
     @Test
     void resolve_empty() {
-        when(element.getAnnotation(Load.class)).thenReturn(EmptyLoad.class.getAnnotation(Load.class));
+        when(element.getAnnotation(Load.class)).thenReturn(empty);
         var results = new HashMap<String, Object>();
         
         resolver.resolve(element, results);
@@ -77,11 +106,6 @@ class LoadResolverTest {
         assertArrayEquals(new String[] {}, (String[]) results.get("loadbefore"));
         assertArrayEquals(new String[] {}, (String[]) results.get("softdepend"));
         assertArrayEquals(new String[] {}, (String[]) results.get("depend"));
-    }
-    
-    @Load
-    static class EmptyLoad {
-        
     }
     
     @Test

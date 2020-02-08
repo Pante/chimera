@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core.resolvers;
 
-import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.scribe.core.*;
 
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 
-public class APIResolver extends SingleResolver {
+public abstract class UniqueResolver<T> extends Resolver<T> {
 
-    public APIResolver(Messager messager) {
-        super(messager, "API");
+    protected String name;
+    
+    
+    public UniqueResolver(Set<Class<? extends Annotation>> annotations, String name) {
+        super(annotations);
+        this.name = name;
     }
+
     
     @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
+    protected boolean check(Set<T> types) {
+        var unique = types.size() <= 1;
+        if (!unique) {
+            for (var type : types) {
+                resolution.error(type, "Invalid number of @" + name + " annotations, plugin must contain only one @" + name + " annotation");
+            }
+        }
+        
+        return unique;
     }
-    
+
+
 }

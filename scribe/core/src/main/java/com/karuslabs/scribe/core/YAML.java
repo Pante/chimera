@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.scribe.core;
 
 import java.io.*;
@@ -34,29 +33,30 @@ import org.snakeyaml.engine.v2.common.*;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 
-public class YAMLWriter {
-
-    String type;
-    File file;
-    Dump dump;
+public abstract class YAML {
+    
+    protected String name;
+    protected Dump dump;
     
     
-    public YAMLWriter(String type, File file) {
-        this(type, file, new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
-    }
-    
-    public YAMLWriter(String type, File file, Dump dump) {
-        this.type = type;
-        this.file = file;
-        this.dump = dump;
+    public YAML(String name) {
+        this.name = name;
+        dump = new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build());
     }
     
     
-    public void write(Map<String, Object> map) throws IOException {
-        try (var writer = new BufferedWriter(new FileWriter(file))) {
-            writer.append("# This file was generated using Scribe " + type + " 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
-                  .append(dump.dumpToString(map));
+    public void write(Map<String, Object> mapping) {
+        try (var writer = writer()) {
+            writer.append("# This file was generated using " + name + "4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
+                  .append(dump.dumpToString(mapping));
+            
+        } catch (IOException e) {
+            handle(e);
         }
     }
+        
+    protected abstract Writer writer() throws IOException;
+    
+    protected abstract void handle(IOException e);
     
 }

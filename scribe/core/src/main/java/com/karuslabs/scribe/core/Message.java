@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.annotations.ValueType;
 
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class APIResolver extends SingleResolver {
+public @ValueType class Message<T> {
 
-    public APIResolver(Messager messager) {
-        super(messager, "API");
+    public static enum Type {
+        INFO, WARNING, ERROR
     }
     
-    @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
+    
+    public final @Nullable T location;
+    public final String value;
+    public final Type type;
+    
+    
+    public static <T> Message<T> error(T location, String value) {
+        return new Message(location, value, Type.ERROR);
+    }
+    
+    public static <T> Message<T> warning(T location, String value) {
+        return new Message(location, value, Type.WARNING);
+    }
+    
+    public static <T> Message<T> info(T location, String value) {
+        return new Message(location, value, Type.INFO);
+    }
+    
+    
+    public Message(String value, Type type) {
+        this(null, value, type);
+    }
+    
+    Message(T location, String value, Type type) {
+        this.location = location;
+        this.value = value;
+        this.type = type;
     }
     
 }

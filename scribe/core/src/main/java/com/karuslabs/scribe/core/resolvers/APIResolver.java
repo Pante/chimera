@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.core.resolvers;
 
-import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.scribe.annotations.*;
 
-import java.util.Map;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.util.Set;
 
 
-public class APIResolver extends SingleResolver {
+public class APIResolver<T> extends UniqueResolver<T> {
 
-    public APIResolver(Messager messager) {
-        super(messager, "API");
+    public APIResolver() {
+        super(Set.of(API.class), "API");
     }
+
     
     @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
+    protected void resolve(T type) {
+       var api = extractor.single(type, API.class);
+       if (api.value() != Version.INFERRED) {
+           resolution.mapping().put("api-version", api.value().version);
+           return;
+       }
+       
+       if (!project.api.isEmpty()) {
+           resolution.mapping().put("api-version", project.api);
+           
+       } else {
+           resolution.mapping().put("api-version", Version.INFERRED.version);
+           resolution.warning(type, "Unable to infer 'api-version', defaulting to '"+ Version.INFERRED.version + "'");
+       }
     }
-    
+
 }
