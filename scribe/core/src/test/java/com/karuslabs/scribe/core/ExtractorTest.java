@@ -23,26 +23,57 @@
  */
 package com.karuslabs.scribe.core;
 
-import org.junit.jupiter.api.Test;
+import com.karuslabs.scribe.annotations.Command;
+
+import javax.lang.model.element.Element;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProjectTest {
+@Command(name = "a")
+@Command(name = "b")
+class ExtractorTest {
     
-    @Test
-    void project() {
-        var project = Project.EMPTY;
+    @Nested
+    class ClassTest {
         
-        assertEquals("", project.name);
-        assertEquals("", project.version);
-        assertTrue(project.authors.isEmpty());
-        assertEquals("", project.api);
-        assertEquals("", project.description);
-        assertEquals("", project.url);
+        @Test
+        void all() {
+            assertArrayEquals(ExtractorTest.class.getAnnotationsByType(Command.class), Extractor.CLASS.all(ExtractorTest.class, Command.class));
+        }
+        
+        @Test
+        void single() {
+            assertEquals(ExtractorTest.class.getAnnotation(Command.class), Extractor.CLASS.single(Extractor.class, Command.class));
+        }
+        
+    }
+    
+    @Nested
+    class ElementTest {
+        
+        Element element = mock(Element.class);
+        
+        @Test
+        void all() {
+            Extractor.ELEMENT.all(element, Command.class);
+            
+            verify(element).getAnnotationsByType(Command.class);
+        }
+        
+        @Test
+        void single() {
+            Extractor.ELEMENT.single(element, Command.class);
+            
+            verify(element).getAnnotation(Command.class);
+        }
+        
     }
 
 } 

@@ -34,8 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE})
 public @interface Plugin {
     
-    String name();
+    String name() default "";
     
-    String version();
+    String version() default "";
     
 }

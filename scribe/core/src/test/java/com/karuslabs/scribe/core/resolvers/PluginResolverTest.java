@@ -23,45 +23,24 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
-import com.karuslabs.scribe.annotations.Load;
+import java.util.stream.Stream;
 
-import java.util.Set;
-import java.util.regex.Matcher;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
 
-public class LoadResolver<T> extends UniqueResolver<T> {
+@ExtendWith(MockitoExtension.class)
+class PluginResolverTest {
     
-    private Matcher matcher;
     
-    
-    public LoadResolver() {
-        super(Set.of(Load.class), "Load");
-        matcher = WORD.matcher("Load");
-    }
 
-    @Override
-    protected void resolve(T type) {
-        var load = extractor.single(type, Load.class);
-        var mapping = resolution.mappings;
-        
-        mapping.put("load", load.during().toString());
-        
-        check(type, load.before());
-        mapping.put("loadbefore", load.before());
-        
-        check(type, load.optionallyAfter());
-        mapping.put("softdepend", load.optionallyAfter());
-        
-        check(type, load.after());
-        mapping.put("depend", load.after());
-    }
-    
-    protected void check(T type, String[] names) {
-        for (var name : names) {
-            if (!matcher.reset(name).matches()) {
-                resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
-            }
-        }
-    }
-
-}
+} 

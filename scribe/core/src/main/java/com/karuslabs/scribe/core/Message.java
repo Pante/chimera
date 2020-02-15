@@ -25,6 +25,8 @@ package com.karuslabs.scribe.core;
 
 import com.karuslabs.annotations.ValueType;
 
+import java.util.Objects;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
@@ -40,27 +42,42 @@ public @ValueType class Message<T> {
     public final Type type;
     
     
-    public static <T> Message<T> error(T location, String value) {
+    public static <T> Message<T> error(@Nullable T location, String value) {
         return new Message(location, value, Type.ERROR);
     }
     
-    public static <T> Message<T> warning(T location, String value) {
+    public static <T> Message<T> warning(@Nullable T location, String value) {
         return new Message(location, value, Type.WARNING);
     }
     
-    public static <T> Message<T> info(T location, String value) {
+    public static <T> Message<T> info(@Nullable T location, String value) {
         return new Message(location, value, Type.INFO);
     }
     
-    
-    public Message(String value, Type type) {
-        this(null, value, type);
-    }
-    
-    Message(T location, String value, Type type) {
+    public Message(@Nullable T location, String value, Type type) {
         this.location = location;
         this.value = value;
         this.type = type;
+    }
+    
+    
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Message<?>)) {
+            return false;
+        }
+        
+        var other = (Message<T>) object;
+        return Objects.equals(location, other.location) && value.equals(other.value) && type == other.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.location);
+        hash = 67 * hash + Objects.hashCode(this.value);
+        hash = 67 * hash + Objects.hashCode(this.type);
+        return hash;
     }
     
 }

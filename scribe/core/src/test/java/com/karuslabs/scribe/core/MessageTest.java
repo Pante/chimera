@@ -25,7 +25,6 @@ package com.karuslabs.scribe.core;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -38,17 +37,6 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 @ExtendWith(MockitoExtension.class)
 class MessageTest {
-    
-    
-    @Test
-    void message() {
-        var message = new Message<>("value", Message.Type.WARNING);
-        
-        assertNull(message.location);
-        assertEquals(message.type, Message.Type.WARNING);
-        assertEquals(message.value, "value");
-    }
-    
     
     @ParameterizedTest
     @MethodSource("message_parameters")
@@ -63,6 +51,26 @@ class MessageTest {
             of(Message.info("location", "value"), Message.Type.INFO),
             of(Message.warning("location", "value"), Message.Type.WARNING),
             of(Message.error("location", "value"), Message.Type.ERROR)
+        );
+    }
+    
+    
+    @ParameterizedTest
+    @MethodSource("equality_parameters")
+    void equality(Object other, boolean expected) {
+        var message = Message.error("location", "value");
+        
+        assertEquals(message.equals(other), expected);
+        assertEquals(message.hashCode() == other.hashCode(), expected);
+    }
+    
+    static Stream<Arguments> equality_parameters() {
+        return Stream.of(
+            of(Message.error("location", "value"), true),
+            of(Message.error("l", "value"), false),
+            of(Message.error("location", "v"), false),
+            of(Message.warning("location", "value"), false),
+            of(new Object(), false)
         );
     }
 

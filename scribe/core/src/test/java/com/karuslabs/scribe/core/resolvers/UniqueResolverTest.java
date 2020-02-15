@@ -21,28 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.scribe.core.resolvers;
+
+import com.karuslabs.scribe.annotations.Command;
+import com.karuslabs.scribe.core.*;
+
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProjectTest {
+class UniqueResolverTest {
+    
+    StubResolver resolver = new StubResolver();
+    Resolution<String> resolution = mock(Resolution.class);
+    
     
     @Test
-    void project() {
-        var project = Project.EMPTY;
+    void check_one() {
+        resolver.initialize(Project.EMPTY, null, resolution);
         
-        assertEquals("", project.name);
-        assertEquals("", project.version);
-        assertTrue(project.authors.isEmpty());
-        assertEquals("", project.api);
-        assertEquals("", project.description);
-        assertEquals("", project.url);
+        assertTrue(resolver.check(Set.of("a")));
+        verifyNoInteractions(resolution);
+    }
+    
+    
+    @Test
+    void check_many() {
+        resolver.initialize(Project.EMPTY, null, resolution);
+        
+        assertFalse(resolver.check(Set.of("a", "b")));
+        verify(resolution).error("a", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
+        verify(resolution).error("b", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
     }
 
-} 
+}
+
+class StubResolver extends UniqueResolver<String> {
+    
+    StubResolver() {
+        super(Set.of(Command.class), "hello");
+    }
+
+    @Override
+    protected void resolve(String type) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+}

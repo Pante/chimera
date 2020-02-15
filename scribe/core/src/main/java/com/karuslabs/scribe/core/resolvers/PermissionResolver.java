@@ -23,10 +23,9 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
-import com.karuslabs.scribe.annotations.Permission;
+import com.karuslabs.scribe.annotations.*;
 import com.karuslabs.scribe.core.*;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -37,8 +36,8 @@ public class PermissionResolver<T> extends Resolver<T> {
     Matcher matcher;
     
     
-    public PermissionResolver(Set<Class<? extends Annotation>> annotations) {
-        super(annotations);
+    public PermissionResolver() {
+        super(Set.of(Permission.class, Permissions.class));
         names = new HashSet<>();
         matcher = PERMISSION.matcher("");
     }
@@ -52,7 +51,7 @@ public class PermissionResolver<T> extends Resolver<T> {
             resolve(permission, permissions);
         }
         
-        resolution.mapping.put("permissions", permissions);
+        resolution.mappings.put("permissions", permissions);
     }
     
     protected void check(T type, Permission permission) {

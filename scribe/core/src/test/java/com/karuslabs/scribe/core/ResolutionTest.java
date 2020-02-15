@@ -21,47 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.annotations.Load;
+import java.util.stream.Stream;
 
-import java.util.Set;
-import java.util.regex.Matcher;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-public class LoadResolver<T> extends UniqueResolver<T> {
+@ExtendWith(MockitoExtension.class)
+class ResolutionTest {
     
-    private Matcher matcher;
+    Resolution<String> resolution = new Resolution<>();
     
     
-    public LoadResolver() {
-        super(Set.of(Load.class), "Load");
-        matcher = WORD.matcher("Load");
-    }
-
-    @Override
-    protected void resolve(T type) {
-        var load = extractor.single(type, Load.class);
-        var mapping = resolution.mappings;
+    @ParameterizedTest
+    @MethodSource("add_parameters")
+    void add(Resolution<String> resolution, Message.Type type) {
+        var message = resolution.messages.get(0);
         
-        mapping.put("load", load.during().toString());
-        
-        check(type, load.before());
-        mapping.put("loadbefore", load.before());
-        
-        check(type, load.optionallyAfter());
-        mapping.put("softdepend", load.optionallyAfter());
-        
-        check(type, load.after());
-        mapping.put("depend", load.after());
+        assertEquals(new Message(null, "hello", type), message);
     }
     
-    protected void check(T type, String[] names) {
-        for (var name : names) {
-            if (!matcher.reset(name).matches()) {
-                resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
-            }
-        }
+    static Stream<Arguments> add_parameters() {
+        return Stream.of(
+            of(new Resolution().error("hello"), Message.Type.ERROR),
+            of(new Resolution().warning("hello"), Message.Type.WARNING),
+            of(new Resolution().info("hello"), Message.Type.INFO)
+        );
     }
 
-}
+} 

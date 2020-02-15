@@ -23,52 +23,47 @@
  */
 package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.core.Message.Type;
-
 import java.util.*;
 
 
 public class Resolution<T> {
     
-    public final Map<String, Object> mapping;
-    List<Message<T>> messages;
+    public final Map<String, Object> mappings;
+    public final List<Message<T>> messages;
     
     
     public Resolution() {
-        mapping = new HashMap<>();
+        mappings = new HashMap<>();
         messages = new ArrayList<>();
     }
     
+        
+    public Resolution<T> error(String message) {
+        return error(null, message);
+    }
     
-    public Resolution error(T location, String message) {
+    public Resolution<T> error(T location, String message) {
         messages.add(Message.error(location, message));
         return this;
     }
     
-    public Resolution error(String message) {
-        messages.add(new Message(message, Type.ERROR));
-        return this;
+        
+    public Resolution<T> warning(String message) {
+        return warning(null, message);
     }
     
-    
-    public Resolution warning(T location, String message) {
+    public Resolution<T> warning(T location, String message) {
         messages.add(Message.warning(location, message));
         return this;
     }
     
-    public Resolution warning(String message) {
-        messages.add(new Message(message, Type.WARNING));
-        return this;
+        
+    public Resolution<T> info(String message) {
+        return info(null, message);
     }
     
-    
-    public Resolution info(T location, String message) {
+    public Resolution<T> info(T location, String message) {
         messages.add(Message.info(location, message));
-        return this;
-    }
-    
-    public Resolution info(String message) {
-        messages.add(new Message(message, Type.INFO));
         return this;
     }
     

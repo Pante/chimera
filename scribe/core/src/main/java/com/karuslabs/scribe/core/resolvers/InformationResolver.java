@@ -49,31 +49,31 @@ public class InformationResolver<T> extends UniqueResolver<T> {
     }
     
     protected void resolve(Information information) {
-        var mapping = resolution.mapping;
+        var mappings = resolution.mappings;
         
         if (information.authors().length > 0) {
-            mapping.put("authors", information.authors());
+            mappings.put("authors", information.authors());
             
         } else if (!project.authors.isEmpty()) {
-            mapping.put("authors", project.authors);
+            mappings.put("authors", project.authors);
         }
         
         if (!information.description().isEmpty()) {
-            mapping.put("description", information.description());
+            mappings.put("description", information.description());
             
         } else if (!project.description.isEmpty()) {
-            mapping.put("description", project.description);
+            mappings.put("description", project.description);
         }
         
         if (!information.url().isEmpty()) {
-            mapping.put("website", information.url());
+            mappings.put("website", information.url());
             
         } else if (!project.url.isEmpty()) {
-            mapping.put("description", project.url);
+            mappings.put("website", project.url);
         }
         
         if (!information.prefix().isEmpty()) {
-            mapping.put("prefix", information.prefix());
+            mappings.put("prefix", information.prefix());
         }
     }
 

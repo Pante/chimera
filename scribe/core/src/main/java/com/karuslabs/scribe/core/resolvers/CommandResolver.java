@@ -66,7 +66,7 @@ public class CommandResolver<T> extends Resolver<T> {
             commands.put(command.name(), resolve(type, command));
         }
         
-        resolution.mapping.put("commands", commands);
+        resolution.mappings.put("commands", commands);
     }
     
     protected void check(T type, Command command) {
@@ -90,10 +90,10 @@ public class CommandResolver<T> extends Resolver<T> {
         if (entry == null) {
             names.put(name, new SimpleEntry<>(command, label));
             
-        } else if (type == NAME && entry.getValue() == NAME) {
+        } else if (label == NAME && entry.getValue() == NAME) {
             resolution.error(type, "Conflicting command names: '" + name + "', command names must be unique");
             
-        } else if (type == ALIAS && entry.getValue() == ALIAS) {
+        } else if (label == ALIAS && entry.getValue() == ALIAS) {
             resolution.error(type, "Conflicting command aliases: '" + name + "' for '" + command.name() + "' and '" 
                                  + entry.getKey().name() + "', command aliases must be unique");
             

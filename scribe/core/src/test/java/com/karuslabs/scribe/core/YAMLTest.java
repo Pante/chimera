@@ -23,49 +23,67 @@
  */
 package com.karuslabs.scribe.core;
 
-import java.lang.annotation.Annotation;
-import javax.lang.model.element.Element;
+import java.io.*;
+import java.util.Map;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
 
 
-public interface Extractor<T> {
+@ExtendWith(MockitoExtension.class)
+class YAMLTest {
     
-    public static final Extractor<Class<?>> CLASS = new ClassExtractor();
-    public static final Extractor<Element> ELEMENT = new ElementExtractor();
+    StubYAML yaml = spy(new StubYAML());
     
     
-    public <A extends Annotation> A[] all(T type, Class<A> annotation);
+    @Test
+    void write() throws IOException {
+        yaml.write(Map.of("k", "v"));
+        
+        verify(yaml.writer, times(2)).append(any(CharSequence.class));
+        verify(yaml.writer).append("k: v\n");
+    }
     
-    public <A extends Annotation> @Nullable A single(T type, Class<A> annotation);
     
+    @Test
+    void handle() throws IOException {
+        doThrow(IOException.class).when(yaml).writer();
+        
+        yaml.write(Map.of());
+        
+        verify(yaml).handle(any(IOException.class));
+    }
+
 }
 
+class StubYAML extends YAML {
 
-class ClassExtractor implements Extractor<Class<?>> {
-
-    @Override
-    public <A extends Annotation> A[] all(Class<?> type, Class<A> annotation) {
-        return type.getAnnotationsByType(annotation);
-    }
-
-    @Override
-    public <A extends Annotation> A single(Class<?> type, Class<A> annotation) {
-        return type.getAnnotation(annotation);
+    Writer writer;
+    
+    
+    StubYAML() {
+        super("name");
+        try {
+            writer = mock(Writer.class);
+            when(writer.append(any())).thenReturn(writer);
+            
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
     
-}
-
-class ElementExtractor implements Extractor<Element> {
-
+    
     @Override
-    public <A extends Annotation> A[] all(Element element, Class<A> annotation) {
-        return element.getAnnotationsByType(annotation);
+    protected Writer writer() throws IOException {
+        return writer;
     }
 
     @Override
-    public <A extends Annotation> A single(Element element, Class<A> annotation) {
-        return element.getAnnotation(annotation);
+    protected void handle(IOException e) {
+        
     }
     
 }
