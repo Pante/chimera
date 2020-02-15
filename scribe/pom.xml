@@ -19,6 +19,7 @@
         <module>maven-plugin</module>
         <module>standalone</module>
         <module>core</module>
+        <module>scribe-plugin</module>
     </modules>
     
 </project>

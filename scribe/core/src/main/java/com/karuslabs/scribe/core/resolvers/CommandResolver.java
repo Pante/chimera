@@ -66,7 +66,7 @@ public class CommandResolver<T> extends Resolver<T> {
             commands.put(command.name(), resolve(type, command));
         }
         
-        resolution.mapping().put("commands", commands);
+        resolution.mapping.put("commands", commands);
     }
     
     protected void check(T type, Command command) {

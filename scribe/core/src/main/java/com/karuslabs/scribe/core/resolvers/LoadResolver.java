@@ -43,7 +43,7 @@ public class LoadResolver<T> extends UniqueResolver<T> {
     @Override
     protected void resolve(T type) {
         var load = extractor.single(type, Load.class);
-        var mapping = resolution.mapping();
+        var mapping = resolution.mapping;
         
         mapping.put("load", load.during().toString());
         

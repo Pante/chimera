@@ -52,7 +52,7 @@ public class PermissionResolver<T> extends Resolver<T> {
             resolve(permission, permissions);
         }
         
-        resolution.mapping().put("permissions", permissions);
+        resolution.mapping.put("permissions", permissions);
     }
     
     protected void check(T type, Permission permission) {
