@@ -58,10 +58,7 @@ public abstract class Resolver<T> {
     
     
     public void resolve(Set<T> types) {
-        if (!check(types)) {
-            return;
-        }
-        
+        check(types);
         for (var type : types) {
             resolve(type);
         }
@@ -69,7 +66,7 @@ public abstract class Resolver<T> {
         clear();
     }
     
-    protected boolean check(Set<T> types) { return true; }
+    protected void check(Set<T> types) {}
   
     protected abstract void resolve(T type);     
     

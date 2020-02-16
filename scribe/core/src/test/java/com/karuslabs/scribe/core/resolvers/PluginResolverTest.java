@@ -60,14 +60,14 @@ class PluginResolverTest {
     
     @Test
     void check() {
-        assertTrue(resolver.check(Set.of(PluginResolverTest.class)));
+        resolver.check(Set.of(PluginResolverTest.class));
         assertTrue(resolution.messages.isEmpty());
     }
     
     
     @Test
     void check_none() {
-        assertFalse(resolver.check(Set.of())); 
+        resolver.check(Set.of()); 
         assertEquals(
             Message.error(null, "No @Plugin annotation found, plugin must contain a @Plugin annotation"),
             resolution.messages.get(0)
@@ -77,7 +77,7 @@ class PluginResolverTest {
     
     @Test
     void check_many() {
-        assertFalse(resolver.check(Set.of(Errors.class, Empty.class)));
+        resolver.check(Set.of(Errors.class, Empty.class));
         assertEquals(
             Set.of(
                 Message.error(Empty.class, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation"),
@@ -142,10 +142,10 @@ class PluginResolverTest {
     static class StubResolver extends PluginResolver<Class<?>> {
 
         @Override
-        protected boolean check(Class<?> type) {
-            return true;
+        protected void check(Class<?> type) {
+            
         }
-
+        
         @Override
         protected String stringify(Class<?> type) {
             return type.getName();
@@ -171,7 +171,7 @@ class ClassPluginResolverTest {
     
     @Test
     void check() {
-        assertTrue(resolver.check(Valid.class));
+        resolver.check(Valid.class);
         assertTrue(resolution.messages.isEmpty());
         
     }
@@ -184,7 +184,7 @@ class ClassPluginResolverTest {
     
     @Test
     void check_abstract() {
-        assertFalse(resolver.check(Abstract.class));
+        resolver.check(Abstract.class);
         assertEquals(
             Message.error(Abstract.class, "Invalid main class: '" + Abstract.class.getName() + "', main class cannot be abstract"),
             resolution.messages.get(0)
@@ -198,7 +198,7 @@ class ClassPluginResolverTest {
     
     @Test
     void check_superclass() {
-        assertFalse(resolver.check(ClassPluginResolverTest.class));
+        resolver.check(ClassPluginResolverTest.class);
         assertEquals(
             Message.error(
                 ClassPluginResolverTest.class, 
@@ -211,7 +211,7 @@ class ClassPluginResolverTest {
     
     @Test
     void check_constructor() {
-        assertFalse(resolver.check(Constructor.class));
+        resolver.check(Constructor.class);
         assertEquals(1, resolution.messages.size());
         assertEquals(
             Message.error(
@@ -265,7 +265,7 @@ class ElementPluginResolverTest {
     void check() {
         when(element.accept(resolver.visitor, false)).thenReturn(true);
         
-        assertTrue(resolver.check(element));
+        resolver.check(element);
         
         verify(element).accept(resolver.visitor, false);
     }

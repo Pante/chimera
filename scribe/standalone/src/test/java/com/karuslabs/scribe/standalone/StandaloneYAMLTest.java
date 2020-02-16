@@ -21,56 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.standalone;
 
-import java.util.*;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import java.io.*;
+import javax.annotation.processing.*;
+import javax.tools.Diagnostic;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class SingleResolverTest {
+class StandaloneYAMLTest {
     
+    Filer filer = mock(Filer.class);
     Messager messager = mock(Messager.class);
-    SingleResolver resolver = new StubResolver(messager);
-    Element first = mock(Element.class);
-    Element second = mock(Element.class);
+    StandaloneYAML yaml = new StandaloneYAML(filer, messager);
     
     
     @Test
-    void check_single() {
-        assertTrue(resolver.check(Set.of(first)));
-        verifyNoInteractions(messager);
-    }
-    
-    
-    @Test
-    void check_multiple() {
-        assertFalse(resolver.check(Set.of(first, second)));
+    void writer() throws IOException {
+        var writer = mock(Writer.class);
+        FileObject object = when(mock(FileObject.class).openWriter()).thenReturn(writer).getMock();
+        when(filer.createResource(any(), any(), any())).thenReturn(object);
         
-        verify(messager).printMessage(ERROR, "Invalid number of @Something annotations, plugin must contain only one @Something annotation", first);
-        verify(messager).printMessage(ERROR, "Invalid number of @Something annotations, plugin must contain only one @Something annotation", second);
-    }
-
-}
-
-class StubResolver extends SingleResolver {
-
-    public StubResolver(Messager messager) {
-        super(messager, "Something");
-    }
-
-    @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        assertEquals(writer, yaml.writer());
+        verify(filer).createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml");
+        verify(object).openWriter();
     }
     
-}
+    
+    @Test
+    void handle() {
+        yaml.handle(new IOException("Message"));
+        
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Failed to create plugin.yml");
+        verify(messager).printMessage(Diagnostic.Kind.ERROR, "Message");
+    }
+
+} 

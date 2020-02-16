@@ -47,7 +47,7 @@ class UniqueResolverTest {
     void check_one() {
         resolver.initialize(Project.EMPTY, null, resolution);
         
-        assertTrue(resolver.check(Set.of("a")));
+        resolver.check(Set.of("a"));
         verifyNoInteractions(resolution);
     }
     
@@ -56,7 +56,7 @@ class UniqueResolverTest {
     void check_many() {
         resolver.initialize(Project.EMPTY, null, resolution);
         
-        assertFalse(resolver.check(Set.of("a", "b")));
+        resolver.check(Set.of("a", "b"));
         verify(resolution).error("a", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
         verify(resolution).error("b", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
     }

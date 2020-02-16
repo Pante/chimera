@@ -41,15 +41,15 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProcessTest {
+class ProcessorTest {
     
     
-    StubProcess process = new StubProcess();
+    StubProcessor processor = new StubProcessor();
     
     
     @Test
     void loader() throws MalformedURLException {
-        var loader = Process.loader(List.of(new File("").toURI().toURL().toString()));
+        var loader = Processor.loader(List.of(new File("").toURI().toURL().toString()));
         
         assertTrue(loader instanceof URLClassLoader);
     }
@@ -57,29 +57,29 @@ class ProcessTest {
     
     @Test
     void loader_throws_exception() {
-        assertTrue(assertThrows(UncheckedIOException.class, () -> Process.loader(List.of(""))).getCause() instanceof MalformedURLException);
+        assertTrue(assertThrows(UncheckedIOException.class, () -> Processor.loader(List.of(""))).getCause() instanceof MalformedURLException);
     }
     
     
     @Test
     void run() {
-        assertEquals(6, process.resolvers.size());
+        assertEquals(6, processor.resolvers.size());
         
-        var resolver = process.resolver;
-        process.resolvers = List.of(resolver);
+        var resolver = processor.resolver;
+        processor.resolvers = List.of(resolver);
         
-        var resolution = process.run();
+        var resolution = processor.run();
         
-        verify(resolver).initialize(process.project, Extractor.CLASS, resolution);
-        verify(resolver).resolve(Set.of(StubProcess.class));
+        verify(resolver).initialize(processor.project, Extractor.CLASS, resolution);
+        verify(resolver).resolve(Set.of(StubProcessor.class));
     }
     
     
     @Test
     void annotations() {
-        var annotations = process.annotations();
+        var annotations = processor.annotations();
         
-        assertNotNull(process.annotations);
+        assertNotNull(processor.annotations);
         assertEquals(
             Set.of(
                 API.class,
@@ -98,23 +98,23 @@ class ProcessTest {
 }
 
 
-class StubProcess extends Process<Class<?>> {
+class StubProcessor extends Processor<Class<?>> {
     
     PluginResolver<Class<?>> resolver;
     
     
-    StubProcess() {
+    StubProcessor() {
         this(when(mock(PluginResolver.class).annotations()).thenReturn(Set.of(Plugin.class)).getMock());
     }
     
-    StubProcess(PluginResolver<Class<?>> resolver) {
+    StubProcessor(PluginResolver<Class<?>> resolver) {
         super(mock(Project.class), Extractor.CLASS, resolver);
         this.resolver = resolver;
     }
 
     @Override
     protected Stream<Class<?>> annotated(Class<? extends Annotation> annotation) {
-        return Stream.of(StubProcess.class);
+        return Stream.of(StubProcessor.class);
     }
 
 }

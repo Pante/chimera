@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone.resolvers;
+package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.API;
+import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Processor;
+import com.karuslabs.scribe.core.resolvers.PluginResolver;
 
-import java.util.Map;
-import javax.annotation.processing.Messager;
+import java.lang.annotation.Annotation;
+import java.util.stream.Stream;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class APIResolver extends SingleResolver {
-
-    public APIResolver(Messager messager) {
-        super(messager, "API");
+public class StandaloneProcessor extends Processor<Element> {
+    
+    @Nullable RoundEnvironment environment;
+    
+    
+    public StandaloneProcessor(Elements elements, Types types) {
+        super(Project.EMPTY, Extractor.ELEMENT, PluginResolver.element(elements, types));
     }
+    
+    
+    public void initialize(RoundEnvironment environment) {
+        this.environment = environment;
+    }
+    
     
     @Override
-    protected void resolve(Element element, Map<String, Object> results) {
-        var api = element.getAnnotation(API.class);
-        results.put("api-version", api.value().version);
+    protected Stream<Element> annotated(Class<? extends Annotation> annotation) {
+        return environment.getElementsAnnotatedWith(annotation).stream().map(element -> element);
     }
-    
+
 }

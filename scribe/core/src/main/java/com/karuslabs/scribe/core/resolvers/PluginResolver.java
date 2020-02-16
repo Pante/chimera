@@ -56,23 +56,21 @@ public abstract class PluginResolver<T> extends Resolver<T> {
     
     
     @Override
-    protected boolean check(Set<T> types) {
+    protected void check(Set<T> types) {
         if (types.isEmpty()) {
             resolution.error("No @Plugin annotation found, plugin must contain a @Plugin annotation");
-            return false;
             
         } else if (types.size() > 1) {
             for (var type : types) {
                 resolution.error(type, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation");
             }
-            return false;
             
         } else {
-            return check(new ArrayList<>(types).get(0));
+            check(new ArrayList<>(types).get(0));
         }
     }
     
-    protected abstract boolean check(T type);
+    protected abstract void check(T type);
     
     
     
@@ -112,12 +110,9 @@ class ClassPluginResolver extends PluginResolver<Class<?>> {
     
     
     @Override
-    protected boolean check(Class<?> type) {
-        var valid = true;
-        
+    protected void check(Class<?> type) {
         if ((type.getModifiers() & ABSTRACT) != 0) {
             resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot be abstract");
-            valid = false;
         }
         
         if (!org.bukkit.plugin.Plugin.class.isAssignableFrom(type)) {
@@ -125,17 +120,13 @@ class ClassPluginResolver extends PluginResolver<Class<?>> {
                 type, 
                 "Invalid main class: '" + type.getName() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
             );
-            valid = false;
         }
         
         for (var constructor : type.getDeclaredConstructors()) {
             if (constructor.getParameterCount() != 0 ) {
                 resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot contain constructors with parameters");
-                valid = false;
             }
         }
-        
-        return valid;
     }
 
     @Override
@@ -161,8 +152,8 @@ class ElementPluginResolver extends PluginResolver<Element> {
     
     
     @Override
-    protected boolean check(Element type) {
-        return type.accept(visitor, false);
+    protected void check(Element type) {
+        type.accept(visitor, false);
     }
 
     @Override

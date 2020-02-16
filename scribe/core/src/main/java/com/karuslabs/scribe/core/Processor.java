@@ -36,18 +36,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static java.util.stream.Collectors.*;
 
 
-public abstract class Process<T> {
+public abstract class Processor<T> {
     
     public static ClassLoader loader(List<String> classpaths) {
-        return URLClassLoader.newInstance(
-            classpaths.stream().map(classpath -> {
+        return URLClassLoader.newInstance(classpaths.stream().map(classpath -> {
                 try {
                     return new URL(classpath);
                 } catch (MalformedURLException e) {
                     throw new UncheckedIOException(e);
                 }
             }).toArray(URL[]::new),
-            Process.class.getClassLoader()
+            Processor.class.getClassLoader()
         );
     } 
     
@@ -58,7 +57,7 @@ public abstract class Process<T> {
     @Nullable Set<Class<? extends Annotation>> annotations;
     
     
-    public Process(Project project, Extractor<T> extractor, PluginResolver<T> resolver) {
+    public Processor(Project project, Extractor<T> extractor, PluginResolver<T> resolver) {
         this(project, extractor, List.of(
             resolver,
             new APIResolver(),
@@ -69,7 +68,7 @@ public abstract class Process<T> {
         ));
     }
     
-    public Process(Project project, Extractor<T> extractor, List<Resolver<T>> resolvers) {
+    public Processor(Project project, Extractor<T> extractor, List<Resolver<T>> resolvers) {
         this.project = project;
         this.extractor = extractor;
         this.resolvers = resolvers;
@@ -77,7 +76,7 @@ public abstract class Process<T> {
     
     
     
-    public Resolution run() {
+    public Resolution<T> run() {
         var resolution = new Resolution<T>();
         for (var resolver : resolvers) {
             var types = resolver.annotations().stream().collect(flatMapping(this::annotated, toSet()));

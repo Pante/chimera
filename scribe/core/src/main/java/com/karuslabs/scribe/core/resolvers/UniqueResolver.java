@@ -41,15 +41,12 @@ public abstract class UniqueResolver<T> extends Resolver<T> {
 
     
     @Override
-    protected boolean check(Set<T> types) {
-        var unique = types.size() <= 1;
-        if (!unique) {
+    protected void check(Set<T> types) {
+        if (types.size() > 1) {
             for (var type : types) {
                 resolution.error(type, "Invalid number of @" + name + " annotations, plugin must contain only one @" + name + " annotation");
             }
         }
-        
-        return unique;
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,46 +23,38 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import java.io.IOException;
-import java.util.Map;
-import java.time.LocalDateTime;
+import com.karuslabs.scribe.core.YAML;
+
+import java.io.*;
+
 import javax.annotation.processing.*;
-import javax.tools.*;
+import javax.tools.StandardLocation;
 
-import org.snakeyaml.engine.v2.api.*;
-import org.snakeyaml.engine.v2.common.*;
-
-import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
-public class YAMLWriter {
-    
+public class StandaloneYAML extends YAML {
+
     Filer filer;
     Messager messager;
-    Dump dump;
     
     
-    public YAMLWriter(Filer filer, Messager messager) {
-        this(filer, messager, new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build()));
-    }
-    
-    public YAMLWriter(Filer filer, Messager messager, Dump dump) {
+    public StandaloneYAML(Filer filer, Messager messager) {
+        super("Scribe Standalone");
         this.filer = filer;
         this.messager = messager;
-        this.dump = dump;
     }
     
     
-    public void write(Map<String, Object> map) {
-        try (var writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml").openWriter()) {
-            writer.append("# This file was generated using Scribe Standalone 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
-                  .append(dump.dumpToString(map));
-            
-        } catch (IOException e) {
-            messager.printMessage(ERROR, "Failed to create plugin.yml");
-            messager.printMessage(ERROR, e.getMessage());
-        }
+    @Override
+    protected Writer writer() throws IOException {
+        return filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml").openWriter();
     }
-            
+
+    @Override
+    protected void handle(IOException e) {
+        messager.printMessage(ERROR, "Failed to create plugin.yml");
+        messager.printMessage(ERROR, e.getMessage());
+    }
+
 }

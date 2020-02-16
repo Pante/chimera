@@ -67,21 +67,10 @@ class ResolverTest {
     
     
     @Test
-    void resolve_check_false() {
-        doReturn(false).when(resolver).check(Set.of("a"));
-        
-        resolver.resolve(Set.of("a"));
-        
-        verify(resolver, times(0)).resolve(any(String.class));
-        verify(resolver, times(0)).clear();
-    }
-    
-    
-    @Test
     void check() {
         var set = mock(Set.class);
         
-        assertTrue(resolver.check(set));
+        resolver.check(set);
         verifyNoInteractions(set);
     }
     

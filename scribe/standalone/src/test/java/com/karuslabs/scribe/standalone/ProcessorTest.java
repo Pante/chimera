@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,9 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.Plugin;
+import com.karuslabs.scribe.core.Resolution;
 
-import java.util.*;
+import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.util.*;
@@ -41,58 +41,76 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProcessorTest {
     
-    Processor processor = new Processor();
-    Messager messager = mock(Messager.class);
-    Types types = mock(Types.class);
+    ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
     Elements elements = mock(Elements.class);
-    RoundEnvironment environment = mock(RoundEnvironment.class);
+    Types types = mock(Types.class);
+    TypeElement element = mock(TypeElement.class);
+    Filer filer = mock(Filer.class);
+    Messager messager = mock(Messager.class);
+    Processor processor = spy(new Processor());
+    Resolution<Element> resolution;
     
     
     @BeforeEach
     void before() {
-        when(elements.getTypeElement(any())).thenReturn(mock(TypeElement.class));
+        when(environment.getElementUtils()).thenReturn(elements);
+        when(environment.getTypeUtils()).thenReturn(types);
+        when(environment.getFiler()).thenReturn(filer);
+        when(environment.getMessager()).thenReturn(messager);
+        
+        when(elements.getTypeElement(any())).thenReturn(element);
+        
+        processor.init(environment);
+        resolution = new Resolution<Element>();
     }
     
     
     @Test
     void init() {
-        ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
-        when(environment.getMessager()).thenReturn(messager);
-        when(environment.getTypeUtils()).thenReturn(types);
-        when(environment.getElementUtils()).thenReturn(elements);
-        
-        processor.init(environment);
-        
-        assertEquals(8, processor.resolvers.size());
-        assertNotNull(processor.writer);
+        assertNotNull(processor.processor);
+        assertNotNull(processor.yaml);
     }
     
     
     @Test
     void process() {
-        doReturn(Set.of(mock(Element.class))).when(environment).getElementsAnnotatedWithAny(Set.of(Plugin.class));
-        when(environment.getElementsAnnotatedWith(Plugin.class)).thenReturn(Set.of());
+        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
         when(environment.processingOver()).thenReturn(false);
         
-        Resolver resolver = mock(Resolver.class);
-        processor.resolvers.put(Plugin.class, resolver);
-        processor.writer = mock(YAMLWriter.class);
+        processor.processor = when(mock(StandaloneProcessor.class).run()).thenReturn(resolution).getMock();
+        processor.yaml = mock(StandaloneYAML.class);
+        resolution.error(element, "error").warning(element, "warning").info(element, "info");
         
         assertFalse(processor.process(Set.of(), environment));
+        verify(processor).error(element, "error");
+        verify(processor).warn(element, "warning");
+        verify(processor).note(element, "info");
+    }
+    
+    
+    @Test
+    void process_over() {
+        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
+        when(environment.processingOver()).thenReturn(true);
         
-        verify(resolver).resolve(any(Set.class), any(Map.class));
-        verify(processor.writer).write(any(Map.class));
+        processor.processor = when(mock(StandaloneProcessor.class).run()).thenReturn(resolution).getMock();
+        processor.yaml = mock(StandaloneYAML.class);
+        resolution.error(element, "error").warning(element, "warning").info(element, "info");
+        
+        assertFalse(processor.process(Set.of(), environment));
+        verify(processor, times(0)).error(element, "error");
+        verify(processor, times(0)).warn(element, "warning");
+        verify(processor, times(0)).note(element, "info");
     }
     
     
     @Test
     void process_empty() {
-        when(environment.getElementsAnnotatedWithAny(Set.of())).thenReturn(Set.of());
-        processor.writer = mock(YAMLWriter.class);
+        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of()).getMock();
+        processor.processor = mock(StandaloneProcessor.class);
         
         assertFalse(processor.process(Set.of(), environment));
-        
-        verifyNoInteractions(processor.writer);
+        verify(processor.processor, times(0)).initialize(any());
     }
 
 } 

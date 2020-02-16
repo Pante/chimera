@@ -37,6 +37,13 @@
         </dependency>
         
         <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>scribe-core</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service-annotations</artifactId>
             <version>1.0-rc6</version>
@@ -47,13 +54,6 @@
             <artifactId>spigot-api</artifactId>
             <version>1.15-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.snakeyaml</groupId>
-            <artifactId>snakeyaml-engine</artifactId>
-            <version>2.1</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
     

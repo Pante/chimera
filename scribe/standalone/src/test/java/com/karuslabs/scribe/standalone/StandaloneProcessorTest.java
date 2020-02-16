@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,54 +23,47 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import java.util.*;
-import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import com.karuslabs.scribe.annotations.Plugin;
+
+import java.util.Set;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ResolverTest {
+class StandaloneProcessorTest {
     
+    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
+    Types types = mock(Types.class);
+    RoundEnvironment environment = mock(RoundEnvironment.class);
+    StandaloneProcessor processor = new StandaloneProcessor(elements, types);
     Element element = mock(Element.class);
-    Set<Element> elements = Set.of(element);
-    Messager messager = mock(Messager.class);
-    Resolver resolver = spy(new Resolver(messager) {
-        @Override
-        protected void resolve(Element element, Map<String, Object> results) {
-            
-        }
-    });
     
     
     @Test
-    void resolve() {
-        resolver.resolve(elements, Map.of());
+    void initalize() {
+        processor.initialize(environment);
         
-        verify(resolver).resolve(element, Map.of());
-        verify(resolver).clear();
+        assertEquals(environment, processor.environment);
     }
     
     
     @Test
-    void resolve_nothing() {
-        doReturn(false).when(resolver).check(elements);
+    void annotated() {
+        doReturn(Set.of(element)).when(environment).getElementsAnnotatedWith(Plugin.class);
+
+        processor.environment = environment;
         
-        resolver.resolve(elements, Map.of());
-        
-        verify(resolver, times(0)).resolve(element, Map.of());
-    }
-    
-    
-    @Test
-    void validate() {
-        assertTrue(resolver.check(Set.of()));
+        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
     }
 
 } 

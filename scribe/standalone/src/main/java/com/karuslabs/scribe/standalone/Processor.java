@@ -27,14 +27,11 @@ package com.karuslabs.scribe.standalone;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processors.AnnotationProcessor;
-import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.standalone.resolvers.*;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 
 
 @AutoService(javax.annotation.processing.Processor.class)
@@ -42,48 +39,46 @@ import javax.lang.model.element.TypeElement;
 @SupportedAnnotationTypes("com.karuslabs.scribe.annotations.*")
 public class Processor extends AnnotationProcessor {
     
-    Map<Class<? extends Annotation>, Resolver> resolvers;
-    YAMLWriter writer;
-    
-    
-    public Processor() {
-        resolvers = new HashMap<>();
-    }
+    StandaloneProcessor processor;
+    StandaloneYAML yaml;
     
     
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
-        var commandResolver = new CommandResolver(messager);
-        var permissionResolver = new PermissionResolver(messager);
-        
-        resolvers.put(API.class, new APIResolver(messager));
-        resolvers.put(Command.class, commandResolver);
-        resolvers.put(Commands.class, commandResolver);
-        resolvers.put(Information.class, new InformationResolver(messager));
-        resolvers.put(Load.class, new LoadResolver(messager));
-        resolvers.put(Permission.class, permissionResolver);
-        resolvers.put(Permissions.class, permissionResolver);
-        resolvers.put(Plugin.class, new PluginResolver(elements, types, messager));
-        
-        writer = new YAMLWriter(environment.getFiler(), messager);
+        processor = new StandaloneProcessor(elements, types);
+        yaml = new StandaloneYAML(environment.getFiler(), messager);
     }
     
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        if (environment.getElementsAnnotatedWithAny(resolvers.keySet()).isEmpty()) {
+        if (environment.getElementsAnnotatedWithAny(processor.annotations()).isEmpty()) {
             return false;
         }
         
-        var results = new HashMap<String, Object>();
-        
-        for (var entry : resolvers.entrySet()) {
-            entry.getValue().resolve(environment.getElementsAnnotatedWith(entry.getKey()), results);
-        }
-        
+        processor.initialize(environment);
+        var resolution = processor.run();
         if (!environment.processingOver()) {
-            writer.write(results);
+            yaml.write(resolution.mappings);
+            for (var message : resolution.messages) {
+                switch (message.type) {
+                    case ERROR:
+                        error(message.location, message.value);
+                        break;
+
+                    case WARNING:
+                        warn(message.location, message.value);
+                        break;
+
+                    case INFO:
+                        note(message.location, message.value);
+                        break;
+
+                    default:
+                        throw new UnsupportedOperationException("Unsupported type: " + message.type);
+                }
+            }
         }
         
         return false;
