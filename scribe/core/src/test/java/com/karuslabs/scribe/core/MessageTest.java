@@ -25,6 +25,7 @@ package com.karuslabs.scribe.core;
 
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -73,5 +74,14 @@ class MessageTest {
             of(new Object(), false)
         );
     }
-
+    
+    
+    @Test
+    void toString_equals() {
+        assertEquals(
+            Message.error(Object.class, "this is a message").toString(),
+            "[ERROR] class java.lang.Object: this is a message"
+        );
+    }
+    
 } 

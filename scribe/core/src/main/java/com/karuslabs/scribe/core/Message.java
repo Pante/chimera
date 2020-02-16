@@ -80,4 +80,9 @@ public @ValueType class Message<T> {
         return hash;
     }
     
+    @Override
+    public String toString() {
+        return "[" + type + "] " + location + ": " + value;
+    }
+    
 }

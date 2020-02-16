@@ -23,15 +23,29 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.annotations.Ignored;
 import com.karuslabs.scribe.annotations.Plugin;
 import com.karuslabs.scribe.core.Resolver;
 
 import java.util.*;
 import java.util.regex.Matcher;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
+
+import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
+import static javax.lang.model.element.Modifier.ABSTRACT;
+
 
 
 public abstract class PluginResolver<T> extends Resolver<T> {
-
+    
+    public static final PluginResolver<Class<?>> CLASS = new ClassPluginResolver();
+    public static PluginResolver<Element> element(Elements elements, Types types) {
+        return new ElementPluginResolver(elements, types);
+    }
+    
+    
     Matcher matcher;
     
     
@@ -68,23 +82,143 @@ public abstract class PluginResolver<T> extends Resolver<T> {
         
         resolution.mappings.put("main", stringify(type));
         
-        if (!matcher.reset(plugin.name()).matches()) {
-            resolution.error(type, "Invalid name: '" + plugin.name() + "', name must contain only alphanumeric characters and '_'");
+        var name = plugin.name().isEmpty() ? project.name : plugin.name();
+        if (!matcher.reset(name).matches()) {
+            resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
         }
         
-        resolution.mappings.put("name", plugin.name());
+        resolution.mappings.put("name", name);
         
-        if (!VERSIONING.matcher(plugin.version()).matches()) {
+        var version = plugin.version().isEmpty() ? project.version : plugin.version();
+        if (!VERSIONING.matcher(version).matches()) {
             resolution.warning(
                 type, 
-                "Unconventional versioning scheme: '" + plugin.version() + "', " +
+                "Unconventional versioning scheme: '" + version + "', " +
                 "it is highly recommended that versions follows SemVer, https://semver.org/"
             );
         }
         
-        resolution.mappings.put("version", plugin.version());
+        resolution.mappings.put("version", version);
     }
     
     protected abstract String stringify(T type);
 
+}
+
+
+class ClassPluginResolver extends PluginResolver<Class<?>> {
+    
+    static final int ABSTRACT = 0x00000400;
+    
+    
+    @Override
+    protected boolean check(Class<?> type) {
+        var valid = true;
+        
+        if ((type.getModifiers() & ABSTRACT) != 0) {
+            resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot be abstract");
+            valid = false;
+        }
+        
+        if (!org.bukkit.plugin.Plugin.class.isAssignableFrom(type)) {
+            resolution.error(
+                type, 
+                "Invalid main class: '" + type.getName() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
+            );
+            valid = false;
+        }
+        
+        for (var constructor : type.getDeclaredConstructors()) {
+            if (constructor.getParameterCount() != 0 ) {
+                resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot contain constructors with parameters");
+                valid = false;
+            }
+        }
+        
+        return valid;
+    }
+
+    @Override
+    protected String stringify(Class<?> type) {
+        return type.getName();
+    }
+    
+}
+
+
+class ElementPluginResolver extends PluginResolver<Element> {
+    
+    Types types;
+    TypeMirror expected;
+    Visitor visitor;
+    
+    
+    ElementPluginResolver(Elements elements, Types types) {
+        this.types = types;
+        expected = elements.getTypeElement(org.bukkit.plugin.Plugin.class.getName()).asType();
+        visitor = new Visitor();
+    }
+    
+    
+    @Override
+    protected boolean check(Element type) {
+        return type.accept(visitor, false);
+    }
+
+    @Override
+    protected String stringify(Element type) {
+        return type.asType().toString();
+    }
+    
+    
+    class Visitor extends SimpleElementVisitor9<Boolean, Boolean> {
+        
+        Visitor() {
+            super(true);
+        }
+        
+        
+        @Override
+        public Boolean visitType(TypeElement element, Boolean nested) {
+            if (nested) {
+                return true;
+            }
+            
+            var valid = true;
+            
+            if (element.getModifiers().contains(ABSTRACT)) {
+                resolution.error(element, "Invalid main class: '" + element.asType() + "', main class cannot be abstract");
+            }
+            
+            if (!types.isAssignable(element.asType(), expected)) {
+                resolution.error(
+                    element, 
+                    "Invalid main class: '" + element.asType() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
+                );
+                valid = false;
+            }
+            
+            for (var enclosed : element.getEnclosedElements()) {
+                valid &= enclosed.accept(this, true);
+            }
+            
+            return valid;
+        }
+        
+        @Override
+        public Boolean visitExecutable(ExecutableElement element, @Ignored Boolean nested) {
+            if (element.getKind() == CONSTRUCTOR && !element.getParameters().isEmpty()) {
+                resolution.error(
+                    element, 
+                    "Invalid main class: '" + element.getEnclosingElement() + "', main class cannot contain constructors with parameters"
+                );
+                return false;
+                
+            } else {
+                return true;
+            }
+        }
+        
+    }
+    
 }

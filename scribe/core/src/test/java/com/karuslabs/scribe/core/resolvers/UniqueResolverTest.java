@@ -60,18 +60,18 @@ class UniqueResolverTest {
         verify(resolution).error("a", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
         verify(resolution).error("b", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
     }
-
-}
-
-class StubResolver extends UniqueResolver<String> {
     
-    StubResolver() {
-        super(Set.of(Command.class), "hello");
+    static class StubResolver extends UniqueResolver<String> {
+    
+        StubResolver() {
+            super(Set.of(Command.class), "hello");
+        }
+
+        @Override
+        protected void resolve(String type) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
     }
 
-    @Override
-    protected void resolve(String type) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
 }
