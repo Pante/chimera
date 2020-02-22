@@ -15,10 +15,24 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>scribe-core</artifactId>
+            <version>${project.version}</version>
             <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
+            <version>4.8.64</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.6.3</version>
+            <type>jar</type>
         </dependency>
         
         <dependency>
@@ -34,6 +48,13 @@
             <version>3.6.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.15-R0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     
     <build>
@@ -44,7 +65,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>${maven.compiler.release}</release>
+                    <release>${release}</release>
                 </configuration>
             </plugin>
             

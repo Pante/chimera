@@ -47,7 +47,7 @@ public abstract class YAML {
     
     public void write(Map<String, Object> mapping) {
         try (var writer = writer()) {
-            writer.append("# This file was generated using " + name + "4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
+            writer.append("# This file was generated using " + name + " 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
                   .append(dump.dumpToString(mapping));
             
         } catch (IOException e) {

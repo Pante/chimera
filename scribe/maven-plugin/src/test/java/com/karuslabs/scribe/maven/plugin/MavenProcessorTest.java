@@ -21,64 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.annotations.Command;
+import com.karuslabs.scribe.core.Project;
+
+import io.github.classgraph.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@API(Version.V1_15)
-class APIResolverTest {
+class MavenProcessorTest {
     
-    APIResolver<Class<?>> resolver = new APIResolver<>();
-    Resolution<Class<?>> resolution = new Resolution();
+    ScanResult results = mock(ScanResult.class);
+    ClassGraph graph = when(mock(ClassGraph.class).scan()).thenReturn(results).getMock();
+    MavenProcessor processor = new MavenProcessor(Project.EMPTY, graph);
     
     
     @Test
-    void resolve() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+    void annotated() {
+        var info = mock(ClassInfo.class);
+        doReturn(Command.class).when(info).loadClass();
         
-        resolver.resolve(APIResolverTest.class);
+        ClassInfoList list = when(mock(ClassInfoList.class).stream()).thenReturn(Stream.of(info)).getMock();
+        when(results.getClassesWithAnnotation(Command.class.getName())).thenReturn(list);
         
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-        assertTrue(resolution.messages.isEmpty());
+        var actual = processor.annotated(Command.class).collect(toList());
+        
+        verify(graph).scan();
+        verify(results).getClassesWithAnnotation(Command.class.getName());
+        
+        assertEquals(List.of(Command.class), actual);
     }
     
     
     @Test
-    void resolve_inferred() {
-        resolver.initialize(new Project("", "", List.of(), "1.15.1", "", ""), Extractor.CLASS, resolution);
+    void close() {
+        processor.results = results;
         
-        resolver.resolve(Inferred.class);
+        processor.close();
         
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-    }
-    
-    
-    @Test
-    void resolve_inferred_default() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
-        
-        resolver.resolve(Inferred.class);
-        var message = resolution.messages.get(0);
-        
-        assertEquals("1.13", resolution.mappings.get("api-version"));
-        assertEquals(Message.warning(Inferred.class, "Unable to infer 'api-version', defaulting to '1.13'"), message);
-    }
-    
-    
-    @API(Version.INFERRED)
-    static class Inferred {
-        
+        verify(results).close();
     }
 
-}
+} 

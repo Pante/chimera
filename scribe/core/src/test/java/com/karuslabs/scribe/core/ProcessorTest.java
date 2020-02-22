@@ -49,15 +49,9 @@ class ProcessorTest {
     
     @Test
     void loader() throws MalformedURLException {
-        var loader = Processor.loader(List.of(new File("").toURI().toURL().toString()));
+        var loader = Processor.loader(List.of(""));
         
         assertTrue(loader instanceof URLClassLoader);
-    }
-    
-    
-    @Test
-    void loader_throws_exception() {
-        assertTrue(assertThrows(UncheckedIOException.class, () -> Processor.loader(List.of(""))).getCause() instanceof MalformedURLException);
     }
     
     

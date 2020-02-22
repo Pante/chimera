@@ -25,12 +25,20 @@ package com.karuslabs.scribe.core;
 
 import com.karuslabs.annotations.*;
 
-import java.util.List;
+import java.util.*;
 
 
 public @ValueType class Project {
     
     public static Project EMPTY = new Project("", "", List.of(), "", "", "");
+    public static Map<String, String> DEPENDENCIES = Map.of(
+        "bukkit", "org.bukkit",
+        "craftbukkit", "org.bukkit",
+        "spigot-api", "org.spigotmc",
+        "spigot", "org.spigotmc",
+        "paper-api", "com.destroystokyo.paper",
+        "paper", "com.destroystokyo.paper"
+    );
     
     
     public final String name;

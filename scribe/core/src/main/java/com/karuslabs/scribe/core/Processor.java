@@ -25,7 +25,7 @@ package com.karuslabs.scribe.core;
 
 import com.karuslabs.scribe.core.resolvers.*;
 
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.net.*;
 import java.util.*;
@@ -41,7 +41,7 @@ public abstract class Processor<T> {
     public static ClassLoader loader(List<String> classpaths) {
         return URLClassLoader.newInstance(classpaths.stream().map(classpath -> {
                 try {
-                    return new URL(classpath);
+                    return new File(classpath).toURI().toURL();
                 } catch (MalformedURLException e) {
                     throw new UncheckedIOException(e);
                 }

@@ -21,64 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Message;
 
 import java.util.List;
 
+import org.apache.maven.plugin.logging.Log;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@API(Version.V1_15)
-class APIResolverTest {
+class MessagesTest {
     
-    APIResolver<Class<?>> resolver = new APIResolver<>();
-    Resolution<Class<?>> resolution = new Resolution();
+    Log log = mock(Log.class);
     
     
     @Test
-    void resolve() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+    void log() {        
+        Messages.WARNINGS.log(log, List.of(Message.warning(Messages.class, "First"), Message.warning(null, "Second")));
         
-        resolver.resolve(APIResolverTest.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-        assertTrue(resolution.messages.isEmpty());
+        verify(log, times(3)).info("-------------------------------------------------------------");
+        verify(log).warn("RESOLUTION WARNING:");
+        verify(log).warn(Messages.class.getName() + ": First");
+        verify(log).warn("Second");
+        verify(log).info("2 warnings");
     }
     
     
     @Test
-    void resolve_inferred() {
-        resolver.initialize(new Project("", "", List.of(), "1.15.1", "", ""), Extractor.CLASS, resolution);
+    void log_empty() {
+        Messages.ERRORS.log(log, List.of());
         
-        resolver.resolve(Inferred.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-    }
-    
-    
-    @Test
-    void resolve_inferred_default() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
-        
-        resolver.resolve(Inferred.class);
-        var message = resolution.messages.get(0);
-        
-        assertEquals("1.13", resolution.mappings.get("api-version"));
-        assertEquals(Message.warning(Inferred.class, "Unable to infer 'api-version', defaulting to '1.13'"), message);
-    }
-    
-    
-    @API(Version.INFERRED)
-    static class Inferred {
-        
+        verifyNoInteractions(log);
     }
 
-}
+} 

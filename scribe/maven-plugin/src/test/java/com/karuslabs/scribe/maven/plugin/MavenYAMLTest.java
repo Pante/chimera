@@ -21,64 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.*;
+import java.io.*;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@API(Version.V1_15)
-class APIResolverTest {
+class MavenYAMLTest {
     
-    APIResolver<Class<?>> resolver = new APIResolver<>();
-    Resolution<Class<?>> resolution = new Resolution();
+    File file = new File(new File(getClass().getClassLoader().getResource("beacon.yml").getFile()).getParentFile(), "plugin.yml");
+    IOException exception = mock(IOException.class);
+    MavenYAML yaml = new MavenYAML(file);
     
     
     @Test
-    void resolve() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
-        
-        resolver.resolve(APIResolverTest.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-        assertTrue(resolution.messages.isEmpty());
+    void writer() throws IOException {
+        try (var writer = yaml.writer()) {
+            assertNotNull(writer);
+        }
     }
     
     
     @Test
-    void resolve_inferred() {
-        resolver.initialize(new Project("", "", List.of(), "1.15.1", "", ""), Extractor.CLASS, resolution);
-        
-        resolver.resolve(Inferred.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
+    void handle() {
+        assertTrue(assertThrows(UncheckedIOException.class, () -> yaml.handle(exception)).getCause() instanceof IOException);
     }
     
     
-    @Test
-    void resolve_inferred_default() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
-        
-        resolver.resolve(Inferred.class);
-        var message = resolution.messages.get(0);
-        
-        assertEquals("1.13", resolution.mappings.get("api-version"));
-        assertEquals(Message.warning(Inferred.class, "Unable to infer 'api-version', defaulting to '1.13'"), message);
-    }
-    
-    
-    @API(Version.INFERRED)
-    static class Inferred {
-        
+    @AfterEach
+    void after() {
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
-}
+} 

@@ -23,18 +23,79 @@
  */
 package com.karuslabs.scribe.maven.plugin;
 
+import com.karuslabs.scribe.core.*;
+
+import io.github.classgraph.ClassGraph;
+
+import java.io.File;
+import java.util.*;
+import java.util.stream.Stream;
+
+import org.apache.maven.model.Contributor;
 import org.apache.maven.plugin.*;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.project.MavenProject;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
 @Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false)
-public class ScribeMojo extends AbstractMojo {
+public class ScribeMojo extends AbstractMojo {    
+    
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    MavenProject pom;
+    
+    @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
+    List<String> classpaths;
+    
+    @Parameter(defaultValue = "${project.basedir}/src/main/resources")
+    File folder;
+    
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void execute() throws MojoFailureException {
+        var graph = new ClassGraph().enableClassInfo().enableAnnotationInfo().addClassLoader(Processor.loader(classpaths));
+        try (var processor = new MavenProcessor(project(), graph)) {
+            
+            var yaml = new MavenYAML(new File(folder, "plugin.yml"));
+            var resolution = processor.run();
+            
+            if (log(resolution.messages).isEmpty()) {
+                yaml.write(resolution.mappings);
+
+            } else {
+                throw new MojoFailureException("Resolution failure");
+            }
+        }
+    }
+    
+    protected Project project() {
+        var authors = Stream.of(pom.getContributors(), pom.getDevelopers())
+                            .flatMap(Collection::stream)
+                            .map(Contributor::getName)
+                            .collect(toList());
+        
+        var version = "";
+        for (var dependency : pom.getDependencies()) {
+            var group = Project.DEPENDENCIES.get(dependency.getArtifactId());
+            if (Objects.equals(group, dependency.getGroupId())) {
+                version = dependency.getVersion();
+                break;
+            }
+        }
+        return new Project(pom.getName(), pom.getVersion(), authors, version, pom.getDescription(), pom.getUrl());
+    }
+    
+    protected List<Message<Class<?>>> log(List<Message<Class<?>>> messages) {
+        var warnings = messages.stream().filter(message -> message.type == Message.Type.WARNING).collect(toList());
+        var errors = messages.stream().filter(message -> message.type == Message.Type.ERROR).collect(toList());
+
+        Messages.WARNINGS.log(getLog(), warnings);
+        Messages.ERRORS.log(getLog(), errors);
+        
+        return errors;
     }
     
 }

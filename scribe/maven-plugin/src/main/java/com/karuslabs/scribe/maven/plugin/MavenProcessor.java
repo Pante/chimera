@@ -21,39 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.*;
+import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.resolvers.PluginResolver;
 
-import java.util.Set;
+import io.github.classgraph.*;
+
+import java.lang.annotation.Annotation;
+import java.util.stream.Stream;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class APIResolver<T> extends UniqueResolver<T> {
+public class MavenProcessor extends Processor<Class<?>> implements AutoCloseable {
     
-    public APIResolver() {
-        super(Set.of(API.class), "API");
+    ClassGraph graph;
+    @Nullable ScanResult results;
+    
+    
+    public MavenProcessor(Project project, ClassGraph graph) {
+        super(project, Extractor.CLASS, PluginResolver.CLASS);
+        this.graph = graph;
+    }
+    
+    
+    @Override
+    protected Stream<Class<?>> annotated(Class<? extends Annotation> annotation) {
+        if (results == null) {
+            results = graph.scan();
+        }
+        
+        return results.getClassesWithAnnotation(annotation.getName()).stream().map(ClassInfo::loadClass);
     }
 
     
     @Override
-    protected void resolve(T type) {
-       var api = extractor.single(type, API.class);
-       if (api.value() != Version.INFERRED) {
-           resolution.mappings.put("api-version", api.value().version);
-           return;
-       }
-       
-       for (var version : Version.values()) {
-           if (project.api.startsWith(version.version + ".") || project.api.startsWith(version.version + "-")) {
-               resolution.mappings.put("api-version", version.version);
-               break;
-           }
-       }
-       
-       if (!resolution.mappings.containsKey("api-version")) {
-           resolution.mappings.put("api-version", Version.INFERRED.version);
-           resolution.warning(type, "Unable to infer 'api-version', defaulting to '" + Version.INFERRED.version + "'");
-       }
+    public void close() {
+        if (results != null) {
+            results.close();
+        }
     }
 
 }

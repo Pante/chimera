@@ -21,39 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.*;
+import com.karuslabs.scribe.core.YAML;
 
-import java.util.Set;
+import java.io.*;
 
 
-public class APIResolver<T> extends UniqueResolver<T> {
+public class MavenYAML extends YAML {
+
+    File file;
     
-    public APIResolver() {
-        super(Set.of(API.class), "API");
+    
+    public MavenYAML(File file) {
+        super("Scribe Maven Plugin");
+        this.file = file;
     }
-
+    
     
     @Override
-    protected void resolve(T type) {
-       var api = extractor.single(type, API.class);
-       if (api.value() != Version.INFERRED) {
-           resolution.mappings.put("api-version", api.value().version);
-           return;
-       }
-       
-       for (var version : Version.values()) {
-           if (project.api.startsWith(version.version + ".") || project.api.startsWith(version.version + "-")) {
-               resolution.mappings.put("api-version", version.version);
-               break;
-           }
-       }
-       
-       if (!resolution.mappings.containsKey("api-version")) {
-           resolution.mappings.put("api-version", Version.INFERRED.version);
-           resolution.warning(type, "Unable to infer 'api-version', defaulting to '" + Version.INFERRED.version + "'");
-       }
+    protected Writer writer() throws IOException {
+        return new BufferedWriter(new FileWriter(file));
+    }
+
+    @Override
+    protected void handle(IOException e) {
+        throw new UncheckedIOException(e);
     }
 
 }
