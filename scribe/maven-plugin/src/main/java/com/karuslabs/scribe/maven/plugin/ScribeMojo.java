@@ -59,7 +59,7 @@ public class ScribeMojo extends AbstractMojo {
         var graph = new ClassGraph().enableClassInfo().enableAnnotationInfo().addClassLoader(Processor.loader(classpaths));
         try (var processor = new MavenProcessor(project(), graph)) {
             
-            var yaml = new MavenYAML(new File(folder, "plugin.yml"));
+            var yaml = YAML.fromFile("Scribe Maven Plugin", new File(folder, "plugin.yml"));
             var resolution = processor.run();
             
             if (log(resolution.messages).isEmpty()) {

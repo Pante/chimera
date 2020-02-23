@@ -16,7 +16,6 @@
     <modules>
         <module>annotations</module>
         <module>core</module>
-        <module>gradle-plugin</module>
         <module>maven-plugin</module>
         <module>standalone</module>
     </modules>

@@ -35,19 +35,24 @@ import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 public abstract class YAML {
     
-    protected String name;
+    public static YAML fromFile(String project, File file) {
+        return new FileYAML(project, file);
+    }
+    
+    
+    protected String project;
     protected Dump dump;
     
     
-    public YAML(String name) {
-        this.name = name;
+    public YAML(String project) {
+        this.project = project;
         dump = new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build());
     }
     
     
     public void write(Map<String, Object> mapping) {
         try (var writer = writer()) {
-            writer.append("# This file was generated using " + name + " 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
+            writer.append("# This file was generated using " + project + " 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
                   .append(dump.dumpToString(mapping));
             
         } catch (IOException e) {
@@ -58,5 +63,28 @@ public abstract class YAML {
     protected abstract Writer writer() throws IOException;
     
     protected abstract void handle(IOException e);
+    
+}
+
+class FileYAML extends YAML {
+    
+    File file;
+
+    
+    FileYAML(String name, File file) {
+        super(name);
+        this.file = file;
+    }
+
+    
+    @Override
+    protected Writer writer() throws IOException {
+        return new BufferedWriter(new FileWriter(file));
+    }
+
+    @Override
+    protected void handle(IOException e) {
+        throw new UncheckedIOException(e);
+    }
     
 }

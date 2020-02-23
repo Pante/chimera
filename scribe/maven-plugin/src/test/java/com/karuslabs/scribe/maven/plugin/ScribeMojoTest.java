@@ -24,6 +24,7 @@
 package com.karuslabs.scribe.maven.plugin;
 
 import com.karuslabs.scribe.core.Message;
+
 import java.io.File;
 import java.util.List;
 

@@ -26,10 +26,11 @@ package com.karuslabs.scribe.core;
 import java.io.*;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -87,3 +88,35 @@ class StubYAML extends YAML {
     }
     
 }
+
+
+@ExtendWith(MockitoExtension.class)
+class FileYAMLTest {
+    
+    File file = new File(new File(getClass().getClassLoader().getResource("beacon.yml").getFile()).getParentFile(), "plugin.yml");
+    IOException exception = mock(IOException.class);
+    YAML yaml = YAML.fromFile("name", file);
+    
+    
+    @Test
+    void writer() throws IOException {
+        try (var writer = yaml.writer()) {
+            assertNotNull(writer);
+        }
+    }
+    
+    
+    @Test
+    void handle() {
+        assertTrue(assertThrows(UncheckedIOException.class, () -> yaml.handle(exception)).getCause() instanceof IOException);
+    }
+    
+    
+    @AfterEach
+    void after() {
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+} 

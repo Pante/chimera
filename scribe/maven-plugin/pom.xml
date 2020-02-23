@@ -11,7 +11,7 @@
     <packaging>maven-plugin</packaging>
         
     <name>Scribe Maven Plugin</name>
-    <description>A lint for plugin.yml files</description>
+    <description>Maven plugin for compile-time plugin.yml generation</description>
     
     <dependencies>
         <dependency>
