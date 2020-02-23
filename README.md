@@ -8,7 +8,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 **This is a bleeding edge version, please see [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 11+. [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 
-**To get started, please read the [wiki](https://github.com/Pante/Chimera/wiki).**
+**Please read the [wiki](https://github.com/Pante/Chimera/wiki) to get started.**
 
 [![Travis-CI](https://img.shields.io/travis/pante/chimera/master?logo=travis)](https://travis-ci.com/Pante/Chimera)
 [![Funding](https://img.shields.io/badge/%F0%9F%A4%8D%20-sponsorship-ff69b4?style=flat-square)](https://github.com/sponsors/Pante)
