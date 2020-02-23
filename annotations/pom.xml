@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     
     <name>Annotations</name>
-    <description>Karus Lab's annotations and annotation processors</description>
+    <description>Annotations and annotation processors</description>
     
     <build>
         <defaultGoal>clean package install</defaultGoal>
@@ -25,16 +25,15 @@
             </plugin>
     
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
                     <shadedClassifierName>shaded</shadedClassifierName>
+                    <minimizeJar>true</minimizeJar>
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
@@ -58,12 +57,6 @@
                     <execution>
                         <goals>
                             <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>

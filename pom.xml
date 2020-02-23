@@ -8,13 +8,13 @@
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
-    <description>A collection of Karus Lab's libraries and development tools</description>
+    <description>Mono-repository for Spigot libararies and tools</description>
     
     <properties>
+        <release>11</release>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <release>11</release>
     </properties>
 
     <modules>
@@ -42,12 +42,9 @@
             </distributionManagement>
         </profile>
         
-        <profile>
+<!-- Pending GitHub Package Registry's support for mutable packages !-->
+<!--        <profile>
             <id>github-packages</id>
-            <activation>
-                <!-- Pending GitHub Package Registry's support for mutable packages !-->
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <distributionManagement>
                 <repository>
                     <id>github-packages</id>
@@ -59,7 +56,7 @@
                     <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </snapshotRepository>
             </distributionManagement>
-        </profile>
+        </profile>-->
     </profiles>
     
     <repositories>   
@@ -138,7 +135,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.1</version>
                 <dependencies>

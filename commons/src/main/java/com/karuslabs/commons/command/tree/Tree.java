@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command.tree;
 
 import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.tree.nodes.Mutable;
 
 import com.mojang.brigadier.tree.*;
 
@@ -31,7 +32,6 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import com.karuslabs.commons.command.tree.nodes.Mutable;
 
 
 public class Tree<T, R> {    
