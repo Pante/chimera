@@ -56,7 +56,7 @@ class APIResolverTest {
     
     @Test
     void resolve_inferred() {
-        resolver.initialize(new Project("", "", List.of(), "1.15.1", "", ""), Extractor.CLASS, resolution);
+        resolver.initialize(new Project("", "", "1.15.1", List.of(), "", ""), Extractor.CLASS, resolution);
         
         resolver.resolve(Inferred.class);
         

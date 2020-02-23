@@ -49,7 +49,7 @@ class PluginResolverTest {
     
     StubResolver resolver = new StubResolver();
     Resolution<Class<?>> resolution = new Resolution<>();
-    Project project = new Project("project_name", "1.0.0", List.of(), "", "", "");
+    Project project = new Project("project_name", "1.0.0", "", List.of(), "", "");
     
     
     @BeforeEach

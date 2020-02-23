@@ -77,15 +77,15 @@ public class ScribeMojo extends AbstractMojo {
                             .map(Contributor::getName)
                             .collect(toList());
         
-        var version = "";
+        var api = "";
         for (var dependency : pom.getDependencies()) {
             var group = Project.DEPENDENCIES.get(dependency.getArtifactId());
             if (Objects.equals(group, dependency.getGroupId())) {
-                version = dependency.getVersion();
+                api = dependency.getVersion();
                 break;
             }
         }
-        return new Project(pom.getName(), pom.getVersion(), authors, version, pom.getDescription(), pom.getUrl());
+        return new Project(pom.getName(), pom.getVersion(), api, authors, pom.getDescription(), pom.getUrl());
     }
     
     protected List<Message<Class<?>>> log(List<Message<Class<?>>> messages) {

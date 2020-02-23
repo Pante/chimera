@@ -92,7 +92,7 @@ class InformationResolverTest {
     
     @Test
     void resolve_information_project() {
-        resolver.initialize(new Project("", "", List.of("Pante"), "", "project description", "http://wwww.repo.karuslabs.com"), Extractor.CLASS, resolution);
+        resolver.initialize(new Project("", "", "", List.of("Pante"), "project description", "http://wwww.repo.karuslabs.com"), Extractor.CLASS, resolution);
         
         resolver.resolve(Empty.class.getAnnotation(Information.class));
         var mappings = resolution.mappings;

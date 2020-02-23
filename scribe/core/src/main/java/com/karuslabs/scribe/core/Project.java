@@ -30,7 +30,7 @@ import java.util.*;
 
 public @ValueType class Project {
     
-    public static Project EMPTY = new Project("", "", List.of(), "", "", "");
+    public static Project EMPTY = new Project("", "", "", List.of(), "", "");
     public static Map<String, String> DEPENDENCIES = Map.of(
         "bukkit", "org.bukkit",
         "craftbukkit", "org.bukkit",
@@ -43,17 +43,17 @@ public @ValueType class Project {
     
     public final String name;
     public final String version;
-    public final @Immutable List<String> authors;
     public final String api;
+    public final @Immutable List<String> authors;
     public final String description;
     public final String url;
     
     
-    public Project(String name, String version, List<String> authors, String api, String description, String url) {
+    public Project(String name, String version, String api, List<String> authors, String description, String url) {
         this.name = name;
         this.version = version;
-        this.authors = authors;
         this.api = api;
+        this.authors = authors;
         this.description = description;
         this.url = url;
     }
