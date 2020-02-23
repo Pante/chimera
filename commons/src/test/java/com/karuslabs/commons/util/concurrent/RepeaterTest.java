@@ -67,8 +67,8 @@ class RepeaterTest {
         
         assertEquals(task, repeater.decorateTask(runnable, task));
         
-        verifyZeroInteractions(runnable);
-        verifyZeroInteractions(task);
+        verifyNoInteractions(runnable);
+        verifyNoInteractions(task);
     }
     
     

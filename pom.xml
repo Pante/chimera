@@ -4,17 +4,17 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.4.0</version>
+    <version>4.5.0</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
-    <description>A collection of Karus Lab's libraries and development tools</description>
+    <description>Mono-repository for Spigot libararies and tools</description>
     
     <properties>
+        <release>11</release>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <release>11</release>
     </properties>
 
     <modules>
@@ -47,12 +47,9 @@
             </distributionManagement>
         </profile>
         
-        <profile>
+<!-- Pending GitHub Package Registry's support for mutable packages !-->
+<!--        <profile>
             <id>github-packages</id>
-            <activation>
-                <!-- Pending GitHub Package Registry's support for mutable packages !-->
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <distributionManagement>
                 <repository>
                     <id>github-packages</id>
@@ -64,7 +61,7 @@
                     <url>https://maven.pkg.github.com/Pante/chimera</url>
                 </snapshotRepository>
             </distributionManagement>
-        </profile>
+        </profile>-->
     </profiles>
     
     <repositories>
@@ -103,49 +100,49 @@
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.0.1</version>
+            <version>3.1.1</version>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.5.2</version>
+            <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.5.2</version>
+            <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.5.2</version>
+            <version>5.6.0</version>
             <scope>test</scope>
         </dependency>
                 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -153,14 +150,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.27</version>
+                        <version>8.29</version>
                     </dependency>
                 </dependencies>
                 <configuration>

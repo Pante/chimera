@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-update-version</actionName>
+            <displayName>update-version</displayName>
+            <goals>
+                <goal>release:update-versions</goal>
+                <goal>-DdevelopmentVersion=4.5.0-SNAPSHOT</goal>
+            </goals>
+        </action>
+    </actions>

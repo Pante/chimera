@@ -44,13 +44,13 @@ public @interface Plugin {
      * 
      * @return the name
      */
-    String name();
+    String name() default "";
     
     /**
      * The plugin's version.
      * 
      * @return the version
      */
-    String version();
+    String version() default "";
     
 }
