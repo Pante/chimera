@@ -72,7 +72,6 @@ Karus Labs' mono-repository for spigot libraries & tools.
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/scribe-annotations/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/scribe-annotations)
 [![javadoc](https://img.shields.io/badge/javadoc-4.5.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.5.0/scribe/scribe-annotations/apidocs/index.html)
 
-**Since 4.4.0, the annotation processors are packaged separately under `scribe-standalone`.**
 ```XML
 <repository>
   <id>chimera-releases</id>
