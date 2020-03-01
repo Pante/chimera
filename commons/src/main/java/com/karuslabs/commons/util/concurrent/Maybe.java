@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,38 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.annotations.Blocking;
+
 import java.util.Optional;
 import java.util.concurrent.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public interface Eventual<T> extends Future<T> {
+public class Maybe<T> extends FutureTask<T> {
     
-    public default Optional<T> acquire() {
+    private static final Callable<?> VALUE = () -> null;
+    
+    
+    public static <T> Maybe<T> value(T value) {
+        var maybe =  new Maybe(VALUE);
+        maybe.set(value);
+        
+        return maybe;
+    }
+    
+    
+    public Maybe(Callable<T> callable) {
+        super(callable);
+    }
+
+    public Maybe(Runnable runnable, T result) {
+        super(runnable, result);
+    }
+    
+    
+    @Blocking
+    public Optional<T> maybe() {
         try {
             return Optional.ofNullable(get());
             
@@ -40,7 +63,8 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default Optional<T> acquire(long timeout, TimeUnit unit) {
+    @Blocking
+    public Optional<T> maybe(long timeout, TimeUnit unit) {
         try {
             return Optional.ofNullable(get(timeout, unit));
             
@@ -50,7 +74,8 @@ public interface Eventual<T> extends Future<T> {
     }
     
     
-    public default @Nullable T await() {
+    @Blocking
+    public @Nullable T value() {
         try {
             return get();
                     
@@ -59,7 +84,8 @@ public interface Eventual<T> extends Future<T> {
         }
     }
     
-    public default @Nullable T await(long timeout, TimeUnit unit) {
+    @Blocking
+    public @Nullable T value(long timeout, TimeUnit unit) {
         try {
             return get(timeout, unit);
             

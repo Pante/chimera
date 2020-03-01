@@ -21,51 +21,78 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.locale.providers;
+package com.karuslabs.commons.util.concurrent;
 
-import java.util.Locale;
-
-import org.bukkit.entity.Player;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class ProviderTest {
+class MaybeTest {
     
-    Player player = when(mock(Player.class).getLocale()).thenReturn("en_GB").getMock();
+    static final String expected = "expected";
+    static final Maybe<String> maybe = new Maybe<>(() -> expected);
+    static final Maybe<String> exceptional = new Maybe<>(() -> { throw new IllegalArgumentException(); }, null);
     
     
-    @Test
-    void detected() {
-        assertEquals(Locale.UK, Provider.DETECTED.get(player));
+    @BeforeAll
+    static void before() {
+        maybe.run();
+        exceptional.run();
     }
     
     
     @Test
-    void none() {
-        assertEquals(Locale.getDefault(), Provider.NONE.get(null));
+    void maybe() {
+        assertEquals(expected, maybe.maybe().orElseThrow());
     }
     
     
     @Test
-    void getOrDefault() {
-        Provider<?> provider = key -> Locale.FRANCE;
-        Provider<?> empty = key -> null;
-        
-        assertEquals(Locale.FRANCE, provider.getOrDefault(null, Locale.ITALY));
-        assertEquals(Locale.CANADA, empty.getOrDefault(null, Locale.CANADA));
+    void maybe_throws_exception() {
+        assertEquals(Optional.empty(), exceptional.maybe());
     }
     
     
     @Test
-    void getDefault() {
-        assertEquals(Locale.getDefault(), Provider.NONE.getDefault());
+    void maybe_timeout() {
+        assertEquals(expected, maybe.maybe(1, TimeUnit.MINUTES).orElseThrow());
+    }
+    
+    
+    @Test
+    void maybe_timeout_throws_exception() {
+        assertEquals(Optional.empty(), exceptional.maybe(0, TimeUnit.MINUTES));
+    }
+    
+    
+    @Test
+    void value() {
+        assertEquals(expected, maybe.value());
+    }
+    
+    
+    @Test
+    void value_throws_exception() {
+        assertNull(exceptional.value());
+    }
+    
+    
+    @Test
+    void value_timeout() {
+        assertEquals(expected, maybe.value(1, TimeUnit.MINUTES));
+    }
+    
+    
+    @Test
+    void value_timeout_throws_exception() {
+        assertNull(exceptional.value(0, TimeUnit.MINUTES));
     }
     
 }

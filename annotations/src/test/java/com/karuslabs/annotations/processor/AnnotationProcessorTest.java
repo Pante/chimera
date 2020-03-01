@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.processors;
+package com.karuslabs.annotations.processor;
 
 import java.util.Set;
 import javax.annotation.processing.*;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;

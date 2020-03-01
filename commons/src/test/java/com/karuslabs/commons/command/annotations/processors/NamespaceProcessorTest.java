@@ -74,7 +74,9 @@ class NamespaceProcessorTest {
         when(element.getAnnotationsByType(Literal.class)).thenReturn(Namespace.class.getDeclaredAnnotationsByType(Literal.class));
         when(element.getAnnotationsByType(Argument.class)).thenReturn(Namespace.class.getDeclaredAnnotationsByType(Argument.class));
         
-        processor.process(element, new HashSet<>());
+        doReturn(new HashSet<>()).when(processor).scope(element);
+        
+        processor.process(element);
     }
     
     @Literal(namespace = "a")

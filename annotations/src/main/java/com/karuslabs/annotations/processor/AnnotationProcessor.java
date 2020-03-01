@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.processors;
+package com.karuslabs.annotations.processor;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -33,20 +33,20 @@ import static javax.tools.Diagnostic.Kind.*;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
-    protected static final TypeElement[] ARRAY = new TypeElement[0];
+    private static final TypeElement[] ARRAY = new TypeElement[0];
     
     
     protected Elements elements;
-    protected Messager messager;
     protected Types types;
+    protected Messager messager;
     
     
     @Override
-    public synchronized void init(ProcessingEnvironment environment) {
+    public void init(ProcessingEnvironment environment) {
         super.init(environment);
         elements = environment.getElementUtils();
-        messager = environment.getMessager();
         types = environment.getTypeUtils();
+        messager = environment.getMessager();
     }
     
     
@@ -56,10 +56,16 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
             process(element);
         }
         
+        clear();
+        
         return false;
     }
     
     protected void process(Element element) {
+        
+    }
+    
+    protected void clear() {
         
     }
     

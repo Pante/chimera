@@ -26,11 +26,11 @@ package com.karuslabs.annotations;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 @Documented
-@Retention(RUNTIME)
+@Retention(SOURCE)
 @Target(TYPE)
 public @interface ValueType {
     

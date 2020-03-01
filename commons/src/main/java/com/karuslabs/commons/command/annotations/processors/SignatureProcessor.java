@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.annotations.processors;
 
 import com.karuslabs.annotations.Ignored;
-import com.karuslabs.annotations.processors.AnnotationProcessor;
+import com.karuslabs.annotations.processor.AnnotationProcessor;
 import com.karuslabs.commons.command.DefaultableContext;
 
 import com.google.auto.service.AutoService;

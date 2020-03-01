@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Matthias.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.filters;
+package com.karuslabs.annotations.processor;
 
-import com.karuslabs.annotations.Ignored;
+import com.karuslabs.annotations.*;
 
 import javax.lang.model.element.*;
 import javax.lang.model.util.SimpleElementVisitor9;
@@ -31,10 +31,22 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class ClassFilter extends SimpleElementVisitor9<Element, Void> {
+public abstract class Filter extends SimpleElementVisitor9<Element, Void> {
     
-    public static final ClassFilter FILTER = new ClassFilter();
+    public static final Filter CLASS = new ClassFilter();
+    public static final Filter PACKAGE = new PackageFilter();
+    public static final Filter MODULE = new ModuleFilter();
     
+    
+    @Override
+    protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
+        var enclosing = element.getEnclosingElement();
+        return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
+    }
+    
+}
+
+class ClassFilter extends Filter {
     
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -51,11 +63,28 @@ public class ClassFilter extends SimpleElementVisitor9<Element, Void> {
         return element;
     }
     
+}
+
+class PackageFilter extends Filter {
     
     @Override
-    protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
-        var enclosing = element.getEnclosingElement();
-        return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
+    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+        return DEFAULT_VALUE;
+    }
+    
+    
+    @Override
+    public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
+        return element;
+    }
+    
+}
+
+class ModuleFilter extends Filter {
+    
+    @Override
+    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+        return element;
     }
     
 }

@@ -26,7 +26,7 @@ package com.karuslabs.scribe.standalone;
 
 import com.google.auto.service.AutoService;
 
-import com.karuslabs.annotations.processors.AnnotationProcessor;
+import com.karuslabs.annotations.processor.AnnotationProcessor;
 
 import java.util.*;
 import javax.annotation.processing.*;

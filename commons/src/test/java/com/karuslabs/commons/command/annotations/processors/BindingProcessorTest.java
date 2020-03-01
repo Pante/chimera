@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
-import com.karuslabs.annotations.filters.ClassFilter;
+import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.annotations.processors.BindingProcessor.Visitor;
 
@@ -94,15 +94,15 @@ class BindingProcessorTest {
         RoundEnvironment environment = mock(RoundEnvironment.class);
         
         Element bind = when(mock(Element.class).asType()).thenReturn(type).getMock();
-        when(bind.accept(ClassFilter.FILTER, null)).thenReturn(bind);
+        when(bind.accept(Filter.CLASS, null)).thenReturn(bind);
         
         Element argument = when(mock(Element.class).asType()).thenReturn(type).getMock();
-        when(argument.accept(ClassFilter.FILTER, null)).thenReturn(argument);
+        when(argument.accept(Filter.CLASS, null)).thenReturn(argument);
         
         doReturn(Set.of(bind)).when(environment).getElementsAnnotatedWith(Bind.class);
         doReturn(Set.of(argument)).when(environment).getElementsAnnotatedWithAny(BindingProcessor.ARGUMENTS);
         
-        when(element.accept(ClassFilter.FILTER, null)).thenReturn(element);
+        when(element.accept(Filter.CLASS, null)).thenReturn(element);
         
         assertFalse(processor.process(Set.of(), environment));
         assertTrue(processor.visitors.isEmpty());
@@ -114,7 +114,7 @@ class BindingProcessorTest {
     
     @Test
     void visitor() {
-        when(element.accept(ClassFilter.FILTER, null)).thenReturn(element);
+        when(element.accept(Filter.CLASS, null)).thenReturn(element);
         
         var visitor = processor.visitor(element);
         

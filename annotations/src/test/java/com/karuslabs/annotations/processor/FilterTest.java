@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations.filters;
+package com.karuslabs.annotations.processor;
 
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
@@ -78,21 +78,21 @@ class FilterTest {
     
     static Stream<Arguments> visit_parameters() {
         return Stream.of(
-            of(ClassFilter.FILTER, MODULE, null),
-            of(ClassFilter.FILTER, PACKAGE, null),
-            of(ClassFilter.FILTER, TYPE, TYPE),
-            of(ClassFilter.FILTER, DEFAULT, null),
-            of(ClassFilter.FILTER, ENCLOSED, null),
+            of(Filter.CLASS, MODULE, null),
+            of(Filter.CLASS, PACKAGE, null),
+            of(Filter.CLASS, TYPE, TYPE),
+            of(Filter.CLASS, DEFAULT, null),
+            of(Filter.CLASS, ENCLOSED, null),
             
-            of(PackageFilter.FILTER, MODULE, null),
-            of(PackageFilter.FILTER, PACKAGE, PACKAGE),
-            of(PackageFilter.FILTER, TYPE, null),
-            of(PackageFilter.FILTER, ENCLOSED, null),
+            of(Filter.PACKAGE, MODULE, null),
+            of(Filter.PACKAGE, PACKAGE, PACKAGE),
+            of(Filter.PACKAGE, TYPE, null),
+            of(Filter.PACKAGE, ENCLOSED, null),
             
-            of(ModuleFilter.FILTER, MODULE, MODULE),
-            of(ModuleFilter.FILTER, PACKAGE, null),
-            of(ModuleFilter.FILTER, TYPE, null),
-            of(ModuleFilter.FILTER, ENCLOSED, MODULE)
+            of(Filter.MODULE, MODULE, MODULE),
+            of(Filter.MODULE, PACKAGE, null),
+            of(Filter.MODULE, TYPE, null),
+            of(Filter.MODULE, ENCLOSED, MODULE)
         );
     }
 

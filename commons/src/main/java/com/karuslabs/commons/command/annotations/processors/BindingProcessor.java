@@ -24,8 +24,7 @@
 package com.karuslabs.commons.command.annotations.processors;
 
 import com.karuslabs.annotations.*;
-import com.karuslabs.annotations.processors.AnnotationProcessor;
-import com.karuslabs.annotations.filters.ClassFilter;
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.util.collection.TokenMap;
 
@@ -87,7 +86,7 @@ public class BindingProcessor extends AnnotationProcessor {
     }
     
     protected Visitor visitor(Element element) {
-        var type = element.accept(ClassFilter.FILTER, null).asType().toString();
+        var type = element.accept(Filter.CLASS, null).asType().toString();
         var visitor = visitors.get(type);
         if (visitor == null) {
             visitor = new Visitor();

@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
-import com.karuslabs.annotations.processors.AnnotationProcessor;
-import com.karuslabs.annotations.filters.ClassFilter;
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.annotations.*;
 
 import com.google.auto.service.AutoService;
@@ -53,19 +52,8 @@ public class NamespaceProcessor extends AnnotationProcessor {
     }
     
     
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (var element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
-            process(element, scope(element));
-        }
-        
-        scopes.clear();
-        
-        return false;
-    }
-    
     protected Set<List<String>> scope(Element element) {
-        var type = element.accept(ClassFilter.FILTER, null).asType().toString();
+        var type = element.accept(Filter.CLASS, null).asType().toString();
         var scope = scopes.get(type);
         
         if (scope == null) {
@@ -77,7 +65,10 @@ public class NamespaceProcessor extends AnnotationProcessor {
     }
     
     
-    protected void process(Element element, Set<List<String>> scope) {
+    @Override
+    protected void process(Element element) {
+        Set<List<String>> scope = scope(element);
+        
         for (var literal : element.getAnnotationsByType(Literal.class)) {
             process(element, "Literal", literal.namespace(), literal.aliases());
             process(element, scope, "Literal", literal.namespace());
@@ -111,6 +102,12 @@ public class NamespaceProcessor extends AnnotationProcessor {
         } else if (!scope.add(List.of(namespace))) {
             error(element, "Invalid namespace for @" + annotation + Arrays.toString(namespace) + ", namespace already exists");
         }
+    }
+    
+    
+    @Override
+    protected void clear() {
+        scopes.clear();
     }
     
 }

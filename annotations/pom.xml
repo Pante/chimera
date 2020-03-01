@@ -4,17 +4,17 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.5.0-SNAPSHOT</version>
+        <version>4.6.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>annotations</artifactId>
     <packaging>jar</packaging>
     
     <name>Annotations</name>
-    <description>Annotations and annotation processors</description>
+    <description>General annotations and processors</description>
     
     <build>
-        <defaultGoal>clean package install</defaultGoal>
+        <defaultGoal>install</defaultGoal>
         <plugins>  
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
