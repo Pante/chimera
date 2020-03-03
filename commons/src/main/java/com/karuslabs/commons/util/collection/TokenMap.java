@@ -25,12 +25,14 @@ package com.karuslabs.commons.util.collection;
 
 import com.google.common.primitives.Primitives;
 
+import com.karuslabs.annotations.ValueType;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
 
 import static com.karuslabs.commons.util.collection.TokenMap.key;
-import com.karuslabs.annotations.ValueType;
 
 
 public interface TokenMap<N, T> {
@@ -59,9 +61,9 @@ public interface TokenMap<N, T> {
     }
     
     
-    public <U extends T> U get(N name, Class<U> type);
+    public <U extends T> @Nullable U get(N name, Class<U> type);
     
-    public default <U extends T> U get(Key<N, U> key) {
+    public default <U extends T> @Nullable U get(Key<N, U> key) {
         return (U) map().get(key);
     }
     
@@ -78,18 +80,18 @@ public interface TokenMap<N, T> {
     }
     
     
-    public default <U extends T> U put(N name, Class<U> type, U value) {
+    public default <U extends T> @Nullable U put(N name, Class<U> type, U value) {
         return put(key(name, type), value);
     }
     
-    public default <U extends T> U put(Key<N, U> key, U value) {
+    public default <U extends T> @Nullable U put(Key<N, U> key, U value) {
         return (U) map().put(key, value);
     }
     
     
-    public <U extends T> U remove(N name, Class<U> type);
+    public <U extends T> @Nullable U remove(N name, Class<U> type);
     
-    public default <U extends T> U remove(Key<N, U> key) {
+    public default <U extends T> @Nullable U remove(Key<N, U> key) {
         return (U) map().remove(key);
     }
     
@@ -120,6 +122,20 @@ public interface TokenMap<N, T> {
             return this;
         }
 
+        
+        @Override
+        public int hashCode() {
+            return hash;
+        }
+
+        int hash() {
+            int hash = 5;
+            hash = 53 * hash + Objects.hashCode(name);
+            hash = 53 * hash + Objects.hashCode(type);
+            return hash;
+        }
+        
+        
         @Override
         public boolean equals(Object object) {
             if (this == object) {
@@ -134,18 +150,7 @@ public interface TokenMap<N, T> {
             }
         }
 
-        @Override
-        public int hashCode() {
-            return hash;
-        }
-
-        int hash() {
-            int hash = 5;
-            hash = 53 * hash + Objects.hashCode(name);
-            hash = 53 * hash + Objects.hashCode(type);
-            return hash;
-        }
-
+        
         @Override
         public String toString() {
             return "Key[name: " + name + " class: " + type.getName() + "]";
@@ -177,7 +182,7 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
     }
 
     @Override
-    public <U extends T> U get(N name, Class<U> type) {
+    public <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) cached.set(name, type));
     }
 
@@ -187,7 +192,7 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
     }
     
     @Override
-    public <U extends T> U remove(N name, Class<U> type) {
+    public <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) cached.set(name, type));
     }
 
@@ -218,7 +223,7 @@ class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     }
 
     @Override
-    public <U extends T> U get(N name, Class<U> type) {
+    public <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) cached.set(name, type));
     }
 
@@ -228,7 +233,7 @@ class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     }
     
     @Override
-    public <U extends T> U remove(N name, Class<U> type) {
+    public <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) cached.set(name, type));
     }
 

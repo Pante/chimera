@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,14 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.Future;
 
+public interface Context {
 
-public class RunnableRepetition<T> extends Repetition<T> {
-    
-    private Runnable runnable;
+    public static final long INFINITE = -1;
     
     
-    public RunnableRepetition(Runnable runnable, long times) {
-        super(times);
-        this.runnable = runnable;
-    }
-
-    @Override
-    protected void run(Future<T> context) {
-        runnable.run();
-    }
+    public void cancel();
+    
+    public long times();
     
 }

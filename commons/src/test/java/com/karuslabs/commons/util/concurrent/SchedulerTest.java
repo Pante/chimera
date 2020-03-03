@@ -23,54 +23,56 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class RunnableRepetitionTest {
+class SchedulerTest {
     
-    Runnable runnable = mock(Runnable.class);
-    Repetition<String> continual = new RunnableRepetition<>(runnable, 0);
-    Future<String> context = mock(Future.class);
-    
-    
-    @BeforeEach
-    void before() {
-        continual.set(context);
-    }
+    Scheduler scheduler = spy(new Scheduler(1));
+    RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
     
     
     @Test
-    void run_timed() {
-        var continual = new RunnableRepetition<String>(runnable, 1);
-        continual.set(context);
+    void schedule_consumer() {
+        doReturn(null).when(scheduler).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
+        var capture = ArgumentCaptor.forClass(RunnableContext.class);
         
-        continual.run();
-        verify(runnable).run();
+        scheduler.schedule((context) -> {}, 1, 2, TimeUnit.DAYS);
         
-        continual.run();
-        verify(context).cancel(false);
+        verify(scheduler).scheduleAtFixedRate(capture.capture(), eq(1L), eq(2L), eq(TimeUnit.DAYS));
+        
+        var runnable = capture.getValue();
+        assertEquals(Context.INFINITE, runnable.times());
     }
     
     
     @Test
-    void run_finish() {
-        continual.run();
-        verify(runnable, times(0)).run();
-        verify(context).cancel(false);
+    void decorateTask_runnable() {
+        Runnable runnable = mock(Runnable.class);
+        
+        assertEquals(task, scheduler.decorateTask(runnable, task));
+        
+        verifyNoInteractions(runnable);
+        verifyNoInteractions(task);
     }
     
     
     @Test
-    void set_throws_exception() {
-        assertEquals("Context has already been set", assertThrows(IllegalStateException.class, () -> continual.set(context)).getMessage());
+    void decorateTask_runnableContext() {
+        var runnable = mock(RunnableContext.class);
+        
+        assertEquals(task, scheduler.decorateTask(runnable, task));
+        
+        assertSame(task, runnable.future);
     }
     
 }

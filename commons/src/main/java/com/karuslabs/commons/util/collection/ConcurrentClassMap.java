@@ -64,7 +64,7 @@ class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T>
 
 class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
 
-    private ConcurrentMap<Class<? extends T>, T> map;
+    private final ConcurrentMap<Class<? extends T>, T> map;
     
     
     ConcurrentProxiedClassMap(ConcurrentMap<Class<? extends T>, T> map) {

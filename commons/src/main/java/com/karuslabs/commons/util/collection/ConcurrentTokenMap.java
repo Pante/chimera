@@ -27,6 +27,8 @@ import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import java.util.concurrent.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
@@ -49,7 +51,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     }
     
     @Override
-    public default <U extends T> U get(N name, Class<U> type) {
+    public default <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
     
@@ -59,7 +61,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     }
     
     @Override
-    public default <U extends T> U remove(N name, Class<U> type) {
+    public default <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
 

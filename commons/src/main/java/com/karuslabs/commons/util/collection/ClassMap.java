@@ -27,6 +27,8 @@ import com.google.common.primitives.Primitives;
 
 import java.util.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public interface ClassMap<T> {
     
@@ -47,12 +49,12 @@ public interface ClassMap<T> {
         return map().containsKey(type);
     }
     
-    public default <U extends T> boolean containsValue(U value) {
+    public default <U extends T> boolean containsValue(@Nullable U value) {
         return map().containsValue(value);
     }
         
     
-    public default <U extends T> U get(Class<U> type) {
+    public default @Nullable <U extends T> U get(Class<U> type) {
         return (U) map().get(type);
     }
     
@@ -66,11 +68,11 @@ public interface ClassMap<T> {
         }
     }
     
-    public default <U extends T> U put(Class<U> type, U value) {
+    public default <U extends T> @Nullable U put(Class<U> type, U value) {
         return (U) map().put(type, value);
     }
     
-    public default <U extends T> U remove(Class<U> type) {
+    public default <U extends T> @Nullable U remove(Class<U> type) {
         return (U) map().remove(type);
     }
     
@@ -97,7 +99,7 @@ class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
 
 class ProxiedClassMap<T> implements ClassMap<T> {
     
-    private Map<Class<? extends T>, T> map;
+    private final Map<Class<? extends T>, T> map;
     
     ProxiedClassMap(Map<Class<? extends T>, T> map) {
         this.map = map;

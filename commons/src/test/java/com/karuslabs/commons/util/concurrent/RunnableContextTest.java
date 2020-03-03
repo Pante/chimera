@@ -23,7 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,51 +35,40 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class RepeaterTest {
+class RunnableContextTest {
     
-    Repeater repeater = spy(new Repeater(1));
-    RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
+    Consumer<Context> consumer = mock(Consumer.class);
+    RunnableContext runnable = new RunnableContext(consumer, 1);
+    Future<String> future = mock(Future.class);
     
     
-    @Test
-    void schedule_runnable() {
-        doReturn(null).when(repeater).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
-        
-        repeater.schedule(() -> {}, 1, 2, TimeUnit.DAYS, 4);
-        
-        verify(repeater).scheduleAtFixedRate(any(RunnableRepetition.class), eq(1L), eq(2L), eq(TimeUnit.DAYS));
+    @BeforeEach
+    void before() {
+        runnable.future = future;
     }
     
     
     @Test
-    void schedule_repetition() {
-        doReturn(null).when(repeater).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
+    void run_timed() {        
+        runnable.run();
+        verify(consumer).accept(runnable);
+        assertEquals(0, runnable.times());
         
-        var repetition = new RunnableRepetition(() -> {}, 3);
-        repeater.schedule(repetition, 1, 2, TimeUnit.DAYS);
+        runnable.run();
         
-        verify(repeater).scheduleAtFixedRate(repetition, 1, 2, TimeUnit.DAYS);
+        assertEquals(0, runnable.times());
+        verify(future).cancel(false);
     }
     
     
     @Test
-    void decorateTask_runnable() {
-        Runnable runnable = mock(Runnable.class);
+    void run_infinite() {
+        runnable.times = Context.INFINITE;
         
-        assertEquals(task, repeater.decorateTask(runnable, task));
+        runnable.run();
         
-        verifyNoInteractions(runnable);
-        verifyNoInteractions(task);
-    }
-    
-    
-    @Test
-    void decorateTask_continual() {
-        Repetition continual = mock(Repetition.class);
-        
-        assertEquals(task, repeater.decorateTask(continual, task));
-        
-        verify(continual).set(task);
+        assertEquals(Context.INFINITE, runnable.times());
+        verifyNoInteractions(future);
     }
     
 }
