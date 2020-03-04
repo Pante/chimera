@@ -23,13 +23,15 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.ValueType;
+
 import java.util.*;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class TrieEntry<T> implements Entry<String, T> {
+final @ValueType class TrieEntry<T> implements Entry<String, T> {
     
     static final int PRINTABLE = 95;
     static final int OFFSET = 32;
@@ -176,8 +178,8 @@ class TrieEntry<T> implements Entry<String, T> {
             return false;
         }
         
-        Map.Entry<?, ?> e = (Map.Entry<?, ?>) other;
-        return equals(key, e.getKey()) && equals(value, e.getValue());
+        var entry = (Map.Entry<?, ?>) other;
+        return equals(key, entry.getKey()) && equals(value, entry.getValue());
     }
         
     /**
@@ -190,8 +192,7 @@ class TrieEntry<T> implements Entry<String, T> {
     
     @Override
     public int hashCode() {
-        return (key == null ? 0 : key.hashCode())
-             ^ (value == null ? 0 : value.hashCode());
+        return Objects.hashCode(key) ^ Objects.hashCode(value);
     }
     
     @Override

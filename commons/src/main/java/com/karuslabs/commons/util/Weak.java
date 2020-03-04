@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.annotations.ValueType;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -31,7 +32,6 @@ import java.util.stream.Stream;
 
 import static com.karuslabs.commons.util.WeakValue.EMPTY;
 import static java.util.stream.Stream.ofNullable;
-import com.karuslabs.annotations.ValueType;
 
 
 public @ValueType interface Weak<T> {

@@ -34,15 +34,15 @@ import static java.lang.Math.*;
 public @Static class Vectors {
     
     @FunctionalInterface
-    public static interface Reducer<T> {
+    public static interface Reduction<T> {
         
-        public T reduce(T container, double x, double y, double z);
+        public T reduce(T type, double x, double y, double z);
         
     }
     
-    public static Reducer<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
+    public static Reduction<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
         
-    public static Reducer<Location> LOCATION = (location, x, y, z) -> {
+    public static Reduction<Location> LOCATION = (location, x, y, z) -> {
         location.setX(x);
         location.setY(y);
         location.setZ(z);
@@ -103,7 +103,7 @@ public @Static class Vectors {
     }
     
     
-    public static <T> T rotate(Reducer<T> reducer, T container, double initialX, double initialY, double initialZ, float yawDegrees, float pitchDegrees) {
+    public static <T> T rotate(Reduction<T> reducer, T container, double initialX, double initialY, double initialZ, float yawDegrees, float pitchDegrees) {
         double x, y, z;
         
         double yaw = toRadians(-(yawDegrees + 90));
