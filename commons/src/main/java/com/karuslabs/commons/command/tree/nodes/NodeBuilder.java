@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.commons.command.tree.nodes;
 
-package com.karuslabs.commons.util;
+import com.karuslabs.commons.command.*;
 
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
 
 
-@ExtendWith(MockitoExtension.class)
-class TypeTest {
+public abstract class NodeBuilder<T, Builder extends NodeBuilder<T, Builder>> extends ArgumentBuilder<T, Builder> {
+
     
-    @ParameterizedTest
-    @MethodSource({"of_provider"})
-    void of(Object object) {
-        assertEquals(Type.of(object).boxed, object.getClass());
-    }
-    
-    static Stream<Object> of_provider() {
-        return Stream.of(true, 'a', "b", (byte) 0, (short) 0, 0, 0L, (float) 0, (double) 0);
+    public Builder executes(Executable<T> command) {
+        return executes((Command<T>) command);
     }
     
     
-    @Test
-    void of_type() {
-        assertEquals(Void.class, Type.of(new Object()).boxed);
+    public Builder then(Object annotated, String name) {
+        return then(Commands.resolve(annotated, name));
+    }
+    
+    
+    public Builder optionally(ArgumentBuilder<T, ?> builder) {
+        return optionally(builder.build());
+    }
+        
+    public Builder optionally(CommandNode<T> node) {
+        then(node);
+        for (var child : node.getChildren()) {
+            then(child);
+        }
+
+        return getThis();
     }
     
 }

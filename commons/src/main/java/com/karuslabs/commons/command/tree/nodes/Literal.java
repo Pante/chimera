@@ -25,10 +25,7 @@ package com.karuslabs.commons.command.tree.nodes;
 
 import com.karuslabs.commons.command.Commands;
 
-import com.karuslabs.commons.command.Executable;
-
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
@@ -40,6 +37,29 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
+    
+    public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
+        var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+ 
+        for (var child : command.getChildren()) {
+            literal.addChild(child);
+        }
+        
+        if (command instanceof Aliasable<?>) {
+            ((Aliasable<T>) command).aliases().add(literal);
+        }
+        
+        return literal;
+    }
+    
+    public static <T> Builder<T> builder(String name) {
+        return new Builder<>(name);
+    }
+    
+    public static Builder<CommandSender> of(String name) {
+        return new Builder<>(name);
+    }
+    
     
     private CommandNode<T> destination;
     private List<CommandNode<T>> aliases;
@@ -146,16 +166,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     }
 
     
-    public static <T> Builder<T> builder(String name) {
-        return new Builder<>(name);
-    }
-    
-    public static Builder<CommandSender> of(String name) {
-        return new Builder<>(name);
-    }
-    
-    
-    public static class Builder<T> extends ArgumentBuilder<T, Builder<T>> {
+    public static class Builder<T> extends com.karuslabs.commons.command.tree.nodes.NodeBuilder<T, Builder<T>> {
         
         String name;
         List<String> aliases;
@@ -176,35 +187,6 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             aliases.add(alias);
             return this;
         }
-        
-        public Builder<T> executes(Executable<T> command) {
-            return executes((Command<T>) command);
-        }
-        
-        
-        public Builder<T> then(Object annotated, String name) {
-            return then(Commands.from(annotated, name));
-        }
-        
-        
-        public Builder<T> optionally(ArgumentBuilder<T, ?> builder) {
-            return optionally(builder.build());
-        }
-        
-        public Builder<T> optionally(CommandNode<T> node) {
-            then(node);
-            for (var child : node.getChildren()) {
-                then(child);
-            }
-            
-            return this;
-        }
-        
-        
-        @Override
-        protected Builder<T> getThis() {
-            return this;
-        }
 
         
         @Override
@@ -215,10 +197,16 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             }
             
             for (var alias : aliases) {
-                Commands.alias(literal, alias);
+                Literal.alias(literal, alias);
             }
 
             return literal;
+        }
+        
+        
+        @Override
+        protected Builder<T> getThis() {
+            return this;
         }
 
     }

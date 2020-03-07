@@ -51,24 +51,11 @@ class CommandsTest {
 
     
     @Test
-    void from() {
+    void resolve() {
         var command = new TestCommand();
-        TestCommand.assertCommand(command, Commands.from(command, "a"));
+        TestCommand.assertCommand(command, Commands.resolve(command, "a"));
     }
-    
-    
-    
-    @Test
-    void alias() {
-        var alias = Commands.alias(literal, "alias");
-        
-        assertEquals("alias", alias.getName());
-        assertTrue(alias.isAlias());
-        assertEquals(literal.getCommand(), alias.getCommand());
-        assertEquals(4, alias.getChildren().size());
-        assertTrue(literal.aliases().contains(alias));
-    }
-    
+
     
     @Test
     void executes() {
@@ -79,33 +66,18 @@ class CommandsTest {
     
     
     @ParameterizedTest
-    @MethodSource("child")
-    void remove_child(String child, boolean removed, int size) {
+    @MethodSource("remove_parameters")
+    void remove(String child, boolean removed, int size) {
+        assertEquals(4, literal.getChildren().size());
+        
         assertEquals(removed, Commands.remove(literal, child) != null);
         assertEquals(size, literal.getChildren().size());
     }
     
-    static Stream<Arguments> child() {
+    static Stream<Arguments> remove_parameters() {
         return Stream.of(
             of("a", true, 1),
             of("c", false, 4)
-        );
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("remove_children_parameters")
-    void remove_children(String[] children, boolean all, int size) {
-        assertEquals(all, Commands.remove(literal, children));
-        assertEquals(size, literal.getChildren().size());
-    }
-    
-    static Stream<Arguments> remove_children_parameters() {
-        return Stream.of(
-            of(new String[] {"a"}, true, 1),
-            of(new String[] {"a", "b"}, true, 0),
-            of(new String[] {"a", "b", "c"}, false, 0),
-            of(new String[] {"other"}, false, 4)
         );
     }
     

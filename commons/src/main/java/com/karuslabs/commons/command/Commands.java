@@ -39,46 +39,25 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public @Static class Commands {
     
     static final Assembler<?> ASSEMBLER = new Assembler<>();
-    static final VarHandle COMMAND = field("command", Command.class);
-    static final VarHandle CHILDREN = field("children", Map.class);
-    static final VarHandle LITERALS = field("literals", Map.class);
-    static final VarHandle ARGUMENTS = field("arguments", Map.class);
     
+    static final VarHandle COMMAND;
+    static final VarHandle CHILDREN;
+    static final VarHandle LITERALS;
+    static final VarHandle ARGUMENTS;
     
-    static VarHandle field(String name, Class<?> type) {
+    static {
         try {
-            return MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, name, type);
+            var targetClass = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup());
+            COMMAND = targetClass.findVarHandle(CommandNode.class, "command", Command.class);
+            CHILDREN = targetClass.findVarHandle(CommandNode.class, "children", Map.class);
+            LITERALS = targetClass.findVarHandle(CommandNode.class, "literals", Map.class);
+            ARGUMENTS = targetClass.findVarHandle(CommandNode.class, "arguments", Map.class);
             
         } catch (IllegalAccessException | NoSuchFieldException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
 
-    
-    public static <T> CommandNode<T> from(Object annotated, String name) {
-        return Commands.<T>from(annotated).get(name);
-    }
-    
-    
-    public static <T> Map<String, CommandNode<T>> from(Object annotated) {
-        return (Map<String, CommandNode<T>>) ASSEMBLER.assemble(annotated);
-    }
-
-    
-    public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
-        var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
- 
-        for (var child : command.getChildren()) {
-            literal.addChild(child);
-        }
-        
-        if (command instanceof Aliasable<?>) {
-            ((Aliasable<T>) command).aliases().add(literal);
-        }
-        
-        return literal;
-    }
-    
     
     public static <T> void executes(CommandNode<T> command, Command<T> execution) {
         COMMAND.set(command, execution);
@@ -87,8 +66,8 @@ public @Static class Commands {
         
     public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
         var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
-        var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
-        var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
+        var literals = (Map<String, ?>) LITERALS.get(command);
+        var arguments = (Map<String, ?>) ARGUMENTS.get(command);
 
         
         var removed = commands.remove(child);
@@ -101,41 +80,23 @@ public @Static class Commands {
         
         if (removed instanceof Aliasable<?>) {
             for (var alias : ((Aliasable<?>) removed).aliases()) {
-                commands.remove(alias.getName());
-                literals.remove(child);
-                arguments.remove(child);
+                var name = alias.getName();
+                commands.remove(name);
+                literals.remove(name);
+                arguments.remove(name);
             }
         }
 
         return removed;
     }
-
-    public static <T> boolean remove(CommandNode<T> command, String... children) {
-        var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
-        var literals = (Map<String, LiteralCommandNode<T>>) LITERALS.get(command);
-        var arguments = (Map<String, ArgumentCommandNode<T, ?>>) ARGUMENTS.get(command);
-        
-        var all = true;
-        for (var child : children) {
-            var removed = commands.remove(child);
-            if (removed == null) {
-                all = false;
-                continue;
-            }
-            
-            literals.remove(child);
-            arguments.remove(child);
-            
-            if (removed instanceof Aliasable<?>) {
-                for (var alias : ((Aliasable<?>) removed).aliases()) {
-                    commands.remove(alias.getName());
-                    literals.remove(child);
-                    arguments.remove(child);
-                }
-            }
-        }
-        
-        return all;
+    
+    
+    public static <T> CommandNode<T> resolve(Object annotated, String name) {
+        return Commands.<T>resolve(annotated).get(name);
+    }
+    
+    public static <T> Map<String, CommandNode<T>> resolve(Object annotated) {
+        return (Map<String, CommandNode<T>>) ASSEMBLER.assemble(annotated);
     }
     
 }

@@ -25,11 +25,8 @@ package com.karuslabs.commons.command.tree.nodes;
 
 import com.karuslabs.commons.command.Commands;
 
-import com.karuslabs.commons.command.Executable;
-
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
@@ -41,7 +38,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
-
+    
+    public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
+        return new Builder<>(name, type);
+    }
+    
+    public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
+        return new Builder<>(name, type);
+    }
+    
+    
     private CommandNode<T> destination;
 
     
@@ -57,8 +63,8 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     @Override
     public void addChild(CommandNode<T> child) {
-        var existing = getChild(child.getName());
-        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
+        var current = getChild(child.getName());
+        var existingAliases = current instanceof Aliasable<?> ? ((Aliasable<T>) current).aliases() : null;
         var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
         
         super.addChild(child); 
@@ -73,7 +79,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
             if (childAliases != null) {
                 existingAliases.addAll(childAliases);
                 for (var alias : childAliases) {
-                    for (var grandchild : existing.getChildren()) {
+                    for (var grandchild : current.getChildren()) {
                         alias.addChild(grandchild);
                     }
                 }
@@ -109,18 +115,9 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
     }
+
     
-    
-    public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
-        return new Builder<>(name, type);
-    }
-    
-    public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
-        return new Builder<>(name, type);
-    }
-    
-    
-    public static class Builder<T, V> extends ArgumentBuilder<T, Builder<T, V>> {
+    public static class Builder<T, V> extends NodeBuilder<T, Builder<T, V>> {
         
         String name;
         ArgumentType<V> type;
@@ -131,33 +128,11 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
             this.name = name;
             this.type = type;
         }
-        
-        public Builder<T, V> executes(Executable<T> command) {
-            return executes((Command<T>) command);
-        }
+
         
         public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
             return getThis();
-        }
-        
-        
-        public Builder<T, V> then(Object annotated, String name) {
-            return then(Commands.from(annotated, name));
-        }
-        
-        
-        public Builder<T, V> optionally(ArgumentBuilder<T, ?> builder) {
-            return optionally(builder.build());
-        }
-        
-        public Builder<T, V> optionally(CommandNode<T> node) {
-            then(node);
-            for (var child : node.getChildren()) {
-                then(child);
-            }
-            
-            return this;
         }
         
         

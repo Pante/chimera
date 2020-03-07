@@ -72,7 +72,7 @@ public class Root extends RootCommandNode<CommandSender> {
                 super.addChild(command);
             }
             
-            super.addChild(Commands.alias(literal, prefix + ":" + command.getName()));
+            super.addChild(Literal.alias(literal, prefix + ":" + command.getName()));
             
         } else {
             throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode");
