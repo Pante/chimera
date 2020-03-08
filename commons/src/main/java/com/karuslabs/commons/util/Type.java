@@ -39,7 +39,8 @@ public enum Type {
     LONG(Long.class, long.class),
     FLOAT(Float.class, float.class),
     DOUBLE(Double.class, double.class),
-    TYPE(Void.class, null);
+    VOID(Void.class, null),
+    TYPE(null, null);
     
     
     private static final Map<Class<?>, Type> TYPES;

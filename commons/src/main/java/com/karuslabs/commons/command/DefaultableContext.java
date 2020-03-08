@@ -32,7 +32,7 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class DefaultableContext<S> extends CommandContext<S> {
+public class DefaultableContext<T> extends CommandContext<T> {
     
     static final VarHandle ARGUMENTS;
     
@@ -41,17 +41,17 @@ public class DefaultableContext<S> extends CommandContext<S> {
             ARGUMENTS = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup())
                                      .findVarHandle(CommandContext.class, "arguments", Map.class);
             
-        } catch (IllegalAccessException | NoSuchFieldException e) {
+        } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
     
     
-    private CommandContext<S> context;
-    private @Nullable Map<String, ParsedArgument<S, ?>> arguments;
+    private CommandContext<T> context;
+    private @Nullable Map<String, ParsedArgument<T, ?>> arguments;
     
     
-    public DefaultableContext(CommandContext<S> context) {
+    public DefaultableContext(CommandContext<T> context) {
         super(null, null, null, null, null, null, null, null, null, false);
         this.context = context;
         this.arguments = null;
@@ -64,7 +64,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     public <V> V getOptionalArgument(String name, Class<V> type, V value) {
         if (arguments == null) {
-            arguments = (Map<String, ParsedArgument<S, ?>>) ARGUMENTS.get(context);
+            arguments = (Map<String, ParsedArgument<T, ?>>) ARGUMENTS.get(context);
         }  
         
         var argument = arguments.get(name);
@@ -78,27 +78,27 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     
     @Override
-    public DefaultableContext<S> copyFor(final S source) {
+    public DefaultableContext<T> copyFor(T source) {
         return new DefaultableContext(context.copyFor(source));
     }
 
     @Override
-    public CommandContext<S> getChild() {
+    public CommandContext<T> getChild() {
         return context.getChild();
     }
 
     @Override
-    public CommandContext<S> getLastChild() {
+    public CommandContext<T> getLastChild() {
         return context.getLastChild();
     }
 
     @Override
-    public Command<S> getCommand() {
+    public Command<T> getCommand() {
         return context.getCommand();
     }
 
     @Override
-    public S getSource() {
+    public T getSource() {
         return context.getSource();
     }
 
@@ -108,7 +108,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
 
     @Override
-    public RedirectModifier<S> getRedirectModifier() {
+    public RedirectModifier<T> getRedirectModifier() {
         return context.getRedirectModifier();
     }
 
@@ -123,7 +123,7 @@ public class DefaultableContext<S> extends CommandContext<S> {
     }
 
     @Override
-    public List<ParsedCommandNode<S>> getNodes() {
+    public List<ParsedCommandNode<T>> getNodes() {
         return context.getNodes();
     }
 
@@ -134,12 +134,15 @@ public class DefaultableContext<S> extends CommandContext<S> {
     
     
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof DefaultableContext)) {
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+            
+        } else  if (!(other instanceof DefaultableContext)) {
             return false;
         }
 
-        return context.equals(((DefaultableContext) object).context);
+        return context.equals(((DefaultableContext) other).context);
     }
 
     @Override

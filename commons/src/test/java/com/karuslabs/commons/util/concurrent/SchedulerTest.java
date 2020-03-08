@@ -27,10 +27,10 @@ import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 
 
@@ -56,6 +56,15 @@ class SchedulerTest {
     
     
     @Test
+    void decorateTask_runnableContext() {
+        var runnable = mock(RunnableContext.class);
+        
+        assertEquals(task, scheduler.decorateTask(runnable, task));
+        assertSame(task, runnable.future);
+    }
+    
+    
+    @Test
     void decorateTask_runnable() {
         Runnable runnable = mock(Runnable.class);
         
@@ -63,16 +72,6 @@ class SchedulerTest {
         
         verifyNoInteractions(runnable);
         verifyNoInteractions(task);
-    }
-    
-    
-    @Test
-    void decorateTask_runnableContext() {
-        var runnable = mock(RunnableContext.class);
-        
-        assertEquals(task, scheduler.decorateTask(runnable, task));
-        
-        assertSame(task, runnable.future);
     }
     
 }

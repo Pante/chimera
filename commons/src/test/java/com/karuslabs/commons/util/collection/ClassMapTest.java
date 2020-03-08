@@ -40,8 +40,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClassMapTest {    
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void containsKey(ClassMap<Object> map) {
+        
         map.put(int.class, 1);
         assertTrue(map.containsKey(int.class));
         assertFalse(map.containsKey(Integer.class));
@@ -49,7 +50,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void containsValue(ClassMap<Object> map) {  
         map.put(int.class, 1); 
         assertTrue(map.containsValue(1));
@@ -57,7 +58,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void get(ClassMap<Object> map) {
         map.put(String.class, "test");
         assertEquals(String.class, map.get(String.class).getClass());
@@ -65,7 +66,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void getOrDefault_value(ClassMap<Object> map) {
         map.put(int.class, 1);
         assertEquals(1, (int) map.getOrDefault(int.class, 2));
@@ -73,7 +74,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void getOrDefault_default(ClassMap<Object> map) {
         map.map().put(int.class, "invalid");
         assertEquals(2, (int) map.getOrDefault(int.class, 2));
@@ -81,7 +82,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void put(ClassMap<Object> map) {
         map.put(String.class, "first");
         assertEquals("first", map.put(String.class, "second"));
@@ -89,7 +90,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("parameters")
     void remove(ClassMap<Object> map) {
         map.put(int.class, 1); 
         map.remove(int.class);
@@ -97,7 +98,7 @@ class ClassMapTest {
     }
     
     
-    static Stream<ClassMap<Object>> map_provider() {
+    static Stream<ClassMap<Object>> parameters() {
         var hashed = ClassMap.of();
         var proxied = ClassMap.of(new HashMap<>());
         

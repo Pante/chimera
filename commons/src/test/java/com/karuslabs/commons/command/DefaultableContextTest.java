@@ -50,96 +50,94 @@ class DefaultableContextTest {
     static final CommandNode<Object> NODE = mock(CommandNode.class);
     static final StringRange RANGE = new StringRange(0, 0);
     static final RedirectModifier<Object> MODIFIER = context -> List.of();
-    
-    
-    CommandContext<Object> context = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, NODE, List.of(), RANGE, null, MODIFIER, false);
-    DefaultableContext<Object> defaultable = new DefaultableContext<>(context);
-    
-    CommandContext<Object> mock = mock(CommandContext.class);
-    DefaultableContext<Object> delegate = new DefaultableContext<>(mock);
+    static final CommandContext<Object> DELEGATE = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, NODE, List.of(), RANGE, null, MODIFIER, false);
+    static final DefaultableContext<Object> CONTEXT = new DefaultableContext<>(DELEGATE);
     
     
     @Test
     void getOptionalArgument() {
-        assertEquals("value", defaultable.getOptionalArgument("argument", String.class));
+        assertEquals("value", CONTEXT.getOptionalArgument("argument", String.class));
     }
     
     
     @Test
     void getOptionalArgument_null() {
-        assertNull(defaultable.getOptionalArgument("invalid", String.class));
+        assertNull(CONTEXT.getOptionalArgument("invalid", String.class));
     }
     
     
     @Test
     void getOptionalArgument_default() {
-        assertEquals("value", defaultable.getOptionalArgument("argument", String.class, "value"));
+        assertEquals("value", CONTEXT.getOptionalArgument("argument", String.class, "value"));
     }
     
     
     @Test
     void getOptionalArgument_default_default() {
-        assertEquals("default", defaultable.getOptionalArgument("invalid", String.class, "default"));
+        assertEquals("default", CONTEXT.getOptionalArgument("invalid", String.class, "default"));
     }
     
     
     @Test
     void delegate() {
-        delegate.copyFor(null);
-        verify(mock).copyFor(null);
+        var delegate = mock(CommandContext.class);
+        var context = new DefaultableContext<>(delegate);
         
-        delegate.getChild();
-        verify(mock).getChild();
+        context.copyFor(null);
+        verify(delegate).copyFor(null);
         
-        delegate.getLastChild();
-        verify(mock).getLastChild();
+        context.getChild();
+        verify(delegate).getChild();
         
-        delegate.getCommand();
-        verify(mock).getCommand();
+        context.getLastChild();
+        verify(delegate).getLastChild();
         
-        delegate.getSource();
-        verify(mock).getSource();
+        context.getCommand();
+        verify(delegate).getCommand();
         
-        delegate.getArgument("name", String.class);
-        verify(mock).getArgument("name", String.class);
+        context.getSource();
+        verify(delegate).getSource();
         
-        delegate.getRedirectModifier();
-        verify(mock).getRedirectModifier();
+        context.getArgument("name", String.class);
+        verify(delegate).getArgument("name", String.class);
         
-        delegate.getRange();
-        verify(mock).getRange();
+        context.getRedirectModifier();
+        verify(delegate).getRedirectModifier();
         
-        delegate.getInput();
-        verify(mock).getInput();
+        context.getRange();
+        verify(delegate).getRange();
         
-        delegate.getNodes();
-        verify(mock).getNodes();
+        context.getInput();
+        verify(delegate).getInput();
         
-        delegate.isForked();
-        verify(mock).isForked();
+        context.getNodes();
+        verify(delegate).getNodes();
+        
+        context.isForked();
+        verify(delegate).isForked();
     }
     
     
     @ParameterizedTest
-    @MethodSource("equality_provider")
+    @MethodSource("equality_parameters")
     void equality(Object other, boolean expected) {
-        assertEquals(expected, defaultable.equals(other));
+        assertEquals(expected, CONTEXT.equals(other));
     }
     
     
     @ParameterizedTest
-    @MethodSource("equality_provider")
+    @MethodSource("equality_parameters")
     void hashCode(Object other, boolean expected) {
-        assertEquals(expected, defaultable.hashCode() == Objects.hashCode(other));
+        assertEquals(expected, CONTEXT.hashCode() == Objects.hashCode(other));
     }
     
     
-    static Stream<Arguments> equality_provider() {
+    static Stream<Arguments> equality_parameters() {
         var context = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, NODE, List.of(), RANGE, null, MODIFIER, false);
         var other = new DefaultableContext<>(context);
         return Stream.of(
+            of(CONTEXT, true),
             of(other, true),
-            of(new DefaultableContext(context) {}, true),
             of(null, false)
         );
     }

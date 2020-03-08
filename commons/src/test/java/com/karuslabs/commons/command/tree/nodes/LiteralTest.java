@@ -50,6 +50,20 @@ class LiteralTest {
     
     
     @Test
+    void alias() {
+        literal.addChild(argument);
+        
+        var alias = Literal.alias(literal, "alias");
+        
+        assertEquals("alias", alias.getName());
+        assertTrue(alias.isAlias());
+        assertEquals(literal.getCommand(), alias.getCommand());
+        assertEquals(1, alias.getChildren().size());
+        assertTrue(literal.aliases().contains(alias));
+    }
+    
+    
+    @Test
     void addChild_child() {
         literal.addChild(child);
         var alias = literal.aliases().get(0);

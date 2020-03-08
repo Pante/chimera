@@ -45,23 +45,15 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 @ExtendWith(MockitoExtension.class)
 class CommandsTest {
     
-    Command<Object> command = val -> 1;
-    Argument<Object, String> argument = Argument.builder("b", word()).executes(command).then(Argument.builder("b1", word())).build();
-    Literal<Object> literal = Literal.builder("name").executes(command).then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
-
+    Argument<Object, String> argument = Argument.builder("b", word()).then(Argument.builder("b1", word())).build();
+    Literal<Object> literal = Literal.builder("name").then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
+    Command<Object> execution = val -> 1;
     
-    @Test
-    void resolve() {
-        var command = new TestCommand();
-        TestCommand.assertCommand(command, Commands.resolve(command, "a"));
-    }
-
     
     @Test
     void executes() {
-        Command<Object> command = val -> 1;
-        Commands.executes(literal, command);
-        assertSame(command, literal.getCommand());
+        Commands.executes(literal, execution);
+        assertSame(execution, literal.getCommand());
     }
     
     
@@ -79,6 +71,13 @@ class CommandsTest {
             of("a", true, 1),
             of("c", false, 4)
         );
+    }
+    
+    
+    @Test
+    void resolve() {
+        var command = new TestCommand();
+        TestCommand.assertCommand(command, Commands.resolve(command, "a"));
     }
     
 } 

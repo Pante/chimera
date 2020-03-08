@@ -53,7 +53,7 @@ public @Static class Commands {
             LITERALS = targetClass.findVarHandle(CommandNode.class, "literals", Map.class);
             ARGUMENTS = targetClass.findVarHandle(CommandNode.class, "arguments", Map.class);
             
-        } catch (IllegalAccessException | NoSuchFieldException e) {
+        } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }
     }
@@ -65,12 +65,12 @@ public @Static class Commands {
     
         
     public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
-        var commands = (Map<String, CommandNode<T>>) CHILDREN.get(command);
+        var children = (Map<String, CommandNode<T>>) CHILDREN.get(command);
         var literals = (Map<String, ?>) LITERALS.get(command);
         var arguments = (Map<String, ?>) ARGUMENTS.get(command);
 
         
-        var removed = commands.remove(child);
+        var removed = children.remove(child);
         if (removed == null) {
             return null;
         }
@@ -81,7 +81,7 @@ public @Static class Commands {
         if (removed instanceof Aliasable<?>) {
             for (var alias : ((Aliasable<?>) removed).aliases()) {
                 var name = alias.getName();
-                commands.remove(name);
+                children.remove(name);
                 literals.remove(name);
                 arguments.remove(name);
             }
@@ -91,7 +91,7 @@ public @Static class Commands {
     }
     
     
-    public static <T> CommandNode<T> resolve(Object annotated, String name) {
+    public static <T> @Nullable CommandNode<T> resolve(Object annotated, String name) {
         return Commands.<T>resolve(annotated).get(name);
     }
     

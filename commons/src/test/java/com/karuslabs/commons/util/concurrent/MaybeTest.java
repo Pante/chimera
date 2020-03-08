@@ -36,21 +36,27 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class MaybeTest {
     
-    static final String expected = "expected";
-    static final Maybe<String> maybe = new Maybe<>(() -> expected);
-    static final Maybe<String> exceptional = new Maybe<>(() -> { throw new IllegalArgumentException(); }, null);
+    Maybe<String> maybe = new Maybe<>(() -> "expected");
+    Maybe<String> exceptional = new Maybe<>(() -> { throw new IllegalArgumentException(); }, null);
     
     
-    @BeforeAll
-    static void before() {
+    @BeforeEach
+    void before() {
         maybe.run();
         exceptional.run();
     }
     
     
     @Test
+    void value_constructor() {
+        var maybe = Maybe.value("a");
+        assertEquals("a", maybe.value());
+    }
+    
+    
+    @Test
     void maybe() {
-        assertEquals(expected, maybe.maybe().orElseThrow());
+        assertEquals("expected", maybe.maybe().orElseThrow());
     }
     
     
@@ -62,7 +68,7 @@ class MaybeTest {
     
     @Test
     void maybe_timeout() {
-        assertEquals(expected, maybe.maybe(1, TimeUnit.MINUTES).orElseThrow());
+        assertEquals("expected", maybe.maybe(1, TimeUnit.MINUTES).orElseThrow());
     }
     
     
@@ -74,7 +80,7 @@ class MaybeTest {
     
     @Test
     void value() {
-        assertEquals(expected, maybe.value());
+        assertEquals("expected", maybe.value());
     }
     
     
@@ -86,7 +92,7 @@ class MaybeTest {
     
     @Test
     void value_timeout() {
-        assertEquals(expected, maybe.value(1, TimeUnit.MINUTES));
+        assertEquals("expected", maybe.value(1, TimeUnit.MINUTES));
     }
     
     

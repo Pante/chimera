@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Matthias.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,14 @@ class AnnotationProcessorTest {
     Messager messager = mock(Messager.class);
     Elements elements = mock(Elements.class);
     Types types = mock(Types.class);
+    Element element = mock(Element.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
+    
+    
+    @BeforeEach
+    void before() {
+        processor.init(environment);
+    }
     
     
     @Test
@@ -62,16 +69,21 @@ class AnnotationProcessorTest {
     
     
     @Test
-    void messsage() {
-        var element = mock(Element.class);
-        processor.init(environment);
-        
+    void error() {
         processor.error(element, "Error");
         verify(messager).printMessage(ERROR, "Error", element);
-        
+    }
+    
+    
+    @Test
+    void warn() {      
         processor.warn(element, "Warning");
         verify(messager).printMessage(WARNING, "Warning", element);
-        
+    }
+    
+    
+    @Test
+    void note() {
         processor.note(element, "Note");
         verify(messager).printMessage(NOTE, "Note", element);
     }

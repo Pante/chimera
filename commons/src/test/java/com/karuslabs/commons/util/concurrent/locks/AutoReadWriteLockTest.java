@@ -49,53 +49,54 @@ import static org.mockito.Mockito.*;
 class AutoReadWriteLockTest {
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void lock_delegate(Lock lock, Lock internal) throws InterruptedException {
+    @MethodSource({"lock_parameters"})
+    void lock_delegate(Lock lock, Lock delegate) throws InterruptedException {
         lock.lock();
-        verify(internal).lock();
+        verify(delegate).lock();
         
         lock.lockInterruptibly();
-        verify(internal).lockInterruptibly();
+        verify(delegate).lockInterruptibly();
         
         lock.newCondition();
-        verify(internal).newCondition();
+        verify(delegate).newCondition();
 
         lock.tryLock();
-        verify(internal).tryLock();
+        verify(delegate).tryLock();
         
         lock.tryLock(1, DAYS);
-        verify(internal).tryLock(1, DAYS);
+        verify(delegate).tryLock(1, DAYS);
         
         lock.unlock();
-        verify(internal).unlock();
+        verify(delegate).unlock();
         
         assertEquals(lock.toString(), "delegate");
     }
 
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void acquire_internal_unlocks(Acquirable lock, Lock internal) throws InterruptedException {
-        try (var releasable = lock.acquire()) {
-            verify(internal).lock();
+    @MethodSource({"lock_parameters"})
+    void acquire_delegate_unlocks(Acquirable lock, Lock delegate) throws InterruptedException {
+        try (var mutex = lock.acquire()) {
+            verify(delegate).lock();
             
         } finally {
-            verify(internal).unlock();
+            verify(delegate).unlock();
         }
     }
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void acquire_interruptibly_internal_unlocks(Acquirable lock, Lock internal) throws InterruptedException {
-        try (var releasable = lock.acquireInterruptibly()) {
-            verify(internal).lockInterruptibly();
+    @MethodSource({"lock_parameters"})
+    void acquireInterruptibly_delegate_unlocks(Acquirable lock, Lock delegate) throws InterruptedException {
+        try (var mutex = lock.acquireInterruptibly()) {
+            verify(delegate).lockInterruptibly();
+            
         } finally {
-            verify(internal).unlock();
+            verify(delegate).unlock();
         }
     } 
     
     
-    static Stream<Arguments> lock_provider() {
+    static Stream<Arguments> lock_parameters() {
         ReadLock reader = when(mock(ReadLock.class).toString()).thenReturn("delegate").getMock();
         var autoreader = new AutoReadLock(new AutoReadWriteLock(), reader);
         

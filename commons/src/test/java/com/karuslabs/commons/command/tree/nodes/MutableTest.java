@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MutableNodeTest {
+class MutableTest {
     
     
     @ParameterizedTest

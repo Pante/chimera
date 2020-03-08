@@ -49,7 +49,7 @@ class RunnableContextTest {
     
     
     @Test
-    void run_timed() {        
+    void run() {        
         runnable.run();
         verify(consumer).accept(runnable);
         assertEquals(0, runnable.times());
