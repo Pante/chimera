@@ -23,7 +23,9 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.util.Position;
+import com.karuslabs.commons.util.Point;
+import com.karuslabs.commons.util.Point.Axis;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -50,7 +52,7 @@ class Position2DTypeTest {
     
     @Test
     void parse() throws CommandSyntaxException {
-        assertEquals(new Position(1, 0, 3).relative(Position.Z, true), type.parse(new StringReader("1 ~3")));
+        assertEquals(new Point(1, 0, 3).relative(Axis.Z, true), type.parse(new StringReader("1 ~3")));
     }
     
     

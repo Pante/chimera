@@ -24,7 +24,8 @@
 package com.karuslabs.commons.command.types.parsers;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.util.Position;
+import com.karuslabs.commons.util.Point;
+import com.karuslabs.commons.util.Point.Axis;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.exceptions.*;
@@ -51,35 +52,35 @@ public @Static class VectorParser {
     }
     
     
-    public static Position parse2DPosition(StringReader reader) throws CommandSyntaxException {
+    public static Point parse2DPosition(StringReader reader) throws CommandSyntaxException {
         return parsePosition(reader, false);
     }
     
-    public static Position parse3DPosition(StringReader reader) throws CommandSyntaxException {
+    public static Point parse3DPosition(StringReader reader) throws CommandSyntaxException {
         return parsePosition(reader, true);
     }
     
     
-    static Position parsePosition(StringReader reader, boolean y) throws CommandSyntaxException {
-        var position = new Position();
+    static Point parsePosition(StringReader reader, boolean y) throws CommandSyntaxException {
+        var position = new Point();
         
         if (reader.peek() == '^') {
-            position.rotate(true);
+            position.rotation(true);
         }
         
-        parse(reader, position, Position.X);
+        parse(reader, position, Axis.X);
         if (y) {
-            parse(reader, position, Position.Y);
+            parse(reader, position, Axis.Y);
         }
-        parse(reader, position, Position.Z);
+        parse(reader, position, Axis.Z);
         
         return position;
     }
     
-    static Position parse(StringReader reader, Position position, int axis) throws CommandSyntaxException {
+    static Point parse(StringReader reader, Point position, Axis axis) throws CommandSyntaxException {
         reader.skipWhitespace();
         
-        if (position.rotate()) {
+        if (position.rotation()) {
             if (reader.peek() != '^') {
                 throw MIXED.createWithContext(reader);
             }

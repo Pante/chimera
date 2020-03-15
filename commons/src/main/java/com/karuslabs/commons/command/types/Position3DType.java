@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.types;
 
 import com.karuslabs.commons.command.types.parsers.VectorParser;
-import com.karuslabs.commons.util.Position;
+import com.karuslabs.commons.util.Point;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
@@ -34,13 +34,13 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.*;
 
 
-public class Position3DType extends Cartesian3DType<Position> {
+public class Position3DType extends Cartesian3DType<Point> {
     
     static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~");
     
     
     @Override
-    public Position parse(StringReader reader) throws CommandSyntaxException {
+    public Point parse(StringReader reader) throws CommandSyntaxException {
         return VectorParser.parse3DPosition(reader);
     }
     

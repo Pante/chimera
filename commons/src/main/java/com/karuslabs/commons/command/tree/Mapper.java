@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.tree;
 
+import com.karuslabs.annotations.VisibleForOverride;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
@@ -58,36 +59,44 @@ public class Mapper<T, R> {
     }
 
     
+    @VisibleForOverride
     protected CommandNode<R> argument(CommandNode<T> command) {
         var parameter = (ArgumentCommandNode<T, ?>) command;
         return new Argument<>(parameter.getName(), type(parameter), execution(parameter), requirement(parameter), suggestions(parameter));
     }
 
+    @VisibleForOverride
     protected CommandNode<R> literal(CommandNode<T> command) {
         return new Literal<>(command.getName(), execution(command), requirement(command));
     }
 
+    @VisibleForOverride
     protected CommandNode<R> root(CommandNode<T> command) {
         return new RootCommandNode<>();
     }
 
+    @VisibleForOverride
     protected CommandNode<R> otherwise(CommandNode<T> command) {
-        throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
+        throw new IllegalArgumentException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
     }
     
     
+    @VisibleForOverride
     protected ArgumentType<?> type(ArgumentCommandNode<T, ?> command) {
         return command.getType();
     }
     
+    @VisibleForOverride
     protected Command<R> execution(CommandNode<T> command) {
         return (Command<R>) NONE;
     }
 
+    @VisibleForOverride
     protected Predicate<R> requirement(CommandNode<T> command) {
         return (Predicate<R>) TRUE;
     }
 
+    @VisibleForOverride
     protected @Nullable SuggestionProvider<R> suggestions(ArgumentCommandNode<T, ?> command) {
         return null;
     }

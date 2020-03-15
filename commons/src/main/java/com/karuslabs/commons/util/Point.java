@@ -33,99 +33,114 @@ import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public final @ValueType class Position extends Location {
+public final @ValueType class Point extends Location {
     
     private static final double EPSILON = 0.000001;
+    private static final int X = 0;
+    private static final int Y = 1;
+    private static final int Z = 2;
     
-    
-    public static final int X = 0;
-    public static final int Y = 1;
-    public static final int Z = 2;
+    public static enum Axis {
+        
+        X(0),
+        Y(1),
+        Z(2);
+        
+        private final int index;
+        
+        private Axis(int index) {
+            this.index = index;
+        }
+        
+    }
     
     
     private boolean[] relative;
-    private boolean rotate;
+    private boolean rotation;
     
     
-    public Position() {
+    public Point() {
         this(0, 0, 0);
     }
     
-    public Position(double x, double y, double z) {
+    public Point(double x, double y, double z) {
         this(null, x, y, z);
     }
     
-    public Position(@Nullable World world, double x, double y, double z) {
+    public Point(@Nullable World world, double x, double y, double z) {
         this(world, x, y, z, 0, 0);
     }
 
-    public Position(@Nullable World world, double x, double y, double z, float yaw, float pitch) {
+    public Point(@Nullable World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
         relative = new boolean[]{ false, false, false };
-        rotate = false;
+        rotation = false;
     }
     
     
-    public void apply(Location to, Location origin) {
-        to.setX(relative[X] ? getX() + origin.getX() : getX());
-        to.setY(relative[Y] ? getY() + origin.getY() : getY());
-        to.setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
+    public void copy(Location origin, Location result) {
+        result.setX(relative[X] ? getX() + origin.getX() : getX());
+        result.setY(relative[Y] ? getY() + origin.getY() : getY());
+        result.setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
         
-        if (rotate) Vectors.rotate(to, origin);
-    }
-    
-    public void apply(Vector to, Location origin) {
-        to.setX(relative[X] ? getX() + origin.getX() : getX())
-          .setY(relative[Y] ? getY() + origin.getY() : getY())
-          .setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
-        
-        if (rotate) Vectors.rotate(to, origin);
-    }
-    
-    public void relativize(Location origin) {
-        if (relative[X]) setX(getX() + origin.getX());
-        if (relative[Y]) setY(getY() + origin.getY());
-        if (relative[Z]) setZ(getZ() + origin.getZ());
-        if (rotate) Vectors.rotate(this, origin);
-    }
-    
-    
-    public Position set(int axis, double value) {
-        switch (axis) {
-            case X:
-               setX(value);
-               return this;
-               
-            case Y:
-                setY(value);
-                return this;
-                
-            case Z:
-                setZ(value);
-                return this;
-                
-            default:
-                throw new IllegalArgumentException("Invalid axis: " + axis);
+        if (rotation) {
+            Vectors.rotate(result, origin);
         }
     }
     
-    
-    public boolean relative(int axis) {
-        return relative[axis];
+    public void copy(Location origin, Vector result) {
+        result.setX(relative[X] ? getX() + origin.getX() : getX())
+              .setY(relative[Y] ? getY() + origin.getY() : getY())
+              .setZ(relative[Z] ? getZ() + origin.getZ() : getZ());
+        
+        if (rotation) {
+            Vectors.rotate(result, origin);
+        }
     }
     
-    public Position relative(int axis, boolean relative) {
-        this.relative[axis] = relative;
+    public void align(Location origin) {
+        if (relative[X]) setX(getX() + origin.getX());
+        if (relative[Y]) setY(getY() + origin.getY());
+        if (relative[Z]) setZ(getZ() + origin.getZ());
+        if (rotation) Vectors.rotate(this, origin);
+    }
+    
+    
+    public Point set(Axis axis, double value) {
+        switch (axis) {
+            case X:
+                setX(value);
+                break;
+               
+            case Y:
+                setY(value);
+                break;
+                
+            case Z:
+                setZ(value);
+                break;
+        }
+        
         return this;
     }
     
     
-    public boolean rotate() {
-        return rotate;
+    public boolean relative(Axis axis) {
+        return relative[axis.index];
     }
     
-    public Position rotate(boolean rotate) {
-        this.rotate = rotate;
+    public Point relative(Axis axis, boolean relative) {
+        this.relative[axis.index] = relative;
+        return this;
+    }
+    
+    
+    public boolean rotation() {
+        return rotation;
+    }
+    
+    public Point rotation(boolean rotation) {
+        this.rotation = rotation;
         return this;
     }
     
@@ -136,18 +151,18 @@ public final @ValueType class Position extends Location {
             return true;
         }
         
-        if (!(object instanceof Position)) {
+        if (!(object instanceof Point)) {
             return false;
         }
         
-        var other = (Position) object;
+        var other = (Point) object;
         return Objects.equals(getWorld(), other.getWorld())
             && Math.abs(getX() - other.getX()) < EPSILON
             && Math.abs(getY() - other.getY()) < EPSILON
             && Math.abs(getZ() - other.getZ()) < EPSILON
             && Math.abs(getYaw() - other.getYaw()) < EPSILON
             && Math.abs(getPitch() - other.getPitch()) < EPSILON
-            && rotate == other.rotate 
+            && rotation == other.rotation 
             && Arrays.equals(relative, other.relative);
     }
 
@@ -156,7 +171,7 @@ public final @ValueType class Position extends Location {
         int hash = super.hashCode();
         
         hash = 19 * hash + Arrays.hashCode(this.relative);
-        hash = 19 * hash + (this.rotate ? 1 : 0);
+        hash = 19 * hash + (this.rotation ? 1 : 0);
         
         return hash;
     }
@@ -164,12 +179,17 @@ public final @ValueType class Position extends Location {
     
     @Override
     public String toString() {
-        return "rotate[" + rotate + "], " + getWorld() + "[world]" + point(getX(), X) + point(getY(), Y) + point(getZ(), Z) + ", " + getYaw() + "[yaw], " + getPitch() + "[pitch]";
+        return "Point[rotation: " + rotation + ", world: " + getWorld() 
+             + ", x: " + point(getX(), X) 
+             + ", y: " + point(getY(), Y) 
+             + ", z: " + point(getZ(), Z)
+             + ", yaw: " + getYaw()
+             + ", pitch: " + getPitch()
+             + "]";
     }
     
     private String point(double point, int axis) {
-        var relativity = relative[axis] ? "relative" : "absolute";
-        return ", " + point + "[" + relativity + "]";
+        return "[" + point + ", " + (relative[axis] ? "relative" : "absolute") + "]";
     }
     
 }

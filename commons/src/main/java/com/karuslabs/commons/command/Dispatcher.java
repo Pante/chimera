@@ -25,7 +25,7 @@ package com.karuslabs.commons.command;
 
 import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
-import com.karuslabs.commons.command.tree.Tree;
+import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -47,7 +47,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private MinecraftServer server;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
     Synchronizer synchronizer;
-    Tree<CommandSender, CommandListenerWrapper> tree;
+    TreeWalker<CommandSender, CommandListenerWrapper> tree;
 
     
     public static Dispatcher of(Plugin plugin) {
@@ -68,7 +68,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
-        this.tree = new Tree<>(new DispatcherMapper(this));
+        this.tree = new TreeWalker<>(new DispatcherMapper(this));
     }
     
     
@@ -80,7 +80,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
       
     
     public void update() {
-        tree.truncate(getRoot(), dispatcher.getRoot());
+        tree.prune(dispatcher.getRoot(), getRoot().getChildren());
         synchronizer.synchronize();
     }
     
@@ -88,7 +88,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        tree.truncate(getRoot(), dispatcher.getRoot());
+        tree.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
  
     

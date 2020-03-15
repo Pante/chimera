@@ -71,10 +71,6 @@ public @Static class Commands {
 
         
         var removed = children.remove(child);
-        if (removed == null) {
-            return null;
-        }
-        
         literals.remove(child);
         arguments.remove(child);
         

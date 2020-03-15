@@ -40,19 +40,32 @@ import static org.junit.jupiter.api.Assertions.*;
 class TypeTest {
     
     @ParameterizedTest
-    @MethodSource({"of_provider"})
+    @MethodSource({"types"})
     void of(Object object) {
-        assertEquals(Type.of(object).boxed, object.getClass());
+        assertEquals(Type.of(object.getClass()).boxed, object.getClass());
     }
     
-    static Stream<Object> of_provider() {
+    static Stream<Object> types() {
         return Stream.of(true, 'a', "b", (byte) 0, (short) 0, 0, 0L, (float) 0, (double) 0);
     }
     
     
     @Test
     void of_type() {
-        assertEquals(Void.class, Type.of(new Object()).boxed);
+        var type = Type.of(new Object().getClass());
+        
+        assertEquals(Object.class, type.boxed);
+        assertEquals(Object.class, type.unboxed);
+    }
+    
+    
+    @Test
+    void of_null() {
+        assertEquals(Void.class, Type.of(Void.class).boxed);
+        assertEquals(null, Type.of(Void.class).unboxed);
+        
+        assertEquals(Void.class, Type.of(null).boxed);
+        assertEquals(null, Type.of(null).unboxed);
     }
     
 }

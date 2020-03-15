@@ -386,7 +386,7 @@ public class Trie<V> extends AbstractMap<String, V> {
             return entry;
         }
 
-        void children(TrieEntry<V> entry) {
+        final void children(TrieEntry<V> entry) {
             if (entry.ascii != null) {
                 for (var child : entry.ascii) {
                     if (child != null) {

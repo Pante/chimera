@@ -23,12 +23,14 @@
  */
 package com.karuslabs.annotations.processor;
 
+
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 import static javax.tools.Diagnostic.Kind.*;
+import com.karuslabs.annotations.VisibleForOverride;
 
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
@@ -61,10 +63,12 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return false;
     }
     
+    @VisibleForOverride
     protected void process(Element element) {
         
     }
     
+    @VisibleForOverride
     protected void clear() {
         
     }

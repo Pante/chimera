@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.annotations.Delegate;
+
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.*;
 
@@ -32,10 +34,9 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class DefaultableContext<T> extends CommandContext<T> {
+public @Delegate class DefaultableContext<T> extends CommandContext<T> {
     
     static final VarHandle ARGUMENTS;
-    
     static {
         try {
             ARGUMENTS = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup())

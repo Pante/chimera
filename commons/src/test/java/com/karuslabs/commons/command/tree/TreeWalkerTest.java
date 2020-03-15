@@ -44,61 +44,44 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class TreeTest {
+class TreeWalkerTest {
     
     static Literal<String> mapped = Literal.<String>builder("child").build();
     
-    Tree<String, String> tree = spy(new Tree(spy(new Mapper<>())));
+    TreeWalker<String, String> tree = spy(new TreeWalker(spy(new Mapper<>())));
+    RootCommandNode<String> root = new RootCommandNode<>();
     Literal<String> literal = Literal.<String>builder("parent").then(Literal.<String>builder("child").build()).build();
+    List<CommandNode<String>> commands = List.of(
+        Literal.<String>builder("a").build(), 
+        Literal.<String>builder("b").build(), 
+        Literal.<String>builder("c").requires(val -> false).build()
+    );
     
     
     @Test
-    void truncate() {
-        var source = new RootCommandNode<String>();
-        source.addChild(Literal.<String>builder("a").build());
-        source.addChild(Literal.<String>builder("b").build());
-        source.addChild(Literal.<String>builder("c").requires(val -> false).build());
+    void prune() {
+        root.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
         
-        var target = new RootCommandNode<String>();
-        target.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
+        tree.prune(root, commands);
         
-        tree.truncate(source, target);
-        
-        assertEquals(3, target.getChildren().size());
-        assertNull(target.getChild("a").getChild("child"));
+        assertEquals(3, root.getChildren().size());
+        assertNull(root.getChild("a").getChild("child"));
     }
     
     
     @Test
-    void map_roots() {
-        var source = new RootCommandNode<String>();
-        source.addChild(Literal.<String>builder("a").build());
-        source.addChild(Literal.<String>builder("b").build());
-        source.addChild(Literal.<String>builder("c").requires(val -> false).build());
+    void add() {
+        root.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
         
-        var target = new RootCommandNode<String>();
-        target.addChild(Literal.<String>builder("a").then(Literal.<String>builder("child").build()).build());
+        tree.add(root, commands, "", command -> !command.getName().equalsIgnoreCase("b"));
         
-        tree.map(source, target, "", command -> !command.getName().equalsIgnoreCase("b"));
-        
-        assertEquals(1, target.getChildren().size());
-        assertNotNull(target.getChild("a").getChild("child"));
+        assertEquals(1, root.getChildren().size());
+        assertNotNull(root.getChild("a").getChild("child"));
     }
     
     
     @Test
-    void map_command() {
-        doReturn(null).when(tree).map(any(CommandNode.class), any(String.class));
-        
-        tree.map(literal);
-        
-        verify(tree).map(literal, null);
-    }
-    
-    
-    @Test
-    void map_command_caller() {
-        var root = Literal.<String>builder("root").build();
+    void map() {
         var a = Literal.<String>builder("a").then(Literal.<String>builder("b").requires(val -> false).build()).build();
         var c = Literal.<String>builder("c").redirect(a).build();
         var d = Literal.<String>builder("d").then(c).build();
@@ -108,11 +91,11 @@ class TreeTest {
         root.addChild(c);
         root.addChild(d);
         
-        var mapped = tree.map(root, "");
+        var mapped = tree.map(root, "", new IdentityHashMap<>());
         var empty = mapped.getChild("a");
         var same = mapped.getChild("d").getChild("c");
         
-        assertEquals("root", mapped.getName());
+        assertEquals("", mapped.getName());
         assertEquals(0, empty.getChildren().size());
         assertSame(empty, mapped.getChild("c").getRedirect());
         assertSame(mapped.getChild("c"), same);

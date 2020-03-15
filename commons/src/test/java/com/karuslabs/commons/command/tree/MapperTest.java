@@ -45,7 +45,7 @@ class MapperTest {
     
     
     @Test
-    void mapper_map_argument() {
+    void map_argument() {
         var unmapped = Argument.<String, String>builder("b", StringArgumentType.word()).build();
         var argument = (ArgumentCommandNode<String, String>) mapper.map(unmapped);
         
@@ -58,7 +58,7 @@ class MapperTest {
     
     
     @Test
-    void mapper_map_literal() {
+    void map_literal() {
         var literal = mapper.map(Literal.<String>builder("a").build());
         
         assertTrue(literal instanceof LiteralCommandNode<?>);
@@ -69,17 +69,17 @@ class MapperTest {
     
     
     @Test
-    void mapper_map_root() {
+    void map_root() {
         assertEquals(RootCommandNode.class, mapper.map(new RootCommandNode<>()).getClass());
     }
     
     
     @Test
-    void mapper_map_otherwise() {
+    void map_otherwise() {
         var command = mock(CommandNode.class);
         assertEquals(
             "Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName(), 
-            assertThrows(UnsupportedOperationException.class, () -> mapper.map(command)).getMessage()
+            assertThrows(IllegalArgumentException.class, () -> mapper.map(command)).getMessage()
         );
     }
     

@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util;
 
+import com.karuslabs.commons.util.Point.Axis;
+
 import java.util.stream.Stream;
 
 import org.bukkit.Location;
@@ -40,101 +42,94 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 
 @ExtendWith(MockitoExtension.class)
-class PositionTest {
+class PointTest {
     
-    static final Position POSITION = new Position(null, 1, 2, 3, 90, 180);
+    static final Point POINT = new Point(null, 1, 2, 3, 90, 180);
     
-    Position position = new Position();
+    Point point = new Point();
     Vector vector = new Vector();
     
-    Position source = new Position(1, 2, 3);
-    Position origin = new Position(null, 1, 2, 3, 90, 180);
+    Point source = new Point(1, 2, 3);
+    Point origin = new Point(null, 1, 2, 3, 90, 180);
     
     
     @Test
-    void apply_relative_location() {
-        source.relative(Position.X, true).relative(Position.Y, true).relative(Position.Z, true).rotate(true).apply(position, origin);
-        assertEquals(new Position(2, -4, -6), position);
+    void copy_relative_location() {
+        source.relative(Axis.X, true).relative(Axis.Y, true).relative(Axis.Z, true).rotation(true).copy(origin, point);
+        assertEquals(new Point(2, -4, -6), point);
     }
     
     
     @Test
-    void apply_absolute_location() {
-        source.apply(position, origin);
-        assertEquals(new Position(1, 2, 3), position);
+    void copy_absolute_location() {
+        source.copy(origin, point);
+        assertEquals(new Point(1, 2, 3), point);
     }
     
     
     @Test
-    void apply_relative_vector() {
-        source.relative(Position.X, true).relative(Position.Y, true).relative(Position.Z, true).rotate(true).apply(vector, origin);
+    void copy_relative_vector() {
+        source.relative(Axis.X, true).relative(Axis.Y, true).relative(Axis.Z, true).rotation(true).copy(origin, vector);
         assertEquals(new Vector(2, -4, -6), vector);
     }
     
     
     @Test
-    void apply_absolute_vector() {
-        source.apply(vector, origin);
+    void copy_absolute_vector() {
+        source.copy(origin, vector);
         assertEquals(new Vector(1, 2, 3), vector);
     }
     
     
     @Test
-    void relativize() {
-        var position = new Position(1, 2, 3).relative(Position.X, true).relative(Position.Y, true).relative(Position.Z, true).rotate(true);
-        var origin = new Position(null, 1, 2, 3, 90, 180);
+    void align() {
+        var position = new Point(1, 2, 3).relative(Axis.X, true).relative(Axis.Y, true).relative(Axis.Z, true).rotation(true);
+        var origin = new Point(null, 1, 2, 3, 90, 180);
         
-        position.relativize(origin);
+        position.align(origin);
         
-        assertEquals(new Position(2, -4, -6).relative(Position.X, true).relative(Position.Y, true).relative(Position.Z, true).rotate(true), position);
+        assertEquals(new Point(2, -4, -6).relative(Axis.X, true).relative(Axis.Y, true).relative(Axis.Z, true).rotation(true), position);
     }
     
     
     @Test
     void set() {
-        assertEquals(4, position.set(Position.X, 4).getX(), 0.00000001);
-        assertEquals(5, position.set(Position.Y, 5).getY(), 0.00000001);
-        assertEquals(6, position.set(Position.Z, 6).getZ(), 0.00000001);
-    }
-    
-    
-    @Test
-    void set_throws_exception() {
-        assertEquals("Invalid axis: 3", assertThrows(IllegalArgumentException.class, () -> position.set(3, 0)).getMessage());
+        assertEquals(4, point.set(Axis.X, 4).getX(), 0.00000001);
+        assertEquals(5, point.set(Axis.Y, 5).getY(), 0.00000001);
+        assertEquals(6, point.set(Axis.Z, 6).getZ(), 0.00000001);
     }
     
     
     @Test
     void relative() {
-        assertTrue(position.relative(Position.X, true).relative(Position.X));
+        assertTrue(point.relative(Axis.X, true).relative(Axis.X));
     }
     
     
     @Test
-    void rotate() {
-        assertTrue(position.rotate(true).rotate());
+    void rotation() {
+        assertTrue(point.rotation(true).rotation());
     }
     
     
     @ParameterizedTest
     @MethodSource("equality_parameters")
     void equals(Object other, boolean expected) {
-       assertEquals(expected, POSITION.equals(other));
+       assertEquals(expected, POINT.equals(other));
     }
     
     @ParameterizedTest
     @MethodSource("equality_parameters")
     void hashCode(Object other, boolean expected) {
-        assertEquals(expected, POSITION.hashCode() == other.hashCode());
+        assertEquals(expected, POINT.hashCode() == other.hashCode());
     }
     
     
     static Stream<Arguments> equality_parameters() {
-        return Stream.of(
-            of(POSITION, true),
-            of(new Position(null, 1, 2, 3, 90, 180), true),
+        return Stream.of(of(POINT, true),
+            of(new Point(null, 1, 2, 3, 90, 180), true),
             of(new Location(null, 0, 0, 0), false),
-            of(new Position(null, 1, 2, 3, 90, 180).relative(Position.Y, true), false)
+            of(new Point(null, 1, 2, 3, 90, 180).relative(Axis.Y, true), false)
         );
     }
     
@@ -142,8 +137,8 @@ class PositionTest {
     @Test
     void to_string() {
         assertEquals(
-            "rotate[true], null[world], 1.0[absolute], 2.0[relative], 3.0[absolute], 90.0[yaw], 180.0[pitch]",
-            new Position(null, 1, 2, 3, 90, 180).rotate(true).relative(Position.Y, true).toString()
+            "Point[rotation: true, world: null, x: [1.0, absolute], y: [2.0, relative], z: [3.0, absolute], yaw: 90.0, pitch: 180.0]",
+            new Point(null, 1, 2, 3, 90, 180).rotation(true).relative(Axis.Y, true).toString()
         );
     }
 

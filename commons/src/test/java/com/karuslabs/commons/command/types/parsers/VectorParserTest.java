@@ -23,7 +23,8 @@
  */
 package com.karuslabs.commons.command.types.parsers;
 
-import com.karuslabs.commons.util.Position;
+import com.karuslabs.commons.util.Point;
+import com.karuslabs.commons.util.Point.Axis;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -77,28 +78,26 @@ class VectorParserTest {
     
     @ParameterizedTest
     @MethodSource("parse2DPosition_parameters")
-    void parse2DPosition(String line, Position expected) throws CommandSyntaxException {
+    void parse2DPosition(String line, Point expected) throws CommandSyntaxException {
         assertEquals(expected, VectorParser.parse2DPosition(new StringReader(line)));
     }
     
     static Stream<Arguments> parse2DPosition_parameters() {
-        return Stream.of(
-            of("^1.0  ^2.0", new Position(1, 0, 2).rotate(true)),
-            of("1.0  ~2.0", new Position(1, 0, 2).relative(Position.Z, true))
+        return Stream.of(of("^1.0  ^2.0", new Point(1, 0, 2).rotation(true)),
+            of("1.0  ~2.0", new Point(1, 0, 2).relative(Axis.Z, true))
         );
     }
     
     
     @ParameterizedTest
     @MethodSource("parse3DPosition_parameters")
-    void parse3DPosition(String line, Position expected) throws CommandSyntaxException {
+    void parse3DPosition(String line, Point expected) throws CommandSyntaxException {
         assertEquals(expected, VectorParser.parse3DPosition(new StringReader(line)));
     }
     
     static Stream<Arguments> parse3DPosition_parameters() {
-        return Stream.of(
-            of("^1.0  ^2.0  ^3.0", new Position(1, 2, 3).rotate(true)),
-            of(" 1.0  ~2.0   3.0", new Position(1, 2, 3).relative(Position.Y, true))
+        return Stream.of(of("^1.0  ^2.0  ^3.0", new Point(1, 2, 3).rotation(true)),
+            of(" 1.0  ~2.0   3.0", new Point(1, 2, 3).relative(Axis.Y, true))
         );
     }
     

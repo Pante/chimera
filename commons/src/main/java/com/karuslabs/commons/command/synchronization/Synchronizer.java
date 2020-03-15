@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.command.tree.Tree;
+import com.karuslabs.commons.command.tree.TreeWalker;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
@@ -49,13 +49,13 @@ public class Synchronizer implements Listener {
     private MinecraftServer server;
     private Plugin plugin;
     CommandDispatcher<CommandListenerWrapper> dispatcher; 
-    Tree<CommandListenerWrapper, ICompletionProvider> tree;
+    TreeWalker<CommandListenerWrapper, ICompletionProvider> tree;
     WeakReference<Synchronization> synchronization;
     
     
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
-        var tree = new Tree<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
+        var tree = new TreeWalker<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
         var registration = plugin.getServer().getServicesManager().getRegistration(Synchronization.class);
         
         var synchronizer = new Synchronizer(server.getServer(), plugin, tree, registration == null ? null : registration.getProvider());
@@ -65,7 +65,7 @@ public class Synchronizer implements Listener {
     }
     
     
-    Synchronizer(MinecraftServer server, Plugin plugin, Tree<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
+    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
         this.server = server;
         this.plugin = plugin;
         this.dispatcher = server.commandDispatcher.a();
@@ -91,7 +91,7 @@ public class Synchronizer implements Listener {
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        tree.map(dispatcher.getRoot(), root, entity.getCommandListener(), command -> commands.contains(command.getName()));
+        tree.add(root, dispatcher.getRoot().getChildren(), entity.getCommandListener(), command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }

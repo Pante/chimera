@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.command.tree.Tree;
+import com.karuslabs.commons.command.tree.TreeWalker;
 
 import java.util.List;
 
@@ -109,7 +109,7 @@ class SynchronizerTest {
     
     @Test
     void synchronize_player_commands() {
-        synchronizer.tree = mock(Tree.class);
+        synchronizer.tree = mock(TreeWalker.class);
         
         EntityPlayer entity = mock(EntityPlayer.class);
         entity.playerConnection = mock(PlayerConnection.class);
@@ -118,7 +118,7 @@ class SynchronizerTest {
         
         synchronizer.synchronize(player, List.of());
         
-        verify(synchronizer.tree).map(any(), any(), any(), any());
+        verify(synchronizer.tree).add(any(), any(), any(), any());
         verify(entity.playerConnection).sendPacket(any(PacketPlayOutCommands.class));
     }
     

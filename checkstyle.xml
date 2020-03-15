@@ -32,7 +32,6 @@
         <module name="GenericWhitespace"/>
         <module name="MissingDeprecated"/>
         <module name="MissingOverride"/>
-        <module name="MissingSwitchDefault"/>
         <module name="NoClone"/>
         <module name="NoFinalizer"/>
         <module name="RedundantImport"/>

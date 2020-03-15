@@ -25,7 +25,7 @@ package com.karuslabs.commons.util.collection;
 
 import com.google.common.primitives.Primitives;
 
-import com.karuslabs.annotations.ValueType;
+import com.karuslabs.annotations.*;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -45,7 +45,7 @@ public interface TokenMap<N, T> {
         return new HashTokenMap<>(capacity);
     }
     
-    public static <N, T> TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
+    public static <N, T> @Delegate TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
         return new ProxiedTokenMap<>(map);
     }
     
@@ -137,13 +137,13 @@ public interface TokenMap<N, T> {
         
         
         @Override
-        public boolean equals(Object object) {
-            if (this == object) {
+        public boolean equals(Object other) {
+            if (this == other) {
                 return true;
 
-            } else if (object instanceof Key<?, ?> && hashCode() == object.hashCode()) {
-                Key key = (Key) object;
-                return type == key.type && name.equals(key.name);
+            } else if (other instanceof Key<?, ?> && hashCode() == other.hashCode()) {
+                Key key = (Key) other;
+                return type == key.type && Objects.equals(name, key.name);
 
             } else {
                 return false;
@@ -205,7 +205,7 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
 }
 
 
-class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
+@Delegate class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     
     Map<Key<N, ? extends T>, T> map;
     Key<N, T> cached;

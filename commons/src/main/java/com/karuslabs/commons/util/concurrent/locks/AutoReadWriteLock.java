@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.annotations.Delegate;
+
 import com.karuslabs.commons.util.concurrent.locks.AutoReadWriteLock.*;
 
 import java.util.concurrent.TimeUnit;
@@ -58,7 +60,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
     }
     
     
-    public static class AutoReadLock extends ReadLock implements Acquirable {
+    public static @Delegate class AutoReadLock extends ReadLock implements Acquirable {
         
         private final ReadLock lock;
         private final Mutex mutex;
@@ -120,7 +122,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
     }
     
-    public static class AutoWriteLock extends WriteLock implements Acquirable {
+    public static @Delegate class AutoWriteLock extends WriteLock implements Acquirable {
         
         private final WriteLock lock;
         private final Mutex mutex;

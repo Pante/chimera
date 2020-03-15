@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class VectorsTest {
     
     Vector vector = new Vector(1, 2, 3);
-    Position position = new Position(null, 3, 2, 1);
-    Position pivot = new Position(null, 0, 0, 0, 90, -180); 
+    Point position = new Point(null, 3, 2, 1);
+    Point pivot = new Point(null, 0, 0, 0, 90, -180); 
     
     
     @Test
@@ -78,13 +78,13 @@ class VectorsTest {
     
     @Test
     void roatate_location_pivot() {
-        assertEquals(new Position(null, 3, -2, -1), Vectors.rotate(position, pivot));
+        assertEquals(new Point(null, 3, -2, -1), Vectors.rotate(position, pivot));
     }
     
     
     @Test
     void roatate_location_degrees() {
-        assertEquals(new Position(null, 3, -2, -1), Vectors.rotate(position, 90, -180));
+        assertEquals(new Point(null, 3, -2, -1), Vectors.rotate(position, 90, -180));
     }
     
     

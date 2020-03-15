@@ -25,6 +25,8 @@ package com.karuslabs.commons.util.collection;
 
 import com.google.common.primitives.Primitives;
 
+import com.karuslabs.annotations.Delegate;
+
 import java.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -40,7 +42,7 @@ public interface ClassMap<T> {
         return new HashClassMap<>(capacity);
     }
     
-    public static <T> ClassMap<T> of(Map<Class<? extends T>, T> map) {
+    public static <T> @Delegate ClassMap<T> of(Map<Class<? extends T>, T> map) {
         return new ProxiedClassMap<>(map);
     }
     
@@ -97,7 +99,7 @@ class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
     
 }
 
-class ProxiedClassMap<T> implements ClassMap<T> {
+@Delegate class ProxiedClassMap<T> implements ClassMap<T> {
     
     private final Map<Class<? extends T>, T> map;
     

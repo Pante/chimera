@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Delegate;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import java.util.concurrent.*;
@@ -40,7 +41,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
         return new ConcurrentHashTokenMap<>(capacity);
     }
     
-    public static <N, T> ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
+    public static <N, T> @Delegate ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
         return new ConcurrentProxiedTokenMap<>(map);
     }
     
@@ -102,7 +103,7 @@ class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>
 }
 
 
-class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
+@Delegate class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentMap<Key<N, ? extends T>, T> map;
     

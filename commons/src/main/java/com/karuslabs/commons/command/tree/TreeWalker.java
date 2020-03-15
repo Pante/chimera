@@ -34,48 +34,40 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Tree<T, R> {    
+public class TreeWalker<T, R> {    
     
-    private Mapper<T, R> mapper;
+    private final Mapper<T, R> mapper;
     
     
-    public Tree(Mapper<T, R> mapper) {
+    public TreeWalker(Mapper<T, R> mapper) {
         this.mapper = mapper;
     }
     
     
-    public void truncate(RootCommandNode<T> source, RootCommandNode<R> target) {
-        for (var child : source.getChildren()) {
-            Commands.remove(target, child.getName());
-            var mapped = map(child);
+    public void prune(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands) {
+        for (var child : commands) {
+            Commands.remove(root, child.getName());
+            var mapped = map(child, null, new IdentityHashMap<>());
             if (mapped != null) {
-                target.addChild(mapped);
+                root.addChild(mapped);
             }
         }
     }
     
-    public void map(RootCommandNode<T> source, RootCommandNode<R> target, T caller, Predicate<CommandNode<T>> requirement) {
-        for (var child : source.getChildren()) {
-            if (requirement.test(child)) {
-                var mapped = map(child, caller);
+    public void add(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands, T source, Predicate<CommandNode<T>> requirement) {
+        for (var command : commands) {
+            if (requirement.test(command)) {
+                var mapped = map(command, source, new IdentityHashMap<>());
                 if (mapped != null) {
-                    target.addChild(mapped);
+                    root.addChild(mapped);
                 }
             }
         }
     }
+
     
-    
-    public @Nullable CommandNode<R> map(CommandNode<T> command) {
-        return map(command, null);
-    }
-    
-    public @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T caller) {
-        return map(command, caller, new IdentityHashMap<>());
-    }
-    
-    public @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        if (caller != null && command.getRequirement() != null && !command.canUse(caller)) {
+    protected @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
+        if (source != null && command.getRequirement() != null && !command.canUse(source)) {
             return null;
         }
         
@@ -84,23 +76,23 @@ public class Tree<T, R> {
             target = mapper.map(command);
             mappings.put(command, target);
             
-            redirect(command, target, caller, mappings);
-            descend(command, target, caller, mappings);
+            redirect(command, target, source, mappings);
+            descend(command, target, source, mappings);
         }
 
         return target;
     }
     
-    protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
+    protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
         if (command.getRedirect() != null && target instanceof Mutable<?>) {
-            var destination = map(command.getRedirect(), caller, mappings);
+            var destination = map(command.getRedirect(), source, mappings);
             ((Mutable<R>) target).setRedirect(destination);
         }
     }
     
-    protected void descend(CommandNode<T> command, CommandNode<R> target, @Nullable T caller, Map<CommandNode<T>, CommandNode<R>> mappings) {
+    protected void descend(CommandNode<T> command, CommandNode<R> target, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
         for (var child : command.getChildren()) {
-            var mapped = map(child, caller, mappings);
+            var mapped = map(child, source, mappings);
             if (mapped != null) {
                 target.addChild(mapped);
             }

@@ -100,7 +100,7 @@ final @ValueType class TrieEntry<T> implements Entry<String, T> {
     
     
     @Nullable TrieEntry<T> set(char character, String key, T value) {
-        TrieEntry<T> old = null;
+        TrieEntry<T> old;
         if (31 < character && character < 127) {
             if (ascii == null) {
                 ascii = (TrieEntry<T>[]) new TrieEntry<?>[PRINTABLE];
@@ -174,11 +174,11 @@ final @ValueType class TrieEntry<T> implements Entry<String, T> {
             return true;
         }
         
-        if (!(other instanceof Map.Entry)) {
+        if (!(other instanceof TrieEntry)) {
             return false;
         }
         
-        var entry = (Map.Entry<?, ?>) other;
+        var entry = (TrieEntry<?>) other;
         return equals(key, entry.getKey()) && equals(value, entry.getValue());
     }
         

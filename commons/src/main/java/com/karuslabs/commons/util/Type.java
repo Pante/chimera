@@ -39,8 +39,8 @@ public enum Type {
     LONG(Long.class, long.class),
     FLOAT(Float.class, float.class),
     DOUBLE(Double.class, double.class),
-    VOID(Void.class, null),
-    TYPE(null, null);
+    TYPE(Object.class, Object.class),
+    NULL(Void.class, null);
     
     
     private static final Map<Class<?>, Type> TYPES;
@@ -64,12 +64,17 @@ public enum Type {
     }
     
     
-    public static Type of(Object object) {
-        return of(object.getClass());
+    public static Type of(@Nullable Object object) {
+        return of(object == null ? null : object.getClass());
     }
     
-    public static Type of(Class<?> type) {
-        return TYPES.getOrDefault(type, TYPE);
+    public static Type of(@Nullable Class<?> type) {
+        if (type != null && type != Void.class) {
+            return TYPES.getOrDefault(type, TYPE);
+            
+        } else {
+            return NULL;
+        }
     }
     
     

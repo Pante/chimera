@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Delegate;
+
 import java.util.concurrent.*;
 
 
@@ -36,7 +38,7 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
         return new ConcurrentHashClassMap<>(capacity);
     }
     
-    public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
+    public static <T> @Delegate ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
         return new ConcurrentProxiedClassMap<>(map);
     }
     
@@ -62,7 +64,7 @@ class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T>
     
 }
 
-class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
+@Delegate class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
 
     private final ConcurrentMap<Class<? extends T>, T> map;
     
