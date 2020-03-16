@@ -37,64 +37,69 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class TreeWalker<T, R> {    
     
     private final Mapper<T, R> mapper;
+    protected final Map<CommandNode<T>, CommandNode<R>> mappings;
     
     
     public TreeWalker(Mapper<T, R> mapper) {
         this.mapper = mapper;
+        this.mappings = new IdentityHashMap<>();
     }
     
     
     public void prune(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands) {
         for (var child : commands) {
             Commands.remove(root, child.getName());
-            var mapped = map(child, null, new IdentityHashMap<>());
+            var mapped = map(child, null);
             if (mapped != null) {
                 root.addChild(mapped);
             }
         }
+        
+        mappings.clear();
     }
     
     public void add(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands, T source, Predicate<CommandNode<T>> requirement) {
         for (var command : commands) {
             if (requirement.test(command)) {
-                var mapped = map(command, source, new IdentityHashMap<>());
+                var mapped = map(command, source);
                 if (mapped != null) {
                     root.addChild(mapped);
                 }
             }
         }
+        
+        mappings.clear();
     }
 
     
-    protected @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
+    protected @Nullable CommandNode<R> map(CommandNode<T> command, @Nullable T source) {
         if (source != null && command.getRequirement() != null && !command.canUse(source)) {
             return null;
         }
         
-        var target = mappings.get(command);
-        if (target == null) {
-            target = mapper.map(command);
-            mappings.put(command, target);
+        var result = mappings.get(command);
+        if (result == null) {
+            result = mapper.map(command);
+            mappings.put(command, result);
             
-            redirect(command, target, source, mappings);
-            descend(command, target, source, mappings);
+            redirect(command.getRedirect(), result, source);
+            descend(command.getChildren(), result, source);
         }
 
-        return target;
+        return result;
     }
     
-    protected void redirect(CommandNode<T> command, CommandNode<R> target, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        if (command.getRedirect() != null && target instanceof Mutable<?>) {
-            var destination = map(command.getRedirect(), source, mappings);
-            ((Mutable<R>) target).setRedirect(destination);
+    protected void redirect(CommandNode<T> destination, CommandNode<R> result, @Nullable T source) {
+        if (destination != null && result instanceof Mutable<?>) {
+            ((Mutable<R>) result).setRedirect(map(destination, source));
         }
     }
     
-    protected void descend(CommandNode<T> command, CommandNode<R> target, @Nullable T source, Map<CommandNode<T>, CommandNode<R>> mappings) {
-        for (var child : command.getChildren()) {
-            var mapped = map(child, source, mappings);
+    protected void descend(Collection<CommandNode<T>> children, CommandNode<R> result, @Nullable T source) {
+        for (var child : children) {
+            var mapped = map(child, source);
             if (mapped != null) {
-                target.addChild(mapped);
+                result.addChild(mapped);
             }
         }
     }

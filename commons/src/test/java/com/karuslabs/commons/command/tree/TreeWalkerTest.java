@@ -91,7 +91,7 @@ class TreeWalkerTest {
         root.addChild(c);
         root.addChild(d);
         
-        var mapped = tree.map(root, "", new IdentityHashMap<>());
+        var mapped = tree.map(root, "");
         var empty = mapped.getChild("a");
         var same = mapped.getChild("d").getChild("c");
         
@@ -105,10 +105,10 @@ class TreeWalkerTest {
     @ParameterizedTest
     @MethodSource("redirect_parameters")
     void redirect(CommandNode<String> destination, CommandNode<String> target, CommandNode<String> expected) {
-        doReturn(destination).when(tree).map(any(CommandNode.class), any(String.class), any(Map.class));
+        doReturn(destination).when(tree).map(any(CommandNode.class), any(String.class));
         literal.setRedirect(destination);
         
-        tree.redirect(literal, target, "", new HashMap<>());
+        tree.redirect(literal, target, "");
 
         
         assertSame(expected, target.getRedirect());
@@ -128,11 +128,11 @@ class TreeWalkerTest {
     @ParameterizedTest
     @MethodSource("descend_parameters")
     void descend(CommandNode<String> returned) {
-        doReturn(returned).when(tree).map(any(CommandNode.class), any(String.class), any(Map.class));
+        doReturn(returned).when(tree).map(any(CommandNode.class), any(String.class));
         
         var target = new RootCommandNode<String>();
         
-        tree.descend(literal, target, "", new HashMap<>());
+        tree.descend(literal.getChildren(), target, "");
         assertSame(returned, target.getChild("child"));
     }
     
