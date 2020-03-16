@@ -49,9 +49,9 @@ public class TreeWalker<T, R> {
     public void prune(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands) {
         for (var child : commands) {
             Commands.remove(root, child.getName());
-            var mapped = map(child, null);
-            if (mapped != null) {
-                root.addChild(mapped);
+            var result = map(child, null);
+            if (result != null) {
+                root.addChild(result);
             }
         }
         
@@ -61,9 +61,9 @@ public class TreeWalker<T, R> {
     public void add(RootCommandNode<R> root, Collection<? extends CommandNode<T>> commands, T source, Predicate<CommandNode<T>> requirement) {
         for (var command : commands) {
             if (requirement.test(command)) {
-                var mapped = map(command, source);
-                if (mapped != null) {
-                    root.addChild(mapped);
+                var result = map(command, source);
+                if (result != null) {
+                    root.addChild(result);
                 }
             }
         }
