@@ -28,10 +28,14 @@ import com.karuslabs.commons.command.*;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.util.*;
+
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import static java.util.stream.Collectors.toList;
 
 
 public class Root extends RootCommandNode<CommandSender> {
@@ -55,32 +59,41 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (command instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<CommandSender>) command).aliases()) {
-                register(alias);
-            }
-        }
+        List<LiteralCommandNode<CommandSender>> aliases;
         
-        register(command); //Registered last to avoid <plugin>:<command> getting registered again as an alias
-    }
-    
-    protected void register(CommandNode<CommandSender> command) {
-        if (command instanceof LiteralCommandNode<?>) {
-            var literal = (LiteralCommandNode<CommandSender>) command;
-            
-            if (map.register(prefix, wrap(literal))) {
-                super.addChild(command);
-            }
-            
-            super.addChild(Literal.alias(literal, prefix + ":" + command.getName()));
+        if (command instanceof Aliasable<?>) {
+            aliases = ((Aliasable<CommandSender>) command).aliases();
             
         } else {
-            throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode");
+            aliases = List.of();
+        }
+        
+        register(command, aliases);
+    }
+    
+    protected void register(CommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
+        if (!(command instanceof LiteralCommandNode<?>)) {
+            throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", commands registered to root must be a literal");
+        }
+        
+        var literal = (LiteralCommandNode<CommandSender>) command;
+        var wrapper = wrap(literal, aliases.stream().map(LiteralCommandNode::getName).collect(toList()));
+        
+        super.addChild(Literal.alias(literal, prefix + ":" + command.getName()));
+        if (map.register(prefix, wrapper)) {
+            super.addChild(literal);
+        }
+        
+        for (var alias : aliases) {
+            super.addChild(Literal.alias(literal, prefix + ":" + alias.getName()));
+            if (wrapper.getAliases().contains(alias.getName())) {
+                super.addChild(alias);
+            }
         }
     }
     
-    protected Command wrap(LiteralCommandNode<CommandSender> command) {
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText());
+    protected Command wrap(LiteralCommandNode<CommandSender> command, List<String> aliases) {
+        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
     }
     
     

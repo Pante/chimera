@@ -52,7 +52,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     public static Dispatcher of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
-        var root = new Root(plugin, server.getCommandMap());
+        var root = new Root(plugin.getName().toLowerCase(), server.getCommandMap(), Root.wrap(dispatcher, plugin));
         var synchronizer = Synchronizer.of(plugin);
         
         var dispatcher = new Dispatcher(server, root, synchronizer);

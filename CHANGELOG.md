@@ -28,6 +28,7 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Change `Mapper.otherwise(ComandNode<T>)` now throws `IllegalArgumentException` instead of `UnsupportedOperationException`
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
 - Fix longstanding issue with command aliases not being removed in `Commands.remove(String)`
+- Fix longstanding issue with command aliases not being associated with their names in Bukkit's command system
 - Remove `Commands.remove(CommandNode<T>, String...)` - this method was almost never used and posed a technical burden, use `Commands.remove(CommandNode<T>, String)` instead
 
 **Concurrency**

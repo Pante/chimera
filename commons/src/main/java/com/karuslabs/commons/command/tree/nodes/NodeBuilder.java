@@ -30,24 +30,24 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 
 
-public abstract class NodeBuilder<T, Builder extends NodeBuilder<T, Builder>> extends ArgumentBuilder<T, Builder> {
+public abstract class NodeBuilder<T, B extends NodeBuilder<T, B>> extends ArgumentBuilder<T, B> {
 
     
-    public Builder executes(Executable<T> command) {
+    public B executes(Executable<T> command) {
         return executes((Command<T>) command);
     }
     
     
-    public Builder then(Object annotated, String name) {
+    public B then(Object annotated, String name) {
         return then(Commands.resolve(annotated, name));
     }
     
     
-    public Builder optionally(ArgumentBuilder<T, ?> builder) {
+    public B optionally(ArgumentBuilder<T, ?> builder) {
         return optionally(builder.build());
     }
         
-    public Builder optionally(CommandNode<T> node) {
+    public B optionally(CommandNode<T> node) {
         then(node);
         for (var child : node.getChildren()) {
             then(child);

@@ -95,11 +95,11 @@ public class TreeWalker<T, R> {
         }
     }
     
-    protected void descend(Collection<CommandNode<T>> children, CommandNode<R> result, @Nullable T source) {
+    protected void descend(Collection<CommandNode<T>> children, CommandNode<R> command, @Nullable T source) {
         for (var child : children) {
-            var mapped = map(child, source);
-            if (mapped != null) {
-                result.addChild(mapped);
+            var result = map(child, source);
+            if (result != null) {
+                command.addChild(result);
             }
         }
     }

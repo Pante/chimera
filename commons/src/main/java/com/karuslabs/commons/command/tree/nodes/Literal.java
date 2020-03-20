@@ -62,7 +62,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     
     private CommandNode<T> destination;
-    private List<CommandNode<T>> aliases;
+    private List<LiteralCommandNode<T>> aliases;
     private boolean alias;
     
     
@@ -74,7 +74,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         this(name, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
     }
     
-    public Literal(String name, List<CommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+    public Literal(String name, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
         this.aliases = aliases;
@@ -131,7 +131,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     
     @Override
-    public List<CommandNode<T>> aliases() {
+    public List<LiteralCommandNode<T>> aliases() {
         return aliases;
     }
     

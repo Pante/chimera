@@ -39,12 +39,8 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage) {
-        this(name, plugin, dispatcher, "", usage);
-    }
-    
-    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String description, String usage) {
-        super(name, description, usage, List.of());
+    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage, List<String> aliases) {
+        super(name, "", usage, aliases);
         this.plugin = plugin;
         this.dispatcher = dispatcher;
     }
