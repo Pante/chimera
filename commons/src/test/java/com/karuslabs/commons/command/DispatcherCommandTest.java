@@ -28,6 +28,8 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import java.util.List;
+
 import net.minecraft.server.v1_15_R1.*;
 
 import org.bukkit.command.CommandSender;
@@ -52,7 +54,7 @@ class DispatcherCommandTest {
     
     Plugin plugin = mock(Plugin.class);
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
-    DispatcherCommand command = spy(new DispatcherCommand("name", plugin, dispatcher, ""));
+    DispatcherCommand command = spy(new DispatcherCommand("name", plugin, dispatcher, "", List.of()));
     
     
     @Test

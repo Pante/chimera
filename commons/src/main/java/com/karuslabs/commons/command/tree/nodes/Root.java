@@ -35,8 +35,6 @@ import org.bukkit.plugin.Plugin;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static java.util.stream.Collectors.toList;
-
 
 public class Root extends RootCommandNode<CommandSender> {
     
@@ -59,41 +57,43 @@ public class Root extends RootCommandNode<CommandSender> {
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        List<LiteralCommandNode<CommandSender>> aliases;
-        
-        if (command instanceof Aliasable<?>) {
-            aliases = ((Aliasable<CommandSender>) command).aliases();
-            
-        } else {
-            aliases = List.of();
-        }
-        
-        register(command, aliases);
-    }
-    
-    protected void register(CommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
         if (!(command instanceof LiteralCommandNode<?>)) {
             throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", commands registered to root must be a literal");
         }
         
         var literal = (LiteralCommandNode<CommandSender>) command;
-        var wrapper = wrap(literal, aliases.stream().map(LiteralCommandNode::getName).collect(toList()));
         
-        super.addChild(Literal.alias(literal, prefix + ":" + command.getName()));
+        var aliases = List.<LiteralCommandNode<CommandSender>>of();
+        if (command instanceof Aliasable<?>) {
+            aliases = new ArrayList<>(((Aliasable<CommandSender>) command).aliases());
+        }
+        
+        register(literal, aliases);
+    }
+    
+    protected void register(LiteralCommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
+        var wrapper = wrap(command, aliases);
+        
+        super.addChild(Literal.alias(command, prefix + ":" + command.getName()));
         if (map.register(prefix, wrapper)) {
-            super.addChild(literal);
+            super.addChild(command);
         }
         
         for (var alias : aliases) {
-            super.addChild(Literal.alias(literal, prefix + ":" + alias.getName()));
+            super.addChild(Literal.alias(command, prefix + ":" + alias.getName()));
             if (wrapper.getAliases().contains(alias.getName())) {
                 super.addChild(alias);
             }
         }
     }
     
-    protected Command wrap(LiteralCommandNode<CommandSender> command, List<String> aliases) {
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
+    protected Command wrap(LiteralCommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
+        var names = new ArrayList<String>();
+        for (var alias : aliases) {
+            names.add(alias.getName());
+        }
+        
+        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), names);
     }
     
     
