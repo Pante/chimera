@@ -1,7 +1,6 @@
 ## Next Release - Boy, and as the years go by
 
-In accordance with the principal of successive refinement, this update focuses on QOL
-and retrofitting old classes/packages
+This update focuses on Quality of Life and retrofitting old classes/packages
 
 Big Ol' list of changes:
 
@@ -20,13 +19,15 @@ Annotations has been undergone a few tweaks.
 Numerous components of the project has been redesigned to reduce the overall API surface area while retaining functionality.
 
 **Commands**
-- Add `NodeBuilder<T, Builder extends ArgumentBuilder<T, Builder>>`
+- Add `Nodes`
 - Add `TreeWalker<T, R>`
+- Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
 - Change `Commands.from(Object, String)` to `Commands.resolve(Object, String)`
 - Change `Mapper.otherwise(ComandNode<T>)` now throws `IllegalArgumentException` instead of `UnsupportedOperationException`
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
+- Fix longstanding issue with child commands not replaced when new child commands are added
 - Fix longstanding issue with command aliases not being removed in `Commands.remove(String)`
 - Fix longstanding issue with command aliases not being associated with their names in Bukkit's command system
 - Remove `Commands.remove(CommandNode<T>, String...)` - this method was almost never used and posed a technical burden, use `Commands.remove(CommandNode<T>, String)` instead

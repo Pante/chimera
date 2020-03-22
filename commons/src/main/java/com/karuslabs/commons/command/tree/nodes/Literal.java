@@ -29,7 +29,7 @@ import com.mojang.brigadier.*;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -62,6 +62,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     
     private CommandNode<T> destination;
+    private Consumer<CommandNode<T>> addition;
     private List<LiteralCommandNode<T>> aliases;
     private boolean alias;
     
@@ -77,6 +78,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     public Literal(String name, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
+        this.addition = super::addChild;
         this.aliases = aliases;
         this.alias = alias;
     }
@@ -84,34 +86,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     @Override
     public void addChild(CommandNode<T> child) {
-        var existing = getChild(child.getName());
-        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
-        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
-        
-        super.addChild(child); 
-        
-        if (childAliases != null) {
-            for (var alias : childAliases) {
-                super.addChild(alias);
-            }
-        }
-                
-        if (!alias && existingAliases != null) {
-            if (childAliases != null) {
-                existingAliases.addAll(childAliases);
-                for (var alias : childAliases) {
-                    for (var grandchild : existing.getChildren()) {
-                        alias.addChild(grandchild);
-                    }
-                }
-            }
-
-            for (var grandchild : child.getChildren()) {
-                for (var existingChildAlias : existingAliases) {
-                    existingChildAlias.addChild(grandchild);
-                }
-            }
-        }
+        Nodes.addChild(this, child, addition);
         
         for (var alias : aliases) {
             alias.addChild(child);
@@ -166,7 +141,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     }
 
     
-    public static class Builder<T> extends com.karuslabs.commons.command.tree.nodes.NodeBuilder<T, Builder<T>> {
+    public static class Builder<T> extends Nodes.Builder<T, Builder<T>> {
         
         String name;
         List<String> aliases;

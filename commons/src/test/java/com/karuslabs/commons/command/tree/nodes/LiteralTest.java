@@ -89,8 +89,8 @@ class LiteralTest {
         
         var child = (Literal<String>) literal.getChild("child");
         
-        assertSame(this.child, child);
-        assertEquals(3, child.aliases().size());
+        assertSame(extensive, child);
+        assertEquals(2, child.aliases().size());
         assertEquals(2, child.aliases().get(0).getChildren().size());
         assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
         assertEquals(2, child.getChildren().size());
@@ -104,13 +104,13 @@ class LiteralTest {
         
         var alias = literal.aliases().get(0);
         
-        assertEquals(3, literal.getChildren().size());
-        assertEquals(3, alias.getChildren().size());
+        assertEquals(2, literal.getChildren().size());
+        assertEquals(2, alias.getChildren().size());
         
         var child = (Literal<String>) literal.getChild("child");
         
-        assertSame(this.extensive, child);
-        assertEquals(3, child.aliases().size());
+        assertSame(this.child, child);
+        assertEquals(1, child.aliases().size());
         assertEquals(2, child.aliases().get(0).getChildren().size());
         assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
         assertEquals(2, child.getChildren().size());
@@ -139,8 +139,8 @@ class LiteralTest {
         assertEquals(3, literal.getChildren().size());
         assertEquals(3, alias.getChildren().size());
         
-        assertSame(argument, literal.getChild("child"));
-        assertEquals(3, argument.getChildren().size());
+        assertSame(extensive, literal.getChild("child"));
+        assertEquals(3, extensive.getChildren().size());
     }
     
     
@@ -151,11 +151,11 @@ class LiteralTest {
         
         var alias = literal.aliases().get(0);
         
-        assertEquals(3, literal.getChildren().size());
-        assertEquals(3, alias.getChildren().size());
+        assertEquals(1, literal.getChildren().size());
+        assertEquals(1, alias.getChildren().size());
         
-        assertSame(extensive, literal.getChild("child"));
-        assertEquals(3, extensive.getChildren().size());
+        assertSame(argument, literal.getChild("child"));
+        assertEquals(3, argument.getChildren().size());
     }
     
     

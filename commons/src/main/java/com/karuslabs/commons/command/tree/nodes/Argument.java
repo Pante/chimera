@@ -30,7 +30,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -49,6 +49,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     
     private CommandNode<T> destination;
+    private Consumer<CommandNode<T>> addition;
 
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
@@ -58,39 +59,13 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
+        this.addition = super::addChild;
     }
     
     
     @Override
     public void addChild(CommandNode<T> child) {
-        var current = getChild(child.getName());
-        var existingAliases = current instanceof Aliasable<?> ? ((Aliasable<T>) current).aliases() : null;
-        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
-        
-        super.addChild(child); 
-        
-        if (childAliases != null) {
-            for (var alias : childAliases) {
-                super.addChild(alias);
-            }
-        }
-        
-        if (existingAliases != null) {
-            if (childAliases != null) {
-                existingAliases.addAll(childAliases);
-                for (var alias : childAliases) {
-                    for (var grandchild : current.getChildren()) {
-                        alias.addChild(grandchild);
-                    }
-                }
-            }
-
-            for (var grandchild : child.getChildren()) {
-                for (var existingChildAlias : existingAliases) {
-                    existingChildAlias.addChild(grandchild);
-                }
-            }
-        }
+        Nodes.addChild(this, child, addition);
     }
     
     
@@ -117,7 +92,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     }
 
     
-    public static class Builder<T, V> extends NodeBuilder<T, Builder<T, V>> {
+    public static class Builder<T, V> extends Nodes.Builder<T, Builder<T, V>> {
         
         String name;
         ArgumentType<V> type;

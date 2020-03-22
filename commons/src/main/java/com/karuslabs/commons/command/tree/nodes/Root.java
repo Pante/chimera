@@ -41,7 +41,7 @@ public class Root extends RootCommandNode<CommandSender> {
     private String prefix;
     private Plugin plugin;
     private CommandMap map;
-    @Nullable CommandDispatcher<CommandSender> dispatcher;
+    private @Nullable CommandDispatcher<CommandSender> dispatcher;
     
     
     public Root(Plugin plugin, CommandMap map) {
@@ -58,14 +58,15 @@ public class Root extends RootCommandNode<CommandSender> {
     @Override
     public void addChild(CommandNode<CommandSender> command) {
         if (!(command instanceof LiteralCommandNode<?>)) {
-            throw new IllegalArgumentException("Invalid command registered: " + command.getName() + ", commands registered to root must be a literal");
+            throw new IllegalArgumentException("Invalid command: '" + command.getName() + "', commands registered to root must be a literal");
         }
         
         var literal = (LiteralCommandNode<CommandSender>) command;
         
         var aliases = List.<LiteralCommandNode<CommandSender>>of();
         if (command instanceof Aliasable<?>) {
-            aliases = new ArrayList<>(((Aliasable<CommandSender>) command).aliases());
+            var aliasable = ((Aliasable<CommandSender>) command);
+            aliases = new ArrayList<>(aliasable.aliases());
         }
         
         register(literal, aliases);

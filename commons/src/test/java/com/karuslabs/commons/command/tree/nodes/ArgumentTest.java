@@ -65,10 +65,13 @@ class ArgumentTest {
         
         assertEquals(3, argument.getChildren().size());
         
-        var child = (Argument<String, String>) argument.getChild("child");
+        var child = (Literal<String>) argument.getChild("child");
         
-        assertSame(this.child, child);
+        assertSame(this.extensive, child);
         assertEquals(2, child.getChildren().size());
+        assertEquals(2, child.aliases().size());
+        assertEquals(2, child.aliases().get(0).getChildren().size());
+        assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
     }
     
     
@@ -77,13 +80,10 @@ class ArgumentTest {
         argument.addChild(extensive);
         argument.addChild(child);
         
-        assertEquals(3, argument.getChildren().size());
-        var child = (Literal<String>) argument.getChild("child");
+        assertEquals(1, argument.getChildren().size());
+        var child = (Argument<String, String>) argument.getChild("child");
         
-        assertSame(this.extensive, child);
-        assertEquals(2, child.aliases().size());
-        assertEquals(2, child.aliases().get(0).getChildren().size());
-        assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
+        assertSame(this.child, child);
         assertEquals(2, child.getChildren().size());
     }
     
@@ -102,10 +102,10 @@ class ArgumentTest {
         argument.addChild(literal);
         argument.addChild(extensive);
         
-        assertEquals(4, argument.getChildren().size());
+        assertEquals(3, argument.getChildren().size());
         
-        assertSame(literal, argument.getChild("child"));
-        assertEquals(2, literal.getChildren().size());
+        assertSame(extensive, argument.getChild("child"));
+        assertEquals(2, extensive.getChildren().size());
     }
     
     
@@ -114,9 +114,9 @@ class ArgumentTest {
         argument.addChild(extensive);
         argument.addChild(literal);
         
-        assertEquals(4, argument.getChildren().size());
+        assertEquals(2, argument.getChildren().size());
         
-        assertSame(extensive, argument.getChild("child"));
+        assertSame(literal, argument.getChild("child"));
         assertEquals(2, extensive.getChildren().size());
     }
     

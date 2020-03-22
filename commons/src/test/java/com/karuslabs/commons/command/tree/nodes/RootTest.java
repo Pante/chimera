@@ -59,7 +59,7 @@ class RootTest {
         
         root.addChild(literal);
         
-        verify(map, times(2)).register(eq("test"), any(DispatcherCommand.class));
+        verify(map, times(1)).register(eq("test"), any(DispatcherCommand.class));
         assertNotNull(root.getChild("a"));
         assertNotNull(root.getChild("test:a"));
         assertNotNull(root.getChild("a1"));
@@ -70,7 +70,7 @@ class RootTest {
     @ParameterizedTest
     @MethodSource("addChild_throws_exception_parameters")
     void addChild_throws_exception(CommandNode<CommandSender> command) {
-        assertEquals("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode", 
+        assertEquals("Invalid command: '" + command.getName() + "', commands registered to root must be a literal", 
             assertThrows(IllegalArgumentException.class, () -> root.addChild(command)).getMessage()
         );
     }
@@ -86,7 +86,7 @@ class RootTest {
         
         root.dispatcher(dispatcher);
         
-        assertSame(dispatcher, root.dispatcher);
+        assertSame(dispatcher, root.dispatcher());
     }
     
     
