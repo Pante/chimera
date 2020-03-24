@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.annotations.VisibleForOverride;
+
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
@@ -58,6 +60,7 @@ public class Scheduler extends ScheduledThreadPoolExecutor {
     }
     
     @Override
+    @VisibleForOverride
     protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> future) {
         if (runnable instanceof RunnableContext) {
             var context = (RunnableContext) runnable;

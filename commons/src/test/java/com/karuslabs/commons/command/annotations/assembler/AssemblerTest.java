@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
-import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
@@ -146,7 +146,7 @@ class AssemblerTest {
         
         
         @Literal(namespace = "b")
-        void executable(DefaultableContext<String> context) {
+        void executable(OptionalContext<String> context) {
             executable++;
         }
         
@@ -156,7 +156,7 @@ class AssemblerTest {
     @Test
     void emit() throws ReflectiveOperationException {
        var signature = new InvalidSignature();
-       var method = signature.getClass().getDeclaredMethod("method", DefaultableContext.class);
+       var method = signature.getClass().getDeclaredMethod("method", OptionalContext.class);
         assertEquals(
             "Invalid signature for method in class com.karuslabs.commons.command.annotations.assembler.AssemblerTest$InvalidSignature, signaure must match Command or Executable",
             assertThrows(IllegalArgumentException.class, () -> assembler.emit(signature, method)).getMessage()
@@ -167,7 +167,7 @@ class AssemblerTest {
     
     static class InvalidSignature {
         
-        int method(DefaultableContext<String> context) {
+        int method(OptionalContext<String> context) {
             return 1;
         }
         

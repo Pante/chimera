@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
-import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.commons.command.OptionalContext;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -75,7 +75,7 @@ class SignatureProcessorTest {
         when(types.erasure(context)).thenReturn(context);
         
         TypeElement defaultableContext = when(mock(TypeElement.class).asType()).thenReturn(defaultable).getMock();
-        when(elements.getTypeElement(DefaultableContext.class.getName())).thenReturn(defaultableContext);
+        when(elements.getTypeElement(OptionalContext.class.getName())).thenReturn(defaultableContext);
         when(types.erasure(defaultable)).thenReturn(defaultable);
         
         TypeElement exceptionElement = when(mock(TypeElement.class).asType()).thenReturn(exception).getMock();

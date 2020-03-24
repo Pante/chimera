@@ -43,7 +43,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class DefaultableContextTest {
+class OptionalContextTest {
     
     static final Object SOURCE = new Object();
     static final Command<Object> COMMAND = context -> 1;
@@ -51,7 +51,7 @@ class DefaultableContextTest {
     static final StringRange RANGE = new StringRange(0, 0);
     static final RedirectModifier<Object> MODIFIER = context -> List.of();
     static final CommandContext<Object> DELEGATE = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, NODE, List.of(), RANGE, null, MODIFIER, false);
-    static final DefaultableContext<Object> CONTEXT = new DefaultableContext<>(DELEGATE);
+    static final OptionalContext<Object> CONTEXT = new OptionalContext<>(DELEGATE);
     
     
     @Test
@@ -81,7 +81,7 @@ class DefaultableContextTest {
     @Test
     void delegate() {
         var delegate = mock(CommandContext.class);
-        var context = new DefaultableContext<>(delegate);
+        var context = new OptionalContext<>(delegate);
         
         context.copyFor(null);
         verify(delegate).copyFor(null);
@@ -134,7 +134,7 @@ class DefaultableContextTest {
     
     static Stream<Arguments> equality_parameters() {
         var context = new CommandContext<>(SOURCE, "", Map.of("argument", new ParsedArgument<>(0, 1, "value")), COMMAND, NODE, List.of(), RANGE, null, MODIFIER, false);
-        var other = new DefaultableContext<>(context);
+        var other = new OptionalContext<>(context);
         return Stream.of(
             of(CONTEXT, true),
             of(other, true),

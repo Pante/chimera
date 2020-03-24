@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
+import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
 
@@ -68,7 +68,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
-        this.tree = new TreeWalker<>(new DispatcherMapper(this));
+        this.tree = new TreeWalker<>(new NativeMapper(this));
     }
     
     

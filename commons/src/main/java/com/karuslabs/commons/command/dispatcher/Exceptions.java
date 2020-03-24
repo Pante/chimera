@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.annotations.Static;
 
@@ -38,12 +38,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 
-public @Static class Exceptions {
+@Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
     
     
-    public static void report(CommandSender sender, CommandSyntaxException exception) {
+    static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         
         listener.sendFailureMessage(ChatComponentUtils.a(exception.getRawMessage()));
@@ -80,7 +80,7 @@ public @Static class Exceptions {
     }
     
     
-    public static void report(CommandSender sender, Exception exception) {
+    static void report(CommandSender sender, Exception exception) {
         var listener = from(sender);
         
         var message = exception.getMessage();

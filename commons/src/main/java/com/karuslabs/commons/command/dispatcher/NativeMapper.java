@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.Mapper;
@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.karuslabs.commons.command.types.Type;
 
 
-class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
+class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     static final Map<ClientsideProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
     
@@ -57,7 +57,7 @@ class DispatcherMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    DispatcherMapper(CommandDispatcher<CommandSender> dispatcher) {
+    NativeMapper(CommandDispatcher<CommandSender> dispatcher) {
         this.dispatcher = dispatcher;
     }
     

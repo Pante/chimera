@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.annotations.processors;
 
 import com.karuslabs.annotations.Ignored;
 import com.karuslabs.annotations.processor.AnnotationProcessor;
-import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.commons.command.OptionalContext;
 
 import com.google.auto.service.AutoService;
 
@@ -63,7 +63,7 @@ public class SignatureProcessor extends AnnotationProcessor {
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
         context = types.erasure(elements.getTypeElement(CommandContext.class.getName()).asType());
-        defaultable = types.erasure(elements.getTypeElement(DefaultableContext.class.getName()).asType());
+        defaultable = types.erasure(elements.getTypeElement(OptionalContext.class.getName()).asType());
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
     }
     

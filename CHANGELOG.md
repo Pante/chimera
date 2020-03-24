@@ -25,6 +25,10 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
 - Change `Commands.from(Object, String)` to `Commands.resolve(Object, String)`
+- Change `DefaultableContext<T>` to `OptionalContext<T>`
+- Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
+- Change `DispatcherMapper` to `NativeMapper`
+- Change `Exceptions` to package-private
 - Change `Mapper.otherwise(ComandNode<T>)` now throws `IllegalArgumentException` instead of `UnsupportedOperationException`
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
 - Fix longstanding issue with child commands not replaced when new child commands are added

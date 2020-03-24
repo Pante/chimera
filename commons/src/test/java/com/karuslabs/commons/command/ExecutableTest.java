@@ -41,7 +41,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ExecutableTest {
     
-    Executable<Object> executable = val -> assertTrue(val instanceof DefaultableContext<?>);
+    Executable<Object> executable = val -> assertTrue(val instanceof OptionalContext<?>);
     
     
     @Test

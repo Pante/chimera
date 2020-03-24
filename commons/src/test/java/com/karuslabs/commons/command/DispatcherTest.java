@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.dispatcher.Dispatcher;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.nodes.*;
 

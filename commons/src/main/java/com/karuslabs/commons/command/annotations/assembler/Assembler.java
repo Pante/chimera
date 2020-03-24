@@ -47,8 +47,8 @@ public class Assembler<T> {
     static final MethodType COMMAND_SIGNATURE = MethodType.methodType(int.class, CommandContext.class);
     static final Class<?>[] COMMAND_PARAMETERS = new Class<?>[] {CommandContext.class};
     
-    static final MethodType EXECUTABLE_SIGNATURE = MethodType.methodType(void.class, DefaultableContext.class);
-    static final Class<?>[] EXECUTABLE_PARAMETERS = new Class<?>[] {DefaultableContext.class};
+    static final MethodType EXECUTABLE_SIGNATURE = MethodType.methodType(void.class, OptionalContext.class);
+    static final Class<?>[] EXECUTABLE_PARAMETERS = new Class<?>[] {OptionalContext.class};
     
     
     CommandAssembler assembler;

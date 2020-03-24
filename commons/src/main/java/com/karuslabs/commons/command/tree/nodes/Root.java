@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.*;
+import com.karuslabs.commons.command.dispatcher.DispatcherCommand;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
@@ -61,6 +61,8 @@ public class Root extends RootCommandNode<CommandSender> {
             throw new IllegalArgumentException("Invalid command: '" + command.getName() + "', commands registered to root must be a literal");
         }
         
+        
+        
         var literal = (LiteralCommandNode<CommandSender>) command;
         
         var aliases = List.<LiteralCommandNode<CommandSender>>of();
@@ -95,20 +97,6 @@ public class Root extends RootCommandNode<CommandSender> {
         }
         
         return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), names);
-    }
-    
-    
-    public @Nullable CommandDispatcher<CommandSender> dispatcher() {
-        return dispatcher;
-    }
-    
-    public void dispatcher(CommandDispatcher<CommandSender> dispatcher) {
-        if (this.dispatcher == null) {
-            this.dispatcher = dispatcher;
-            
-        } else {
-            throw new IllegalStateException("CommandDispatcher is already initialized");
-        }
     }
     
 }

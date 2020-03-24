@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
-import com.karuslabs.commons.command.DefaultableContext;
+import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
@@ -52,7 +52,7 @@ public class TestCommand {
     
     
     @Argument(namespace = {"a", "b", "c2"}, type = "argument", suggestions = "argument")
-    void c2(DefaultableContext<String> context) {
+    void c2(OptionalContext<String> context) {
         
     }
     

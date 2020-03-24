@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.commons.command.dispatcher.DispatcherMapper;
 import com.karuslabs.commons.command.types.*;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.nodes.*;

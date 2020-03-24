@@ -31,12 +31,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 @FunctionalInterface
 public interface Executable<S> extends Command<S> {
     
-    public void execute(DefaultableContext<S> context) throws CommandSyntaxException;
+    public void execute(OptionalContext<S> context) throws CommandSyntaxException;
     
     
     @Override
     public default int run(CommandContext<S> context) throws CommandSyntaxException {
-        execute(new DefaultableContext<>(context));
+        execute(new OptionalContext<>(context));
         return SINGLE_SUCCESS;
     }
     

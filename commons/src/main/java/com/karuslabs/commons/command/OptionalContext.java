@@ -34,7 +34,7 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public @Delegate class DefaultableContext<T> extends CommandContext<T> {
+public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
     static final VarHandle ARGUMENTS;
     static {
@@ -52,7 +52,7 @@ public @Delegate class DefaultableContext<T> extends CommandContext<T> {
     private @Nullable Map<String, ParsedArgument<T, ?>> arguments;
     
     
-    public DefaultableContext(CommandContext<T> context) {
+    public OptionalContext(CommandContext<T> context) {
         super(null, null, null, null, null, null, null, null, null, false);
         this.context = context;
         this.arguments = null;
@@ -79,8 +79,8 @@ public @Delegate class DefaultableContext<T> extends CommandContext<T> {
     
     
     @Override
-    public DefaultableContext<T> copyFor(T source) {
-        return new DefaultableContext(context.copyFor(source));
+    public OptionalContext<T> copyFor(T source) {
+        return new OptionalContext(context.copyFor(source));
     }
 
     @Override
@@ -139,11 +139,11 @@ public @Delegate class DefaultableContext<T> extends CommandContext<T> {
         if (this == other) {
             return true;
             
-        } else  if (!(other instanceof DefaultableContext)) {
+        } else  if (!(other instanceof OptionalContext)) {
             return false;
         }
 
-        return context.equals(((DefaultableContext) other).context);
+        return context.equals(((OptionalContext) other).context);
     }
 
     @Override

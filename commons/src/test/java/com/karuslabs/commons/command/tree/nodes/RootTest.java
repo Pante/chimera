@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.DispatcherCommand;
+import com.karuslabs.commons.command.dispatcher.DispatcherCommand;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
 import com.mojang.brigadier.CommandDispatcher;
