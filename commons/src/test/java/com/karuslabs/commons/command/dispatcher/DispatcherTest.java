@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.dispatcher.Dispatcher;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
@@ -78,7 +78,7 @@ class DispatcherTest {
         reset(manager);
         
         var dispatcher = Dispatcher.of(plugin);
-        assertSame(dispatcher, ((Root) dispatcher.getRoot()).dispatcher());
+        assertSame(dispatcher, ((NativeMap) dispatcher.getRoot().getDispatcherMap()).dispatcher);
     }
     
     

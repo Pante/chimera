@@ -23,77 +23,17 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.tree.nodes.Aliasable;
-
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import java.util.*;
-
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
-
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
+import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class DispatcherMap {
-    
-    String prefix;
-    Plugin plugin;
-    CraftCommandMap map;
-    @Nullable CommandDispatcher<CommandSender> dispatcher;
-    
-    
-    DispatcherMap(CraftCommandMap map) {
-        this.map = map;
-    }
-    
-    
-    public @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command) {
-        if (map.getKnownCommands().containsKey(command.getName())) {
-            return null;
-        }
-        
-        var wrapped = wrap(command);
-        map.register(prefix, wrapped);
-        return wrapped;
-    }
-    
-    public @Nullable DispatcherCommand unregister(String name) {
-        
-    }
-    
-    
-    DispatcherCommand wrap(LiteralCommandNode<CommandSender> command) {
-        var aliases = new ArrayList<String>();
-        if (command instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<?>) command).aliases()) {
-                aliases.add(alias.getName());
-            }
-        }
-        
-        return new DispatcherCommand(prefix, plugin, dispatcher, command.getUsageText(), aliases);
-    }
-    
-    
-    @Nullable CommandDispatcher<CommandSender> dispatcher() {
-        return dispatcher;
-    }
-    
-    void dispatcher(CommandDispatcher<CommandSender> dispatcher) {
-        if (this.dispatcher == null) {
-            this.dispatcher = dispatcher;
-            
-        } else {
-            throw new IllegalStateException("CommandDispatcher is already initialized");
-        }
-    }
-    
-    
-    public Map<String, Command> getKnownCommands() {
-        return map.getKnownCommands();
-    }
-    
+public interface DispatcherMap {
+
+    @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command);
+
+    @Nullable DispatcherCommand unregister(String name);
+
 }

@@ -23,80 +23,77 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.dispatcher.DispatcherCommand;
+import com.karuslabs.annotations.Ignored;
+import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.dispatcher.*;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.util.*;
-
 import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Root extends RootCommandNode<CommandSender> {
+public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {
     
     private String prefix;
-    private Plugin plugin;
-    private CommandMap map;
-    private @Nullable CommandDispatcher<CommandSender> dispatcher;
+    private DispatcherMap map;
     
     
-    public Root(Plugin plugin, CommandMap map) {
-        this(plugin.getName().toLowerCase(), plugin, map);
-    }
-    
-    public Root(String prefix, Plugin plugin, CommandMap map) {
+    public Root(String prefix, DispatcherMap map) {
         this.prefix = prefix;
-        this.plugin = plugin;
         this.map = map;
     }
     
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
-        if (!(command instanceof LiteralCommandNode<?>)) {
+        if (getChild(command.getName()) != null) {
+            throw new IllegalArgumentException("Invalid command: '" + command.getName() + "', root already contains a child with the same name");
+            
+        }  else if (!(command instanceof LiteralCommandNode<?>)) {
             throw new IllegalArgumentException("Invalid command: '" + command.getName() + "', commands registered to root must be a literal");
         }
         
-        
-        
         var literal = (LiteralCommandNode<CommandSender>) command;
         
-        var aliases = List.<LiteralCommandNode<CommandSender>>of();
-        if (command instanceof Aliasable<?>) {
-            var aliasable = ((Aliasable<CommandSender>) command);
-            aliases = new ArrayList<>(aliasable.aliases());
+        var wrapper = map.register(literal);
+        if (wrapper == null) {
+            return;
         }
         
-        register(literal, aliases);
-    }
-    
-    protected void register(LiteralCommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
-        var wrapper = wrap(command, aliases);
-        
-        super.addChild(Literal.alias(command, prefix + ":" + command.getName()));
-        if (map.register(prefix, wrapper)) {
-            super.addChild(command);
+        super.addChild(Literal.alias(literal, wrapper.getLabel()));
+        if (wrapper.getName().equals(wrapper.getLabel())) {
+            super.addChild(Literal.alias(literal, wrapper.getName()));
         }
         
-        for (var alias : aliases) {
-            super.addChild(Literal.alias(command, prefix + ":" + alias.getName()));
-            if (wrapper.getAliases().contains(alias.getName())) {
-                super.addChild(alias);
+        if (literal instanceof Aliasable<?>) {
+            for (var alias : ((Aliasable<CommandSender>) literal).aliases()) {
+                if (wrapper.getAliases().contains(alias.getName())) {
+                    super.addChild(Literal.alias(literal, prefix + ":" + alias));
+                    super.addChild(alias);
+                }
             }
         }
     }
+
+    @Override
+    public CommandNode<CommandSender> removeChild(String child) {
+        return Commands.remove(this, child);
+    }
+
     
-    protected Command wrap(LiteralCommandNode<CommandSender> command, List<LiteralCommandNode<CommandSender>> aliases) {
-        var names = new ArrayList<String>();
-        for (var alias : aliases) {
-            names.add(alias.getName());
-        }
-        
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), names);
+    @Override
+    public void setCommand(@Ignored com.mojang.brigadier.Command<CommandSender> command) {
+        // Does nothing
+    }
+
+    @Override
+    public void setRedirect(@Ignored CommandNode<CommandSender> destination) {
+        // Does nothing
+    }
+    
+    
+    public DispatcherMap getDispatcherMap() {
+        return map;
     }
     
 }

@@ -35,8 +35,8 @@ import org.bukkit.plugin.Plugin;
 
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     
-    private Plugin plugin;
-    private CommandDispatcher<CommandSender> dispatcher;
+    Plugin plugin;
+    CommandDispatcher<CommandSender> dispatcher;
     
     
     public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage, List<String> aliases) {

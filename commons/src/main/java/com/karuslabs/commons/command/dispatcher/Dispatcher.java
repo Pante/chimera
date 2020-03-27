@@ -29,11 +29,11 @@ import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.*;
 
 import net.minecraft.server.v1_15_R1.*;
 
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -45,26 +45,31 @@ import org.bukkit.plugin.Plugin;
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
     private MinecraftServer server;
+    private Root root;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
     Synchronizer synchronizer;
     TreeWalker<CommandSender, CommandListenerWrapper> tree;
 
     
     public static Dispatcher of(Plugin plugin) {
+        var prefix = plugin.getName().toLowerCase();
+        
         var server = ((CraftServer) plugin.getServer());
-        var root = new Root(plugin, server.getCommandMap());
+        var map = new NativeMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
+        var root = new Root(prefix, map);
         var synchronizer = Synchronizer.of(plugin);
         
         var dispatcher = new Dispatcher(server, root, synchronizer);
-        root.dispatcher(dispatcher);
+        map.dispatcher = dispatcher;
         server.getPluginManager().registerEvents(dispatcher, plugin);
         
         return dispatcher;
     }
     
     
-    protected Dispatcher(Server server, RootCommandNode<CommandSender> root, Synchronizer synchronizer) {
+    protected Dispatcher(Server server, Root root, Synchronizer synchronizer) {
         super(root);
+        this.root = root;
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
@@ -89,6 +94,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     protected void update(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
         tree.prune(dispatcher.getRoot(), getRoot().getChildren());
+    }
+    
+    
+    @Override
+    public Root getRoot()  {
+        return root;
     }
  
     

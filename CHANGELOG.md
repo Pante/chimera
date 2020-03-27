@@ -30,6 +30,7 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Change `DispatcherMapper` to `NativeMapper`
 - Change `Exceptions` to package-private
 - Change `Mapper.otherwise(ComandNode<T>)` now throws `IllegalArgumentException` instead of `UnsupportedOperationException`
+- Remove `Literal.Builder<T>.alias(String)` - use `Literal.Builder<T>.alias(String...)` instead
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
 - Fix longstanding issue with child commands not replaced when new child commands are added
 - Fix longstanding issue with command aliases not being removed in `Commands.remove(String)`

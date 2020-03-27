@@ -23,10 +23,9 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.dispatcher.DispatcherCommand;
+import com.karuslabs.commons.command.dispatcher.*;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
 import java.util.stream.Stream;
@@ -48,18 +47,16 @@ import static org.mockito.Mockito.*;
 class RootTest {
     
     Plugin plugin = when(mock(Plugin.class).getName()).thenReturn("test").getMock();
-    CommandMap map = mock(CommandMap.class);
-    Root root = new Root(plugin, map);
+    DispatcherMap map = mock(DispatcherMap.class);
+    Root root = new Root("prefix", map);
     
     
     @Test
     void addChild() {
         var literal = Literal.of("a").alias("a1").build();
-        doReturn(true).when(map).register(any(String.class), any(Command.class));
         
         root.addChild(literal);
         
-        verify(map, times(1)).register(eq("test"), any(DispatcherCommand.class));
         assertNotNull(root.getChild("a"));
         assertNotNull(root.getChild("test:a"));
         assertNotNull(root.getChild("a1"));
@@ -77,27 +74,6 @@ class RootTest {
     
     static Stream<CommandNode<CommandSender>> addChild_throws_exception_parameters() {
         return Stream.of(new RootCommandNode<>(), Argument.of("name", new EnchantmentType()).build());
-    }
-    
-    
-    @Test
-    void dispatcher() {
-        var dispatcher = mock(CommandDispatcher.class);
-        
-        root.dispatcher(dispatcher);
-        
-        assertSame(dispatcher, root.dispatcher());
-    }
-    
-    
-    @Test
-    void dispatcher_throws_exception() {
-        var dispatcher = mock(CommandDispatcher.class);
-        
-        assertEquals(
-            "CommandDispatcher is already initialized", 
-            assertThrows(IllegalStateException.class, () -> { root.dispatcher(dispatcher); root.dispatcher(dispatcher); }).getMessage()
-        );
     }
 
 } 

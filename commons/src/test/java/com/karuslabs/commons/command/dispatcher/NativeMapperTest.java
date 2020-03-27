@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command;
+package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.dispatcher.DispatcherMapper;
 import com.karuslabs.commons.command.types.*;
 import com.karuslabs.commons.command.suggestions.ClientsideProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
@@ -49,13 +48,13 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class DispatcherMapperTest {
+class NativeMapperTest {
     
     static final SuggestionProvider<CommandListenerWrapper> PROVIDER = (a, b) -> null;
     
     
     CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
-    DispatcherMapper mapper = spy(new DispatcherMapper(dispatcher));
+    NativeMapper mapper = spy(new NativeMapper(dispatcher));
     
     CommandSender sender = mock(CommandSender.class);
     CommandListenerWrapper listener = when(mock(CommandListenerWrapper.class).getBukkitSender()).thenReturn(sender).getMock();
@@ -72,7 +71,7 @@ class DispatcherMapperTest {
     
     @Test
     void requirement() {
-        assertSame(DispatcherMapper.TRUE, mapper.requirement(Literal.of("a").requires(null).build()));
+        assertSame(NativeMapper.TRUE, mapper.requirement(Literal.of("a").requires(null).build()));
         
         Predicate<CommandSender> predicate = mock(Predicate.class);
         mapper.requirement(Literal.of("a").requires(predicate).build()).test(listener);
@@ -99,7 +98,7 @@ class DispatcherMapperTest {
     
     @Test
     void suggestions_clientside() {
-        assertSame(DispatcherMapper.CLIENT_SIDE.get(ClientsideProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientsideProvider.ENTITIES).build()));
+        assertSame(NativeMapper.CLIENT_SIDE.get(ClientsideProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientsideProvider.ENTITIES).build()));
     }
     
     

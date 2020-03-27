@@ -157,11 +157,6 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             Collections.addAll(this.aliases, aliases);
             return this;
         }
-        
-        public Builder<T> alias(String alias) {
-            aliases.add(alias);
-            return this;
-        }
 
         
         @Override
