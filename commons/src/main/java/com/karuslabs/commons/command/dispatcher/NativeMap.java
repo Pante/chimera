@@ -55,6 +55,8 @@ class NativeMap implements DispatcherMap {
     
     @Override
     public @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command) {
+        // We don't need to check if map contains "prefix:command_name" since Spigot will
+        // always override it
         if (map.getKnownCommands().containsKey(command.getName())) {
             return null;
         }

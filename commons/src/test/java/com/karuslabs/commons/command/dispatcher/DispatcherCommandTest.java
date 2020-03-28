@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.dispatcher.DispatcherCommand;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;

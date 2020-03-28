@@ -29,6 +29,8 @@ import com.karuslabs.commons.command.dispatcher.*;
 
 import com.mojang.brigadier.tree.*;
 
+import java.util.*;
+
 import org.bukkit.command.*;
 
 
@@ -60,15 +62,15 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
             return;
         }
         
-        super.addChild(Literal.alias(literal, wrapper.getLabel()));
+        super.addChild(Literal.alias(literal, prefix + ":" + literal.getName()));
         if (wrapper.getName().equals(wrapper.getLabel())) {
-            super.addChild(Literal.alias(literal, wrapper.getName()));
+            super.addChild(literal);
         }
         
         if (literal instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<CommandSender>) literal).aliases()) {
+            for (var alias : new ArrayList<>((((Aliasable<CommandSender>) literal).aliases()))) {
                 if (wrapper.getAliases().contains(alias.getName())) {
-                    super.addChild(Literal.alias(literal, prefix + ":" + alias));
+                    super.addChild(Literal.alias(literal, prefix + ":" + alias.getName()));
                     super.addChild(alias);
                 }
             }

@@ -28,10 +28,10 @@ import com.karuslabs.commons.command.types.EnchantmentType;
 
 import com.mojang.brigadier.tree.*;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,14 +46,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class RootTest {
     
-    Plugin plugin = when(mock(Plugin.class).getName()).thenReturn("test").getMock();
     DispatcherMap map = mock(DispatcherMap.class);
-    Root root = new Root("prefix", map);
+    Root root = new Root("test", map);
+    Literal<CommandSender> literal = Literal.of("a").alias("a1").build();
     
     
     @Test
     void addChild() {
-        var literal = Literal.of("a").alias("a1").build();
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
         
         root.addChild(literal);
         
@@ -64,9 +64,58 @@ class RootTest {
     }
     
     
+    @Test
+    void addChild_bukkit_contains_name() {
+        var command = new DispatcherCommand("a", null, null, null, List.of("a1"));
+        command.setLabel("label");
+        
+        when(map.register(literal)).thenReturn(command);
+        
+        root.addChild(literal);
+        
+        assertNull(root.getChild("a"));
+        assertNotNull(root.getChild("test:a"));
+        assertNotNull(root.getChild("a1"));
+        assertNotNull(root.getChild("test:a1"));
+    }
+    
+    
+    @Test
+    void addChild_bukkit_contains_alias() {
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of()));
+        
+        root.addChild(literal);
+        
+        assertNotNull(root.getChild("a"));
+        assertNotNull(root.getChild("test:a"));
+        assertNull(root.getChild("a1"));
+        assertNull(root.getChild("test:a1"));
+    }
+    
+    
+    @Test
+    void addChild_unregistered() {
+        root.addChild(Literal.of("a").build());
+        
+        assertEquals(0, root.getChildren().size());
+    }
+    
+    
+    @Test
+    void addChild_duplicate_throws_exception() {
+        when(map.register(any())).thenReturn(new DispatcherCommand("", null, null, null, List.of("")));
+        
+        root.addChild(Literal.of("a").build());
+        
+        assertEquals("Invalid command: 'a', root already contains a child with the same name",
+            assertThrows(IllegalArgumentException.class, () -> root.addChild(Literal.of("a").build())).getMessage()
+        );
+    }
+    
+    
     @ParameterizedTest
     @MethodSource("addChild_throws_exception_parameters")
-    void addChild_throws_exception(CommandNode<CommandSender> command) {
+    void addChild_non_literal_throws_exception(CommandNode<CommandSender> command) {
         assertEquals("Invalid command: '" + command.getName() + "', commands registered to root must be a literal", 
             assertThrows(IllegalArgumentException.class, () -> root.addChild(command)).getMessage()
         );
@@ -74,6 +123,35 @@ class RootTest {
     
     static Stream<CommandNode<CommandSender>> addChild_throws_exception_parameters() {
         return Stream.of(new RootCommandNode<>(), Argument.of("name", new EnchantmentType()).build());
+    }
+    
+    
+    @Test
+    void removeChild() {
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
+        
+        root.addChild(literal);
+        
+        assertEquals(4, root.getChildren().size());
+        
+        assertEquals(literal, root.removeChild("a"));
+        assertEquals(0, root.getChildren().size());
+    }
+    
+    
+    @Test
+    void getters() {
+        var command = root.getCommand();
+        root.setCommand(mock(com.mojang.brigadier.Command.class));
+        
+        assertSame(command, root.getCommand());
+        
+        var destination = root.getRedirect();
+        root.setRedirect(literal);
+        
+        assertSame(destination, root.getRedirect());
+        
+        assertSame(map, root.getDispatcherMap());
     }
 
 } 

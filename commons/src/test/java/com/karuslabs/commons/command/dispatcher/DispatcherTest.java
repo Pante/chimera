@@ -23,14 +23,13 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.dispatcher.Dispatcher;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import net.minecraft.server.v1_15_R1.*;
 
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
 import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
 import org.bukkit.plugin.*;
 
@@ -49,7 +48,7 @@ class DispatcherTest {
     Plugin plugin = when(mock(Plugin.class).getName()).thenReturn("test").getMock();
     CraftServer craftserver = mock(CraftServer.class);
     DedicatedServer server = mock(DedicatedServer.class);
-    SimpleCommandMap map = when(mock(SimpleCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
+    CraftCommandMap map = when(mock(CraftCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
     ServicesManager services = mock(ServicesManager.class);

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.dispatcher.Exceptions;
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 

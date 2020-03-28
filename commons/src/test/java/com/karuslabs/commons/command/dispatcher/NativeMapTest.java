@@ -24,31 +24,24 @@
 package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.tree.nodes.*;
-import com.karuslabs.commons.command.types.StringType;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.*;
 
 import org.bukkit.Server;
-
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
-
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
@@ -58,7 +51,7 @@ class NativeMapTest {
     static final String PREFIX = "prefix";
     
     Plugin plugin = mock(Plugin.class);
-    CraftCommandMap craftmap = new CraftCommandMap(mock(Server.class));
+    CraftCommandMap craftmap = spy(new CraftCommandMap(mock(Server.class)));
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
     NativeMap map;
     
@@ -70,6 +63,57 @@ class NativeMapTest {
     void before() {
         map = new NativeMap(PREFIX, plugin, craftmap);
         map.dispatcher = dispatcher;
+    }
+    
+    
+    @Test
+    void register() {
+        var command = map.register(literal);
+        
+        verify(craftmap).register(PREFIX, command);
+        
+        assertEquals("literal", command.getName());
+        assertEquals("literal", command.getUsage());
+        assertEquals(plugin, command.getPlugin());
+        assertEquals(dispatcher, command.dispatcher);
+        assertEquals(List.of("l"), command.getAliases());
+    }
+    
+    
+    @Test
+    void register_already_exists() {
+        craftmap.getKnownCommands().put("literal", mock(Command.class));
+        
+        assertNull(map.register(literal));
+        verify(craftmap, times(0)).register(eq(PREFIX), any(Command.class));
+    }
+    
+    
+    @Test
+    void unregister_unknown() {
+        craftmap.getKnownCommands().put("something", mock(Command.class));
+        
+        assertNull(map.unregister("something"));
+    }
+    
+    
+    @Test
+    void unregister_aliasable() {
+        DispatcherCommand command = when(mock(DispatcherCommand.class).getAliases()).thenReturn(List.of("a", "b")).getMock();
+        var other = mock(Command.class);
+        var commands = craftmap.getKnownCommands();
+        
+        commands.clear();
+        commands.put("literal", command);
+        commands.put(PREFIX + ":literal", command);
+        commands.put("a", command);
+        commands.put(PREFIX + ":a", command);
+        commands.put("b", other);
+        commands.put(PREFIX + ":a", command);
+        
+        assertEquals(command, map.unregister("literal"));
+        assertEquals(Map.of("b", other), commands);
+        verify(command).unregister(craftmap);
     }
     
 

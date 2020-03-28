@@ -19,6 +19,8 @@ Annotations has been undergone a few tweaks.
 Numerous components of the project has been redesigned to reduce the overall API surface area while retaining functionality.
 
 **Commands**
+- Add `DispatcherMap`
+- Add `NativeMap`
 - Add `Nodes`
 - Add `TreeWalker<T, R>`
 - Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
@@ -29,12 +31,15 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
 - Change `DispatcherMapper` to `NativeMapper`
 - Change `Exceptions` to package-private
-- Change `Mapper.otherwise(ComandNode<T>)` now throws `IllegalArgumentException` instead of `UnsupportedOperationException`
+- Change `Mapper.otherwise(ComandNode<T>)` to throw `IllegalArgumentException` instead of `UnsupportedOperationException`
+- Change `Root` to implement `Mutable<CommandSender>`
+- Change `Root.addChild(...)` to throw `IllegalArgumentException` if two commands with the same name are registered
 - Remove `Literal.Builder<T>.alias(String)` - use `Literal.Builder<T>.alias(String...)` instead
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
-- Fix longstanding issue with child commands not replaced when new child commands are added
-- Fix longstanding issue with command aliases not being removed in `Commands.remove(String)`
-- Fix longstanding issue with command aliases not being associated with their names in Bukkit's command system
+- Fix child commands not replaced when new child commands are added
+- Fix command aliases not being removed in `Commands.remove(String)`
+- Fix command aliases not being associated with their names in Bukkit's command system
+- Fix commands being added to `Root` even when unable to be registered in Bukkit's command system
 - Remove `Commands.remove(CommandNode<T>, String...)` - this method was almost never used and posed a technical burden, use `Commands.remove(CommandNode<T>, String)` instead
 
 **Concurrency**
