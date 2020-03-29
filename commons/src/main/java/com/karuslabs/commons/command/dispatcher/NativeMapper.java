@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.suggestions.ClientsideProvider;
+import com.karuslabs.commons.command.suggestions.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.Mapper;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -44,13 +44,13 @@ import com.karuslabs.commons.command.types.Type;
 
 class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
-    static final Map<ClientsideProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
+    static final Map<ClientSuggestionProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
     
     static {
-        CLIENT_SIDE = new EnumMap<>(ClientsideProvider.class);
-        CLIENT_SIDE.put(ClientsideProvider.RECIPES, CompletionProviders.b);
-        CLIENT_SIDE.put(ClientsideProvider.SOUNDS, CompletionProviders.c);
-        CLIENT_SIDE.put(ClientsideProvider.ENTITIES, CompletionProviders.d);
+        CLIENT_SIDE = new EnumMap<>(ClientSuggestionProvider.class);
+        CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, CompletionProviders.b);
+        CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, CompletionProviders.c);
+        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.d);
     }
     
     

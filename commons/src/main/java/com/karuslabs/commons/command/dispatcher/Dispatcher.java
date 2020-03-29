@@ -48,19 +48,20 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private Root root;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
     Synchronizer synchronizer;
-    TreeWalker<CommandSender, CommandListenerWrapper> tree;
+    TreeWalker<CommandSender, CommandListenerWrapper> walker;
 
     
     public static Dispatcher of(Plugin plugin) {
         var prefix = plugin.getName().toLowerCase();
-        
         var server = ((CraftServer) plugin.getServer());
+        
         var map = new NativeMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
         var root = new Root(prefix, map);
         var synchronizer = Synchronizer.of(plugin);
         
         var dispatcher = new Dispatcher(server, root, synchronizer);
         map.dispatcher = dispatcher;
+        
         server.getPluginManager().registerEvents(dispatcher, plugin);
         
         return dispatcher;
@@ -73,7 +74,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
-        this.tree = new TreeWalker<>(new NativeMapper(this));
+        this.walker = new TreeWalker<>(new NativeMapper(this));
     }
     
     
@@ -85,7 +86,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
       
     
     public void update() {
-        tree.prune(dispatcher.getRoot(), getRoot().getChildren());
+        walker.prune(dispatcher.getRoot(), getRoot().getChildren());
         synchronizer.synchronize();
     }
     
@@ -93,7 +94,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
-        tree.prune(dispatcher.getRoot(), getRoot().getChildren());
+        walker.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
     
     

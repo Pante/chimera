@@ -43,6 +43,7 @@ import org.bukkit.entity.minecart.CommandMinecart;
     private static final Object[] EMPTY = new Object[0];
     
     
+    // Source: net.minecraft.server.CommandDispatcher #line: 187
     static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         
@@ -80,6 +81,7 @@ import org.bukkit.entity.minecart.CommandMinecart;
     }
     
     
+    // Source: net.minecraft.server.CommandDispatcher #line: 212
     static void report(CommandSender sender, Exception exception) {
         var listener = from(sender);
         
@@ -98,6 +100,7 @@ import org.bukkit.entity.minecart.CommandMinecart;
     }
     
     
+    // Source: package org.bukkit.craftbukkit.command.VanillaCommandWrapper#getListener(CommandSender)
     static CommandListenerWrapper from(CommandSender sender) {
         if (sender instanceof Player) {
             return ((CraftPlayer) sender).getHandle().getCommandListener();

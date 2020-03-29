@@ -23,24 +23,26 @@
  */
 package com.karuslabs.commons.command.suggestions;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.*;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
-import java.util.concurrent.CompletableFuture;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.bukkit.command.CommandSender;
+import static org.mockito.Mockito.*;
 
 
-public enum ClientsideProvider implements SuggestionProvider<CommandSender> {
+@ExtendWith(MockitoExtension.class)
+class ClientSuggestionProviderTest {
     
-    ENTITIES,
-    RECIPES,
-    SOUNDS;
-    
-    
-    @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
-        return builder.buildFuture();
+    @Test
+    void getSuggestions() {
+        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).buildFuture()).thenReturn(null).getMock();
+        
+        ClientSuggestionProvider.ENTITIES.getSuggestions(null, builder);
+        
+        verify(builder).buildFuture();
+        verifyNoMoreInteractions(builder);
     }
-    
-}
+
+} 

@@ -24,6 +24,7 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Add `Nodes`
 - Add `TreeWalker<T, R>`
 - Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
+- Change `ClientsideProvider` to `ClientSuggestionProvider`
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
 - Change `Commands.from(Object, String)` to `Commands.resolve(Object, String)`

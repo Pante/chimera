@@ -49,7 +49,7 @@ public class Synchronizer implements Listener {
     private MinecraftServer server;
     private Plugin plugin;
     CommandDispatcher<CommandListenerWrapper> dispatcher; 
-    TreeWalker<CommandListenerWrapper, ICompletionProvider> tree;
+    TreeWalker<CommandListenerWrapper, ICompletionProvider> walker;
     WeakReference<Synchronization> synchronization;
     
     
@@ -65,11 +65,11 @@ public class Synchronizer implements Listener {
     }
     
     
-    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
+    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> walker, Synchronization synchronization) {
         this.server = server;
         this.plugin = plugin;
         this.dispatcher = server.commandDispatcher.a();
-        this.tree = tree;
+        this.walker = walker;
         this.synchronization = new WeakReference<>(synchronization);
     }
     
@@ -91,7 +91,7 @@ public class Synchronizer implements Listener {
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        tree.add(root, dispatcher.getRoot().getChildren(), entity.getCommandListener(), command -> commands.contains(command.getName()));
+        walker.add(root, dispatcher.getRoot().getChildren(), entity.getCommandListener(), command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }

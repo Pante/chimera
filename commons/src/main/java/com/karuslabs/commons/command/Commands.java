@@ -38,20 +38,20 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public @Static class Commands {
     
-    static final Assembler<?> ASSEMBLER = new Assembler<>();
+    private static final Assembler<?> ASSEMBLER = new Assembler<>();
     
-    static final VarHandle COMMAND;
-    static final VarHandle CHILDREN;
-    static final VarHandle LITERALS;
-    static final VarHandle ARGUMENTS;
+    private static final VarHandle COMMAND;
+    private static final VarHandle CHILDREN;
+    private static final VarHandle LITERALS;
+    private static final VarHandle ARGUMENTS;
     
     static {
         try {
-            var targetClass = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup());
-            COMMAND = targetClass.findVarHandle(CommandNode.class, "command", Command.class);
-            CHILDREN = targetClass.findVarHandle(CommandNode.class, "children", Map.class);
-            LITERALS = targetClass.findVarHandle(CommandNode.class, "literals", Map.class);
-            ARGUMENTS = targetClass.findVarHandle(CommandNode.class, "arguments", Map.class);
+            var type = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup());
+            COMMAND = type.findVarHandle(CommandNode.class, "command", Command.class);
+            CHILDREN = type.findVarHandle(CommandNode.class, "children", Map.class);
+            LITERALS = type.findVarHandle(CommandNode.class, "literals", Map.class);
+            ARGUMENTS = type.findVarHandle(CommandNode.class, "arguments", Map.class);
             
         } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);

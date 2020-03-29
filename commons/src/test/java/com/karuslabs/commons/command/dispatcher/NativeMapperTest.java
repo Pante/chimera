@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.types.*;
-import com.karuslabs.commons.command.suggestions.ClientsideProvider;
+import com.karuslabs.commons.command.suggestions.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -98,7 +98,7 @@ class NativeMapperTest {
     
     @Test
     void suggestions_clientside() {
-        assertSame(NativeMapper.CLIENT_SIDE.get(ClientsideProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientsideProvider.ENTITIES).build()));
+        assertSame(NativeMapper.CLIENT_SIDE.get(ClientSuggestionProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientSuggestionProvider.ENTITIES).build()));
     }
     
     
