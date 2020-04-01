@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +28,15 @@ import com.karuslabs.commons.command.tree.TreeWalker;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 import net.minecraft.server.v1_15_R1.*;
+
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.*;
 
@@ -50,27 +49,24 @@ public class Synchronizer implements Listener {
     private Plugin plugin;
     CommandDispatcher<CommandListenerWrapper> dispatcher; 
     TreeWalker<CommandListenerWrapper, ICompletionProvider> walker;
-    WeakReference<Synchronization> synchronization;
     
     
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
         var tree = new TreeWalker<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
-        var registration = plugin.getServer().getServicesManager().getRegistration(Synchronization.class);
         
-        var synchronizer = new Synchronizer(server.getServer(), plugin, tree, registration == null ? null : registration.getProvider());
+        var synchronizer = new Synchronizer(server.getServer(), plugin, tree);
         server.getPluginManager().registerEvents(synchronizer, plugin);
         
         return synchronizer;
     }
     
     
-    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> walker, Synchronization synchronization) {
+    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> walker) {
         this.server = server;
         this.plugin = plugin;
         this.dispatcher = server.commandDispatcher.a();
         this.walker = walker;
-        this.synchronization = new WeakReference<>(synchronization);
     }
     
     
@@ -96,25 +92,9 @@ public class Synchronizer implements Listener {
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
     
-    
+
     @EventHandler
-    protected void synchronize(PlayerCommandSendEvent event) {
-        if (event instanceof SynchronizationEvent) {
-            return;
-        }
-        
-        var task = synchronization.get();
-        if (task == null) {
-            task = new Synchronization(this, plugin.getServer().getScheduler(), plugin);
-            synchronization = new WeakReference<>(task);
-            plugin.getServer().getServicesManager().register(Synchronization.class, task, plugin, ServicePriority.Low);
-        }
-        
-        task.add(event);
-    }
-    
-    @EventHandler
-    protected void load(ServerLoadEvent event) {
+    void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
     }
     

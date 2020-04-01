@@ -127,17 +127,17 @@ class SynchronizerTest {
     void synchronize_event_ignore_event() {
         synchronizer.synchronize(new SynchronizationEvent(null, List.of()));
         
-        assertNull(synchronizer.synchronization.get());
+        assertNull(synchronizer.task.get());
     }
     
     
     @Test
     void synchronize_event() {
         synchronizer.synchronize(mock(PlayerCommandSendEvent.class));
-        var task = synchronizer.synchronization.get();
+        var task = synchronizer.task.get();
         
         assertTrue(task.running);
-        verify(services).register(Synchronization.class, task, plugin, ServicePriority.Low);
+        verify(services).register(Task.class, task, plugin, ServicePriority.Low);
     }
     
     

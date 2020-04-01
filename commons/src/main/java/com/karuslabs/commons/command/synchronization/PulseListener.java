@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,35 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import java.util.*;
-
-import org.bukkit.event.player.PlayerCommandSendEvent;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.event.*;
+import org.bukkit.event.server.ServiceUnregisterEvent;
+import org.bukkit.plugin.*;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
-public class Synchronization implements Runnable {
+public class PulseListener implements Listener {
     
-    private Synchronizer synchronizer;
-    private BukkitScheduler scheduler;
-    private Plugin plugin;
-    Set<PlayerCommandSendEvent> events;
-    boolean running;
+    Synchronizer synchronizer;
+    Plugin plugin;
+    BukkitScheduler scheduler;
+    ServicesManager services;
     
     
-    public Synchronization(Synchronizer synchronizer, BukkitScheduler scheduler, Plugin plugin) {
+    public PulseListener(Synchronizer synchronizer, Plugin plugin) {
         this.synchronizer = synchronizer;
-        this.scheduler = scheduler;
         this.plugin = plugin;
-        this.events = new HashSet<>();
-        this.running = false;
+        this.scheduler = plugin.getServer().getScheduler();
+        this.services = plugin.getServer().getServicesManager();
     }
     
     
-    public void add(PlayerCommandSendEvent event) {
-        if (events.add(event) && !running) {
-            scheduler.scheduleSyncDelayedTask(plugin, this);
-            running = true;
+    @EventHandler
+    protected void listen(ServiceUnregisterEvent event) {
+        if (event.getProvider().getService() == SynchronizationListener.class && !services.isProvidedFor(SynchronizationListener.class)) {
+            var listener = new SynchronizationListener(synchronizer, scheduler, plugin);
+            plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+            services.register(SynchronizationListener.class, listener, plugin, ServicePriority.Normal);
         }
-    }
-    
-    
-    @Override
-    public void run() {
-        for (var event : events) {
-            synchronizer.synchronize(event.getPlayer(), event.getCommands());
-        }
-        
-        events.clear();
-        running = false;
     }
     
 }

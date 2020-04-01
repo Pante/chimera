@@ -43,7 +43,7 @@ class SynchronizationTest {
     
     Synchronizer synchronizer = mock(Synchronizer.class);
     BukkitScheduler scheduler = mock(BukkitScheduler.class);
-    Synchronization synchronization = new Synchronization(synchronizer, scheduler, null);
+    Task synchronization = new Task(synchronizer, scheduler, null);
     PlayerCommandSendEvent event = mock(PlayerCommandSendEvent.class);
     
     

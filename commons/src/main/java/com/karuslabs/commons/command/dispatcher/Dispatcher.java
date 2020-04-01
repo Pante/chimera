@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.synchronization.Synchronizer;
+import com.karuslabs.commons.command.synchronization.*;
 import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
@@ -63,6 +63,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         map.dispatcher = dispatcher;
         
         server.getPluginManager().registerEvents(dispatcher, plugin);
+        server.getPluginManager().registerEvents(new PulseListener(synchronizer, plugin), plugin);
         
         return dispatcher;
     }

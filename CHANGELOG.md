@@ -22,6 +22,8 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Add `DispatcherMap`
 - Add `NativeMap`
 - Add `Nodes`
+- Add `PulseListener`
+- Add `SynchronizationListener`
 - Add `TreeWalker<T, R>`
 - Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
 - Change `ClientsideProvider` to `ClientSuggestionProvider`
@@ -35,7 +37,9 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Change `Mapper.otherwise(ComandNode<T>)` to throw `IllegalArgumentException` instead of `UnsupportedOperationException`
 - Change `Root` to implement `Mutable<CommandSender>`
 - Change `Root.addChild(...)` to throw `IllegalArgumentException` if two commands with the same name are registered
+- Change `Synchronizer` methods annotated with `EventListener` to be package private
 - Remove `Literal.Builder<T>.alias(String)` - use `Literal.Builder<T>.alias(String...)` instead
+- Remove `Synchronization` - this was a leaky abstraction and has been replaced by `SynchronizationListener`
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
 - Fix child commands not replaced when new child commands are added
 - Fix command aliases not being removed in `Commands.remove(String)`
