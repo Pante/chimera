@@ -45,12 +45,19 @@ public class PulseListener implements Listener {
     }
     
     
-    @EventHandler
-    protected void listen(ServiceUnregisterEvent event) {
-        if (event.getProvider().getService() == SynchronizationListener.class && !services.isProvidedFor(SynchronizationListener.class)) {
+    public void register() {
+        if (!services.isProvidedFor(SynchronizationListener.class)) {
             var listener = new SynchronizationListener(synchronizer, scheduler, plugin);
             plugin.getServer().getPluginManager().registerEvents(listener, plugin);
             services.register(SynchronizationListener.class, listener, plugin, ServicePriority.Normal);
+        }
+    }
+    
+    
+    @EventHandler
+    void listen(ServiceUnregisterEvent event) {
+        if (event.getProvider().getService() == SynchronizationListener.class) {
+            register();
         }
     }
     

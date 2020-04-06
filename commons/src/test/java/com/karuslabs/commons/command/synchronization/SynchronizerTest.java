@@ -33,7 +33,6 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.*;
 
 import org.junit.jupiter.api.*;
@@ -121,25 +120,7 @@ class SynchronizerTest {
         verify(synchronizer.walker).add(any(), any(), any(), any());
         verify(entity.playerConnection).sendPacket(any(PacketPlayOutCommands.class));
     }
-    
-    
-    @Test
-    void synchronize_event_ignore_event() {
-        synchronizer.synchronize(new SynchronizationEvent(null, List.of()));
-        
-        assertNull(synchronizer.task.get());
-    }
-    
-    
-    @Test
-    void synchronize_event() {
-        synchronizer.synchronize(mock(PlayerCommandSendEvent.class));
-        var task = synchronizer.task.get();
-        
-        assertTrue(task.running);
-        verify(services).register(Task.class, task, plugin, ServicePriority.Low);
-    }
-    
+
     
     @Test
     void load() {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandSendEvent;
-
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import org.junit.jupiter.api.Test;
@@ -39,57 +39,57 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class SynchronizationTest {
+class SynchronizationListenerTest {
     
     Synchronizer synchronizer = mock(Synchronizer.class);
     BukkitScheduler scheduler = mock(BukkitScheduler.class);
-    Task synchronization = new Task(synchronizer, scheduler, null);
-    PlayerCommandSendEvent event = mock(PlayerCommandSendEvent.class);
-    
-    
-    @Test
-    void add() {
-        synchronization.add(event);
-        
-        assertTrue(synchronization.events.contains(event));
-        assertTrue(synchronization.running);
-        verify(scheduler).scheduleSyncDelayedTask(null, synchronization);
-    }
-    
-    
-    @Test
-    void add_duplicate() {
-        synchronization.events.add(event);
-        synchronization.add(event);
-        
-        assertTrue(synchronization.events.contains(event));
-        assertFalse(synchronization.running);
-        verify(scheduler, times(0)).scheduleSyncDelayedTask(null, synchronization);
-    }
-    
-    
-    @Test
-    void add_running() {
-        synchronization.running = true;
-        synchronization.add(event);
-        
-        assertTrue(synchronization.events.contains(event));
-        assertTrue(synchronization.running);
-        verify(scheduler, times(0)).scheduleSyncDelayedTask(null, synchronization);
-    }
+    Plugin plugin = mock(Plugin.class);
+    SynchronizationListener listener = new SynchronizationListener(synchronizer, scheduler, plugin);
     
     
     @Test
     void run() {
-        when(event.getPlayer()).thenReturn(mock(Player.class));
-        when(event.getCommands()).thenReturn(List.of("a"));
+        var player = mock(Player.class);
+        var event = new SynchronizationEvent(player, List.of("a"));
         
-        synchronization.add(event);
-        synchronization.run();
+        listener.events.add(event);
         
-        verify(synchronizer).synchronize(any(Player.class), any(List.class));
-        assertTrue(synchronization.events.isEmpty());
-        assertFalse(synchronization.running);
+        listener.running = true;
+        
+        listener.run();
+        
+        verify(synchronizer).synchronize(player, List.of("a"));
+        assertTrue(listener.events.isEmpty());
+        assertFalse(listener.running);
+    }
+    
+    
+    @Test
+    void synchronize_event_ignore_event() {
+        listener.synchronize(new SynchronizationEvent(null, List.of()));
+        
+        verifyNoInteractions(scheduler);
+    }
+    
+    
+    @Test
+    void synchronize_event_new_task() {
+        assertFalse(listener.running);
+        
+        listener.synchronize(mock(PlayerCommandSendEvent.class));
+        
+        verify(scheduler).scheduleSyncDelayedTask(plugin, listener);
+        assertTrue(listener.running);
+    }
+    
+    
+    @Test
+    void synchronize_event_existing_task() {
+        listener.running = true;
+        
+        listener.synchronize(mock(PlayerCommandSendEvent.class));
+        
+        verifyNoInteractions(scheduler);
     }
 
 } 

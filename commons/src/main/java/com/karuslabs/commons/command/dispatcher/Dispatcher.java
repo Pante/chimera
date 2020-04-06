@@ -55,15 +55,19 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var prefix = plugin.getName().toLowerCase();
         var server = ((CraftServer) plugin.getServer());
         
-        var map = new NativeMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
-        var root = new Root(prefix, map);
         var synchronizer = Synchronizer.of(plugin);
         
+        var map = new NativeMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
+        var root = new Root(prefix, map);
         var dispatcher = new Dispatcher(server, root, synchronizer);
         map.dispatcher = dispatcher;
         
         server.getPluginManager().registerEvents(dispatcher, plugin);
-        server.getPluginManager().registerEvents(new PulseListener(synchronizer, plugin), plugin);
+        
+        var listener = new PulseListener(synchronizer, plugin);
+        listener.register();
+        
+        server.getPluginManager().registerEvents(listener, plugin);
         
         return dispatcher;
     }
