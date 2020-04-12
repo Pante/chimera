@@ -35,8 +35,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Literals.class)
 public @interface Literal {
     
-    String[] namespace();
+    String value();
     
-    String[] aliases() default {};
+    String aliases() default "";
     
 }

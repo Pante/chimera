@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.processors;
+package com.karuslabs.commons.command.annotations.old.assembler.processors;
 
 import com.karuslabs.annotations.Ignored;
 import com.karuslabs.annotations.processor.AnnotationProcessor;

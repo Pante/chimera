@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.processors;
+package com.karuslabs.commons.command.annotations.old.assembler.processors;
 
 import com.karuslabs.annotations.*;
 import com.karuslabs.annotations.processor.*;
@@ -50,7 +50,7 @@ import javax.lang.model.util.SimpleElementVisitor9;
 })
 public class BindingProcessor extends AnnotationProcessor {
     
-    static final Set<Class<? extends Annotation>> ARGUMENTS = Set.of(Argument.class, Arguments.class);
+    static final Set<Class<? extends Annotation>> ARGUMENTS = Set.of(Argument.class, Argument.class);
     
     Map<String, Visitor> visitors;
     TypeMirror argument;

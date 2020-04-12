@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
+import com.karuslabs.commons.command.annotations.old.assembler.Assembler;
 import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.types.EnchantmentType;

@@ -21,19 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.annotations.old.assembler;
 
-import java.lang.annotation.*;
+import com.mojang.brigadier.tree.CommandNode;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target(METHOD)
-public @interface Argument {
+public class Node<T> {
     
-    String[] value();
+    private String name;
+    private @Nullable CommandNode<T> command;
+    private Map<String, Node<T>> children;
+    
+    
+    public Node(String name) {
+        this(name, null);
+    }
+    
+    public Node(String name, @Nullable CommandNode<T> command) {
+        this.name = name;
+        this.command = command;
+        children = new HashMap<>();
+    }
+    
+    
+    public String name() {
+        return name;
+    }
+    
+    
+    public @Nullable CommandNode<T> get() {
+        return command;
+    }
+    
+    public void set(CommandNode<T> command) {
+        this.command = command;
+    }
+    
+    
+    public Map<String, Node<T>> children() {
+        return children;
+    }
     
 }

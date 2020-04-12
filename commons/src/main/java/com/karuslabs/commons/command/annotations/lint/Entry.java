@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,49 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.assembler;
-
-import com.mojang.brigadier.tree.CommandNode;
+package com.karuslabs.commons.command.annotations.lint;
 
 import java.util.*;
+import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Node<T> {
+public class Entry {
+
+    public final Map<String, Entry> children;
+    public @Nullable Element type;
+    public @Nullable Element execution;
+    public @Nullable Element suggestions;
     
-    private String name;
-    private @Nullable CommandNode<T> command;
-    private Map<String, Node<T>> children;
     
-    
-    public Node(String name) {
-        this(name, null);
-    }
-    
-    public Node(String name, @Nullable CommandNode<T> command) {
-        this.name = name;
-        this.command = command;
+    public Entry() {
         children = new HashMap<>();
-    }
-    
-    
-    public String name() {
-        return name;
-    }
-    
-    
-    public @Nullable CommandNode<T> get() {
-        return command;
-    }
-    
-    public void set(CommandNode<T> command) {
-        this.command = command;
-    }
-    
-    
-    public Map<String, Node<T>> children() {
-        return children;
     }
     
 }

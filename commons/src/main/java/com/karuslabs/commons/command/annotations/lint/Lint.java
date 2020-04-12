@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.annotations.lint;
 
-import java.lang.annotation.*;
+import java.util.Map;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
-@Documented
-@Retention(RUNTIME)
-@Target(METHOD)
-public @interface Argument {
+public abstract class Lint {
     
-    String[] value();
+    protected Map<String, Entry> commands;
+    protected Messager messager;
+    protected Elements elements;
+    protected Types types;
+    
+    
+    public Lint(Map<String, Entry> commands, Messager messager, Elements elements, Types types) {
+        this.commands = commands;
+        this.messager = messager;
+        this.elements = elements;
+        this.types = types;
+    }
+    
+    
+    public abstract void lint(Element element);
     
 }

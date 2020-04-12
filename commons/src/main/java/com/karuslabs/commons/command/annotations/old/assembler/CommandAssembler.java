@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.assembler;
+package com.karuslabs.commons.command.annotations.old.assembler;
 
 import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.util.collection.TokenMap;

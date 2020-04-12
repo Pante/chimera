@@ -75,8 +75,13 @@ class DispatcherTest {
     @Test
     void of() {
         reset(manager);
+        reset(services);
+        
+        when(services.isProvidedFor(any())).thenReturn(false);
         
         var dispatcher = Dispatcher.of(plugin);
+        
+        verify(services).register(any(), any(), any(), any());
         assertSame(dispatcher, ((NativeMap) dispatcher.getRoot().getDispatcherMap()).dispatcher);
     }
     

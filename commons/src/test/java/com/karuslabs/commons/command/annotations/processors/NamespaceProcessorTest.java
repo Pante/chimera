@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
+import com.karuslabs.commons.command.annotations.old.assembler.processors.NamespaceProcessor;
 import com.karuslabs.commons.command.annotations.*;
 import com.mojang.brigadier.arguments.ArgumentType;
 

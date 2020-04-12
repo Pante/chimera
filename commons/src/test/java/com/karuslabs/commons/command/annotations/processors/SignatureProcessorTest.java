@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
+import com.karuslabs.commons.command.annotations.old.assembler.processors.SignatureProcessor;
 import com.karuslabs.commons.command.OptionalContext;
 
 import com.mojang.brigadier.context.CommandContext;

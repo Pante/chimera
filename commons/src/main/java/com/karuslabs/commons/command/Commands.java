@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.command.annotations.assembler.Assembler;
+import com.karuslabs.commons.command.annotations.old.assembler.Assembler;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
