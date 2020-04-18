@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
+import com.karuslabs.commons.command.aot.annotations.Argument;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.annotations.old.assembler.processors.BindingProcessor;
 import com.karuslabs.annotations.processor.Filter;
-import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.annotations.old.assembler.processors.BindingProcessor.Visitor;
 
 import com.mojang.brigadier.arguments.ArgumentType;

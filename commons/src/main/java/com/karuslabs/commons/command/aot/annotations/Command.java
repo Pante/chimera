@@ -21,11 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.lint;
+package com.karuslabs.commons.command.aot.annotations;
 
-import com.karuslabs.annotations.processor.AnnotationProcessor;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public class LintProcessor extends AnnotationProcessor {
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+public @interface Command {
 
+    String[] value();
+    
 }

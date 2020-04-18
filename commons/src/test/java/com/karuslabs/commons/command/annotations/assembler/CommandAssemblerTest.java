@@ -23,9 +23,11 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
+import com.karuslabs.commons.command.aot.annotations.Argument;
+import com.karuslabs.commons.command.aot.annotations.Literal;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.annotations.old.assembler.Node;
 import com.karuslabs.commons.command.annotations.old.assembler.CommandAssembler;
-import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.tree.nodes.Aliasable;
 import com.karuslabs.commons.util.collection.TokenMap;
 

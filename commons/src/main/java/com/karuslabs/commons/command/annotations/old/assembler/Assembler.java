@@ -23,8 +23,10 @@
  */
 package com.karuslabs.commons.command.annotations.old.assembler;
 
+import com.karuslabs.commons.command.aot.annotations.Bind;
+import com.karuslabs.commons.command.aot.annotations.Argument;
+import com.karuslabs.commons.command.aot.annotations.Literal;
 import com.karuslabs.commons.command.*;
-import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.util.collection.TokenMap;
 
 import com.mojang.brigadier.Command;

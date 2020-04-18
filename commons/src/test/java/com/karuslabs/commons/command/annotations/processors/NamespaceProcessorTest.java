@@ -23,8 +23,10 @@
  */
 package com.karuslabs.commons.command.annotations.processors;
 
+import com.karuslabs.commons.command.aot.annotations.Argument;
+import com.karuslabs.commons.command.aot.annotations.Literal;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.annotations.old.assembler.processors.NamespaceProcessor;
-import com.karuslabs.commons.command.annotations.*;
 import com.mojang.brigadier.arguments.ArgumentType;
 
 import java.util.*;

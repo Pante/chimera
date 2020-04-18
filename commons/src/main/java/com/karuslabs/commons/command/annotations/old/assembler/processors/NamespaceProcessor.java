@@ -23,8 +23,9 @@
  */
 package com.karuslabs.commons.command.annotations.old.assembler.processors;
 
+import com.karuslabs.commons.command.aot.annotations.Argument;
+import com.karuslabs.commons.command.aot.annotations.Literal;
 import com.karuslabs.annotations.processor.*;
-import com.karuslabs.commons.command.annotations.*;
 
 import com.google.auto.service.AutoService;
 

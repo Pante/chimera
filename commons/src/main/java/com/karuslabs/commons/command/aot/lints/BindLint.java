@@ -21,19 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.aot.lints;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.Node;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.*;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Command {
-
-    String[] value();
+public class BindLint extends Lint {
     
+    public BindLint(Lexer lexer, Map<Element, Set<Node>> scopes, Node root, Messager messager, Elements elements, Types types) {
+        super(lexer, scopes, root, messager, elements, types);
+    }
+
+    
+    @Override
+    public void lint(Element element) {
+        for (var argument : element.getAnnotation(Bind.class).value()) {
+            lexer.lex(this, argument, argument);
+        }
+    }
+
+    @Override
+    public void argument(String context, String argument) {
+        
+    }
+
 }

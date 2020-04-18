@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations.lint;
+package com.karuslabs.commons.command.aot;
 
 import java.util.*;
 import javax.lang.model.element.Element;
@@ -29,16 +29,44 @@ import javax.lang.model.element.Element;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Entry {
+public class Node {
+    
+    public static enum Type {
+        ARGUMENT, LITERAL;
+    }
+    
 
-    public final Map<String, Entry> children;
-    public @Nullable Element type;
+    public final String name;
+    public final Type type;
+    public final Map<String, Element> aliases;
+    public final Map<String, Node> children;
+    public final Element element;
+    public @Nullable Element argumentType;
     public @Nullable Element execution;
     public @Nullable Element suggestions;
     
     
-    public Entry() {
-        children = new HashMap<>();
+    public static Node argument(String name, Element element) {
+        return new Node(name, Type.ARGUMENT, element);
+    }
+    
+    public static Node literal(String name, Element element) {
+        return new Node(name, Type.LITERAL, element);
+    }
+    
+    
+    Node(String name, Type type, Element element) {
+        this.name = name;
+        this.type = type;
+        this.aliases = new HashMap<>();
+        this.children = new HashMap<>();
+        this.element = element;
+    }
+    
+    
+    public Node addChild(Node child) {
+        var entry = children.putIfAbsent(child.name, child);
+        return entry == null ? child : entry;
     }
     
 }

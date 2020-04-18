@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.aot.lexers;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.karuslabs.annotations.VisibleForOverride;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-@Repeatable(Literals.class)
-public @interface Literal {
+@FunctionalInterface
+public interface Lexer {
     
-    String value();
+    public void lex(Visitor visitor, String context, String value);
     
-    String aliases() default "";
+    
+    static interface Visitor {
+        
+        @VisibleForOverride
+        public default void command(String context, String command) {
+            
+        }
+        
+        
+        @VisibleForOverride
+        public default void literal(String context, String literal) {
+            
+        }
+        
+        @VisibleForOverride
+        public default void alias(String context, String literal, String alias) {
+            
+        }
+        
+        
+        @VisibleForOverride
+        public default void argument(String context, String argument) {
+            
+        }
+        
+        
+        @VisibleForOverride
+        public default void error(String message) {
+            
+        }
+        
+    }
     
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
+package com.karuslabs.commons.command.aot.annotations;
 
 import java.lang.annotation.*;
 
@@ -31,9 +31,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Literals {
+@Target({FIELD, METHOD})
+public @interface Bind {
     
-    Literal[] value();
+    String[] value();
     
 }

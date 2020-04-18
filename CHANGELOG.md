@@ -17,8 +17,10 @@ Annotations has been undergone a few tweaks.
 ### Commons
 
 Numerous components of the project has been redesigned to reduce the overall API surface area while retaining functionality.
+Commands annotations have also been rewritten to support AOT compilation and be less verbose.
 
 **Commands**
+- Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
 - Add `DispatcherMap`
 - Add `NativeMap`
 - Add `Nodes`
@@ -46,6 +48,10 @@ Numerous components of the project has been redesigned to reduce the overall API
 - Fix command aliases not being associated with their names in Bukkit's command system
 - Fix commands being added to `Root` even when unable to be registered in Bukkit's command system
 - Remove `Commands.remove(CommandNode<T>, String...)` - this method was almost never used and posed a technical burden, use `Commands.remove(CommandNode<T>, String)` instead
+
+**Command Annotations**
+Commands annotations have been rewritten to support AOT compilation and be less verbose.Please refer to the wiki for
+more information.
 
 **Concurrency**
 - Add `Context`

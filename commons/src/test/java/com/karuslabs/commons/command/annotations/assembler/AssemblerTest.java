@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.command.annotations.assembler;
 
+import com.karuslabs.commons.command.aot.annotations.Literal;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.annotations.old.assembler.Assembler;
 import com.karuslabs.commons.command.OptionalContext;
-import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
 import com.mojang.brigadier.arguments.*;

@@ -23,9 +23,10 @@
  */
 package com.karuslabs.commons.command.annotations.old.assembler.processors;
 
+import com.karuslabs.commons.command.aot.annotations.Bind;
+import com.karuslabs.commons.command.aot.annotations.Argument;
 import com.karuslabs.annotations.*;
 import com.karuslabs.annotations.processor.*;
-import com.karuslabs.commons.command.annotations.*;
 import com.karuslabs.commons.util.collection.TokenMap;
 
 import com.google.auto.service.AutoService;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package com.karuslabs.commons.command.aot.lexers;
 
 
-@Documented
-@Retention(RUNTIME)
-@Target(FIELD)
-public @interface Bind {
+public class CommandLexer implements Lexer {
     
-    String[] value();
+    private Lexer literal;
+    private Lexer argument;
     
+    
+    public CommandLexer(Lexer literal, Lexer argument) {
+        this.literal = literal;
+        this.argument = argument;
+    }
+    
+    
+    @Override
+    public void lex(Visitor visitor, String context, String command) {
+        if (command.isBlank()) {
+            visitor.error("Invalid command, command cannot be blank");
+            return;
+        }
+        
+        for (var part : command.split("\\s+")) {
+            visitor.command(context, part);
+        
+            if (part.startsWith("<")) {
+                argument.lex(visitor, context, part);
+
+            } else {
+                literal.lex(visitor, context, part);
+            }
+        }
+    }
+
 }
