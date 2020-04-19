@@ -26,7 +26,6 @@ package com.karuslabs.commons.command.aot.lexers;
 import com.karuslabs.annotations.VisibleForOverride;
 
 
-@FunctionalInterface
 public interface Lexer {
     
     public void lex(Visitor visitor, String context, String value);

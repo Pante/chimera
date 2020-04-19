@@ -24,7 +24,6 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.commons.command.annotations.old.assembler.Assembler;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
@@ -37,8 +36,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 public @Static class Commands {
-    
-    private static final Assembler<?> ASSEMBLER = new Assembler<>();
     
     private static final VarHandle COMMAND;
     private static final VarHandle CHILDREN;
@@ -84,15 +81,6 @@ public @Static class Commands {
         }
 
         return removed;
-    }
-    
-    
-    public static <T> @Nullable CommandNode<T> resolve(Object annotated, String name) {
-        return Commands.<T>resolve(annotated).get(name);
-    }
-    
-    public static <T> Map<String, CommandNode<T>> resolve(Object annotated) {
-        return (Map<String, CommandNode<T>>) ASSEMBLER.assemble(annotated);
     }
     
 }

@@ -21,52 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.semantics;
+
+import com.karuslabs.annotations.processor.Filter;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.commons.command.aot.annotations.Bind;
 
 import java.util.*;
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Node {
+public class BindAnalyzer extends Analyzer {
     
-    public static enum Type {
-        ARGUMENT, LITERAL;
+    @Nullable Set<Token> scope;
+    
+    
+    public BindAnalyzer(Lexer lexer, Map<Element, Set<Token>> scopes, Token root, Messager messager, Elements elements, Types types) {
+        super(lexer, scopes, root, messager, elements, types);
     }
-    
 
-    public final String name;
-    public final Type type;
-    public final Map<String, Element> aliases;
-    public final Map<String, Node> children;
-    public final Element element;
-    public @Nullable Element argumentType;
-    public @Nullable Element execution;
-    public @Nullable Element suggestions;
     
-    
-    public static Node argument(String name, Element element) {
-        return new Node(name, Type.ARGUMENT, element);
-    }
-    
-    public static Node literal(String name, Element element) {
-        return new Node(name, Type.LITERAL, element);
-    }
-    
-    
-    Node(String name, Type type, Element element) {
-        this.name = name;
-        this.type = type;
-        this.aliases = new HashMap<>();
-        this.children = new HashMap<>();
+    @Override
+    public void lint(Element element) {
         this.element = element;
+        scope(element.accept(Filter.CLASS, null));
+        
+        for (var argument : element.getAnnotation(Bind.class).value()) {
+            lexer.lex(this, argument, argument);
+            current = root;
+        }
     }
-    
-    
-    public Node addChild(Node child) {
-        var entry = children.putIfAbsent(child.name, child);
-        return entry == null ? child : entry;
+
+    @Override
+    public void argument(String context, String argument) {
+        if (current == root) {
+            error("Invalid argument position: '<" + argument + ">' in '" + context + "', commands must start with literals");
+        }
     }
-    
+
 }

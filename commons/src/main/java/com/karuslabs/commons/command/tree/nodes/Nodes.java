@@ -42,11 +42,6 @@ public @Static class Nodes {
         }
 
 
-        public B then(Object annotated, String name) {
-            return then(Commands.resolve(annotated, name));
-        }
-
-
         public B optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }

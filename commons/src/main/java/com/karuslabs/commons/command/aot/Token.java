@@ -21,58 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
-
-import com.karuslabs.commons.command.aot.Node;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
+package com.karuslabs.commons.command.aot;
 
 import java.util.*;
-import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
-import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static javax.tools.Diagnostic.Kind.ERROR;
 
-
-public abstract class Lint implements Lexer.Visitor {
+public class Token {
     
-    protected Lexer lexer;
-    protected Map<Element, Set<Node>> scopes;
-    protected Node root;
-    protected @Nullable Element element;
-    protected Messager messager;
-    protected Elements elements;
-    protected Types types;
-    
-    
-    public Lint(Lexer lexer, Map<Element, Set<Node>> scopes, Node root, Messager messager, Elements elements, Types types) {
-        this.lexer = lexer;
-        this.scopes = scopes;
-        this.root = root;
-        this.messager = messager;
-        this.elements = elements;
-        this.types = types;
+    public static enum Type {
+        ARGUMENT, LITERAL;
     }
     
+
+    public final String name;
+    public final Type type;
+    public final Map<String, Element> aliases;
+    public final Map<String, Token> children;
+    public final Element element;
+    public @Nullable Element argumentType;
+    public @Nullable Element execution;
+    public @Nullable Element suggestions;
     
-    public abstract void lint(Element element);
     
-    
-    @Override
-    public void error(String message) {
-        messager.printMessage(ERROR, message, element);
-    }
-    
-    
-    protected Set<Node> scope(Element element) {
-        var scope = scopes.get(element);
-        if (scope == null) {
-            scopes.put(element, scope = new HashSet<>());
-        }
-        
-        return scope;
+    public Token(String name, Type type, Element element) {
+        this.name = name;
+        this.type = type;
+        this.aliases = new HashMap<>();
+        this.children = new HashMap<>();
+        this.element = element;
     }
     
 }

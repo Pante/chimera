@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotations.assembler.TestCommand;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.*;
@@ -71,13 +70,6 @@ class CommandsTest {
             of("a", true, 1),
             of("c", false, 4)
         );
-    }
-    
-    
-    @Test
-    void resolve() {
-        var command = new TestCommand();
-        TestCommand.assertCommand(command, Commands.resolve(command, "a"));
     }
     
 } 

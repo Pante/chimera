@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.commons.command.aot.semantics;
 
 import com.karuslabs.commons.command.aot.annotations.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.commons.command.aot.Node;
+import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.commons.command.aot.Token.Type;
 
 import java.util.*;
 import javax.annotation.processing.Messager;
@@ -33,28 +34,25 @@ import javax.lang.model.element.Element;
 import javax.lang.model.util.*;
 
 
-import static javax.tools.Diagnostic.Kind.ERROR;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-
-public class CommandLint extends Lint {
-
-    Node current;
-    @Nullable Set<Node> scope;
+public class CommandAnalyzer extends Analyzer {
     
-    
-    public CommandLint(Lexer lexer, Map<Element, Set<Node>> scopes, Node root, Messager messager, Elements elements, Types types) {
+    public CommandAnalyzer(Lexer lexer, Map<Element, Set<Token>> scopes, Token root, Messager messager, Elements elements, Types types) {
         super(lexer, scopes, root, messager, elements, types);
-        this.current = root;
     }
 
     
     @Override
     public void lint(Element element) {
         this.element = element;
-        this.scope = scope(element);
-        for (var command : element.getAnnotation(Command.class).value()) {
+        scope(element);
+        
+        var commands = element.getAnnotation(Command.class).value();
+        if (commands.length == 0) {
+            error("Invalid command declaration, @Command cannot be empty");
+            return;
+        }
+        
+        for (var command : commands) {
             lexer.lex(this, command, command);
             current = root;
         }
@@ -64,22 +62,19 @@ public class CommandLint extends Lint {
     @Override
     public void argument(String context, String argument) {
         if (current == root) {
-            messager.printMessage(
-                ERROR, 
-                "Invalid argument position: '<" + argument + ">' in '" + context + "', commands must start with literals", 
-                element
-            );
+            error("Invalid argument position: '<" + argument + ">' in '" + context + "', commands must start with literals");
             return;
         }
         
-        current = current.addChild(Node.argument(argument, element));
+        child(context, argument, Type.ARGUMENT);
+        current = current.addChild(Token.argument(argument, element));
         scope.add(current);
     }
     
     
     @Override
     public void literal(String context, String literal) {
-        current = current.addChild(Node.literal(literal, element));
+        current = current.addChild(Token.literal(literal, element));
         scope.add(current);
     }
     
@@ -88,7 +83,7 @@ public class CommandLint extends Lint {
     public void alias(String context, String literal, String alias) {
         if (current.aliases.putIfAbsent(alias, element) != null) {
             var site = current.aliases.get(alias);
-            error("Invalid alias: '"  + alias + "' in " + context + ", alias has already been declared in '" + site.asType().toString() + "'");
+            error("Invalid alias: '"  + alias + "' in " + context + ", alias has already been declared in '" + site.asType() + "'");
         }
     }
 
