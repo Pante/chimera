@@ -67,14 +67,14 @@ public class CommandAnalyzer extends Analyzer {
         }
         
         child(context, argument, Type.ARGUMENT);
-        current = current.addChild(Token.argument(argument, element));
+        
         scope.add(current);
     }
     
     
     @Override
     public void literal(String context, String literal) {
-        current = current.addChild(Token.literal(literal, element));
+        
         scope.add(current);
     }
     
