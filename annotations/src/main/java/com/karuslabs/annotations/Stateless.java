@@ -21,16 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.annotations;
 
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
+import java.lang.annotation.*;
 
-import javax.lang.model.element.Element;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-@FunctionalInterface
-public interface Lexer {
-    
-    public boolean lex(Visitor<String> visitor, Element site, String context, String value);
-    
+@Documented
+@Retention(SOURCE)
+@Target(TYPE)
+public @interface Stateless {
+
 }

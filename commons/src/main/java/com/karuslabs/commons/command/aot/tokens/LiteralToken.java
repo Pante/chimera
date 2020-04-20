@@ -21,37 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.tokens;
 
 import java.util.*;
 import javax.lang.model.element.Element;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public class Token {
+public class LiteralToken extends Token {
     
-    public static enum Type {
-        ARGUMENT, LITERAL;
+    public final Set<String> aliases;
+    
+    
+    public LiteralToken(Element site, String value, Set<String> aliases) {
+        super(site, value);
+        this.aliases = aliases;
     }
-    
 
-    public final String name;
-    public final Type type;
-    public final Map<String, Element> aliases;
-    public final Map<String, Token> children;
-    public final Element element;
-    public @Nullable Element argumentType;
-    public @Nullable Element execution;
-    public @Nullable Element suggestions;
     
-    
-    public Token(String name, Type type, Element element) {
-        this.name = name;
-        this.type = type;
-        this.aliases = new HashMap<>();
-        this.children = new HashMap<>();
-        this.element = element;
+    @Override
+    public boolean visit(Visitor visitor, String context) {
+        return visitor.literal(this, context);
     }
-    
+
 }

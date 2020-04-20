@@ -8,6 +8,7 @@ Big Ol' list of changes:
 Annotations has been undergone a few tweaks.
 
 - Add `@Delegate`
+- Add `@Stateless`
 - Add `@VisibleForOverride`
 - Add `Filter`
 - Change `RetentionPolicy` of annotations from `RUNTIME` to `SOURCE`

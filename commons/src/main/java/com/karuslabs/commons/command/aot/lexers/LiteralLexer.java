@@ -23,37 +23,72 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
+import com.karuslabs.annotations.Stateless;
+import com.karuslabs.commons.command.aot.tokens.LiteralToken;
+import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
 
-public class LiteralLexer implements Lexer {
+import java.util.HashSet;
+import javax.lang.model.element.Element;
 
+
+public @Stateless class LiteralLexer implements Lexer {
+    
     @Override
-    public void lex(Visitor visitor, String context, String literal) {
-        var names = literal.split("\\|");
-        var name = names[0];
-        
-        if (valid(visitor, context, name)) {
-            visitor.literal(context, name);
+    public boolean lex(Visitor<String> visitor, Element site, String context, String value) {
+        var names = split(visitor, context, value);
+        if (names.length == 0) {
+            return false;
         }
+        
+        var name = names[0];
+        if (!valid(visitor, context, "name", name)) {
+            return false;
+        }
+        
+        var aliases = new HashSet<String>();
+        var error = false;
         
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            if (valid(visitor, context, alias)) {
-                visitor.alias(context, literal, alias);
+            if (!valid(visitor, context, "alias", alias)) {
+                error = true;
+            }
+            
+            if (!aliases.add(alias)) {
+                visitor.warn("Duplicate alias: '" + alias + "' in '" + context + "'");
             }
         }
+        
+        return !error && visitor.literal(new LiteralToken(site, name, aliases), context);
     }
     
-    boolean valid(Visitor visitor, String context, String name) {
-        if (name.startsWith("<") || name.endsWith(">")) {
-            visitor.error("Invalid literal syntax: '" + name +"' in " + context + ", literals cannot be enclosed by '<' and '>'");
-            return false;
-
-        } else if (name.contains("|")) {
-            visitor.error("Invalid literal syntax: '" + name +"' in " + context + ", excessive '|'s found");
+    
+    String[] split(Visitor visitor, String context, String value) {
+        // No need to check for starting '|'s since it will result in blank spaces in resultant array
+        if (value.endsWith("|")) {
+            visitor.warn("Trailing '|'s found in '" + value + "' at '" + context + "'");
+        }
+        
+        var names = value.split("\\|");
+        if (names.length == 0) {
+            visitor.error("Blank literal name: '" + value + "' in '" + context + "', literals cannot be blank");
+        }
+        
+        return names;
+    }
+    
+    
+    boolean valid(Visitor visitor, String context, String type, String value) {
+        if (value.isBlank()) {
+            visitor.error("Blank literal " + type + " in '" + context + "', literals cannot be blank");
             return false;
             
-        } else if (name.isBlank()) {
-            visitor.error("Invalid literal name in '" + context + "', literals cannot be blank");
+        } else if (value.contains("<") || value.contains(">")) {
+            visitor.error("Invalid literal " + type + ": '" + value + "' in '" + context + "', literals cannot contain '<' and '>'");
+            return false;
+            
+        } else if (value.contains("|")) {
+            visitor.error("Invalid literal " + type + ": '" + value + "' in '" + context + "', literals cannot contain '|'");
             return false;
             
         } else {

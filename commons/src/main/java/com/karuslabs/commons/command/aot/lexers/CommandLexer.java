@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
+import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
+
+import javax.lang.model.element.Element;
+
 
 public class CommandLexer implements Lexer {
     
@@ -30,29 +34,30 @@ public class CommandLexer implements Lexer {
     private Lexer argument;
     
     
-    public CommandLexer(Lexer literal, Lexer argument) {
+    CommandLexer(Lexer literal, Lexer argument) {
         this.literal = literal;
         this.argument = argument;
     }
     
     
     @Override
-    public void lex(Visitor visitor, String context, String command) {
-        if (command.isBlank()) {
+    public boolean lex(Visitor<String> visitor, Element site, String context, String value) {
+        if (value.isBlank()) {
             visitor.error("Invalid command, command cannot be blank");
-            return;
+            return false;
         }
         
-        for (var part : command.split("\\s+")) {
-            visitor.command(context, part);
-        
-            if (part.startsWith("<")) {
-                argument.lex(visitor, context, part);
-
+        var error = false;
+        for (var command : value.split("\\s+")) {
+            if (!command.startsWith("<")) {
+                error |= literal.lex(visitor, site, context, command);
+                
             } else {
-                literal.lex(visitor, context, part);
+                error |= argument.lex(visitor, site, context, command);
             }
         }
+        
+        return !error;
     }
 
 }

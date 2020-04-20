@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
-
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
-
-import javax.lang.model.element.Element;
+package com.karuslabs.commons.command.aot;
 
 
-@FunctionalInterface
-public interface Lexer {
+public interface Reporter {
     
-    public boolean lex(Visitor<String> visitor, Element site, String context, String value);
+    public void error(String message);
+    
+    public void warn(String message);
     
 }

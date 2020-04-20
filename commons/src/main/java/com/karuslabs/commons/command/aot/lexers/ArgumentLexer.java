@@ -23,27 +23,39 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
+import com.karuslabs.annotations.Stateless;
+import com.karuslabs.commons.command.aot.tokens.ArgumentToken;
+import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
 
-public class ArgumentLexer implements Lexer {
+import javax.lang.model.element.Element;
 
+
+public @Stateless class ArgumentLexer implements Lexer {
+    
     @Override
-    public void lex(Visitor visitor, String context, String raw) {
-        if (!raw.startsWith("<") || !raw.endsWith(">")) {
-            visitor.error("Invalid argument syntax: '" + raw + "' in '" + context + "', arguments must be enclosed by '<' and '>'");
+    public boolean lex(Visitor<String> visitor, Element site, String context, String value) {
+        if (!value.startsWith("<") || !value.endsWith(">")) {
+            visitor.error("Invalid argument syntax: '" + value + "', in '" + context + "' argument must be enclosed by '<' and '>'");
+            return false;
         }
         
-        if (raw.contains("\\|")) {
-            visitor.error("Invalid argument syntax: '" + raw + "' in '" + context + "', arguments cannot contain '|'");
-            return;
+        if (value.contains("|")) {
+            visitor.error("Invalid argument syntax: '" + value + "', in '" + context + "' argument must not contain '|'s");
+            return false;
         }
         
-        var argument = raw.substring(1, raw.length() - 1);
+        
+        var argument = value.substring(1, value.length() - 1);
         if (argument.isBlank()) {
-            visitor.error("Invalid argument name in '" + context + "', argument names cannot be blank");
-            
-        } else {
-            visitor.argument(context, argument);
+            visitor.error("Blank argument: '" + value + "' in '" + context + "', arguments cannot be blank");
+            return false;
         }
+        
+        if (argument.startsWith("<") || argument.startsWith(">")) {
+            visitor.warn("Trailing '<'s or '>'s found in '"+ value + "' at '" + context + "'");
+        }
+        
+        return visitor.argument(new ArgumentToken(site, argument), context);
     }
 
 }
