@@ -23,11 +23,23 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.annotations.Static;
 
-public interface Reporter {
+
+public @Static class Messages {
     
-    public void error(String message);
+    public static String reason(String type, String value, String context) {
+        return type + ": " + value(value, context);
+    }
     
-    public void warn(String message);
+    
+    public static String reason(String type, String value, String context, String description) {
+        return type + ": " + value(value, context) + ", " + description;
+    }
+    
+    
+    public static String value(String value, String context) {
+        return "'" + value + "' in '" + context + "'";
+    }
     
 }

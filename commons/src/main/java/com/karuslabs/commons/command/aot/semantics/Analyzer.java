@@ -21,41 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.tokens;
+package com.karuslabs.commons.command.aot.semantics;
 
+import com.karuslabs.commons.command.aot.*;
+
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static javax.tools.Diagnostic.Kind.*;
 
-public class ArgumentToken extends Token {
 
-    @Nullable Element type;
+public abstract class Analyzer implements Agent<Boolean> {
+
+    
+    protected Environment environment;
+    protected Messager messager;
+    protected Elements elements;
+    protected Types types;
+    protected @Nullable Element element;
     
     
-    public ArgumentToken(Element site, String value) {
-        super(site, value);
+    public Analyzer(Environment environment, Messager messager, Elements elements, Types types) {
+        this.environment = environment;
+        this.messager = messager;
+        this.elements = elements;
+        this.types = types;
     }
-
+    
+    
+    public abstract boolean analyze(Element element);
+    
     
     @Override
-    public boolean visit(Visitor visitor, String context) {
-        return visitor.argument(this, context);
-    }
-    
-    
-    public @Nullable Element type() {
-        return type;
-    }
-    
-    public boolean type(Element element) {
-        if (type == null) {
-            type = element;
-            return true;
-            
-        } else {
-            return false;
-        }
+    public Boolean error(String message) {
+        messager.printMessage(ERROR, message, element);
+        return false;
     }
 
+    @Override
+    public Boolean warn(String message) {
+        messager.printMessage(WARNING, message, element);
+        return true;
+    }
+    
 }

@@ -21,42 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.tokens;
 
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
+import com.karuslabs.commons.command.aot.Agent;
 
-import javax.lang.model.element.Element;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class CommandLexer implements Lexer {
+public class Root extends Token {
 
-    private Lexer literal;
-    private Lexer argument;
+    public Root() {
+        super(null, "", "[root]", "[root]");
+    }
+
     
-    
-    CommandLexer(Lexer literal, Lexer argument) {
-        this.literal = literal;
-        this.argument = argument;
+    @Override
+    public <T, R> @Nullable R visit(Visitor<T, R> visitor, T context) {
+        return visitor.root(this, context);
     }
     
     
     @Override
-    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value) {
-        if (value.isBlank()) {
-            return visitor.error("Invalid command, command cannot be blank");
+    public @Nullable Token add(Agent agent, Token child) {
+        if (child instanceof Literal) {
+            return super.add(agent, child);
+            
+        } else {
+            agent.error("Invalid command: " + child + ", command must be a literal");
+            return null;
         }
-        
-        var success = true;
-        for (var command : value.split("\\s+")) {
-            if (command.startsWith("<")) {
-                success &= argument.lex(visitor, site, context, command);
-                
-            } else {
-                success &= literal.lex(visitor, site, context, command);
-            }
-        }
-        
-        return success;
     }
     
+    @Override
+    public @Nullable Root merge(Agent agent, Token other) {
+        if (this == other) {
+            return this;
+            
+        } else {
+            throw new UnsupportedOperationException("Root cannot be merged");
+        }
+    }
+
 }

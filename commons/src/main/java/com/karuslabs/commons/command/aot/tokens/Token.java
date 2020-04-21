@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.tokens;
 
-import com.karuslabs.annotations.VisibleForOverride;
-import com.karuslabs.commons.command.aot.Reporter;
+import com.karuslabs.commons.command.aot.*;
 
 import java.util.*;
 import javax.lang.model.element.Element;
@@ -34,36 +33,60 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Token {
     
-    public static interface Visitor<T> extends Reporter {
-        
-        @VisibleForOverride
-        public default boolean argument(ArgumentToken argument, T context) {
-            return false;
+    public static interface Visitor<T, R> extends Agent<R> {
+
+        public default @Nullable R argument(Argument argument, T context) {
+            return token(argument, context);
         }
         
-        @VisibleForOverride
-        public default boolean literal(LiteralToken literal, T context) {
-            return false;
+        public default @Nullable R literal(Literal literal, T context) {
+            return token(literal, context);
+        }
+        
+        public default @Nullable R root(Root root, T context) {
+            return token(root, context);
+        }
+        
+        
+        public default @Nullable R token(Token token, T context) {
+            return null;
         }
         
     }
     
-
-    public final Element site;
+    
+    public final @Nullable Element site;
+    public final String context;
     public final String value;
+    public final String raw;
     public final Map<String, Token> children;
     @Nullable Element execution;
     @Nullable Element suggestions;
     
     
-    public Token(Element site, String value) {
+    public Token(Element site, String context, String value, String raw) {
         this.site = site;
+        this.context = context;
         this.value = value;
+        this.raw = raw;
         children = new HashMap<>();
     }
     
     
-    public abstract boolean visit(Visitor visitor, String context);
+    public abstract <T, R> R visit(Visitor<T, R> visitor, T context);
+    
+    
+    public @Nullable Token add(Agent<?> agent, Token child) {
+        var existing = children.get(child.value);
+        if (existing == null) {
+            children.put(child.value, child);
+            return child;   
+        }
+        
+        return existing.merge(agent, this);
+    }
+    
+    protected abstract @Nullable Token merge(Agent<?> agent, Token other);
     
     
     public @Nullable Element execution() {
@@ -71,7 +94,7 @@ public abstract class Token {
     }
     
     public boolean execution(Element element) {
-        if (element == null) {
+        if (execution == null) {
             execution = element;
             return true;
             
@@ -93,6 +116,12 @@ public abstract class Token {
         } else {
             return false;
         }
+    }
+    
+    
+    @Override
+    public String toString() {
+        return Messages.value(value, context);
     }
     
 }

@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.tokens;
 
-import com.karuslabs.commons.command.aot.tokens.Token;
+import com.karuslabs.commons.command.aot.Agent;
 
 import java.util.*;
 import javax.lang.model.element.Element;
@@ -31,62 +31,37 @@ import javax.lang.model.element.Element;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Environment {
-    
-    public final Token global;
-    Map<Element, Map<String, Token>> scopes;
-    @Nullable Map<String, Token> local;
-    @Nullable Agent<?> agent;
-    Token current;
+public class Literal extends Token {
+
+    public Set<String> aliases;
     
     
-    public Environment(Token global) {
-        this.global = global;
-        current = global;
-        scopes = new HashMap<>();
+    public Literal(Element site, String context, String value, Set<String> aliases) {
+        super(site, context, value, String.join("|", value, String.join("|", aliases)));
+        this.aliases = aliases;
     }
+
     
-    
-    public void initialize(Agent<?> agent) {
-        this.agent = agent;
-        local = null;
-        current = global;
+    @Override
+    public <T, R> @Nullable R visit(Visitor<T, R> visitor, T context) {
+        return visitor.literal(this, context);
     }
+
     
-    
-    public @Nullable Token add(Token child) {
-        var token = current.add(agent, child);
-        if (token == null) {
-            current = global;
-            return null;   
-        } 
-        
-        if (current == global) {
-            local.put(token.value, token);
+    @Override
+    public @Nullable Token merge(Agent agent, Token other) {
+        if (!(other instanceof Literal)) {
+            agent.error("Invalid command: " + other + ", command already exists");
+            return null;
         }
         
-        current = token;
-        return token;
-    }
-    
-    
-    public Map<String, Token> scope(Element element) {
-        local = scopes.get(element);
-        if (local == null) {
-            local = new HashMap<>();
-            scopes.put(element, local);
+        for (var alias : ((Literal) other).aliases) {
+            if (!aliases.add(alias)) {
+                agent.warn("'" + alias + "' already exists");
+            }
         }
-        
-        return local;
+
+        return this;
     }
-    
-    
-    public Token current() {
-        return current;
-    }
-    
-    public @Nullable Map<String, Token> local() {
-        return local;
-    }
-    
+
 }

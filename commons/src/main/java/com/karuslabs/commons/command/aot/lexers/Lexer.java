@@ -31,6 +31,6 @@ import javax.lang.model.element.Element;
 @FunctionalInterface
 public interface Lexer {
     
-    public boolean lex(Visitor<String> visitor, Element site, String context, String value);
+    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value);
     
 }

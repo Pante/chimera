@@ -21,26 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.tokens;
+package com.karuslabs.commons.command.aot.semantics;
 
-import java.util.*;
-import javax.lang.model.element.Element;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
+import javax.annotation.processing.Messager;
+
+import javax.lang.model.util.*;
 
 
-public class LiteralToken extends Token {
+public abstract class SyntaxAnalyzer extends Analyzer implements Visitor<String, Boolean> {
     
-    public final Set<String> aliases;
+    protected Lexer lexer;
+
     
-    
-    public LiteralToken(Element site, String value, Set<String> aliases) {
-        super(site, value);
-        this.aliases = aliases;
+    public SyntaxAnalyzer(Lexer lexer, Environment environment, Messager messager, Elements elements, Types types) {
+        super(environment, messager, elements, types);
+        this.lexer = lexer;
     }
-
     
-    @Override
-    public boolean visit(Visitor visitor, String context) {
-        return visitor.literal(this, context);
-    }
-
 }

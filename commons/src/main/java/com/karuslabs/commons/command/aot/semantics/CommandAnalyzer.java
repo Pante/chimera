@@ -21,72 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.semantics;
 
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.annotations.Command;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.commons.command.aot.tokens.Token;
 
-import java.util.*;
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
+public class CommandAnalyzer extends SyntaxAnalyzer {
 
-public class Environment {
-    
-    public final Token global;
-    Map<Element, Map<String, Token>> scopes;
-    @Nullable Map<String, Token> local;
-    @Nullable Agent<?> agent;
-    Token current;
-    
-    
-    public Environment(Token global) {
-        this.global = global;
-        current = global;
-        scopes = new HashMap<>();
+    public CommandAnalyzer(Lexer lexer, Environment environment, Messager messager, Elements elements, Types types) {
+        super(lexer, environment, messager, elements, types);
     }
+
     
-    
-    public void initialize(Agent<?> agent) {
-        this.agent = agent;
-        local = null;
-        current = global;
-    }
-    
-    
-    public @Nullable Token add(Token child) {
-        var token = current.add(agent, child);
-        if (token == null) {
-            current = global;
-            return null;   
-        } 
+    @Override
+    public boolean analyze(Element element) {
+        environment.initialize(this);
+        environment.scope(element);
+        this.element = element;
         
-        if (current == global) {
-            local.put(token.value, token);
+        var commands = element.getAnnotation(Command.class).value();
+        if (commands.length == 0) {
+            return error("Invalid command declaration, @Command cannot be empty");
         }
         
-        current = token;
-        return token;
-    }
-    
-    
-    public Map<String, Token> scope(Element element) {
-        local = scopes.get(element);
-        if (local == null) {
-            local = new HashMap<>();
-            scopes.put(element, local);
+        var success = true;
+        for (var command : commands) {
+            success &= lexer.lex(this, element, command, command);
         }
         
-        return local;
+        return success;
     }
     
     
-    public Token current() {
-        return current;
+    @Override
+    public Boolean token(Token token, String context) {
+        return environment.add(token) != null;
     }
-    
-    public @Nullable Map<String, Token> local() {
-        return local;
-    }
-    
+
 }

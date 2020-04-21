@@ -21,72 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.tokens;
 
-import com.karuslabs.commons.command.aot.tokens.Token;
+import com.karuslabs.commons.command.aot.Agent;
 
-import java.util.*;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Environment {
-    
-    public final Token global;
-    Map<Element, Map<String, Token>> scopes;
-    @Nullable Map<String, Token> local;
-    @Nullable Agent<?> agent;
-    Token current;
+public class Argument extends Token {
+
+    @Nullable Element type;
     
     
-    public Environment(Token global) {
-        this.global = global;
-        current = global;
-        scopes = new HashMap<>();
+    public Argument(Element site, String context, String value) {
+        super(site, context, value, "<" + value + ">");
     }
-    
-    
-    public void initialize(Agent<?> agent) {
-        this.agent = agent;
-        local = null;
-        current = global;
+
+    @Override
+    public <T, R> @Nullable R visit(Visitor<T, R> visitor, T context) {
+        return visitor.argument(this, context);
     }
+
     
-    
-    public @Nullable Token add(Token child) {
-        var token = current.add(agent, child);
-        if (token == null) {
-            current = global;
-            return null;   
-        } 
-        
-        if (current == global) {
-            local.put(token.value, token);
+    @Override
+    public @Nullable Argument merge(Agent agent, Token other) {
+        if (other instanceof Argument && value.equals(other.value)) {
+            return this;
+            
+        } else {
+            agent.error("Invalid command: " + other + ", command already exists");
+            return null;
         }
-        
-        current = token;
-        return token;
     }
     
     
-    public Map<String, Token> scope(Element element) {
-        local = scopes.get(element);
-        if (local == null) {
-            local = new HashMap<>();
-            scopes.put(element, local);
+    public @Nullable Element type() {
+        return type;
+    }
+    
+    public boolean type(Element element) {
+        if (type == null) {
+            type = element;
+            return true;
+            
+        } else {
+            return false;
         }
-        
-        return local;
     }
-    
-    
-    public Token current() {
-        return current;
-    }
-    
-    public @Nullable Map<String, Token> local() {
-        return local;
-    }
-    
+
 }

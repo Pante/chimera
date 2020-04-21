@@ -24,38 +24,37 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.annotations.Stateless;
-import com.karuslabs.commons.command.aot.tokens.ArgumentToken;
+import com.karuslabs.commons.command.aot.tokens.Argument;
 import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
 
 import javax.lang.model.element.Element;
+
+import static com.karuslabs.commons.command.aot.Messages.reason;
 
 
 public @Stateless class ArgumentLexer implements Lexer {
     
     @Override
-    public boolean lex(Visitor<String> visitor, Element site, String context, String value) {
+    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value) {
         if (!value.startsWith("<") || !value.endsWith(">")) {
-            visitor.error("Invalid argument syntax: '" + value + "', in '" + context + "' argument must be enclosed by '<' and '>'");
-            return false;
+            return visitor.error(reason("Invalid argument syntax", value, context, "argument must be enclosed by '<' and '>'"));
         }
         
         if (value.contains("|")) {
-            visitor.error("Invalid argument syntax: '" + value + "', in '" + context + "' argument must not contain '|'s");
-            return false;
+            return visitor.error(reason("Invalid argument syntax", value, context, "argument must not contain '|'s"));
         }
         
         
         var argument = value.substring(1, value.length() - 1);
         if (argument.isBlank()) {
-            visitor.error("Blank argument: '" + value + "' in '" + context + "', arguments cannot be blank");
-            return false;
+            return visitor.error(reason("Blank argument", value, context, "arguments cannot be blank"));
         }
         
         if (argument.startsWith("<") || argument.startsWith(">")) {
-            visitor.warn("Trailing '<'s or '>'s found in '"+ value + "' at '" + context + "'");
+            visitor.warn(reason("Trailing '<'s or '>'s found in", value, context));
         }
         
-        return visitor.argument(new ArgumentToken(site, argument), context);
+        return visitor.argument(new Argument(site, context, argument), context);
     }
-
+    
 }

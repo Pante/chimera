@@ -21,42 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
-
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
-
-import javax.lang.model.element.Element;
+package com.karuslabs.commons.command.aot;
 
 
-public class CommandLexer implements Lexer {
-
-    private Lexer literal;
-    private Lexer argument;
+public interface Agent<R> {
     
+    public R error(String message);
     
-    CommandLexer(Lexer literal, Lexer argument) {
-        this.literal = literal;
-        this.argument = argument;
-    }
-    
-    
-    @Override
-    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value) {
-        if (value.isBlank()) {
-            return visitor.error("Invalid command, command cannot be blank");
-        }
-        
-        var success = true;
-        for (var command : value.split("\\s+")) {
-            if (command.startsWith("<")) {
-                success &= argument.lex(visitor, site, context, command);
-                
-            } else {
-                success &= literal.lex(visitor, site, context, command);
-            }
-        }
-        
-        return success;
-    }
+    public R warn(String message);
     
 }
