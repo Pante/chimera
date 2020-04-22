@@ -23,14 +23,17 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
+import com.karuslabs.commons.command.aot.*;
 
-import javax.lang.model.element.Element;
+import java.util.List;
 
 
 @FunctionalInterface
 public interface Lexer {
     
-    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value);
+    static final List<Token> EMPTY = List.of();
+    
+    
+    public List<Token> lex(Agent agent, String value, String context);
     
 }

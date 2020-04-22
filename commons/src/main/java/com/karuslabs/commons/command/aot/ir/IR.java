@@ -21,38 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.tokens;
+package com.karuslabs.commons.command.aot.ir;
 
-import com.karuslabs.commons.command.aot.Agent;
+import com.karuslabs.commons.command.aot.Token;
 
+import java.util.*;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Argument extends Token {
+public abstract class IR {
 
+    public final Element element;
+    public final Token declaration;
+    public final Map<Element, List<Token>> bindings;
+    public final Map<String, IR> children;
+    @Nullable Element execution;
     @Nullable Element type;
+    @Nullable Element suggestions;
     
     
-    public Argument(Element site, String context, String value) {
-        super(site, context, value, "<" + value + ">");
+    public IR(Element element, Token declaration) {
+        this.element = element;
+        this.declaration = declaration;
+        bindings = new HashMap<>();
+        children = new HashMap<>();
     }
-
-    @Override
-    public <T, R> @Nullable R visit(Visitor<T, R> visitor, T context) {
-        return visitor.argument(this, context);
-    }
-
     
-    @Override
-    public @Nullable Argument merge(Agent agent, Token other) {
-        if (other instanceof Argument && value.equals(other.value)) {
-            return this;
+    
+    public @Nullable Element execution() {
+        return execution;
+    }
+    
+    public boolean execution(Element element) {
+        if (execution == null) {
+            execution = element;
+            return true;
             
         } else {
-            agent.error("Invalid command: " + other + ", command already exists");
-            return null;
+            return false;
         }
     }
     
@@ -70,5 +78,20 @@ public class Argument extends Token {
             return false;
         }
     }
-
+    
+    
+    public @Nullable Element suggestions() {
+        return suggestions;
+    }
+    
+    public boolean suggestions(Element element) {
+        if (suggestions == null) {
+            suggestions = element;
+            return true;
+            
+        } else {
+            return false;
+        }
+    }
+    
 }

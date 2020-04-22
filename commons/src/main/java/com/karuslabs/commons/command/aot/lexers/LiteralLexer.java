@@ -24,11 +24,10 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.annotations.Stateless;
-import com.karuslabs.commons.command.aot.tokens.Literal;
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
 
-import java.util.HashSet;
-import javax.lang.model.element.Element;
+import com.karuslabs.commons.command.aot.*;
+
+import java.util.*;
 
 import static com.karuslabs.commons.command.aot.Messages.reason;
 
@@ -36,15 +35,15 @@ import static com.karuslabs.commons.command.aot.Messages.reason;
 public @Stateless class LiteralLexer implements Lexer {
 
     @Override
-    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value) {
-        var names = split(visitor, context, value);
+    public List<Token> lex(Agent agent, String value, String context) {
+        var names = split(agent, value, context);
         if (names.length == 0) {
-            return false;
+            return EMPTY;
         }
         
         var name = names[0];
-        if (!valid(visitor, context, "name", name)) {
-            return false;
+        if (!valid(agent, "name", name, context)) {
+            return EMPTY;
         }
         
         var aliases = new HashSet<String>();
@@ -52,41 +51,44 @@ public @Stateless class LiteralLexer implements Lexer {
         
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            success &= valid(visitor, context, "alias", alias);
+            success &= valid(agent, "alias", alias, context);
             
             if (!aliases.add(alias)) {
-                visitor.warn(reason("Invalid alias", alias, context, "alias already exists"));
+                agent.warn(reason("Duplicate alias", alias, context, "alias already exists"));
             }
         }
         
-        return success && visitor.literal(new Literal(site, context, name, aliases), context);
+        return success ? List.of(Token.literal(name, aliases, context)) : EMPTY;
     }
     
     
-    String[] split(Visitor<String, Boolean> visitor, String context, String value) {
+    String[] split(Agent agent, String value, String context) {
         // No need to check for starting '|'s since it will result in blank spaces in array
         if (value.endsWith("|")) {
-            visitor.warn(reason("Trailing '|'s found in", value, context));
+            agent.warn(reason("Trailing '|'s found in", value, context));
         }
         
         var names = value.split("\\|");
         if (names.length == 0) {
-            visitor.error(reason("Blank literal name", value, context, "literals cannot be blank"));
+            agent.error(reason("Blank literal name", value, context, "literals cannot be blank"));
         }
         
         return names;
     }
     
     
-    boolean valid(Visitor<String, Boolean> visitor, String context, String type, String value) {
+    boolean valid(Agent agent, String type, String value, String context) {
         if (value.isBlank()) {
-            return visitor.error(reason("Blank literal", type, context, "literals cannot be blank"));
+            agent.error(reason("Blank literal", type, context, "literals cannot be blank"));
+            return false;
             
         } else if (value.contains("<") || value.contains(">")) {
-            return visitor.error(reason("Invalid literal" + type,  value , context, "literals cannot contain '<' and '>'"));
+            agent.error(reason("Invalid literal" + type,  value , context, "literals cannot contain '<' and '>'"));
+            return false;
             
         } else if (value.contains("|")) {
-            return visitor.error(reason("Invalid literal" + type, value, context, "literals cannot contain '|'"));
+            agent.error(reason("Invalid literal" + type, value, context, "literals cannot contain '|'"));
+            return false;
             
         } else {
             return true;

@@ -24,10 +24,10 @@
 package com.karuslabs.commons.command.aot;
 
 
-public interface Agent<R> {
+public interface Agent {
     
-    public R error(String message);
+    public void error(String message);
     
-    public R warn(String message);
+    public void warn(String message);
     
 }

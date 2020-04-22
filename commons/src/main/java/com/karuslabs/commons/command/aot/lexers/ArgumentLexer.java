@@ -24,10 +24,12 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.annotations.Stateless;
-import com.karuslabs.commons.command.aot.tokens.Argument;
-import com.karuslabs.commons.command.aot.tokens.Token.Visitor;
 
-import javax.lang.model.element.Element;
+import com.karuslabs.commons.command.aot.*;
+
+import java.util.List;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.commons.command.aot.Messages.reason;
 
@@ -35,26 +37,30 @@ import static com.karuslabs.commons.command.aot.Messages.reason;
 public @Stateless class ArgumentLexer implements Lexer {
     
     @Override
-    public boolean lex(Visitor<String, Boolean> visitor, Element site, String context, String value) {
+    public @Nullable List<Token> lex(Agent agent, String value, String context) {
         if (!value.startsWith("<") || !value.endsWith(">")) {
-            return visitor.error(reason("Invalid argument syntax", value, context, "argument must be enclosed by '<' and '>'"));
+            agent.error(reason("Invalid argument syntax", value, context, "argument must be enclosed by '<' and '>'"));
+            return EMPTY;
         }
         
         if (value.contains("|")) {
-            return visitor.error(reason("Invalid argument syntax", value, context, "argument must not contain '|'s"));
+            agent.error(reason("Invalid argument syntax", value, context, "argument must not contain '|'s"));
+            return EMPTY;
         }
         
         
         var argument = value.substring(1, value.length() - 1);
         if (argument.isBlank()) {
-            return visitor.error(reason("Blank argument", value, context, "arguments cannot be blank"));
+            agent.error(reason("Blank argument", value, context, "arguments cannot be blank"));
+            return EMPTY;
         }
         
         if (argument.startsWith("<") || argument.startsWith(">")) {
-            visitor.warn(reason("Trailing '<'s or '>'s found in", value, context));
+            agent.warn(reason("Trailing '<'s or '>'s found in", value, context));
+            return EMPTY;
         }
         
-        return visitor.argument(new Argument(site, context, argument), context);
+        return List.of(Token.argument(value, context));
     }
     
 }
