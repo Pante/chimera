@@ -23,19 +23,19 @@
  */
 package com.karuslabs.commons.command.aot.ir;
 
+import com.karuslabs.commons.command.aot.Environment;
 import com.karuslabs.commons.command.aot.Token;
-
 import java.util.*;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public abstract class IR {
+public class IR {
 
     public final Element element;
     public final Token declaration;
-    public final Map<Element, List<Token>> bindings;
+    public final Map<Element, Token> bindings;
     public final Map<String, IR> children;
     @Nullable Element execution;
     @Nullable Element type;
@@ -47,6 +47,18 @@ public abstract class IR {
         this.declaration = declaration;
         bindings = new HashMap<>();
         children = new HashMap<>();
+    }
+    
+    
+    public @Nullable IR add(Environment environment, Element element, Token declaration) {
+        var existing = children.get(declaration.lexeme);
+        if (existing == null) {
+            var ir = new IR(element, declaration);
+            children.put(declaration.lexeme, ir);
+            return ir;
+        }
+        
+        return existing.declaration.merge(environment, declaration) ? existing : null;
     }
     
     

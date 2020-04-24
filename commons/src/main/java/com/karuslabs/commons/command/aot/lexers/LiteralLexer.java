@@ -35,14 +35,14 @@ import static com.karuslabs.commons.command.aot.Messages.reason;
 public @Stateless class LiteralLexer implements Lexer {
 
     @Override
-    public List<Token> lex(Agent agent, String value, String context) {
-        var names = split(agent, value, context);
+    public List<Token> lex(Environment environment, String value, String context) {
+        var names = split(environment, value, context);
         if (names.length == 0) {
             return EMPTY;
         }
         
         var name = names[0];
-        if (!valid(agent, "name", name, context)) {
+        if (!valid(environment, "name", name, context)) {
             return EMPTY;
         }
         
@@ -51,10 +51,10 @@ public @Stateless class LiteralLexer implements Lexer {
         
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            success &= valid(agent, "alias", alias, context);
+            success &= valid(environment, "alias", alias, context);
             
             if (!aliases.add(alias)) {
-                agent.warn(reason("Duplicate alias", alias, context, "alias already exists"));
+                environment.warn(reason("Duplicate alias", alias, context, "alias already exists"));
             }
         }
         
@@ -62,32 +62,32 @@ public @Stateless class LiteralLexer implements Lexer {
     }
     
     
-    String[] split(Agent agent, String value, String context) {
+    String[] split(Environment environment, String value, String context) {
         // No need to check for starting '|'s since it will result in blank spaces in array
         if (value.endsWith("|")) {
-            agent.warn(reason("Trailing '|'s found in", value, context));
+            environment.warn(reason("Trailing '|'s found in", value, context));
         }
         
         var names = value.split("\\|");
         if (names.length == 0) {
-            agent.error(reason("Blank literal name", value, context, "literals cannot be blank"));
+            environment.error(reason("Blank literal name", value, context, "literals cannot be blank"));
         }
         
         return names;
     }
     
     
-    boolean valid(Agent agent, String type, String value, String context) {
+    boolean valid(Environment environment, String type, String value, String context) {
         if (value.isBlank()) {
-            agent.error(reason("Blank literal", type, context, "literals cannot be blank"));
+            environment.error(reason("Blank literal", type, context, "literals cannot be blank"));
             return false;
             
         } else if (value.contains("<") || value.contains(">")) {
-            agent.error(reason("Invalid literal" + type,  value , context, "literals cannot contain '<' and '>'"));
+            environment.error(reason("Invalid literal" + type,  value , context, "literals cannot contain '<' and '>'"));
             return false;
             
         } else if (value.contains("|")) {
-            agent.error(reason("Invalid literal" + type, value, context, "literals cannot contain '|'"));
+            environment.error(reason("Invalid literal" + type, value, context, "literals cannot contain '|'"));
             return false;
             
         } else {

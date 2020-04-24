@@ -21,19 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
-
-import com.karuslabs.commons.command.aot.*;
-
-import java.util.List;
+package com.karuslabs.commons.command.aot.ir;
 
 
-@FunctionalInterface
-public interface Lexer {
-    
-    static final List<Token> EMPTY = List.of();
-    
-    
-    public List<Token> lex(Environment environment, String value, String context);
-    
+public class Root extends IR {
+
+    public Root() {
+        super(null, null);
+    }
+
 }

@@ -21,46 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
-
-import com.karuslabs.annotations.Stateless;
+package com.karuslabs.commons.command.aot.semantics;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Command;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.ir.*;
 
 import java.util.List;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import javax.lang.model.element.Element;
 
 
-public @Stateless class ArgumentLexer implements Lexer {
+public class CommandAnalyzer extends Analyzer {
+
+    private Lexer lexer;
     
-    @Override
-    public @Nullable List<Token> lex(Environment environment, String value, String context) {
-        if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(reason("Invalid argument syntax", value, context, "argument must be enclosed by '<' and '>'"));
-            return EMPTY;
-        }
-        
-        if (value.contains("|")) {
-            environment.error(reason("Invalid argument syntax", value, context, "argument must not contain '|'s"));
-            return EMPTY;
-        }
-        
-        
-        var argument = value.substring(1, value.length() - 1);
-        if (argument.isBlank()) {
-            environment.error(reason("Blank argument", value, context, "arguments cannot be blank"));
-            return EMPTY;
-        }
-        
-        if (argument.startsWith("<") || argument.startsWith(">")) {
-            environment.warn(reason("Trailing '<'s or '>'s found in", value, context));
-            return EMPTY;
-        }
-        
-        return List.of(Token.argument(value, context));
+    
+    public CommandAnalyzer(Environment environment, Lexer lexer) {
+        super(environment);
+        this.lexer = lexer;
     }
     
+    
+    @Override
+    public void analyze(Element element) {
+        environment.initialize(element);
+        var scope = environment.scope(element);
+        
+        var commands = element.getAnnotation(Command.class).value();
+        if (commands.length == 0) {
+            environment.error("Invalid @Command annotation, @Command cannot be empty");
+            return;
+        }
+        
+        for (var command : commands) {
+            parse(scope, element, lexer.lex(environment, command, command));
+        }
+    }
+    
+    void parse(IR root, Element element, List<Token> tokens) {
+        var current = root;
+        for (var token : tokens) {
+            var ir = current.add(environment, element, token);
+            if (ir == null) {
+                return;
+            }
+            
+            current = ir;
+        }
+    }
+
 }

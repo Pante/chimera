@@ -41,19 +41,19 @@ public class CommandLexer implements Lexer {
     
     
     @Override
-    public List<Token> lex(Agent agent, String value, String context) {
+    public List<Token> lex(Environment environment, String value, String context) {
         if (value.isBlank()) {
-            agent.error("Invalid command, command cannot be blank");
+            environment.error("Invalid command, command cannot be blank");
             return EMPTY;
         }
         
         var tokens = new ArrayList<Token>();
         for (var command : value.split("\\s+")) {
             if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(agent, context, command));
+                tokens.addAll(argument.lex(environment, context, command));
                 
             } else {
-                tokens.addAll(literal.lex(agent, context, command));
+                tokens.addAll(literal.lex(environment, context, command));
             }
         }
         

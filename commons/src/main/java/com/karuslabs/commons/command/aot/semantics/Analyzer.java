@@ -21,13 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.semantics;
+
+import com.karuslabs.commons.command.aot.Environment;
+
+import javax.lang.model.element.Element;
 
 
-public interface Agent {
+public abstract class Analyzer {
     
-    public void error(String message);
+    protected Environment environment;
     
-    public void warn(String message);
+    
+    public Analyzer(Environment environment) {
+        this.environment = environment;
+    }
+    
+    
+    public abstract void analyze(Element element);
     
 }

@@ -25,8 +25,6 @@ package com.karuslabs.commons.command.aot;
 
 import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import static com.karuslabs.commons.command.aot.Messages.*;
 
 
@@ -70,25 +68,25 @@ public class Token {
     }
     
     
-    public @Nullable Token merge(Agent agent, Token other) {
+    public boolean merge(Environment environment, Token other) {
         if (!lexeme.equals(other.lexeme)) {
             throw new IllegalArgumentException("Invalid merge between: " + lexeme + " and " + other.lexeme + ", tokens have different lexemes");
             
         } else if (type != other.type) {
-            agent.error(reason("Invalid " + other.type.value, other, "command of a different type already exists"));
-            return null; 
+            environment.error(reason("Invalid " + other.type.value, other, "command of a different type already exists"));
+            return false; 
             
         }
         
         if (type == Type.LITERAL) {
             for (var alias : other.aliases) {
                 if (!aliases.add(alias)) {
-                    agent.warn(reason("Duplicate alias", alias, other.context, "alias already exists"));
+                    environment.warn(reason("Duplicate alias", alias, other.context, "alias already exists"));
                 }
             }
         } 
         
-        return this;
+        return true;
     }
     
     
