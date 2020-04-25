@@ -23,52 +23,21 @@
  */
 package com.karuslabs.commons.command.aot.semantics;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Command;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.commons.command.aot.ir.*;
+import com.karuslabs.commons.command.aot.Environment;
 
-import java.util.List;
 import javax.lang.model.element.Element;
 
 
-public class CommandAnalyzer extends Analyzer {
-
-    private Lexer lexer;
+public abstract class Parser {
+    
+    protected Environment environment;
     
     
-    public CommandAnalyzer(Environment environment, Lexer lexer) {
-        super(environment);
-        this.lexer = lexer;
+    public Parser(Environment environment) {
+        this.environment = environment;
     }
     
     
-    @Override
-    public void analyze(Element element) {
-        environment.initialize(element);
-        var scope = environment.scope(element);
-        
-        var commands = element.getAnnotation(Command.class).value();
-        if (commands.length == 0) {
-            environment.error("Invalid @Command annotation, @Command cannot be empty");
-            return;
-        }
-        
-        for (var command : commands) {
-            parse(scope, element, lexer.lex(environment, command, command));
-        }
-    }
+    public abstract void parse(Element element);
     
-    void parse(IR root, Element element, List<Token> tokens) {
-        var current = root;
-        for (var token : tokens) {
-            var ir = current.add(environment, element, token);
-            if (ir == null) {
-                return;
-            }
-            
-            current = ir;
-        }
-    }
-
 }

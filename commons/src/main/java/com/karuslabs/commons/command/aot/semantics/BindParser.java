@@ -28,6 +28,7 @@ import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.ir.IR;
+import com.karuslabs.commons.command.aot.ir.IR;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.List;
@@ -36,19 +37,19 @@ import javax.lang.model.element.Element;
 import static com.karuslabs.commons.command.aot.Messages.reason;
 
 
-public class BindAnalyzer extends Analyzer {
+public class BindParser extends Parser {
     
     private Lexer lexer;
     
     
-    public BindAnalyzer(Environment environment, Lexer lexer) {
+    public BindParser(Environment environment, Lexer lexer) {
         super(environment);
         this.lexer = lexer;
     }
 
     
     @Override
-    public void analyze(Element element) {
+    public void parse(Element element) {
         environment.initialize(element);
         var scope = environment.scopes.get(element.accept(Filter.CLASS, null));
         
@@ -69,7 +70,7 @@ public class BindAnalyzer extends Analyzer {
                 parse(scope, element, tokens);
                 
             } else if (tokens.size() == 1) {
-                // partial match
+                parse(scope, element, tokens.get(0));
             } 
         }
     }
@@ -88,9 +89,25 @@ public class BindAnalyzer extends Analyzer {
             binding = token;
         }
         
-        var existing = current.bindings.get(element);
+        bind(current, element, binding);
+    }
+    
+    void parse(IR ir, Element element, Token binding) {
+        var declaration = ir.declaration;
+        if (declaration != null && declaration.lexeme.equals(binding.lexeme) && declaration.type == binding.type) {
+            bind(ir, element, binding);
+        }
+        
+        for (var child : ir.children.values()) {
+            parse(child, element, binding);
+        }
+    }
+    
+    
+    void bind(IR ir, Element element, Token binding) {
+        var existing = ir.bindings.get(element);
         if (existing == null) {
-            current.bindings.put(element, binding);
+            ir.bindings.put(element, binding);
             
         } else {
             environment.error(reason("Invalid binding", binding, "binding already exists"));
