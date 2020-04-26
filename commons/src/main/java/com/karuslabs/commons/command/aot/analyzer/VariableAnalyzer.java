@@ -21,13 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.ir;
+package com.karuslabs.commons.command.aot.analyzer;
+
+import com.karuslabs.commons.command.aot.*;
+import javax.lang.model.element.Modifier;
 
 
-public class Root extends IR {
+import javax.lang.model.element.VariableElement;
 
-    public Root() {
-        super(null, null);
+
+public class VariableAnalyzer {
+
+    private Environment environment;
+    
+    
+    public VariableAnalyzer(Environment environment) {
+        this.environment = environment;
+        
     }
-
+    
+    
+    public void analyze(VariableElement variable, IR ir, Token binding) {
+        var modifiers = variable.getModifiers();
+        if (!modifiers.contains(Modifier.PUBLIC) || modifiers.contains(Modifier.STATIC)) {
+            environment.error("Invalid field: '" + variable.getSimpleName() + "', field must be public and non-static", variable);
+        }
+        
+        
+    }
+    
 }

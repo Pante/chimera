@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.ir;
+package com.karuslabs.commons.command.aot;
 
 import com.karuslabs.commons.command.aot.Environment;
 import com.karuslabs.commons.command.aot.Token;
@@ -40,6 +40,11 @@ public class IR {
     @Nullable Element execution;
     @Nullable Element type;
     @Nullable Element suggestions;
+    
+    
+    public static IR root() {
+        return new IR(null, null);
+    }
     
     
     public IR(Element element, Token declaration) {

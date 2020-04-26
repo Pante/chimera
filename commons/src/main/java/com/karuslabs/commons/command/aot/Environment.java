@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.commons.command.aot.ir.*;
-
 import java.util.*;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
@@ -40,7 +38,7 @@ public class Environment {
     public final Messager messager;
     public final Elements elements;
     public final Types types;
-    public final Map<Element, Root> scopes;
+    public final Map<Element, IR> scopes;
     @Nullable Element element;
     boolean error;
     
@@ -59,10 +57,10 @@ public class Environment {
     }
     
     
-    public Root scope(Element element) {
+    public IR scope(Element element) {
         var existing = scopes.get(element);
         if (existing == null) {
-            existing = new Root();
+            existing = IR.root();
             scopes.put(element, existing);
         }
         
@@ -71,12 +69,22 @@ public class Environment {
     
     
     public void error(String message) {
+        error(message, element);
+    }
+    
+    public void error(String message, Element element) {
         messager.printMessage(ERROR, message, element);
         error = true;
     }
+    
 
     public void warn(String message) {
+        warn(message, element);
+    }
+    
+    public void warn(String message, Element element) {
         messager.printMessage(WARNING, message, element);
+        error = true;
     }
     
     

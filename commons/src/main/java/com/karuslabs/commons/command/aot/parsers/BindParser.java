@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.semantics;
+package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.annotations.processor.Filter;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
-import com.karuslabs.commons.command.aot.ir.IR;
-import com.karuslabs.commons.command.aot.ir.IR;
+import com.karuslabs.commons.command.aot.IR;
+import com.karuslabs.commons.command.aot.IR;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.List;
