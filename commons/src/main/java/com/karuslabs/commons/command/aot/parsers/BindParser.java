@@ -27,8 +27,6 @@ import com.karuslabs.annotations.processor.Filter;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
-import com.karuslabs.commons.command.aot.IR;
-import com.karuslabs.commons.command.aot.IR;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.List;

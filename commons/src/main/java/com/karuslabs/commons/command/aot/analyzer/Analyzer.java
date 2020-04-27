@@ -26,9 +26,8 @@ package com.karuslabs.commons.command.aot.analyzer;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Token.Type;
 
-import javax.lang.model.element.*;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.List;
+import javax.lang.model.util.SimpleElementVisitor9;
 
 import static com.karuslabs.commons.command.aot.Messages.reason;
 
@@ -36,15 +35,12 @@ import static com.karuslabs.commons.command.aot.Messages.reason;
 public class Analyzer {
     
     private Environment environment;
-    private MethodAnalyzer method;
-    private VariableAnalyzer variable;
+    private List<SimpleElementVisitor9<Void, IR>> visitors;
     
     
-    
-    public Analyzer(Environment environment, MethodAnalyzer method, VariableAnalyzer variable) {
+    public Analyzer(Environment environment, List<SimpleElementVisitor9<Void, IR>> visitors) {
         this.environment = environment;
-        this.method = method;
-        this.variable = variable;
+        this.visitors = visitors;
     }
 
 
@@ -52,7 +48,7 @@ public class Analyzer {
         for (var root : environment.scopes.values()) {
             for (var child : root.children.values()) {
                 if (child.element == null || child.declaration == null) {
-                    throw new IllegalStateException("Root contains invalid IRs");
+                    throw new IllegalStateException("Invalid Root child, root cannot contain roots");
 
                 } else if (child.declaration.type == Type.ARGUMENT) {
                     environment.initialize(child.element);
@@ -68,14 +64,8 @@ public class Analyzer {
         for (var entry : ir.bindings.entrySet()) {
             var element = entry.getKey();
             
-            if (element instanceof ExecutableElement) {
-                method.analyze((ExecutableElement) element, ir, entry.getValue());
-                
-            } else if (element instanceof VariableElement) {
-                variable.analyze((VariableElement) element, ir, entry.getValue());
-                
-            } else {
-                throw new IllegalStateException("No analyzer for: " + element.asType());
+            for (var visitor : visitors) {
+                element.accept(visitor, ir);
             }
         }
         

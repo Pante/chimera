@@ -34,11 +34,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.List;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
+import javax.lang.model.util.SimpleElementVisitor9;
 
 import static com.karuslabs.commons.command.aot.Messages.reason;
 
 
-public class MethodAnalyzer {
+public class MethodVisitor extends SimpleElementVisitor9<Void, IR> {
 
     private Environment environment;
     TypeMirror context;
@@ -46,37 +47,46 @@ public class MethodAnalyzer {
     TypeMirror exception;
     
     
-    public MethodAnalyzer(Environment environment) {
+    public MethodVisitor(Environment environment) {
         this.environment = environment;
         
         var elements = environment.elements;
         var types = environment.types;
-        var commandsender = elements.getTypeElement(CommandSender.class.getName()).asType();
+        var sender = elements.getTypeElement(CommandSender.class.getName()).asType();
         
-        context = types.getDeclaredType(elements.getTypeElement(CommandContext.class.getName()), commandsender);
-        defaultable = types.getDeclaredType(elements.getTypeElement(OptionalContext.class.getName()), commandsender);
+        context = types.getDeclaredType(elements.getTypeElement(CommandContext.class.getName()), sender);
+        defaultable = types.getDeclaredType(elements.getTypeElement(OptionalContext.class.getName()), sender);
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
     }
     
     
-    public void analyze(ExecutableElement method, IR ir, Token binding) {
+    @Override
+    public Void visitExecutable(ExecutableElement method, IR ir) {
         var modifiers = method.getModifiers();
         if (!modifiers.contains(Modifier.PUBLIC) || modifiers.contains(Modifier.STATIC)) {
             environment.error("Invalid method: '" + method.getSimpleName() + "', method must be public and non-static", method);
+            return null;
         }
 
         var parameters = method.getParameters();
-        if (parameters.size() != 1 || !signature(method.getReturnType(), parameters) || exceptions(method.getThrownTypes())) {
-            environment.error("Invalid method: " + method.getSimpleName() + ", method signature must match either Command<CommandSender> or Executable<CommandSender>", method);   
+        if (!signature(method.getReturnType(), parameters) || !exceptions(method.getThrownTypes())) {
+            environment.error("Invalid method: " + method.getSimpleName() + ", method signature must match either Command<CommandSender> or Executable<CommandSender>", method);
+            return null;
         }
         
         if (!ir.execution(method)) {
-            environment.error(reason("Invalid binding for", binding, "binding already exists"), method);
+            environment.error(reason("Invalid binding", ir.bindings.get(method), "binding already exists"), method);
         }
+        
+        return null;
     }
     
     
     boolean signature(TypeMirror type, List<? extends VariableElement> parameters) {
+        if (parameters.size() != 1) {
+            return false;
+        }
+        
         var types = environment.types;
         
         var returnable = type.getKind();
@@ -88,6 +98,5 @@ public class MethodAnalyzer {
     boolean exceptions(List<? extends TypeMirror> thrown) {
         return thrown.isEmpty() || (thrown.size() == 1 && environment.types.isSubtype(thrown.get(0), exception));
     }
-    
     
 }

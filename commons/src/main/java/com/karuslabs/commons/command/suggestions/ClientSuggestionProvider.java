@@ -33,9 +33,7 @@ import org.bukkit.command.CommandSender;
 
 public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
     
-    ENTITIES,
-    RECIPES,
-    SOUNDS;
+    ENTITIES, RECIPES, SOUNDS;
     
     
     @Override
