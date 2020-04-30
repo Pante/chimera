@@ -26,14 +26,16 @@ package com.karuslabs.commons.command.aot.lexers;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.List;
+import javax.lang.model.element.Element;
 
 
 @FunctionalInterface
 public interface Lexer {
+ 
+    public List<Token> lex(Environment environment, Element location, String value, String context);
     
-    static final List<Token> EMPTY = List.of();
-    
-    
-    public List<Token> lex(Environment environment, String value, String context);
+    public default List<Token> lex(Environment environment, Element location, String value) {
+        return lex(environment, location, value, value);
+    }
     
 }

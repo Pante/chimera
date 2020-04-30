@@ -28,87 +28,84 @@ import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.resolvers.Resolver;
 
 import java.util.List;
-import javax.lang.model.element.Element;
-
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import javax.lang.model.element.*;
 
 
 public class BindParser extends Parser {
     
-    private Lexer lexer;
+    Resolver<ExecutableElement> method;
+    Resolver<VariableElement> variable;
     
     
-    public BindParser(Environment environment, Lexer lexer) {
-        super(environment);
-        this.lexer = lexer;
+    public BindParser(Environment environment, Lexer lexer, Resolver<ExecutableElement> method, Resolver<VariableElement> variable) {
+        super(environment, lexer);
+        this.method = method;
+        this.variable = variable;
     }
 
     
     @Override
     public void parse(Element element) {
-        environment.initialize(element);
-        var scope = environment.scopes.get(element.accept(Filter.CLASS, null));
-        
-        if (scope == null) {
-            environment.error("Invalid @Bind annotation, enclosing class must be annotated with @Command");
+        var root = environment.scopes.get(element.accept(Filter.CLASS, null));
+        if (root == null) {
+            environment.error(element, "Enclosing class must be annotated with @Command");
             return;
         }
         
         var bindings = element.getAnnotation(Bind.class).value();
         if (bindings.length == 0) {
-            environment.error("Invalid @Bind annotation, @Bind cannot be empty");
+            environment.error(element, "@Bind annotation cannot be empty");
             return;
         }
         
         for (var binding : bindings) {
-            var tokens = lexer.lex(environment, binding, binding);
-            if (tokens.size() > 1) {
-                parse(scope, element, tokens);
-                
-            } else if (tokens.size() == 1) {
-                parse(scope, element, tokens.get(0));
-            } 
+            var tokens = lexer.lex(environment, element, binding);
+            if (valid(tokens)) {
+                if (tokens.size() == 1) {
+                    matchAny(root, element, tokens.get(0));
+                    
+                } else {
+                    matchExact(root, element, tokens);
+                }
+            }
         }
     }
     
-    void parse(IR root, Element element, List<Token> tokens) {
-        var current = root;
-        Token binding = null;
-        
-        for (var token : tokens) {
-            var ir = current.children.get(token.lexeme);
-            if (ir == null) {
+    
+    void matchAny(Token current, Element element, Token binding) {
+        if (current.lexeme.equals(binding.lexeme) && current.type == binding.type) {
+            resolve(current, element, binding);
+        }
+
+        for (var child : current.children.values()) {
+            matchAny(child, element, binding);
+        }
+    }
+    
+    void matchExact(Token current, Element element, List<Token> bindings) {
+        for (var binding : bindings) {
+            current = current.children.get(binding.lexeme);
+            if (current == null) {
                 return;
             }
+        }
+        
+        resolve(current, element, bindings.get(bindings.size() - 1));
+    }
+    
+    
+    void resolve(Token token, Element element, Token binding) {
+        if (element instanceof ExecutableElement) {
+             method.resolve(token, (ExecutableElement) element, binding);
             
-            current = ir;
-            binding = token;
-        }
-        
-        bind(current, element, binding);
-    }
-    
-    void parse(IR ir, Element element, Token binding) {
-        var declaration = ir.declaration;
-        if (declaration != null && declaration.lexeme.equals(binding.lexeme) && declaration.type == binding.type) {
-            bind(ir, element, binding);
-        }
-        
-        for (var child : ir.children.values()) {
-            parse(child, element, binding);
-        }
-    }
-    
-    
-    void bind(IR ir, Element element, Token binding) {
-        var existing = ir.bindings.get(element);
-        if (existing == null) {
-            ir.bindings.put(element, binding);
+        } else if (element instanceof VariableElement) {
+            variable.resolve(token, (VariableElement) element, binding);
             
         } else {
-            environment.error(reason("Invalid binding", binding, "binding already exists"));
+            environment.error(element, "@Bind annotation cannot be applied here");
         }
     }
 

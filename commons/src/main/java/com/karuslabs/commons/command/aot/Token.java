@@ -23,76 +23,99 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import java.util.Set;
+import java.util.*;
+import javax.lang.model.element.Element;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.commons.command.aot.Messages.*;
 
 
 public class Token {
     
-    public static enum Type {
-        
-        ARGUMENT("argument"), LITERAL("literal");
-        
-        public final String value;
-        
-        private Type(String value) {
-            this.value = value;
-        }
-        
-    }
-    
-    
+    public final Element location;
     public final String lexeme;
     public final Type type;
     public final Set<String> aliases;
+    public final Map<Binding, Token> bindings;
+    public final Map<String, Token> children;
     public final String literal;
     public final String context;
+
     
-    
-    public static Token argument(String lexeme, String context) {
-        return new Token(lexeme, Type.ARGUMENT, Set.of(), "<" + lexeme + ">", context);
+    public static Token argument(Element location, String lexeme, String context) {
+        return new Token(location, lexeme, Type.ARGUMENT, Set.of(), "<" + lexeme + ">", context);
     }
     
-    public static Token literal(String lexeme, Set<String> aliases, String context) {
-        return new Token(lexeme, Type.LITERAL, aliases, String.join("|", lexeme, String.join("|", aliases)), context);
+    public static Token literal(Element location, String lexeme, Set<String> aliases, String context) {
+        return new Token(location, lexeme, Type.LITERAL, aliases, String.join("|", lexeme, String.join("|", aliases)), context);
+    }
+    
+    public static Token generation(Element location, String file) {
+        return new Token(location, file, Type.GENERATION, Set.of(), file, "");
+    }
+    
+    public static Token root() {
+        return new Token(null, "", Type.ROOT, Set.of(), "", "");
     }
     
     
-    Token(String lexeme, Type type, Set<String> aliases, String literal, String context) {
+    Token(Element location, String lexeme, Type type, Set<String> aliases, String literal, String context) {
+        this.location = location;
         this.lexeme = lexeme;
         this.type = type;
+        this.aliases = aliases;
+        this.bindings = new EnumMap<>(Binding.class);
+        this.children = new HashMap<>();
         this.literal = literal;
         this.context = context;
-        this.aliases = aliases;
     }
     
     
-    public boolean merge(Environment environment, Token other) {
-        if (!lexeme.equals(other.lexeme)) {
-            throw new IllegalArgumentException("Invalid merge between: " + lexeme + " and " + other.lexeme + ", tokens have different lexemes");
-            
-        } else if (type != other.type) {
-            environment.error(reason("Invalid " + other.type.value, other, "command of a different type already exists"));
-            return false; 
-            
+    public @Nullable Token add(Environment environment, Token child) {
+        var existing = children.get(child.lexeme);
+        if (existing == null) {
+            children.put(child.lexeme, child);
+            return child;
         }
         
-        if (type == Type.LITERAL) {
+        return existing.merge(environment, child) ? existing : null;
+    } 
+    
+    boolean merge(Environment environment, Token other) {
+        if (type != other.type) {
+            environment.error(location, reason("A " + other.type + " with the same name already exists", other));
+            return false; 
+            
+        } else if (type == Type.LITERAL) {
             for (var alias : other.aliases) {
                 if (!aliases.add(alias)) {
-                    environment.warn(reason("Duplicate alias", alias, other.context, "alias already exists"));
+                    environment.warn(location, reason("Alias already exists", alias, other.context));
                 }
             }
-        } 
+        }
         
         return true;
     }
     
     
+    public void bind(Environment environment, Binding binding, Token token) {
+        var existing = bindings.get(binding);
+        if (existing != null) {
+            environment.error(token.location, binding.article + " " + binding.signature + " is already bound to " + token);
+            
+        } else if (binding == Binding.TYPE && type != Type.ARGUMENT) {
+            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to a literal" + token);
+       
+        } else {
+            bindings.put(binding, token);
+        }
+    }
+    
+    
     @Override
     public String toString() {
-        return site(literal, context);
+        return location(literal, context);
     }
     
 }

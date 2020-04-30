@@ -21,24 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.Static;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+
+import javax.lang.model.element.Element;
 
 
-public @Static class Messages {
-    
-    public static String reason(String reason, Token token) {
-        return reason + ": " + token;
+public class GenerationParser extends Parser {
+
+    public GenerationParser(Environment environment, Lexer lexer) {
+        super(environment, lexer);
     }
-    
-    public static String reason(String reason, String value, String context) {
-        return reason + ": " + location(value, context);
-    }
-    
 
-    public static String location(String value, String context) {
-        return "'" + value + "' in '" + context + "'";
-    }
     
+    @Override
+    public void parse(Element element) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

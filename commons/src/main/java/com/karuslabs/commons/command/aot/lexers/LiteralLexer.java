@@ -23,27 +23,27 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.annotations.Stateless;
-
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.*;
+import javax.lang.model.element.Element;
 
 import static com.karuslabs.commons.command.aot.Messages.reason;
+import static java.util.Collections.EMPTY_LIST;
 
 
-public @Stateless class LiteralLexer implements Lexer {
+public class LiteralLexer implements Lexer {
 
     @Override
-    public List<Token> lex(Environment environment, String value, String context) {
-        var names = split(environment, value, context);
+    public List<Token> lex(Environment environment, Element location, String value, String context) {
+        var names = split(environment, location, value, context);
         if (names.length == 0) {
-            return EMPTY;
+            return EMPTY_LIST;
         }
         
         var name = names[0];
-        if (!valid(environment, "name", name, context)) {
-            return EMPTY;
+        if (!valid(environment, location, name, context)) {
+            return EMPTY_LIST;
         }
         
         var aliases = new HashSet<String>();
@@ -51,43 +51,43 @@ public @Stateless class LiteralLexer implements Lexer {
         
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            success &= valid(environment, "alias", alias, context);
+            success &= valid(environment, location, alias, context);
             
             if (!aliases.add(alias)) {
-                environment.warn(reason("Duplicate alias", alias, context, "alias already exists"));
+                environment.warn(location, reason("Alias already exists", alias, context));
             }
         }
         
-        return success ? List.of(Token.literal(name, aliases, context)) : EMPTY;
+        return success ? List.of(Token.literal(location, name, aliases, context)) : EMPTY_LIST;
     }
     
     
-    String[] split(Environment environment, String value, String context) {
+    String[] split(Environment environment, Element location, String value, String context) {
         // No need to check for starting '|'s since it will result in blank spaces in array
         if (value.endsWith("|")) {
-            environment.warn(reason("Trailing '|'s found in", value, context));
+            environment.warn(location, reason("Trailing '|'s found in", value, context));
         }
         
         var names = value.split("\\|");
         if (names.length == 0) {
-            environment.error(reason("Blank literal name", value, context, "literals cannot be blank"));
+            environment.error(location, reason("Literals cannot be blank", value, context));
         }
         
         return names;
     }
     
     
-    boolean valid(Environment environment, String type, String value, String context) {
+    boolean valid(Environment environment, Element location, String value, String context) {
         if (value.isBlank()) {
-            environment.error(reason("Blank literal", type, context, "literals cannot be blank"));
+            environment.error(location,reason("Literals cannot be blank", value, context));
             return false;
             
         } else if (value.contains("<") || value.contains(">")) {
-            environment.error(reason("Invalid literal" + type,  value , context, "literals cannot contain '<' and '>'"));
+            environment.error(location,reason("Literals cannot contain '<' and '>'",  value , context));
             return false;
             
         } else if (value.contains("|")) {
-            environment.error(reason("Invalid literal" + type, value, context, "literals cannot contain '|'"));
+            environment.error(location,reason("Literals cannot contain '|'", value, context));
             return false;
             
         } else {

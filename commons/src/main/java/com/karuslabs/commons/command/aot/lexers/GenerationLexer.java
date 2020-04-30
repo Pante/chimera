@@ -26,39 +26,31 @@ package com.karuslabs.commons.command.aot.lexers;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.List;
+import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.reason;
 import static java.util.Collections.EMPTY_LIST;
 
 
-public class ArgumentLexer implements Lexer {
+public class GenerationLexer implements Lexer {
+    
+    static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
+    static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
+
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String value, String context) {
-        if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(location, reason("Arguments must be enclosed by '<' and '>'", value, context));
+    public List<Token> lex(Environment environment, Element location, String folder, String file) {
+        if (!PACKAGE.reset(folder).matches()) {
+            environment.error(location, "Invalid package name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
             return EMPTY_LIST;
         }
         
-        if (value.contains("|")) {
-            environment.error(location, reason("Arguments cannot contain '|'", value, context));
+        if (!FILE.reset(file).matches()) {
+            environment.error(location, "Invalid file name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
             return EMPTY_LIST;
         }
         
-        
-        var argument = value.substring(1, value.length() - 1);
-        if (argument.isBlank()) {
-            environment.error(location, reason("Arguments cannot be blank", value, context));
-            return EMPTY_LIST;
-        }
-        
-        if (argument.startsWith("<") || argument.startsWith(">")) {
-            environment.warn(location, reason("Trailing '<'s or '>'s found in", value, context));
-            return EMPTY_LIST;
-        }
-        
-        return List.of(Token.argument(location, value, context));
+        return List.of(Token.generation(location, folder + "." + file));
     }
-    
+
 }

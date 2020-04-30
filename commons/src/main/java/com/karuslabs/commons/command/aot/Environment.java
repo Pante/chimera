@@ -28,18 +28,15 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import static javax.tools.Diagnostic.Kind.*;
 
 
 public class Environment {
-    
+
     public final Messager messager;
     public final Elements elements;
     public final Types types;
-    public final Map<Element, IR> scopes;
-    @Nullable Element element;
+    public final Map<Element, Token> scopes;
     boolean error;
     
     
@@ -52,37 +49,24 @@ public class Environment {
     }
     
     
-    public void initialize(Element element) {
-        this.element = element;
-    }
-    
-    
-    public IR scope(Element element) {
+    public Token root(Element element) {
         var existing = scopes.get(element);
         if (existing == null) {
-            existing = IR.root();
+            existing = Token.root();
             scopes.put(element, existing);
         }
         
         return existing;
     }
+
     
-    
-    public void error(String message) {
-        error(message, element);
-    }
-    
-    public void error(String message, Element element) {
+    public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);
         error = true;
     }
-    
 
-    public void warn(String message) {
-        warn(message, element);
-    }
     
-    public void warn(String message, Element element) {
+    public void warn(Element element, String message) {
         messager.printMessage(WARNING, message, element);
         error = true;
     }

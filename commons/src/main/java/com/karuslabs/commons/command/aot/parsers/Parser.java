@@ -23,21 +23,42 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
 
+import java.util.List;
 import javax.lang.model.element.Element;
+
+import static com.karuslabs.commons.command.aot.Messages.reason;
 
 
 public abstract class Parser {
     
     protected Environment environment;
+    protected Lexer lexer;
     
     
-    public Parser(Environment environment) {
+    public Parser(Environment environment, Lexer lexer) {
         this.environment = environment;
+        this.lexer = lexer;
     }
     
     
     public abstract void parse(Element element);
+    
+    
+    protected boolean valid(List<Token> tokens) {
+        if (tokens.isEmpty()) {
+            return false;
+        }
+        
+        var token = tokens.get(0);
+        if (token.type == Type.ARGUMENT) {
+            environment.error(token.location, reason("Commands cannot start with arguments", token));
+            return false;
+        }
+        
+        return true;
+    }
     
 }

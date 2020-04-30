@@ -23,22 +23,21 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.annotations.Static;
 
-
-public @Static class Messages {
+public enum Type {
     
-    public static String reason(String reason, Token token) {
-        return reason + ": " + token;
+    ARGUMENT("argument"), LITERAL("literal"), ROOT("root"), GENERATION("generation");
+        
+    private final String value;
+
+    private Type(String value) {
+        this.value = value;
     }
-    
-    public static String reason(String reason, String value, String context) {
-        return reason + ": " + location(value, context);
-    }
-    
 
-    public static String location(String value, String context) {
-        return "'" + value + "' in '" + context + "'";
+
+    @Override
+    public String toString() {
+        return value;
     }
     
 }

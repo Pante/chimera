@@ -46,7 +46,7 @@ public abstract class Filter extends SimpleElementVisitor9<Element, Void> {
     
 }
 
-@Stateless class ClassFilter extends Filter {
+class ClassFilter extends Filter {
     
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -65,7 +65,7 @@ public abstract class Filter extends SimpleElementVisitor9<Element, Void> {
     
 }
 
-@Stateless class PackageFilter extends Filter {
+class PackageFilter extends Filter {
     
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -80,7 +80,7 @@ public abstract class Filter extends SimpleElementVisitor9<Element, Void> {
     
 }
 
-@Stateless class ModuleFilter extends Filter {
+class ModuleFilter extends Filter {
     
     @Override
     public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {

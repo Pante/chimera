@@ -8,7 +8,6 @@ Big Ol' list of changes:
 Annotations has been undergone a few tweaks.
 
 - Add `@Delegate`
-- Add `@Stateless`
 - Add `@VisibleForOverride`
 - Add `Filter`
 - Change `RetentionPolicy` of annotations from `RUNTIME` to `SOURCE`
@@ -86,7 +85,7 @@ more information.
 - Fix incorrect copyright header in files
 
 
-## 4.5.0 - It's a world of laughter (21/02/2019)
+## 4.5.0 - It's a world of laughter (23/02/2020)
 
 This update introduces `Scribe Maven Plugin` for Maven.
 

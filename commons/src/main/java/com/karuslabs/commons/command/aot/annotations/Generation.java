@@ -21,24 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.annotations;
 
-import com.karuslabs.annotations.Static;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-public @Static class Messages {
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE})
+public @interface Generation {
     
-    public static String reason(String reason, Token token) {
-        return reason + ": " + token;
-    }
+    String folder() default "";
     
-    public static String reason(String reason, String value, String context) {
-        return reason + ": " + location(value, context);
-    }
-    
-
-    public static String location(String value, String context) {
-        return "'" + value + "' in '" + context + "'";
-    }
+    String file() default "Commands.java";
     
 }

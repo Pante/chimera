@@ -21,35 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.analyzer;
+package com.karuslabs.commons.command.aot.resolvers;
 
 import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.aot.*;
 
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import java.util.List;
+
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
-import javax.lang.model.util.SimpleElementVisitor9;
 
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import org.bukkit.command.CommandSender;
+
+import static javax.lang.model.element.Modifier.*;
 
 
-public class MethodVisitor extends SimpleElementVisitor9<Void, IR> {
+public class MethodResolver extends Resolver<ExecutableElement> {
 
-    private Environment environment;
     TypeMirror context;
     TypeMirror defaultable;
     TypeMirror exception;
     
     
-    public MethodVisitor(Environment environment) {
-        this.environment = environment;
-        
+    public MethodResolver(Environment environment) {
+        super(environment);
         var elements = environment.elements;
         var types = environment.types;
         var sender = elements.getTypeElement(CommandSender.class.getName()).asType();
@@ -58,27 +55,22 @@ public class MethodVisitor extends SimpleElementVisitor9<Void, IR> {
         defaultable = types.getDeclaredType(elements.getTypeElement(OptionalContext.class.getName()), sender);
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
     }
-    
+
     
     @Override
-    public Void visitExecutable(ExecutableElement method, IR ir) {
+    public void resolve(Token token, ExecutableElement method, Token binding) {
         var modifiers = method.getModifiers();
-        if (!modifiers.contains(Modifier.PUBLIC) || modifiers.contains(Modifier.STATIC)) {
-            environment.error("Invalid method: '" + method.getSimpleName() + "', method must be public and non-static", method);
-            return null;
+        if (!modifiers.contains(PUBLIC) || modifiers.contains(STATIC)) {
+            environment.error(method, "Method must be public and non-static");
+            return;
         }
+        
+        if (signature(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
+            token.bind(environment, Binding.EXECUTION, binding);
 
-        var parameters = method.getParameters();
-        if (!signature(method.getReturnType(), parameters) || !exceptions(method.getThrownTypes())) {
-            environment.error("Invalid method: " + method.getSimpleName() + ", method signature must match either Command<CommandSender> or Executable<CommandSender>", method);
-            return null;
+        } else {
+            environment.error(method, "Signature must match either Command<CommandSender> or Executable<CommandSender>");
         }
-        
-        if (!ir.execution(method)) {
-            environment.error(reason("Invalid binding", ir.bindings.get(method), "binding already exists"), method);
-        }
-        
-        return null;
     }
     
     

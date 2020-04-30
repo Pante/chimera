@@ -23,22 +23,28 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.annotations.Static;
 
-
-public @Static class Messages {
+public enum Binding {
     
-    public static String reason(String reason, Token token) {
-        return reason + ": " + token;
+    EXECUTION("A", "Command<CommandSender>", "execution"), 
+    TYPE("An", "ArgumentType<?>", "type"), 
+    SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "sugggestions");
+    
+    public final String article;
+    public final String signature;
+    private final String value;
+    
+
+    private Binding(String article, String signature, String value) {
+        this.article = article;
+        this.signature = signature;
+        this.value = value;
     }
     
-    public static String reason(String reason, String value, String context) {
-        return reason + ": " + location(value, context);
-    }
     
-
-    public static String location(String value, String context) {
-        return "'" + value + "' in '" + context + "'";
+    @Override
+    public String toString() {
+        return value;
     }
     
 }

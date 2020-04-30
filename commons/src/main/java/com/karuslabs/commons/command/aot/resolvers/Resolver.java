@@ -21,17 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations;
+package com.karuslabs.commons.command.aot.resolvers;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.command.aot.*;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import javax.lang.model.element.Element;
 
 
-@Documented
-@Retention(SOURCE)
-@Target(TYPE)
-public @interface Stateless {
+public abstract class Resolver<T extends Element> {
 
+    protected Environment environment;
+    
+    
+    public Resolver(Environment environment) {
+        this.environment = environment;
+    }
+    
+    
+    public abstract void resolve(Token token, T element, Token binding);
+    
 }
