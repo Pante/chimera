@@ -21,24 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.*;
 
+import java.util.List;
+import java.util.regex.*;
 import javax.lang.model.element.Element;
 
+import static java.util.Collections.EMPTY_LIST;
 
-public class GenerationParser extends Parser {
 
-    public GenerationParser(Environment environment, Lexer lexer) {
-        super(environment, lexer);
-    }
+public class OutputLexer implements Lexer {
+    
+    static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
+    static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
 
     
     @Override
-    public void parse(Element element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Token> lex(Environment environment, Element location, String folder, String file) {
+        if (!PACKAGE.reset(folder).matches()) {
+            environment.error(location, "Invalid package name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
+            return EMPTY_LIST;
+        }
+        
+        if (!FILE.reset(file).matches()) {
+            environment.error(location, "Invalid file name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
+            return EMPTY_LIST;
+        }
+        
+        return List.of(Token.generation(location, folder + "." + file));
     }
 
 }

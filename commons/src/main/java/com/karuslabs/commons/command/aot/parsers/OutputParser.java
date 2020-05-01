@@ -21,36 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.annotations.processor.Filter;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.annotations.Output;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
 
-import java.util.List;
-import java.util.regex.*;
-import javax.lang.model.element.Element;
-
-import static java.util.Collections.EMPTY_LIST;
+import javax.lang.model.element.*;
 
 
-public class GenerationLexer implements Lexer {
-    
-    static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
-    static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
+public class OutputParser extends Parser {
+
+    public OutputParser(Environment environment, Lexer lexer) {
+        super(environment, lexer);
+    }
 
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String folder, String file) {
-        if (!PACKAGE.reset(folder).matches()) {
-            environment.error(location, "Invalid package name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
-            return EMPTY_LIST;
-        }
+    public void parse(Element element) {
+        var output = element.getAnnotation(Output.class);
         
-        if (!FILE.reset(file).matches()) {
-            environment.error(location, "Invalid file name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
-            return EMPTY_LIST;
+        var folder = output.folder();
+        if (folder.isBlank()) {
+            folder = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
         }
-        
-        return List.of(Token.generation(location, folder + "." + file));
     }
 
 }

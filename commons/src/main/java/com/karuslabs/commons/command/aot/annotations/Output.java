@@ -32,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
-public @interface Generation {
+public @interface Output {
     
     String folder() default "";
     

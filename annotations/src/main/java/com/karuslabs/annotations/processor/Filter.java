@@ -31,59 +31,59 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public abstract class Filter extends SimpleElementVisitor9<Element, Void> {
+public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
-    public static final Filter CLASS = new ClassFilter();
-    public static final Filter PACKAGE = new PackageFilter();
-    public static final Filter MODULE = new ModuleFilter();
+    public static final Filter<TypeElement> CLASS = new ClassFilter();
+    public static final Filter<PackageElement> PACKAGE = new PackageFilter();
+    public static final Filter<ModuleElement> MODULE = new ModuleFilter();
     
     
     @Override
-    protected @Nullable Element defaultAction(Element element, @Ignored Void parameter) {
+    protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();
         return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
     }
     
 }
 
-class ClassFilter extends Filter {
+class ClassFilter extends Filter<TypeElement> {
     
     @Override
-    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable TypeElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
+    public @Nullable TypeElement visitPackage(PackageElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public Element visitType(TypeElement element, @Ignored Void parameter) {
+    public TypeElement visitType(TypeElement element, @Ignored Void parameter) {
         return element;
     }
     
 }
 
-class PackageFilter extends Filter {
+class PackageFilter extends Filter<PackageElement> {
     
     @Override
-    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable PackageElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
     
     @Override
-    public @Nullable Element visitPackage(PackageElement element, @Ignored Void parameter) {
+    public @Nullable PackageElement visitPackage(PackageElement element, @Ignored Void parameter) {
         return element;
     }
     
 }
 
-class ModuleFilter extends Filter {
+class ModuleFilter extends Filter<ModuleElement> {
     
     @Override
-    public @Nullable Element visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable ModuleElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return element;
     }
     
