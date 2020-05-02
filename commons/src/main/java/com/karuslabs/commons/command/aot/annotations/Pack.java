@@ -21,31 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.annotations;
 
-import com.karuslabs.annotations.processor.Filter;
-import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.commons.command.aot.annotations.Output;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
+import java.lang.annotation.*;
 
-import javax.lang.model.element.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-public class OutputParser extends Parser {
+@Documented
+@Retention(SOURCE)
+@Target(TYPE)
+public @interface Pack {
 
-    public OutputParser(Environment environment, Lexer lexer) {
-        super(environment, lexer);
-    }
-
+    public static final String RELATIVE_PACKAGE = "${relative}";
     
-    @Override
-    public void parse(Element element) {
-        var output = element.getAnnotation(Output.class);
-        
-        var folder = output.folder();
-        if (folder.isBlank()) {
-            folder = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
-        }
-    }
-
+    
+    String name() default RELATIVE_PACKAGE;
+    
+    String file() default "Commands.java";
+    
 }

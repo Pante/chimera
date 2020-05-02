@@ -21,36 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.generation;
 
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.annotations.processor.Filter;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.annotations.Pack;
 
-import java.util.List;
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static java.util.Collections.EMPTY_LIST;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class OutputLexer implements Lexer {
+public class Package {
     
     static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
     static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
+    
+    
+    private Environment environment;
+    
+    
+    public Package(Environment environment) {
+        this.environment = environment;
+    }
 
     
-    @Override
-    public List<Token> lex(Environment environment, Element location, String folder, String file) {
-        if (!PACKAGE.reset(folder).matches()) {
-            environment.error(location, "Invalid package name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
-            return EMPTY_LIST;
+    public @Nullable String resolve(Element element) {
+        var pack = element.getAnnotation(Pack.class);
+        
+        var name = pack.name();
+        if (Pack.RELATIVE_PACKAGE.equals(name)) {
+            name = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
+            
+        } else if (!PACKAGE.reset(name).matches()) {
+            environment.error(element, "Invalid package name");
+            return null;
         }
         
-        if (!FILE.reset(file).matches()) {
-            environment.error(location, "Invalid file name, https://docs.oracle.com/javase/specs/jls/se11/html/jls-3.html#jls-3.8");
-            return EMPTY_LIST;
+        var file = pack.file();
+        if (!file.endsWith(".java")) {
+            environment.error(element, "File name must end with '.java'");
+            return null;
+            
+        } else if (!FILE.reset(file).matches()) {
+            environment.error(element, "Invalid file name");
+            return null;
+            
+        } else {
+            return name + "." + file;
         }
-        
-        return List.of(Token.generation(location, folder + "." + file));
     }
 
 }

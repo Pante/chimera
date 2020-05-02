@@ -51,10 +51,6 @@ public class Token {
         return new Token(location, lexeme, Type.LITERAL, aliases, String.join("|", lexeme, String.join("|", aliases)), context);
     }
     
-    public static Token generation(Element location, String file) {
-        return new Token(location, file, Type.GENERATION, Set.of(), file, "");
-    }
-    
     public static Token root() {
         return new Token(null, "", Type.ROOT, Set.of(), "", "");
     }

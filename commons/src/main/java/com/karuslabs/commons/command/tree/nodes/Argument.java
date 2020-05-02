@@ -50,7 +50,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     private CommandNode<T> destination;
     private Consumer<CommandNode<T>> addition;
-
+    
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);

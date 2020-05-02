@@ -29,6 +29,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import java.util.function.Predicate;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
@@ -43,6 +44,7 @@ public class VariableResolver extends Resolver<VariableElement> {
     Types types;
     TypeMirror command;
     TypeMirror argumentType;
+    TypeMirror requirement;
     TypeMirror suggestions;
     
     
@@ -55,6 +57,7 @@ public class VariableResolver extends Resolver<VariableElement> {
         
         command = types.getDeclaredType(elements.getTypeElement(Command.class.getName()), sender);
         argumentType = types.erasure(elements.getTypeElement(ArgumentType.class.getName()).asType());
+        requirement = types.getDeclaredType(elements.getTypeElement(Predicate.class.getName()), sender);
         suggestions = types.getDeclaredType(elements.getTypeElement(SuggestionProvider.class.getName()), sender);
     }
 
@@ -74,8 +77,14 @@ public class VariableResolver extends Resolver<VariableElement> {
         } else if (types.isSubtype(type, argumentType)) {
             token.bind(environment, Binding.TYPE, token);
             
-        } else {
+        } else if (types.isSubtype(type, requirement)) {
+            token.bind(environment, Binding.REQUIREMENT, token);
+            
+        } else if (types.isSubtype(type, suggestions)) {
             token.bind(environment, Binding.SUGGESTIONS, token);
+            
+        } else {
+            environment.error(variable, variable.asType() + " must be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 

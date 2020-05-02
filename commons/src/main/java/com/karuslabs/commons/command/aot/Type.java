@@ -26,7 +26,7 @@ package com.karuslabs.commons.command.aot;
 
 public enum Type {
     
-    ARGUMENT("argument"), LITERAL("literal"), ROOT("root"), GENERATION("generation");
+    ARGUMENT("argument"), LITERAL("literal"), ROOT("root");
         
     private final String value;
 

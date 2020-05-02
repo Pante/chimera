@@ -40,6 +40,7 @@ import static javax.lang.model.element.Modifier.*;
 
 public class MethodResolver extends Resolver<ExecutableElement> {
 
+    TypeMirror sender;
     TypeMirror context;
     TypeMirror defaultable;
     TypeMirror exception;
@@ -49,8 +50,8 @@ public class MethodResolver extends Resolver<ExecutableElement> {
         super(environment);
         var elements = environment.elements;
         var types = environment.types;
-        var sender = elements.getTypeElement(CommandSender.class.getName()).asType();
         
+        sender = elements.getTypeElement(CommandSender.class.getName()).asType();
         context = types.getDeclaredType(elements.getTypeElement(CommandContext.class.getName()), sender);
         defaultable = types.getDeclaredType(elements.getTypeElement(OptionalContext.class.getName()), sender);
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
@@ -65,16 +66,19 @@ public class MethodResolver extends Resolver<ExecutableElement> {
             return;
         }
         
-        if (signature(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
+        if (command(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
             token.bind(environment, Binding.EXECUTION, binding);
 
+        } else if (predicate(method.getReturnType(), method.getParameters())) {
+            token.bind(environment, Binding.REQUIREMENT, binding);
+            
         } else {
             environment.error(method, "Signature must match either Command<CommandSender> or Executable<CommandSender>");
         }
     }
+
     
-    
-    boolean signature(TypeMirror type, List<? extends VariableElement> parameters) {
+    boolean command(TypeMirror type, List<? extends VariableElement> parameters) {
         if (parameters.size() != 1) {
             return false;
         }
@@ -89,6 +93,16 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     
     boolean exceptions(List<? extends TypeMirror> thrown) {
         return thrown.isEmpty() || (thrown.size() == 1 && environment.types.isSubtype(thrown.get(0), exception));
+    }
+    
+    
+    boolean predicate(TypeMirror type, List<? extends VariableElement> parameters) {
+        if (parameters.size() != 1) {
+            return false;
+        }
+        
+        var types = environment.types;
+        return type.getKind() == TypeKind.BOOLEAN && types.isSameType(sender, parameters.get(0).asType());
     }
     
 }

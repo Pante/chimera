@@ -27,7 +27,8 @@ package com.karuslabs.commons.command.aot;
 public enum Binding {
     
     EXECUTION("A", "Command<CommandSender>", "execution"), 
-    TYPE("An", "ArgumentType<?>", "type"), 
+    TYPE("An", "ArgumentType<?>", "type"),
+    REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
     SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "sugggestions");
     
     public final String article;
