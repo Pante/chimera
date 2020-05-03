@@ -33,21 +33,23 @@ import javax.lang.model.element.Element;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Package {
+public class Packager {
     
     static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
     static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
     
     
     private Environment environment;
+    private @Nullable String pack;
+    private @Nullable String file;
     
     
-    public Package(Environment environment) {
+    public Packager(Environment environment) {
         this.environment = environment;
     }
 
     
-    public @Nullable String resolve(Element element) {
+    public void resolve(Element element) {
         var pack = element.getAnnotation(Pack.class);
         
         var name = pack.name();
@@ -56,21 +58,29 @@ public class Package {
             
         } else if (!PACKAGE.reset(name).matches()) {
             environment.error(element, "Invalid package name");
-            return null;
+            return;
         }
         
         var file = pack.file();
         if (!file.endsWith(".java")) {
             environment.error(element, "File name must end with '.java'");
-            return null;
             
         } else if (!FILE.reset(file).matches()) {
             environment.error(element, "Invalid file name");
-            return null;
             
         } else {
-            return name + "." + file;
+            this.pack = name;
+            this.file = file;
         }
+    }
+    
+    
+    public @Nullable String pack() {
+        return pack;
+    }
+    
+    public @Nullable String file() {
+        return file;
     }
 
 }
