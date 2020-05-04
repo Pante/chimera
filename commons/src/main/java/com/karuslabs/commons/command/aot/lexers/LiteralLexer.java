@@ -70,7 +70,7 @@ public class LiteralLexer implements Lexer {
         
         var names = value.split("\\|");
         if (names.length == 0) {
-            environment.error(location, reason("Literals cannot be blank", value, context));
+            environment.error(location, "Blank literal found in command: '" + context + "'");
         }
         
         return names;
@@ -79,15 +79,11 @@ public class LiteralLexer implements Lexer {
     
     boolean valid(Environment environment, Element location, String value, String context) {
         if (value.isBlank()) {
-            environment.error(location,reason("Literals cannot be blank", value, context));
+            environment.error(location, "Blank literal found in command: '" + context + "'");
             return false;
             
         } else if (value.contains("<") || value.contains(">")) {
-            environment.error(location,reason("Literals cannot contain '<' and '>'",  value , context));
-            return false;
-            
-        } else if (value.contains("|")) {
-            environment.error(location,reason("Literals cannot contain '|'", value, context));
+            environment.error(location,reason("Literal cannot contain '<' and '>'",  value , context));
             return false;
             
         } else {

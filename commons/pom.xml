@@ -53,7 +53,7 @@
     
     
     <build>
-        <defaultGoal>install</defaultGoal>
+        <defaultGoal>clean package install</defaultGoal>
         <plugins>  
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -37,19 +37,19 @@ public class ArgumentLexer implements Lexer {
     @Override
     public List<Token> lex(Environment environment, Element location, String value, String context) {
         if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(location, reason("Arguments must be enclosed by '<' and '>'", value, context));
+            environment.error(location, reason("An argument must be enclosed by '<' and '>'", value, context));
             return EMPTY_LIST;
         }
         
         if (value.contains("|")) {
-            environment.error(location, reason("Arguments cannot contain '|'", value, context));
+            environment.error(location, reason("Argument cannot contain '|'", value, context));
             return EMPTY_LIST;
         }
         
         
         var argument = value.substring(1, value.length() - 1);
         if (argument.isBlank()) {
-            environment.error(location, reason("Arguments cannot be blank", value, context));
+            environment.error(location, reason("Argument cannot be blank", value, context));
             return EMPTY_LIST;
         }
         
@@ -58,7 +58,7 @@ public class ArgumentLexer implements Lexer {
             return EMPTY_LIST;
         }
         
-        return List.of(Token.argument(location, value, context));
+        return List.of(Token.argument(location, argument, context));
     }
     
 }

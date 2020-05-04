@@ -38,7 +38,7 @@ public @Static class Messages {
     
 
     public static String location(String value, String context) {
-        return "'" + value + "' in '" + context + "'";
+        return "'" + value + "' in command: '" + context + "'";
     }
     
 }

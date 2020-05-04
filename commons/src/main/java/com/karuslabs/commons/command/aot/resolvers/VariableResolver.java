@@ -72,16 +72,16 @@ public class VariableResolver extends Resolver<VariableElement> {
         
         var type = variable.asType();
         if (types.isSubtype(type, command)) {
-            token.bind(environment, Binding.EXECUTION, token);
+            token.bind(environment, Binding.EXECUTION, binding);
             
         } else if (types.isSubtype(type, argumentType)) {
-            token.bind(environment, Binding.TYPE, token);
+            token.bind(environment, Binding.TYPE, binding);
             
         } else if (types.isSubtype(type, requirement)) {
-            token.bind(environment, Binding.REQUIREMENT, token);
+            token.bind(environment, Binding.REQUIREMENT, binding);
             
         } else if (types.isSubtype(type, suggestions)) {
-            token.bind(environment, Binding.SUGGESTIONS, token);
+            token.bind(environment, Binding.SUGGESTIONS, binding);
             
         } else {
             environment.error(variable, variable.asType() + " must be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");

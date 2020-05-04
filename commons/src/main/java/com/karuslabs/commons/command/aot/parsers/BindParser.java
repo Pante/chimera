@@ -63,26 +63,28 @@ public class BindParser extends Parser {
         
         for (var binding : bindings) {
             var tokens = lexer.lex(environment, element, binding);
-            if (valid(tokens)) {
-                if (tokens.size() == 1) {
-                    matchAny(root, element, tokens.get(0));
-                    
-                } else {
-                    matchExact(root, element, tokens);
-                }
+            if (tokens.size() == 1 && matchAny(root, element, tokens.get(0)) == 0) {
+                environment.error(element, "'" + tokens.get(0).literal + "' does not exist");
+
+            } else if (tokens.size() > 1) {
+                matchExact(root, element, tokens);
             }
         }
     }
     
     
-    void matchAny(Token current, Element element, Token binding) {
+    int matchAny(Token current, Element element, Token binding) {
+        int matches = 0;
         if (current.lexeme.equals(binding.lexeme) && current.type == binding.type) {
             resolve(current, element, binding);
+            matches++;
         }
 
         for (var child : current.children.values()) {
-            matchAny(child, element, binding);
+            matches += matchAny(child, element, binding);
         }
+        
+        return matches;
     }
     
     void matchExact(Token current, Element element, List<Token> bindings) {

@@ -48,7 +48,13 @@ public class Token {
     }
     
     public static Token literal(Element location, String lexeme, Set<String> aliases, String context) {
-        return new Token(location, lexeme, Type.LITERAL, aliases, String.join("|", lexeme, String.join("|", aliases)), context);
+        var literal = lexeme;
+        if (!aliases.isEmpty()) {
+            literal = literal + "|" + String.join("|", aliases);
+        }
+        
+        System.out.println("Token aliases: " + aliases.size());
+        return new Token(location, lexeme, Type.LITERAL, aliases, literal, context);
     }
     
     public static Token root() {
@@ -98,10 +104,10 @@ public class Token {
     public void bind(Environment environment, Binding binding, Token token) {
         var existing = bindings.get(binding);
         if (existing != null) {
-            environment.error(token.location, binding.article + " " + binding.signature + " is already bound to " + token);
+            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + token);
             
         } else if (binding == Binding.TYPE && type != Type.ARGUMENT) {
-            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to a literal" + token);
+            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to literal: " + token);
        
         } else {
             bindings.put(binding, token);
