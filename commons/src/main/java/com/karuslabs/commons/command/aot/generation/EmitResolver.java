@@ -25,15 +25,17 @@ package com.karuslabs.commons.command.aot.generation;
 
 import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.commons.command.aot.annotations.Pack;
+import com.karuslabs.commons.command.aot.annotations.Emit;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static com.karuslabs.commons.command.aot.annotations.Emit.RELATIVE_PACKAGE;
 
-public class Packager {
+
+public class EmitResolver {
     
     static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
     static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
@@ -45,34 +47,31 @@ public class Packager {
     private @Nullable String file;
     
     
-    public Packager(Environment environment) {
+    public EmitResolver(Environment environment) {
         this.environment = environment;
     }
 
     
     public void resolve(Element element) {
-        var pack = element.getAnnotation(Pack.class);
+        this.element = element;
         
-        var name = pack.name();
-        if (Pack.RELATIVE_PACKAGE.equals(name)) {
-            name = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
+        var emit = element.getAnnotation(Emit.class);
+        var value = emit.pack();
+        
+        if (RELATIVE_PACKAGE.equals(value)) {
+            pack = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
+            file = "Commands";
             
-        } else if (!PACKAGE.reset(name).matches()) {
+        } else if (value.endsWith(".java")) {
+            environment.error(element, "File ends with \".java\", should not end with file extension");
+            
+        }  else if (!PACKAGE.reset(value).matches()) {
             environment.error(element, "Invalid package name");
-            return;
-        }
-        
-        var file = pack.file();
-        if (!file.endsWith(".java")) {
-            environment.error(element, "File name must end with '.java'");
-            
-        } else if (!FILE.reset(file).matches()) {
-            environment.error(element, "Invalid file name");
             
         } else {
-            this.element = element;
-            this.pack = name;
-            this.file = file;
+            int dot = value.lastIndexOf(".");
+            pack = value.substring(0, dot);
+            file = value.substring(dot + 1, value.length());
         }
     }
     

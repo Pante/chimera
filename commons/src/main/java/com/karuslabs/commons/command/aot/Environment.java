@@ -68,11 +68,6 @@ public class Environment {
     }
 
     
-    public void error(String message) {
-        messager.printMessage(ERROR, message);
-        error = true;
-    }
-    
     public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);
         error = true;

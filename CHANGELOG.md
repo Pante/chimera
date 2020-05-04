@@ -10,6 +10,9 @@ Annotations has been undergone a few tweaks.
 - Add `@Delegate`
 - Add `@VisibleForOverride`
 - Add `Filter`
+- Add `AnnotationProcessor.error(String)`
+- Add `AnnotationProcessor.warn(String)`
+- Add `AnnotationProcessor.note(String)`
 - Change `RetentionPolicy` of annotations from `RUNTIME` to `SOURCE`
 - Change `com.karuslabs.annotations.processors` to `com.karuslabs.annotations.processer`
 - Remove `com.karuslabs.annotations.filters` - All the current filters are available in `Filter`

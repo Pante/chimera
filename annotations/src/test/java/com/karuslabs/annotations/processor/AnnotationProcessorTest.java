@@ -70,13 +70,25 @@ class AnnotationProcessorTest {
     
     @Test
     void error() {
+        processor.error("Error");
+        verify(messager).printMessage(ERROR, "Error");
+    }
+    
+    @Test
+    void error_element() {
         processor.error(element, "Error");
         verify(messager).printMessage(ERROR, "Error", element);
     }
     
     
     @Test
-    void warn() {      
+    void warn() {
+        processor.warn("Warning");
+        verify(messager).printMessage(WARNING, "Warning");
+    }
+    
+    @Test
+    void warn_element() {      
         processor.warn(element, "Warning");
         verify(messager).printMessage(WARNING, "Warning", element);
     }
@@ -84,6 +96,12 @@ class AnnotationProcessorTest {
     
     @Test
     void note() {
+        processor.note("Note");
+        verify(messager).printMessage(NOTE, "Note");
+    }
+    
+    @Test
+    void note_element() {
         processor.note(element, "Note");
         verify(messager).printMessage(NOTE, "Note", element);
     }

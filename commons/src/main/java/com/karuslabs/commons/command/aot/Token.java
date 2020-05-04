@@ -53,7 +53,6 @@ public class Token {
             literal = literal + "|" + String.join("|", aliases);
         }
         
-        System.out.println("Token aliases: " + aliases.size());
         return new Token(location, lexeme, Type.LITERAL, aliases, literal, context);
     }
     

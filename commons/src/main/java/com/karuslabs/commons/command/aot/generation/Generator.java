@@ -35,23 +35,23 @@ import javax.lang.model.element.*;
 public class Generator {
     
     private Environment environment;
-    private Packager packager;
+    private EmitResolver resolver;
     private TypeBlock type;
     private MethodBlock method;
     
     
-    public Generator(Environment environment, Packager pack, TypeBlock type, MethodBlock method) {
+    public Generator(Environment environment, EmitResolver resolver, TypeBlock type, MethodBlock method) {
         this.environment = environment;
-        this.packager = pack;
+        this.resolver = resolver;
         this.type = type;
         this.method = method;
     }
     
     
     public void generate() {
-        var file = packager.pack().isBlank() ? packager.file() : packager.pack() + "." + packager.file();
+        var file = resolver.pack().isBlank() ? resolver.file() : resolver.pack() + "." + resolver.file();
         try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, environment.scopes.keySet().toArray(new Element[0])).openWriter())) {
-            type.start(packager.pack(), packager.file().replaceAll("\\.java", ""));
+            type.start(resolver.pack(), resolver.file());
         
             for (var entry : environment.scopes.entrySet()) {
                 method.start((TypeElement) entry.getKey());
@@ -60,11 +60,11 @@ public class Generator {
 
             writer.write(type.end());
             
-        } catch (FilerException e) {
-            environment.error(packager.element(), file + " already exists");
+        } catch (FilerException ignored) {
+            environment.error(resolver.element(), resolver.file() + " already exists");
             
-        } catch (IOException e) {
-            environment.error(packager.element(), "Failed to create file: '" + file + "'");
+        } catch (IOException ignored) {
+            environment.error(resolver.element(), "Failed to create file: '" + resolver.file() + "'");
         }
     }
     

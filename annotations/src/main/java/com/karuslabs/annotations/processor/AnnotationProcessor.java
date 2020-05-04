@@ -74,12 +74,26 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     }
     
     
+    public void error(String message) {
+        messager.printMessage(ERROR, message);
+    }
+    
     public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);
     }
     
+    
+    public void warn(String message) {
+        messager.printMessage(WARNING, message);
+    }
+    
     public void warn(Element element, String message) {
         messager.printMessage(WARNING, message, element);
+    }
+    
+    
+    public void note(String message) {
+         messager.printMessage(NOTE, message);
     }
     
     public void note(Element element, String message) {

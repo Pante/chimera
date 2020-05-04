@@ -42,9 +42,10 @@ public class TypeBlock {
         builder.append("// This file was generated at ").append(LocalDateTime.now()).append(" using Chimera AOT 4.6.0\n");
         builder.append("package ").append(pack).append(";\n\n");
         builder.append("import com.karuslabs.commons.command.tree.nodes.*;\n\n");
+        builder.append("import com.mojang.brigadier.tree.CommandNode;\n\n");
         builder.append("import java.util.*;\n");
         builder.append("import java.util.function.Predicate;\n\n");
-        builder.append("import import org.bukkit.command.CommandSender;;\n\n\n");
+        builder.append("import org.bukkit.command.CommandSender;\n\n\n");
         builder.append("public class ").append(type).append(" {\n\n");
         builder.append("    private static final Predicate<CommandSender> REQUIREMENT = s -> true;\n\n");
     }

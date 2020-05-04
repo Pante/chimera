@@ -37,7 +37,7 @@ import com.karuslabs.commons.command.aot.resolvers.*;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.annotation.processing.*;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
@@ -51,32 +51,40 @@ public class Processor extends AnnotationProcessor {
     Parser command;
     Parser bind;
     Analyzer analyzer;
-    Packager packager;
+    EmitResolver resolver;
     Generator generator;
+    boolean compiled;
     
     
     @Override
     public void init(ProcessingEnvironment env) {
+        super.init(env);
+        
         var lexer = new CommandLexer(new LiteralLexer(), new ArgumentLexer());
         
         environment = new Environment(env.getMessager(), env.getFiler(), env.getElementUtils(), env.getTypeUtils());
         command = new CommandParser(environment, lexer);
         bind = new BindParser(environment, lexer, new MethodResolver(environment), new VariableResolver(environment));
         analyzer = new Analyzer(environment);
-        packager = new Packager(environment);
-        generator = new Generator(environment, packager, new TypeBlock(), new MethodBlock());
+        resolver = new EmitResolver(environment);
+        generator = new Generator(environment, resolver, new TypeBlock(), new MethodBlock());
     }
     
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        pack(env);
+        if (compiled) {
+            return false;
+        }
+        
+        resolveLocation(env);
         parse(command, annotations, env, Command.class);
         parse(bind, annotations, env, Bind.class);
         analyzer.analyze();
         
         if (!environment.error()) {
             generator.generate();
+            compiled = true;
         }
         
         environment.clear();
@@ -84,18 +92,18 @@ public class Processor extends AnnotationProcessor {
     }
     
     
-    void pack(RoundEnvironment env) {
-        var elements = env.getElementsAnnotatedWith(Pack.class);
-        if (elements.isEmpty()) {
-            environment.error("Project must contain at least one @Pack annotation");
+    void resolveLocation(RoundEnvironment env) {
+        var elements = env.getElementsAnnotatedWith(Emit.class);
+        if (elements.size() == 1) {
+            resolver.resolve(elements.toArray(new Element[0])[0]);
+            
+        } else if (elements.isEmpty()) {
+            error("Project must contain at least one @Pack annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {
-                environment.error(element, "Project must contain only one @Pack annotation");
-            }
-            
-        } else {
-            packager.resolve(elements.toArray(ARRAY)[0]);
+                error(element, "Project must contain only one @Pack annotation");
+            } 
         }
     }
     

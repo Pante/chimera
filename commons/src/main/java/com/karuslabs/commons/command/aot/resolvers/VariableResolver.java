@@ -29,8 +29,9 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
+import java.util.Set;
 import java.util.function.Predicate;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
@@ -40,6 +41,8 @@ import static javax.lang.model.element.Modifier.*;
 
 
 public class VariableResolver extends Resolver<VariableElement> {
+    
+    static final Set<Modifier> MODIFIERS = Set.of(PUBLIC, FINAL);
 
     Types types;
     TypeMirror command;
@@ -65,8 +68,8 @@ public class VariableResolver extends Resolver<VariableElement> {
     @Override
     public void resolve(Token token, VariableElement variable, Token binding) {
         var modifiers = variable.getModifiers();
-        if (!modifiers.contains(PUBLIC) || modifiers.contains(STATIC)) {
-            environment.error(variable, "Field must be public and non-static");
+        if (!modifiers.containsAll(MODIFIERS) || modifiers.contains(STATIC)) {
+            environment.error(variable, "Field should be public, final and non-static");
             return;
         }
         
@@ -84,7 +87,7 @@ public class VariableResolver extends Resolver<VariableElement> {
             token.bind(environment, Binding.SUGGESTIONS, binding);
             
         } else {
-            environment.error(variable, variable.asType() + " must be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
+            environment.error(variable, variable.asType() + " should be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 

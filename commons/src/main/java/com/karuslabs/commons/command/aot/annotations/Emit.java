@@ -32,13 +32,11 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target(TYPE)
-public @interface Pack {
+public @interface Emit {
 
     public static final String RELATIVE_PACKAGE = "${relative}";
     
     
-    String name() default RELATIVE_PACKAGE;
-    
-    String file() default "Commands.java";
-    
+    String pack() default RELATIVE_PACKAGE;
+
 }

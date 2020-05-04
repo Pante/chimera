@@ -53,17 +53,17 @@ public class MethodBlock {
     
     
     public void start(TypeElement element) {
-        variables.add("command");
+        variables.add("source");
         variables.add("commands");
         
         builder.setLength(0);
-        builder.append("    public static Map<String, CommandNode<CommandSender> of(").append(element.getQualifiedName()).append(" command) {\n");
+        builder.append("    public static Map<String, CommandNode<CommandSender>> of(").append(element.getQualifiedName()).append(" source) {\n");
         builder.append("        var commands = new HashMap<String, CommandNode<CommandSender>>();\n\n");
     }
     
     
     public String command(Token token) {
-        var variable = token.lexeme;
+        var variable = "command";
         while (!variables.add(variable)) {
             variable = variable + count++;
         }
@@ -123,10 +123,10 @@ public class MethodBlock {
       
         var element = parameter.location;
         if (element instanceof ExecutableElement) {
-            return "command::" + element.getSimpleName();
+            return "source::" + element.getSimpleName();
             
         } else if (element instanceof VariableElement) {
-            return "command." + element.getSimpleName();
+            return "source." + element.getSimpleName();
             
         } else {
             return value;
