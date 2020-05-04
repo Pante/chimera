@@ -93,7 +93,7 @@ public class MethodBlock {
             parameter(token, Binding.TYPE, "null"),
             parameter(token, Binding.EXECUTION, "null"),
             parameter(token, Binding.REQUIREMENT, "REQUIREMENT"),
-            parameter(token, Binding.SUGGESTIONS, "null")
+            parameter(token, Binding.SUGGESTIONS, "null"),
         }));
     }
     
@@ -102,7 +102,7 @@ public class MethodBlock {
             variable,
             StringEscapeUtils.escapeJava(token.lexeme),
             parameter(token, Binding.EXECUTION, "null"),
-            parameter(token, Binding.REQUIREMENT, "REQUIREMENT")
+            parameter(token, Binding.REQUIREMENT, "REQUIREMENT"),
         }));
         
         var parameters = new Object[2];
