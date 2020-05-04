@@ -139,7 +139,7 @@ public class MethodBlock {
     }
     
     
-    public String end(Set<String> roots) {
+    public String end(List<String> roots) {
         for (var root : roots) {
             builder.append("        commands.put(").append(root).append(".getName(), ").append(root).append(");\n");
         }

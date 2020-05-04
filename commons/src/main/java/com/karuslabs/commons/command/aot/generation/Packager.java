@@ -40,6 +40,7 @@ public class Packager {
     
     
     private Environment environment;
+    private @Nullable Element element;
     private @Nullable String pack;
     private @Nullable String file;
     
@@ -69,11 +70,16 @@ public class Packager {
             environment.error(element, "Invalid file name");
             
         } else {
+            this.element = element;
             this.pack = name;
             this.file = file;
         }
     }
     
+    
+    public @Nullable Element element() {
+        return element;
+    }
     
     public @Nullable String pack() {
         return pack;

@@ -35,7 +35,7 @@ import com.karuslabs.annotations.VisibleForOverride;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
-    private static final TypeElement[] ARRAY = new TypeElement[0];
+    protected static final TypeElement[] ARRAY = new TypeElement[0];
     
     
     protected Elements elements;

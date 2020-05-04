@@ -37,7 +37,7 @@ public class CommandLexer implements Lexer {
     private Lexer argument;
     
     
-    CommandLexer(Lexer literal, Lexer argument) {
+    public CommandLexer(Lexer literal, Lexer argument) {
         this.literal = literal;
         this.argument = argument;
     }

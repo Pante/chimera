@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot;
 
 import java.util.*;
-import javax.annotation.processing.Messager;
+import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 import javax.lang.model.util.*;
 
@@ -34,14 +34,16 @@ import static javax.tools.Diagnostic.Kind.*;
 public class Environment {
 
     public final Messager messager;
+    public final Filer filer;
     public final Elements elements;
     public final Types types;
     public final Map<Element, Token> scopes;
     boolean error;
     
     
-    public Environment(Messager messager, Elements elements, Types types) {
+    public Environment(Messager messager, Filer filer, Elements elements, Types types) {
         this.messager = messager;
+        this.filer = filer;
         this.elements = elements;
         this.types = types;
         scopes = new HashMap<>();
@@ -58,7 +60,18 @@ public class Environment {
         
         return existing;
     }
+    
+    
+    public void clear() {
+        scopes.clear();
+        error = false;
+    }
 
+    
+    public void error(String message) {
+        messager.printMessage(ERROR, message);
+        error = true;
+    }
     
     public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);

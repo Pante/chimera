@@ -26,31 +26,68 @@ package com.karuslabs.commons.command.aot.generation;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.generation.blocks.*;
 
+import java.io.*;
 import java.util.*;
+import javax.annotation.processing.FilerException;
+import javax.lang.model.element.*;
 
 
 public class Generator {
     
     private Environment environment;
-    private Packager pack;
+    private Packager packager;
     private TypeBlock type;
     private MethodBlock method;
     
     
     public Generator(Environment environment, Packager pack, TypeBlock type, MethodBlock method) {
         this.environment = environment;
-        this.pack = pack;
+        this.packager = pack;
         this.type = type;
         this.method = method;
     }
     
     
-    public Set<String> descend(Token token) {
-        for (var child : token.children.values()) {
-            descend(token);
+    public void generate() {
+        var file = packager.pack().isBlank() ? packager.file() : packager.pack() + "." + packager.file();
+        try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, environment.scopes.keySet().toArray(new Element[0])).openWriter())) {
+            type.start(packager.pack(), packager.file().replaceAll("\\.java", ""));
+        
+            for (var entry : environment.scopes.entrySet()) {
+                method.start((TypeElement) entry.getKey());
+                type.method(descend(entry.getValue()));
+            }
+
+            writer.write(type.end());
+            
+        } catch (FilerException e) {
+            environment.error(packager.element(), file + " already exists");
+            
+        } catch (IOException e) {
+            environment.error(packager.element(), "Failed to create file: '" + file + "'");
+        }
+    }
+    
+    
+    public String descend(Token token) {
+        var values = token.children.values();
+        var children = new ArrayList<String>(values.size());
+        
+        for (var child : values) {
+            children.add(descend(child));
         }
         
-        return null;
+        if (token.type != Type.ROOT) {
+            var variable = method.command(token);
+            for (var child : children) {
+                method.link(variable, child);
+            }
+        
+            return variable;
+            
+        } else {
+            return method.end(children);
+        }
     }
     
 }
