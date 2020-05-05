@@ -37,54 +37,60 @@ import static com.karuslabs.commons.command.aot.annotations.Emit.RELATIVE_PACKAG
 
 public class EmitResolver {
     
-    static final Matcher PACKAGE = Pattern.compile("^([a-zA-Z_]{1}[a-zA-Z]*){2,10}\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,30}((\\.([a-zA-Z_]{1}[a-zA-Z0-9_]*){1,61})*)?$").matcher("");
-    static final Matcher FILE = Pattern.compile("([a-zA-Z_$]?)([a-zA-Z\\d_$])*(\\.java)").matcher("");
+    static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
     
     private Environment environment;
     private @Nullable Element element;
-    private @Nullable String pack;
-    private @Nullable String file;
+    private String pack;
+    private String file;
     
     
     public EmitResolver(Environment environment) {
         this.environment = environment;
+        this.pack = "";
+        this.file = "Commands";
     }
 
     
     public void resolve(Element element) {
         this.element = element;
-        
         var emit = element.getAnnotation(Emit.class);
-        var value = emit.pack();
+        var value = emit.value();
         
         if (RELATIVE_PACKAGE.equals(value)) {
             pack = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
-            file = "Commands";
+            return;
             
         } else if (value.endsWith(".java")) {
             environment.error(element, "File ends with \".java\", should not end with file extension");
+            return;
             
         }  else if (!PACKAGE.reset(value).matches()) {
             environment.error(element, "Invalid package name");
+            return;
             
-        } else {
-            int dot = value.lastIndexOf(".");
+        } 
+        
+        int dot = value.lastIndexOf(".");
+        if (dot != -1) {
             pack = value.substring(0, dot);
             file = value.substring(dot + 1, value.length());
+            
+        } else {
+            file = value;
         }
     }
-    
     
     public @Nullable Element element() {
         return element;
     }
     
-    public @Nullable String pack() {
+    public String pack() {
         return pack;
     }
     
-    public @Nullable String file() {
+    public String file() {
         return file;
     }
 

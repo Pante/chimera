@@ -40,7 +40,9 @@ public class TypeBlock {
     public void start(String pack, String type) {
         builder.setLength(0);
         builder.append("// This file was generated at ").append(LocalDateTime.now()).append(" using Chimera AOT 4.6.0\n");
-        builder.append("package ").append(pack).append(";\n\n");
+        if (!pack.isEmpty()) {
+            builder.append("package ").append(pack).append(";\n\n");
+        }
         builder.append("import com.karuslabs.commons.command.tree.nodes.*;\n\n");
         builder.append("import com.mojang.brigadier.tree.CommandNode;\n\n");
         builder.append("import java.util.*;\n");

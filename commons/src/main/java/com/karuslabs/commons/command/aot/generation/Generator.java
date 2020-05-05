@@ -49,7 +49,7 @@ public class Generator {
     
     
     public void generate() {
-        var file = resolver.pack().isBlank() ? resolver.file() : resolver.pack() + "." + resolver.file();
+        var file = resolver.pack().isEmpty() ? resolver.file() : resolver.pack() + "." + resolver.file();
         try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, environment.scopes.keySet().toArray(new Element[0])).openWriter())) {
             type.start(resolver.pack(), resolver.file());
         

@@ -53,7 +53,7 @@ public class Processor extends AnnotationProcessor {
     Analyzer analyzer;
     EmitResolver resolver;
     Generator generator;
-    boolean compiled;
+    boolean processed;
     
     
     @Override
@@ -68,31 +68,32 @@ public class Processor extends AnnotationProcessor {
         analyzer = new Analyzer(environment);
         resolver = new EmitResolver(environment);
         generator = new Generator(environment, resolver, new TypeBlock(), new MethodBlock());
+        processed = false;
     }
     
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        if (compiled) {
+        if (processed) {
             return false;
         }
         
-        resolveLocation(env);
+        resolveFile(env);
         parse(command, annotations, env, Command.class);
         parse(bind, annotations, env, Bind.class);
         analyzer.analyze();
         
         if (!environment.error()) {
             generator.generate();
-            compiled = true;
         }
         
         environment.clear();
+        processed = true;
         return false;
     }
     
     
-    void resolveLocation(RoundEnvironment env) {
+    void resolveFile(RoundEnvironment env) {
         var elements = env.getElementsAnnotatedWith(Emit.class);
         if (elements.size() == 1) {
             resolver.resolve(elements.toArray(new Element[0])[0]);
@@ -103,7 +104,7 @@ public class Processor extends AnnotationProcessor {
         } else if (elements.size() > 1) {
             for (var element : elements) {
                 error(element, "Project must contain only one @Pack annotation");
-            } 
+            }
         }
     }
     

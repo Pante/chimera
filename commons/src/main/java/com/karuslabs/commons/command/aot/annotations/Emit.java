@@ -37,6 +37,6 @@ public @interface Emit {
     public static final String RELATIVE_PACKAGE = "${relative}";
     
     
-    String pack() default RELATIVE_PACKAGE;
+    String value() default RELATIVE_PACKAGE;
 
 }

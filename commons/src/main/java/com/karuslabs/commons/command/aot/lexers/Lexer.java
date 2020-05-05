@@ -31,11 +31,7 @@ import javax.lang.model.element.Element;
 
 @FunctionalInterface
 public interface Lexer {
- 
-    public List<Token> lex(Environment environment, Element location, String value, String context);
-    
-    public default List<Token> lex(Environment environment, Element location, String value) {
-        return lex(environment, location, value, value);
-    }
+
+    public List<Token> lex(Environment environment, Element location, String value);
     
 }

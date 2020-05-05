@@ -62,7 +62,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     public void resolve(Token token, ExecutableElement method, Token binding) {
         var modifiers = method.getModifiers();
         if (!modifiers.contains(PUBLIC) || modifiers.contains(STATIC)) {
-            environment.error(method, "Method must be public and non-static");
+            environment.error(method, "Method should be public and non-static");
             return;
         }
         
@@ -73,7 +73,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
             token.bind(environment, Binding.REQUIREMENT, binding);
             
         } else {
-            environment.error(method, "Signature must match either Command<CommandSender> or Executable<CommandSender>");
+            environment.error(method, "Signature should match Command<CommandSender>, Executable<CommandSender> or Predicate<CommandSender>");
         }
     }
 

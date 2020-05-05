@@ -42,7 +42,7 @@ public class CommandParser extends Parser {
     public void parse(Element element) {
         var commands = element.getAnnotation(Command.class).value();
         if (commands.length == 0) {
-            environment.error(element, "@Command annotation cannot be empty");
+            environment.error(element, "A @Command annotation should not be empty");
         }
         
         var root = environment.root(element);

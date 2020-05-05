@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
-public @Static class Lexer {
+public @Static class Readers {
     
     public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
     

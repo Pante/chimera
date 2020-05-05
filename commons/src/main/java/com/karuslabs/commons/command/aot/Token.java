@@ -40,28 +40,27 @@ public class Token {
     public final Map<Binding, Token> bindings;
     public final Map<String, Token> children;
     public final String literal;
-    public final String context;
 
     
-    public static Token argument(Element location, String lexeme, String context) {
-        return new Token(location, lexeme, Type.ARGUMENT, Set.of(), "<" + lexeme + ">", context);
+    public static Token argument(Element location, String lexeme) {
+        return new Token(location, lexeme, Type.ARGUMENT, Set.of(), "<" + lexeme + ">");
     }
     
-    public static Token literal(Element location, String lexeme, Set<String> aliases, String context) {
+    public static Token literal(Element location, String lexeme, Set<String> aliases) {
         var literal = lexeme;
         if (!aliases.isEmpty()) {
             literal = literal + "|" + String.join("|", aliases);
         }
         
-        return new Token(location, lexeme, Type.LITERAL, aliases, literal, context);
+        return new Token(location, lexeme, Type.LITERAL, aliases, literal);
     }
     
     public static Token root() {
-        return new Token(null, "", Type.ROOT, Set.of(), "", "");
+        return new Token(null, "", Type.ROOT, Set.of(), "");
     }
     
     
-    Token(Element location, String lexeme, Type type, Set<String> aliases, String literal, String context) {
+    Token(Element location, String lexeme, Type type, Set<String> aliases, String literal) {
         this.location = location;
         this.lexeme = lexeme;
         this.type = type;
@@ -69,7 +68,6 @@ public class Token {
         this.bindings = new EnumMap<>(Binding.class);
         this.children = new HashMap<>();
         this.literal = literal;
-        this.context = context;
     }
     
     
@@ -85,13 +83,13 @@ public class Token {
     
     boolean merge(Environment environment, Token other) {
         if (type != other.type) {
-            environment.error(location, reason("A " + other.type + " with the same name already exists", other));
+            environment.error(location, format(lexeme, "already exists", "an argument and literal in the same scope should not have the same name"));
             return false; 
             
         } else if (type == Type.LITERAL) {
             for (var alias : other.aliases) {
                 if (!aliases.add(alias)) {
-                    environment.warn(location, reason("Alias already exists", alias, other.context));
+                    environment.warn(location, "Duplicate alias: " + quote(alias));
                 }
             }
         }
@@ -103,10 +101,10 @@ public class Token {
     public void bind(Environment environment, Binding binding, Token token) {
         var existing = bindings.get(binding);
         if (existing != null) {
-            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + token);
+            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + this);
             
         } else if (binding == Binding.TYPE && type != Type.ARGUMENT) {
-            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to literal: " + token);
+            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to literal: " + this);
        
         } else {
             bindings.put(binding, token);
@@ -116,7 +114,7 @@ public class Token {
     
     @Override
     public String toString() {
-        return location(literal, context);
+        return literal;
     }
     
 }

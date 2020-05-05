@@ -28,37 +28,37 @@ import com.karuslabs.commons.command.aot.*;
 import java.util.List;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import static com.karuslabs.commons.command.aot.Messages.format;
 import static java.util.Collections.EMPTY_LIST;
 
 
 public class ArgumentLexer implements Lexer {
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String value, String context) {
+    public List<Token> lex(Environment environment, Element location, String value) {
         if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(location, reason("An argument must be enclosed by '<' and '>'", value, context));
+            environment.error(location, format(value, "is an invalid argument", "should be enclosed by \"<\" and \">\""));
             return EMPTY_LIST;
         }
         
         if (value.contains("|")) {
-            environment.error(location, reason("Argument cannot contain '|'", value, context));
+            environment.error(location, format(value, "contains \"|\"", "an argument should not have aliases"));
             return EMPTY_LIST;
         }
         
         
         var argument = value.substring(1, value.length() - 1);
-        if (argument.isBlank()) {
-            environment.error(location, reason("Argument cannot be blank", value, context));
+        if (argument.isEmpty()) {
+            environment.error(location, format(value, "is empty", "an argument should not be empty"));
             return EMPTY_LIST;
         }
         
         if (argument.startsWith("<") || argument.startsWith(">")) {
-            environment.warn(location, reason("Trailing '<'s or '>'s found in", value, context));
+            environment.warn(location, format(value, "contains trailing \"<\"s or \">\"s"));
             return EMPTY_LIST;
         }
         
-        return List.of(Token.argument(location, argument, context));
+        return List.of(Token.argument(location, argument));
     }
     
 }

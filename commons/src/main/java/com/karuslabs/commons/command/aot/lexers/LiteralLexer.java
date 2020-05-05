@@ -28,21 +28,21 @@ import com.karuslabs.commons.command.aot.*;
 import java.util.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import static com.karuslabs.commons.command.aot.Messages.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
 public class LiteralLexer implements Lexer {
 
     @Override
-    public List<Token> lex(Environment environment, Element location, String value, String context) {
-        var names = split(environment, location, value, context);
+    public List<Token> lex(Environment environment, Element location, String value) {
+        var names = split(environment, location, value);
         if (names.length == 0) {
             return EMPTY_LIST;
         }
         
         var name = names[0];
-        if (!valid(environment, location, name, context)) {
+        if (!valid(environment, location, name, value)) {
             return EMPTY_LIST;
         }
         
@@ -51,39 +51,34 @@ public class LiteralLexer implements Lexer {
         
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            success &= valid(environment, location, alias, context);
+            success &= valid(environment, location, alias, value);
             
             if (!aliases.add(alias)) {
-                environment.warn(location, reason("Alias already exists", alias, context));
+                environment.warn(location, "Duplicate alias: " + quote(alias));
             }
         }
         
-        return success ? List.of(Token.literal(location, name, aliases, context)) : EMPTY_LIST;
+        return success ? List.of(Token.literal(location, name, aliases)) : EMPTY_LIST;
     }
     
     
-    String[] split(Environment environment, Element location, String value, String context) {
+    String[] split(Environment environment, Element location, String value) {
         // No need to check for starting '|'s since it will result in blank spaces in array
         if (value.endsWith("|")) {
-            environment.warn(location, reason("Trailing '|'s found in", value, context));
+            environment.warn(location, format(value, "contains trailing \"|\"s"));
         }
         
-        var names = value.split("\\|");
-        if (names.length == 0) {
-            environment.error(location, "Blank literal found in command: '" + context + "'");
-        }
-        
-        return names;
+        return value.split("\\|");
     }
     
     
     boolean valid(Environment environment, Element location, String value, String context) {
         if (value.isBlank()) {
-            environment.error(location, "Blank literal found in command: '" + context + "'");
+            environment.error(location, format(context, "contains a blank literal", "a literal should not be blank"));
             return false;
             
         } else if (value.contains("<") || value.contains(">")) {
-            environment.error(location,reason("Literal cannot contain '<' and '>'",  value , context));
+            environment.error(location, format(value, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
             return false;
             
         } else {

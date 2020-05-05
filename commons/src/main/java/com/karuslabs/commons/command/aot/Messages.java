@@ -28,17 +28,17 @@ import com.karuslabs.annotations.Static;
 
 public @Static class Messages {
     
-    public static String reason(String reason, Token token) {
-        return reason + ": " + token;
+    public static String format(Object value, String reason) {
+        return quote(value) + " " + reason;
     }
     
-    public static String reason(String reason, String value, String context) {
-        return reason + ": " + location(value, context);
+    public static String format(Object value, String reason, String resolution) {
+        return quote(value) + " " + reason + ", " + resolution;
     }
     
-
-    public static String location(String value, String context) {
-        return "'" + value + "' in command: '" + context + "'";
+    
+    public static String quote(Object value) {
+        return "\"" + value + "\"";
     }
     
 }

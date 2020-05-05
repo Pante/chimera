@@ -26,11 +26,13 @@ package com.karuslabs.commons.command.aot;
 
 public enum Type {
     
-    ARGUMENT("argument"), LITERAL("literal"), ROOT("root");
-        
+    ARGUMENT("An", "argument"), LITERAL("A", "literal"), ROOT("A", "root");
+       
+    public final String article;
     private final String value;
 
-    private Type(String value) {
+    private Type(String article, String value) {
+        this.article = article;
         this.value = value;
     }
 

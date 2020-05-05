@@ -39,6 +39,7 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
 - Change `DispatcherMapper` to `NativeMapper`
 - Change `Exceptions` to package-private
+- Change `Lexers` to `Readers`
 - Change `Mapper.otherwise(ComandNode<T>)` to throw `IllegalArgumentException` instead of `UnsupportedOperationException`
 - Change `Root` to implement `Mutable<CommandSender>`
 - Change `Root.addChild(...)` to throw `IllegalArgumentException` if two commands with the same name are registered

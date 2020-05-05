@@ -27,7 +27,7 @@ import com.karuslabs.commons.command.aot.*;
 
 import java.util.Collection;
 
-import static com.karuslabs.commons.command.aot.Messages.reason;
+import static com.karuslabs.commons.command.aot.Messages.format;
 
 
 public class Analyzer {
@@ -48,7 +48,7 @@ public class Analyzer {
         for (var token : tokens) {
             analyze(token.children.values());
             if (token.type == Type.ARGUMENT && !token.bindings.containsKey(Binding.TYPE)) {
-                environment.error(token.location, reason("Argument does not have an ArgumentType", token));
+                environment.error(token.location, format(token, "is an invalid argument", "should have a binded ArgumentType"));
             }
         }
     }
