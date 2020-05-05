@@ -85,6 +85,7 @@ more information.
 
 **Others**
 - Add `CHANGELOG.md`
+- Finally changed the project's banner
 - Fix incorrect copyright header in files
 
 
