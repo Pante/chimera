@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 @Documented
 @Retention(SOURCE)
-@Target({TYPE, METHOD})
+@Target(TYPE)
 public @interface Command {
 
     String[] value();

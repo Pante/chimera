@@ -29,22 +29,16 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import java.util.Set;
 import java.util.function.Predicate;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Types;
 
-import org.bukkit.command.CommandSender;
-
+import static com.karuslabs.commons.command.aot.Binding.*;
 import static javax.lang.model.element.Modifier.*;
 
 
 public class VariableResolver extends Resolver<VariableElement> {
-    
-    static final Set<Modifier> MODIFIERS = Set.of(PUBLIC, FINAL);
 
-    Types types;
     TypeMirror command;
     TypeMirror argumentType;
     TypeMirror requirement;
@@ -53,41 +47,36 @@ public class VariableResolver extends Resolver<VariableElement> {
     
     public VariableResolver(Environment environment) {
         super(environment);
-        this.types = environment.types;
-        
-        var elements = environment.elements;
-        var sender = elements.getTypeElement(CommandSender.class.getName()).asType();
-        
-        command = types.getDeclaredType(elements.getTypeElement(Command.class.getName()), sender);
+        command = specialize(Command.class, sender);
         argumentType = types.erasure(elements.getTypeElement(ArgumentType.class.getName()).asType());
-        requirement = types.getDeclaredType(elements.getTypeElement(Predicate.class.getName()), sender);
-        suggestions = types.getDeclaredType(elements.getTypeElement(SuggestionProvider.class.getName()), sender);
+        requirement = specialize(Predicate.class, sender);
+        suggestions = specialize(SuggestionProvider.class, sender);
     }
 
     
     @Override
-    public void resolve(Token token, VariableElement variable, Token binding) {
+    public void resolve(VariableElement variable, Token token, Token binding) {
         var modifiers = variable.getModifiers();
-        if (!modifiers.containsAll(MODIFIERS) || modifiers.contains(STATIC)) {
-            environment.error(variable, "Field should be public, final and non-static");
+        if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
+            environment.error(variable, "Field should be public and final");
             return;
         }
         
         var type = variable.asType();
         if (types.isSubtype(type, command)) {
-            token.bind(environment, Binding.EXECUTION, binding);
+            token.bind(environment, EXECUTION, binding);
             
         } else if (types.isSubtype(type, argumentType)) {
-            token.bind(environment, Binding.TYPE, binding);
+            token.bind(environment, TYPE, binding);
             
         } else if (types.isSubtype(type, requirement)) {
-            token.bind(environment, Binding.REQUIREMENT, binding);
+            token.bind(environment, REQUIREMENT, binding);
             
         } else if (types.isSubtype(type, suggestions)) {
-            token.bind(environment, Binding.SUGGESTIONS, binding);
+            token.bind(environment, SUGGESTIONS, binding);
             
         } else {
-            environment.error(variable, variable.asType() + " should be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
+            environment.error(variable, variable + " should be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 

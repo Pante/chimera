@@ -26,18 +26,33 @@ package com.karuslabs.commons.command.aot.resolvers;
 import com.karuslabs.commons.command.aot.*;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
+
+import org.bukkit.command.CommandSender;
 
 
 public abstract class Resolver<T extends Element> {
 
     protected Environment environment;
+    protected Elements elements;
+    protected Types types;
+    protected TypeMirror sender;
     
     
     public Resolver(Environment environment) {
         this.environment = environment;
+        this.elements = environment.elements;
+        this.types = environment.types;
+        this.sender = elements.getTypeElement(CommandSender.class.getName()).asType();
     }
     
     
-    public abstract void resolve(Token token, T element, Token binding);
+    public abstract void resolve(T element, Token token, Token binding);
+    
+    
+    protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
+        return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
+    }
     
 }

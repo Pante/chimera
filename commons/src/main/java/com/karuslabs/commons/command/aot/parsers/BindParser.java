@@ -33,6 +33,8 @@ import com.karuslabs.commons.command.aot.resolvers.Resolver;
 import java.util.List;
 import javax.lang.model.element.*;
 
+import static com.karuslabs.commons.command.aot.Messages.format;
+
 
 public class BindParser extends Parser {
     
@@ -49,45 +51,44 @@ public class BindParser extends Parser {
     
     @Override
     public void parse(Element element) {
-        var root = environment.scopes.get(element.accept(Filter.CLASS, null));
+        var type = element.accept(Filter.CLASS, null);
+        var root = environment.scopes.get(type);
         if (root == null) {
-            environment.error(element, "Enclosing class must be annotated with @Command");
+            environment.error(type, "Class should be annotated with @Command");
             return;
         }
         
         var bindings = element.getAnnotation(Bind.class).value();
         if (bindings.length == 0) {
-            environment.error(element, "@Bind annotation cannot be empty");
+            environment.error(element, "@Bind annotation should not be empty");
             return;
         }
         
         for (var binding : bindings) {
             var tokens = lexer.lex(environment, element, binding);
-            if (tokens.size() == 1 && matchAny(root, element, tokens.get(0)) == 0) {
-                environment.error(element, "'" + tokens.get(0).literal + "' does not exist");
+            if (tokens.size() == 1 && !matchAny(element, root, tokens.get(0))) {
+                environment.error(element, format(tokens.get(0), "does not exist"));
 
             } else if (tokens.size() > 1) {
-                matchExact(root, element, tokens);
+                match(element, root, tokens);
             }
         }
     }
     
-    
-    int matchAny(Token current, Element element, Token binding) {
-        int matches = 0;
-        if (current.lexeme.equals(binding.lexeme) && current.type == binding.type) {
-            resolve(current, element, binding);
-            matches++;
-        }
-
-        for (var child : current.children.values()) {
-            matches += matchAny(child, element, binding);
+    boolean matchAny(Element element, Token current, Token binding) {
+        var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
+        if (match) {
+            resolve(element, current, binding);
         }
         
-        return matches;
+        for (var child : current.children.values()) {
+            match |= matchAny(element, child, binding);
+        }
+        
+        return match;
     }
     
-    void matchExact(Token current, Element element, List<Token> bindings) {
+    void match(Element element, Token current, List<Token> bindings) {
         for (var binding : bindings) {
             current = current.children.get(binding.lexeme);
             if (current == null) {
@@ -95,19 +96,19 @@ public class BindParser extends Parser {
             }
         }
         
-        resolve(current, element, bindings.get(bindings.size() - 1));
+        resolve(element, current, bindings.get(bindings.size() - 1));
     }
     
     
-    void resolve(Token token, Element element, Token binding) {
+    void resolve(Element element, Token token, Token binding) {
         if (element instanceof ExecutableElement) {
-             method.resolve(token, (ExecutableElement) element, binding);
+            method.resolve((ExecutableElement) element, token, binding);
             
         } else if (element instanceof VariableElement) {
-            variable.resolve(token, (VariableElement) element, binding);
+            variable.resolve((VariableElement) element, token, binding);
             
         } else {
-            environment.error(element, "@Bind annotation cannot be applied here");
+            environment.error(element, "@Bind annotation should not be used on a " + element.getKind().toString());
         }
     }
 

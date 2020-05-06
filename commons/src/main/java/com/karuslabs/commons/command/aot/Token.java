@@ -34,33 +34,28 @@ import static com.karuslabs.commons.command.aot.Messages.*;
 public class Token {
     
     public final Element location;
+    public final String literal;
     public final String lexeme;
     public final Type type;
     public final Set<String> aliases;
     public final Map<Binding, Token> bindings;
     public final Map<String, Token> children;
-    public final String literal;
 
     
-    public static Token argument(Element location, String lexeme) {
-        return new Token(location, lexeme, Type.ARGUMENT, Set.of(), "<" + lexeme + ">");
+    public static Token argument(Element location, String literal, String lexeme) {
+        return new Token(location, literal, lexeme, Type.ARGUMENT, Set.of());
     }
     
-    public static Token literal(Element location, String lexeme, Set<String> aliases) {
-        var literal = lexeme;
-        if (!aliases.isEmpty()) {
-            literal = literal + "|" + String.join("|", aliases);
-        }
-        
-        return new Token(location, lexeme, Type.LITERAL, aliases, literal);
+    public static Token literal(Element location, String literal, String lexeme, Set<String> aliases) {
+        return new Token(location, literal, lexeme, Type.LITERAL, aliases);
     }
     
     public static Token root() {
-        return new Token(null, "", Type.ROOT, Set.of(), "");
+        return new Token(null, "", "", Type.ROOT, Set.of());
     }
     
     
-    Token(Element location, String lexeme, Type type, Set<String> aliases, String literal) {
+    Token(Element location, String literal, String lexeme, Type type, Set<String> aliases) {
         this.location = location;
         this.lexeme = lexeme;
         this.type = type;
@@ -103,8 +98,8 @@ public class Token {
         if (existing != null) {
             environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + this);
             
-        } else if (binding == Binding.TYPE && type != Type.ARGUMENT) {
-            environment.error(token.location, binding.article + " " + binding.signature + " cannot be bound to literal: " + this);
+        } else if (type != Type.ARGUMENT && (binding == Binding.TYPE || binding == Binding.SUGGESTIONS)) {
+            environment.error(token.location, binding.article + " " + binding.signature + " should not be bound to a literal");
        
         } else {
             bindings.put(binding, token);

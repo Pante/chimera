@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.analyzers;
-
-import com.karuslabs.commons.command.aot.*;
+package com.karuslabs.commons.command.aot;
 
 import java.util.Collection;
 
@@ -48,7 +46,7 @@ public class Analyzer {
         for (var token : tokens) {
             analyze(token.children.values());
             if (token.type == Type.ARGUMENT && !token.bindings.containsKey(Binding.TYPE)) {
-                environment.error(token.location, format(token, "is an invalid argument", "should have a binded ArgumentType"));
+                environment.error(token.location, format(token, "is an invalid argument", "should be binded to  an ArgumentType<?>"));
             }
         }
     }

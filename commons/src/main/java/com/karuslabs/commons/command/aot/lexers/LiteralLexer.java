@@ -36,7 +36,12 @@ public class LiteralLexer implements Lexer {
 
     @Override
     public List<Token> lex(Environment environment, Element location, String value) {
-        var names = split(environment, location, value);
+        // No need to check for starting '|'s since it will result in blank spaces in array
+        if (value.endsWith("|")) {
+            environment.warn(location, format(value, "contains trailing \"|\"s"));
+        }
+        
+        var names = value.split("\\|");
         if (names.length == 0) {
             return EMPTY_LIST;
         }
@@ -58,23 +63,13 @@ public class LiteralLexer implements Lexer {
             }
         }
         
-        return success ? List.of(Token.literal(location, name, aliases)) : EMPTY_LIST;
-    }
-    
-    
-    String[] split(Environment environment, Element location, String value) {
-        // No need to check for starting '|'s since it will result in blank spaces in array
-        if (value.endsWith("|")) {
-            environment.warn(location, format(value, "contains trailing \"|\"s"));
-        }
-        
-        return value.split("\\|");
+        return success ? List.of(Token.literal(location, value, name, aliases)) : EMPTY_LIST;
     }
     
     
     boolean valid(Environment environment, Element location, String value, String context) {
-        if (value.isBlank()) {
-            environment.error(location, format(context, "contains a blank literal", "a literal should not be blank"));
+        if (value.isEmpty()) {
+            environment.error(location, format(context, "contains an empty literal", "a literal should not be empty"));
             return false;
             
         } else if (value.contains("<") || value.contains(">")) {

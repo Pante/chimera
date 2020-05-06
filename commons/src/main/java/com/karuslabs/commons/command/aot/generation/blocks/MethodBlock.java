@@ -31,10 +31,15 @@ import javax.lang.model.element.*;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import static javax.lang.model.element.Modifier.STATIC;
+
 
 public class MethodBlock {
     
     StringBuilder builder;
+    @Nullable Name type;
     MessageFormat argument;
     MessageFormat literal;
     MessageFormat alias;
@@ -53,11 +58,12 @@ public class MethodBlock {
     
     
     public void start(TypeElement element) {
+        type = element.getQualifiedName();
         variables.add("source");
         variables.add("commands");
         
         builder.setLength(0);
-        builder.append("    public static Map<String, CommandNode<CommandSender>> of(").append(element.getQualifiedName()).append(" source) {\n");
+        builder.append("    public static Map<String, CommandNode<CommandSender>> of(").append(type).append(" source) {\n");
         builder.append("        var commands = new HashMap<String, CommandNode<CommandSender>>();\n\n");
     }
     
@@ -81,7 +87,6 @@ public class MethodBlock {
                 throw new IllegalArgumentException("Invalid token type: '" + token.type + "', found when generating method");
         }
         
-        builder.append("\n");
         return variable;
     }
     
@@ -122,11 +127,13 @@ public class MethodBlock {
         }
       
         var element = parameter.location;
+        var name = element.getModifiers().contains(STATIC) ? type : "source";
+        
         if (element instanceof ExecutableElement) {
-            return "source::" + element.getSimpleName();
+            return name + "::" + element.getSimpleName();
             
         } else if (element instanceof VariableElement) {
-            return "source." + element.getSimpleName();
+            return name + "." + element.getSimpleName();
             
         } else {
             return value;
@@ -134,18 +141,27 @@ public class MethodBlock {
     }
     
     
-    public void link(String variable, String child) {
+    public void addChild(String variable, String child) {
         builder.append("        ").append(variable).append(".addChild(").append(child).append(");\n");
     }
     
     
+    public void newLine() {
+        builder.append("\n");
+    }
+    
+    
     public String end(List<String> roots) {
+        variables.clear();
+        count = 0;
+        
         for (var root : roots) {
             builder.append("        commands.put(").append(root).append(".getName(), ").append(root).append(");\n");
         }
         
         builder.append("        return commands;\n");
         builder.append("    }\n\n");
+        
         return builder.toString();
     }
     

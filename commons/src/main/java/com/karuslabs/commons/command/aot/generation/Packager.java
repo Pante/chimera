@@ -32,10 +32,11 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static com.karuslabs.commons.command.aot.Messages.quote;
 import static com.karuslabs.commons.command.aot.annotations.Emit.RELATIVE_PACKAGE;
 
 
-public class EmitResolver {
+public class Packager {
     
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
@@ -46,7 +47,7 @@ public class EmitResolver {
     private String file;
     
     
-    public EmitResolver(Environment environment) {
+    public Packager(Environment environment) {
         this.environment = environment;
         this.pack = "";
         this.file = "Commands";
@@ -62,14 +63,14 @@ public class EmitResolver {
             pack = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
             return;
             
-        } else if (value.endsWith(".java")) {
-            environment.error(element, "File ends with \".java\", should not end with file extension");
+        } else if (value.endsWith(".java") || value.endsWith(".class")) {
+            var parts = value.split("\\.");
+            environment.error(element, "File ends with " + quote(parts[parts.length - 1])+ ", should not end with file extension");
             return;
             
         }  else if (!PACKAGE.reset(value).matches()) {
             environment.error(element, "Invalid package name");
             return;
-            
         } 
         
         int dot = value.lastIndexOf(".");

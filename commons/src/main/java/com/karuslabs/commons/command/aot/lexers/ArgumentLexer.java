@@ -58,7 +58,7 @@ public class ArgumentLexer implements Lexer {
             return EMPTY_LIST;
         }
         
-        return List.of(Token.argument(location, argument));
+        return List.of(Token.argument(location, value, argument));
     }
     
 }

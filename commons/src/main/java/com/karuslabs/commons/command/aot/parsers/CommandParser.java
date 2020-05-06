@@ -42,19 +42,20 @@ public class CommandParser extends Parser {
     public void parse(Element element) {
         var commands = element.getAnnotation(Command.class).value();
         if (commands.length == 0) {
-            environment.error(element, "A @Command annotation should not be empty");
+            environment.error(element, "@Command annotation should not be empty");
         }
         
         var root = environment.root(element);
         for (var command : commands) {
             var tokens = lexer.lex(environment, element, command);
+            System.out.println("Tokens: " + tokens);
             if (valid(tokens)) {
-                parse(root, element, tokens);
+                parse(element, root, tokens);
             }
         }
     }
     
-    void parse(Token root, Element element, List<Token> tokens) {
+    void parse(Element element, Token root, List<Token> tokens) {
         var current = root;
         for (var token : tokens) {
             current = current.add(environment, token);

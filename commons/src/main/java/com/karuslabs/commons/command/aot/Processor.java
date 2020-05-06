@@ -26,7 +26,6 @@ package com.karuslabs.commons.command.aot;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processor.AnnotationProcessor;
-import com.karuslabs.commons.command.aot.analyzers.Analyzer;
 import com.karuslabs.commons.command.aot.annotations.*;
 import com.karuslabs.commons.command.aot.generation.*;
 import com.karuslabs.commons.command.aot.generation.blocks.*;
@@ -51,7 +50,7 @@ public class Processor extends AnnotationProcessor {
     Parser command;
     Parser bind;
     Analyzer analyzer;
-    EmitResolver resolver;
+    Packager resolver;
     Generator generator;
     boolean processed;
     
@@ -66,7 +65,7 @@ public class Processor extends AnnotationProcessor {
         command = new CommandParser(environment, lexer);
         bind = new BindParser(environment, lexer, new MethodResolver(environment), new VariableResolver(environment));
         analyzer = new Analyzer(environment);
-        resolver = new EmitResolver(environment);
+        resolver = new Packager(environment);
         generator = new Generator(environment, resolver, new TypeBlock(), new MethodBlock());
         processed = false;
     }
@@ -99,11 +98,11 @@ public class Processor extends AnnotationProcessor {
             resolver.resolve(elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
-            error("Project must contain at least one @Pack annotation");
+            error("Project does not contain a @Pack annotation, should contain one @Pack annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {
-                error(element, "Project must contain only one @Pack annotation");
+                error(element, "Project contains " + elements.size() + " @Pack annotations, should contain one @Pack annotation");
             }
         }
     }

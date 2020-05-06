@@ -35,23 +35,25 @@ import javax.lang.model.element.*;
 public class Generator {
     
     private Environment environment;
-    private EmitResolver resolver;
+    private Packager packager;
     private TypeBlock type;
     private MethodBlock method;
     
     
-    public Generator(Environment environment, EmitResolver resolver, TypeBlock type, MethodBlock method) {
+    public Generator(Environment environment, Packager packager, TypeBlock type, MethodBlock method) {
         this.environment = environment;
-        this.resolver = resolver;
+        this.packager = packager;
         this.type = type;
         this.method = method;
     }
     
     
     public void generate() {
-        var file = resolver.pack().isEmpty() ? resolver.file() : resolver.pack() + "." + resolver.file();
-        try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, environment.scopes.keySet().toArray(new Element[0])).openWriter())) {
-            type.start(resolver.pack(), resolver.file());
+        var file = packager.pack().isEmpty() ? packager.file() : packager.pack() + "." + packager.file();
+        var elements = environment.scopes.keySet().toArray(new Element[0]);
+        
+        try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, elements).openWriter())) {
+            type.start(packager.pack(), packager.file());
         
             for (var entry : environment.scopes.entrySet()) {
                 method.start((TypeElement) entry.getKey());
@@ -61,10 +63,10 @@ public class Generator {
             writer.write(type.end());
             
         } catch (FilerException ignored) {
-            environment.error(resolver.element(), resolver.file() + " already exists");
+            environment.error(packager.element(), packager.file() + " already exists");
             
         } catch (IOException ignored) {
-            environment.error(resolver.element(), "Failed to create file: '" + resolver.file() + "'");
+            environment.error(packager.element(), "Failed to create file: '" + packager.file() + "'");
         }
     }
     
@@ -80,9 +82,10 @@ public class Generator {
         if (token.type != Type.ROOT) {
             var variable = method.command(token);
             for (var child : children) {
-                method.link(variable, child);
+                method.addChild(variable, child);
             }
-        
+            
+            method.newLine();
             return variable;
             
         } else {

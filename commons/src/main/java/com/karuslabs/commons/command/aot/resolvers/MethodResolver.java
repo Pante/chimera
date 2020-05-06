@@ -28,52 +28,57 @@ import com.karuslabs.commons.command.aot.*;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.List;
+import com.mojang.brigadier.suggestion.*;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
-import org.bukkit.command.CommandSender;
-
+import static com.karuslabs.commons.command.aot.Binding.*;
 import static javax.lang.model.element.Modifier.*;
 
 
 public class MethodResolver extends Resolver<ExecutableElement> {
 
-    TypeMirror sender;
+    TypeMirror completable;
     TypeMirror context;
     TypeMirror defaultable;
+    TypeMirror builder;
     TypeMirror exception;
     
     
     public MethodResolver(Environment environment) {
         super(environment);
-        var elements = environment.elements;
-        var types = environment.types;
+        var suggestions = elements.getTypeElement(Suggestions.class.getName()).asType();
         
-        sender = elements.getTypeElement(CommandSender.class.getName()).asType();
-        context = types.getDeclaredType(elements.getTypeElement(CommandContext.class.getName()), sender);
-        defaultable = types.getDeclaredType(elements.getTypeElement(OptionalContext.class.getName()), sender);
+        completable = specialize(CompletableFuture.class, suggestions);
+        context = specialize(CommandContext.class, sender);
+        defaultable = specialize(OptionalContext.class, sender);
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
+        builder = elements.getTypeElement(SuggestionsBuilder.class.getName()).asType();
     }
 
     
     @Override
-    public void resolve(Token token, ExecutableElement method, Token binding) {
+    public void resolve(ExecutableElement method, Token token, Token binding) {
         var modifiers = method.getModifiers();
-        if (!modifiers.contains(PUBLIC) || modifiers.contains(STATIC)) {
-            environment.error(method, "Method should be public and non-static");
+        if (!modifiers.contains(PUBLIC)) {
+            environment.error(method, "Method should be public");
             return;
         }
         
         if (command(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
-            token.bind(environment, Binding.EXECUTION, binding);
+            token.bind(environment, EXECUTION, binding);
 
         } else if (predicate(method.getReturnType(), method.getParameters())) {
-            token.bind(environment, Binding.REQUIREMENT, binding);
+            token.bind(environment, REQUIREMENT, binding);
+            
+        } else if (suggestions(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
+            token.bind(environment, SUGGESTIONS, binding);
             
         } else {
-            environment.error(method, "Signature should match Command<CommandSender>, Executable<CommandSender> or Predicate<CommandSender>");
+            environment.error(method, "Signature should match Command<CommandSender>, Executable<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 
@@ -83,26 +88,30 @@ public class MethodResolver extends Resolver<ExecutableElement> {
             return false;
         }
         
-        var types = environment.types;
-        
         var returnable = type.getKind();
         var parameter = parameters.get(0).asType();
-        return (returnable == TypeKind.INT && types.isSameType(context, parameter))
-            || (returnable == TypeKind.VOID && types.isSameType(defaultable, parameter));
+        return (returnable == TypeKind.INT && types.isSubtype(context, parameter))
+            || (returnable == TypeKind.VOID && types.isSubtype(defaultable, parameter));
     }
-    
-    boolean exceptions(List<? extends TypeMirror> thrown) {
-        return thrown.isEmpty() || (thrown.size() == 1 && environment.types.isSubtype(thrown.get(0), exception));
-    }
-    
+
     
     boolean predicate(TypeMirror type, List<? extends VariableElement> parameters) {
-        if (parameters.size() != 1) {
-            return false;
-        }
-        
-        var types = environment.types;
-        return type.getKind() == TypeKind.BOOLEAN && types.isSameType(sender, parameters.get(0).asType());
+        return type.getKind() == TypeKind.BOOLEAN 
+            && parameters.size() == 1 
+            && types.isSubtype(sender, parameters.get(0).asType());
+    }
+    
+    
+    boolean suggestions(TypeMirror type, List<? extends VariableElement> parameters) {
+        return types.isSubtype(type, completable)
+            && parameters.size() == 2
+            && types.isSubtype(context, parameters.get(0).asType()) 
+            && types.isSubtype(builder, parameters.get(1).asType());
+    }
+    
+    
+    boolean exceptions(List<? extends TypeMirror> thrown) {
+        return thrown.isEmpty() || (thrown.size() == 1 && types.isSubtype(thrown.get(0), exception));
     }
     
 }

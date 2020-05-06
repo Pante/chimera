@@ -53,12 +53,12 @@ public abstract class Parser {
         }
         
         var token = tokens.get(0);
-        if (token.type == Type.ARGUMENT) {
-            environment.error(token.location, format(token, "is at an invalid position", "a command should not start with an argument"));
-            return false;
+        var valid = token.type != Type.ARGUMENT;
+        if (!valid) {
+            environment.error(token.location, format(token, "is at an invalid position", "command should not start with an argument"));
         }
         
-        return true;
+        return valid;
     }
     
 }
