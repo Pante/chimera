@@ -26,10 +26,10 @@ package com.karuslabs.commons.command.aot;
 
 public enum Binding {
     
-    EXECUTION("A", "Command<CommandSender>", "execution"), 
+    COMMAND("A", "Command<CommandSender>", "command"), 
     TYPE("An", "ArgumentType<?>", "type"),
     REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
-    SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "sugggestions");
+    SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "suggestions");
     
     public final String article;
     public final String signature;

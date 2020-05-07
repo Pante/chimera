@@ -76,7 +76,6 @@ public class Environment {
     
     public void warn(Element element, String message) {
         messager.printMessage(WARNING, message, element);
-        error = true;
     }
     
     

@@ -96,7 +96,7 @@ public class MethodBlock {
             variable,
             StringEscapeUtils.escapeJava(token.lexeme),
             parameter(token, Binding.TYPE, "null"),
-            parameter(token, Binding.EXECUTION, "null"),
+            parameter(token, Binding.COMMAND, "null"),
             parameter(token, Binding.REQUIREMENT, "REQUIREMENT"),
             parameter(token, Binding.SUGGESTIONS, "null"),
         }));
@@ -106,7 +106,7 @@ public class MethodBlock {
         builder.append(literal.format(new Object[] {
             variable,
             StringEscapeUtils.escapeJava(token.lexeme),
-            parameter(token, Binding.EXECUTION, "null"),
+            parameter(token, Binding.COMMAND, "null"),
             parameter(token, Binding.REQUIREMENT, "REQUIREMENT"),
         }));
         

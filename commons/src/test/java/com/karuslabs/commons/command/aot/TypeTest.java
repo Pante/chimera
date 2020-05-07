@@ -23,32 +23,34 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-public class Analyzer {
+@ExtendWith(MockitoExtension.class)
+class TypeTest {
     
-    private Environment environment;
-    
-    
-    public Analyzer(Environment environment) {
-        this.environment = environment;
+    @ParameterizedTest
+    @MethodSource("fields_parameters")
+    void fields(Type type, String article, String value) {
+        assertEquals(article, type.article);
+        assertEquals(value, type.toString());
     }
     
-    
-    public void analyze() {
-        analyze(environment.scopes.values());
+    static Stream<Arguments> fields_parameters() {
+        return Stream.of(
+            of(Type.ARGUMENT, "An", "argument"),
+            of(Type.LITERAL, "A", "literal"),
+            of(Type.ROOT, "A", "root")
+        );
     }
-    
-    void analyze(Collection<Token> tokens) {
-        for (var token : tokens) {
-            analyze(token.children.values());
-            if (token.type == Type.ARGUMENT && !token.bindings.containsKey(Binding.TYPE)) {
-                environment.error(token.location, format(token, "is an invalid argument", "an ArgumentType<?> should be bound to it"));
-            }
-        }
-    }
-    
-}
+
+} 

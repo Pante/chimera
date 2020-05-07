@@ -64,7 +64,7 @@ public class VariableResolver extends Resolver<VariableElement> {
         
         var type = variable.asType();
         if (types.isSubtype(type, command)) {
-            token.bind(environment, EXECUTION, binding);
+            token.bind(environment, COMMAND, binding);
             
         } else if (types.isSubtype(type, argumentType)) {
             token.bind(environment, TYPE, binding);

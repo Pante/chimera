@@ -73,13 +73,13 @@ public class Token {
             return child;
         }
         
-        return existing.merge(environment, child) ? existing : null;
+        return existing.merge(environment, child);
     } 
     
-    boolean merge(Environment environment, Token other) {
+    @Nullable Token merge(Environment environment, Token other) {
         if (type != other.type) {
             environment.error(location, format(lexeme, "already exists", "an argument and literal in the same scope should not have the same name"));
-            return false; 
+            return null; 
             
         } else if (type == Type.LITERAL) {
             for (var alias : other.aliases) {
@@ -89,14 +89,14 @@ public class Token {
             }
         }
         
-        return true;
+        return this;
     }
     
     
     public void bind(Environment environment, Binding binding, Token token) {
         var existing = bindings.get(binding);
         if (existing != null) {
-            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + this);
+            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + quote(toString()));
             
         } else if (type != Type.ARGUMENT && (binding == Binding.TYPE || binding == Binding.SUGGESTIONS)) {
             environment.error(token.location, binding.article + " " + binding.signature + " should not be bound to a literal");

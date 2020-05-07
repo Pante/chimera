@@ -69,7 +69,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
         }
         
         if (command(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
-            token.bind(environment, EXECUTION, binding);
+            token.bind(environment, COMMAND, binding);
 
         } else if (predicate(method.getReturnType(), method.getParameters())) {
             token.bind(environment, REQUIREMENT, binding);
