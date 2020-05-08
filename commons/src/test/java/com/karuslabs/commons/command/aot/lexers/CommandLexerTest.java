@@ -23,41 +23,48 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.commons.command.aot.Type;
 
-import java.util.List;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import static java.util.Collections.EMPTY_LIST;
 
 
-public class ArgumentLexer implements Lexer {
+@ExtendWith(MockitoExtension.class)
+class CommandLexerTest {
     
-    @Override
-    public List<Token> lex(Environment environment, Element location, String value) {
-        if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(location, format(value, "is an invalid argument", "should be enclosed by \"<\" and \">\""));
-            return EMPTY_LIST;
-        }
+    CommandLexer lexer = new CommandLexer(new ArgumentLexer(), new LiteralLexer());
+    Environment environment = mock(Environment.class);
+    Element location = mock(Element.class);
+    
+    
+    @ParameterizedTest
+    @CsvSource({"a <b>", "a       <b>"})
+    void lex(String value) {
+        var tokens = lexer.lex(environment, location, value);
+        var a = tokens.get(0);
+        var b = tokens.get(1);
         
-        if (value.contains("|")) {
-            environment.error(location, format(value, "contains \"|\"", "an argument should not have aliases"));
-            return EMPTY_LIST;
-        }
-        
-        
-        var argument = value.substring(1, value.length() - 1);
-        if (argument.isEmpty()) {
-            environment.error(location, format(value, "is empty", "an argument should not be empty"));
-            return EMPTY_LIST;
-        }
-        
-        if (argument.startsWith("<") || argument.endsWith(">")) {
-            environment.warn(location, format(value, "contains trailing \"<\"s or \">\"s"));
-        }
-        
-        return List.of(Token.argument(location, value, argument));
+        assertEquals(2, tokens.size());
+        assertEquals(Type.LITERAL, a.type);
+        assertEquals(Type.ARGUMENT, b.type);
     }
     
-}
+    
+    @ParameterizedTest
+    @CsvSource({"''", "'      '"})
+    void lex_errors(String value) {
+        assertEquals(EMPTY_LIST, lexer.lex(environment, location, value));
+        verify(environment).error(location, "Command should not be blank");
+    }
+} 

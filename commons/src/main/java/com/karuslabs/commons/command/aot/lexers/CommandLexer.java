@@ -33,11 +33,11 @@ import static java.util.Collections.EMPTY_LIST;
 
 public class CommandLexer implements Lexer {
 
-    private Lexer literal;
     private Lexer argument;
+    private Lexer literal;
     
     
-    public CommandLexer(Lexer literal, Lexer argument) {
+    public CommandLexer(Lexer argument, Lexer literal) {
         this.literal = literal;
         this.argument = argument;
     }

@@ -50,36 +50,36 @@ public class Processor extends AnnotationProcessor {
     Parser command;
     Parser bind;
     Analyzer analyzer;
-    Packager resolver;
+    Packager packager;
     Generator generator;
-    boolean processed;
+    boolean compiled;
     
     
     @Override
     public void init(ProcessingEnvironment env) {
         super.init(env);
         
-        var lexer = new CommandLexer(new LiteralLexer(), new ArgumentLexer());
+        var lexer = new CommandLexer(new ArgumentLexer(), new LiteralLexer());
         
         environment = new Environment(env.getMessager(), env.getFiler(), env.getElementUtils(), env.getTypeUtils());
         command = new CommandParser(environment, lexer);
         bind = new BindParser(environment, lexer, new MethodResolver(environment), new VariableResolver(environment));
         analyzer = new Analyzer(environment);
-        resolver = new Packager(environment);
-        generator = new Generator(environment, resolver, new TypeBlock(), new MethodBlock());
-        processed = false;
+        packager = new Packager(environment);
+        generator = new Generator(environment, packager, new TypeBlock(), new MethodBlock());
+        compiled = false;
     }
     
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
-        if (processed) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
+        if (compiled) {
             return false;
         }
         
-        resolveFile(env);
-        parse(command, annotations, env, Command.class);
-        parse(bind, annotations, env, Bind.class);
+        resolveFile(round.getElementsAnnotatedWith(Emit.class));
+        parse(command, round, Command.class);
+        parse(bind, round, Bind.class);
         analyzer.analyze();
         
         if (!environment.error()) {
@@ -87,15 +87,14 @@ public class Processor extends AnnotationProcessor {
         }
         
         environment.clear();
-        processed = true;
+        compiled = true;
         return false;
     }
     
     
-    void resolveFile(RoundEnvironment env) {
-        var elements = env.getElementsAnnotatedWith(Emit.class);
+    void resolveFile(Set<? extends Element> elements) {
         if (elements.size() == 1) {
-            resolver.resolve(elements.toArray(new Element[0])[0]);
+            packager.resolve(elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
             error("Project does not contain a @Pack annotation, should contain one @Pack annotation");
@@ -107,7 +106,8 @@ public class Processor extends AnnotationProcessor {
         }
     }
     
-    void parse(Parser parser, Set<? extends TypeElement> annotations, RoundEnvironment env, Class<? extends Annotation> annotation) {
+    
+    void parse(Parser parser, RoundEnvironment env, Class<? extends Annotation> annotation) {
         for (var element : env.getElementsAnnotatedWith(annotation)) {
             parser.parse(element);
         }

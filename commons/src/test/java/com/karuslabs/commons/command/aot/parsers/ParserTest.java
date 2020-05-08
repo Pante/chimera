@@ -24,44 +24,59 @@
 package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Command;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.lexers.*;
 
-import java.util.List;
+import java.util.*;
 import javax.lang.model.element.Element;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class CommandParser extends Parser {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+
+@ExtendWith(MockitoExtension.class)
+class ParserTest {
     
-    public CommandParser(Environment environment, Lexer lexer) {
+    Environment environment = mock(Environment.class);
+    Parser parser = new StubParser(environment, new CommandLexer(new ArgumentLexer(), new LiteralLexer()));
+    
+    
+    @Test
+    void valid() {
+        assertTrue(parser.valid(List.of(Token.literal(null, "", "", Set.of()))));
+        verifyNoInteractions(environment);
+    }
+    
+    
+    @Test
+    void valid_empty() {
+        assertFalse(parser.valid(List.of()));
+        verifyNoInteractions(environment);
+    }
+    
+    
+    @Test
+    void valid_invalid() {
+        var argument = Token.argument(mock(Element.class), "<argument>", "argument");
+        
+        assertFalse(parser.valid(List.of(argument)));
+        verify(environment).error(argument.location, "\"<argument>\" is at an invalid position, command should not start with an argument");
+    }
+
+} 
+
+class StubParser extends Parser {
+
+    public StubParser(Environment environment, Lexer lexer) {
         super(environment, lexer);
     }
 
-    
     @Override
     public void parse(Element element) {
-        var commands = element.getAnnotation(Command.class).value();
-        if (commands.length == 0) {
-            environment.error(element, "@Command annotation should not be empty");
-            return;
-        }
-        
-        var root = environment.root(element);
-        for (var command : commands) {
-            var tokens = lexer.lex(environment, element, command);
-            if (valid(tokens)) {
-                parse(root, tokens);
-            }
-        }
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    void parse(Token current, List<Token> tokens) {
-        for (var token : tokens) {
-            current = current.add(environment, token);
-            if (current == null) {
-                return;
-            }
-        }
-    }
-
 }

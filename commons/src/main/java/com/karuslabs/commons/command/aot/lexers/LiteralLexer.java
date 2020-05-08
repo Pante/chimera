@@ -36,49 +36,38 @@ public class LiteralLexer implements Lexer {
 
     @Override
     public List<Token> lex(Environment environment, Element location, String value) {
-        // No need to check for starting '|'s since it will result in blank spaces in array
-        if (value.endsWith("|")) {
-            environment.warn(location, format(value, "contains trailing \"|\"s"));
-        }
-        
-        var names = value.split("\\|");
-        if (names.length == 0) {
+        if (value.contains("<") || value.contains(">")) {
+            environment.error(location, format(value, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
             return EMPTY_LIST;
         }
         
-        var name = names[0];
-        if (!valid(environment, location, name, value)) {
-            return EMPTY_LIST;
+        var names = value.split("\\|", -1);
+        
+        for (var name : names) {
+            if (!valid(environment, location, value, name)) {
+                return EMPTY_LIST;
+            }
         }
         
         var aliases = new HashSet<String>();
-        var success = true;
-        
         for (int i = 1; i < names.length; i++) {
             var alias = names[i];
-            success &= valid(environment, location, alias, value);
-            
             if (!aliases.add(alias)) {
                 environment.warn(location, "Duplicate alias: " + quote(alias));
             }
         }
         
-        return success ? List.of(Token.literal(location, value, name, aliases)) : EMPTY_LIST;
+        return List.of(Token.literal(location, value, names[0], aliases));
     }
     
     
-    boolean valid(Environment environment, Element location, String value, String context) {
-        if (value.isEmpty()) {
-            environment.error(location, format(context, "contains an empty literal", "a literal should not be empty"));
-            return false;
-            
-        } else if (value.contains("<") || value.contains(">")) {
-            environment.error(location, format(value, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
-            return false;
-            
-        } else {
-            return true;
+    boolean valid(Environment environment, Element location, String context, String value) {
+        var valid = !value.isEmpty();
+        if (!valid) {
+            environment.error(location, format(context, "contains an empty literal alias or name", "should not be empty"));
         }
+        
+        return valid;
     }
 
 }

@@ -92,6 +92,12 @@ public class BindParser extends Parser {
         for (var binding : bindings) {
             current = current.children.get(binding.lexeme);
             if (current == null) {
+                var command = "";
+                for (var part : bindings) {
+                    command += part + " ";
+                }
+                
+                environment.error(element, format(command.trim(), "does not exist"));
                 return;
             }
         }

@@ -34,6 +34,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
 import static com.karuslabs.commons.command.aot.Binding.*;
+import static com.karuslabs.commons.command.aot.Messages.quote;
 import static javax.lang.model.element.Modifier.*;
 
 
@@ -76,7 +77,7 @@ public class VariableResolver extends Resolver<VariableElement> {
             token.bind(environment, SUGGESTIONS, binding);
             
         } else {
-            environment.error(variable, variable + " should be a ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
+            environment.error(variable, quote(variable) + " should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 
