@@ -39,12 +39,12 @@ import static javax.lang.model.element.Modifier.STATIC;
 public class MethodBlock {
     
     StringBuilder builder;
-    @Nullable Name type;
     MessageFormat argument;
     MessageFormat literal;
     MessageFormat alias;
     Set<String> variables;
     int count;
+    @Nullable String type;
     
     
     public MethodBlock() {
@@ -57,8 +57,8 @@ public class MethodBlock {
     }
     
     
-    public void start(TypeElement element) {
-        type = element.getQualifiedName();
+    public void start(String type) {
+        this.type = type;
         variables.add("source");
         variables.add("commands");
         
@@ -84,7 +84,7 @@ public class MethodBlock {
                 break;
                 
             default:
-                throw new IllegalArgumentException("Invalid token type: '" + token.type + "', found when generating method");
+                throw new IllegalArgumentException("Invalid token type: \"" + token.type + "\", found when generating method");
         }
         
         return variable;
@@ -136,7 +136,7 @@ public class MethodBlock {
             return name + "." + element.getSimpleName();
             
         } else {
-            return value;
+            throw new IllegalArgumentException("Invalid bind target: \"" + element.getKind() + "\"");
         }
     }
     

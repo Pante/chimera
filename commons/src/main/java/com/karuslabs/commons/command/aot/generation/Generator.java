@@ -52,21 +52,21 @@ public class Generator {
         var file = packager.pack().isEmpty() ? packager.file() : packager.pack() + "." + packager.file();
         var elements = environment.scopes.keySet().toArray(new Element[0]);
         
-        try (var writer = new BufferedWriter(environment.filer.createSourceFile(file, elements).openWriter())) {
+        try (var writer = environment.filer.createSourceFile(file, elements).openWriter()) {
             type.start(packager.pack(), packager.file());
         
             for (var entry : environment.scopes.entrySet()) {
-                method.start((TypeElement) entry.getKey());
+                method.start(((TypeElement) entry.getKey()).getQualifiedName().toString());
                 type.method(descend(entry.getValue()));
             }
 
             writer.write(type.end());
             
         } catch (FilerException ignored) {
-            environment.error(packager.element(), packager.file() + " already exists");
+            environment.error(packager.element(), "\"" + file + "\" already exists");
             
         } catch (IOException ignored) {
-            environment.error(packager.element(), "Failed to create file: '" + packager.file() + "'");
+            environment.error(packager.element(), "Failed to create file: \"" + file + "\"");
         }
     }
     

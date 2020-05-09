@@ -147,6 +147,7 @@
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <includeTestResources>false</includeTestResources>
                 </configuration>
                 <executions>
                     <execution>

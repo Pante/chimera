@@ -65,7 +65,7 @@ public class Packager {
             
         } else if (value.endsWith(".java") || value.endsWith(".class")) {
             var parts = value.split("\\.");
-            environment.error(element, "File ends with " + quote(parts[parts.length - 1])+ ", should not end with file extension");
+            environment.error(element, "File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
             return;
             
         }  else if (!PACKAGE.reset(value).matches()) {
