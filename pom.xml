@@ -10,12 +10,14 @@
     <name>Chimera</name>
     <description>Mono-repository for Spigot libararies and tools</description>
     
+    
     <properties>
-        <release>11</release>
-        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <release>11</release>
     </properties>
+
 
     <modules>
         <module>annotations</module>
@@ -23,41 +25,19 @@
         <module>scribe</module>
     </modules>
           
-    <profiles>
-        <profile>
+          
+    <distributionManagement>
+        <repository>
             <id>karus</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <distributionManagement>
-                <repository>
-                    <id>karus</id>
-                    <url>https://repo.karuslabs.com/repository/chimera-releases</url>
-                </repository>
+            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
+        </repository>
 
-                <snapshotRepository>
-                    <id>karus</id>
-                    <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
-        
-<!-- Pending GitHub Package Registry's support for mutable packages !-->
-<!--        <profile>
-            <id>github-packages</id>
-            <distributionManagement>
-                <repository>
-                    <id>github-packages</id>
-                    <url>https://maven.pkg.github.com/Pante/chimera</url>
-                </repository>
-
-                <snapshotRepository>
-                    <id>github-packages</id>
-                    <url>https://maven.pkg.github.com/Pante/chimera</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>-->
-    </profiles>
+        <snapshotRepository>
+            <id>karus</id>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
     
     <repositories>   
         <repository>
@@ -74,12 +54,8 @@
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
         </repository>
-            
-        <repository>
-            <id>lingua-releases</id>
-            <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
-        </repository>
     </repositories>
+    
     
     <dependencies>      
         <dependency>
@@ -132,8 +108,43 @@
         </dependency>
     </dependencies>
     
+    
     <build>
-        <plugins>
+        <defaultGoal>install</defaultGoal>
+        <plugins>  
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${release}</release>
+                </configuration>
+            </plugin>
+        
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>shaded</shadedClassifierName>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                    </transformers>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.1</version>
@@ -157,7 +168,20 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    
 </project>

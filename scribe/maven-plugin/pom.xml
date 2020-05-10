@@ -13,6 +13,7 @@
     <name>Scribe Maven Plugin</name>
     <description>Maven plugin for compile-time plugin.yml generation</description>
     
+    
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -58,63 +59,13 @@
     </dependencies>
     
     <build>
-        <defaultGoal>clean package install</defaultGoal>
         <plugins>  
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <release>${release}</release>
-                </configuration>
-            </plugin>
-            
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>process-classes</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-                <configuration>
-                    <trimStackTrace>false</trimStackTrace>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                    </transformers>
-                </configuration>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                            <goal>report</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

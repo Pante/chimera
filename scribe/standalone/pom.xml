@@ -13,6 +13,7 @@
     <name>Scribe Standalone</name>
     <description>Standalone compile-time plugin.yml generator</description>
     
+    
     <repositories>
         <repository>
             <id>Sonatype-public</id>
@@ -20,6 +21,7 @@
             <url>http://oss.sonatype.org/content/groups/public/</url>
         </repository>
     </repositories>
+    
     
     <dependencies>
         <dependency>
@@ -48,7 +50,6 @@
             <artifactId>auto-service-annotations</artifactId>
             <version>1.0-rc6</version>
             <scope>compile</scope>
-            <optional>true</optional>
         </dependency>
         
         <dependency>
@@ -60,7 +61,6 @@
     </dependencies>
     
     <build>
-        <defaultGoal>clean package install</defaultGoal>
         <plugins>  
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -75,48 +75,6 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
-            </plugin>
-    
-            <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <shadedClassifierName>shaded</shadedClassifierName>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                    </transformers>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-    
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-                <configuration>
-                    <trimStackTrace>false</trimStackTrace>
-                </configuration>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

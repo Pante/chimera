@@ -13,11 +13,11 @@
     <name>Scribe</name>
     <description>Compile-time plugin.yml generators</description>
     
+    
     <modules>
         <module>annotations</module>
         <module>core</module>
         <module>maven-plugin</module>
         <module>standalone</module>
     </modules>
-    
 </project>
