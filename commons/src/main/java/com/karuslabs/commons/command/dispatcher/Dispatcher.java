@@ -29,6 +29,9 @@ import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.CommandNode;
+
+import java.util.Map;
 
 import net.minecraft.server.v1_15_R1.*;
 
@@ -80,6 +83,13 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.dispatcher = this.server.commandDispatcher.a();
         this.synchronizer = synchronizer;
         this.walker = new TreeWalker<>(new NativeMapper(this));
+    }
+    
+    
+    public void register(Map<String, CommandNode<CommandSender>> commands) {
+        for (var command : commands.values()) {
+            getRoot().addChild(command);
+        }
     }
     
     

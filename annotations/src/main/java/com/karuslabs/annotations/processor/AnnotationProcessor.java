@@ -23,6 +23,7 @@
  */
 package com.karuslabs.annotations.processor;
 
+import com.karuslabs.annotations.VisibleForOverride;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -30,7 +31,6 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 import static javax.tools.Diagnostic.Kind.*;
-import com.karuslabs.annotations.VisibleForOverride;
 
 
 public abstract class AnnotationProcessor extends AbstractProcessor {

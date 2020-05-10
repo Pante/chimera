@@ -26,7 +26,13 @@ package com.karuslabs.commons.command.dispatcher;
 import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.nodes.*;
 
+import com.mojang.brigadier.tree.CommandNode;
+
+import java.util.Map;
+
 import net.minecraft.server.v1_15_R1.*;
+
+import org.bukkit.command.CommandSender;
 
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
@@ -87,7 +93,18 @@ class DispatcherTest {
     
     
     @Test
-    void register() {
+    void register_commands() {
+        CommandNode<CommandSender> a = Literal.of("a").build();
+        var commands = Map.of("a", a);
+        
+        dispatcher.register(commands);
+        
+        assertSame(a, dispatcher.getRoot().getChild("a"));
+    }
+    
+    
+    @Test
+    void register_builder() {
         var a = dispatcher.register(Literal.of("a"));
         
         assertSame(a, dispatcher.getRoot().getChild("a"));

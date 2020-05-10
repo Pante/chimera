@@ -24,6 +24,7 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 
 **Commands**
 - Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
+- Add `Dispatcher.register(Map<String, CommandNode<CommandSender>>)`
 - Add `DispatcherMap`
 - Add `NativeMap`
 - Add `Nodes`
