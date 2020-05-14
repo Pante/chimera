@@ -26,7 +26,7 @@ package com.karuslabs.commons.util.concurrent.locks;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class AutoLock extends ReentrantLock implements Acquirable {
+public class AutoLock extends ReentrantLock implements Holdable {
     
     private final Mutex mutex;
     
@@ -42,13 +42,13 @@ public class AutoLock extends ReentrantLock implements Acquirable {
     
     
     @Override
-    public Mutex acquire() {
+    public Mutex hold() {
         lock();
         return mutex;
     }
 
     @Override
-    public Mutex acquireInterruptibly() throws InterruptedException {
+    public Mutex holdInterruptibly() throws InterruptedException {
         lockInterruptibly();
         return mutex;
     }

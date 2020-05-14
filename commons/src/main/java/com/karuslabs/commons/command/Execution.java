@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.suggestions;
+package com.karuslabs.commons.command;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.*;
-
-import java.util.concurrent.CompletableFuture;
-
-import org.bukkit.command.CommandSender;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 
-public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
+@FunctionalInterface
+public interface Execution<T> extends Command<T> {
     
-    ENTITIES, RECIPES, SOUNDS;
+    public void execute(OptionalContext<T> context) throws CommandSyntaxException;
     
     
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
-        return builder.buildFuture();
+    public default int run(CommandContext<T> context) throws CommandSyntaxException {
+        execute(new OptionalContext<>(context));
+        return SINGLE_SUCCESS;
     }
     
 }

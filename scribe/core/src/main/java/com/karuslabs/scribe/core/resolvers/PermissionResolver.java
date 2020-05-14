@@ -89,7 +89,7 @@ public class PermissionResolver<T> extends Resolver<T> {
             information.put("description", permission.description());
         }
         
-        information.put("default", permission.implicit().value);
+        information.put("default", permission.implicit().toString());
         
         if (permission.children().length > 0) {
             var children = new HashMap<String, Boolean>();

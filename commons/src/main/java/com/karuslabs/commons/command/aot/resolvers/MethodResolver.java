@@ -78,7 +78,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
             token.bind(environment, SUGGESTIONS, binding);
             
         } else {
-            environment.error(method, "Signature should match Command<CommandSender>, Executable<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
+            environment.error(method, "Signature should match Command<CommandSender>, Execution<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         }
     }
 

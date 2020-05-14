@@ -133,7 +133,7 @@ class MethodResolverTest {
     static Stream<Arguments> resolve_errors_parameters() {
         return Stream.of(
             of(Set.of(), "Method should be public"),
-            of(Set.of(PUBLIC),"Signature should match Command<CommandSender>, Executable<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>")
+            of(Set.of(PUBLIC),"Signature should match Command<CommandSender>, Execution<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>")
         );
     }
     

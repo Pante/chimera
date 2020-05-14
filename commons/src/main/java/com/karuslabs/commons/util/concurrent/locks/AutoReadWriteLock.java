@@ -60,7 +60,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
     }
     
     
-    public static @Delegate class AutoReadLock extends ReadLock implements Acquirable {
+    public static @Delegate class AutoReadLock extends ReadLock implements Holdable {
         
         private final ReadLock lock;
         private final Mutex mutex;
@@ -73,13 +73,13 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
         
         @Override
-        public Mutex acquire() {
+        public Mutex hold() {
             lock();
             return mutex;
         }
 
         @Override
-        public Mutex acquireInterruptibly() throws InterruptedException {
+        public Mutex holdInterruptibly() throws InterruptedException {
             lockInterruptibly();
             return mutex;
         }
@@ -122,7 +122,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
     }
     
-    public static @Delegate class AutoWriteLock extends WriteLock implements Acquirable {
+    public static @Delegate class AutoWriteLock extends WriteLock implements Holdable {
         
         private final WriteLock lock;
         private final Mutex mutex;
@@ -135,13 +135,13 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
         
         
         @Override
-        public Mutex acquire() {
+        public Mutex hold() {
             lock();
             return mutex;
         }
 
         @Override
-        public Mutex acquireInterruptibly() throws InterruptedException {
+        public Mutex holdInterruptibly() throws InterruptedException {
             lockInterruptibly();
             return mutex;
         }

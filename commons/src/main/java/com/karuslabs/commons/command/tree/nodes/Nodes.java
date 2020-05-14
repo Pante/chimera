@@ -37,7 +37,7 @@ public @Static class Nodes {
 
     public static abstract class Builder<T, B extends Builder<T, B>> extends ArgumentBuilder<T, B> {
     
-        public B executes(Executable<T> command) {
+        public B executes(Execution<T> command) {
             return executes((Command<T>) command);
         }
 

@@ -41,7 +41,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
-@Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false)
+@Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class ScribeMojo extends AbstractMojo {    
     
     @Parameter(defaultValue = "${project}", readonly = true, required = true)

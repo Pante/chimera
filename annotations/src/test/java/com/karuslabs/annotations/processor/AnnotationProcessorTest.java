@@ -26,28 +26,23 @@ package com.karuslabs.annotations.processor;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.*;
-import org.mockito.quality.Strictness;
 
 import static javax.tools.Diagnostic.Kind.*;
+import static org.mockito.quality.Strictness.LENIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@MockitoSettings(strictness = LENIENT)
 class AnnotationProcessorTest {
     
     AnnotationProcessor processor = spy(new AnnotationProcessor() {});
     Messager messager = mock(Messager.class);
-    Elements elements = mock(Elements.class);
-    Types types = mock(Types.class);
-    Element element = mock(Element.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
+    Element element = mock(Element.class);
     
     
     @BeforeEach
@@ -58,13 +53,10 @@ class AnnotationProcessorTest {
     
     @Test
     void process() {
-        when(environment.getElementUtils()).thenReturn(elements);
-        when(environment.getTypeUtils()).thenReturn(types);
+        RoundEnvironment round = mock(RoundEnvironment.class);
+        doReturn(Set.of(mock(Element.class))).when(round).getElementsAnnotatedWithAny(any(TypeElement[].class));
         
-        RoundEnvironment environment = mock(RoundEnvironment.class);
-        doReturn(Set.of(mock(TypeElement.class))).when(environment).getElementsAnnotatedWithAny(any(TypeElement[].class));
-        
-        assertFalse(processor.process(Set.of(), environment));
+        assertFalse(processor.process(Set.of(), round));
     }
     
     

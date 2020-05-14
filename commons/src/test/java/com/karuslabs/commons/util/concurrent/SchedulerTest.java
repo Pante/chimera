@@ -24,17 +24,15 @@
 package com.karuslabs.commons.util.concurrent;
 
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class SchedulerTest {
     
     Scheduler scheduler = spy(new Scheduler(1));
@@ -44,14 +42,13 @@ class SchedulerTest {
     @Test
     void schedule_consumer() {
         doReturn(null).when(scheduler).scheduleAtFixedRate(any(), anyInt(), anyInt(), any());
-        var capture = ArgumentCaptor.forClass(RunnableContext.class);
+        var runnable = ArgumentCaptor.forClass(RunnableContext.class);
         
         scheduler.schedule((context) -> {}, 1, 2, TimeUnit.DAYS);
         
-        verify(scheduler).scheduleAtFixedRate(capture.capture(), eq(1L), eq(2L), eq(TimeUnit.DAYS));
+        verify(scheduler).scheduleAtFixedRate(runnable.capture(), eq(1L), eq(2L), eq(TimeUnit.DAYS));
         
-        var runnable = capture.getValue();
-        assertEquals(Context.INFINITE, runnable.times());
+        assertEquals(Context.INFINITE, runnable.getValue().times());
     }
     
     
@@ -72,6 +69,45 @@ class SchedulerTest {
         
         verifyNoInteractions(runnable);
         verifyNoInteractions(task);
+    }
+    
+}
+
+
+class RunnableContextTest {
+    
+    Consumer<Context> consumer = mock(Consumer.class);
+    RunnableContext runnable = new RunnableContext(consumer, 1);
+    Future<String> future = mock(Future.class);
+    
+    
+    @BeforeEach
+    void before() {
+        runnable.future = future;
+    }
+    
+    
+    @Test
+    void run() {        
+        runnable.run();
+        verify(consumer).accept(runnable);
+        assertEquals(0, runnable.times());
+        
+        runnable.run();
+        
+        assertEquals(0, runnable.times());
+        verify(future).cancel(false);
+    }
+    
+    
+    @Test
+    void run_infinite() {
+        runnable.times = Context.INFINITE;
+        
+        runnable.run();
+        
+        assertEquals(Context.INFINITE, runnable.times());
+        verifyNoInteractions(future);
     }
     
 }

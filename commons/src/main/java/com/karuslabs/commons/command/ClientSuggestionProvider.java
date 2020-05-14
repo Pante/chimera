@@ -24,31 +24,21 @@
 package com.karuslabs.commons.command;
 
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.*;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.concurrent.CompletableFuture;
 
-import java.util.HashMap;
-
-import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.bukkit.command.CommandSender;
 
 
-@ExtendWith(MockitoExtension.class)
-class ExecutableTest {
+public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
     
-    Executable<Object> executable = val -> assertTrue(val instanceof OptionalContext<?>);
+    ENTITIES, RECIPES, SOUNDS;
     
     
-    @Test
-    void run() throws CommandSyntaxException {
-        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, null, false);
-        
-        assertEquals(SINGLE_SUCCESS, executable.run(context));
+    @Override
+    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
+        return builder.buildFuture();
     }
-
-} 
+    
+}

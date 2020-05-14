@@ -21,29 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.commons.util.collection;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ClassMapTest {    
     
     @ParameterizedTest
     @MethodSource("parameters")
     void containsKey(ClassMap<Object> map) {
-        
         map.put(int.class, 1);
+        
         assertTrue(map.containsKey(int.class));
         assertFalse(map.containsKey(Integer.class));
     }
@@ -108,7 +104,6 @@ class ClassMapTest {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class HashClassMapTest {
     
     ClassMap<Object> map = ClassMap.of(1);
@@ -122,7 +117,6 @@ class HashClassMapTest {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class ProxiedClassMapTest {
     
     Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);

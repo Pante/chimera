@@ -33,11 +33,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Maybe<T> extends FutureTask<T> {
     
-    private static final Callable<?> VALUE = () -> null;
+    private static final Callable<?> CALLABLE = () -> null;
     
     
     public static <T> Maybe<T> value(T value) {
-        var maybe =  new Maybe(VALUE);
+        var maybe =  new Maybe(CALLABLE);
         maybe.set(value);
         
         return maybe;
@@ -54,7 +54,7 @@ public class Maybe<T> extends FutureTask<T> {
     
     
     @Blocking
-    public Optional<T> maybe() {
+    public Optional<T> some() {
         try {
             return Optional.ofNullable(get());
             
@@ -64,7 +64,7 @@ public class Maybe<T> extends FutureTask<T> {
     }
     
     @Blocking
-    public Optional<T> maybe(long timeout, TimeUnit unit) {
+    public Optional<T> some(long timeout, TimeUnit unit) {
         try {
             return Optional.ofNullable(get(timeout, unit));
             

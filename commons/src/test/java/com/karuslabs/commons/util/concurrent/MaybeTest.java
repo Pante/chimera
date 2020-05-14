@@ -27,13 +27,10 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class MaybeTest {
     
     Maybe<String> maybe = new Maybe<>(() -> "expected");
@@ -55,26 +52,26 @@ class MaybeTest {
     
     
     @Test
-    void maybe() {
-        assertEquals("expected", maybe.maybe().orElseThrow());
+    void some() {
+        assertEquals("expected", maybe.some().orElseThrow());
     }
     
     
     @Test
-    void maybe_throws_exception() {
-        assertEquals(Optional.empty(), exceptional.maybe());
+    void some_throws_exception() {
+        assertEquals(Optional.empty(), exceptional.some());
     }
     
     
     @Test
-    void maybe_timeout() {
-        assertEquals("expected", maybe.maybe(1, TimeUnit.MINUTES).orElseThrow());
+    void some_timeout() {
+        assertEquals("expected", maybe.some(1, TimeUnit.MINUTES).orElseThrow());
     }
     
     
     @Test
-    void maybe_timeout_throws_exception() {
-        assertEquals(Optional.empty(), exceptional.maybe(0, TimeUnit.MINUTES));
+    void some_timeout_throws_exception() {
+        assertEquals(Optional.empty(), exceptional.some(0, TimeUnit.MINUTES));
     }
     
     

@@ -39,13 +39,13 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 class VersionTest {
     
     @ParameterizedTest
-    @MethodSource("values_parameters")
-    void values(Version version, String value) {
-        assertEquals(value, version.version);
+    @MethodSource("toString_parameters")
+    void toString(Version version, String value) {
+        assertEquals(value, version.toString());
     }
     
     
-    static Stream<Arguments> values_parameters() {
+    static Stream<Arguments> toString_parameters() {
         return Stream.of(
             of(Version.INFERRED, "1.13"),
             of(Version.V1_13, "1.13"),

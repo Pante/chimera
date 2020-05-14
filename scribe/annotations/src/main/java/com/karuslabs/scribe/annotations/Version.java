@@ -32,10 +32,16 @@ public enum Version {
     V1_15("1.15");
     
     
-    public final String version;
+    private final String value;
     
-    private Version(String version) {
-        this.version = version;
+    private Version(String value) {
+        this.value = value;
+    }
+    
+    
+    @Override
+    public String toString() {
+        return value;
     }
     
 }

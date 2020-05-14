@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent;
+package com.karuslabs.commons.command;
 
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class RunnableContextTest {
+class ExecutionTest {
     
-    Consumer<Context> consumer = mock(Consumer.class);
-    RunnableContext runnable = new RunnableContext(consumer, 1);
-    Future<String> future = mock(Future.class);
-    
-    
-    @BeforeEach
-    void before() {
-        runnable.future = future;
-    }
+    Execution<Object> executable = val -> assertTrue(val instanceof OptionalContext<?>);
     
     
     @Test
-    void run() {        
-        runnable.run();
-        verify(consumer).accept(runnable);
-        assertEquals(0, runnable.times());
+    void run() throws CommandSyntaxException {
+        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, null, false);
         
-        runnable.run();
-        
-        assertEquals(0, runnable.times());
-        verify(future).cancel(false);
+        assertEquals(SINGLE_SUCCESS, executable.run(context));
     }
-    
-    
-    @Test
-    void run_infinite() {
-        runnable.times = Context.INFINITE;
-        
-        runnable.run();
-        
-        assertEquals(Context.INFINITE, runnable.times());
-        verifyNoInteractions(future);
-    }
-    
-}
+
+} 

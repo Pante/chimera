@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.types.*;
-import com.karuslabs.commons.command.suggestions.ClientSuggestionProvider;
+import com.karuslabs.commons.command.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.CommandDispatcher;

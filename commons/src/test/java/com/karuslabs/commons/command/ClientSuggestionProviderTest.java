@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,26 @@
  */
 package com.karuslabs.commons.command;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
 
 
-@FunctionalInterface
-public interface Executable<T> extends Command<T> {
+@ExtendWith(MockitoExtension.class)
+class ClientSuggestionProviderTest {
     
-    public void execute(OptionalContext<T> context) throws CommandSyntaxException;
-    
-    
-    @Override
-    public default int run(CommandContext<T> context) throws CommandSyntaxException {
-        execute(new OptionalContext<>(context));
-        return SINGLE_SUCCESS;
+    @Test
+    void getSuggestions() {
+        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).buildFuture()).thenReturn(null).getMock();
+        
+        ClientSuggestionProvider.ENTITIES.getSuggestions(null, builder);
+        
+        verify(builder).buildFuture();
+        verifyNoMoreInteractions(builder);
     }
-    
-}
+
+} 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2018 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.suggestions;
-
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.*;
+package com.karuslabs.commons.util.concurrent.locks;
 
 
-@ExtendWith(MockitoExtension.class)
-class ClientSuggestionProviderTest {
+public interface Holdable {
     
-    @Test
-    void getSuggestions() {
-        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).buildFuture()).thenReturn(null).getMock();
-        
-        ClientSuggestionProvider.ENTITIES.getSuggestions(null, builder);
-        
-        verify(builder).buildFuture();
-        verifyNoMoreInteractions(builder);
-    }
-
-} 
+    public Mutex hold();
+    
+    public Mutex holdInterruptibly() throws InterruptedException;
+    
+}

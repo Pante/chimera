@@ -39,20 +39,20 @@ public class APIResolver<T> extends UniqueResolver<T> {
     protected void resolve(T type) {
        var api = extractor.single(type, API.class);
        if (api.value() != Version.INFERRED) {
-           resolution.mappings.put("api-version", api.value().version);
+           resolution.mappings.put("api-version", api.value().toString());
            return;
        }
        
        for (var version : Version.values()) {
-           if (project.api.startsWith(version.version + ".") || project.api.startsWith(version.version + "-")) {
-               resolution.mappings.put("api-version", version.version);
+           if (project.api.startsWith(version + ".") || project.api.startsWith(version + "-")) {
+               resolution.mappings.put("api-version", version.toString());
                break;
            }
        }
        
        if (!resolution.mappings.containsKey("api-version")) {
-           resolution.mappings.put("api-version", Version.INFERRED.version);
-           resolution.warning(type, "Unable to infer 'api-version', defaulting to '" + Version.INFERRED.version + "'");
+           resolution.mappings.put("api-version", Version.INFERRED.toString());
+           resolution.warning(type, "Unable to infer 'api-version', defaulting to '" + Version.INFERRED + "'");
        }
     }
 

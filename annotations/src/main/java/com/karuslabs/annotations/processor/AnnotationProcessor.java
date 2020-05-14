@@ -35,7 +35,7 @@ import static javax.tools.Diagnostic.Kind.*;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
-    protected static final TypeElement[] ARRAY = new TypeElement[0];
+    protected static final TypeElement[] EMPTY = new TypeElement[0];
     
     
     protected Elements elements;
@@ -53,8 +53,8 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     
     
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        for (var element : environment.getElementsAnnotatedWithAny(annotations.toArray(ARRAY))) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
+        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(EMPTY))) {
             process(element);
         }
         

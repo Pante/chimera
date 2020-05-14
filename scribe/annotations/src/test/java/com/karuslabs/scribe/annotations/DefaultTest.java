@@ -39,12 +39,12 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 class DefaultTest {
     
     @ParameterizedTest
-    @MethodSource("values_parameters")
-    void values(Default value, String expected) {
-        assertEquals(expected, value.value);
+    @MethodSource("toString_parameters")
+    void toString(Default value, String expected) {
+        assertEquals(expected, value.toString());
     }
     
-    static Stream<Arguments> values_parameters() {
+    static Stream<Arguments> toString_parameters() {
         return Stream.of(
             of(Default.TRUE, "true"),
             of(Default.FALSE, "false"),

@@ -32,13 +32,14 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Add `SynchronizationListener`
 - Add `TreeWalker<T, R>`
 - Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
-- Change `ClientsideProvider` to `ClientSuggestionProvider`
+- Change `com.karuslabs.commons.command.suggestions.ClientsideProvider` to `com.karuslabs.commons.command.ClientSuggestionProvider`
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
 - Change `Commands.from(Object, String)` to `Commands.resolve(Object, String)`
 - Change `DefaultableContext<T>` to `OptionalContext<T>`
 - Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
 - Change `DispatcherMapper` to `NativeMapper`
+- Change `Executable<T>` to `Execution<T>`
 - Change `Exceptions` to package-private
 - Change `Lexers` to `Readers`
 - Change `Mapper.otherwise(ComandNode<T>)` to throw `IllegalArgumentException` instead of `UnsupportedOperationException`
@@ -65,6 +66,9 @@ more information.
 - Add `Context`
 - Add `Maybe<T>`
 - Add `Scheduler`
+- Change `Acquirable` to `Holdable`
+- Change `Acquirable.acquire()` to `Holdable.hold()`
+- Change `Acquirable.acquireInterruptibly()` to `Holdable.holdInterruptibly()`
 - Fix longstanding issue with tasks scheduled with `Scheduler` and it's predecessor not running the correct number of times
 - Fix missing `@Nullable` annotations
 - Remove `Eventual<T>` - replaced by `Maybe<T>`
@@ -84,6 +88,13 @@ more information.
 - Remove `com.karuslabs.commons.util.locale.providers`
 - Remove `com.karuslabs.commons.util.locale.spi`
 - Remove dependency on `lingua-franca`
+
+**Scribe-Annotations**
+- Change `Default.value` from public to private
+- Change `Version.version` from public to private
+
+**Scribe-Maven-Plugin**
+- Fix failed execution caused by project's dependencies not getting resolved
 
 **Others**
 - Add `CHANGELOG.md`
