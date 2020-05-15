@@ -33,7 +33,7 @@ import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public final @ValueType class Point extends Location {
+public @ValueType final class Point extends Location {
     
     private static final double EPSILON = 0.000001;
     private static final int X = 0;

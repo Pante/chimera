@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.util.collection;
 
-import com.google.common.primitives.Primitives;
-
 import com.karuslabs.annotations.Delegate;
+import com.karuslabs.commons.util.Type;
 
 import java.util.*;
 
@@ -62,7 +61,7 @@ public interface ClassMap<T> {
     
     public default <U extends T> U getOrDefault(Class<U> type, U value) {
         var item = map().get(type);
-        if (item != null && Primitives.wrap(type).isAssignableFrom(item.getClass())) {
+        if (item != null && Type.box(type).isAssignableFrom(item.getClass())) {
             return (U) item;
             
         } else {

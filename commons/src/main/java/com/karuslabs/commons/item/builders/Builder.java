@@ -46,7 +46,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         meta = (Meta) item.getItemMeta();
     }
     
-    public Builder(Builder<ItemMeta, ?> source) {
+    Builder(Builder<ItemMeta, ?> source) {
         item = source.item;
         meta = (Meta) source.meta;
         source.item = null;

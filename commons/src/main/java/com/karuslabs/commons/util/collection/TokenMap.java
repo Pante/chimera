@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.util.collection;
 
-import com.google.common.primitives.Primitives;
-
 import com.karuslabs.annotations.*;
+import com.karuslabs.commons.util.Type;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -71,9 +70,10 @@ public interface TokenMap<N, T> {
     public <U extends T> U getOrDefault(N name, Class<U> type, U value);
     
     public default <U extends T> U getOrDefault(Key<N, U> key, U value) {
-        T item = map().get(key);
-        if (item != null && Primitives.wrap(key.type).isAssignableFrom(item.getClass())) {
+        var item = map().get(key);
+        if (item != null && Type.box(key.type).isAssignableFrom(item.getClass())) {
             return (U) item;
+            
         } else {
             return value;
         }
@@ -129,10 +129,7 @@ public interface TokenMap<N, T> {
         }
 
         int hash() {
-            int hash = 5;
-            hash = 53 * hash + Objects.hashCode(name);
-            hash = 53 * hash + Objects.hashCode(type);
-            return hash;
+            return Objects.hash(name, type);
         }
         
         
@@ -153,7 +150,7 @@ public interface TokenMap<N, T> {
         
         @Override
         public String toString() {
-            return "Key[name: " + name + " class: " + type.getName() + "]";
+            return "Key[name: \"" + name + "\" class: " + type.getName() + "]";
         }
 
     }

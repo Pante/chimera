@@ -26,13 +26,10 @@ package com.karuslabs.commons.util;
 import org.bukkit.util.Vector;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class VectorsTest {
     
     Vector vector = new Vector(1, 2, 3);

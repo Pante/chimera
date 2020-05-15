@@ -60,7 +60,7 @@ public class Trie<V> extends AbstractMap<String, V> {
     }
     
     
-    public <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
+    <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
         var entry = root;
         for (var character : prefix.toCharArray()) {
             entry = entry.get(character);
@@ -69,11 +69,11 @@ public class Trie<V> extends AbstractMap<String, V> {
             }
         }
         
-        accumulate(entry, mapper, collection);
+        map(entry, mapper, collection);
         return collection;
     }
     
-    <C extends Collection<T>, T> void accumulate(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
+    <C extends Collection<T>, T> void map(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
         if (entry.key != null) {
             leaves.add(mapper.apply(entry));
         }
@@ -81,14 +81,14 @@ public class Trie<V> extends AbstractMap<String, V> {
         if (entry.ascii != null) {
             for (var child : entry.ascii) {
                 if (child != null) {
-                    accumulate(child, mapper, leaves);
+                    map(child, mapper, leaves);
                 }
             }
         }
         
         if (entry.expanded != null) {
             for (var child : entry.expanded.values()) {
-                accumulate(child, mapper, leaves);
+                map(child, mapper, leaves);
             }
         }
     }

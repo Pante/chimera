@@ -66,13 +66,13 @@ class FilterTest {
     
     
     @ParameterizedTest
-    @MethodSource("visit_parameters")
+    @MethodSource("filters")
     void visit(ElementVisitor<Element, Void> visitor, Element element, Element expected) {
         assertEquals(expected, element.accept(visitor, null));
     }
     
     
-    static Stream<Arguments> visit_parameters() {
+    static Stream<Arguments> filters() {
         return Stream.of(
             of(Filter.CLASS, MODULE, null),
             of(Filter.CLASS, PACKAGE, null),

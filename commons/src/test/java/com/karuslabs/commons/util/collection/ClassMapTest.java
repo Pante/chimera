@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClassMapTest {    
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void containsKey(ClassMap<Object> map) {
         map.put(int.class, 1);
         
@@ -46,7 +46,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void containsValue(ClassMap<Object> map) {  
         map.put(int.class, 1); 
         assertTrue(map.containsValue(1));
@@ -54,7 +54,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void get(ClassMap<Object> map) {
         map.put(String.class, "test");
         assertEquals(String.class, map.get(String.class).getClass());
@@ -62,15 +62,16 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void getOrDefault_value(ClassMap<Object> map) {
         map.put(int.class, 1);
-        assertEquals(1, (int) map.getOrDefault(int.class, 2));
+        
+        assertEquals(1, (int) map.getOrDefault(int.class, 3));
     }
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void getOrDefault_default(ClassMap<Object> map) {
         map.map().put(int.class, "invalid");
         assertEquals(2, (int) map.getOrDefault(int.class, 2));
@@ -78,7 +79,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void put(ClassMap<Object> map) {
         map.put(String.class, "first");
         assertEquals("first", map.put(String.class, "second"));
@@ -86,7 +87,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("parameters")
+    @MethodSource("maps")
     void remove(ClassMap<Object> map) {
         map.put(int.class, 1); 
         map.remove(int.class);
@@ -94,7 +95,7 @@ class ClassMapTest {
     }
     
     
-    static Stream<ClassMap<Object>> parameters() {
+    static Stream<ClassMap<Object>> maps() {
         var hashed = ClassMap.of();
         var proxied = ClassMap.of(new HashMap<>());
         

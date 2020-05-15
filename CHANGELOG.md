@@ -77,12 +77,23 @@ more information.
 - Remove `Repetition` - redundant as `Scheduler` now accepts a `Consumer<Context>`
 - Remove `RunnableRepetition` - redundant as `Scheduler` now accepts a `Consumer<Context>`
 
+**Items**
+- Change `Builder(Builder<ItemMeta, ?>)` from public to package-private
+
 **Utility**
 - Add `Point`
-- Add `NULL` constant to `Type`
+- Add `Type.box(Class<?>)`
+- Add `Type.unbox(Class<?>)`
+- Add `Type.VOID'
+- Change `Trie.prefixed(String, Function<Entry<String, V>, T>, C) from public to package-private
 - Change boxed and unboxed values of `TYPE` constant in `Type` to `Object`
+- Change `Vectors.LOCATION` from public to package private
+- Change `Vectors.Reduction<T>` from public to package private
+- Change `Vectors.rotate(Reduction<T>, T, double, double, double, float, float)` from public to package-private
+- Change `Vectors.VECTOR` from public to package private
 - Fix incorrect equality comparison for `TrieEntry`
 - Remove `Position` - replaced by `Point`
+- Remove `Type.of(Object)`
 
 **Locale**
 - Remove `com.karuslabs.commons.util.locale.providers`

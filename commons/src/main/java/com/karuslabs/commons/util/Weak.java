@@ -76,7 +76,7 @@ public @ValueType interface Weak<T> {
 }
 
 
-final @ValueType class WeakValue<T> extends WeakReference<T> implements Weak<T> {
+@ValueType final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     static final Weak<?> EMPTY = new WeakValue<>(null);
     
@@ -195,7 +195,7 @@ final @ValueType class WeakValue<T> extends WeakReference<T> implements Weak<T> 
     @Override
     public String toString() {
         T value = get();
-        return value != null ? String.format("Weak[%s]", value) : "Weak.empty";
+        return value != null ? "Weak[" + value + "]" : "Weak.empty";
     }
 
 }

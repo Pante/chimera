@@ -25,8 +25,6 @@ package com.karuslabs.commons.util;
 
 import java.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 public enum Type {
     
@@ -39,8 +37,8 @@ public enum Type {
     LONG(Long.class, long.class),
     FLOAT(Float.class, float.class),
     DOUBLE(Double.class, double.class),
-    TYPE(Object.class, Object.class),
-    NULL(Void.class, null);
+    VOID(Void.class, void.class),
+    TYPE(Object.class, Object.class);
     
     
     private static final Map<Class<?>, Type> TYPES;
@@ -56,6 +54,7 @@ public enum Type {
         register(LONG);
         register(FLOAT);
         register(DOUBLE);
+        register(VOID);
     }
     
     private static void register(Type type) {
@@ -64,22 +63,24 @@ public enum Type {
     }
     
     
-    public static Type of(@Nullable Object object) {
-        return of(object == null ? null : object.getClass());
+    public static Class<?> box(Class<?> type) {
+        var boxed = TYPES.get(type);
+        return boxed == null ? type : boxed.boxed;
     }
     
-    public static Type of(@Nullable Class<?> type) {
-        if (type != null && type != Void.class) {
-            return TYPES.getOrDefault(type, TYPE);
-            
-        } else {
-            return NULL;
-        }
+    public static Class<?> unbox(Class<?> type) {
+        var unboxed = TYPES.get(type);
+        return unboxed == null ? type : unboxed.unboxed;
+    }
+
+    
+    public static Type of(Class<?> type) {
+        return TYPES.getOrDefault(type, TYPE);
     }
     
     
-    public final @Nullable Class<?> boxed;
-    public final @Nullable Class<?> unboxed;
+    public final Class<?> boxed;
+    public final Class<?> unboxed;
 
 
     private Type(Class<?> boxed, Class<?> unboxed) {
