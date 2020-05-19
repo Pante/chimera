@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
+import java.util.Set;
+
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.meta.BannerMeta;
 
@@ -36,17 +40,17 @@ import static org.mockito.Mockito.*;
 
 class BannerBuilderTest {
     
-    BannerMeta meta = StubBukkit.meta(BannerMeta.class);
+    BannerMeta meta = MockBukkit.meta(BannerMeta.class);
     
     @Test
     void pattern() {
         var first = new Pattern(RED, BORDER);
         var second = new Pattern(RED, FLOWER);
         
-        BannerBuilder.of(WATER).self().pattern(first).pattern(1, second);
+        BannerBuilder.of(WATER).self().patterns(first).patterns(Set.of(second));
         
         verify(meta).addPattern(first);
-        verify(meta).setPattern(1, second);
+        verify(meta).addPattern(second);
     }
     
 }

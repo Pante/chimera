@@ -50,7 +50,7 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, E
     
     
     @Override
-    protected EnchantmentStorageBuilder self() {
+    EnchantmentStorageBuilder self() {
         return this;
     }
     

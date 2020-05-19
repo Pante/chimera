@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ import org.bukkit.inventory.meta.*;
 
 
 public class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
-    
+     
     public static CrossbowBuilder of() {
         return new CrossbowBuilder(Material.CROSSBOW);
     }
@@ -45,18 +45,21 @@ public class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
     }
     
     
-    public CrossbowBuilder projectiles(List<ItemStack> projectiles) {
-        meta.setChargedProjectiles(projectiles);
-        return this;
+    public CrossbowBuilder projectiles(Collection<ItemStack> projectiles) {
+        return projectiles(projectiles.toArray(new ItemStack[0]));
     }
     
     public CrossbowBuilder projectiles(ItemStack... projectiles) {
-        return projectiles(List.of(projectiles));
+        for (var projectile : projectiles) {
+            meta.addChargedProjectile(projectile);
+        }
+        
+        return this;
     }
     
 
     @Override
-    protected CrossbowBuilder self() {
+    CrossbowBuilder self() {
         return this;
     }
     

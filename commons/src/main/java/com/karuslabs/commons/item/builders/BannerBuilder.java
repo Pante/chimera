@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import java.util.Collection;
+
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.meta.*;
@@ -43,19 +45,20 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     }
     
     
-    public BannerBuilder pattern(Pattern pattern) {
-        meta.addPattern(pattern);
-        return this;
+    public BannerBuilder patterns(Collection<Pattern> patterns) {
+        return patterns(patterns.toArray(new Pattern[0]));
     }
     
-    public BannerBuilder pattern(int index, Pattern pattern) {
-        meta.setPattern(index, pattern);
+    public BannerBuilder patterns(Pattern... patterns) {
+        for (var pattern : patterns) {
+            meta.addPattern(pattern);
+        }
         return this;
     }
     
 
     @Override
-    protected BannerBuilder self() {
+    BannerBuilder self() {
         return this;
     }
     

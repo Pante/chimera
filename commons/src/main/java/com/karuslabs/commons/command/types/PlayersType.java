@@ -100,13 +100,13 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
         var remaining = builder.getRemaining();
         if ("@".startsWith(remaining)) {
             builder.suggest("@a", ALL);
         }
         
-        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
+        var sender = source instanceof Player ? (Player) source : null;
         var enclosed = remaining.startsWith("\"");
         remaining = remaining.replace("\"", "");
         
@@ -124,7 +124,7 @@ public class PlayersType implements StringType<List<Player>> {
         }
         
         for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
+            if ((sender == null || sender.canSee(player)) && player.getName().startsWith(last)) {
                 var suggestion = beginning + player.getName();
                 if (enclosed) {
                     suggestion = '"' + suggestion + '"';

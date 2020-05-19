@@ -23,11 +23,10 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.types.parsers.VectorParser;
-
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.*;
@@ -36,16 +35,25 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 
 
-public class WorldType implements WordType<World> {
+public class WorldType implements StringType<World> {
     
-    static final Collection<String> EXAMPLES = List.of("world_name", "\"world name\"");
+    private static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world: \"" + world + "\""));
+    private static final List<String> EXAMPLES = List.of("my_fancy_world", "\"Yet another world\"");
     
     
     @Override
     public World parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parseWorld(reader);
+        var name = reader.readString();
+        var world = Bukkit.getWorld(name);
+        
+        if (world == null) {
+            throw WORLD.createWithContext(reader, name);
+        }
+        
+        return world;
     }
 
+    
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var world : Bukkit.getWorlds()) {
@@ -57,8 +65,9 @@ public class WorldType implements WordType<World> {
         return builder.buildFuture();
     }
 
+
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

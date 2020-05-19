@@ -23,36 +23,35 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class CrossbowBuilderTest {
     
-    CrossbowMeta meta = StubBukkit.meta(CrossbowMeta.class);
+    CrossbowMeta meta = MockBukkit.meta(CrossbowMeta.class);
     ItemStack item = mock(ItemStack.class);
     
     @Test
     void projectiles_list() {
         CrossbowBuilder.of().self().projectiles(List.of(item));
         
-        verify(meta).setChargedProjectiles(List.of(item));
+        verify(meta).addChargedProjectile(item);
     }
     
     @Test
     void projectiles_array() {
         CrossbowBuilder.of().self().projectiles(item);
         
-        verify(meta).setChargedProjectiles(List.of(item));
+        verify(meta).addChargedProjectile(item);
     }
 
 } 

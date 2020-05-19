@@ -23,27 +23,24 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.Set;
 
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class FireworkBuilderTest {
     
-    FireworkMeta meta = StubBukkit.meta(FireworkMeta.class);
-    @Mock FireworkEffect effect;
-    @Mock Set<FireworkEffect> set;
+    FireworkMeta meta = MockBukkit.meta(FireworkMeta.class);
+    FireworkEffect effect = mock(FireworkEffect.class);
+    Set<FireworkEffect> set = Set.of();
     
     
     @Test

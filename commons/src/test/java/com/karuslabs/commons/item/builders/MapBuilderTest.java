@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.*;
 
 class MapBuilderTest {
     
-    MapMeta meta = StubBukkit.meta(MapMeta.class);
+    MapMeta meta = MockBukkit.meta(MapMeta.class);
     
     
     @Test

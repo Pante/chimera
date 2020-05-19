@@ -26,6 +26,8 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
@@ -42,14 +44,14 @@ public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmou
     }
     
     
-    public LeatherArmourBuilder colour(Color colour) {
+    public LeatherArmourBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
 
     
     @Override
-    protected LeatherArmourBuilder self() {
+    LeatherArmourBuilder self() {
         return this;
     }
     

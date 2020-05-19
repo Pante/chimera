@@ -33,7 +33,6 @@ import javax.lang.model.type.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -47,14 +46,13 @@ import static org.mockito.Mockito.*;
 import static org.mockito.quality.Strictness.LENIENT;
 
 
-@ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
 class MethodResolverTest {
     
     static final TypeMirror SENDER = mock(TypeMirror.class);
     static final TypeMirror COMPLETABLE = mock(TypeMirror.class);
     static final TypeMirror CONTEXT = mock(TypeMirror.class);
-    static final TypeMirror DEFAULTABLE = mock(TypeMirror.class);
+    static final TypeMirror OPTIONAL = mock(TypeMirror.class);
     static final TypeMirror BUILDER = mock(TypeMirror.class);
     static final TypeMirror EXCEPTION = mock(TypeMirror.class);
     
@@ -78,14 +76,14 @@ class MethodResolverTest {
         resolver.sender = SENDER;
         resolver.completable = COMPLETABLE;
         resolver.context = CONTEXT;
-        resolver.defaultable = DEFAULTABLE;
+        resolver.optional = OPTIONAL;
         resolver.builder = BUILDER;
         resolver.exception = EXCEPTION;
         
         when(types.isSubtype(SENDER, SENDER)).thenReturn(true);
         when(types.isSubtype(COMPLETABLE, COMPLETABLE)).thenReturn(true);
         when(types.isSubtype(CONTEXT, CONTEXT)).thenReturn(true);
-        when(types.isSubtype(DEFAULTABLE, DEFAULTABLE)).thenReturn(true);
+        when(types.isSubtype(OPTIONAL, OPTIONAL)).thenReturn(true);
         when(types.isSubtype(BUILDER, BUILDER)).thenReturn(true);
         when(types.isSubtype(EXCEPTION, EXCEPTION)).thenReturn(true);
     }
@@ -109,7 +107,7 @@ class MethodResolverTest {
     
     static Stream<Arguments> resolve_parameters() {
         return Stream.of(
-            of(when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.VOID).getMock(), List.of(DEFAULTABLE), Binding.COMMAND),
+            of(when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.VOID).getMock(), List.of(SENDER, OPTIONAL), Binding.COMMAND),
             of(when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock(), List.of(SENDER), Binding.REQUIREMENT),
             of(COMPLETABLE, List.of(CONTEXT, BUILDER), Binding.SUGGESTIONS)
         );
@@ -148,9 +146,9 @@ class MethodResolverTest {
         var integer = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.INT).getMock();
         var nothing = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.VOID).getMock();
         
-        return Stream.of(
-            of(integer, List.of(CONTEXT), true),
-            of(nothing, List.of(DEFAULTABLE), true),
+        return Stream.of(of(integer, List.of(CONTEXT), true),
+            of(nothing, List.of(SENDER, OPTIONAL), true),
+            of(nothing, List.of(OPTIONAL, SENDER), false),
             of(integer, List.of(), false),
             of(integer, List.of(CONTEXT, CONTEXT), false),
             of(integer, List.of(EXCEPTION), false),

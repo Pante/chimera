@@ -49,7 +49,7 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkE
 
     
     @Override
-    protected FireworkEffectBuilder self() {
+    FireworkEffectBuilder self() {
         return this;
     }
     

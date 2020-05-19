@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,22 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.types.parsers.VectorParser;
-
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import java.util.*;
-
-import org.bukkit.util.Vector;
+import java.util.List;
 
 
-public class Vector3DType extends Cartesian3DType<Vector> {
+public abstract class DynamicExampleType<T> implements Type<T> {
     
-    static final Collection<String> EXAMPLES = List.of("0 0 0", "0.0 0.0 0.0");
+    private final List<String> examples;
+    
+    
+    public DynamicExampleType(List<String> examples) {
+        this.examples = examples;
+    }
     
     
     @Override
-    public Vector parse(StringReader reader) throws CommandSyntaxException {
-        return VectorParser.parse3DVector(reader);
+    public List<String> getExamples() {
+        return examples;
     }
-
-    @Override
-    public Collection<String> getExamples() {
-        return EXAMPLES;
-    }
-
     
 }

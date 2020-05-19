@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,56 +24,45 @@
 package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.*;
+import java.util.concurrent.ExecutionException;
 
-import net.minecraft.server.v1_15_R1.ArgumentVec2;
 
-import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class Cartesian2DTypeTest {
+class TypeTest {
     
-    Location location = new Location(null, 1, 2, 3);
+    CommandSender sender = mock(CommandSender.class);
+    CommandContext<CommandSender> context = when(mock(CommandContext.class).getSource()).thenReturn(sender).getMock();
     SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
-    Cartesian2DType<String> type = new Cartesian2DType<>() {
+    Type<String> type = spy(new Type<>() {
+
         @Override
-        public String parse(StringReader reader) throws CommandSyntaxException {
+        public String parse(StringReader reader) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
-    };
-    
-    
-    @Test
-    void suggest_all() {
-        when(builder.getRemaining()).thenReturn("");
-        type.suggest(builder, null, location, new String[] {});
         
-        verify(builder).suggest("1.0");
-        verify(builder).suggest("1.0 3.0");
-    }
-    
-    
-    @Test
-    void suggest_z() {
-        when(builder.getRemaining()).thenReturn("4");
-        type.suggest(builder, null, location, new String[] {"4"});
+        @Override
+        public ArgumentType<?> mapped() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
         
-        verify(builder).suggest("4 3.0");
-    }
+    });
     
     
     @Test
-    void mapped() {
-        assertEquals(ArgumentVec2.class, type.mapped().getClass());
+    void listSuggestions() throws InterruptedException, ExecutionException {
+        assertTrue(type.listSuggestions(context, builder).get().isEmpty());
+        verify(type).listSuggestions(sender, context, builder);
+        
     }
 
 } 

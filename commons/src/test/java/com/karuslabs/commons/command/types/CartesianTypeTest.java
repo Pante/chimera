@@ -29,57 +29,159 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import java.util.concurrent.ExecutionException;
+
+import net.minecraft.server.v1_15_R1.*;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class CartesianTypeTest {
     
     Location location = mock(Location.class);
     Block block = when(mock(Block.class).getLocation()).thenReturn(location).getMock();
     Player player = when(mock(Player.class).getTargetBlockExact(5)).thenReturn(block).getMock();
     SuggestionsBuilder builder = new SuggestionsBuilder("a b", 0);
-    CommandContext<CommandSender> context = when(mock(CommandContext.class).getSource()).thenReturn(player).getMock();
+    CommandContext<CommandSender> context = mock(CommandContext.class);
     
     
     CartesianType<String> type = spy(new CartesianType<>() {
         @Override
-        public ArgumentType<?> mapped() {
+        public String parse(StringReader reader) throws CommandSyntaxException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public String parse(StringReader reader) throws CommandSyntaxException {
+        public ArgumentType<?> mapped() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     });
     
     
-    @ParameterizedTest
-    @CsvSource({"a b, 2", "' ', 0", "'  ', 0"})
-    void split(String remaining, int expected) {
-        assertEquals(expected, type.split(remaining).length);
+    @Test
+    void listSuggestions() throws InterruptedException, ExecutionException {
+        assertTrue(type.listSuggestions(player, context, builder).get().isEmpty());
+        
+        verify(type).suggest(builder, new String[] {"a", "b"}, location);
+        verify(type).suggest(builder, new String[] {"a", "b"});
     }
     
     
     @Test
-    void listSuggestions() {
-        type.listSuggestions(context, builder);
+    void listSuggestions_location() {
+        var builder = mock(SuggestionsBuilder.class);
+        var location = mock(Location.class);
         
-        verify(type).suggest(builder, context, location, new String[] {"a", "b"});
-        verify(type).suggest(builder, context, new String[] {"a", "b"});
+        type.suggest(builder, new String[0], location);
+        
+        verifyNoInteractions(builder);
+        verifyNoInteractions(location);
     }
 
-} 
+}
+
+
+class CartesianDimensionalTypeTest {
+    
+    Location location = new Location(null, 1, 2, 3);
+    SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
+    
+    
+    
+    @Nested class Cartesian2DTest {
+
+        Cartesian2DType<String> type = new Cartesian2DType<>() {
+            @Override
+            public String parse(StringReader reader) throws CommandSyntaxException {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+
+        @Test
+        void suggest_all() {
+            when(builder.getRemaining()).thenReturn("");
+            type.suggest(builder, new String[0], location);
+
+            verify(builder).suggest("1.0");
+            verify(builder).suggest("1.0 3.0");
+        }
+
+
+        @Test
+        void suggest_z() {
+            when(builder.getRemaining()).thenReturn("4");
+            type.suggest(builder, new String[] {"4"}, location);
+
+            verify(builder).suggest("4 3.0");
+        }
+
+
+        @Test
+        void mapped() {
+            assertEquals(ArgumentVec2.class, type.mapped().getClass());
+        }
+    
+    }
+    
+    
+    @Nested class Cartesian3DTest {
+    
+        Cartesian3DType<String> type = new Cartesian3DType<>() {
+            @Override
+            public String parse(StringReader reader) throws CommandSyntaxException {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+
+
+        @Test
+        void suggest_all() {
+            when(builder.getRemaining()).thenReturn("");
+            type.suggest(builder, new String[0], location);
+
+            verify(builder).suggest("1.0");
+            verify(builder).suggest("1.0 2.0");
+            verify(builder).suggest("1.0 2.0 3.0");
+        }
+
+
+        @Test
+        void suggest_yz() {
+            when(builder.getRemaining()).thenReturn("4");
+            type.suggest(builder, new String[] {"4"}, location);
+
+            verify(builder).suggest("4 2.0 3.0");
+        }
+
+
+        @Test
+        void suggest_z() {
+            when(builder.getRemaining()).thenReturn("4");
+            type.suggest(builder, new String[] {"4", "5"}, location);
+
+            verify(builder).suggest("4 5 3.0");
+        }
+
+
+        @Test
+        void mapped() {
+            assertEquals(ArgumentVec3.class, type.mapped().getClass());
+        }
+    
+    }
+    
+}
+
+
+
+
+
+

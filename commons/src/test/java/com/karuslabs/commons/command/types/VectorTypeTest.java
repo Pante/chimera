@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,31 +28,46 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-import org.bukkit.util.Vector;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class Vector2DTypeTest {
+class VectorTypeTest {
     
-    Vector2DType type = new Vector2DType();
+    @ParameterizedTest
+    @CsvSource({"'   -1.4  3.6', -1.4, 3.6", "' -1.4  3.6   2.7', -1.4, 3.6"})
+    void parse_2D_vector(String line, double x, double z) throws CommandSyntaxException {
+        var vector = VectorType.FLAT.parse(new StringReader(line));
+        
+        assertEquals(x, vector.getX(), 0);
+        assertEquals(0, vector.getY(), 0);
+        assertEquals(z, vector.getZ(), 0);
+    }
     
     
-    @Test
-    void parse() throws CommandSyntaxException {
-        assertEquals(new Vector(1, 0, 2), type.parse(new StringReader("1 2")));
+    @ParameterizedTest
+    @CsvSource({"' -1.4  3.6   2.7', -1.4, 3.6, 2.7"})
+    void parse_3D_vector(String line, double x, double y, double z) throws CommandSyntaxException {
+        var vector = VectorType.CUBIC.parse(new StringReader(line));
+        
+        assertEquals(x, vector.getX(), 0);
+        assertEquals(y, vector.getY(), 0);
+        assertEquals(z, vector.getZ(), 0);
     }
     
     
     @Test
-    void getExamples() {
-        assertEquals(List.of("0 0", "0.0 0.0"), type.getExamples());
+    void getExamples_2D() {
+        assertEquals(List.of("0 0", "0.0 0.0"), VectorType.FLAT.getExamples());
+    }
+    
+    
+    @Test
+    void getExamples_3D() {
+        assertEquals(List.of("0 0 0", "0.0 0.0 0.0"), VectorType.CUBIC.getExamples());
     }
 
 } 

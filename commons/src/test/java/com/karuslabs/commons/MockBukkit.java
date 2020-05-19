@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.commons;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
@@ -33,7 +33,7 @@ import org.bukkit.inventory.meta.*;
 import static org.mockito.Mockito.*;
 
 
-class StubBukkit {
+public class MockBukkit {
     
     private static final Field SERVER;
     

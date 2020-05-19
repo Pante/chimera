@@ -42,53 +42,66 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
         return new BannerBuilder(this);
     }
     
+    
     public BlockStateBuilder asBlockState() {
         return new BlockStateBuilder(this);
     }
+    
     
     public BookBuilder asBook() {
         return new BookBuilder(this);
     }
     
+    
     public CrossbowBuilder asCrossbow() {
         return new CrossbowBuilder(this);
     }
+    
     
     public EnchantmentStorageBuilder asEnchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
     
+    
     public FireworkBuilder asFirework() {
         return new FireworkBuilder(this);
     }
+    
     
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
+    
     public KnowledgeBookBuilder asKnowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
+    
     
     public LeatherArmourBuilder asLeatherArmour() {
         return new LeatherArmourBuilder(this);
     }
     
+    
     public MapBuilder asMap() {
         return new MapBuilder(this);
     }
+    
     
     public PotionBuilder asPotion() {
         return new PotionBuilder(this);
     }
     
+    
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
     }
     
+    
     public SuspiciousStewBuilder asStew() {
         return new SuspiciousStewBuilder(this);
     }
+    
     
     public TropicalFishBucketBuilder asBucket() {
         return new TropicalFishBucketBuilder(this);
@@ -96,7 +109,7 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
 
     
     @Override
-    protected ItemBuilder self() {
+    ItemBuilder self() {
         return this;
     }
     

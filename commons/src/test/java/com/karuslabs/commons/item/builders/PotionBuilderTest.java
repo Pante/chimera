@@ -23,26 +23,23 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Color.SILVER;
 import static org.bukkit.Material.WATER;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 public class PotionBuilderTest {
     
-    PotionMeta meta = StubBukkit.meta(PotionMeta.class);
-    @Mock PotionData data;
-    @Mock PotionEffect effect;
+    PotionMeta meta = MockBukkit.meta(PotionMeta.class);
+    PotionData data = mock(PotionData.class);
+    PotionEffect effect = mock(PotionEffect.class);
     
     
     @Test

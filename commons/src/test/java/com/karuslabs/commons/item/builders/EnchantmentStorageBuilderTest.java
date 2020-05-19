@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ import static org.mockito.Mockito.*;
 
 class EnchantmentStorageBuilderTest {
     
-    EnchantmentStorageMeta meta = StubBukkit.meta(EnchantmentStorageMeta.class);
+    EnchantmentStorageMeta meta = MockBukkit.meta(EnchantmentStorageMeta.class);
     
     
     @Test

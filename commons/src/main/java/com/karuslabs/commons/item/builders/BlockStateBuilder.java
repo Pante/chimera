@@ -50,7 +50,7 @@ public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder
     
 
     @Override
-    protected BlockStateBuilder self() {
+    BlockStateBuilder self() {
         return this;
     }
     

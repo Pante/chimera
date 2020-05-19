@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.List;
 
 import org.bukkit.inventory.meta.BookMeta;
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.*;
 
 class BookBuilderTest {
     
-    BookMeta meta = StubBukkit.meta(BookMeta.class);
+    BookMeta meta = MockBukkit.meta(BookMeta.class);
     
     
     @Test

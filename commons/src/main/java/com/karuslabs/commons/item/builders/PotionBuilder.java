@@ -27,6 +27,8 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
@@ -43,7 +45,7 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     }
     
     
-    public PotionBuilder colour(Color colour) {
+    public PotionBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
@@ -60,7 +62,7 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
     
     @Override
-    protected PotionBuilder self() {
+    PotionBuilder self() {
         return this;
     }
     

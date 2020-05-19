@@ -34,8 +34,6 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 public class PlayerType implements WordType<Player> {
     
@@ -65,14 +63,10 @@ public class PlayerType implements WordType<Player> {
 
     
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
-        return suggest(builder, source); 
-    }
-    
-    protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
-        for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
+        var sender = source instanceof Player ? (Player) source : null;
+        for (var player : server.getOnlinePlayers()) {
+            if ((sender == null || sender.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {
                 builder.suggest(player.getName());
             }
         }

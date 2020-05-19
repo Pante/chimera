@@ -27,6 +27,8 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.map.MapView;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     
@@ -43,12 +45,12 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     }
     
     
-    public MapBuilder colour(Color colour) {
+    public MapBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
     
-    public MapBuilder location(String name) {
+    public MapBuilder location(@Nullable String name) {
         meta.setLocationName(name);
         return this;
     }
@@ -65,7 +67,7 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
 
     
     @Override
-    protected MapBuilder self() {
+    MapBuilder self() {
         return this;
     }
     

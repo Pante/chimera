@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.*;
 
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ import static org.mockito.Mockito.*;
 
 class TropicalFishBucketBuilderTest {
     
-    TropicalFishBucketMeta meta = StubBukkit.meta(TropicalFishBucketMeta.class);
+    TropicalFishBucketMeta meta = MockBukkit.meta(TropicalFishBucketMeta.class);
     
     
     @Test

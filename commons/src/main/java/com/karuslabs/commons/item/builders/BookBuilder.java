@@ -23,17 +23,16 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.BookMeta.Generation;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class BookBuilder extends Builder<BookMeta, BookBuilder> {
-    
-    private static final String[] EMPTY = new String[0];
-    
     
     public static BookBuilder of(Material material) {
         return new BookBuilder(material);
@@ -48,19 +47,19 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     }
     
     
-    public BookBuilder author(String name) {
+    public BookBuilder author(@Nullable String name) {
         meta.setAuthor(name);
         return this;
     }
     
-    public BookBuilder generation(Generation generation) {
+    public BookBuilder generation(@Nullable Generation generation) {
         meta.setGeneration(generation);
         return this;
     }
     
     
-    public BookBuilder pages(List<String> pages) {
-        return pages(pages.toArray(EMPTY));
+    public BookBuilder pages(Collection<String> pages) {
+        return pages(pages.toArray(new String[0]));
     }
     
     public BookBuilder pages(String... pages) {
@@ -69,14 +68,14 @@ public class BookBuilder extends Builder<BookMeta, BookBuilder> {
     }
     
     
-    public BookBuilder title(String title) {
+    public BookBuilder title(@Nullable String title) {
         meta.setTitle(title);
         return this;
     }
     
 
     @Override
-    protected BookBuilder self() {
+    BookBuilder self() {
         return this;
     }
     

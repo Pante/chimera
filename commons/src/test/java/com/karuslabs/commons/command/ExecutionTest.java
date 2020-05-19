@@ -35,13 +35,12 @@ import java.util.HashMap;
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 class ExecutionTest {
     
-    Execution<Object> executable = val -> assertTrue(val instanceof OptionalContext<?>);
+    Execution<Object> executable = (source, context) -> assertTrue(context instanceof OptionalContext<?>);
     
     
     @Test

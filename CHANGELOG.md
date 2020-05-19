@@ -26,12 +26,17 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
 - Add `Dispatcher.register(Map<String, CommandNode<CommandSender>>)`
 - Add `DispatcherMap`
+- Add `DynamicExampleType`
 - Add `NativeMap`
 - Add `Nodes`
 - Add `PulseListener`
 - Add `SynchronizationListener`
 - Add `TreeWalker<T, R>`
+- Add `Type.listSuggestions(S, CommandContext<S>, SugegstionsBuilder)`
 - Change `Argument.addChild(CommandNode)` and `Literal.addChild(CommandNode)` to not merge the current child's aliases and the new child's aliases
+- Change `CartesianType` from public to package private
+- Change `Cartesian2DType` from public to package private
+- Change `Cartesian3DType` from public to package private
 - Change `com.karuslabs.commons.command.suggestions.ClientsideProvider` to `com.karuslabs.commons.command.ClientSuggestionProvider`
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
@@ -40,12 +45,18 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
 - Change `DispatcherMapper` to `NativeMapper`
 - Change `Executable<T>` to `Execution<T>`
+- Change `Execution.execute(OptionalContext<T>)` to `Execution.execute(T source, OptionalContext<T>)`
 - Change `Exceptions` to package-private
 - Change `Lexers` to `Readers`
 - Change `Mapper.otherwise(ComandNode<T>)` to throw `IllegalArgumentException` instead of `UnsupportedOperationException`
+- Change `Position2DType` to `PointType`
+- Change `Position3DType` to `PointType`
 - Change `Root` to implement `Mutable<CommandSender>`
 - Change `Root.addChild(...)` to throw `IllegalArgumentException` if two commands with the same name are registered
 - Change `Synchronizer` methods annotated with `EventListener` to be package private
+- Change `Type.listSuggestions(CommandContext<S>, SuggestionsBuilder)` to forward to `Type.listSuggestions(S, CommandContext<S>, SugegstionsBuilder)`
+- Change `Vector2DType` to `VectorType`
+- Change `Vector3DType` to `VectorType`
 - Remove `Literal.Builder<T>.alias(String)` - use `Literal.Builder<T>.alias(String...)` instead
 - Remove `Synchronization` - this was a leaky abstraction and has been replaced by `SynchronizationListener`
 - Remove `Tree<T, R>` - replaced by `TreeWalker<T, R>`
@@ -53,13 +64,15 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Fix command aliases not being removed in `Commands.remove(String)`
 - Fix command aliases not being associated with their names in Bukkit's command system
 - Fix commands being added to `Root` even when unable to be registered in Bukkit's command system
+- Fix `WorldType` not parsing quoted world names with spaces
 - Remove `Commands.remove(CommandNode<T>, String...)` - this method was almost never used and posed a technical burden, use `Commands.remove(CommandNode<T>, String)` instead
 - Remove `Commands.resolve(Object)` - this method have been made redundant by the rewritten command annotations
 - Remove `Commands.resolve(Object, String)` - this method have been made redundant by the rewritten command annotations
 - Remove `Nodes.Builder.then(Object, String)` - this method have been made redundant by the rewritten command annotations
+- Remove `com.karuslabs.commons.command.types.parser.VectorParser`
 
 **Command Annotations**
-Commands annotations have been rewritten to support AOT compilation and be less verbose.Please refer to the wiki for
+Commands annotations have been rewritten to support AOT compilation and be less verbose. Please refer to the wiki for
 more information.
 
 **Concurrency**
@@ -78,7 +91,13 @@ more information.
 - Remove `RunnableRepetition` - redundant as `Scheduler` now accepts a `Consumer<Context>`
 
 **Items**
+- Change `BannerBuilder.pattern(Pattern)` to `BannerBuilder.patterns(Pattern...)`
+- Change `BannerBuilder.pattern(int, Pattern)` to `BannerBuilder.patterns(Collection<Pattern>)`
+- Change `BookBuilder.pages(List<String>)` to `BookBuilder.pages(Iterable<String>)`
 - Change `Builder(Builder<ItemMeta, ?>)` from public to package-private
+- Change `Builder(Material)` from public to package-private
+- Change `Builder.sef()` from public to package-private
+- Fix `CrossbowBuilder.projectiles(List<ItemStack>)` not being consistent with `Collection<?>` and `varargs` methods in other `Builder`s
 
 **Utility**
 - Add `Point`

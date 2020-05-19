@@ -43,7 +43,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
 
     TypeMirror completable;
     TypeMirror context;
-    TypeMirror defaultable;
+    TypeMirror optional;
     TypeMirror builder;
     TypeMirror exception;
     
@@ -54,7 +54,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
         
         completable = specialize(CompletableFuture.class, suggestions);
         context = specialize(CommandContext.class, sender);
-        defaultable = specialize(OptionalContext.class, sender);
+        optional = specialize(OptionalContext.class, sender);
         exception = elements.getTypeElement(CommandSyntaxException.class.getName()).asType();
         builder = elements.getTypeElement(SuggestionsBuilder.class.getName()).asType();
     }
@@ -84,14 +84,15 @@ public class MethodResolver extends Resolver<ExecutableElement> {
 
     
     boolean command(TypeMirror type, List<? extends VariableElement> parameters) {
-        if (parameters.size() != 1) {
+        if (parameters.size() < 1) {
             return false;
         }
         
         var returnable = type.getKind();
-        var parameter = parameters.get(0).asType();
-        return (returnable == TypeKind.INT && types.isSubtype(context, parameter))
-            || (returnable == TypeKind.VOID && types.isSubtype(defaultable, parameter));
+        var first = parameters.get(0).asType();
+        
+        return (parameters.size() == 1 && returnable == TypeKind.INT && types.isSubtype(context, first)
+            || (parameters.size() == 2 && returnable == TypeKind.VOID && types.isSubtype(sender, first)) && types.isSubtype(optional, parameters.get(1).asType()));
     }
 
     

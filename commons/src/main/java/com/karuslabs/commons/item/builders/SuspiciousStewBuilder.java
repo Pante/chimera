@@ -50,7 +50,7 @@ public class SuspiciousStewBuilder extends Builder<SuspiciousStewMeta, Suspiciou
     
 
     @Override
-    protected SuspiciousStewBuilder self() {
+    SuspiciousStewBuilder self() {
         return this;
     }
     

@@ -32,6 +32,8 @@ import org.bukkit.inventory.meta.*;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 
 public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     
@@ -56,14 +58,14 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
         return head(getOfflinePlayer(id));
     }
     
-    public SkullBuilder head(OfflinePlayer player) {
+    public SkullBuilder head(@Nullable OfflinePlayer player) {
         meta.setOwningPlayer(player);
         return this;
     }
     
     
     @Override
-    protected SkullBuilder self() {
+    SkullBuilder self() {
         return this;
     }
     

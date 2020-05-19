@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.SkullMeta;
 
 import org.junit.jupiter.api.Test;
@@ -34,13 +36,13 @@ import static org.mockito.Mockito.*;
 
 class SkullBuilderTest {
     
-    SkullMeta meta = StubBukkit.meta(SkullMeta.class);
+    SkullMeta meta = MockBukkit.meta(SkullMeta.class);
     
     
     @Test
     void owner() {
         var builder = SkullBuilder.of(WATER).self();
-        var owner = StubBukkit.offline();
+        var owner = MockBukkit.offline();
         
         builder.head(ALEX);
         

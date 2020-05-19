@@ -41,7 +41,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     @Nullable List<String> lore;
     
     
-    public Builder(Material material) {
+    Builder(Material material) {
         item = new ItemStack(material);
         meta = (Meta) item.getItemMeta();
     }
@@ -65,12 +65,12 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
-    public Self display(String name) {
+    public Self display(@Nullable String name) {
         meta.setDisplayName(name);
         return self();
     }
     
-    public Self localised(String name) {
+    public Self localised(@Nullable String name) {
         meta.setLocalizedName(name);
         return self();
     }
@@ -135,6 +135,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
-    protected abstract Self self();
+    abstract Self self();
     
 }

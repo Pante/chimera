@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -39,9 +41,10 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 class ItemBuilderTest {    
     
     @ParameterizedTest
-    @MethodSource({"as_provider"})
+    @MethodSource("as_parameters")
     void as(Class<? extends ItemMeta> type, Function<ItemBuilder, Builder> function, Class<? extends Builder> expected) {
-        StubBukkit.meta(type);
+        MockBukkit.meta(type);
+        
         var old = ItemBuilder.of(Material.WATER).self();
         var builder = function.apply(old);
         
@@ -52,7 +55,7 @@ class ItemBuilderTest {
         assertNotNull(builder.meta);
     }
     
-    static Stream<Arguments> as_provider() {
+    static Stream<Arguments> as_parameters() {
         return Stream.of(
             of(BannerMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBanner(), BannerBuilder.class),
             of(BlockStateMeta.class, (Function<ItemBuilder, Builder>) builder -> builder.asBlockState(), BlockStateBuilder.class),

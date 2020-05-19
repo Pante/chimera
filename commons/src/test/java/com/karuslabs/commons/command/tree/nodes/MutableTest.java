@@ -101,8 +101,8 @@ class MutableTest {
     static Stream<Mutable<CommandSender>> mutable_parameters() {
         var optional = Literal.of("optional").then(Literal.of("optional child"));
         return Stream.of(
-            Literal.of("literal").alias("literal alias").alias("a", "b").executes(val -> {val.getSource().getName();}).optionally(optional).build(),
-            Argument.of("argument", StringArgumentType.word()).executes(val -> {val.getSource().getName();}).optionally(optional).build()
+            Literal.of("literal").alias("literal alias").alias("a", "b").executes((s, val) -> {val.getSource().getName();}).optionally(optional).build(),
+            Argument.of("argument", StringArgumentType.word()).executes((s, val) -> {val.getSource().getName();}).optionally(optional).build()
         );
     }
 

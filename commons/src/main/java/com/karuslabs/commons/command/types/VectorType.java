@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,28 +30,56 @@ import java.util.List;
 
 import org.bukkit.util.Vector;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
-@ExtendWith(MockitoExtension.class)
-class Vector3DTypeTest {
+public abstract class VectorType extends DynamicExampleType<Vector> {
     
-    Vector3DType type = new Vector3DType();
+    public static final VectorType FLAT = new Vector2DType();
+    public static final VectorType CUBIC = new Vector3DType();
     
     
-    @Test
-    void parse() throws CommandSyntaxException {
-        assertEquals(new Vector(1, 2, 3), type.parse(new StringReader("1 2 3")));
+    private final boolean cubic;
+    
+    
+    VectorType(List<String> examples, boolean cubic) {
+        super(examples);
+        this.cubic = cubic;
     }
     
     
-    @Test
-    void getExamples() {
-        assertEquals(List.of("0 0 0", "0.0 0.0 0.0"), type.getExamples());
+    @Override
+    public Vector parse(StringReader reader) throws CommandSyntaxException {
+        var vector = new Vector();
+        
+        reader.skipWhitespace();
+        vector.setX(reader.readDouble());
+        
+        if (cubic) {
+            reader.skipWhitespace();
+            vector.setY(reader.readDouble());
+        }
+        
+        reader.skipWhitespace();
+        vector.setZ(reader.readDouble());
+        
+        return vector;
     }
 
-} 
+}
+
+
+class Vector2DType extends VectorType implements Cartesian2DType<Vector> {
+
+    Vector2DType() {
+        super(List.of("0 0", "0.0 0.0"), false);
+    }
+    
+}
+
+
+class Vector3DType extends VectorType implements Cartesian3DType<Vector> {
+
+    Vector3DType() {
+        super(List.of("0 0 0", "0.0 0.0 0.0"), true);
+    }
+    
+}

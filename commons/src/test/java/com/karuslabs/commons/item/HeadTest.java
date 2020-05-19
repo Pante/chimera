@@ -26,7 +26,9 @@ package com.karuslabs.commons.item;
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.item.Head.ALEX;
+
 import static java.util.UUID.fromString;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
