@@ -32,14 +32,11 @@ import java.util.*;
 import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class CommandParserTest {
     
     Environment environment = mock(Environment.class);
@@ -54,7 +51,7 @@ class CommandParserTest {
     void parse() {
         Element element = when(mock(Element.class).getAnnotation(Command.class)).thenReturn(new StubCommand("a")).getMock();
         var root = Token.root();
-        when(environment.root(element)).thenReturn(root);
+        when(environment.scope(element)).thenReturn(root);
         
         parser.parse(element);
         

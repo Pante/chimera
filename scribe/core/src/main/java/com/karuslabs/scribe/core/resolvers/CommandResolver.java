@@ -66,7 +66,7 @@ public class CommandResolver<T> extends Resolver<T> {
             commands.put(command.name(), resolve(type, command));
         }
         
-        resolution.mappings.put("commands", commands);
+        environment.mappings.put("commands", commands);
     }
     
     protected void check(T type, Command command) {
@@ -78,11 +78,11 @@ public class CommandResolver<T> extends Resolver<T> {
     
     protected void check(T type, Command command, String name, Label label) {
         if (matcher.reset(name).matches()) {
-            resolution.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot contain whitespaces");
+            environment.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot contain whitespaces");
             return;
             
         } else if (name.isEmpty()) {
-            resolution.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot be empty");
+            environment.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot be empty");
             return;
         }
         
@@ -91,14 +91,14 @@ public class CommandResolver<T> extends Resolver<T> {
             names.put(name, new SimpleEntry<>(command, label));
             
         } else if (label == NAME && entry.getValue() == NAME) {
-            resolution.error(type, "Conflicting command names: '" + name + "', command names must be unique");
+            environment.error(type, "Conflicting command names: '" + name + "', command names must be unique");
             
         } else if (label == ALIAS && entry.getValue() == ALIAS) {
-            resolution.error(type, "Conflicting command aliases: '" + name + "' for '" + command.name() + "' and '" 
+            environment.error(type, "Conflicting command aliases: '" + name + "' for '" + command.name() + "' and '" 
                                  + entry.getKey().name() + "', command aliases must be unique");
             
         } else {
-            resolution.error(type, "Conflicting command name and alias: '" + name + "' and alias for '" + entry.getKey().name()
+            environment.error(type, "Conflicting command name and alias: '" + name + "' and alias for '" + entry.getKey().name()
                                  + "', command names and aliases must be unique");
         }
     }
@@ -119,7 +119,7 @@ public class CommandResolver<T> extends Resolver<T> {
         
         if (!command.permission().isEmpty()) {
             if (!PERMISSION.matcher(command.permission()).matches()) {
-                resolution.warning(type, "Potentially malformed command permission: '" + command.permission() + "'");
+                environment.warning(type, "Potentially malformed command permission: '" + command.permission() + "'");
             }
             map.put("permission", command.permission());
         }

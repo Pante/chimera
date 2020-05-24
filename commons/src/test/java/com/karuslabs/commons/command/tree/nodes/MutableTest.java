@@ -31,21 +31,17 @@ import java.util.stream.Stream;
 
 import org.bukkit.command.CommandSender;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class MutableTest {
     
     
     @ParameterizedTest
-    @MethodSource("mutable_parameters")
+    @MethodSource("mutables")
     void removeChild(Mutable<CommandSender> mutable) {
         var child = Literal.of("child").alias("child1").build();
         
@@ -60,7 +56,7 @@ class MutableTest {
     
     
     @ParameterizedTest
-    @MethodSource("mutable_parameters")
+    @MethodSource("mutables")
     void setCommand(Mutable<CommandSender> mutable) {
         Command command = val -> 0;
         
@@ -74,7 +70,7 @@ class MutableTest {
     
     
     @ParameterizedTest
-    @MethodSource("mutable_parameters")
+    @MethodSource("mutables")
     void setRedirect(Mutable<CommandSender> mutable) {
         var destination = Literal.of("child").build();
         
@@ -88,7 +84,7 @@ class MutableTest {
     
     
     @ParameterizedTest
-    @MethodSource("mutable_parameters")
+    @MethodSource("mutables")
     void optionally(Mutable<CommandSender> mutable) {
         var command = (CommandNode<?>) mutable;
 
@@ -98,7 +94,7 @@ class MutableTest {
     }
     
     
-    static Stream<Mutable<CommandSender>> mutable_parameters() {
+    static Stream<Mutable<CommandSender>> mutables() {
         var optional = Literal.of("optional").then(Literal.of("optional child"));
         return Stream.of(
             Literal.of("literal").alias("literal alias").alias("a", "b").executes((s, val) -> {val.getSource().getName();}).optionally(optional).build(),

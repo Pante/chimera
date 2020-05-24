@@ -25,28 +25,24 @@ package com.karuslabs.commons.command.aot;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@ExtendWith(MockitoExtension.class)
 class BindingTest {
     
     @ParameterizedTest
-    @MethodSource("fields_parameters")
+    @MethodSource("fields")
     void fields(Binding binding, String article, String signature, String value) {
         assertEquals(article, binding.article);
         assertEquals(signature, binding.signature);
         assertEquals(value, binding.toString());
     }
     
-    static Stream<Arguments> fields_parameters() {
+    static Stream<Arguments> fields() {
         return Stream.of(
             of(Binding.COMMAND, "A", "Command<CommandSender>", "command"),
             of(Binding.TYPE, "An", "ArgumentType<?>", "type"),

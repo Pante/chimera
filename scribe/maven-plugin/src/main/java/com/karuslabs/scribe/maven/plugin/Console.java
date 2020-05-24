@@ -23,7 +23,6 @@
  */
 package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.core.Message;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -31,10 +30,10 @@ import java.util.function.BiConsumer;
 import org.apache.maven.plugin.logging.Log;
 
 
-public class Messages {
+public class Console {
     
-    public static final Messages WARNINGS = new Messages((log, message) -> log.warn(message), "WARNING", "warning");
-    public static final Messages ERRORS = new Messages((log, message) -> log.error(message), "FAILURE", "error");
+    public static final Console WARNINGS = new Console((log, message) -> log.warn(message), "WARNING", "warning");
+    public static final Console ERRORS = new Console((log, message) -> log.error(message), "FAILURE", "error");
     
     
     BiConsumer<Log, String> consumer;
@@ -42,7 +41,7 @@ public class Messages {
     String count;
     
     
-    Messages(BiConsumer<Log, String> consumer, String header, String count) {
+    Console(BiConsumer<Log, String> consumer, String header, String count) {
         this.consumer = consumer;
         this.header = header;
         this.count = count;

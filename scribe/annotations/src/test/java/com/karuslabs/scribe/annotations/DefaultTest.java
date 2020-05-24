@@ -25,17 +25,13 @@ package com.karuslabs.scribe.annotations;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@ExtendWith(MockitoExtension.class)
 class DefaultTest {
     
     @ParameterizedTest

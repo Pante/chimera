@@ -40,7 +40,7 @@ import static org.mockito.Mockito.*;
 class UniqueResolverTest {
     
     StubResolver resolver = new StubResolver();
-    Resolution<String> resolution = mock(Resolution.class);
+    Environment<String> resolution = mock(Environment.class);
     
     
     @Test

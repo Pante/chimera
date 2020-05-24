@@ -44,12 +44,12 @@ public class InformationResolver<T> extends UniqueResolver<T> {
     protected void check(Information information, T type) {
         var url = information.url();
         if (!url.isEmpty() && !URL.matcher(url).matches()) {
-            resolution.error(type, "Invalid URL: " + url + ", " + url + " is not a valid URL");
+            environment.error(type, "Invalid URL: " + url + ", " + url + " is not a valid URL");
         }
     }
     
     protected void resolve(Information information) {
-        var mappings = resolution.mappings;
+        var mappings = environment.mappings;
         
         if (information.authors().length > 0) {
             mappings.put("authors", information.authors());

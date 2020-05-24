@@ -25,42 +25,42 @@ package com.karuslabs.commons.command.aot.generation;
 
 import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.commons.command.aot.annotations.Emit;
+import com.karuslabs.commons.command.aot.annotations.Source;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.commons.command.aot.Messages.quote;
-import static com.karuslabs.commons.command.aot.annotations.Emit.RELATIVE_PACKAGE;
+import static com.karuslabs.annotations.processor.Messages.quote;
+import static com.karuslabs.commons.command.aot.annotations.Source.RELATIVE_PACKAGE;
 
 
-public class Packager {
+public class SourceResolver {
     
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
     
     private Environment environment;
     private @Nullable Element element;
-    private String pack;
+    private String folder;
     private String file;
     
     
-    public Packager(Environment environment) {
+    public SourceResolver(Environment environment) {
         this.environment = environment;
-        this.pack = "";
+        this.folder = "";
         this.file = "Commands";
     }
 
     
     public void resolve(Element element) {
         this.element = element;
-        var emit = element.getAnnotation(Emit.class);
+        var emit = element.getAnnotation(Source.class);
         var value = emit.value();
         
         if (RELATIVE_PACKAGE.equals(value)) {
-            pack = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
+            folder = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
             return;
             
         } else if (value.endsWith(".java") || value.endsWith(".class")) {
@@ -75,7 +75,7 @@ public class Packager {
         
         int dot = value.lastIndexOf(".");
         if (dot != -1) {
-            pack = value.substring(0, dot);
+            folder = value.substring(0, dot);
             file = value.substring(dot + 1, value.length());
             
         } else {
@@ -87,8 +87,8 @@ public class Packager {
         return element;
     }
     
-    public String pack() {
-        return pack;
+    public String folder() {
+        return folder;
     }
     
     public String file() {

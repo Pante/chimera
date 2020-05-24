@@ -29,11 +29,8 @@ import java.util.stream.Stream;
 import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Collections.EMPTY_LIST;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +38,6 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ArgumentLexerTest {
     
     ArgumentLexer lexer = new ArgumentLexer();
@@ -63,22 +59,22 @@ class ArgumentLexerTest {
     
     @ParameterizedTest
     @CsvSource({"<<arg>", "<arg>>"})
-    void lex_warning(String value) {
-        var tokens = lexer.lex(environment, location, value);
+    void lex_warning(String raw) {
+        var tokens = lexer.lex(environment, location, raw);
         var token = tokens.get(0);
         
         assertEquals(1, tokens.size());
         assertEquals(location, token.location);
-        assertEquals(value, token.literal);
-        assertEquals(value.substring(1, value.length() - 1), token.lexeme);
-        verify(environment).warn(location, "\"" + value + "\" contains trailing \"<\"s or \">\"s");
+        assertEquals(raw, token.literal);
+        assertEquals(raw.substring(1, raw.length() - 1), token.lexeme);
+        verify(environment).warn(location, "\"" + raw + "\" contains trailing \"<\"s or \">\"s");
     }
     
     
     @ParameterizedTest
     @MethodSource("lex_error_parameters")
-    void lex_errors(String value, String error) {
-        assertEquals(EMPTY_LIST, lexer.lex(environment, location, value));
+    void lex_errors(String raw, String error) {
+        assertEquals(EMPTY_LIST, lexer.lex(environment, location, raw));
         verify(environment).error(location, error);
     }
     

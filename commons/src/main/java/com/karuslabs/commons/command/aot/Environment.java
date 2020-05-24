@@ -51,11 +51,10 @@ public class Environment {
     }
     
     
-    public Token root(Element element) {
+    public Token scope(Element element) {
         var existing = scopes.get(element);
         if (existing == null) {
-            existing = Token.root();
-            scopes.put(element, existing);
+            scopes.put(element, existing = Token.root());
         }
         
         return existing;

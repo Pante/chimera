@@ -51,7 +51,7 @@ public class PermissionResolver<T> extends Resolver<T> {
             resolve(permission, permissions);
         }
         
-        resolution.mappings.put("permissions", permissions);
+        environment.mappings.put("permissions", permissions);
     }
     
     protected void check(T type, Permission permission) {
@@ -60,23 +60,23 @@ public class PermissionResolver<T> extends Resolver<T> {
         checkMalformed(type, permission);
         
         if (Set.of(permission.children()).contains(name)) {
-            resolution.warning(type, "Self-inheriting permission: '" + name + "'");
+            environment.warning(type, "Self-inheriting permission: '" + name + "'");
         }
         
         if (!names.add(name)) {
-            resolution.error(type, "Conflicting permissions: '" + name + "', permissions must be unique");
+            environment.error(type, "Conflicting permissions: '" + name + "', permissions must be unique");
         }
     }
     
     protected void checkMalformed(T type, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
-            resolution.warning(type, "Potentially malformed permission: '" + name + "'");
+            environment.warning(type, "Potentially malformed permission: '" + name + "'");
         }
         
         for (var child : permission.children()) {
             if (!matcher.reset(child).matches()) {
-                resolution.warning(type, "Potentially malformed child permission: '" + child + "'");
+                environment.warning(type, "Potentially malformed child permission: '" + child + "'");
             }
         }
     }

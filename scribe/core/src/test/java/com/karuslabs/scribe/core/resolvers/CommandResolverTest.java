@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Command;
 import com.karuslabs.scribe.core.*;
 import com.karuslabs.scribe.core.resolvers.CommandResolver.Label;
@@ -62,7 +63,7 @@ class CommandResolverTest {
     
     
     CommandResolver<Class<?>> resolver = new CommandResolver<>();
-    Resolution<Class<?>> resolution = spy(new Resolution<>());
+    Environment<Class<?>> resolution = spy(new Environment<>());
     Command command = CommandResolverTest.class.getAnnotation(Command.class);
     
     

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Plugin;
 import com.karuslabs.scribe.core.*;
 
@@ -48,7 +49,7 @@ import static org.mockito.Mockito.*;
 class PluginResolverTest {
     
     StubResolver resolver = new StubResolver();
-    Resolution<Class<?>> resolution = new Resolution<>();
+    Environment<Class<?>> resolution = new Environment<>();
     Project project = new Project("project_name", "1.0.0", "", List.of(), "", "");
     
     
@@ -160,7 +161,7 @@ class PluginResolverTest {
 class ClassPluginResolverTest {
     
     PluginResolver<Class<?>> resolver = PluginResolver.CLASS;
-    Resolution<Class<?>> resolution = new Resolution<>();
+    Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach
@@ -250,7 +251,7 @@ class ElementPluginResolverTest {
     TypeElement type = when(mock(TypeElement.class).asType()).thenReturn(mirror).getMock();
     ExecutableElement executable = mock(ExecutableElement.class);
     ElementPluginResolver resolver;
-    Resolution<Element> resolution = new Resolution<>();
+    Environment<Element> resolution = new Environment<>();
     
     
     @BeforeEach

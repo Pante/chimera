@@ -76,8 +76,8 @@ public abstract class Processor<T> {
     
     
     
-    public Resolution<T> run() {
-        var resolution = new Resolution<T>();
+    public Environment<T> run() {
+        var resolution = new Environment<T>();
         for (var resolver : resolvers) {
             var types = resolver.annotations().stream().collect(flatMapping(this::annotated, toSet()));
             resolver.initialize(project, extractor, resolution);

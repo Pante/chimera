@@ -98,11 +98,10 @@ class MethodResolverTest {
         when(method.getThrownTypes()).thenReturn(List.of());
         
         var token = mock(Token.class);
-        var other = mock(Token.class);
         
-        resolver.resolve(method, token, other);
+        resolver.resolve(method, token, method);
         
-        verify(token).bind(environment, binding, other);
+        verify(token).bind(environment, binding, method);
     }
     
     static Stream<Arguments> resolve_parameters() {
@@ -123,7 +122,7 @@ class MethodResolverTest {
         
         when(method.getModifiers()).thenReturn(modifiers);
         
-        resolver.resolve(method, mock(Token.class), mock(Token.class));
+        resolver.resolve(method, mock(Token.class), mock(Element.class));
         
         verify(environment).error(method, error);
     }

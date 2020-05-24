@@ -48,7 +48,7 @@ public abstract class Resolver<T extends Element> {
     }
     
     
-    public abstract void resolve(T element, Token token, Token binding);
+    public abstract void resolve(T element, Token token, Element location);
     
     
     protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {

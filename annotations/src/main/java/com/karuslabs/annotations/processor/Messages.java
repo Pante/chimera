@@ -21,50 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.annotations.processor;
 
-import java.util.*;
+import com.karuslabs.annotations.Static;
 
 
-public class Resolution<T> {
+public @Static class Messages {
     
-    public final Map<String, Object> mappings;
-    public final List<Message<T>> messages;
-    
-    
-    public Resolution() {
-        mappings = new HashMap<>();
-        messages = new ArrayList<>();
+    public static String format(Object value, String reason) {
+        return quote(value) + " " + reason;
     }
     
-        
-    public Resolution<T> error(String message) {
-        return error(null, message);
+    public static String format(Object value, String reason, String resolution) {
+        return quote(value) + " " + reason + ", " + resolution;
     }
     
-    public Resolution<T> error(T location, String message) {
-        messages.add(Message.error(location, message));
-        return this;
-    }
     
-        
-    public Resolution<T> warning(String message) {
-        return warning(null, message);
-    }
-    
-    public Resolution<T> warning(T location, String message) {
-        messages.add(Message.warning(location, message));
-        return this;
-    }
-    
-        
-    public Resolution<T> info(String message) {
-        return info(null, message);
-    }
-    
-    public Resolution<T> info(T location, String message) {
-        messages.add(Message.info(location, message));
-        return this;
+    public static String quote(Object value) {
+        return "\"" + value + "\"";
     }
     
 }

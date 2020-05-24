@@ -29,14 +29,11 @@ import java.util.Set;
 import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class MethodBlockTest {
     
     MethodBlock block = new MethodBlock();
@@ -57,7 +54,7 @@ class MethodBlockTest {
         when(type.getModifiers()).thenReturn(Set.of());
         
         var token = Token.root();
-        token.bindings.put(Binding.TYPE, Token.literal(type, "", "", null));
+        token.bindings.put(Binding.TYPE, type);
         
         assertEquals(
             "Invalid bind target: \"CLASS\"",

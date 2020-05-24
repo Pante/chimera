@@ -31,8 +31,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 @Documented
 @Retention(SOURCE)
-@Target(TYPE)
-public @interface Emit {
+@Target({PACKAGE, TYPE})
+public @interface Source {
 
     public static final String RELATIVE_PACKAGE = "${relative}";
     

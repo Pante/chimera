@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.commons.command.aot.annotations.Emit;
 import com.karuslabs.commons.command.aot.generation.*;
 import com.karuslabs.commons.command.aot.parsers.*;
 
@@ -34,20 +33,18 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import com.karuslabs.commons.command.aot.annotations.Source;
 
 
-@ExtendWith(MockitoExtension.class)
 class ProcessorTest {
     
     Processor processor = spy(new Processor());
+    RoundEnvironment round = mock(RoundEnvironment.class);
     Element a = mock(Element.class);
     Element b = mock(Element.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
     
     
     @BeforeEach
@@ -59,9 +56,9 @@ class ProcessorTest {
         processor.command = mock(CommandParser.class);
         processor.bind = mock(BindParser.class);
         processor.analyzer = mock(Analyzer.class);
-        processor.packager = mock(Packager.class);
+        processor.source = mock(SourceResolver.class);
         processor.generator = mock(Generator.class);
-        processor.compiled = false;
+        processor.processed = false;
     }
     
     
@@ -84,23 +81,23 @@ class ProcessorTest {
         assertNotNull(processor.command);
         assertNotNull(processor.bind);
         assertNotNull(processor.analyzer);
-        assertNotNull(processor.packager);
+        assertNotNull(processor.source);
         assertNotNull(processor.generator);
-        assertNotNull(processor.compiled);
+        assertNotNull(processor.processed);
     }
     
     
     @Test
     void process() {
-        doReturn(Set.of()).when(round).getElementsAnnotatedWith(Emit.class);
+        doReturn(Set.of()).when(round).getElementsAnnotatedWith(Source.class);
         doReturn(false).when(processor.environment).error();
-        doNothing().when(processor).resolveFile(Set.of());
+        doNothing().when(processor).resolveSource(Set.of());
         doNothing().when(processor).parse(any(Parser.class), eq(round), any());
         
         processor.process(Set.of(), round);
         
-        assertTrue(processor.compiled);
-        verify(processor).resolveFile(Set.of());
+        assertTrue(processor.processed);
+        verify(processor).resolveSource(Set.of());
         verify(processor, times(2)).parse(any(Parser.class), eq(round), any());
         verify(processor.analyzer).analyze();
         verify(processor.generator).generate();
@@ -109,12 +106,12 @@ class ProcessorTest {
     
     
     @Test
-    void process_compiled() {
-        processor.compiled = true;
+    void process_processed() {
+        processor.processed = true;
         
         processor.process(Set.of(), round);
         
-        verify(processor, times(0)).resolveFile(any());
+        verify(processor, times(0)).resolveSource(any());
         verify(processor, times(0)).parse(any(), any(), any());
         verifyNoInteractions(processor.analyzer);
         verifyNoInteractions(processor.generator);
@@ -123,15 +120,15 @@ class ProcessorTest {
     
     @Test
     void process_error() {
-        doReturn(Set.of()).when(round).getElementsAnnotatedWith(Emit.class);
+        doReturn(Set.of()).when(round).getElementsAnnotatedWith(Source.class);
         doReturn(true).when(processor.environment).error();
-        doNothing().when(processor).resolveFile(Set.of());
+        doNothing().when(processor).resolveSource(Set.of());
         doNothing().when(processor).parse(any(Parser.class), eq(round), any());
         
         processor.process(Set.of(), round);
         
-        assertTrue(processor.compiled);
-        verify(processor).resolveFile(Set.of());
+        assertTrue(processor.processed);
+        verify(processor).resolveSource(Set.of());
         verify(processor, times(2)).parse(any(Parser.class), eq(round), any());
         verify(processor.analyzer).analyze();
         verify(processor.environment).clear();
@@ -141,36 +138,36 @@ class ProcessorTest {
     
     
     @Test
-    void resolve_file() {
-        processor.resolveFile(Set.of(a));
+    void resolveSource() {
+        processor.resolveSource(Set.of(a));
         
-        verify(processor.packager).resolve(a);
+        verify(processor.source).resolve(a);
     }
     
     
     @Test
-    void resolve_file_none() {
-        processor.resolveFile(Set.of());
+    void resolveSource_none() {
+        processor.resolveSource(Set.of());
         
-        verify(processor).error("Project does not contain a @Pack annotation, should contain one @Pack annotation");
+        verify(processor).error("Project does not contain an @Source annotation, should contain one @Source annotation");
     }
     
     
     @Test
-    void resolve_file_several() {
-        processor.resolveFile(Set.of(a, b));
+    void resolveSource_several() {
+        processor.resolveSource(Set.of(a, b));
         
-        verify(processor).error(a, "Project contains 2 @Pack annotations, should contain one @Pack annotation");
-        verify(processor).error(b, "Project contains 2 @Pack annotations, should contain one @Pack annotation");
+        verify(processor).error(a, "Project contains 2 @Source annotations, should contain one @Source annotation");
+        verify(processor).error(b, "Project contains 2 @Source annotations, should contain one @Source annotation");
     }
     
     
     @Test
     void parse() {
         var parser = mock(Parser.class);
-        doReturn(Set.of(a, b)).when(round).getElementsAnnotatedWith(Emit.class);
+        doReturn(Set.of(a, b)).when(round).getElementsAnnotatedWith(Source.class);
         
-        processor.parse(parser, round, Emit.class);
+        processor.parse(parser, round, Source.class);
         
         verify(parser).parse(a);
         verify(parser).parse(b);

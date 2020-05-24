@@ -92,8 +92,8 @@ public class ScribeMojo extends AbstractMojo {
         var warnings = messages.stream().filter(message -> message.type == Message.Type.WARNING).collect(toList());
         var errors = messages.stream().filter(message -> message.type == Message.Type.ERROR).collect(toList());
 
-        Messages.WARNINGS.log(getLog(), warnings);
-        Messages.ERRORS.log(getLog(), errors);
+        Console.WARNINGS.log(getLog(), warnings);
+        Console.ERRORS.log(getLog(), errors);
         
         return errors;
     }

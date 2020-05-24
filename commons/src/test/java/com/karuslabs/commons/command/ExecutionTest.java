@@ -27,27 +27,20 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.HashMap;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 
-@ExtendWith(MockitoExtension.class)
 class ExecutionTest {
     
-    Execution<Object> executable = (source, context) -> assertTrue(context instanceof OptionalContext<?>);
+    Execution<Object> execution = (source, context) -> assertTrue(context instanceof OptionalContext<?>);
     
     
     @Test
     void run() throws CommandSyntaxException {
-        var context = new CommandContext<>(null, null, new HashMap<>(), null, null, null, null, null, null, false);
-        
-        assertEquals(SINGLE_SUCCESS, executable.run(context));
+        assertEquals(SINGLE_SUCCESS, execution.run(mock(CommandContext.class)));
     }
 
 } 

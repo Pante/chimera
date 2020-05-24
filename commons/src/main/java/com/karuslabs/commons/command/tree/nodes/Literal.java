@@ -118,9 +118,9 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     @Override
     public void setCommand(Command<T> command) {
-        Commands.executes(this, command);
+        Commands.execution(this, command);
         for (var alias : aliases) {
-            Commands.executes(alias, command);
+            Commands.execution(alias, command);
         }
     }
 

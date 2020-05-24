@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
+import com.karuslabs.scribe.core.resolvers.Resolver;
 import com.karuslabs.scribe.annotations.Command;
 
 import java.util.Set;
@@ -41,7 +42,7 @@ class ResolverTest {
     Resolver resolver = spy(new StubResolver());
     Project project = mock(Project.class);
     Extractor<String> extractor = mock(Extractor.class);
-    Resolution<String> resolution = mock(Resolution.class);
+    Environment<String> resolution = mock(Environment.class);
     
     
     @Test

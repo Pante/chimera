@@ -21,9 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.scribe.core.resolvers;
 
 import com.karuslabs.annotations.Immutable;
+import com.karuslabs.scribe.core.Environment;
+import com.karuslabs.scribe.core.Extractor;
+import com.karuslabs.scribe.core.Project;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -42,7 +45,7 @@ public abstract class Resolver<T> {
     protected @Immutable Set<Class<? extends Annotation>> annotations;
     protected Project project;
     protected Extractor<T> extractor;
-    protected Resolution<T> resolution;
+    protected Environment<T> environment;
     
     
     public Resolver(@Immutable Set<Class<? extends Annotation>> annotations) {
@@ -50,10 +53,10 @@ public abstract class Resolver<T> {
     }
     
     
-    public void initialize(Project project, Extractor<T> extractor, Resolution<T> resolution) {
+    public void initialize(Project project, Extractor<T> extractor, Environment<T> environment) {
         this.project = project;
         this.extractor = extractor;
-        this.resolution = resolution;
+        this.environment = environment;
     }
     
     

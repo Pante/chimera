@@ -33,7 +33,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -46,7 +45,6 @@ import static javax.lang.model.element.Modifier.*;
 import static org.mockito.quality.Strictness.LENIENT;
 
 
-@ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
 class VariableResolverTest {
     
@@ -84,11 +82,10 @@ class VariableResolverTest {
         when(environment.types.isSubtype(type, expected)).thenReturn(true);
         
         var token = mock(Token.class);
-        var other = mock(Token.class);
         
-        resolver.resolve(variable, token, other);
+        resolver.resolve(variable, token, variable);
         
-        verify(token).bind(environment, binding, other);
+        verify(token).bind(environment, binding, variable);
     }
     
     static Stream<Arguments> resolve_parameters() {
@@ -106,7 +103,7 @@ class VariableResolverTest {
     void resolve_errors(VariableElement variable, String error) {
         when(environment.types.isSubtype(any(), any())).thenReturn(false);
         
-        resolver.resolve(variable, mock(Token.class), mock(Token.class));
+        resolver.resolve(variable, mock(Token.class), variable);
         
         verify(environment).error(variable, error);
     }

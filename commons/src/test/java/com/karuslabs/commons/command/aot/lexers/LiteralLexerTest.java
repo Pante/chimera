@@ -30,11 +30,9 @@ import java.util.stream.Stream;
 import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
@@ -43,7 +41,6 @@ import static org.mockito.Mockito.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
-@ExtendWith(MockitoExtension.class)
 class LiteralLexerTest {
     
     LiteralLexer lexer = new LiteralLexer();
@@ -83,8 +80,8 @@ class LiteralLexerTest {
     
     @ParameterizedTest
     @MethodSource("lex_errors_parameters")
-    void lex_errors(String value, String error) {
-        assertEquals(EMPTY_LIST, lexer.lex(environment, location, value));
+    void lex_errors(String raw, String error) {
+        assertEquals(EMPTY_LIST, lexer.lex(environment, location, raw));
         verify(environment).error(location, error);
     }
     

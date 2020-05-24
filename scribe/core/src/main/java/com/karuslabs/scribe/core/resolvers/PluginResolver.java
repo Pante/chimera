@@ -25,7 +25,6 @@ package com.karuslabs.scribe.core.resolvers;
 
 import com.karuslabs.annotations.Ignored;
 import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Resolver;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -58,11 +57,11 @@ public abstract class PluginResolver<T> extends Resolver<T> {
     @Override
     protected void check(Set<T> types) {
         if (types.isEmpty()) {
-            resolution.error("No @Plugin annotation found, plugin must contain a @Plugin annotation");
+            environment.error("No @Plugin annotation found, plugin must contain a @Plugin annotation");
             
         } else if (types.size() > 1) {
             for (var type : types) {
-                resolution.error(type, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation");
+                environment.error(type, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation");
             }
             
         } else {
@@ -78,25 +77,25 @@ public abstract class PluginResolver<T> extends Resolver<T> {
     protected void resolve(T type) {
         var plugin = extractor.single(type, Plugin.class);
         
-        resolution.mappings.put("main", stringify(type));
+        environment.mappings.put("main", stringify(type));
         
         var name = plugin.name().isEmpty() ? project.name : plugin.name();
         if (!matcher.reset(name).matches()) {
-            resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
+            environment.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
         }
         
-        resolution.mappings.put("name", name);
+        environment.mappings.put("name", name);
         
         var version = plugin.version().isEmpty() ? project.version : plugin.version();
         if (!VERSIONING.matcher(version).matches()) {
-            resolution.warning(
+            environment.warning(
                 type, 
                 "Unconventional versioning scheme: '" + version + "', " +
                 "it is highly recommended that versions follows SemVer, https://semver.org/"
             );
         }
         
-        resolution.mappings.put("version", version);
+        environment.mappings.put("version", version);
     }
     
     protected abstract String stringify(T type);
@@ -112,11 +111,11 @@ class ClassPluginResolver extends PluginResolver<Class<?>> {
     @Override
     protected void check(Class<?> type) {
         if ((type.getModifiers() & ABSTRACT) != 0) {
-            resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot be abstract");
+            environment.error(type, "Invalid main class: '" + type.getName() + "', main class cannot be abstract");
         }
         
         if (!org.bukkit.plugin.Plugin.class.isAssignableFrom(type)) {
-            resolution.error(
+            environment.error(
                 type, 
                 "Invalid main class: '" + type.getName() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
             );
@@ -124,7 +123,7 @@ class ClassPluginResolver extends PluginResolver<Class<?>> {
         
         for (var constructor : type.getDeclaredConstructors()) {
             if (constructor.getParameterCount() != 0 ) {
-                resolution.error(type, "Invalid main class: '" + type.getName() + "', main class cannot contain constructors with parameters");
+                environment.error(type, "Invalid main class: '" + type.getName() + "', main class cannot contain constructors with parameters");
             }
         }
     }
@@ -178,11 +177,11 @@ class ElementPluginResolver extends PluginResolver<Element> {
             var valid = true;
             
             if (element.getModifiers().contains(ABSTRACT)) {
-                resolution.error(element, "Invalid main class: '" + element.asType() + "', main class cannot be abstract");
+                environment.error(element, "Invalid main class: '" + element.asType() + "', main class cannot be abstract");
             }
             
             if (!types.isAssignable(element.asType(), expected)) {
-                resolution.error(
+                environment.error(
                     element, 
                     "Invalid main class: '" + element.asType() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
                 );
@@ -199,7 +198,7 @@ class ElementPluginResolver extends PluginResolver<Element> {
         @Override
         public Boolean visitExecutable(ExecutableElement element, @Ignored Boolean nested) {
             if (element.getKind() == CONSTRUCTOR && !element.getParameters().isEmpty()) {
-                resolution.error(
+                environment.error(
                     element, 
                     "Invalid main class: '" + element.getEnclosingElement() + "', main class cannot contain constructors with parameters"
                 );

@@ -46,7 +46,7 @@ public class CommandParser extends Parser {
             return;
         }
         
-        var root = environment.root(element);
+        var root = environment.scope(element);
         for (var command : commands) {
             var tokens = lexer.lex(environment, element, command);
             if (valid(tokens)) {

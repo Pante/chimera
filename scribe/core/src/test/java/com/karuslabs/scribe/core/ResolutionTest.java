@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,12 +39,12 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 @ExtendWith(MockitoExtension.class)
 class ResolutionTest {
     
-    Resolution<String> resolution = new Resolution<>();
+    Environment<String> resolution = new Environment<>();
     
     
     @ParameterizedTest
     @MethodSource("add_parameters")
-    void add(Resolution<String> resolution, Message.Type type) {
+    void add(Environment<String> resolution, Message.Type type) {
         var message = resolution.messages.get(0);
         
         assertEquals(new Message(null, "hello", type), message);
@@ -51,9 +52,9 @@ class ResolutionTest {
     
     static Stream<Arguments> add_parameters() {
         return Stream.of(
-            of(new Resolution().error("hello"), Message.Type.ERROR),
-            of(new Resolution().warning("hello"), Message.Type.WARNING),
-            of(new Resolution().info("hello"), Message.Type.INFO)
+            of(new Environment().error("hello"), Message.Type.ERROR),
+            of(new Environment().warning("hello"), Message.Type.WARNING),
+            of(new Environment().info("hello"), Message.Type.INFO)
         );
     }
 

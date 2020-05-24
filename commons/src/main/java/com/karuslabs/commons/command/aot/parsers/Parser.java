@@ -29,7 +29,7 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import java.util.List;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import static com.karuslabs.annotations.processor.Messages.format;
 
 
 public abstract class Parser {
@@ -53,12 +53,12 @@ public abstract class Parser {
         }
         
         var token = tokens.get(0);
-        var valid = token.type != Type.ARGUMENT;
-        if (!valid) {
+        var error = token.type == Type.ARGUMENT;
+        if (error) {
             environment.error(token.location, format(token, "is at an invalid position", "command should not start with an argument"));
         }
         
-        return valid;
+        return !error;
     }
     
 }

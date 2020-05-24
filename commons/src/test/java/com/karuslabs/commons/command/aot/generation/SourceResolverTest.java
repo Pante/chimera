@@ -24,49 +24,44 @@
 package com.karuslabs.commons.command.aot.generation;
 
 import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.commons.command.aot.annotations.Emit;
+import com.karuslabs.commons.command.aot.annotations.Source;
 
 import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class PackagerTest {
+class SourceResolverTest {
     
     PackageElement pack = when(mock(PackageElement.class).getQualifiedName()).thenReturn(new StubName("com.karuslabs.commands.aot")).getMock();
     Element element = when(mock(Element.class).accept(any(), any())).thenReturn(pack).getMock();
     Environment environment = mock(Environment.class);
-    Packager packager = new Packager(environment);
+    SourceResolver packager = new SourceResolver(environment);
     
     
     @ParameterizedTest
-    @MethodSource("resolve_parameters")
+    @MethodSource("resolve")
     void resolve(String value, String pack, String file) {
-        when(element.getAnnotation(Emit.class)).thenReturn(new StubEmit(value));
+        when(element.getAnnotation(Source.class)).thenReturn(new StubSource(value));
         
         packager.resolve(element);
         
         verifyNoInteractions(environment);
         
         assertEquals(element, packager.element());
-        assertEquals(pack, packager.pack());
+        assertEquals(pack, packager.folder());
         assertEquals(file, packager.file());
     }
     
-    static Stream<Arguments> resolve_parameters() {
-        return Stream.of(
-            of(Emit.RELATIVE_PACKAGE, "com.karuslabs.commands.aot", "Commands"),
+    static Stream<Arguments> resolve() {
+        return Stream.of(of(Source.RELATIVE_PACKAGE, "com.karuslabs.commands.aot", "Commands"),
             of("com.karuslabs.Test", "com.karuslabs", "Test"),
             of("Unnamed", "", "Unnamed")
         );
@@ -76,13 +71,13 @@ class PackagerTest {
     @ParameterizedTest
     @MethodSource("resolve_errors_parameters")
     void resolve_errors(String value, String error) {
-        when(element.getAnnotation(Emit.class)).thenReturn(new StubEmit(value));
+        when(element.getAnnotation(Source.class)).thenReturn(new StubSource(value));
         
         packager.resolve(element);
         
         verify(environment).error(element, error);
         
-        assertEquals("", packager.pack());
+        assertEquals("", packager.folder());
         assertEquals("Commands", packager.file());
     }
     
@@ -97,12 +92,12 @@ class PackagerTest {
 }
 
 
-class StubEmit implements Emit {
+class StubSource implements Source {
 
     private String value;
     
     
-    StubEmit(String value) {
+    StubSource(String value) {
         this.value = value;
     }
     
@@ -114,7 +109,7 @@ class StubEmit implements Emit {
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return Emit.class;
+        return Source.class;
     }
     
 }
@@ -131,22 +126,22 @@ class StubName implements Name {
 
     @Override
     public boolean contentEquals(CharSequence cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return value.contains(cs);
     }
 
     @Override
     public int length() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return value.length();
     }
 
     @Override
     public char charAt(int index) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return value.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return value.subSequence(start, end);
     }
     
     

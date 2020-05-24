@@ -36,22 +36,18 @@ import javax.lang.model.element.*;
 import javax.tools.JavaFileObject;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.junit.jupiter.MockitoExtension;
-
+import static com.karuslabs.commons.command.aot.Binding.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
-
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class GeneratorTest {
     
     Environment environment = spy(new Environment(mock(Messager.class), mock(Filer.class), null, null));
-    Packager packager = when(mock(Packager.class).element()).thenReturn(mock(Element.class)).getMock();
-    Generator generator = new Generator(environment, packager, new TypeBlock(), new MethodBlock());
+    SourceResolver resolver = when(mock(SourceResolver.class).element()).thenReturn(mock(Element.class)).getMock();
+    Generator generator = new Generator(environment, resolver, new TypeBlock(), new MethodBlock());
     
     StringWriter writer = new StringWriter();
     JavaFileObject file;
@@ -64,10 +60,11 @@ class GeneratorTest {
     
     @BeforeEach
     void before() throws IOException {
-        when(packager.pack()).thenReturn("aot.generation");
-        when(packager.file()).thenReturn("Commands");
+        when(resolver.folder()).thenReturn("aot.generation");
+        when(resolver.file()).thenReturn("Commands");
         
         file = when(mock(JavaFileObject.class).openWriter()).thenReturn(writer).getMock();
+        
         when(environment.filer.createSourceFile(any(), any())).thenReturn(file);
         
         when(command.getModifiers()).thenReturn(Set.of(PUBLIC, STATIC, FINAL));
@@ -77,11 +74,11 @@ class GeneratorTest {
         var root = Token.root();
         
         var tell = Token.literal(mock(Element.class), "tell|t", "tell", Set.of("t"));
-        tell.bindings.put(Binding.COMMAND, Token.literal(command, "tell", "tell", Set.of()));
+        tell.bindings.put(COMMAND, command);
         
         var argument = Token.argument(mock(Element.class), "<players>", "players");
-        argument.bindings.put(Binding.TYPE, Token.argument(argumentType, "<players>", "players"));
-        argument.bindings.put(Binding.SUGGESTIONS, Token.argument(suggestions, "<players>", "players"));
+        argument.bindings.put(TYPE, argumentType);
+        argument.bindings.put(SUGGESTIONS, suggestions);
         
         root.add(environment, tell).add(environment, argument);
         
@@ -107,7 +104,7 @@ class GeneratorTest {
         
         generator.generate();
         
-        verify(environment).error(packager.element(), "\"aot.generation.Commands\" already exists");
+        verify(environment).error(resolver.element(), "\"aot.generation.Commands\" already exists");
     }
     
     
@@ -117,7 +114,7 @@ class GeneratorTest {
         
         generator.generate();
         
-        verify(environment).error(packager.element(), "Failed to create file: \"aot.generation.Commands\"");
+        verify(environment).error(resolver.element(), "Failed to create file: \"aot.generation.Commands\"");
     }
 
 }

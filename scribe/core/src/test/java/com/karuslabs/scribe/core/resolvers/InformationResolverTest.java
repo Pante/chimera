@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Information;
 import com.karuslabs.scribe.core.*;
 
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InformationResolverTest {
     
     InformationResolver<Class<?>> resolver = new InformationResolver<>();
-    Resolution<Class<?>> resolution = new Resolution<>();
+    Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach

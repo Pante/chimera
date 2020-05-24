@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Load;
 import com.karuslabs.scribe.core.*;
 
@@ -39,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LoadResolverTest {
     
     LoadResolver<Class<?>> resolver = new LoadResolver<>();
-    Resolution<Class<?>> resolution = new Resolution<>();
+    Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach

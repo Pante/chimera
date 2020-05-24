@@ -40,14 +40,11 @@ import net.minecraft.server.v1_15_R1.CommandListenerWrapper;
 import org.bukkit.command.CommandSender;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class NativeMapperTest {
     
     static final SuggestionProvider<CommandListenerWrapper> PROVIDER = (a, b) -> null;

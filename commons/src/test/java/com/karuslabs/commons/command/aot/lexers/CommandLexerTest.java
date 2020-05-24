@@ -28,11 +28,9 @@ import com.karuslabs.commons.command.aot.Type;
 
 import javax.lang.model.element.Element;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,7 +38,6 @@ import static org.mockito.Mockito.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
-@ExtendWith(MockitoExtension.class)
 class CommandLexerTest {
     
     CommandLexer lexer = new CommandLexer(new ArgumentLexer(), new LiteralLexer());
@@ -50,8 +47,8 @@ class CommandLexerTest {
     
     @ParameterizedTest
     @CsvSource({"a <b>", "a       <b>"})
-    void lex(String value) {
-        var tokens = lexer.lex(environment, location, value);
+    void lex(String raw) {
+        var tokens = lexer.lex(environment, location, raw);
         var a = tokens.get(0);
         var b = tokens.get(1);
         
@@ -63,8 +60,8 @@ class CommandLexerTest {
     
     @ParameterizedTest
     @CsvSource({"''", "'      '"})
-    void lex_errors(String value) {
-        assertEquals(EMPTY_LIST, lexer.lex(environment, location, value));
+    void lex_errors(String raw) {
+        assertEquals(EMPTY_LIST, lexer.lex(environment, location, raw));
         verify(environment).error(location, "Command should not be blank");
     }
 } 

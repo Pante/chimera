@@ -34,7 +34,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
 import static com.karuslabs.commons.command.aot.Binding.*;
-import static com.karuslabs.commons.command.aot.Messages.quote;
+import static com.karuslabs.annotations.processor.Messages.quote;
 import static javax.lang.model.element.Modifier.*;
 
 
@@ -56,7 +56,7 @@ public class VariableResolver extends Resolver<VariableElement> {
 
     
     @Override
-    public void resolve(VariableElement variable, Token token, Token binding) {
+    public void resolve(VariableElement variable, Token token, Element location) {
         var modifiers = variable.getModifiers();
         if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
             environment.error(variable, "Field should be public and final");
@@ -65,16 +65,16 @@ public class VariableResolver extends Resolver<VariableElement> {
         
         var type = variable.asType();
         if (types.isSubtype(type, command)) {
-            token.bind(environment, COMMAND, binding);
+            token.bind(environment, COMMAND, location);
             
         } else if (types.isSubtype(type, argumentType)) {
-            token.bind(environment, TYPE, binding);
+            token.bind(environment, TYPE, location);
             
         } else if (types.isSubtype(type, requirement)) {
-            token.bind(environment, REQUIREMENT, binding);
+            token.bind(environment, REQUIREMENT, location);
             
         } else if (types.isSubtype(type, suggestions)) {
-            token.bind(environment, SUGGESTIONS, binding);
+            token.bind(environment, SUGGESTIONS, location);
             
         } else {
             environment.error(variable, quote(variable) + " should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");

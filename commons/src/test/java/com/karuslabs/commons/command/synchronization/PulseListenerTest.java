@@ -31,7 +31,6 @@ import org.bukkit.plugin.*;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.junit.jupiter.*;
@@ -41,7 +40,6 @@ import static org.mockito.Mockito.*;
 import static org.mockito.quality.Strictness.LENIENT;
 
 
-@ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
 class PulseListenerTest {
     

@@ -50,9 +50,9 @@ public class Processor extends AnnotationProcessor {
     Parser command;
     Parser bind;
     Analyzer analyzer;
-    Packager packager;
+    SourceResolver source;
     Generator generator;
-    boolean compiled;
+    boolean processed;
     
     
     @Override
@@ -65,21 +65,22 @@ public class Processor extends AnnotationProcessor {
         command = new CommandParser(environment, lexer);
         bind = new BindParser(environment, lexer, new MethodResolver(environment), new VariableResolver(environment));
         analyzer = new Analyzer(environment);
-        packager = new Packager(environment);
-        generator = new Generator(environment, packager, new TypeBlock(), new MethodBlock());
-        compiled = false;
+        source = new SourceResolver(environment);
+        generator = new Generator(environment, source, new TypeBlock(), new MethodBlock());
+        processed = false;
     }
     
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
-        if (compiled) {
+        if (processed) {
             return false;
         }
         
-        resolveFile(round.getElementsAnnotatedWith(Emit.class));
+        resolveSource(round.getElementsAnnotatedWith(Source.class));
         parse(command, round, Command.class);
         parse(bind, round, Bind.class);
+        
         analyzer.analyze();
         
         if (!environment.error()) {
@@ -87,28 +88,28 @@ public class Processor extends AnnotationProcessor {
         }
         
         environment.clear();
-        compiled = true;
+        processed = true;
         return false;
     }
     
     
-    void resolveFile(Set<? extends Element> elements) {
+    void resolveSource(Set<? extends Element> elements) {
         if (elements.size() == 1) {
-            packager.resolve(elements.toArray(new Element[0])[0]);
+            source.resolve(elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
-            error("Project does not contain a @Pack annotation, should contain one @Pack annotation");
+            error("Project does not contain an @Source annotation, should contain one @Source annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {
-                error(element, "Project contains " + elements.size() + " @Pack annotations, should contain one @Pack annotation");
+                error(element, "Project contains " + elements.size() + " @Source annotations, should contain one @Source annotation");
             }
         }
     }
     
     
-    void parse(Parser parser, RoundEnvironment env, Class<? extends Annotation> annotation) {
-        for (var element : env.getElementsAnnotatedWith(annotation)) {
+    void parse(Parser parser, RoundEnvironment round, Class<? extends Annotation> annotation) {
+        for (var element : round.getElementsAnnotatedWith(annotation)) {
             parser.parse(element);
         }
     }

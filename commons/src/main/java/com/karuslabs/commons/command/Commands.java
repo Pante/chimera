@@ -56,7 +56,7 @@ public @Static class Commands {
     }
 
     
-    public static <T> void executes(CommandNode<T> command, Command<T> execution) {
+    public static <T> void execution(CommandNode<T> command, Command<T> execution) {
         COMMAND.set(command, execution);
     }
     

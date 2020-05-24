@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;

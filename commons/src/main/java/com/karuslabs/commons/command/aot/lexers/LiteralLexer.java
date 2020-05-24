@@ -28,23 +28,23 @@ import com.karuslabs.commons.command.aot.*;
 import java.util.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.*;
+import static com.karuslabs.annotations.processor.Messages.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
 public class LiteralLexer implements Lexer {
 
     @Override
-    public List<Token> lex(Environment environment, Element location, String value) {
-        if (value.contains("<") || value.contains(">")) {
-            environment.error(location, format(value, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
+    public List<Token> lex(Environment environment, Element location, String raw) {
+        if (raw.contains("<") || raw.contains(">")) {
+            environment.error(location, format(raw, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
             return EMPTY_LIST;
         }
         
-        var names = value.split("\\|", -1);
+        var names = raw.split("\\|", -1);
         
         for (var name : names) {
-            if (!valid(environment, location, value, name)) {
+            if (!valid(environment, location, raw, name)) {
                 return EMPTY_LIST;
             }
         }
@@ -57,17 +57,17 @@ public class LiteralLexer implements Lexer {
             }
         }
         
-        return List.of(Token.literal(location, value, names[0], aliases));
+        return List.of(Token.literal(location, raw, names[0], aliases));
     }
     
     
     boolean valid(Environment environment, Element location, String context, String value) {
-        var valid = !value.isEmpty();
-        if (!valid) {
+        var error = value.isEmpty();
+        if (error) {
             environment.error(location, format(context, "contains an empty literal alias or name", "should not be empty"));
         }
         
-        return valid;
+        return !error;
     }
 
 }

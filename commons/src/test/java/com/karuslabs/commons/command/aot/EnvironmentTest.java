@@ -25,27 +25,23 @@ package com.karuslabs.commons.command.aot;
 
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
-import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class EnvironmentTest {
     
-    Environment environment = new Environment(mock(Messager.class), mock(Filer.class), mock(Elements.class), mock(Types.class));
+    Environment environment = new Environment(mock(Messager.class), null, null, null);
     Element element = mock(Element.class);
     
     
     @Test
-    void root() {
-        var root = environment.root(element);
+    void scope() {
+        var root = environment.scope(element);
         
         assertEquals(Type.ROOT, root.type);
         assertSame(root, environment.scopes.get(element));
@@ -68,10 +64,10 @@ class EnvironmentTest {
     void error() {
         environment.error = false;
         
-        environment.error(element, "Error message");
+        environment.error(element, "error message");
         
         assertTrue(environment.error());
-        verify(environment.messager).printMessage(ERROR, "Error message", element);
+        verify(environment.messager).printMessage(ERROR, "error message", element);
     }
     
     
@@ -79,10 +75,10 @@ class EnvironmentTest {
     void warn() {
         environment.error = false;
         
-        environment.warn(element, "Warning message");
+        environment.warn(element, "warning message");
         
         assertFalse(environment.error());
-        verify(environment.messager).printMessage(WARNING, "Warning message", element);
+        verify(environment.messager).printMessage(WARNING, "warning message", element);
     }
 
 } 

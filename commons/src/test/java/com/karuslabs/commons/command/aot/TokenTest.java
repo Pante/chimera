@@ -28,23 +28,19 @@ import java.util.stream.Stream;
 import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class TokenTest {
     
     Token argument = spy(Token.argument(mock(Element.class), "<c>", "c"));
     Token literal = Token.literal(mock(Element.class), "a|b", "a", new HashSet<>(Set.of("b")));
-    Token d = Token.literal(mock(Element.class), "d", "d", Set.of());
+    Element element = mock(Element.class);
     Environment environment = mock(Environment.class);
     
     
@@ -113,29 +109,29 @@ class TokenTest {
     
     @Test
     void bind() {
-        literal.bind(environment, Binding.COMMAND, d);
+        literal.bind(environment, Binding.COMMAND, element);
         
-        assertEquals(d, literal.bindings.get(Binding.COMMAND));
+        assertEquals(element, literal.bindings.get(Binding.COMMAND));
         verifyNoInteractions(environment);
     }
     
     
     @Test
     void bind_existing() {
-        literal.bindings.put(Binding.COMMAND, d);
+        literal.bindings.put(Binding.COMMAND, element);
         
-        literal.bind(environment, Binding.COMMAND, d);
+        literal.bind(environment, Binding.COMMAND, element);
         
-        verify(environment).error(d.location, "A Command<CommandSender> is already bound to \"a|b\"");
+        verify(environment).error(element, "A Command<CommandSender> is already bound to \"a|b\"");
     }
     
     
     @ParameterizedTest
     @MethodSource("bind_invalid_target_parameters")
     void bind_invalid_target(Binding binding, String type) {
-        literal.bind(environment, binding, d);
+        literal.bind(environment, binding, element);
         
-        verify(environment).error(d.location, type + " should not be bound to a literal");
+        verify(environment).error(element, type + " should not be bound to a literal");
     }
     
     static Stream<Arguments> bind_invalid_target_parameters() {

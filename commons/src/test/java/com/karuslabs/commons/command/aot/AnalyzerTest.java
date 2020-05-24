@@ -27,13 +27,10 @@ import java.util.Set;
 import javax.lang.model.element.Element;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class AnalyzerTest {
     
     Environment environment = spy(new Environment(null, null, null, null));
@@ -45,7 +42,7 @@ class AnalyzerTest {
     
     @BeforeEach
     void before() {
-        argument.bind(environment, Binding.TYPE, Token.argument(mock(Element.class), "<something>", "something"));
+        argument.bind(environment, Binding.TYPE, mock(Element.class));
         
         literal.add(environment, argument);
         literal.add(environment, invalid);

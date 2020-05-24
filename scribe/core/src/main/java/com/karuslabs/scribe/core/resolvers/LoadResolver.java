@@ -42,7 +42,7 @@ public class LoadResolver<T> extends UniqueResolver<T> {
     @Override
     protected void resolve(T type) {
         var load = extractor.single(type, Load.class);
-        var mapping = resolution.mappings;
+        var mapping = environment.mappings;
         
         mapping.put("load", load.during().toString());
         
@@ -59,7 +59,7 @@ public class LoadResolver<T> extends UniqueResolver<T> {
     protected void check(T type, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
-                resolution.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
+                environment.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
             }
         }
     }

@@ -13,6 +13,7 @@ Annotations has been undergone a few tweaks.
 - Add `AnnotationProcessor.error(String)`
 - Add `AnnotationProcessor.warn(String)`
 - Add `AnnotationProcessor.note(String)`
+- Add `Messages`
 - Change `RetentionPolicy` of annotations from `RUNTIME` to `SOURCE`
 - Change `com.karuslabs.annotations.processors` to `com.karuslabs.annotations.processer`
 - Remove `com.karuslabs.annotations.filters` - All the current filters are available in `Filter`
@@ -41,6 +42,7 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Change `Commands.alias(LiteralCommandNode<T>, String)` to `Literal.alias(LiteralCommandNode<T>, String)`
 - Change `Commands.from(Object)` to `Commands.resolve(Object)`
 - Change `Commands.from(Object, String)` to `Commands.resolve(Object, String)`
+- Change `Commands.executes(CommandNode<T>, Command<T>)` to `Commands.execution(CommandNode<T>, Command<T>)`
 - Change `DefaultableContext<T>` to `OptionalContext<T>`
 - Change `Dispatcher`, `DispatcherCommand`, `DispatcherMapper` and `Exceptions` from `com.karuslabs.common.command to `com.karuslabs.common.command.dispatcher`
 - Change `DispatcherMapper` to `NativeMapper`
@@ -119,9 +121,13 @@ more information.
 - Remove `com.karuslabs.commons.util.locale.spi`
 - Remove dependency on `lingua-franca`
 
-**Scribe-Annotations**
+**Scribe Annotations**
 - Change `Default.value` from public to private
 - Change `Version.version` from public to private
+
+**Scribe Core**
+- Change `Resolution` to `Environment`
+- Remove `Messages`
 
 **Scribe-Maven-Plugin**
 - Fix failed execution caused by project's dependencies not getting resolved

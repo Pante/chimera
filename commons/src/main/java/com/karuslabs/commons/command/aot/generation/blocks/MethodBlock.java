@@ -44,7 +44,7 @@ public class MethodBlock {
     MessageFormat alias;
     Set<String> variables;
     int count;
-    @Nullable String type;
+    @Nullable CharSequence type;
     
     
     public MethodBlock() {
@@ -57,7 +57,7 @@ public class MethodBlock {
     }
     
     
-    public void start(String type) {
+    public void start(CharSequence type) {
         this.type = type;
         variables.add("source");
         variables.add("commands");
@@ -121,12 +121,11 @@ public class MethodBlock {
     
     
     String parameter(Token token, Binding binding, String value) {
-        var parameter = token.bindings.get(binding);
-        if (parameter == null) {
+        var element = token.bindings.get(binding);
+        if (element == null) {
             return value;
         }
       
-        var element = parameter.location;
         var name = element.getModifiers().contains(STATIC) ? type : "source";
         
         if (element instanceof ExecutableElement) {

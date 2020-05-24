@@ -33,7 +33,7 @@ import com.karuslabs.commons.command.aot.resolvers.Resolver;
 import java.util.List;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import static com.karuslabs.annotations.processor.Messages.format;
 
 
 public class BindParser extends Parser {
@@ -78,7 +78,7 @@ public class BindParser extends Parser {
     boolean matchAny(Element element, Token current, Token binding) {
         var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
         if (match) {
-            resolve(element, current, binding);
+            resolve(element, current, binding.location);
         }
         
         for (var child : current.children.values()) {
@@ -102,16 +102,16 @@ public class BindParser extends Parser {
             }
         }
         
-        resolve(element, current, bindings.get(bindings.size() - 1));
+        resolve(element, current, bindings.get(bindings.size() - 1).location);
     }
     
     
-    void resolve(Element element, Token token, Token binding) {
+    void resolve(Element element, Token token, Element location) {
         if (element instanceof ExecutableElement) {
-            method.resolve((ExecutableElement) element, token, binding);
+            method.resolve((ExecutableElement) element, token, location);
             
         } else if (element instanceof VariableElement) {
-            variable.resolve((VariableElement) element, token, binding);
+            variable.resolve((VariableElement) element, token, location);
             
         } else {
             environment.error(element, "@Bind annotation should not be used on a " + element.getKind().toString());

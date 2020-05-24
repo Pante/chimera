@@ -28,7 +28,7 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.commons.command.aot.Messages.*;
+import static com.karuslabs.annotations.processor.Messages.*;
 
 
 public class Token {
@@ -38,7 +38,7 @@ public class Token {
     public final String lexeme;
     public final Type type;
     public final Set<String> aliases;
-    public final Map<Binding, Token> bindings;
+    public final Map<Binding, Element> bindings;
     public final Map<String, Token> children;
 
     
@@ -93,16 +93,16 @@ public class Token {
     }
     
     
-    public void bind(Environment environment, Binding binding, Token token) {
+    public void bind(Environment environment, Binding binding, Element location) {
         var existing = bindings.get(binding);
         if (existing != null) {
-            environment.error(existing.location, binding.article + " " + binding.signature + " is already bound to " + quote(toString()));
+            environment.error(existing, binding.article + " " + binding.signature + " is already bound to " + quote(toString()));
             
         } else if (type != Type.ARGUMENT && (binding == Binding.TYPE || binding == Binding.SUGGESTIONS)) {
-            environment.error(token.location, binding.article + " " + binding.signature + " should not be bound to a literal");
+            environment.error(location, binding.article + " " + binding.signature + " should not be bound to a literal");
        
         } else {
-            bindings.put(binding, token);
+            bindings.put(binding, location);
         }
     }
     

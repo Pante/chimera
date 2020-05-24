@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.core.Resolution;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -48,7 +48,7 @@ class ProcessorTest {
     Filer filer = mock(Filer.class);
     Messager messager = mock(Messager.class);
     Processor processor = spy(new Processor());
-    Resolution<Element> resolution;
+    Environment<Element> resolution;
     
     
     @BeforeEach
@@ -61,7 +61,7 @@ class ProcessorTest {
         when(elements.getTypeElement(any())).thenReturn(element);
         
         processor.init(environment);
-        resolution = new Resolution<Element>();
+        resolution = new Environment<Element>();
     }
     
     

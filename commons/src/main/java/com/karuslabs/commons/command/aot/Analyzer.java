@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.aot;
 
 import java.util.Collection;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import static com.karuslabs.annotations.processor.Messages.format;
 
 
 public class Analyzer {

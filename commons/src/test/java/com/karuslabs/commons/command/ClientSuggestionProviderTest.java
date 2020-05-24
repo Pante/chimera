@@ -26,18 +26,15 @@ package com.karuslabs.commons.command;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ClientSuggestionProviderTest {
     
     @Test
     void getSuggestions() {
-        SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).buildFuture()).thenReturn(null).getMock();
+        SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
         
         ClientSuggestionProvider.ENTITIES.getSuggestions(null, builder);
         

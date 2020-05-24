@@ -44,14 +44,14 @@ public class CommandLexer implements Lexer {
     
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String value) {
-        if (value.isBlank()) {
+    public List<Token> lex(Environment environment, Element location, String raw) {
+        if (raw.isBlank()) {
             environment.error(location, "Command should not be blank");
             return EMPTY_LIST;
         }
         
         var tokens = new ArrayList<Token>();
-        for (var command : value.split("\\s+")) {
+        for (var command : raw.split("\\s+")) {
             if (command.startsWith("<")) {
                 tokens.addAll(argument.lex(environment, location, command));
                 

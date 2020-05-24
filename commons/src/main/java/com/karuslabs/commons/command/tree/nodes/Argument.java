@@ -77,7 +77,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     @Override
     public void setCommand(Command<T> command) {
-        Commands.executes(this, command);
+        Commands.execution(this, command);
     }
     
     

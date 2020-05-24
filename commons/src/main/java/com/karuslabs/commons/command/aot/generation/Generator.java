@@ -35,38 +35,38 @@ import javax.lang.model.element.*;
 public class Generator {
     
     private Environment environment;
-    private Packager packager;
+    private SourceResolver resolver;
     private TypeBlock type;
     private MethodBlock method;
     
     
-    public Generator(Environment environment, Packager packager, TypeBlock type, MethodBlock method) {
+    public Generator(Environment environment, SourceResolver resolver, TypeBlock type, MethodBlock method) {
         this.environment = environment;
-        this.packager = packager;
+        this.resolver = resolver;
         this.type = type;
         this.method = method;
     }
     
     
     public void generate() {
-        var file = packager.pack().isEmpty() ? packager.file() : packager.pack() + "." + packager.file();
+        var file = resolver.folder().isEmpty() ? resolver.file() : resolver.folder() + "." + resolver.file();
         var elements = environment.scopes.keySet().toArray(new Element[0]);
         
         try (var writer = environment.filer.createSourceFile(file, elements).openWriter()) {
-            type.start(packager.pack(), packager.file());
+            type.start(resolver.folder(), resolver.file());
         
             for (var entry : environment.scopes.entrySet()) {
-                method.start(((TypeElement) entry.getKey()).getQualifiedName().toString());
+                method.start(((TypeElement) entry.getKey()).getQualifiedName());
                 type.method(descend(entry.getValue()));
             }
 
             writer.write(type.end());
             
         } catch (FilerException ignored) {
-            environment.error(packager.element(), "\"" + file + "\" already exists");
+            environment.error(resolver.element(), "\"" + file + "\" already exists");
             
         } catch (IOException ignored) {
-            environment.error(packager.element(), "Failed to create file: \"" + file + "\"");
+            environment.error(resolver.element(), "Failed to create file: \"" + file + "\"");
         }
     }
     

@@ -30,28 +30,23 @@ import com.mojang.brigadier.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@ExtendWith(MockitoExtension.class)
 class CommandsTest {
     
-    Argument<Object, String> argument = Argument.builder("b", word()).then(Argument.builder("b1", word())).build();
-    Literal<Object> literal = Literal.builder("name").then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
+    Literal<Object> literal = Literal.builder("name").then(Literal.builder("a").alias("a1", "a2")).then(Argument.builder("b", word())).build();
     Command<Object> execution = val -> 1;
     
     
     @Test
-    void executes() {
-        Commands.executes(literal, execution);
+    void execution() {
+        Commands.execution(literal, execution);
         assertSame(execution, literal.getCommand());
     }
     

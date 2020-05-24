@@ -23,7 +23,6 @@
  */
 package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.core.Message;
 
 import java.util.List;
 
@@ -45,11 +44,11 @@ class MessagesTest {
     
     @Test
     void log() {        
-        Messages.WARNINGS.log(log, List.of(Message.warning(Messages.class, "First"), Message.warning(null, "Second")));
+        Console.WARNINGS.log(log, List.of(Message.warning(Console.class, "First"), Message.warning(null, "Second")));
         
         verify(log, times(3)).info("-------------------------------------------------------------");
         verify(log).warn("RESOLUTION WARNING:");
-        verify(log).warn(Messages.class.getName() + ": First");
+        verify(log).warn(Console.class.getName() + ": First");
         verify(log).warn("Second");
         verify(log).info("2 warnings");
     }
@@ -57,7 +56,7 @@ class MessagesTest {
     
     @Test
     void log_empty() {
-        Messages.ERRORS.log(log, List.of());
+        Console.ERRORS.log(log, List.of());
         
         verifyNoInteractions(log);
     }

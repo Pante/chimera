@@ -23,6 +23,7 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
+import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Permission;
 import com.karuslabs.scribe.core.*;
 
@@ -41,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PermissionResolverTest {
     
     PermissionResolver<Class<?>> resolver = new PermissionResolver<>();
-    Resolution<Class<?>> resolution = new Resolution<>();
+    Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach

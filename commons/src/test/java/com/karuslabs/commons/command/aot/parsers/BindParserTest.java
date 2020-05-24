@@ -34,13 +34,10 @@ import javax.annotation.processing.Messager;
 import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class BindParserTest {
     
     Environment environment = spy(new Environment(mock(Messager.class), null, null, null));
@@ -131,8 +128,8 @@ class BindParserTest {
         parser.matchAny(method, token, bindingChild);
         
         verify(parser, times(2)).resolve(any(), any(), any());
-        verify(parser).resolve(method, child, bindingChild);
-        verify(parser).resolve(method, other, bindingChild);
+        verify(parser).resolve(method, child, bindingChild.location);
+        verify(parser).resolve(method, other, bindingChild.location);
     }
     
     
@@ -144,7 +141,7 @@ class BindParserTest {
         
         parser.match(method, token, List.of(bindingChild, bindingGrandchild));
         
-        verify(parser).resolve(method, grandchild, bindingGrandchild);
+        verify(parser).resolve(method, grandchild, bindingGrandchild.location);
     }
     
     
@@ -163,18 +160,18 @@ class BindParserTest {
     
     @Test
     void resolve_method() {
-        parser.resolve(method, token, child);
+        parser.resolve(method, token, type);
         
-        verify(parser.method).resolve(method, token, child);
+        verify(parser.method).resolve(method, token, type);
         verifyNoInteractions(environment);
     }
     
     
     @Test
     void resolve_variable() {
-        parser.resolve(variable, token, child);
+        parser.resolve(variable, token, type);
         
-        verify(parser.variable).resolve(variable, token, child);
+        verify(parser.variable).resolve(variable, token, type);
         verifyNoInteractions(environment);
     }
     
@@ -183,7 +180,7 @@ class BindParserTest {
     void resolve_error() {
         Element element = when(mock(Element.class).getKind()).thenReturn(ElementKind.CLASS).getMock();
         
-        parser.resolve(element, token, child);
+        parser.resolve(element, token, type);
         
         verify(environment).error(element, "@Bind annotation should not be used on a " + ElementKind.CLASS);
     }

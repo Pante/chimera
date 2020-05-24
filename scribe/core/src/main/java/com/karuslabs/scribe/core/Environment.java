@@ -21,24 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.scribe.core;
 
-import com.karuslabs.annotations.Static;
+import java.util.*;
 
 
-public @Static class Messages {
+public abstract class Environment<T> {
     
-    public static String format(Object value, String reason) {
-        return quote(value) + " " + reason;
+    public final Map<String, Object> mappings;
+    
+    
+    public Environment() {
+        mappings = new HashMap<>();
     }
     
-    public static String format(Object value, String reason, String resolution) {
-        return quote(value) + " " + reason + ", " + resolution;
-    }
+        
+    public abstract void error(String message);
     
+    public abstract void error(T location, String message);
     
-    public static String quote(Object value) {
-        return "\"" + value + "\"";
-    }
+        
+    public abstract void warning(String message);
+    
+    public abstract void warning(T location, String message);
     
 }

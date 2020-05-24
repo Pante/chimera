@@ -28,36 +28,36 @@ import com.karuslabs.commons.command.aot.*;
 import java.util.List;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Messages.format;
+import static com.karuslabs.annotations.processor.Messages.format;
 import static java.util.Collections.EMPTY_LIST;
 
 
 public class ArgumentLexer implements Lexer {
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String value) {
-        if (!value.startsWith("<") || !value.endsWith(">")) {
-            environment.error(location, format(value, "is an invalid argument", "should be enclosed by \"<\" and \">\""));
+    public List<Token> lex(Environment environment, Element location, String raw) {
+        if (!raw.startsWith("<") || !raw.endsWith(">")) {
+            environment.error(location, format(raw, "is an invalid argument", "should be enclosed by \"<\" and \">\""));
             return EMPTY_LIST;
         }
         
-        if (value.contains("|")) {
-            environment.error(location, format(value, "contains \"|\"", "an argument should not have aliases"));
+        if (raw.contains("|")) {
+            environment.error(location, format(raw, "contains \"|\"", "an argument should not have aliases"));
             return EMPTY_LIST;
         }
         
         
-        var argument = value.substring(1, value.length() - 1);
+        var argument = raw.substring(1, raw.length() - 1);
         if (argument.isEmpty()) {
-            environment.error(location, format(value, "is empty", "an argument should not be empty"));
+            environment.error(location, format(raw, "is empty", "an argument should not be empty"));
             return EMPTY_LIST;
         }
         
         if (argument.startsWith("<") || argument.endsWith(">")) {
-            environment.warn(location, format(value, "contains trailing \"<\"s or \">\"s"));
+            environment.warn(location, format(raw, "contains trailing \"<\"s or \">\"s"));
         }
         
-        return List.of(Token.argument(location, value, argument));
+        return List.of(Token.argument(location, raw, argument));
     }
     
 }

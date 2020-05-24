@@ -23,8 +23,6 @@
  */
 package com.karuslabs.scribe.core.resolvers;
 
-import com.karuslabs.scribe.core.*;
-
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -44,7 +42,7 @@ public abstract class UniqueResolver<T> extends Resolver<T> {
     protected void check(Set<T> types) {
         if (types.size() > 1) {
             for (var type : types) {
-                resolution.error(type, "Invalid number of @" + name + " annotations, plugin must contain only one @" + name + " annotation");
+                environment.error(type, "Invalid number of @" + name + " annotations, plugin must contain only one @" + name + " annotation");
             }
         }
     }

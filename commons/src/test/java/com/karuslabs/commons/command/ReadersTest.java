@@ -26,13 +26,10 @@ package com.karuslabs.commons.command;
 import com.mojang.brigadier.StringReader;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ReadersTest {
     
     StringReader reader = new StringReader("abcd");
@@ -51,7 +48,7 @@ class ReadersTest {
     
     
     @Test
-    void until_end() {
+    void until_predicate() {
         assertEquals("abc", Readers.until(reader, val -> val == 'd'));
     }
 
