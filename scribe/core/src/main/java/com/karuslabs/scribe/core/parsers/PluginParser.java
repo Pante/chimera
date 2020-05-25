@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.annotations.Ignored;
 import com.karuslabs.scribe.annotations.Plugin;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -32,24 +33,27 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.*;
 
+import static com.karuslabs.annotations.processor.Messages.*;
 import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 
 
-
-public abstract class PluginResolver<T> extends Resolver<T> {
+public abstract class PluginParser<T> extends Parser<T> {
     
-    public static final PluginResolver<Class<?>> CLASS = new ClassPluginResolver();
-    public static PluginResolver<Element> element(Elements elements, Types types) {
-        return new ElementPluginResolver(elements, types);
+    public static PluginParser<Class<?>> type(Environment<Class<?>> environment) {
+        return new ClassPluginResolver(environment);
+    }
+    
+    public static PluginParser<Element> element(Environment<Element> environment, Elements elements, Types types) {
+        return new ElementPluginResolver(environment, elements, types);
     }
     
     
     Matcher matcher;
     
     
-    public PluginResolver() {
-        super(Set.of(Plugin.class));
+    public PluginParser(Environment<T> environment) {
+        super(environment, Set.of(Plugin.class));
         matcher = WORD.matcher("");
     }
     
@@ -57,11 +61,11 @@ public abstract class PluginResolver<T> extends Resolver<T> {
     @Override
     protected void check(Set<T> types) {
         if (types.isEmpty()) {
-            environment.error("No @Plugin annotation found, plugin must contain a @Plugin annotation");
+            environment.error("Project does not contain a @Plugin annotation, should contain one @Plugin annotation");
             
         } else if (types.size() > 1) {
             for (var type : types) {
-                environment.error(type, "Invalid number of @Plugin annotations, plugin must contain only one @Plugin annotation");
+                environment.error(type, "Project contains " + types.size() + " @Plugin annotations, should contain one @Plugin annotation");
             }
             
         } else {
@@ -74,25 +78,21 @@ public abstract class PluginResolver<T> extends Resolver<T> {
     
     
     @Override
-    protected void resolve(T type) {
-        var plugin = extractor.single(type, Plugin.class);
+    protected void parse(T type) {
+        var plugin = environment.resolver.any(type, Plugin.class);
         
         environment.mappings.put("main", stringify(type));
         
-        var name = plugin.name().isEmpty() ? project.name : plugin.name();
+        var name = plugin.name().isEmpty() ? environment.project.name : plugin.name();
         if (!matcher.reset(name).matches()) {
-            environment.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
+            environment.error(type, format(name, "is not a valid plugin name", "should contain only alphanumeric characters and \"_\""));
         }
         
         environment.mappings.put("name", name);
         
-        var version = plugin.version().isEmpty() ? project.version : plugin.version();
+        var version = plugin.version().isEmpty() ? environment.project.version : plugin.version();
         if (!VERSIONING.matcher(version).matches()) {
-            environment.warning(
-                type, 
-                "Unconventional versioning scheme: '" + version + "', " +
-                "it is highly recommended that versions follows SemVer, https://semver.org/"
-            );
+            environment.warning(type, format(version, "may be malformed", "versions should follow SemVer, https://semver.org/"));
         }
         
         environment.mappings.put("version", version);
@@ -103,27 +103,29 @@ public abstract class PluginResolver<T> extends Resolver<T> {
 }
 
 
-class ClassPluginResolver extends PluginResolver<Class<?>> {
+class ClassPluginResolver extends PluginParser<Class<?>> {
     
     static final int ABSTRACT = 0x00000400;
+
+    
+    ClassPluginResolver(Environment<Class<?>> environment) {
+        super(environment);
+    }
     
     
     @Override
     protected void check(Class<?> type) {
         if ((type.getModifiers() & ABSTRACT) != 0) {
-            environment.error(type, "Invalid main class: '" + type.getName() + "', main class cannot be abstract");
+            environment.error(type, format(type.getName(), "is not a valid main class", "should not be abstract"));
         }
         
-        if (!org.bukkit.plugin.Plugin.class.isAssignableFrom(type)) {
-            environment.error(
-                type, 
-                "Invalid main class: '" + type.getName() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
-            );
+        if (!org.bukkit.plugin.Plugin.class.isAssignableFrom(type)) {            
+            environment.error(type, format(type.getName(), "is not a valid main class", "should inherit from " + quote(org.bukkit.plugin.Plugin.class.getName())));
         }
         
         for (var constructor : type.getDeclaredConstructors()) {
             if (constructor.getParameterCount() != 0 ) {
-                environment.error(type, "Invalid main class: '" + type.getName() + "', main class cannot contain constructors with parameters");
+                environment.error(type, format(type.getName(), "is not a valid main class", "should not contain a constructor with parameters"));
             }
         }
     }
@@ -136,14 +138,15 @@ class ClassPluginResolver extends PluginResolver<Class<?>> {
 }
 
 
-class ElementPluginResolver extends PluginResolver<Element> {
+class ElementPluginResolver extends PluginParser<Element> {
     
     Types types;
     TypeMirror expected;
     Visitor visitor;
     
     
-    ElementPluginResolver(Elements elements, Types types) {
+    ElementPluginResolver(Environment<Element> environment, Elements elements, Types types) {
+        super(environment);
         this.types = types;
         expected = elements.getTypeElement(org.bukkit.plugin.Plugin.class.getName()).asType();
         visitor = new Visitor();
@@ -177,14 +180,11 @@ class ElementPluginResolver extends PluginResolver<Element> {
             var valid = true;
             
             if (element.getModifiers().contains(ABSTRACT)) {
-                environment.error(element, "Invalid main class: '" + element.asType() + "', main class cannot be abstract");
+                environment.error(element, format(element.asType(), "is not a valid main class", "should not be abstract"));
             }
             
             if (!types.isAssignable(element.asType(), expected)) {
-                environment.error(
-                    element, 
-                    "Invalid main class: '" + element.asType() + "', main class must inherit from '" + org.bukkit.plugin.Plugin.class.getName() + "'"
-                );
+                environment.error(element, format(element.asType(), "is not a valid main class", "should inherit from " + quote(org.bukkit.plugin.Plugin.class.getName())));
                 valid = false;
             }
             
@@ -198,10 +198,7 @@ class ElementPluginResolver extends PluginResolver<Element> {
         @Override
         public Boolean visitExecutable(ExecutableElement element, @Ignored Boolean nested) {
             if (element.getKind() == CONSTRUCTOR && !element.getParameters().isEmpty()) {
-                environment.error(
-                    element, 
-                    "Invalid main class: '" + element.getEnclosingElement() + "', main class cannot contain constructors with parameters"
-                );
+                environment.error(element, format(element.getEnclosingElement(), "is not a valid main class", "should not contain a constructor with parameters"));
                 return false;
                 
             } else {

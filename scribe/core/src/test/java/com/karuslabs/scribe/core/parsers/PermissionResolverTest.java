@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.PermissionParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Permission;
 import com.karuslabs.scribe.core.*;
@@ -41,19 +42,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Permission(value = "a.b", description = "desc", implicit = FALSE, children = {"a.b.c"})
 class PermissionResolverTest {
     
-    PermissionResolver<Class<?>> resolver = new PermissionResolver<>();
+    PermissionParser<Class<?>> resolver = new PermissionParser<>();
     Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach
     void before() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
     }
     
     
     @Test
     void resolve() {
-        resolver.resolve(PermissionResolverTest.class);
+        resolver.parse(PermissionResolverTest.class);
         var mappings = resolution.mappings;
         
         var permissions = (Map<String, Object>) mappings.get("permissions");
@@ -106,7 +107,7 @@ class PermissionResolverTest {
     @Test
     void resolve_permission() {
         var permissions = new HashMap<String, Object>();
-        resolver.resolve(PermissionResolverTest.class.getAnnotation(Permission.class), permissions);
+        resolver.parse(PermissionResolverTest.class.getAnnotation(Permission.class), permissions);
         
         var permission = (Map<String, Object>) permissions.get("a.b");
         var children = (Map<String, Boolean>) permission.get("children");
@@ -125,7 +126,7 @@ class PermissionResolverTest {
     @Test
     void resolve_permission_empty() {
         var permissions = new HashMap<String, Object>();
-        resolver.resolve(Empty.class.getAnnotation(Permission.class), permissions);
+        resolver.parse(Empty.class.getAnnotation(Permission.class), permissions);
         
         var permission = (Map<String, Object>) permissions.get("e.f");
         

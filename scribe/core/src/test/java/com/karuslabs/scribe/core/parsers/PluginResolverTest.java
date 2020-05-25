@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.ElementPluginResolver;
+import com.karuslabs.scribe.core.parsers.PluginParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Plugin;
 import com.karuslabs.scribe.core.*;
@@ -55,7 +57,7 @@ class PluginResolverTest {
     
     @BeforeEach
     void before() {
-        resolver.initialize(project, Extractor.CLASS, resolution);
+        resolver.initialize(project, Resolver.CLASS, resolution);
     }
     
     
@@ -91,7 +93,7 @@ class PluginResolverTest {
     
     @Test
     void resolve() {
-        resolver.resolve(PluginResolverTest.class);
+        resolver.parse(PluginResolverTest.class);
         
         assertTrue(resolution.messages.isEmpty());
         assertEquals(PluginResolverTest.class.getName(), resolution.mappings.get("main"));
@@ -102,7 +104,7 @@ class PluginResolverTest {
     
     @Test
     void resolve_errors() {
-        resolver.resolve(Errors.class);
+        resolver.parse(Errors.class);
         
         assertEquals(2, resolution.messages.size());
         assertEquals(
@@ -126,7 +128,7 @@ class PluginResolverTest {
     
     @Test
     void resolve_empty() {
-        resolver.resolve(Empty.class);
+        resolver.parse(Empty.class);
         
         assertTrue(resolution.messages.isEmpty());
         assertEquals("project_name", resolution.mappings.get("name"));
@@ -140,7 +142,7 @@ class PluginResolverTest {
     }
     
     
-    static class StubResolver extends PluginResolver<Class<?>> {
+    static class StubResolver extends PluginParser<Class<?>> {
 
         @Override
         protected void check(Class<?> type) {
@@ -160,13 +162,13 @@ class PluginResolverTest {
 @ExtendWith(MockitoExtension.class)
 class ClassPluginResolverTest {
     
-    PluginResolver<Class<?>> resolver = PluginResolver.CLASS;
+    PluginParser<Class<?>> resolver = PluginParser.CLASS;
     Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach
     void before() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
     }
     
     
@@ -257,8 +259,8 @@ class ElementPluginResolverTest {
     @BeforeEach
     void before() {
         when(elements.getTypeElement(org.bukkit.plugin.Plugin.class.getName())).thenReturn(type);
-        resolver = (ElementPluginResolver) PluginResolver.element(elements, types);
-        resolver.initialize(Project.EMPTY, Extractor.ELEMENT, resolution);
+        resolver = (ElementPluginResolver) PluginParser.element(elements, types);
+        resolver.initialize(Project.EMPTY, Resolver.ELEMENT, resolution);
     }
     
     

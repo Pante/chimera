@@ -21,27 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.regex.Matcher;
 
-import static com.karuslabs.scribe.core.resolvers.CommandResolver.Label.*;
+import static com.karuslabs.annotations.processor.Messages.*;
+import static com.karuslabs.scribe.core.parsers.CommandParser.Label.*;
 
 
-public class CommandResolver<T> extends Resolver<T> {
+public class CommandParser<T> extends Parser<T> {
 
     public static enum Label {
         NAME("name"), ALIAS("alias");
         
-        public final String value;
+        private final String value;
         
         private Label(String value) {
             this.value = value;
+        }
+        
+        public String toString() {
+            return value;
         }
     }
     
@@ -50,20 +55,20 @@ public class CommandResolver<T> extends Resolver<T> {
     Matcher matcher;
     
     
-    public CommandResolver() {
-        super(Set.of(Commands.class, Command.class));
+    public CommandParser(Environment<T> environment) {
+        super(environment, Set.of(Commands.class, Command.class));
         names = new HashMap<>();
         matcher = COMMAND.matcher("");
     }
     
     
     @Override
-    protected void resolve(T type) {
+    protected void parse(T type) {
         var commands = new HashMap<String, Object>();
         
-        for (var command : extractor.all(type, Command.class)) {
+        for (var command : environment.resolver.all(type, Command.class)) {
             check(type, command);
-            commands.put(command.name(), resolve(type, command));
+            commands.put(command.name(), parse(type, command));
         }
         
         environment.mappings.put("commands", commands);
@@ -78,11 +83,11 @@ public class CommandResolver<T> extends Resolver<T> {
     
     protected void check(T type, Command command, String name, Label label) {
         if (matcher.reset(name).matches()) {
-            environment.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot contain whitespaces");
+            environment.error(type, format(name, "is not a valid command " + label, "should not contain whitespaces"));
             return;
             
         } else if (name.isEmpty()) {
-            environment.error(type, "Invalid command " + label.value + ": '" + name + "', " + label.value + " cannot be empty");
+            environment.error(type, "Command should not be empty");
             return;
         }
         
@@ -90,21 +95,13 @@ public class CommandResolver<T> extends Resolver<T> {
         if (entry == null) {
             names.put(name, new SimpleEntry<>(command, label));
             
-        } else if (label == NAME && entry.getValue() == NAME) {
-            environment.error(type, "Conflicting command names: '" + name + "', command names must be unique");
-            
-        } else if (label == ALIAS && entry.getValue() == ALIAS) {
-            environment.error(type, "Conflicting command aliases: '" + name + "' for '" + command.name() + "' and '" 
-                                 + entry.getKey().name() + "', command aliases must be unique");
-            
         } else {
-            environment.error(type, "Conflicting command name and alias: '" + name + "' and alias for '" + entry.getKey().name()
-                                 + "', command names and aliases must be unique");
+            environment.error(type, format(name, "already exists", "commands should not have the same aliases and "));
         }
     }
     
     
-    protected Map<String, Object> resolve(T type, Command command) {
+    protected Map<String, Object> parse(T type, Command command) {
         var map = new HashMap<String, Object>();
         
         map.put("aliases", command.aliases());
@@ -119,7 +116,7 @@ public class CommandResolver<T> extends Resolver<T> {
         
         if (!command.permission().isEmpty()) {
             if (!PERMISSION.matcher(command.permission()).matches()) {
-                environment.warning(type, "Potentially malformed command permission: '" + command.permission() + "'");
+                environment.warning(type, format(command.permission(), "may be malformed"));
             }
             map.put("permission", command.permission());
         }

@@ -38,7 +38,7 @@ import org.bukkit.entity.Player;
 public class PlayerType implements WordType<Player> {
     
     private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
-    private static final Collection<String> EXAMPLES = List.of("Bob", "Pante");
+    private static final List<String> EXAMPLES = List.of("Bob", "Pante");
 
     
     private Server server;
@@ -76,7 +76,7 @@ public class PlayerType implements WordType<Player> {
     
 
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.core.resolvers.Resolver;
+import com.karuslabs.scribe.core.parsers.Parser;
 import com.karuslabs.scribe.annotations.Command;
 
 import java.util.Set;
@@ -39,9 +39,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ResolverTest {
     
-    Resolver resolver = spy(new StubResolver());
+    Parser resolver = spy(new StubResolver());
     Project project = mock(Project.class);
-    Extractor<String> extractor = mock(Extractor.class);
+    Resolver<String> extractor = mock(Resolver.class);
     Environment<String> resolution = mock(Environment.class);
     
     
@@ -59,7 +59,7 @@ class ResolverTest {
     void resolve_set() {
         var set = Set.of("a", "b");
         
-        resolver.resolve(set);
+        resolver.parse(set);
         
         verify(resolver).check(set);
         verify(resolver, times(2)).resolve(any(String.class));
@@ -83,14 +83,14 @@ class ResolverTest {
 
 } 
 
-class StubResolver extends Resolver<String> {
+class StubResolver extends Parser<String> {
     
     public StubResolver() {
         super(Set.of(Command.class));
     }
     
     @Override
-    protected void resolve(String type) {
+    protected void parse(String type) {
         
     }
     

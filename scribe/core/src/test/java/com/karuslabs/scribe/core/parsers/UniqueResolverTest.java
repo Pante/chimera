@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.SingleParser;
 import com.karuslabs.scribe.annotations.Command;
 import com.karuslabs.scribe.core.*;
 
@@ -61,14 +62,14 @@ class UniqueResolverTest {
         verify(resolution).error("b", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
     }
     
-    static class StubResolver extends UniqueResolver<String> {
+    static class StubResolver extends SingleParser<String> {
     
         StubResolver() {
             super(Set.of(Command.class), "hello");
         }
 
         @Override
-        protected void resolve(String type) {
+        protected void parse(String type) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

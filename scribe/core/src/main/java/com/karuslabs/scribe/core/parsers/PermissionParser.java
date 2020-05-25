@@ -21,34 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.*;
 import java.util.regex.Matcher;
 
+import static com.karuslabs.annotations.processor.Messages.format;
 
-public class PermissionResolver<T> extends Resolver<T> {
+
+public class PermissionParser<T> extends Parser<T> {
 
     Set<String> names;
     Matcher matcher;
     
     
-    public PermissionResolver() {
-        super(Set.of(Permission.class, Permissions.class));
+    public PermissionParser(Environment<T> environment) {
+        super(environment, Set.of(Permission.class, Permissions.class));
         names = new HashSet<>();
         matcher = PERMISSION.matcher("");
     }
 
     @Override
-    protected void resolve(T type) {
+    protected void parse(T type) {
         var permissions = new HashMap<String, Object>();
         
-        for (var permission : extractor.all(type, Permission.class)) {
+        for (var permission : environment.resolver.all(type, Permission.class)) {
             check(type, permission);
-            resolve(permission, permissions);
+            parse(permission, permissions);
         }
         
         environment.mappings.put("permissions", permissions);
@@ -60,29 +62,29 @@ public class PermissionResolver<T> extends Resolver<T> {
         checkMalformed(type, permission);
         
         if (Set.of(permission.children()).contains(name)) {
-            environment.warning(type, "Self-inheriting permission: '" + name + "'");
+            environment.warning(type, format(name, "inherits itself"));
         }
         
         if (!names.add(name)) {
-            environment.error(type, "Conflicting permissions: '" + name + "', permissions must be unique");
+            environment.error(type, format(name, "already exists"));
         }
     }
     
     protected void checkMalformed(T type, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
-            environment.warning(type, "Potentially malformed permission: '" + name + "'");
+            environment.warning(type, format(name, "may be malformed"));
         }
         
         for (var child : permission.children()) {
             if (!matcher.reset(child).matches()) {
-                environment.warning(type, "Potentially malformed child permission: '" + child + "'");
+                environment.warning(type, format(child, " may be malformed"));
             }
         }
     }
     
     
-    protected void resolve(Permission permission, Map<String, Object> permissions) {
+    protected void parse(Permission permission, Map<String, Object> permissions) {
         var information = new HashMap<String, Object>();
         
         if (!permission.description().isEmpty()) {

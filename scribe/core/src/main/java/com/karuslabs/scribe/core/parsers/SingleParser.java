@@ -21,51 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.scribe.core.parsers;
+
+import com.karuslabs.scribe.core.Environment;
 
 import java.lang.annotation.Annotation;
-import javax.lang.model.element.Element;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.Set;
 
 
-public interface Extractor<T> {
-    
-    public static final Extractor<Class<?>> CLASS = new ClassExtractor();
-    public static final Extractor<Element> ELEMENT = new ElementExtractor();
+public abstract class SingleParser<T> extends Parser<T> {
+
+    protected String name;
     
     
-    public <A extends Annotation> A[] all(T type, Class<A> annotation);
-    
-    public <A extends Annotation> @Nullable A single(T type, Class<A> annotation);
-    
-}
-
-
-class ClassExtractor implements Extractor<Class<?>> {
-
-    @Override
-    public <A extends Annotation> A[] all(Class<?> type, Class<A> annotation) {
-        return type.getAnnotationsByType(annotation);
+    public SingleParser(Environment environment, Set<Class<? extends Annotation>> annotations, String name) {
+        super(environment, annotations);
+        this.name = name;
     }
 
-    @Override
-    public <A extends Annotation> A single(Class<?> type, Class<A> annotation) {
-        return type.getAnnotation(annotation);
-    }
     
-}
-
-class ElementExtractor implements Extractor<Element> {
-
     @Override
-    public <A extends Annotation> A[] all(Element element, Class<A> annotation) {
-        return element.getAnnotationsByType(annotation);
+    protected void check(Set<T> types) {
+        if (types.size() > 1) {
+            for (var type : types) {
+                environment.error(type, "Project contains " + types.size() + " @" + name + " annotations, should contain one @" + name + " annotation");
+            }
+        }
     }
 
-    @Override
-    public <A extends Annotation> A single(Element element, Class<A> annotation) {
-        return element.getAnnotation(annotation);
-    }
-    
+
 }

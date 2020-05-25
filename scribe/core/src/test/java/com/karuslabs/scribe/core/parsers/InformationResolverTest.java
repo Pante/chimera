@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.InformationParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Information;
 import com.karuslabs.scribe.core.*;
@@ -40,19 +41,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Information(authors = {"Pante"}, description = "description", url = "http://wwww.repo.karuslabs.com", prefix = "prefix")
 class InformationResolverTest {
     
-    InformationResolver<Class<?>> resolver = new InformationResolver<>();
+    InformationParser<Class<?>> resolver = new InformationParser<>();
     Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach
     void before() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
     }
     
     
     @Test
     void resolve_element() {
-        resolver.resolve(InformationResolverTest.class);
+        resolver.parse(InformationResolverTest.class);
         var mapping = resolution.mappings;
         
         assertArrayEquals(new String[] {"Pante"}, (String[]) mapping.get("authors"));
@@ -93,7 +94,7 @@ class InformationResolverTest {
     
     @Test
     void resolve_information_project() {
-        resolver.initialize(new Project("", "", "", List.of("Pante"), "project description", "http://wwww.repo.karuslabs.com"), Extractor.CLASS, resolution);
+        resolver.initialize(new Project("", "", "", List.of("Pante"), "project description", "http://wwww.repo.karuslabs.com"), Resolver.CLASS, resolution);
         
         resolver.resolve(Empty.class.getAnnotation(Information.class));
         var mappings = resolution.mappings;

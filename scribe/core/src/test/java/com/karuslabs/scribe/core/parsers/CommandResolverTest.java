@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.CommandParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Command;
 import com.karuslabs.scribe.core.*;
-import com.karuslabs.scribe.core.resolvers.CommandResolver.Label;
+import com.karuslabs.scribe.core.parsers.CommandParser.Label;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -62,20 +63,20 @@ class CommandResolverTest {
     }
     
     
-    CommandResolver<Class<?>> resolver = new CommandResolver<>();
+    CommandParser<Class<?>> resolver = new CommandParser<>();
     Environment<Class<?>> resolution = spy(new Environment<>());
     Command command = CommandResolverTest.class.getAnnotation(Command.class);
     
     
     @BeforeEach
     void before() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
     }
     
     
     @Test
     void resolve() {
-        resolver.resolve(Set.of(CommandResolverTest.class));
+        resolver.parse(Set.of(CommandResolverTest.class));
         var mapping = resolution.mappings;
         
         var commands = (Map<String, Object>) mapping.get("commands");
@@ -154,7 +155,7 @@ class CommandResolverTest {
     
     @Test
     void resolve_map() {
-        var results = resolver.resolve(Object.class, command);
+        var results = resolver.parse(Object.class, command);
         
         assertTrue(resolver.names.isEmpty());
         
@@ -169,7 +170,7 @@ class CommandResolverTest {
     
     @Test
     void resolve_warning() {
-        var results = resolver.resolve(Object.class, MalformedPermission.class.getAnnotation(Command.class));
+        var results = resolver.parse(Object.class, MalformedPermission.class.getAnnotation(Command.class));
         
         assertEquals(2, results.size()); 
         assertEquals(

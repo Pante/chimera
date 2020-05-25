@@ -41,7 +41,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("'@a' cannot be used in a list of players."));
     private static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player or selector: " + name));
-    private static final Collection<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
+    private static final List<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
     static final Message ALL = new LiteralMessage("All online players");
     static final Message RANDOM = new LiteralMessage("A online player chosen at random");
     
@@ -139,7 +139,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

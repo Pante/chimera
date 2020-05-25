@@ -45,12 +45,12 @@ class ExtractorTest {
         
         @Test
         void all() {
-            assertArrayEquals(ExtractorTest.class.getAnnotationsByType(Command.class), Extractor.CLASS.all(ExtractorTest.class, Command.class));
+            assertArrayEquals(ExtractorTest.class.getAnnotationsByType(Command.class), Resolver.CLASS.all(ExtractorTest.class, Command.class));
         }
         
         @Test
         void single() {
-            assertEquals(ExtractorTest.class.getAnnotation(Command.class), Extractor.CLASS.single(Extractor.class, Command.class));
+            assertEquals(ExtractorTest.class.getAnnotation(Command.class), Resolver.CLASS.any(Resolver.class, Command.class));
         }
         
     }
@@ -62,14 +62,14 @@ class ExtractorTest {
         
         @Test
         void all() {
-            Extractor.ELEMENT.all(element, Command.class);
+            Resolver.ELEMENT.all(element, Command.class);
             
             verify(element).getAnnotationsByType(Command.class);
         }
         
         @Test
         void single() {
-            Extractor.ELEMENT.single(element, Command.class);
+            Resolver.ELEMENT.any(element, Command.class);
             
             verify(element).getAnnotation(Command.class);
         }

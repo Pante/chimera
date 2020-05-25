@@ -98,7 +98,7 @@ public class Processor extends AnnotationProcessor {
             source.resolve(elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
-            error("Project does not contain an @Source annotation, should contain one @Source annotation");
+            error("Project does not contain a @Source annotation, should contain one @Source annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {

@@ -149,7 +149,7 @@ class ProcessorTest {
     void resolveSource_none() {
         processor.resolveSource(Set.of());
         
-        verify(processor).error("Project does not contain an @Source annotation, should contain one @Source annotation");
+        verify(processor).error("Project does not contain a @Source annotation, should contain one @Source annotation");
     }
     
     

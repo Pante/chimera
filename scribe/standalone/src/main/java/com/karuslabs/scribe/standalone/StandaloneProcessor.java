@@ -25,7 +25,7 @@ package com.karuslabs.scribe.standalone;
 
 import com.karuslabs.scribe.core.*;
 import com.karuslabs.scribe.core.Processor;
-import com.karuslabs.scribe.core.resolvers.PluginResolver;
+import com.karuslabs.scribe.core.parsers.PluginParser;
 
 import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
@@ -42,7 +42,7 @@ public class StandaloneProcessor extends Processor<Element> {
     
     
     public StandaloneProcessor(Elements elements, Types types) {
-        super(Project.EMPTY, Extractor.ELEMENT, PluginResolver.element(elements, types));
+        super(Project.EMPTY, Resolver.ELEMENT, PluginParser.element(elements, types));
     }
     
     

@@ -79,8 +79,8 @@ public class ScribeMojo extends AbstractMojo {
         
         var api = "";
         for (var dependency : pom.getDependencies()) {
-            var group = Project.DEPENDENCIES.get(dependency.getArtifactId());
-            if (Objects.equals(group, dependency.getGroupId())) {
+            var group = Project.DEPENDENCIES.get(dependency.getGroupId());
+            if (Objects.equals(group, dependency.getArtifactId())) {
                 api = dependency.getVersion();
                 break;
             }

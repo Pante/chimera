@@ -21,30 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.scribe.annotations.*;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.Set;
 
 
-public class APIResolver<T> extends UniqueResolver<T> {
+public class APIParser<T> extends SingleParser<T> {
     
-    public APIResolver() {
-        super(Set.of(API.class), "API");
+    public APIParser(Environment<T> environment) {
+        super(environment, Set.of(API.class), "API");
     }
 
     
     @Override
-    protected void resolve(T type) {
-       var api = extractor.single(type, API.class);
+    protected void parse(T type) {
+       var api = environment.resolver.any(type, API.class);
        if (api.value() != Version.INFERRED) {
            environment.mappings.put("api-version", api.value().toString());
            return;
        }
        
        for (var version : Version.values()) {
-           if (project.api.startsWith(version + ".") || project.api.startsWith(version + "-")) {
+           if (environment.project.api.startsWith(version + ".") || environment.project.api.startsWith(version + "-")) {
                environment.mappings.put("api-version", version.toString());
                break;
            }
@@ -52,7 +53,7 @@ public class APIResolver<T> extends UniqueResolver<T> {
        
        if (!environment.mappings.containsKey("api-version")) {
            environment.mappings.put("api-version", Version.INFERRED.toString());
-           environment.warning(type, "Unable to infer 'api-version', defaulting to '" + Version.INFERRED + "'");
+           environment.warning(type, "Could not infer \"api-version\", \"" + Version.INFERRED + "\" will be used instead");
        }
     }
 

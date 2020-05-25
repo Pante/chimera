@@ -21,19 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.annotations.Immutable;
 import com.karuslabs.scribe.core.Environment;
-import com.karuslabs.scribe.core.Extractor;
-import com.karuslabs.scribe.core.Project;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 
-public abstract class Resolver<T> {
+public abstract class Parser<T> {
 
     public static final Pattern COMMAND = Pattern.compile("(.*\\s+.*)");
     public static final Pattern PERMISSION = Pattern.compile("\\w+(\\.\\w+)*(.\\*)?");
@@ -42,28 +40,20 @@ public abstract class Resolver<T> {
     public static final Pattern WORD = Pattern.compile("\\w+");
     
     
+    protected final Environment<T> environment;
     protected @Immutable Set<Class<? extends Annotation>> annotations;
-    protected Project project;
-    protected Extractor<T> extractor;
-    protected Environment<T> environment;
     
     
-    public Resolver(@Immutable Set<Class<? extends Annotation>> annotations) {
+    public Parser(Environment<T> environment, @Immutable Set<Class<? extends Annotation>> annotations) {
+        this.environment = environment;
         this.annotations = annotations;
     }
     
     
-    public void initialize(Project project, Extractor<T> extractor, Environment<T> environment) {
-        this.project = project;
-        this.extractor = extractor;
-        this.environment = environment;
-    }
-    
-    
-    public void resolve(Set<T> types) {
+    public void parse(Set<T> types) {
         check(types);
         for (var type : types) {
-            resolve(type);
+            parse(type);
         }
         
         clear();
@@ -71,7 +61,7 @@ public abstract class Resolver<T> {
     
     protected void check(Set<T> types) {}
   
-    protected abstract void resolve(T type);     
+    protected abstract void parse(T type);     
     
     protected void clear() {}
     

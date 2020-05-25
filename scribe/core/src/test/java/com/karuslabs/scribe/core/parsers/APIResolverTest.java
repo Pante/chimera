@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.APIParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.*;
 import com.karuslabs.scribe.core.*;
@@ -40,15 +41,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @API(Version.V1_15)
 class APIResolverTest {
     
-    APIResolver<Class<?>> resolver = new APIResolver<>();
+    APIParser<Class<?>> resolver = new APIParser<>();
     Environment<Class<?>> resolution = new Environment();
     
     
     @Test
     void resolve() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
         
-        resolver.resolve(APIResolverTest.class);
+        resolver.parse(APIResolverTest.class);
         
         assertEquals("1.15", resolution.mappings.get("api-version"));
         assertTrue(resolution.messages.isEmpty());
@@ -57,9 +58,9 @@ class APIResolverTest {
     
     @Test
     void resolve_inferred() {
-        resolver.initialize(new Project("", "", "1.15.1", List.of(), "", ""), Extractor.CLASS, resolution);
+        resolver.initialize(new Project("", "", "1.15.1", List.of(), "", ""), Resolver.CLASS, resolution);
         
-        resolver.resolve(Inferred.class);
+        resolver.parse(Inferred.class);
         
         assertEquals("1.15", resolution.mappings.get("api-version"));
     }
@@ -67,9 +68,9 @@ class APIResolverTest {
     
     @Test
     void resolve_inferred_default() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
         
-        resolver.resolve(Inferred.class);
+        resolver.parse(Inferred.class);
         var message = resolution.messages.get(0);
         
         assertEquals("1.13", resolution.mappings.get("api-version"));

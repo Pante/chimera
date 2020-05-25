@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
+import com.karuslabs.scribe.core.parsers.LoadParser;
 import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Load;
 import com.karuslabs.scribe.core.*;
@@ -39,19 +40,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Load(during = STARTUP, before = {"a"}, optionallyAfter = {"b"}, after = {"c"})
 class LoadResolverTest {
     
-    LoadResolver<Class<?>> resolver = new LoadResolver<>();
+    LoadParser<Class<?>> resolver = new LoadParser<>();
     Environment<Class<?>> resolution = new Environment<>();
     
     
     @BeforeEach
     void before() {
-        resolver.initialize(Project.EMPTY, Extractor.CLASS, resolution);
+        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
     }
     
     
     @Test
     void resolve() {
-        resolver.resolve(LoadResolverTest.class);
+        resolver.parse(LoadResolverTest.class);
         var mappings = resolution.mappings;
         
         assertEquals(4, mappings.size());
@@ -64,7 +65,7 @@ class LoadResolverTest {
     
     @Test
     void resolve_empty() {
-        resolver.resolve(Empty.class);
+        resolver.parse(Empty.class);
         var mappings = resolution.mappings;
         
         assertEquals(4, mappings.size());

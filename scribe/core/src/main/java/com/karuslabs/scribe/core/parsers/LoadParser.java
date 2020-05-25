@@ -21,27 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.scribe.annotations.Load;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.Set;
 import java.util.regex.Matcher;
 
+import static com.karuslabs.annotations.processor.Messages.format;
 
-public class LoadResolver<T> extends UniqueResolver<T> {
+
+public class LoadParser<T> extends SingleParser<T> {
     
     private Matcher matcher;
     
     
-    public LoadResolver() {
-        super(Set.of(Load.class), "Load");
+    public LoadParser(Environment<T> environment) {
+        super(environment, Set.of(Load.class), "Load");
         matcher = WORD.matcher("Load");
     }
 
     @Override
-    protected void resolve(T type) {
-        var load = extractor.single(type, Load.class);
+    protected void parse(T type) {
+        var load = environment.resolver.any(type, Load.class);
         var mapping = environment.mappings;
         
         mapping.put("load", load.during().toString());
@@ -59,7 +62,7 @@ public class LoadResolver<T> extends UniqueResolver<T> {
     protected void check(T type, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
-                environment.error(type, "Invalid name: '" + name + "', name must contain only alphanumeric characters and '_'");
+                environment.error(type, format(name, " is not a valid plugin name, should contain only alphanumeric characters and \"_\""));
             }
         }
     }

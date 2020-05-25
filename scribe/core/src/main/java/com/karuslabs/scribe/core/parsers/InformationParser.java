@@ -21,34 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core.parsers;
 
 import com.karuslabs.scribe.annotations.Information;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.Set;
 
+import static com.karuslabs.annotations.processor.Messages.format;
 
-public class InformationResolver<T> extends UniqueResolver<T> {
 
-    public InformationResolver() {
-        super(Set.of(Information.class), "Information");
+public class InformationParser<T> extends SingleParser<T> {
+
+    public InformationParser(Environment<T> environment) {
+        super(environment, Set.of(Information.class), "Information");
     }
     
     @Override
-    protected void resolve(T type) {
-        var information = extractor.single(type, Information.class);
+    protected void parse(T type) {
+        var information = environment.resolver.any(type, Information.class);
         check(information, type);
-        resolve(information);
+        parse(information);
     }
     
     protected void check(Information information, T type) {
         var url = information.url();
         if (!url.isEmpty() && !URL.matcher(url).matches()) {
-            environment.error(type, "Invalid URL: " + url + ", " + url + " is not a valid URL");
+            environment.error(type, format(url, "is not a valid URL"));
         }
     }
     
-    protected void resolve(Information information) {
+    protected void parse(Information information) {
+        var project = environment.project;
         var mappings = environment.mappings;
         
         if (information.authors().length > 0) {

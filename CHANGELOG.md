@@ -126,7 +126,10 @@ more information.
 - Change `Version.version` from public to private
 
 **Scribe Core**
+- Change `com.karuslabs.scribe.core.resolvers` to `com.karuslabs.scribe.core.parsers`
+- Change `Extractor` to `Resolver`
 - Change `Resolution` to `Environment`
+- Change `Resolver` and related sub-classes to `Parser` and `...Parser`s
 - Remove `Messages`
 
 **Scribe-Maven-Plugin**

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.core.resolvers.*;
+import com.karuslabs.scribe.core.parsers.*;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -51,40 +51,34 @@ public abstract class Processor<T> {
     } 
     
     
-    Project project;
-    Extractor<T> extractor;
-    List<Resolver<T>> resolvers;
+    Environment<T> environment;
+    List<Parser<T>> parsers;
     @Nullable Set<Class<? extends Annotation>> annotations;
     
     
-    public Processor(Project project, Extractor<T> extractor, PluginResolver<T> resolver) {
-        this(project, extractor, List.of(
-            resolver,
-            new APIResolver(),
-            new CommandResolver(),
-            new InformationResolver(),
-            new LoadResolver(),
-            new PermissionResolver()
+    public Processor(Environment<T> environment, PluginParser<T> parser) {
+        this(environment, List.of(
+            parser,
+            new APIParser(environment),
+            new CommandParser(environment),
+            new InformationParser(environment),
+            new LoadParser(environment),
+            new PermissionParser(environment)
         ));
     }
     
-    public Processor(Project project, Extractor<T> extractor, List<Resolver<T>> resolvers) {
-        this.project = project;
-        this.extractor = extractor;
-        this.resolvers = resolvers;
+    public Processor(Environment<T> environment, List<Parser<T>> parsers) {
+        this.environment = environment;
+        this.parsers = parsers;
     }
     
     
     
-    public Environment<T> run() {
-        var resolution = new Environment<T>();
-        for (var resolver : resolvers) {
-            var types = resolver.annotations().stream().collect(flatMapping(this::annotated, toSet()));
-            resolver.initialize(project, extractor, resolution);
-            resolver.resolve(types);
+    public void run() {
+        for (var parser : parsers) {
+            var types = parser.annotations().stream().collect(flatMapping(this::annotated, toSet()));
+            parser.parse(types);
         }
-        
-        return resolution;
     }
     
     protected abstract Stream<T> annotated(Class<? extends Annotation> annotation);
@@ -92,7 +86,7 @@ public abstract class Processor<T> {
     
     public Set<Class<? extends Annotation>> annotations() {
         if (annotations == null) {
-            annotations = resolvers.stream().collect(flatMapping((resolver) -> resolver.annotations().stream(), toSet()));
+            annotations = parsers.stream().collect(flatMapping((resolver) -> resolver.annotations().stream(), toSet()));
         }
         
         return annotations;

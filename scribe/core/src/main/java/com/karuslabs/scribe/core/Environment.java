@@ -28,10 +28,14 @@ import java.util.*;
 
 public abstract class Environment<T> {
     
+    public final Project project;
+    public final Resolver<T> resolver;
     public final Map<String, Object> mappings;
     
     
-    public Environment() {
+    public Environment(Project project, Resolver<T> resolver) {
+        this.project = project;
+        this.resolver = resolver;
         mappings = new HashMap<>();
     }
     

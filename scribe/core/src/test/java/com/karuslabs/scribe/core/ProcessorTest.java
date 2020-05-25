@@ -24,7 +24,7 @@
 package com.karuslabs.scribe.core;
 
 import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.resolvers.PluginResolver;
+import com.karuslabs.scribe.core.parsers.PluginParser;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -57,14 +57,14 @@ class ProcessorTest {
     
     @Test
     void run() {
-        assertEquals(6, processor.resolvers.size());
+        assertEquals(6, processor.parsers.size());
         
         var resolver = processor.resolver;
-        processor.resolvers = List.of(resolver);
+        processor.parsers = List.of(resolver);
         
         var resolution = processor.run();
         
-        verify(resolver).initialize(processor.project, Extractor.CLASS, resolution);
+        verify(resolver).initialize(processor.project, Resolver.CLASS, resolution);
         verify(resolver).resolve(Set.of(StubProcessor.class));
     }
     
@@ -94,15 +94,15 @@ class ProcessorTest {
 
 class StubProcessor extends Processor<Class<?>> {
     
-    PluginResolver<Class<?>> resolver;
+    PluginParser<Class<?>> resolver;
     
     
     StubProcessor() {
-        this(when(mock(PluginResolver.class).annotations()).thenReturn(Set.of(Plugin.class)).getMock());
+        this(when(mock(PluginParser.class).annotations()).thenReturn(Set.of(Plugin.class)).getMock());
     }
     
-    StubProcessor(PluginResolver<Class<?>> resolver) {
-        super(mock(Project.class), Extractor.CLASS, resolver);
+    StubProcessor(PluginParser<Class<?>> resolver) {
+        super(mock(Project.class), Resolver.CLASS, resolver);
         this.resolver = resolver;
     }
 

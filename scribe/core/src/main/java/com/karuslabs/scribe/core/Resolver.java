@@ -21,31 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core.resolvers;
+package com.karuslabs.scribe.core;
 
 import java.lang.annotation.Annotation;
-import java.util.Set;
+import javax.lang.model.element.Element;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public abstract class UniqueResolver<T> extends Resolver<T> {
-
-    protected String name;
+public interface Resolver<T> {
+    
+    public static final Resolver<Class<?>> CLASS = new ClassResolver();
+    public static final Resolver<Element> ELEMENT = new ElmeentResolver();
     
     
-    public UniqueResolver(Set<Class<? extends Annotation>> annotations, String name) {
-        super(annotations);
-        this.name = name;
-    }
-
+    public <A extends Annotation> A[] all(T type, Class<A> annotation);
     
+    public <A extends Annotation> @Nullable A any(T type, Class<A> annotation);
+    
+}
+
+
+class ClassResolver implements Resolver<Class<?>> {
+
     @Override
-    protected void check(Set<T> types) {
-        if (types.size() > 1) {
-            for (var type : types) {
-                environment.error(type, "Invalid number of @" + name + " annotations, plugin must contain only one @" + name + " annotation");
-            }
-        }
+    public <A extends Annotation> A[] all(Class<?> type, Class<A> annotation) {
+        return type.getAnnotationsByType(annotation);
     }
 
+    @Override
+    public <A extends Annotation> A any(Class<?> type, Class<A> annotation) {
+        return type.getAnnotation(annotation);
+    }
+    
+}
 
+class ElmeentResolver implements Resolver<Element> {
+
+    @Override
+    public <A extends Annotation> A[] all(Element element, Class<A> annotation) {
+        return element.getAnnotationsByType(annotation);
+    }
+
+    @Override
+    public <A extends Annotation> A any(Element element, Class<A> annotation) {
+        return element.getAnnotation(annotation);
+    }
+    
 }
