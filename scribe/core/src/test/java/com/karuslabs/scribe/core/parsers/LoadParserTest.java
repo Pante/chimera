@@ -23,37 +23,29 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.scribe.core.parsers.LoadParser;
-import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Load;
 import com.karuslabs.scribe.core.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.karuslabs.scribe.annotations.Phase.STARTUP;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 
-@ExtendWith(MockitoExtension.class)
 @Load(during = STARTUP, before = {"a"}, optionallyAfter = {"b"}, after = {"c"})
-class LoadResolverTest {
+class LoadParserTest {
     
-    LoadParser<Class<?>> resolver = new LoadParser<>();
-    Environment<Class<?>> resolution = new Environment<>();
+    static final String[] EMPTY = new String[0];
     
-    
-    @BeforeEach
-    void before() {
-        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
-    }
+    Environment<Class<?>> environment = StubEnvironment.of(Project.EMPTY);
+    LoadParser<Class<?>> parser = new LoadParser<>(environment);
     
     
     @Test
-    void resolve() {
-        resolver.parse(LoadResolverTest.class);
-        var mappings = resolution.mappings;
+    void parse() {
+        parser.parse(LoadParserTest.class);
+        var mappings = environment.mappings;
         
         assertEquals(4, mappings.size());
         assertEquals("STARTUP", mappings.get("load"));
@@ -64,15 +56,15 @@ class LoadResolverTest {
     
     
     @Test
-    void resolve_empty() {
-        resolver.parse(Empty.class);
-        var mappings = resolution.mappings;
+    void parse_empty() {
+        parser.parse(Empty.class);
+        var mappings = environment.mappings;
         
         assertEquals(4, mappings.size());
         assertEquals("POSTWORLD", mappings.get("load"));
-        assertArrayEquals(new String[] {}, (String[]) mappings.get("loadbefore"));
-        assertArrayEquals(new String[] {}, (String[]) mappings.get("softdepend"));
-        assertArrayEquals(new String[] {}, (String[]) mappings.get("depend"));
+        assertArrayEquals(EMPTY, (String[]) mappings.get("loadbefore"));
+        assertArrayEquals(EMPTY, (String[]) mappings.get("softdepend"));
+        assertArrayEquals(EMPTY, (String[]) mappings.get("depend"));
     }
     
     
@@ -84,16 +76,10 @@ class LoadResolverTest {
     
     @Test
     void check_errors() {
-        resolver.check(LoadResolverTest.class, new String[] {"a1", "hey!", "sp ace"});
+        parser.check(LoadParserTest.class, new String[] {"a1", "hey!", "sp ace"});
         
-        assertEquals(
-            Message.error(LoadResolverTest.class, "Invalid name: 'hey!', name must contain only alphanumeric characters and '_'"),
-            resolution.messages.get(0)
-        );
-        assertEquals(
-            Message.error(LoadResolverTest.class, "Invalid name: 'sp ace', name must contain only alphanumeric characters and '_'"),
-            resolution.messages.get(1)
-        );
+        verify(environment).error(LoadParserTest.class, "\"hey!\" is not a valid plugin name, should contain only alphanumeric characters and \"_\"");
+        verify(environment).error(LoadParserTest.class, "\"sp ace\" is not a valid plugin name, should contain only alphanumeric characters and \"_\"");
     }
 
 } 

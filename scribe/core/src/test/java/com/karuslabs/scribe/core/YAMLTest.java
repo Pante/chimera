@@ -27,14 +27,11 @@ import java.io.*;
 import java.util.Map;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class YAMLTest {
     
     StubYAML yaml = spy(new StubYAML());
@@ -90,7 +87,6 @@ class StubYAML extends YAML {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class FileYAMLTest {
     
     File file = new File(new File(getClass().getClassLoader().getResource("beacon.yml").getFile()).getParentFile(), "plugin.yml");

@@ -53,7 +53,7 @@ public class APIParser<T> extends SingleParser<T> {
        
        if (!environment.mappings.containsKey("api-version")) {
            environment.mappings.put("api-version", Version.INFERRED.toString());
-           environment.warning(type, "Could not infer \"api-version\", \"" + Version.INFERRED + "\" will be used instead");
+           environment.warn(type, "Could not infer \"api-version\", \"" + Version.INFERRED + "\" will be used instead");
        }
     }
 

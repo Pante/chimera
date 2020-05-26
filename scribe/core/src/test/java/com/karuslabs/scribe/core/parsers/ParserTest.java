@@ -21,47 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone;
+package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Environment;
+import com.karuslabs.scribe.annotations.Command;
+import com.karuslabs.scribe.core.*;
 
 import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class StandaloneProcessorTest {
+class ParserTest {
     
-    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
-    Types types = mock(Types.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
-    Element element = mock(Element.class);
+    Parser<String> parser = spy(new StubResolver(new StubEnvironment<>()));
     
-    
+       
     @Test
-    void initalize() {
-        processor.initialize(round);
+    void parse_set() {
+        var set = Set.of("a", "b");
         
-        assertEquals(round, processor.round);
+        parser.parse(set);
+        
+        verify(parser).check(set);
+        verify(parser, times(2)).parse(any(String.class));
+        verify(parser).clear();
     }
     
     
     @Test
-    void annotated() {
-        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
-
-        processor.round = round;
+    void check() {
+        var set = mock(Set.class);
         
-        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
+        parser.check(set);
+        verifyNoInteractions(set);
+    }
+    
+    
+    @Test
+    void annotations() {
+        assertEquals(Set.of(Command.class), parser.annotations());
     }
 
 } 
+
+class StubResolver extends Parser<String> {
+    
+    public StubResolver(Environment environment) {
+        super(environment, Set.of(Command.class));
+    }
+    
+    @Override
+    protected void parse(String type) {
+        
+    }
+    
+}

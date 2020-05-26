@@ -21,59 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.Command;
+import com.karuslabs.scribe.core.Project;
 
-import javax.lang.model.element.Element;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-@Command(name = "a")
-@Command(name = "b")
-class ExtractorTest {
+class MavenEnvironmentTest {
     
-    @Nested
-    class ClassTest {
+    MavenEnvironment environment = new MavenEnvironment(Project.EMPTY);
+    
+    
+    @Test
+    void error() {
+        environment.error("error");
         
-        @Test
-        void all() {
-            assertArrayEquals(ExtractorTest.class.getAnnotationsByType(Command.class), Resolver.CLASS.all(ExtractorTest.class, Command.class));
-        }
-        
-        @Test
-        void single() {
-            assertEquals(ExtractorTest.class.getAnnotation(Command.class), Resolver.CLASS.any(Resolver.class, Command.class));
-        }
-        
+        assertEquals(new SimpleEntry<>(null, "error"), environment.errors.get(0));
+        assertTrue(environment.warnings.isEmpty());
     }
     
-    @Nested
-    class ElementTest {
+    
+    @Test
+    void error_location() {
+        environment.error(Object.class, "error");
         
-        Element element = mock(Element.class);
+        assertEquals(new SimpleEntry<>(Object.class, "error"), environment.errors.get(0));
+        assertTrue(environment.warnings.isEmpty());
+    }
+    
+    
+    @Test
+    void warn() {
+        environment.warn("warning");
         
-        @Test
-        void all() {
-            Resolver.ELEMENT.all(element, Command.class);
-            
-            verify(element).getAnnotationsByType(Command.class);
-        }
+        assertEquals(new SimpleEntry<>(null, "warning"), environment.warnings.get(0));
+        assertTrue(environment.errors.isEmpty());
+    }
+    
+    
+    @Test
+    void warn_location() {
+        environment.warn(Object.class, "warning");
         
-        @Test
-        void single() {
-            Resolver.ELEMENT.any(element, Command.class);
-            
-            verify(element).getAnnotation(Command.class);
-        }
-        
+        assertEquals(new SimpleEntry<>(Object.class, "warning"), environment.warnings.get(0));
+        assertTrue(environment.errors.isEmpty());
     }
 
 } 

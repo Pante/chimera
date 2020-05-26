@@ -23,49 +23,40 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.scribe.core.parsers.SingleParser;
 import com.karuslabs.scribe.annotations.Command;
 import com.karuslabs.scribe.core.*;
 
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class UniqueResolverTest {
+class SingleParserTest {
     
-    StubResolver resolver = new StubResolver();
-    Environment<String> resolution = mock(Environment.class);
+    Environment<String> environment = spy(new StubEnvironment<>());
+    StubParser resolver = new StubParser(environment);
     
     
     @Test
     void check_one() {
-        resolver.initialize(Project.EMPTY, null, resolution);
-        
         resolver.check(Set.of("a"));
-        verifyNoInteractions(resolution);
+        verifyNoInteractions(environment);
     }
     
     
     @Test
     void check_many() {
-        resolver.initialize(Project.EMPTY, null, resolution);
-        
         resolver.check(Set.of("a", "b"));
-        verify(resolution).error("a", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
-        verify(resolution).error("b", "Invalid number of @hello annotations, plugin must contain only one @hello annotation");
+        
+        verify(environment).error("a", "Project contains 2 @hello annotations, should contain one @hello annotation");
+        verify(environment).error("a", "Project contains 2 @hello annotations, should contain one @hello annotation");
     }
     
-    static class StubResolver extends SingleParser<String> {
+    static class StubParser extends SingleParser<String> {
     
-        StubResolver() {
-            super(Set.of(Command.class), "hello");
+        StubParser(Environment<String> environment) {
+            super(environment, Set.of(Command.class), "hello");
         }
 
         @Override

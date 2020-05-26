@@ -23,45 +23,43 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Environment;
+import com.karuslabs.scribe.core.*;
+import javax.annotation.processing.Messager;
 
-import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.util.*;
+import javax.lang.model.element.Element;
 
-import org.junit.jupiter.api.Test;
-
-import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static javax.tools.Diagnostic.Kind.*;
 
 
-class StandaloneProcessorTest {
+public class StandaloneEnvironment extends Environment<Element> {
     
-    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
-    Types types = mock(Types.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
-    Element element = mock(Element.class);
+    Messager messager;
     
     
-    @Test
-    void initalize() {
-        processor.initialize(round);
-        
-        assertEquals(round, processor.round);
-    }
-    
-    
-    @Test
-    void annotated() {
-        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
-
-        processor.round = round;
-        
-        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
+    public StandaloneEnvironment(Messager messager) {
+        super(Project.EMPTY, Resolver.ELEMENT);
+        this.messager = messager;
     }
 
-} 
+    @Override
+    public void error(String message) {
+        messager.printMessage(ERROR, message);
+    }
+
+    @Override
+    public void error(Element location, String message) {
+        messager.printMessage(ERROR, message, location);
+    }
+
+    
+    @Override
+    public void warn(String message) {
+        messager.printMessage(WARNING, message);
+    }
+
+    @Override
+    public void warn(Element location, String message) {
+        messager.printMessage(WARNING, message, location);
+    }
+
+}

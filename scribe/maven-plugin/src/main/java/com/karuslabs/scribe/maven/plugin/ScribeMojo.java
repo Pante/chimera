@@ -57,21 +57,22 @@ public class ScribeMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoFailureException {
         var graph = new ClassGraph().enableClassInfo().enableAnnotationInfo().addClassLoader(Processor.loader(classpaths));
-        try (var processor = new MavenProcessor(project(), graph)) {
+        var environment = new MavenEnvironment(project());
+        
+        try (var processor = new MavenProcessor(environment, graph)) {   
+            processor.run();
             
-            var yaml = YAML.fromFile("Scribe Maven Plugin", new File(folder, "plugin.yml"));
-            var resolution = processor.run();
-            
-            if (log(resolution.messages).isEmpty()) {
-                yaml.write(resolution.mappings);
+            if (valid(environment)) {
+                var yaml = YAML.fromFile("Scribe Maven Plugin", new File(folder, "plugin.yml"));
+                yaml.write(environment.mappings);
 
             } else {
-                throw new MojoFailureException("Resolution failure");
+                throw new MojoFailureException("Could not resolve annotations");
             }
         }
     }
     
-    protected Project project() {
+    Project project() {
         var authors = Stream.of(pom.getContributors(), pom.getDevelopers())
                             .flatMap(Collection::stream)
                             .map(Contributor::getName)
@@ -79,8 +80,8 @@ public class ScribeMojo extends AbstractMojo {
         
         var api = "";
         for (var dependency : pom.getDependencies()) {
-            var group = Project.DEPENDENCIES.get(dependency.getGroupId());
-            if (Objects.equals(group, dependency.getArtifactId())) {
+            var group = Project.DEPENDENCIES.get(dependency.getArtifactId());
+            if (Objects.equals(group, dependency.getGroupId())) {
                 api = dependency.getVersion();
                 break;
             }
@@ -88,14 +89,11 @@ public class ScribeMojo extends AbstractMojo {
         return new Project(pom.getName(), pom.getVersion(), api, authors, pom.getDescription(), pom.getUrl());
     }
     
-    protected List<Message<Class<?>>> log(List<Message<Class<?>>> messages) {
-        var warnings = messages.stream().filter(message -> message.type == Message.Type.WARNING).collect(toList());
-        var errors = messages.stream().filter(message -> message.type == Message.Type.ERROR).collect(toList());
-
-        Console.WARNINGS.log(getLog(), warnings);
-        Console.ERRORS.log(getLog(), errors);
+    boolean valid(MavenEnvironment environment) {
+        Console.WARNINGS.log(getLog(), environment.warnings);
+        Console.ERRORS.log(getLog(), environment.errors);
         
-        return errors;
+        return environment.errors.isEmpty();
     }
     
 }

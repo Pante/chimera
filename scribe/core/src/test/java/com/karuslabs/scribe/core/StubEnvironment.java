@@ -21,44 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.maven.plugin;
-
-
-import java.util.List;
-
-import org.apache.maven.plugin.logging.Log;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.junit.jupiter.MockitoExtension;
+package com.karuslabs.scribe.core;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
-class MessagesTest {
-    
-    Log log = mock(Log.class);
-    
-    
-    @Test
-    void log() {        
-        Console.WARNINGS.log(log, List.of(Message.warning(Console.class, "First"), Message.warning(null, "Second")));
-        
-        verify(log, times(3)).info("-------------------------------------------------------------");
-        verify(log).warn("RESOLUTION WARNING:");
-        verify(log).warn(Console.class.getName() + ": First");
-        verify(log).warn("Second");
-        verify(log).info("2 warnings");
+public class StubEnvironment<T> extends Environment<T> {
+
+    public static StubEnvironment<Class<?>> of(Project project) {
+        return spy(new StubEnvironment(project, spy(Resolver.CLASS)));
     }
     
     
-    @Test
-    void log_empty() {
-        Console.ERRORS.log(log, List.of());
-        
-        verifyNoInteractions(log);
+    public StubEnvironment() {
+        super(mock(Project.class), mock(Resolver.class));
+    }
+    
+    public StubEnvironment(Project project, Resolver<T> resolver) {
+        super(project, resolver);
     }
 
-} 
+    
+    @Override
+    public void error(String message) {}
+
+    @Override
+    public void error(Object location, String message) {}
+
+    @Override
+    public void warn(String message) {}
+
+    @Override
+    public void warn(Object location, String message) {}
+
+}

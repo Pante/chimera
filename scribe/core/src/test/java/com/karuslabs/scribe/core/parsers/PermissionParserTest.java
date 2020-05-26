@@ -23,39 +23,29 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.scribe.core.parsers.PermissionParser;
-import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.Permission;
 import com.karuslabs.scribe.core.*;
 
 import java.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.karuslabs.scribe.annotations.Default.FALSE;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 @Permission(value = "a.b", description = "desc", implicit = FALSE, children = {"a.b.c"})
-class PermissionResolverTest {
+class PermissionParserTest {
     
-    PermissionParser<Class<?>> resolver = new PermissionParser<>();
-    Environment<Class<?>> resolution = new Environment<>();
-    
-    
-    @BeforeEach
-    void before() {
-        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
-    }
+    Environment<Class<?>> environment = StubEnvironment.of(Project.EMPTY);
+    PermissionParser<Class<?>> parser = new PermissionParser<>(environment);
     
     
     @Test
-    void resolve() {
-        resolver.parse(PermissionResolverTest.class);
-        var mappings = resolution.mappings;
+    void parse() {
+        parser.parse(PermissionParserTest.class);
+        var mappings = environment.mappings;
         
         var permissions = (Map<String, Object>) mappings.get("permissions");
         var permission = (Map<String, Object>) permissions.get("a.b");
@@ -73,12 +63,12 @@ class PermissionResolverTest {
     
     
     @Test
-    void check_warning() {
-        resolver.names.add("a.b");
-        resolver.check(Warnings.class, Warnings.class.getAnnotation(Permission.class));
+    void check_warn() {
+        parser.names.add("a.b");
+        parser.check(Warnings.class, Warnings.class.getAnnotation(Permission.class));
         
-        assertEquals(Message.warning(Warnings.class, "Self-inheriting permission: 'a.b'"), resolution.messages.get(0));
-        assertEquals(Message.error(Warnings.class, "Conflicting permissions: 'a.b', permissions must be unique"), resolution.messages.get(1));
+        verify(environment).warn(Warnings.class, "\"a.b\" inherits itself");
+        verify(environment).error(Warnings.class, "\"a.b\" already exists");
     }
     
     
@@ -89,12 +79,11 @@ class PermissionResolverTest {
     
     
     @Test
-    void checkMalformed_warning() {
-        resolver.checkMalformed(Malformed.class, Malformed.class.getAnnotation(Permission.class));
+    void checkMalformed_warn() {
+        parser.checkMalformed(Malformed.class, Malformed.class.getAnnotation(Permission.class));
         
-        assertEquals(Message.warning(Malformed.class, "Potentially malformed permission: 'a b'"), resolution.messages.get(0));
-        assertEquals(Message.warning(Malformed.class, "Potentially malformed child permission: 'a b'"), resolution.messages.get(1));
-        assertEquals(Message.warning(Malformed.class, "Potentially malformed child permission: 'ce!'"), resolution.messages.get(2));
+        verify(environment, times(2)).warn(Malformed.class, "\"a b\" may be malformed");
+        verify(environment).warn(Malformed.class, "\"ce!\" may be malformed");
     }
     
     
@@ -105,9 +94,9 @@ class PermissionResolverTest {
     
     
     @Test
-    void resolve_permission() {
+    void parse_permission() {
         var permissions = new HashMap<String, Object>();
-        resolver.parse(PermissionResolverTest.class.getAnnotation(Permission.class), permissions);
+        parser.parse(PermissionParserTest.class.getAnnotation(Permission.class), permissions);
         
         var permission = (Map<String, Object>) permissions.get("a.b");
         var children = (Map<String, Boolean>) permission.get("children");
@@ -124,9 +113,9 @@ class PermissionResolverTest {
     
     
     @Test
-    void resolve_permission_empty() {
+    void parse_permission_empty() {
         var permissions = new HashMap<String, Object>();
-        resolver.parse(Empty.class.getAnnotation(Permission.class), permissions);
+        parser.parse(Empty.class.getAnnotation(Permission.class), permissions);
         
         var permission = (Map<String, Object>) permissions.get("e.f");
         
@@ -143,10 +132,10 @@ class PermissionResolverTest {
     
     @Test
     void clear() {
-        resolver.names.add("name");
-        resolver.clear();
+        parser.names.add("name");
+        parser.clear();
         
-        assertTrue(resolver.names.isEmpty());
+        assertTrue(parser.names.isEmpty());
     }
 
 } 

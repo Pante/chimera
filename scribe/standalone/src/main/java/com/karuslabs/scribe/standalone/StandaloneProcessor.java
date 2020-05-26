@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Environment;
 import com.karuslabs.scribe.core.Processor;
 import com.karuslabs.scribe.core.parsers.PluginParser;
 
@@ -38,22 +38,22 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class StandaloneProcessor extends Processor<Element> {
     
-    @Nullable RoundEnvironment environment;
+    @Nullable RoundEnvironment round;
     
     
-    public StandaloneProcessor(Elements elements, Types types) {
-        super(Project.EMPTY, Resolver.ELEMENT, PluginParser.element(elements, types));
+    public StandaloneProcessor(Environment<Element> environment, Elements elements, Types types) {
+        super(environment, PluginParser.element(environment, elements, types));
     }
     
     
-    public void initialize(RoundEnvironment environment) {
-        this.environment = environment;
+    public void initialize(RoundEnvironment round) {
+        this.round = round;
     }
     
     
     @Override
     protected Stream<Element> annotated(Class<? extends Annotation> annotation) {
-        return environment.getElementsAnnotatedWith(annotation).stream().map(element -> element);
+        return round.getElementsAnnotatedWith(annotation).stream().map(element -> element);
     }
 
 }

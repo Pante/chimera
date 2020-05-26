@@ -31,37 +31,34 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ProcessorTest {
     
-    ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
+    ProcessingEnvironment env = mock(ProcessingEnvironment.class);
     Elements elements = mock(Elements.class);
     Types types = mock(Types.class);
     TypeElement element = mock(TypeElement.class);
     Filer filer = mock(Filer.class);
     Messager messager = mock(Messager.class);
     Processor processor = spy(new Processor());
-    Environment<Element> resolution;
+    Environment<Element> environment;
     
     
     @BeforeEach
     void before() {
-        when(environment.getElementUtils()).thenReturn(elements);
-        when(environment.getTypeUtils()).thenReturn(types);
-        when(environment.getFiler()).thenReturn(filer);
-        when(environment.getMessager()).thenReturn(messager);
+        when(env.getElementUtils()).thenReturn(elements);
+        when(env.getTypeUtils()).thenReturn(types);
+        when(env.getFiler()).thenReturn(filer);
+        when(env.getMessager()).thenReturn(messager);
         
         when(elements.getTypeElement(any())).thenReturn(element);
         
-        processor.init(environment);
-        resolution = new Environment<Element>();
+        processor.init(env);
+        environment = processor.environment;
     }
     
     
@@ -74,33 +71,27 @@ class ProcessorTest {
     
     @Test
     void process() {
-        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
-        when(environment.processingOver()).thenReturn(false);
+        RoundEnvironment round = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
+        when(round.processingOver()).thenReturn(false);
         
-        processor.processor = when(mock(StandaloneProcessor.class).run()).thenReturn(resolution).getMock();
+        processor.processor = mock(StandaloneProcessor.class);
         processor.yaml = mock(StandaloneYAML.class);
-        resolution.error(element, "error").warning(element, "warning").info(element, "info");
         
-        assertFalse(processor.process(Set.of(), environment));
-        verify(processor).error(element, "error");
-        verify(processor).warn(element, "warning");
-        verify(processor).note(element, "info");
+        assertFalse(processor.process(Set.of(), round));
+        verify(processor.yaml).write(any());
     }
     
     
     @Test
     void process_over() {
-        RoundEnvironment environment = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
-        when(environment.processingOver()).thenReturn(true);
+        RoundEnvironment round = when(mock(RoundEnvironment.class).getElementsAnnotatedWithAny(any(Set.class))).thenReturn(Set.of(element)).getMock();
+        when(round.processingOver()).thenReturn(true);
         
-        processor.processor = when(mock(StandaloneProcessor.class).run()).thenReturn(resolution).getMock();
+        processor.processor = mock(StandaloneProcessor.class);
         processor.yaml = mock(StandaloneYAML.class);
-        resolution.error(element, "error").warning(element, "warning").info(element, "info");
         
-        assertFalse(processor.process(Set.of(), environment));
-        verify(processor, times(0)).error(element, "error");
-        verify(processor, times(0)).warn(element, "warning");
-        verify(processor, times(0)).note(element, "info");
+        assertFalse(processor.process(Set.of(), round));
+        verify(processor.yaml, times(0)).write(any());
     }
     
     

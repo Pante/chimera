@@ -23,7 +23,6 @@
  */
 package com.karuslabs.scribe.maven.plugin;
 
-
 import java.io.File;
 import java.util.List;
 
@@ -33,14 +32,11 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ScribeMojoTest {
     
     MavenProject pom = mock(MavenProject.class);
@@ -62,7 +58,7 @@ class ScribeMojoTest {
     
     @Test
     void execute() throws MojoFailureException {
-        doReturn(List.of()).when(mojo).log(any(List.class));
+        doReturn(true).when(mojo).valid(any());
         
         mojo.execute();
         
@@ -72,12 +68,12 @@ class ScribeMojoTest {
     
     @Test
     void execute_throws_exception() throws MojoFailureException {
-        assertEquals("Resolution failure", assertThrows(MojoFailureException.class, mojo::execute).getMessage());
+        assertEquals("Could not resolve annotations", assertThrows(MojoFailureException.class, mojo::execute).getMessage());
     }
     
     
     @Test
-    void from() {
+    void project() {
         var contributor = new Contributor();
         contributor.setName("bob");
         
@@ -105,17 +101,6 @@ class ScribeMojoTest {
         assertEquals("url", project.url);
         assertEquals("1.15-R0.1-SNAPSHOT", project.api);
         assertEquals(List.of("bob", "bobby"), project.authors);
-    }
-    
-    
-    @Test
-    void log() {
-        var errors = mojo.log(List.of(Message.warning(null, "first"), Message.error(null, "second")));
-        
-        verify(log).warn("first");
-        verify(log).error("second");
-        
-        assertEquals(1, errors.size());
     }
         
     

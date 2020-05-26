@@ -40,8 +40,8 @@ public class MavenProcessor extends Processor<Class<?>> implements AutoCloseable
     @Nullable ScanResult results;
     
     
-    public MavenProcessor(Project project, ClassGraph graph) {
-        super(project, Resolver.CLASS, PluginParser.CLASS);
+    public MavenProcessor(Environment<Class<?>> environment, ClassGraph graph) {
+        super(environment, PluginParser.type(environment));
         this.graph = graph;
     }
     

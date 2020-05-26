@@ -87,7 +87,7 @@ public class CommandParser<T> extends Parser<T> {
             return;
             
         } else if (name.isEmpty()) {
-            environment.error(type, "Command should not be empty");
+            environment.error(type, "Command " + label + " should not be empty");
             return;
         }
         
@@ -96,7 +96,7 @@ public class CommandParser<T> extends Parser<T> {
             names.put(name, new SimpleEntry<>(command, label));
             
         } else {
-            environment.error(type, format(name, "already exists", "commands should not have the same aliases and "));
+            environment.error(type, format(name, "already exists", "commands should not have the same aliases and names"));
         }
     }
     
@@ -116,7 +116,7 @@ public class CommandParser<T> extends Parser<T> {
         
         if (!command.permission().isEmpty()) {
             if (!PERMISSION.matcher(command.permission()).matches()) {
-                environment.warning(type, format(command.permission(), "may be malformed"));
+                environment.warn(type, format(command.permission(), "may be malformed"));
             }
             map.put("permission", command.permission());
         }

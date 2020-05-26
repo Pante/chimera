@@ -23,58 +23,49 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.scribe.core.parsers.APIParser;
-import com.karuslabs.scribe.maven.plugin.Message;
 import com.karuslabs.scribe.annotations.*;
 import com.karuslabs.scribe.core.*;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 @API(Version.V1_15)
-class APIResolverTest {
+class APIParserTest {
     
-    APIParser<Class<?>> resolver = new APIParser<>();
-    Environment<Class<?>> resolution = new Environment();
+    Environment<Class<?>> environment = StubEnvironment.of(Project.EMPTY);
+    APIParser<Class<?>> parser = new APIParser<>(environment);
     
     
     @Test
-    void resolve() {
-        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
+    void parse() {
+        parser.parse(APIParserTest.class);
         
-        resolver.parse(APIResolverTest.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
-        assertTrue(resolution.messages.isEmpty());
+        assertEquals("1.15", environment.mappings.get("api-version"));
+        verify(environment, times(0)).warn(any(), any());
     }
     
     
     @Test
     void resolve_inferred() {
-        resolver.initialize(new Project("", "", "1.15.1", List.of(), "", ""), Resolver.CLASS, resolution);
+        parser.environment = StubEnvironment.of(new Project("", "", "1.15.1", List.of(), "", ""));
+
+        parser.parse(Inferred.class);
         
-        resolver.parse(Inferred.class);
-        
-        assertEquals("1.15", resolution.mappings.get("api-version"));
+        assertEquals("1.15", parser.environment.mappings.get("api-version"));
     }
     
     
     @Test
-    void resolve_inferred_default() {
-        resolver.initialize(Project.EMPTY, Resolver.CLASS, resolution);
+    void resolve_inferred_default() {    
+        parser.parse(Inferred.class);
         
-        resolver.parse(Inferred.class);
-        var message = resolution.messages.get(0);
-        
-        assertEquals("1.13", resolution.mappings.get("api-version"));
-        assertEquals(Message.warning(Inferred.class, "Unable to infer 'api-version', defaulting to '1.13'"), message);
+        assertEquals("1.13", environment.mappings.get("api-version"));
+        verify(environment).warn(Inferred.class, "Could not infer \"api-version\", \"1.13\" will be used instead");
     }
     
     

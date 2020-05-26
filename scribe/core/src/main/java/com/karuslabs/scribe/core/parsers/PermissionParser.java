@@ -62,7 +62,7 @@ public class PermissionParser<T> extends Parser<T> {
         checkMalformed(type, permission);
         
         if (Set.of(permission.children()).contains(name)) {
-            environment.warning(type, format(name, "inherits itself"));
+            environment.warn(type, format(name, "inherits itself"));
         }
         
         if (!names.add(name)) {
@@ -73,12 +73,12 @@ public class PermissionParser<T> extends Parser<T> {
     protected void checkMalformed(T type, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
-            environment.warning(type, format(name, "may be malformed"));
+            environment.warn(type, format(name, "may be malformed"));
         }
         
         for (var child : permission.children()) {
             if (!matcher.reset(child).matches()) {
-                environment.warning(type, format(child, " may be malformed"));
+                environment.warn(type, format(child, "may be malformed"));
             }
         }
     }

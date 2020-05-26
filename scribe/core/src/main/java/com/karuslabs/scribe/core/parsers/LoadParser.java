@@ -62,7 +62,7 @@ public class LoadParser<T> extends SingleParser<T> {
     protected void check(T type, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {
-                environment.error(type, format(name, " is not a valid plugin name, should contain only alphanumeric characters and \"_\""));
+                environment.error(type, format(name, "is not a valid plugin name, should contain only alphanumeric characters and \"_\""));
             }
         }
     }

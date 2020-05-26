@@ -32,20 +32,17 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class MavenProcessorTest {
     
     ScanResult results = mock(ScanResult.class);
     ClassGraph graph = when(mock(ClassGraph.class).scan()).thenReturn(results).getMock();
-    MavenProcessor processor = new MavenProcessor(Project.EMPTY, graph);
+    MavenProcessor processor = new MavenProcessor(new MavenEnvironment(Project.EMPTY), graph);
     
     
     @Test

@@ -23,8 +23,8 @@
  */
 package com.karuslabs.scribe.maven.plugin;
 
-
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 
 import org.apache.maven.plugin.logging.Log;
@@ -48,7 +48,7 @@ public class Console {
     }
     
     
-    public void log(Log logger, List<Message<Class<?>>> messages) {
+    public void log(Log logger, List<Entry<Class<?>, String>> messages) {
         if (messages.isEmpty()) {
             return;
         }
@@ -57,11 +57,11 @@ public class Console {
         consumer.accept(logger, "RESOLUTION " + header + ":");
         logger.info("-------------------------------------------------------------");
         for (var message : messages) {
-            if (message.location != null) {
-                consumer.accept(logger, message.location.getName() + ": " + message.value);
+            if (message.getKey() != null) {
+                consumer.accept(logger, message.getKey().getName() + ": " + message.getValue());
                 
             } else {
-                consumer.accept(logger, message.value);
+                consumer.accept(logger, message.getValue());
             }
         }
         logger.info(messages.size() + " " + (messages.size() == 1 ? count : count + "s"));

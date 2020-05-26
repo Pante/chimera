@@ -45,8 +45,8 @@ public abstract class Environment<T> {
     public abstract void error(T location, String message);
     
         
-    public abstract void warning(String message);
+    public abstract void warn(String message);
     
-    public abstract void warning(T location, String message);
+    public abstract void warn(T location, String message);
     
 }

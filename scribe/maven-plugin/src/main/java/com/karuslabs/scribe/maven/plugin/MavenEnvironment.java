@@ -21,41 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.core;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.maven.plugin.Message;
-import java.util.stream.Stream;
+import com.karuslabs.scribe.core.*;
 
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 
-@ExtendWith(MockitoExtension.class)
-class ResolutionTest {
+public class MavenEnvironment extends Environment<Class<?>> {
     
-    Environment<String> resolution = new Environment<>();
+    final List<Entry<Class<?>, String>> errors;
+    final List<Entry<Class<?>, String>> warnings;
     
     
-    @ParameterizedTest
-    @MethodSource("add_parameters")
-    void add(Environment<String> resolution, Message.Type type) {
-        var message = resolution.messages.get(0);
-        
-        assertEquals(new Message(null, "hello", type), message);
-    }
-    
-    static Stream<Arguments> add_parameters() {
-        return Stream.of(
-            of(new Environment().error("hello"), Message.Type.ERROR),
-            of(new Environment().warning("hello"), Message.Type.WARNING),
-            of(new Environment().info("hello"), Message.Type.INFO)
-        );
+    public MavenEnvironment(Project project) {
+        super(project, Resolver.CLASS);
+        errors = new ArrayList<>();
+        warnings = new ArrayList<>();
     }
 
-} 
+    @Override
+    public void error(String message) {
+        errors.add(new SimpleEntry(null, message));
+    }
+
+    @Override
+    public void error(Class<?> location, String message) {
+        errors.add(new SimpleEntry(location, message));
+    }
+
+    @Override
+    public void warn(String message) {
+        warnings.add(new SimpleEntry(null, message));
+    }
+
+    @Override
+    public void warn(Class<?> location, String message) {
+        warnings.add(new SimpleEntry(location, message));
+    }
+
+}

@@ -45,7 +45,7 @@ public abstract class PluginParser<T> extends Parser<T> {
     }
     
     public static PluginParser<Element> element(Environment<Element> environment, Elements elements, Types types) {
-        return new ElementPluginResolver(environment, elements, types);
+        return new ElementPluginParser(environment, elements, types);
     }
     
     
@@ -92,7 +92,7 @@ public abstract class PluginParser<T> extends Parser<T> {
         
         var version = plugin.version().isEmpty() ? environment.project.version : plugin.version();
         if (!VERSIONING.matcher(version).matches()) {
-            environment.warning(type, format(version, "may be malformed", "versions should follow SemVer, https://semver.org/"));
+            environment.warn(type, format(version, "may be malformed", "version should follow SemVer, https://semver.org/"));
         }
         
         environment.mappings.put("version", version);
@@ -138,14 +138,14 @@ class ClassPluginResolver extends PluginParser<Class<?>> {
 }
 
 
-class ElementPluginResolver extends PluginParser<Element> {
+class ElementPluginParser extends PluginParser<Element> {
     
     Types types;
     TypeMirror expected;
     Visitor visitor;
     
     
-    ElementPluginResolver(Environment<Element> environment, Elements elements, Types types) {
+    ElementPluginParser(Environment<Element> environment, Elements elements, Types types) {
         super(environment);
         this.types = types;
         expected = elements.getTypeElement(org.bukkit.plugin.Plugin.class.getName()).asType();

@@ -23,45 +23,51 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Environment;
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
 
-import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.util.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.Test;
-
-import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
+import static javax.tools.Diagnostic.Kind.*;
 import static org.mockito.Mockito.*;
 
 
-class StandaloneProcessorTest {
+class StandaloneEnvironmentTest {
     
-    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
-    Types types = mock(Types.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
+    Messager messager = mock(Messager.class);
+    StandaloneEnvironment environment = new StandaloneEnvironment(messager);
     Element element = mock(Element.class);
     
     
     @Test
-    void initalize() {
-        processor.initialize(round);
+    void error() {
+        environment.error("error");
         
-        assertEquals(round, processor.round);
+        verify(messager).printMessage(ERROR, "error");
     }
     
     
     @Test
-    void annotated() {
-        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
-
-        processor.round = round;
+    void error_element() {
+        environment.error(element, "error");
         
-        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
+        verify(messager).printMessage(ERROR, "error", element);
+    }
+    
+    
+    @Test
+    void warn() {
+        environment.warn("warning");
+        
+        verify(messager).printMessage(WARNING, "warning");
+    }
+    
+    
+    @Test
+    void warning() {
+        environment.warn(element, "warning");
+        
+        verify(messager).printMessage(WARNING, "warning", element);
     }
 
 } 

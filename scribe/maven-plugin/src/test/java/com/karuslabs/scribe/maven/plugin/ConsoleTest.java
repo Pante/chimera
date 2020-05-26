@@ -21,47 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone;
+package com.karuslabs.scribe.maven.plugin;
 
-import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Environment;
 
-import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
+
+import org.apache.maven.plugin.logging.Log;
 
 import org.junit.jupiter.api.Test;
 
-import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class StandaloneProcessorTest {
+class ConsoleTest {
     
-    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
-    Types types = mock(Types.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
-    Element element = mock(Element.class);
+    Log log = mock(Log.class);
     
     
     @Test
-    void initalize() {
-        processor.initialize(round);
+    void log() {        
+        Console.WARNINGS.log(log, List.of(new SimpleEntry<>(Console.class, "First"), new SimpleEntry<>(null, "Second")));
         
-        assertEquals(round, processor.round);
+        verify(log, times(3)).info("-------------------------------------------------------------");
+        verify(log).warn("RESOLUTION WARNING:");
+        verify(log).warn(Console.class.getName() + ": First");
+        verify(log).warn("Second");
+        verify(log).info("2 warnings");
     }
     
     
     @Test
-    void annotated() {
-        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
-
-        processor.round = round;
+    void log_empty() {
+        Console.ERRORS.log(log, List.of());
         
-        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
+        verifyNoInteractions(log);
     }
 
 } 

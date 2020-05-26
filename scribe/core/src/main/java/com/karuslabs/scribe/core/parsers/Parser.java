@@ -40,7 +40,7 @@ public abstract class Parser<T> {
     public static final Pattern WORD = Pattern.compile("\\w+");
     
     
-    protected final Environment<T> environment;
+    protected Environment<T> environment;
     protected @Immutable Set<Class<? extends Annotation>> annotations;
     
     

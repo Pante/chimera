@@ -32,12 +32,12 @@ public @ValueType class Project {
     
     public static Project EMPTY = new Project("", "", "", List.of(), "", "");
     public static Map<String, String> DEPENDENCIES = Map.of(
-        "org.bukkit", "bukkit",
-        "org.bukkit", "craftbukkit",
-        "org.spigotmc", "spigot-api",
-        "org.spigotmc", "spigot",
-        "com.destroystokyo.paper", "paper-api",
-        "com.destroystokyo.paper", "paper"
+        "bukkit", "org.bukkit",
+        "craftbukkit", "org.bukkit",
+        "spigot-api", "org.spigotmc",
+        "spigot", "org.spigotmc",
+        "paper-api", "com.destroystokyo.paper",
+        "paper", "com.destroystokyo.paper"
     );
     
     
