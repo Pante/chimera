@@ -26,13 +26,10 @@ package com.karuslabs.commons.command.types;
 import com.mojang.brigadier.arguments.StringArgumentType.StringType;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class StringTest {
     
     com.karuslabs.commons.command.types.StringType argument = reader -> null;

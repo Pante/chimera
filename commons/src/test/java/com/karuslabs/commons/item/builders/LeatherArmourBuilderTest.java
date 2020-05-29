@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ import static org.mockito.Mockito.verify;
 
 class LeatherArmourBuilderTest {
     
-    LeatherArmorMeta meta = StubBukkit.meta(LeatherArmorMeta.class);
+    LeatherArmorMeta meta = MockBukkit.meta(LeatherArmorMeta.class);
     
     
     @Test

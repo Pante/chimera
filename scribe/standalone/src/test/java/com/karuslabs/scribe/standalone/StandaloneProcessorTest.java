@@ -24,6 +24,7 @@
 package com.karuslabs.scribe.standalone;
 
 import com.karuslabs.scribe.annotations.Plugin;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
@@ -31,37 +32,34 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class StandaloneProcessorTest {
     
     Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
     Types types = mock(Types.class);
-    RoundEnvironment environment = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(elements, types);
+    RoundEnvironment round = mock(RoundEnvironment.class);
+    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
     Element element = mock(Element.class);
     
     
     @Test
     void initalize() {
-        processor.initialize(environment);
+        processor.initialize(round);
         
-        assertEquals(environment, processor.environment);
+        assertEquals(round, processor.round);
     }
     
     
     @Test
     void annotated() {
-        doReturn(Set.of(element)).when(environment).getElementsAnnotatedWith(Plugin.class);
+        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
 
-        processor.environment = environment;
+        processor.round = round;
         
         assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
     }

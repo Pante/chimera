@@ -24,32 +24,27 @@
 package com.karuslabs.commons.util.concurrent.locks;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class AutoLockTest {
     
-    @Spy AutoLock lock = new AutoLock();
+    AutoLock lock = spy(new AutoLock());
     
     
     @Test
-    void acquire() {
-        lock.acquire();
+    void hold() {
+        lock.hold();
         
         verify(lock).lock();
     }
     
     
     @Test
-    void acquireInterruptibly() throws InterruptedException {
-        lock.acquireInterruptibly();
+    void holdInterruptibly() throws InterruptedException {
+        lock.holdInterruptibly();
         
         verify(lock).lockInterruptibly();
     }
@@ -57,7 +52,7 @@ class AutoLockTest {
     
     @Test
     void close() {
-        try (var acquired = lock.acquire()) {}
+        try (var mutex = lock.hold()) {}
         
         assertEquals(0, lock.getHoldCount());
     }

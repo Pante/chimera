@@ -26,14 +26,15 @@ package com.karuslabs.annotations;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
  * Signifies that the annotated target is <a href = "https://docs.oracle.com/javase/9/docs/api/java/lang/doc-files/ValueBased.html">value-based</a>.
+ * Annotated types are candidates to be changed to {@code record}s in subsequent Java releases.
  */
 @Documented
-@Retention(RUNTIME)
+@Retention(SOURCE)
 @Target(TYPE)
 public @interface ValueType {
     

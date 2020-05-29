@@ -26,7 +26,7 @@ package com.karuslabs.annotations;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
@@ -34,7 +34,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Usage of this annotation should be limited to overridden constructors and methods.
  */
 @Documented
-@Retention(RUNTIME)
+@Retention(SOURCE)
 @Target({TYPE_PARAMETER, PARAMETER})
 public @interface Ignored {
     

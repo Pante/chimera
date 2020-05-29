@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.tree;
 
+import com.karuslabs.annotations.VisibleForOverride;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.Command;
@@ -107,11 +108,12 @@ public class Mapper<T, R> {
      * @throws ClassCastException if the given {@code command} does not inherit
      *                            from {@code ArgumentCommandNode}
      */
+    @VisibleForOverride
     protected CommandNode<R> argument(CommandNode<T> command) {
         var argument = (ArgumentCommandNode<T, ?>) command;
         return new Argument<>(argument.getName(), type(argument), execution(argument), requirement(argument), suggestions(argument));
     }
-    
+
     /**
      * Maps the given literal to the resultant type.
      * <br><br>
@@ -127,6 +129,7 @@ public class Mapper<T, R> {
      * @throws ClassCastException if the given {@code command} does not inherit
      *                            from {@code LiteralCommandNode}
      */
+    @VisibleForOverride
     protected CommandNode<R> literal(CommandNode<T> command) {
         return new Literal<>(command.getName(), execution(command), requirement(command));
     }
@@ -140,10 +143,11 @@ public class Mapper<T, R> {
      * @param command the command to be mapped
      * @return a {@code RootCommandNode}
      */
+    @VisibleForOverride
     protected CommandNode<R> root(CommandNode<T> command) {
         return new RootCommandNode<>();
     }
-    
+
     /**
      * Maps the given command to the resultant type.
      * <br><br>
@@ -154,8 +158,9 @@ public class Mapper<T, R> {
      * @return a mapped command
      * @throws UnsupportedOperationException if this operation is not overridden
      */
+    @VisibleForOverride
     protected CommandNode<R> otherwise(CommandNode<T> command) {
-        throw new UnsupportedOperationException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
+        throw new IllegalArgumentException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
     }
     
     
@@ -168,6 +173,7 @@ public class Mapper<T, R> {
      * @param command the command which {@code ArgumentType} is to be mapped
      * @return the mapped {@code ArgumentType}
      */
+    @VisibleForOverride
     protected ArgumentType<?> type(ArgumentCommandNode<T, ?> command) {
         return command.getType();
     }
@@ -181,6 +187,7 @@ public class Mapper<T, R> {
      * @param command the command which {@code Command} is to be mapped
      * @return the mapped {@code Command}
      */
+    @VisibleForOverride
     protected Command<R> execution(CommandNode<T> command) {
         return (Command<R>) NONE;
     }
@@ -194,6 +201,7 @@ public class Mapper<T, R> {
      * @param command the command which {@code requirement} is to be mapped
      * @return the mapped {@code requirement}
      */
+    @VisibleForOverride
     protected Predicate<R> requirement(CommandNode<T> command) {
         return (Predicate<R>) TRUE;
     }
@@ -207,6 +215,7 @@ public class Mapper<T, R> {
      * @param command the command which {@code SuggestionProvider} is to be mapped
      * @return the mapped {@code SuggestionProvider}
      */
+    @VisibleForOverride
     protected @Nullable SuggestionProvider<R> suggestions(ArgumentCommandNode<T, ?> command) {
         return null;
     }

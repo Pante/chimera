@@ -24,7 +24,7 @@
 package com.karuslabs.scribe.maven.plugin;
 
 import com.karuslabs.scribe.core.*;
-import com.karuslabs.scribe.core.resolvers.PluginResolver;
+import com.karuslabs.scribe.core.parsers.PluginParser;
 
 import io.github.classgraph.*;
 
@@ -46,11 +46,11 @@ public class MavenProcessor extends Processor<Class<?>> implements AutoCloseable
     /**
      * Creates a {@code MavenProcessor} with the given parameters.
      * 
-     * @param project a representation of the project's {@code pom.xml}
+     * @param environment the environment
      * @param graph a graph
      */
-    public MavenProcessor(Project project, ClassGraph graph) {
-        super(project, Extractor.CLASS, PluginResolver.CLASS);
+    public MavenProcessor(Environment<Class<?>> environment, ClassGraph graph) {
+        super(environment, PluginParser.type(environment));
         this.graph = graph;
     }
     

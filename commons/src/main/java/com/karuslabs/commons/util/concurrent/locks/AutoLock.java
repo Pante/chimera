@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
  * block is exited.
  */
-public class AutoLock extends ReentrantLock implements Acquirable {
+public class AutoLock extends ReentrantLock implements Holdable {
     
     private final Mutex mutex;
     
@@ -61,7 +61,7 @@ public class AutoLock extends ReentrantLock implements Acquirable {
      * @return a {@code Mutex}
      */
     @Override
-    public Mutex acquire() {
+    public Mutex hold() {
         lock();
         return mutex;
     }
@@ -75,7 +75,7 @@ public class AutoLock extends ReentrantLock implements Acquirable {
      *                              the lock
      */
     @Override
-    public Mutex acquireInterruptibly() throws InterruptedException {
+    public Mutex holdInterruptibly() throws InterruptedException {
         lockInterruptibly();
         return mutex;
     }

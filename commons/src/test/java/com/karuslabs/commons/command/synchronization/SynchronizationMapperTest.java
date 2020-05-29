@@ -28,14 +28,11 @@ import com.karuslabs.commons.command.tree.nodes.Argument;
 import net.minecraft.server.v1_15_R1.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class SynchronizationMapperTest {
     
     SynchronizationMapper mapper = SynchronizationMapper.MAPPER;

@@ -43,7 +43,7 @@ public class ParticleType implements WordType<Particle> {
 
     static final Trie<Particle> PARTICLES;
     static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
-    static final Collection<String> EXAMPLES = List.of("barrier", "bubble_column_up");
+    static final List<String> EXAMPLES = List.of("barrier", "bubble_column_up");
     
     static {
         PARTICLES = new Trie<>();
@@ -90,7 +90,7 @@ public class ParticleType implements WordType<Particle> {
     }
 
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

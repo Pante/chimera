@@ -26,7 +26,8 @@ package com.karuslabs.scribe.standalone;
 
 import com.google.auto.service.AutoService;
 
-import com.karuslabs.annotations.processors.AnnotationProcessor;
+import com.karuslabs.annotations.processor.AnnotationProcessor;
+import com.karuslabs.scribe.core.Environment;
 
 import java.util.*;
 import javax.annotation.processing.*;
@@ -42,15 +43,17 @@ import javax.lang.model.element.*;
 @SupportedAnnotationTypes("com.karuslabs.scribe.annotations.*")
 public class Processor extends AnnotationProcessor {
     
+    Environment<Element> environment;
     StandaloneProcessor processor;
     StandaloneYAML yaml;
     
     
     @Override
-    public void init(ProcessingEnvironment environment) {
-        super.init(environment);
-        processor = new StandaloneProcessor(elements, types);
-        yaml = new StandaloneYAML(environment.getFiler(), messager);
+    public void init(ProcessingEnvironment env) {
+        super.init(env);
+        environment = new StandaloneEnvironment(env.getMessager());
+        processor = new StandaloneProcessor(environment, elements, types);
+        yaml = new StandaloneYAML(env.getFiler(), messager);
     }
     
     
@@ -59,37 +62,20 @@ public class Processor extends AnnotationProcessor {
      * {@code plugin.yml}.
      * 
      * @param annotations the annotations used to build a {@code plugin.yml}
-     * @param environment the environment
+     * @param round the round
      * @return {@code false}
      */
     @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        if (environment.getElementsAnnotatedWithAny(processor.annotations()).isEmpty()) {
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
+        if (round.getElementsAnnotatedWithAny(processor.annotations()).isEmpty()) {
             return false;
         }
         
-        processor.initialize(environment);
-        var resolution = processor.run();
-        if (!environment.processingOver()) {
-            yaml.write(resolution.mappings);
-            for (var message : resolution.messages) {
-                switch (message.type) {
-                    case ERROR:
-                        error(message.location, message.value);
-                        break;
-
-                    case WARNING:
-                        warn(message.location, message.value);
-                        break;
-
-                    case INFO:
-                        note(message.location, message.value);
-                        break;
-
-                    default:
-                        throw new UnsupportedOperationException("Unsupported type: " + message.type);
-                }
-            }
+        processor.initialize(round);
+        processor.run();
+        
+        if (!round.processingOver()) {
+            yaml.write(environment.mappings);
         }
         
         return false;

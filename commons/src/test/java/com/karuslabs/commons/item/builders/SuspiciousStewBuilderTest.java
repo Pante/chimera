@@ -23,21 +23,21 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.inventory.meta.SuspiciousStewMeta;
 import org.bukkit.potion.PotionEffect;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class SuspiciousStewBuilderTest {
     
-    SuspiciousStewMeta meta = StubBukkit.meta(SuspiciousStewMeta.class);
+    SuspiciousStewMeta meta = MockBukkit.meta(SuspiciousStewMeta.class);
     PotionEffect effect = mock(PotionEffect.class);
+    
     
     @Test
     void effect() {

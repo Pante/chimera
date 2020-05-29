@@ -23,24 +23,21 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class BlockStateBuilderTest {
     
-    BlockStateMeta meta = StubBukkit.meta(BlockStateMeta.class);
-    @Mock BlockState state;
+    BlockStateMeta meta = MockBukkit.meta(BlockStateMeta.class);
+    BlockState state = mock(BlockState.class);
     
     @Test
     void state() {

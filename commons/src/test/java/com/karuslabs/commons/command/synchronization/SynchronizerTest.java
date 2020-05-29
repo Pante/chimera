@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.command.tree.Tree;
+import com.karuslabs.commons.command.tree.TreeWalker;
 
 import java.util.List;
 
@@ -33,18 +33,14 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.plugin.*;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class SynchronizerTest {
     
     Synchronizer synchronizer;
@@ -109,7 +105,7 @@ class SynchronizerTest {
     
     @Test
     void synchronize_player_commands() {
-        synchronizer.tree = mock(Tree.class);
+        synchronizer.walker = mock(TreeWalker.class);
         
         EntityPlayer entity = mock(EntityPlayer.class);
         entity.playerConnection = mock(PlayerConnection.class);
@@ -118,28 +114,10 @@ class SynchronizerTest {
         
         synchronizer.synchronize(player, List.of());
         
-        verify(synchronizer.tree).map(any(), any(), any(), any());
+        verify(synchronizer.walker).add(any(), any(), any(), any());
         verify(entity.playerConnection).sendPacket(any(PacketPlayOutCommands.class));
     }
-    
-    
-    @Test
-    void synchronize_event_ignore_event() {
-        synchronizer.synchronize(new SynchronizationEvent(null, List.of()));
-        
-        assertNull(synchronizer.synchronization.get());
-    }
-    
-    
-    @Test
-    void synchronize_event() {
-        synchronizer.synchronize(mock(PlayerCommandSendEvent.class));
-        var task = synchronizer.synchronization.get();
-        
-        assertTrue(task.running);
-        verify(services).register(Synchronization.class, task, plugin, ServicePriority.Low);
-    }
-    
+
     
     @Test
     void load() {

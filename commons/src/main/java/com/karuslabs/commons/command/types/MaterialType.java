@@ -44,7 +44,7 @@ public class MaterialType implements WordType<Material> {
     
     static final Trie<Material> MATERIALS;
     static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
-    static final Collection<String> EXAMPLES = List.of("flint_and_steel", "tnt");
+    static final List<String> EXAMPLES = List.of("flint_and_steel", "tnt");
     
     static {
         MATERIALS = new Trie<>();
@@ -99,7 +99,7 @@ public class MaterialType implements WordType<Material> {
     }
 
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

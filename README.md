@@ -1,5 +1,5 @@
 <p align = "center">
-  <img src = "https://i.imgur.com/TA6hOBq.png">
+  <img src = "https://i.imgur.com/iHgSlXk.png">
 </p>
 
 Karus Labs' mono-repository for spigot libraries & tools. 

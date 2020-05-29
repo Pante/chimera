@@ -34,14 +34,6 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * This class recursively maps a command and its children of type {@code T} to type
- * {@code R}. Traversal of the children and redirected commands is handled by this
- * {@code Tree} while the mapping of individual commands is forwarded to a {@link Mapper}.
- * 
- * @param <T> the type of a given command
- * @param <R> the resultant type of a mapped command
- */
 public class Tree<T, R> {    
     
     private Mapper<T, R> mapper;

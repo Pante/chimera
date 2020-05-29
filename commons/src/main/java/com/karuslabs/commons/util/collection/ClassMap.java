@@ -23,9 +23,12 @@
  */
 package com.karuslabs.commons.util.collection;
 
-import com.google.common.primitives.Primitives;
+import com.karuslabs.annotations.Delegate;
+import com.karuslabs.commons.util.Type;
 
 import java.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
@@ -65,7 +68,7 @@ public interface ClassMap<T> {
      * @param map the backing map
      * @return a {@code ClassMap}
      */
-    public static <T> ClassMap<T> of(Map<Class<? extends T>, T> map) {
+    public static <T> @Delegate ClassMap<T> of(Map<Class<? extends T>, T> map) {
         return new ProxiedClassMap<>(map);
     }
     
@@ -88,7 +91,7 @@ public interface ClassMap<T> {
      * @param value the value
      * @return {@code true} if this map contains the value
      */
-    public default <U extends T> boolean containsValue(U value) {
+    public default <U extends T> boolean containsValue(@Nullable U value) {
         return map().containsValue(value);
     }
         
@@ -102,7 +105,7 @@ public interface ClassMap<T> {
      * @return the value associated with the given type, or {@code null} if this 
      *         map contains no mapping for the type
      */
-    public default <U extends T> U get(Class<U> type) {
+    public default @Nullable <U extends T> U get(Class<U> type) {
         return (U) map().get(type);
     }
     
@@ -118,7 +121,7 @@ public interface ClassMap<T> {
      */
     public default <U extends T> U getOrDefault(Class<U> type, U value) {
         var item = map().get(type);
-        if (item != null && Primitives.wrap(type).isAssignableFrom(item.getClass())) {
+        if (item != null && Type.box(type).isAssignableFrom(item.getClass())) {
             return (U) item;
             
         } else {
@@ -126,7 +129,7 @@ public interface ClassMap<T> {
         }
     }
     
-    
+
     /**
      * Associates the given value with the given type. If this map previously contained
      * a mapping for the type, the old value is replaced and returned.
@@ -137,7 +140,7 @@ public interface ClassMap<T> {
      * @return the previous value associated with the type, or {@code null} if there 
      *         was no mapping for the key
      */
-    public default <U extends T> U put(Class<U> type, U value) {
+    public default <U extends T> @Nullable U put(Class<U> type, U value) {
         return (U) map().put(type, value);
     }
     
@@ -151,7 +154,7 @@ public interface ClassMap<T> {
      * @return the previous value associated with the type, or {@code null} if there 
      *         was no mapping for the type
      */
-    public default <U extends T> U remove(Class<U> type) {
+    public default <U extends T> @Nullable U remove(Class<U> type) {
         return (U) map().remove(type);
     }
     
@@ -167,6 +170,11 @@ public interface ClassMap<T> {
 }
 
 
+/**
+ * A {@code ClassMap} that is also a {@code HashMap}.
+ * 
+ * @param <T> the type of the values
+ */
 class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap<T> {
     
     HashClassMap() {}
@@ -182,9 +190,14 @@ class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
     
 }
 
-class ProxiedClassMap<T> implements ClassMap<T> {
+/**
+ * A {@code ClassMap} that delegates execution to a {@code Map}.
+ *
+ * @param <T> the type of the values
+ */
+@Delegate class ProxiedClassMap<T> implements ClassMap<T> {
     
-    private Map<Class<? extends T>, T> map;
+    private final Map<Class<? extends T>, T> map;
     
     ProxiedClassMap(Map<Class<? extends T>, T> map) {
         this.map = map;

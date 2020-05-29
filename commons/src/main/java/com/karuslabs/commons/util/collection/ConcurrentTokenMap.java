@@ -23,9 +23,12 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Delegate;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
 
 import java.util.concurrent.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
@@ -67,7 +70,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
      * @param map the backing map
      * @return a {@code ConcurrentTokenMap}
      */
-    public static <N, T> ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
+    public static <N, T> @Delegate ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
         return new ConcurrentProxiedTokenMap<>(map);
     }
     
@@ -78,7 +81,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     }
     
     @Override
-    public default <U extends T> U get(N name, Class<U> type) {
+    public default <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
     
@@ -88,7 +91,7 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     }
     
     @Override
-    public default <U extends T> U remove(N name, Class<U> type) {
+    public default <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
 
@@ -99,6 +102,9 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
 }
 
 
+/**
+ * A cached, thread local {@code Key} used for look-ups in {@code ConcurrentTokenMap}.
+ */
 class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
     
     static final ThreadLocalKey KEY = new ThreadLocalKey();
@@ -112,6 +118,12 @@ class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
 }
 
 
+/**
+ * A {@code ConcurrentTokenMap} subclass that is also a {@code ConcurrentHashMap}.
+ * 
+ * @param <N> the type of the keys
+ * @param <T> the type of the values 
+ */
 class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentHashTokenMap() {}
@@ -129,7 +141,13 @@ class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>
 }
 
 
-class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
+/**
+ * A {@code ConcurrentTokenMap} subclass that delegates execution to a {@code ConcurrentMap}.
+ * 
+ * @param <N> the type of the keys
+ * @param <T> the type of the values 
+ */
+@Delegate class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentMap<Key<N, ? extends T>, T> map;
     

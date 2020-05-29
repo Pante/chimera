@@ -40,7 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * characters are used as an index in the array of children entries while other 
  * characters are used as a key in the map of children entries. Entries are traversed
  * based on the next character of a string. This makes the time complexity of look-up 
- * and other operations constant relative to the length of the string.
+ * and other operations relative to the length of the string.
  * 
  * @param <V> the type of the values
  */
@@ -101,7 +101,7 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     
     /**
-     * Maps the entries whose keys start with the prefix to the {@code collection}
+     * Recursively maps the entries whose keys start with the prefix to the {@code collection}
      * using the {@code mapper}.
      * 
      * @param <C> the type the collection
@@ -111,7 +111,7 @@ public class Trie<V> extends AbstractMap<String, V> {
      * @param collection the collection
      * @return the collection of mapped elements
      */
-    public <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
+    <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
         var entry = root;
         for (var character : prefix.toCharArray()) {
             entry = entry.get(character);
@@ -120,11 +120,20 @@ public class Trie<V> extends AbstractMap<String, V> {
             }
         }
         
-        accumulate(entry, mapper, collection);
+        map(entry, mapper, collection);
         return collection;
     }
     
-    <C extends Collection<T>, T> void accumulate(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
+    /**
+     * Recursively maps the entries to {@code leaves} using the given {@code mapper}.
+     * 
+     * @param <C> the type of the collection
+     * @param <T> the type of the mapped elements
+     * @param entry the current entry
+     * @param mapper the mapping function
+     * @param leaves the collection
+     */
+    <C extends Collection<T>, T> void map(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
         if (entry.key != null) {
             leaves.add(mapper.apply(entry));
         }
@@ -132,14 +141,14 @@ public class Trie<V> extends AbstractMap<String, V> {
         if (entry.ascii != null) {
             for (var child : entry.ascii) {
                 if (child != null) {
-                    accumulate(child, mapper, leaves);
+                    map(child, mapper, leaves);
                 }
             }
         }
         
         if (entry.expanded != null) {
             for (var child : entry.expanded.values()) {
-                accumulate(child, mapper, leaves);
+                map(child, mapper, leaves);
             }
         }
     }
@@ -150,6 +159,13 @@ public class Trie<V> extends AbstractMap<String, V> {
         return contains(root, value);
     }
     
+    /**
+     * Recursively checks if the given entry or its children contains {@code value}.
+     * 
+     * @param entry the current entry
+     * @param value the value
+     * @return {@code true} if the {@code value} is present; else {@code false}
+     */
     boolean contains(TrieEntry<V> entry, Object value) {
         if (entry.key != null && Objects.equals(entry.value, value)) {
             return true;
@@ -437,7 +453,7 @@ public class Trie<V> extends AbstractMap<String, V> {
             return entry;
         }
 
-        void children(TrieEntry<V> entry) {
+        final void children(TrieEntry<V> entry) {
             if (entry.ascii != null) {
                 for (var child : entry.ascii) {
                     if (child != null) {

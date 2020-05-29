@@ -23,43 +23,37 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.DispatcherCommand;
+import com.karuslabs.commons.command.dispatcher.*;
 import com.karuslabs.commons.command.types.EnchantmentType;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class RootTest {
     
-    Plugin plugin = when(mock(Plugin.class).getName()).thenReturn("test").getMock();
-    CommandMap map = mock(CommandMap.class);
-    Root root = new Root(plugin, map);
+    DispatcherMap map = mock(DispatcherMap.class);
+    Root root = new Root("test", map);
+    Literal<CommandSender> literal = Literal.of("a").alias("a1").build();
     
     
     @Test
     void addChild() {
-        var literal = Literal.of("a").alias("a1").build();
-        doReturn(true).when(map).register(any(String.class), any(Command.class));
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
         
         root.addChild(literal);
         
-        verify(map, times(2)).register(eq("test"), any(DispatcherCommand.class));
         assertNotNull(root.getChild("a"));
         assertNotNull(root.getChild("test:a"));
         assertNotNull(root.getChild("a1"));
@@ -67,10 +61,59 @@ class RootTest {
     }
     
     
+    @Test
+    void addChild_bukkit_contains_name() {
+        var command = new DispatcherCommand("a", null, null, null, List.of("a1"));
+        command.setLabel("label");
+        
+        when(map.register(literal)).thenReturn(command);
+        
+        root.addChild(literal);
+        
+        assertNull(root.getChild("a"));
+        assertNotNull(root.getChild("test:a"));
+        assertNotNull(root.getChild("a1"));
+        assertNotNull(root.getChild("test:a1"));
+    }
+    
+    
+    @Test
+    void addChild_bukkit_contains_alias() {
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of()));
+        
+        root.addChild(literal);
+        
+        assertNotNull(root.getChild("a"));
+        assertNotNull(root.getChild("test:a"));
+        assertNull(root.getChild("a1"));
+        assertNull(root.getChild("test:a1"));
+    }
+    
+    
+    @Test
+    void addChild_unregistered() {
+        root.addChild(Literal.of("a").build());
+        
+        assertEquals(0, root.getChildren().size());
+    }
+    
+    
+    @Test
+    void addChild_duplicate_throws_exception() {
+        when(map.register(any())).thenReturn(new DispatcherCommand("", null, null, null, List.of("")));
+        
+        root.addChild(Literal.of("a").build());
+        
+        assertEquals("Invalid command: 'a', root already contains a child with the same name",
+            assertThrows(IllegalArgumentException.class, () -> root.addChild(Literal.of("a").build())).getMessage()
+        );
+    }
+    
+    
     @ParameterizedTest
     @MethodSource("addChild_throws_exception_parameters")
-    void addChild_throws_exception(CommandNode<CommandSender> command) {
-        assertEquals("Invalid command registered: " + command.getName() + ", command must inherit from LiteralCommandNode", 
+    void addChild_non_literal_throws_exception(CommandNode<CommandSender> command) {
+        assertEquals("Invalid command: '" + command.getName() + "', commands registered to root must be a literal", 
             assertThrows(IllegalArgumentException.class, () -> root.addChild(command)).getMessage()
         );
     }
@@ -81,23 +124,31 @@ class RootTest {
     
     
     @Test
-    void dispatcher() {
-        var dispatcher = mock(CommandDispatcher.class);
+    void removeChild() {
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
         
-        root.dispatcher(dispatcher);
+        root.addChild(literal);
         
-        assertSame(dispatcher, root.dispatcher);
+        assertEquals(4, root.getChildren().size());
+        
+        assertEquals(literal, root.removeChild("a"));
+        assertEquals(0, root.getChildren().size());
     }
     
     
     @Test
-    void dispatcher_throws_exception() {
-        var dispatcher = mock(CommandDispatcher.class);
+    void getters() {
+        var command = root.getCommand();
+        root.setCommand(mock(com.mojang.brigadier.Command.class));
         
-        assertEquals(
-            "CommandDispatcher is already initialized", 
-            assertThrows(IllegalStateException.class, () -> { root.dispatcher(dispatcher); root.dispatcher(dispatcher); }).getMessage()
-        );
+        assertSame(command, root.getCommand());
+        
+        var destination = root.getRedirect();
+        root.setRedirect(literal);
+        
+        assertSame(destination, root.getRedirect());
+        
+        assertSame(map, root.getDispatcherMap());
     }
 
 } 

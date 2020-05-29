@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
-import com.karuslabs.commons.command.Lexer;
+import com.karuslabs.commons.command.Readers;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.CommandContext;
@@ -49,7 +49,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("'@a' cannot be used in a list of players."));
     private static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player or selector: " + name));
-    private static final Collection<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
+    private static final List<String> EXAMPLES = List.of("@a", "@r", "\"Pante, Kevaasaurus\"");
     static final Message ALL = new LiteralMessage("All online players");
     static final Message RANDOM = new LiteralMessage("A online player chosen at random");
     
@@ -78,7 +78,7 @@ public class PlayersType implements StringType<List<Player>> {
      */
     @Override
     public List<Player> parse(StringReader reader) throws CommandSyntaxException {
-        var argument = reader.peek() == '"' ? reader.readQuotedString() : Lexer.until(reader, ' ');
+        var argument = reader.peek() == '"' ? reader.readQuotedString() : Readers.until(reader, ' ');
         
         if (argument.equalsIgnoreCase("@a")) {
             return online();
@@ -86,7 +86,7 @@ public class PlayersType implements StringType<List<Player>> {
         
         var online = online();
         var players = new ArrayList<Player>();
-        var names = Lexer.COMMA.split(argument);
+        var names = Readers.COMMA.split(argument);
         for (var name : names) {
             if (name.equalsIgnoreCase("@r")) {
                 players.add(online.get(ThreadLocalRandom.current().nextInt(online.size())));
@@ -131,17 +131,17 @@ public class PlayersType implements StringType<List<Player>> {
      *         input
      */
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
         var remaining = builder.getRemaining();
         if ("@".startsWith(remaining)) {
             builder.suggest("@a", ALL);
         }
         
-        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
+        var sender = source instanceof Player ? (Player) source : null;
         var enclosed = remaining.startsWith("\"");
         remaining = remaining.replace("\"", "");
         
-        var parts = Lexer.COMMA.split(remaining, -1);
+        var parts = Readers.COMMA.split(remaining, -1);
         var last = parts[parts.length - 1];
         var beginning = remaining.substring(0, remaining.lastIndexOf(last));
         
@@ -155,7 +155,7 @@ public class PlayersType implements StringType<List<Player>> {
         }
         
         for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(last)) {
+            if ((sender == null || sender.canSee(player)) && player.getName().startsWith(last)) {
                 var suggestion = beginning + player.getName();
                 if (enclosed) {
                     suggestion = '"' + suggestion + '"';
@@ -170,7 +170,7 @@ public class PlayersType implements StringType<List<Player>> {
     
     
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

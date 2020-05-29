@@ -21,38 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.commons.util;
 
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class TypeTest {
     
-    @ParameterizedTest
-    @MethodSource({"of_provider"})
-    void of(Object object) {
-        assertEquals(Type.of(object).boxed, object.getClass());
+    @Test
+    void box_primitive() {
+        assertEquals(Integer.class, Type.box(int.class));
     }
     
-    static Stream<Object> of_provider() {
-        return Stream.of(true, 'a', "b", (byte) 0, (short) 0, 0, 0L, (float) 0, (double) 0);
+    
+    @Test
+    void box_type() {
+        assertEquals(TypeTest.class, Type.box(TypeTest.class));
+    }
+    
+    
+    @Test
+    void unbox_wrapper() {
+        assertEquals(int.class, Type.unbox(Integer.class));
+    }
+    
+    
+    @Test
+    void unbox_type() {
+        assertEquals(TypeTest.class, Type.unbox(TypeTest.class));
+    }
+    
+    
+    @ParameterizedTest
+    @EnumSource(Type.class)
+    void of(Type type) {
+        assertEquals(type.boxed, Type.of(type.unboxed).boxed);
     }
     
     
     @Test
     void of_type() {
-        assertNull(Type.of(new Object()).boxed);
+        var type = Type.of(TypeTest.class);
+        
+        assertEquals(Object.class, type.boxed);
+        assertEquals(Object.class, type.unboxed);
     }
     
 }

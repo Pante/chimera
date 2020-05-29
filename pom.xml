@@ -4,65 +4,40 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.5.0</version>
+    <version>4.6.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
     <description>Mono-repository for Spigot libararies and tools</description>
     
+    
     <properties>
-        <release>11</release>
-        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <release>11</release>
     </properties>
+
 
     <modules>
         <module>annotations</module>
         <module>commons</module>
         <module>scribe</module>
     </modules>
-    
-    <profiles>
-        <profile>
+          
+          
+    <distributionManagement>
+        <repository>
             <id>karus</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <distributionManagement>
-                <repository>
-                    <id>karus</id>
-                    <url>https://repo.karuslabs.com/repository/chimera-releases</url>
-                </repository>
+            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
+        </repository>
 
-                <snapshotRepository>
-                    <id>karus</id>
-                    <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
-                </snapshotRepository>
-                
-                <site>
-                    <id>karus</id>
-                    <url>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</url>
-                </site>
-            </distributionManagement>
-        </profile>
-        
-<!-- Pending GitHub Package Registry's support for mutable packages !-->
-<!--        <profile>
-            <id>github-packages</id>
-            <distributionManagement>
-                <repository>
-                    <id>github-packages</id>
-                    <url>https://maven.pkg.github.com/Pante/chimera</url>
-                </repository>
-
-                <snapshotRepository>
-                    <id>github-packages</id>
-                    <url>https://maven.pkg.github.com/Pante/chimera</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>-->
-    </profiles>
+        <snapshotRepository>
+            <id>karus</id>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
     
     <repositories>
         <repository>
@@ -79,76 +54,80 @@
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
         </repository>
-        
-        <repository>
-            <id>chimera-releases</id>
-            <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
-        </repository>
-
-        <repository>
-            <id>chimera-snapshots</id>
-            <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
-        </repository>
-              
-        <repository>
-            <id>lingua-releases</id>
-            <url>https://repo.karuslabs.com/repository/lingua-franca-releases/</url>
-        </repository>
     </repositories>
+    
     
     <dependencies>      
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.1.1</version>
+            <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.6.0</version>
+            <version>1.6.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.6.0</version>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.6.0</version>
+            <version>5.6.2</version>
             <scope>test</scope>
         </dependency>
                 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.3.0</version>
+            <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.3.0</version>
+            <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     
+    
     <build>
-        <plugins>
+        <defaultGoal>install</defaultGoal>
+        <plugins>  
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${release}</release>
+                </configuration>
+            </plugin>
+        
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.1</version>
@@ -156,12 +135,13 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.29</version>
+                        <version>8.32</version>
                     </dependency>
                 </dependencies>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <includeTestResources>false</includeTestResources>
                 </configuration>
                 <executions>
                     <execution>
@@ -171,29 +151,41 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId> 
+                <version>2.8.2</version>
+                <executions> 
+                    <execution>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals> 
+                    </execution> 
+                </executions> 
+            </plugin>
+            
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <docfilessubdirs>true</docfilessubdirs>
                     <additionalOptions>-html5</additionalOptions>
+                    <links>
+                        <link>https://repo.karuslabs.com/repository/brigadier/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>
+                        <link>https://hub.spigotmc.org/javadocs/spigot</link>
+                    </links>
                 </configuration>
                 <executions> 
                     <execution>
-                        <id>generate-javadoc</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                    <execution> 
-                        <id>attach-javadocs</id>
-                        <phase>deploy</phase>
-                        <goals>
                             <goal>jar</goal>
-                        </goals> 
+                        </goals>
                     </execution>
                 </executions> 
             </plugin>
@@ -216,7 +208,21 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.0.0</version>
             </plugin>    
-        </plugins>             
+            
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     
 </project>

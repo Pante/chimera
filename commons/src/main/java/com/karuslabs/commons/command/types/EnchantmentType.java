@@ -43,7 +43,7 @@ public class EnchantmentType implements WordType<Enchantment> {
     
     static final Trie<Enchantment> ENCHANTMENTS;
     static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(enchantment -> new LiteralMessage("Unknown enchantment: " + enchantment));
-    static final Collection<String> EXAMPLES = List.of("arrow_damage", "channeling");
+    static final List<String> EXAMPLES = List.of("arrow_damage", "channeling");
     
     static {
         ENCHANTMENTS = new Trie<>();
@@ -93,7 +93,7 @@ public class EnchantmentType implements WordType<Enchantment> {
     }
 
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

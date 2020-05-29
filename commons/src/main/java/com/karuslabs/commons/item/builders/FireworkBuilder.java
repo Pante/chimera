@@ -88,7 +88,7 @@ public class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
     
 
     @Override
-    protected FireworkBuilder self() {
+    FireworkBuilder self() {
         return this;
     }
     

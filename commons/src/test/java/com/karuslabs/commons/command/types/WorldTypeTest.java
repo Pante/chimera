@@ -71,6 +71,15 @@ class WorldTypeTest {
     
     
     @Test
+    void parse_throws_exception() throws CommandSyntaxException {
+        assertEquals(
+            "Unknown world: \"something\" at position 9: something<--[HERE]", 
+            assertThrows(CommandSyntaxException.class, () -> type.parse(new StringReader("something"))).getMessage()
+        );
+    }
+    
+    
+    @Test
     void listSuggestions() {
         SuggestionsBuilder builder = when(mock(SuggestionsBuilder.class).getRemaining()).thenReturn("worl").getMock();
         
@@ -83,7 +92,7 @@ class WorldTypeTest {
     
     @Test
     void getExamples() {
-        assertEquals(List.of("world_name", "\"world name\""), type.getExamples());
+        assertEquals(List.of("my_fancy_world", "\"Yet another world\""), type.getExamples());
     }
 
 } 

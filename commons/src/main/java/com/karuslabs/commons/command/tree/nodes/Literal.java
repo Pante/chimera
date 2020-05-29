@@ -25,14 +25,11 @@ package com.karuslabs.commons.command.tree.nodes;
 
 import com.karuslabs.commons.command.Commands;
 
-import com.karuslabs.commons.command.Executable;
-
 import com.mojang.brigadier.*;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.tree.*;
 
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -47,8 +44,55 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
     
+    /**
+     * Creates an alias command by the given alias and adds it to {@code command}
+     * if {@code command} is an {@code Aliasable}.
+     * 
+     * @param <T> the type of the source
+     * @param command the command
+     * @param alias the alias
+     * @return the alias command
+     */
+    public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
+        var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+ 
+        for (var child : command.getChildren()) {
+            literal.addChild(child);
+        }
+        
+        if (command instanceof Aliasable<?>) {
+            ((Aliasable<T>) command).aliases().add(literal);
+        }
+        
+        return literal;
+    }
+    
+    /**
+     * Creates a {@code Literal} builder with the given name.
+     * 
+     * @param <T> the type of the source
+     * @param name the name
+     * @return a {@code Builder}
+     */
+    public static <T> Builder<T> builder(String name) {
+        return new Builder<>(name);
+    }
+    
+    /**
+     * Creates a {@code Literal} builder with {@code CommandSender} as the source
+     * type and the given name.
+     * 
+     * @param name the name
+     * @return a {@code Builder}
+     */
+    public static Builder<CommandSender> of(String name) {
+        return new Builder<>(name);
+    }
+    
+    
     private CommandNode<T> destination;
-    private List<CommandNode<T>> aliases;
+    private Consumer<CommandNode<T>> addition;
+    private List<LiteralCommandNode<T>> aliases;
     private boolean alias;
     
     
@@ -89,9 +133,10 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
      * @param modifier the redirection modifier
      * @param fork the fork
      */
-    public Literal(String name, List<CommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+    public Literal(String name, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.destination = destination;
+        this.addition = super::addChild;
         this.aliases = aliases;
         this.alias = alias;
     }
@@ -99,34 +144,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     @Override
     public void addChild(CommandNode<T> child) {
-        var existing = getChild(child.getName());
-        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
-        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
-        
-        super.addChild(child); 
-        
-        if (childAliases != null) {
-            for (var alias : childAliases) {
-                super.addChild(alias);
-            }
-        }
-                
-        if (!alias && existingAliases != null) {
-            if (childAliases != null) {
-                existingAliases.addAll(childAliases);
-                for (var alias : childAliases) {
-                    for (var grandchild : existing.getChildren()) {
-                        alias.addChild(grandchild);
-                    }
-                }
-            }
-
-            for (var grandchild : child.getChildren()) {
-                for (var existingChildAlias : existingAliases) {
-                    existingChildAlias.addChild(grandchild);
-                }
-            }
-        }
+        Nodes.addChild(this, child, addition);
         
         for (var alias : aliases) {
             alias.addChild(child);
@@ -145,7 +163,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     
     @Override
-    public List<CommandNode<T>> aliases() {
+    public List<LiteralCommandNode<T>> aliases() {
         return aliases;
     }
     
@@ -157,9 +175,9 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     @Override
     public void setCommand(Command<T> command) {
-        Commands.executes(this, command);
+        Commands.execution(this, command);
         for (var alias : aliases) {
-            Commands.executes(alias, command);
+            Commands.execution(alias, command);
         }
     }
 
@@ -178,29 +196,6 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             }
         }
     }
-
-    
-    /**
-     * Creates a {@code Literal} builder with the given name.
-     * 
-     * @param <T> the type of the source
-     * @param name the name
-     * @return a {@code Builder}
-     */
-    public static <T> Builder<T> builder(String name) {
-        return new Builder<>(name);
-    }
-    
-    /**
-     * Creates a {@code Literal} builder with {@code CommandSender} as the source
-     * type and the given name.
-     * 
-     * @param name the name
-     * @return a {@code Builder}
-     */
-    public static Builder<CommandSender> of(String name) {
-        return new Builder<>(name);
-    }
     
     
     /**
@@ -208,7 +203,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
      * 
      * @param <T> the type of the source
      */
-    public static class Builder<T> extends ArgumentBuilder<T, Builder<T>> {
+    public static class Builder<T> extends Nodes.Builder<T, Builder<T>> {
         
         String name;
         List<String> aliases;
@@ -239,84 +234,6 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             Collections.addAll(this.aliases, aliases);
             return this;
         }
-        
-        /**
-         * Adds an alias.
-         * 
-         * @param alias the alias
-         * @return {@code this}
-         */
-        public Builder<T> alias(String alias) {
-            aliases.add(alias);
-            return this;
-        }
-        
-        /**
-         * Sets the {@code Command} to be executed.
-         * 
-         * @param command the command to be executed
-         * @return {@code this}
-         */
-        public Builder<T> executes(Executable<T> command) {
-            return executes((Command<T>) command);
-        }
-        
-        
-        /**
-         * Adds a child with the given name created from the annotated object.
-         * 
-         * @param annotated the annotated object
-         * @param name the name of the child to be created
-         * @return {@code this}
-         */
-        public Builder<T> then(Object annotated, String name) {
-            return then(Commands.from(annotated, name));
-        }
-        
-        
-        /**
-         * Adds an optional child built using the given builder. Children of the
-         * optional child are also added to this builder.
-         * <br><br>
-         * <b>Note:</b><br>
-         * An issue with the client processing children nodes may cause suggestions
-         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
-         * 
-         * @param builder the builder which is to build the optional child
-         * @return {@code this}
-         */
-        public Builder<T> optionally(ArgumentBuilder<T, ?> builder) {
-            return optionally(builder.build());
-        }
-        
-        /**
-         * Adds an optional child. Children of the optional child are also added 
-         * to this builder.
-         * <br><br>
-         * <b>Note:</b><br>
-         * An issue with the client processing children nodes may cause suggestions
-         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
-         * 
-         * @param node the optional child
-         * @return {@code this}
-         */
-        public Builder<T> optionally(CommandNode<T> node) {
-            then(node);
-            for (var child : node.getChildren()) {
-                then(child);
-            }
-            
-            return this;
-        }
-        
-        
-        /**
-         * @return {@code this}
-         */
-        @Override
-        protected Builder<T> getThis() {
-            return this;
-        }
 
         
         /**
@@ -332,10 +249,16 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             }
             
             for (var alias : aliases) {
-                Commands.alias(literal, alias);
+                Literal.alias(literal, alias);
             }
 
             return literal;
+        }
+        
+        
+        @Override
+        protected Builder<T> getThis() {
+            return this;
         }
 
     }

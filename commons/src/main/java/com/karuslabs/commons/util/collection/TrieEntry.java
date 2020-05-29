@@ -23,13 +23,28 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.ValueType;
+
 import java.util.*;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class TrieEntry<T> implements Entry<String, T> {
+/**
+ * A trie entry. Each entry represents a character in a string. Each entry points
+ * to the next character in a string. A entry that represents the last character in 
+ * a string also contains the string and, optionally, a value.
+ * 
+ * Children entries that contain an ASCII character are stored in an array to
+ * improve look-up. Non-ASCII characters are stored in a {@code HashMap} instead.
+ * 
+ * Strings that share the same starting characters can similarly share the same 
+ * starting entries. 
+ * 
+ * @param <T> the type of the value
+ */
+final @ValueType class TrieEntry<T> implements Entry<String, T> {
     
     static final int PRINTABLE = 95;
     static final int OFFSET = 32;
@@ -45,10 +60,24 @@ class TrieEntry<T> implements Entry<String, T> {
     @Nullable T value;
     
     
+    /**
+     * Creates an empty {@code TrieEntry} that contains the given character and parent.
+     * 
+     * @param character the character that this {@code TrieEntry} represents
+     * @param parent the parent {@code TrieEntry}
+     */
     TrieEntry(char character, @Nullable TrieEntry<T> parent) {
         this(character, parent, null, null);
     }
     
+    /**
+     * Creates a {@code TrieEntry} with the given values.
+     * 
+     * @param character the character that this {@code TrieEntry} represents
+     * @param parent the parent {@code TrieEntry}
+     * @param key the string
+     * @param value the value
+     */
     TrieEntry(char character, @Nullable TrieEntry<T> parent, String key, T value) {
         this.character = character;
         this.parent = parent;
@@ -98,7 +127,7 @@ class TrieEntry<T> implements Entry<String, T> {
     
     
     @Nullable TrieEntry<T> set(char character, String key, T value) {
-        TrieEntry<T> old = null;
+        TrieEntry<T> old;
         if (31 < character && character < 127) {
             if (ascii == null) {
                 ascii = (TrieEntry<T>[]) new TrieEntry<?>[PRINTABLE];
@@ -172,12 +201,12 @@ class TrieEntry<T> implements Entry<String, T> {
             return true;
         }
         
-        if (!(other instanceof Map.Entry)) {
+        if (!(other instanceof TrieEntry)) {
             return false;
         }
         
-        Map.Entry<?, ?> e = (Map.Entry<?, ?>) other;
-        return equals(key, e.getKey()) && equals(value, e.getValue());
+        var entry = (TrieEntry<?>) other;
+        return equals(key, entry.getKey()) && equals(value, entry.getValue());
     }
         
     /**
@@ -190,8 +219,7 @@ class TrieEntry<T> implements Entry<String, T> {
     
     @Override
     public int hashCode() {
-        return (key == null ? 0 : key.hashCode())
-             ^ (value == null ? 0 : value.hashCode());
+        return Objects.hashCode(key) ^ Objects.hashCode(value);
     }
     
     @Override

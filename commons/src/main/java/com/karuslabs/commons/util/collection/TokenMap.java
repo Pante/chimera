@@ -23,10 +23,11 @@
  */
 package com.karuslabs.commons.util.collection;
 
-import com.google.common.primitives.Primitives;
-
-import com.karuslabs.annotations.ValueType;
+import com.karuslabs.annotations.*;
+import com.karuslabs.commons.util.Type;
 import com.karuslabs.commons.util.collection.TokenMap.Key;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
 
@@ -75,7 +76,7 @@ public interface TokenMap<N, T> {
      * @param map the backing map
      * @return a {@code TokenMap}
      */
-    public static <N, T> TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
+    public static <N, T> @Delegate TokenMap<N, T> of(Map<Key<N, ? extends T>, T> map) {
         return new ProxiedTokenMap<>(map);
     }
     
@@ -125,7 +126,7 @@ public interface TokenMap<N, T> {
      * @return the value associated with the given name and type, or {@code null} 
      *         if this map contains no mapping for the name and type
      */
-    public <U extends T> U get(N name, Class<U> type);
+    public <U extends T> @Nullable U get(N name, Class<U> type);
     
     /**
      * Returns the value to which the given key is mapped, or {@code null} if this
@@ -136,7 +137,7 @@ public interface TokenMap<N, T> {
      * @return the value associated with the given key, or {@code null} if this 
      *         map contains no mapping for the key
      */
-    public default <U extends T> U get(Key<N, U> key) {
+    public default <U extends T> @Nullable U get(Key<N, U> key) {
         return (U) map().get(key);
     }
     
@@ -165,9 +166,10 @@ public interface TokenMap<N, T> {
      *         if this map contains no mapping for the key
      */
     public default <U extends T> U getOrDefault(Key<N, U> key, U value) {
-        T item = map().get(key);
-        if (item != null && Primitives.wrap(key.type).isAssignableFrom(item.getClass())) {
+        var item = map().get(key);
+        if (item != null && Type.box(key.type).isAssignableFrom(item.getClass())) {
             return (U) item;
+            
         } else {
             return value;
         }
@@ -186,7 +188,7 @@ public interface TokenMap<N, T> {
      * @return the previous value associated with the name and type, or {@code null}
      *         if there was no mapping for the type
      */
-    public default <U extends T> U put(N name, Class<U> type, U value) {
+    public default <U extends T> @Nullable U put(N name, Class<U> type, U value) {
         return put(key(name, type), value);
     }
     
@@ -200,7 +202,7 @@ public interface TokenMap<N, T> {
      * @return the previous value associated with the key, or {@code null} if there 
      *         was no mapping for the key
      */
-    public default <U extends T> U put(Key<N, U> key, U value) {
+    public default <U extends T> @Nullable U put(Key<N, U> key, U value) {
         return (U) map().put(key, value);
     }
     
@@ -216,7 +218,7 @@ public interface TokenMap<N, T> {
      * @return the previous value associated with the name and type, or {@code null}
      *         if there was no mapping for the name and type
      */
-    public <U extends T> U remove(N name, Class<U> type);
+    public <U extends T> @Nullable U remove(N name, Class<U> type);
     
     /**
      * Removes the mapping for the key from this map if present. Returns the value
@@ -228,7 +230,7 @@ public interface TokenMap<N, T> {
      * @return the previous value associated with the key, or {@code null} if there 
      *         was no mapping for the key
      */
-    public default <U extends T> U remove(Key<N, U> key) {
+    public default <U extends T> @Nullable U remove(Key<N, U> key) {
         return (U) map().remove(key);
     }
     
@@ -280,35 +282,35 @@ public interface TokenMap<N, T> {
             return this;
         }
 
-        @Override
-        public boolean equals(Object object) {
-            if (this == object) {
-                return true;
-
-            } else if (object instanceof Key<?, ?> && hashCode() == object.hashCode()) {
-                Key key = (Key) object;
-                return type == key.type && name.equals(key.name);
-
-            } else {
-                return false;
-            }
-        }
-
+        
         @Override
         public int hashCode() {
             return hash;
         }
 
         int hash() {
-            int hash = 5;
-            hash = 53 * hash + Objects.hashCode(name);
-            hash = 53 * hash + Objects.hashCode(type);
-            return hash;
+            return Objects.hash(name, type);
+        }
+        
+        
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+
+            } else if (other instanceof Key<?, ?> && hashCode() == other.hashCode()) {
+                Key key = (Key) other;
+                return type == key.type && Objects.equals(name, key.name);
+
+            } else {
+                return false;
+            }
         }
 
+        
         @Override
         public String toString() {
-            return "Key[name: " + name + " class: " + type.getName() + "]";
+            return "Key[name: \"" + name + "\" class: " + type.getName() + "]";
         }
 
     }
@@ -316,6 +318,12 @@ public interface TokenMap<N, T> {
 }
 
 
+/**
+ * A {@code TokenMap} subclass that is also a {@code HashMap}.
+ * 
+ * @param <N> the type of the names of keys
+ * @param <T> the type of values
+ */
 class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements TokenMap<N, T> {
     
     Key<N, T> cached;
@@ -337,7 +345,7 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
     }
 
     @Override
-    public <U extends T> U get(N name, Class<U> type) {
+    public <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) cached.set(name, type));
     }
 
@@ -347,7 +355,7 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
     }
     
     @Override
-    public <U extends T> U remove(N name, Class<U> type) {
+    public <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) cached.set(name, type));
     }
 
@@ -360,7 +368,13 @@ class HashTokenMap<N, T> extends HashMap<Key<N, ? extends T>, T> implements Toke
 }
 
 
-class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
+/**
+ * A {@code TokenMap} subclass that delegates execution to a {@code Map}.
+ * 
+ * @param <N> the type of the names of keys
+ * @param <T> the type of the values
+ */
+@Delegate class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     
     Map<Key<N, ? extends T>, T> map;
     Key<N, T> cached;
@@ -378,7 +392,7 @@ class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     }
 
     @Override
-    public <U extends T> U get(N name, Class<U> type) {
+    public <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) cached.set(name, type));
     }
 
@@ -388,7 +402,7 @@ class ProxiedTokenMap<N, T> implements TokenMap<N, T> {
     }
     
     @Override
-    public <U extends T> U remove(N name, Class<U> type) {
+    public <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) cached.set(name, type));
     }
 

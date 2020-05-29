@@ -23,27 +23,24 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.Set;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.KnowledgeBookMeta;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class KnowledgeBookBuilderTest {
     
-    KnowledgeBookMeta meta = StubBukkit.meta(KnowledgeBookMeta.class);
-    @Mock NamespacedKey first;
-    @Mock NamespacedKey second;
+    KnowledgeBookMeta meta = MockBukkit.meta(KnowledgeBookMeta.class);
+    NamespacedKey first = mock(NamespacedKey.class);
+    NamespacedKey second = mock(NamespacedKey.class);
     
     
     @Test

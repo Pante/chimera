@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Matthias.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,14 @@ package com.karuslabs.annotations;
 
 import java.lang.annotation.*;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
  * Signifies that the annotated target is immutable.
  */
 @Documented
-@Retention(RUNTIME)
+@Retention(SOURCE)
 public @interface Immutable {
     
 }

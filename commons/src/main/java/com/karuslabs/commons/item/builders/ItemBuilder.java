@@ -175,7 +175,7 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
 
     
     @Override
-    protected ItemBuilder self() {
+    ItemBuilder self() {
         return this;
     }
     

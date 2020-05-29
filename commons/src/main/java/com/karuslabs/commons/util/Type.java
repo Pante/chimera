@@ -25,8 +25,6 @@ package com.karuslabs.commons.util;
 
 import java.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 /**
  * Constants of primitive types and their corresponding boxed types.
@@ -42,7 +40,8 @@ public enum Type {
     LONG(Long.class, long.class),
     FLOAT(Float.class, float.class),
     DOUBLE(Double.class, double.class),
-    TYPE(null, null);
+    VOID(Void.class, void.class),
+    TYPE(Object.class, Object.class);
     
     
     private static final Map<Class<?>, Type> TYPES;
@@ -58,6 +57,7 @@ public enum Type {
         register(LONG);
         register(FLOAT);
         register(DOUBLE);
+        register(VOID);
     }
     
     private static void register(Type type) {
@@ -67,16 +67,28 @@ public enum Type {
     
     
     /**
-     * Returns the {@code Type} of the {@code object}, or {@link #TYPE} if the
-     * {@code object} is neither primitive nor boxed.
+     * Returns the boxed equivalent of the given type.
      * 
-     * @param object the object
-     * @return the {@code Type} of the {@code object}, or {@code TYPE} if the object
-     *         is neither primitive nor boxed
+     * @param type a primitive type
+     * @return a boxed type if {@code type} is a primitive type; else {@code type}
      */
-    public static Type of(Object object) {
-        return of(object.getClass());
+    public static Class<?> box(Class<?> type) {
+        var boxed = TYPES.get(type);
+        return boxed == null ? type : boxed.boxed;
     }
+    
+    
+    /**
+     * Returns the unboxed equivalent of the given type.  
+     * 
+     * @param type a wrapper type for a primitive
+     * @return an unboxed type if {@code type} is a wrapper type; else {@code Object.class}
+     */
+    public static Class<?> unbox(Class<?> type) {
+        var unboxed = TYPES.get(type);
+        return unboxed == null ? type : unboxed.unboxed;
+    }
+
     
     /**
      * Returns the {@code Type} of the {@code type}, or {@link #TYPE} if the
@@ -94,11 +106,11 @@ public enum Type {
     /**
      * The boxed type.
      */
-    public final @Nullable Class<?> boxed;
+    public final Class<?> boxed;
     /**
      * The primitive type.
      */
-    public final @Nullable Class<?> unboxed;
+    public final Class<?> unboxed;
 
 
     private Type(Class<?> boxed, Class<?> unboxed) {

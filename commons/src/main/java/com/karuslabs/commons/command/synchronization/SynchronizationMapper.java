@@ -34,27 +34,29 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A mapper that maps the commands in the internal dispatcher of the server to the 
- * type required by an outgoing {@code PacketPlayOutCommands}.
+ * A mapper that maps the commands in the server's internal dispatcher to the type 
+ * required by an outgoing {@code PacketPlayOutCommands}.
  */
 class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
     static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
     /**
-     * Wraps the {@code SuggestionProvider} of the given {@code command} in a
-     * {@code SuggestionProvider} that transforms a {@code ICompletionProvider}
-     * into a {@code CommandListenerWrapper}, or {@code null} if {@code SuggestionProvider}
-     * is {@code null}.
+     * Swaps the {@code SuggestionProvider} of the given command to 
+     * {@code net.minecraft.commands.synchronization.SuggestionProviders#ASK_SERVER}
+     * if present and not a {@coode net.minecraft.commands.synchronization.SuggestionProviders$Wrapper}.
+     * 
+     * Otherwise returns {@code null} if the {@code SuggestionProvider} of the given 
+     * command is not present.
      * 
      * @param command the command
-     * @return the wrapped {@code SuggestionProvider}, or {@code null} if the {@code SuggestionProvider} 
-     *         is {@code null}
+     * @return the swapped {@code SuggestionProvider}, or {@code null} if the
+     *         the {@code SuggestionProvider} of the given command is not present.
      */
     @Override
     protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround using raw types which Mojang abused.
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
+        // Fucking nasty workaround in which Mojang abused raw types. It only works 
+        // because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();
         return provider == null ? null: CompletionProviders.b(provider);
     }

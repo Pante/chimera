@@ -25,72 +25,52 @@ package com.karuslabs.scribe.core;
 
 import com.karuslabs.scribe.annotations.Command;
 
-import java.util.Set;
+import javax.lang.model.element.Element;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
+@Command(name = "a")
+@Command(name = "b")
 class ResolverTest {
     
-    Resolver resolver = spy(new StubResolver());
-    Project project = mock(Project.class);
-    Extractor<String> extractor = mock(Extractor.class);
-    Resolution<String> resolution = mock(Resolution.class);
-    
-    
-    @Test
-    void initialize() {
-        resolver.initialize(project, extractor, resolution);
+    @Nested
+    class ClassRsolverTest {
         
-        assertEquals(project, resolver.project);
-        assertEquals(extractor, resolver.extractor);
-        assertEquals(resolution, resolver.resolution);
+        @Test
+        void all() {
+            assertArrayEquals(ResolverTest.class.getAnnotationsByType(Command.class), Resolver.CLASS.all(ResolverTest.class, Command.class));
+        }
+        
+        @Test
+        void any() {
+            assertEquals(ResolverTest.class.getAnnotation(Command.class), Resolver.CLASS.any(Resolver.class, Command.class));
+        }
+        
     }
     
-    
-    @Test
-    void resolve_set() {
-        var set = Set.of("a", "b");
+    @Nested
+    class ElementTest {
         
-        resolver.resolve(set);
+        Element element = mock(Element.class);
         
-        verify(resolver).check(set);
-        verify(resolver, times(2)).resolve(any(String.class));
-        verify(resolver).clear();
-    }
-    
-    
-    @Test
-    void check() {
-        var set = mock(Set.class);
+        @Test
+        void all() {
+            Resolver.ELEMENT.all(element, Command.class);
+            
+            verify(element).getAnnotationsByType(Command.class);
+        }
         
-        resolver.check(set);
-        verifyNoInteractions(set);
-    }
-    
-    
-    @Test
-    void annotations() {
-        assertEquals(Set.of(Command.class), resolver.annotations());
+        @Test
+        void any() {
+            Resolver.ELEMENT.any(element, Command.class);
+            
+            verify(element).getAnnotation(Command.class);
+        }
+        
     }
 
 } 
-
-class StubResolver extends Resolver<String> {
-    
-    public StubResolver() {
-        super(Set.of(Command.class));
-    }
-    
-    @Override
-    protected void resolve(String type) {
-        
-    }
-    
-}

@@ -29,18 +29,14 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class WeakTest {
     
     static final String VALUE = "test";
@@ -48,43 +44,43 @@ class WeakTest {
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void filter(Weak<String> reference, boolean empty) {
         assertEquals(empty, reference.filter(value -> true).equals(Weak.empty()));
     }
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void flatMap(Weak<String> reference, boolean empty) {
         assertEquals(empty, reference.flatMap(value -> Weak.of(VALUE)).equals(Weak.empty()));
     }
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void map(Weak<String> reference, boolean empty) {
         assertEquals(empty, reference.map(value -> VALUE).equals(Weak.empty()));
     }
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void orElse(Weak<String> reference, boolean empty) {
         assertEquals(empty, reference.orElse(Weak::empty).equals(Weak.empty()));
     }
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
-    void or_value(Weak<String> reference, boolean other) {
-        assertEquals(other, reference.or("OTHER").equals("OTHER"));
+    @MethodSource("weaks")
+    void or_value(Weak<String> reference, boolean expected) {
+        assertEquals(expected, reference.or("OTHER").equals("OTHER"));
     }
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
-    void or_supplier(Weak<String> reference, boolean other) {
-        assertEquals(other, reference.or(() -> "OTHER").equals("OTHER"));
+    @MethodSource("weaks")
+    void or_supplier(Weak<String> reference, boolean expected) {
+        assertEquals(expected, reference.or(() -> "OTHER").equals("OTHER"));
     }
     
     
@@ -113,7 +109,7 @@ class WeakTest {
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void ifPresent(Weak<String> reference, boolean unconsumed) {
         Consumer<String> consumer = mock(Consumer.class);
         reference.ifPresent(consumer);
@@ -123,7 +119,7 @@ class WeakTest {
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void ifPresent_otherwise(Weak<String> reference, boolean unconsumed) {
         Consumer<String> consumer = mock(Consumer.class);
         Runnable otherwise = mock(Runnable.class);
@@ -136,14 +132,14 @@ class WeakTest {
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void isPresent(Weak<String> reference, boolean empty) {
         assertEquals(empty, !reference.isPresent());
     }
     
     
     @ParameterizedTest
-    @MethodSource({"weak_provider"})
+    @MethodSource("weaks")
     void stream(Weak<String> reference, boolean empty) {
         assertEquals(empty, reference.stream().count() == 0);
     }
@@ -161,7 +157,7 @@ class WeakTest {
     }
     
     
-    static Stream<Arguments> weak_provider() {
+    static Stream<Arguments> weaks() {
         return Stream.of(of(WEAK, false), of(Weak.empty(), true));
     }   
     

@@ -24,25 +24,20 @@
 package com.karuslabs.scribe.core;
 
 import com.karuslabs.scribe.annotations.*;
-import com.karuslabs.scribe.core.resolvers.PluginResolver;
+import com.karuslabs.scribe.core.parsers.*;
 
-import java.io.*;
 import java.lang.annotation.Annotation;
 import java.net.*;
 import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ProcessorTest {
-    
     
     StubProcessor processor = new StubProcessor();
     
@@ -57,15 +52,14 @@ class ProcessorTest {
     
     @Test
     void run() {
-        assertEquals(6, processor.resolvers.size());
+        assertEquals(6, processor.parsers.size());
         
-        var resolver = processor.resolver;
-        processor.resolvers = List.of(resolver);
+        Parser<Class<?>> parser = when(mock(Parser.class).annotations()).thenReturn(Set.of(Test.class)).getMock();
+        processor.parsers = List.of(parser);
         
-        var resolution = processor.run();
+        processor.run();
         
-        verify(resolver).initialize(processor.project, Extractor.CLASS, resolution);
-        verify(resolver).resolve(Set.of(StubProcessor.class));
+        verify(parser).parse(Set.of(StubProcessor.class));
     }
     
     
@@ -94,15 +88,15 @@ class ProcessorTest {
 
 class StubProcessor extends Processor<Class<?>> {
     
-    PluginResolver<Class<?>> resolver;
+    PluginParser<Class<?>> resolver;
     
     
     StubProcessor() {
-        this(when(mock(PluginResolver.class).annotations()).thenReturn(Set.of(Plugin.class)).getMock());
+        this(when(mock(PluginParser.class).annotations()).thenReturn(Set.of(Plugin.class)).getMock());
     }
     
-    StubProcessor(PluginResolver<Class<?>> resolver) {
-        super(mock(Project.class), Extractor.CLASS, resolver);
+    StubProcessor(PluginParser<Class<?>> resolver) {
+        super(mock(Environment.class), resolver);
         this.resolver = resolver;
     }
 

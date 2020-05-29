@@ -47,12 +47,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     @Nullable List<String> lore;
     
     
-    /**
-     * Creates a {@code Builder} for the given material.
-     * 
-     * @param material the material
-     */
-    public Builder(Material material) {
+    Builder(Material material) {
         item = new ItemStack(material);
         meta = (Meta) item.getItemMeta();
     }
@@ -62,7 +57,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * 
      * @param source the builder to copy
      */
-    public Builder(Builder<ItemMeta, ?> source) {
+    Builder(Builder<ItemMeta, ?> source) {
         item = source.item;
         meta = (Meta) source.meta;
         source.item = null;
@@ -99,7 +94,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * @param name the display name
      * @return {@code this}
      */
-    public Self display(String name) {
+    public Self display(@Nullable String name) {
         meta.setDisplayName(name);
         return self();
     }
@@ -110,7 +105,7 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
      * @param name the name
      * @return {@code this}
      */
-    public Self localised(String name) {
+    public Self localised(@Nullable String name) {
         meta.setLocalizedName(name);
         return self();
     }
@@ -223,9 +218,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
-    /**
-     * @return {@code this}
-     */
-    protected abstract Self self();
+    abstract Self self();
     
 }

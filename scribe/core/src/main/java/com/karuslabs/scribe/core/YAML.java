@@ -54,7 +54,7 @@ public abstract class YAML {
     /**
      * The project name.
      */
-    protected String project;
+    protected String name;
     /**
      * The dump used to serialize an object.
      */
@@ -66,15 +66,15 @@ public abstract class YAML {
      * 
      * @param project the project name
      */
-    public YAML(String project) {
-        this.project = project;
+    public YAML(String name) {
+        this.name = name;
         dump = new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build());
     }
     
     
     public void write(Map<String, Object> mapping) {
         try (var writer = writer()) {
-            writer.append("# This file was generated using " + project + " 4.5.0 at: " + LocalDateTime.now().format(ISO_DATE_TIME) + "\n")
+            writer.append("# This file was generated at " + LocalDateTime.now().format(ISO_DATE_TIME) + " using " + name + " 4.6.0 \n")
                   .append(dump.dumpToString(mapping));
             
         } catch (IOException e) {

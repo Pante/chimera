@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.commons.util.collection;
 
 import com.karuslabs.commons.util.collection.TokenMap.Key;
@@ -30,20 +29,16 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class TokenMapTest {    
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void containsKey(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertTrue(map.containsKey("a", int.class));
@@ -51,7 +46,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void containsValue(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertTrue(map.containsValue(1));
@@ -59,7 +54,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void get(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.get("a", int.class));
@@ -67,7 +62,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void getOrDefault_value(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.getOrDefault("a", int.class, 2));
@@ -75,7 +70,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void getOrDefault_default(TokenMap<String, Object> map) {
         map.map().put(TokenMap.key("a", String.class), "b");
         assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
@@ -83,7 +78,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void put(TokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         assertEquals("b", map.put("a", String.class, "c"));
@@ -91,7 +86,7 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"map_provider"})
+    @MethodSource({"maps"})
     void remove_name(TokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         map.remove("a", String.class);
@@ -111,7 +106,7 @@ class TokenMapTest {
     }
     
     
-    static Stream<TokenMap<String, Object>> map_provider() {
+    static Stream<TokenMap<String, Object>> maps() {
         TokenMap<String, Object> hashed = TokenMap.of(1);
         TokenMap<String, Object> proxied = TokenMap.of(new HashMap<>());
         return Stream.of(hashed, proxied);
@@ -120,7 +115,6 @@ class TokenMapTest {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class KeyTest {
     
     Key<String, String> key = TokenMap.key("name", String.class);
@@ -140,7 +134,7 @@ class KeyTest {
     
     @Test
     void toString_value() {
-        assertEquals("Key[name: name class: java.lang.String]", key.toString());
+        assertEquals("Key[name: \"name\" class: java.lang.String]", key.toString());
     }
     
 }

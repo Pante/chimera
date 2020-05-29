@@ -39,20 +39,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import org.mockito.junit.jupiter.*;
-import org.mockito.quality.Strictness;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
+import static org.mockito.quality.Strictness.LENIENT;
 
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@MockitoSettings(strictness = LENIENT)
 class PlayersTypeTest {
     
     static Player pante = when(mock(Player.class).getName()).thenReturn("Pante").getMock();

@@ -23,19 +23,14 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.annotations.assembler.TestCommand;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class LiteralTest {
     
     static final Command<String> ARGUMENT = val -> 0;
@@ -47,6 +42,20 @@ class LiteralTest {
     Literal<String> grandchild = Literal.<String>builder("grandchild").alias("grandchild_alias").executes(COMMAND).build();
     Literal<String> extensive = Literal.<String>builder("child").alias("child_alias", "child_alias_other").then(grandchild).executes(COMMAND).build();
     Argument<String, String> argument = Argument.<String, String>builder("child", StringArgumentType.string()).then(Literal.<String>builder("a").build()).executes(ARGUMENT).build();
+    
+    
+    @Test
+    void alias() {
+        literal.addChild(argument);
+        
+        var alias = Literal.alias(literal, "alias");
+        
+        assertEquals("alias", alias.getName());
+        assertTrue(alias.isAlias());
+        assertEquals(literal.getCommand(), alias.getCommand());
+        assertEquals(1, alias.getChildren().size());
+        assertTrue(literal.aliases().contains(alias));
+    }
     
     
     @Test
@@ -75,8 +84,8 @@ class LiteralTest {
         
         var child = (Literal<String>) literal.getChild("child");
         
-        assertSame(this.child, child);
-        assertEquals(3, child.aliases().size());
+        assertSame(extensive, child);
+        assertEquals(2, child.aliases().size());
         assertEquals(2, child.aliases().get(0).getChildren().size());
         assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
         assertEquals(2, child.getChildren().size());
@@ -90,13 +99,13 @@ class LiteralTest {
         
         var alias = literal.aliases().get(0);
         
-        assertEquals(3, literal.getChildren().size());
-        assertEquals(3, alias.getChildren().size());
+        assertEquals(2, literal.getChildren().size());
+        assertEquals(2, alias.getChildren().size());
         
         var child = (Literal<String>) literal.getChild("child");
         
-        assertSame(this.extensive, child);
-        assertEquals(3, child.aliases().size());
+        assertSame(this.child, child);
+        assertEquals(1, child.aliases().size());
         assertEquals(2, child.aliases().get(0).getChildren().size());
         assertTrue(((Aliasable<String>) child.aliases().get(0)).aliases().isEmpty());
         assertEquals(2, child.getChildren().size());
@@ -125,8 +134,8 @@ class LiteralTest {
         assertEquals(3, literal.getChildren().size());
         assertEquals(3, alias.getChildren().size());
         
-        assertSame(argument, literal.getChild("child"));
-        assertEquals(3, argument.getChildren().size());
+        assertSame(extensive, literal.getChild("child"));
+        assertEquals(3, extensive.getChildren().size());
     }
     
     
@@ -137,18 +146,11 @@ class LiteralTest {
         
         var alias = literal.aliases().get(0);
         
-        assertEquals(3, literal.getChildren().size());
-        assertEquals(3, alias.getChildren().size());
+        assertEquals(1, literal.getChildren().size());
+        assertEquals(1, alias.getChildren().size());
         
-        assertSame(extensive, literal.getChild("child"));
-        assertEquals(3, extensive.getChildren().size());
-    }
-    
-    
-    @Test
-    void then() {
-        var command = new TestCommand();
-        TestCommand.assertCommand(command, Literal.of("argument").then(command, "a").build().getChild("a"));
+        assertSame(argument, literal.getChild("child"));
+        assertEquals(3, argument.getChildren().size());
     }
 
 } 

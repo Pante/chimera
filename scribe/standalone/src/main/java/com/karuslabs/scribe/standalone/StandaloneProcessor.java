@@ -23,9 +23,9 @@
  */
 package com.karuslabs.scribe.standalone;
 
-import com.karuslabs.scribe.core.*;
+import com.karuslabs.scribe.core.Environment;
 import com.karuslabs.scribe.core.Processor;
-import com.karuslabs.scribe.core.resolvers.PluginResolver;
+import com.karuslabs.scribe.core.parsers.PluginParser;
 
 import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
@@ -42,33 +42,34 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class StandaloneProcessor extends Processor<Element> {
     
-    @Nullable RoundEnvironment environment;
+    @Nullable RoundEnvironment round;
     
     
     /**
-     * Creates a {@code StandaloneProcessor} with the given elements and types.
+     * Creates a {@code StandaloneProcessor} with the given parameters.
      * 
+     * @param environment the environment
      * @param elements the elements
      * @param types the types.
      */
-    public StandaloneProcessor(Elements elements, Types types) {
-        super(Project.EMPTY, Extractor.ELEMENT, PluginResolver.element(elements, types));
+    public StandaloneProcessor(Environment<Element> environment, Elements elements, Types types) {
+        super(environment, PluginParser.element(environment, elements, types));
     }
     
     
     /**
-     * Initializes this {@code StandaloneProcessor} with the given environment.
+     * Initializes this {@code StandaloneProcessor} with the given round.
      * 
-     * @param environment the environment
+     * @param round the round
      */
-    public void initialize(RoundEnvironment environment) {
-        this.environment = environment;
+    public void initialize(RoundEnvironment round) {
+        this.round = round;
     }
     
     
     @Override
     protected Stream<Element> annotated(Class<? extends Annotation> annotation) {
-        return environment.getElementsAnnotatedWith(annotation).stream().map(element -> element);
+        return round.getElementsAnnotatedWith(annotation).stream().map(element -> element);
     }
 
 }

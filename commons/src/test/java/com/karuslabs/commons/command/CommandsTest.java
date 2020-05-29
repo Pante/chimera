@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.commons.command.annotations.assembler.TestCommand;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.*;
@@ -31,81 +30,40 @@ import com.mojang.brigadier.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@ExtendWith(MockitoExtension.class)
 class CommandsTest {
     
-    Command<Object> command = val -> 1;
-    Argument<Object, String> argument = Argument.builder("b", word()).executes(command).then(Argument.builder("b1", word())).build();
-    Literal<Object> literal = Literal.builder("name").executes(command).then(Literal.builder("a").alias("a1", "a2")).then(argument).build();
-
-    
-    @Test
-    void from() {
-        var command = new TestCommand();
-        TestCommand.assertCommand(command, Commands.from(command, "a"));
-    }
-    
+    Literal<Object> literal = Literal.builder("name").then(Literal.builder("a").alias("a1", "a2")).then(Argument.builder("b", word())).build();
+    Command<Object> execution = val -> 1;
     
     
     @Test
-    void alias() {
-        var alias = Commands.alias(literal, "alias");
-        
-        assertEquals("alias", alias.getName());
-        assertTrue(alias.isAlias());
-        assertEquals(literal.getCommand(), alias.getCommand());
-        assertEquals(4, alias.getChildren().size());
-        assertTrue(literal.aliases().contains(alias));
-    }
-    
-    
-    @Test
-    void executes() {
-        Command<Object> command = val -> 1;
-        Commands.executes(literal, command);
-        assertSame(command, literal.getCommand());
+    void execution() {
+        Commands.execution(literal, execution);
+        assertSame(execution, literal.getCommand());
     }
     
     
     @ParameterizedTest
-    @MethodSource("child")
-    void remove_child(String child, boolean removed, int size) {
+    @MethodSource("remove_parameters")
+    void remove(String child, boolean removed, int size) {
+        assertEquals(4, literal.getChildren().size());
+        
         assertEquals(removed, Commands.remove(literal, child) != null);
         assertEquals(size, literal.getChildren().size());
     }
     
-    static Stream<Arguments> child() {
+    static Stream<Arguments> remove_parameters() {
         return Stream.of(
             of("a", true, 1),
             of("c", false, 4)
-        );
-    }
-    
-    
-    @ParameterizedTest
-    @MethodSource("remove_children_parameters")
-    void remove_children(String[] children, boolean all, int size) {
-        assertEquals(all, Commands.remove(literal, children));
-        assertEquals(size, literal.getChildren().size());
-    }
-    
-    static Stream<Arguments> remove_children_parameters() {
-        return Stream.of(
-            of(new String[] {"a"}, true, 1),
-            of(new String[] {"a", "b"}, true, 0),
-            of(new String[] {"a", "b", "c"}, false, 0),
-            of(new String[] {"other"}, false, 4)
         );
     }
     

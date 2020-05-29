@@ -25,15 +25,12 @@ package com.karuslabs.commons.command.tree.nodes;
 
 import com.karuslabs.commons.command.Commands;
 
-import com.karuslabs.commons.command.Executable;
-
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
 
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -48,9 +45,37 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <V> the type of the argument
  */
 public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
-
+    
+    /**
+     * Creates an {@code Argument} builder with the given name and type.
+     * 
+     * @param <T> the type of the source
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a {@code Builder}
+     */
+    public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
+        return new Builder<>(name, type);
+    }
+    
+    /**
+     * Creates an {@code Argument} builder with {@code CommandSender} as the source
+     * type, and the given name and type.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a {@code Builder}
+     */
+    public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
+        return new Builder<>(name, type);
+    }
+    
+    
     private CommandNode<T> destination;
-
+    private Consumer<CommandNode<T>> addition;
+    
     
     /**
      * Creates an {@code Argument} with the given parameters.
@@ -80,39 +105,13 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
+        this.addition = super::addChild;
     }
     
     
     @Override
     public void addChild(CommandNode<T> child) {
-        var existing = getChild(child.getName());
-        var existingAliases = existing instanceof Aliasable<?> ? ((Aliasable<T>) existing).aliases() : null;
-        var childAliases = child instanceof Aliasable<?> ? ((Aliasable<T>) child).aliases() : null;
-        
-        super.addChild(child); 
-        
-        if (childAliases != null) {
-            for (var alias : childAliases) {
-                super.addChild(alias);
-            }
-        }
-        
-        if (existingAliases != null) {
-            if (childAliases != null) {
-                existingAliases.addAll(childAliases);
-                for (var alias : childAliases) {
-                    for (var grandchild : existing.getChildren()) {
-                        alias.addChild(grandchild);
-                    }
-                }
-            }
-
-            for (var grandchild : child.getChildren()) {
-                for (var existingChildAlias : existingAliases) {
-                    existingChildAlias.addChild(grandchild);
-                }
-            }
-        }
+        Nodes.addChild(this, child, addition);
     }
     
     
@@ -124,7 +123,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     @Override
     public void setCommand(Command<T> command) {
-        Commands.executes(this, command);
+        Commands.execution(this, command);
     }
     
     
@@ -140,39 +139,12 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     
     /**
-     * Creates an {@code Argument} builder with the given name and type.
-     * 
-     * @param <T> the type of the source
-     * @param <V> the type of the argument
-     * @param name the name
-     * @param type the type of the argument
-     * @return a {@code Builder}
-     */
-    public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
-        return new Builder<>(name, type);
-    }
-    
-    /**
-     * Creates an {@code Argument} builder with {@code CommandSender} as the source
-     * type, and the given name and type.
-     * 
-     * @param <V> the type of the argument
-     * @param name the name
-     * @param type the type of the argument
-     * @return a {@code Builder}
-     */
-    public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
-        return new Builder<>(name, type);
-    }
-    
-    
-    /**
      * An {@code Argument} builder.
      * 
      * @param <T> the type of the source
      * @param <V> the type of the argument
      */
-    public static class Builder<T, V> extends ArgumentBuilder<T, Builder<T, V>> {
+    public static class Builder<T, V> extends Nodes.Builder<T, Builder<T, V>> {
         
         String name;
         ArgumentType<V> type;
@@ -194,16 +166,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         }
         
         /**
-         * Sets the {@code Command} to be executed.
-         * 
-         * @param command the command to be executed
-         * @return {@code this}
-         */
-        public Builder<T, V> executes(Executable<T> command) {
-            return executes((Command<T>) command);
-        }
-        
-        /**
          * Sets the {@code SuggestionProvider}.
          * 
          * @param suggestions the {@code SuggestionProvider}
@@ -215,57 +177,6 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         }
         
         
-        /**
-         * Adds a child with the given name created from the annotated object.
-         * 
-         * @param annotated the annotated object
-         * @param name the name of the child to be created
-         * @return {@code this}
-         */
-        public Builder<T, V> then(Object annotated, String name) {
-            return then(Commands.from(annotated, name));
-        }
-        
-        
-        /**
-         * Adds an optional child built using the given builder. Children of the
-         * optional child are also added to this builder.
-         * <br><br>
-         * <b>Note:</b><br>
-         * An issue with the client processing children nodes may cause suggestions
-         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
-         * 
-         * @param builder the builder which is to build the optional child
-         * @return {@code this}
-         */
-        public Builder<T, V> optionally(ArgumentBuilder<T, ?> builder) {
-            return optionally(builder.build());
-        }
-        
-        /**
-         * Adds an optional child. Children of the optional child are also added 
-         * to this builder.
-         * <br><br>
-         * <b>Note:</b><br>
-         * An issue with the client processing children nodes may cause suggestions
-         * from custom {@code SuggestionProvider}s and {@code Type}s to not be displayed.
-         * 
-         * @param node the optional child
-         * @return {@code this}
-         */
-        public Builder<T, V> optionally(CommandNode<T> node) {
-            then(node);
-            for (var child : node.getChildren()) {
-                then(child);
-            }
-            
-            return this;
-        }
-        
-        
-        /**
-         * @return {@code this}
-         */
         @Override
         protected Builder<T, V> getThis() {
             return this;

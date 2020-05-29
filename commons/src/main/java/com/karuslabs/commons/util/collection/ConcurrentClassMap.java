@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Delegate;
+
 import java.util.concurrent.*;
 
 
@@ -61,7 +63,7 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
      * @param map the backing map
      * @return a {@code ConcurrentClassMap}
      */
-    public static <T> ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
+    public static <T> @Delegate ConcurrentClassMap<T> of(ConcurrentMap<Class<? extends T>, T> map) {
         return new ConcurrentProxiedClassMap<>(map);
     }
     
@@ -72,6 +74,11 @@ public interface ConcurrentClassMap<T> extends ClassMap<T> {
 }
 
 
+/**
+ * A {@code ConcurrentClassMap} that is also a {@code ConcurrentHashMap}.
+ * 
+ * @param <T> the type of the values
+ */
 class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T> implements ConcurrentClassMap<T> {
 
     ConcurrentHashClassMap() {}
@@ -87,9 +94,14 @@ class ConcurrentHashClassMap<T> extends ConcurrentHashMap<Class<? extends T>, T>
     
 }
 
-class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
+/**
+ * A {@code ConcurrentClassMap} that delegates execution to a {@code ConcurrentMap}.
+ * 
+ * @param <T> the type of the values
+ */
+@Delegate class ConcurrentProxiedClassMap<T> implements ConcurrentClassMap<T> {
 
-    private ConcurrentMap<Class<? extends T>, T> map;
+    private final ConcurrentMap<Class<? extends T>, T> map;
     
     
     ConcurrentProxiedClassMap(ConcurrentMap<Class<? extends T>, T> map) {

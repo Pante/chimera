@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
+import com.karuslabs.annotations.Delegate;
+
 import com.karuslabs.commons.util.concurrent.locks.AutoReadWriteLock.*;
 
 import java.util.concurrent.TimeUnit;
@@ -86,7 +88,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
      * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
      * block is exited. Overridden operations are forwarded to an underlying {@code ReadLock}.
      */
-    public static class AutoReadLock extends ReadLock implements Acquirable {
+    public static @Delegate class AutoReadLock extends ReadLock implements Holdable {
         
         private final ReadLock lock;
         private final Mutex mutex;
@@ -112,7 +114,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
          * @return a {@code Mutex}
          */
         @Override
-        public Mutex acquire() {
+        public Mutex hold() {
             lock();
             return mutex;
         }
@@ -127,7 +129,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
          *                              acquiring the object
          */
         @Override
-        public Mutex acquireInterruptibly() throws InterruptedException {
+        public Mutex holdInterruptibly() throws InterruptedException {
             lockInterruptibly();
             return mutex;
         }
@@ -175,7 +177,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
      * resource management; i.e. automatic releasing of the lock when a {@code try-with-resources}
      * block is exited. Overridden operations are forwarded to an underlying {@code WriteLock}.
      */
-    public static class AutoWriteLock extends WriteLock implements Acquirable {
+    public static @Delegate class AutoWriteLock extends WriteLock implements Holdable {
         
         private final WriteLock lock;
         private final Mutex mutex;
@@ -201,7 +203,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
          * @return a {@code Mutex}
          */
         @Override
-        public Mutex acquire() {
+        public Mutex hold() {
             lock();
             return mutex;
         }
@@ -215,7 +217,7 @@ public class AutoReadWriteLock extends ReentrantReadWriteLock {
          *                              acquiring the object
          */
         @Override
-        public Mutex acquireInterruptibly() throws InterruptedException {
+        public Mutex holdInterruptibly() throws InterruptedException {
             lockInterruptibly();
             return mutex;
         }

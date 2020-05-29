@@ -44,7 +44,7 @@ import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 /**
  * A MOJO that represents the {@code scribe} goal.
  */
-@Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false)
+@Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class ScribeMojo extends AbstractMojo {    
     
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
@@ -65,16 +65,17 @@ public class ScribeMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoFailureException {
         var graph = new ClassGraph().enableClassInfo().enableAnnotationInfo().addClassLoader(Processor.loader(classpaths));
-        try (var processor = new MavenProcessor(project(), graph)) {
+        var environment = new MavenEnvironment(project());
+        
+        try (var processor = new MavenProcessor(environment, graph)) {   
+            processor.run();
             
-            var yaml = YAML.fromFile("Scribe Maven Plugin", new File(folder, "plugin.yml"));
-            var resolution = processor.run();
-            
-            if (log(resolution.messages).isEmpty()) {
-                yaml.write(resolution.mappings);
+            if (valid(environment)) {
+                var yaml = YAML.fromFile("Scribe Maven Plugin", new File(folder, "plugin.yml"));
+                yaml.write(environment.mappings);
 
             } else {
-                throw new MojoFailureException("Resolution failure");
+                throw new MojoFailureException("Could not resolve annotations");
             }
         }
     }
@@ -84,7 +85,7 @@ public class ScribeMojo extends AbstractMojo {
      * 
      * @return a {@code Project}
      */
-    protected Project project() {
+    Project project() {
         var authors = Stream.of(pom.getContributors(), pom.getDevelopers())
                             .flatMap(Collection::stream)
                             .map(Contributor::getName)
@@ -101,20 +102,19 @@ public class ScribeMojo extends AbstractMojo {
         return new Project(pom.getName(), pom.getVersion(), api, authors, pom.getDescription(), pom.getUrl());
     }
     
+    
     /**
-     * Logs all given messages.
+     * Checks if the given environment contains any errors and warnings. If so,
+     * log the errors and warnings to console.
      * 
-     * @param messages the messages
-     * @return the error messages
+     * @param environment the environment
+     * @return {@code true} if the given environment contains errors; else {@code false}
      */
-    protected List<Message<Class<?>>> log(List<Message<Class<?>>> messages) {
-        var warnings = messages.stream().filter(message -> message.type == Message.Type.WARNING).collect(toList());
-        var errors = messages.stream().filter(message -> message.type == Message.Type.ERROR).collect(toList());
-
-        Messages.WARNINGS.log(getLog(), warnings);
-        Messages.ERRORS.log(getLog(), errors);
+    boolean valid(MavenEnvironment environment) {
+        Console.WARNINGS.log(getLog(), environment.warnings);
+        Console.ERRORS.log(getLog(), environment.errors);
         
-        return errors;
+        return environment.errors.isEmpty();
     }
     
 }

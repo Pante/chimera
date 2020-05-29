@@ -26,7 +26,9 @@ package com.karuslabs.commons.item;
 import org.junit.jupiter.api.Test;
 
 import static com.karuslabs.commons.item.Head.ALEX;
+
 import static java.util.UUID.fromString;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -34,8 +36,8 @@ class HeadTest {
     
     @Test
     void head() {
-        assertEquals(ALEX.name, "MHF_ALEX");
-        assertEquals(ALEX.id, fromString("6ab43178-89fd-4905-97f6-0f67d9d76fd9"));
+        assertEquals("MHF_ALEX", ALEX.name);
+        assertEquals(fromString("6ab43178-89fd-4905-97f6-0f67d9d76fd9"), ALEX.id);
     }
     
 }

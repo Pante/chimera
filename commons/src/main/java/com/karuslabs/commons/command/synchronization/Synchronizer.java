@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,20 @@
  */
 package com.karuslabs.commons.command.synchronization;
 
-import com.karuslabs.commons.command.tree.Tree;
+import com.karuslabs.commons.command.tree.TreeWalker;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.*;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 import net.minecraft.server.v1_15_R1.*;
+
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.*;
 
@@ -45,28 +44,15 @@ import static java.util.stream.Collectors.toSet;
 
 
 /**
- * A {@code Synchronizer} that facilities synchronization between the internal
- * dispatcher of the server and a client.
- * <br><br>
- * <b>Implementation details:</b><br>
- * An issue in Minecraft's command mapping causes redirected commands to be incorrectly
- * mapped and sent to clients  if the name of the redirected command is lexicography 
- * less than the name of the destination. Hence, this {@code Synchronizer} remaps 
- * and resends the commands after a {@code PlayerCommanndSendEvent} is emitted.
- * <br><br>
- * A {@link Synchronization} is shared across plugins using the {@code ServiceManager}
- * to avoid duplicate remapping and resending. A {@code Sychronizer} would first
- * check if a {@code Synchronization} has been registered to the {@code ServiceManager}
- * and uses it if available. A {@code Synchronization} is otherwise created and 
- * shared until the owning plugin is unloaded.
+ * A {@code Synchronizer} that facilities synchronization between the server's internal
+ * dispatcher and a client.
  */
 public class Synchronizer implements Listener {
     
     private MinecraftServer server;
     private Plugin plugin;
     CommandDispatcher<CommandListenerWrapper> dispatcher; 
-    Tree<CommandListenerWrapper, ICompletionProvider> tree;
-    WeakReference<Synchronization> synchronization;
+    TreeWalker<CommandListenerWrapper, ICompletionProvider> walker;
     
     
     /**
@@ -77,28 +63,34 @@ public class Synchronizer implements Listener {
      */
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
-        var tree = new Tree<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
-        var registration = plugin.getServer().getServicesManager().getRegistration(Synchronization.class);
+        var tree = new TreeWalker<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
         
-        var synchronizer = new Synchronizer(server.getServer(), plugin, tree, registration == null ? null : registration.getProvider());
+        var synchronizer = new Synchronizer(server.getServer(), plugin, tree);
         server.getPluginManager().registerEvents(synchronizer, plugin);
         
         return synchronizer;
     }
     
     
-    Synchronizer(MinecraftServer server, Plugin plugin, Tree<CommandListenerWrapper, ICompletionProvider> tree, Synchronization synchronization) {
+    /**
+     * Creates a {@code Synchronizer} with the given parameters.
+     * 
+     * @param server the server
+     * @param plugin the owning plugin
+     * @param walker the walker used to map {@code CommandNode<CommandListenerWrapper>}s
+     *               to {@code CommandNode<ICompletionProivder>}s
+     */
+    Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> walker) {
         this.server = server;
         this.plugin = plugin;
         this.dispatcher = server.commandDispatcher.a();
-        this.tree = tree;
-        this.synchronization = new WeakReference<>(synchronization);
+        this.walker = walker;
     }
     
     
     /**
      * Synchronizes the internal dispatcher of the server with all currently online 
-     * players, ignoring commands that the given player is not permitted to use.
+     * players. Commands are ignored if a player is not permitted to use them.
      */
     public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
@@ -107,8 +99,8 @@ public class Synchronizer implements Listener {
     }
     
     /**
-     * Synchronizes the internal dispatcher of the server with the given {@code player},
-     * ignoring commands that the {@code player} is not permitted to use.
+     * Synchronizes the server's internal dispatcher with the given {@code player}.
+     * Commands are ignored if the given player is not permitted to use them.
      * 
      * @param player the player
      */
@@ -120,8 +112,8 @@ public class Synchronizer implements Listener {
     }
     
     /**
-     * Synchronizes the given {@code commands} in the internal dispatcher of the 
-     * server with the given {@code player}.
+     * Synchronizes the given {@code commands} in the server's internal dispatcher
+     * with the given {@code player}.
      * 
      * @param player the player
      * @param commands the names of the commands
@@ -130,43 +122,20 @@ public class Synchronizer implements Listener {
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
         
-        tree.map(dispatcher.getRoot(), root, entity.getCommandListener(), command -> commands.contains(command.getName()));
+        walker.add(root, dispatcher.getRoot().getChildren(), entity.getCommandListener(), command -> commands.contains(command.getName()));
         
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
     
     
     /**
-     * Synchronizes the commands given by the {@code event} in the internal dispatcher
-     * of the server with the player given by the {@code event} after the {@code event}
-     * has been fully processed.
+     * Reloads this {@code Synchronizer}'s dispatcher each time the server is
+     * reloaded.
      * 
-     * @param event the event which denotes a synchronization between the internal
-     *              dispatcher of the server and a client
+     * @param event the event
      */
     @EventHandler
-    protected void synchronize(PlayerCommandSendEvent event) {
-        if (event instanceof SynchronizationEvent) {
-            return;
-        }
-        
-        var task = synchronization.get();
-        if (task == null) {
-            task = new Synchronization(this, plugin.getServer().getScheduler(), plugin);
-            synchronization = new WeakReference<>(task);
-            plugin.getServer().getServicesManager().register(Synchronization.class, task, plugin, ServicePriority.Low);
-        }
-        
-        task.add(event);
-    }
-    
-    /**
-     * Sets the dispatcher when the server is started or reloaded.
-     * 
-     * @param event the event that denotes the starting and reloading of the server
-     */
-    @EventHandler
-    protected void load(ServerLoadEvent event) {
+    void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();
     }
     

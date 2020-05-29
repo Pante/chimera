@@ -31,71 +31,70 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import org.mockito.junit.jupiter.*;
-import org.mockito.quality.Strictness;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
+import static org.mockito.quality.Strictness.LENIENT;
 
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@MockitoSettings(strictness = LENIENT)
 class AutoReadWriteLockTest {
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void lock_delegate(Lock lock, Lock internal) throws InterruptedException {
-        lock.lock();
-        verify(internal).lock();
+    @MethodSource({"locks"})
+    void lock(Lock wrapper, Lock lock) throws InterruptedException {
+        wrapper.lock();
+        verify(lock).lock();
         
-        lock.lockInterruptibly();
-        verify(internal).lockInterruptibly();
+        wrapper.lockInterruptibly();
+        verify(lock).lockInterruptibly();
         
-        lock.newCondition();
-        verify(internal).newCondition();
+        wrapper.newCondition();
+        verify(lock).newCondition();
 
-        lock.tryLock();
-        verify(internal).tryLock();
+        wrapper.tryLock();
+        verify(lock).tryLock();
         
-        lock.tryLock(1, DAYS);
-        verify(internal).tryLock(1, DAYS);
+        wrapper.tryLock(1, DAYS);
+        verify(lock).tryLock(1, DAYS);
         
-        lock.unlock();
-        verify(internal).unlock();
+        wrapper.unlock();
+        verify(lock).unlock();
         
-        assertEquals(lock.toString(), "delegate");
+        assertEquals(wrapper.toString(), "delegate");
     }
 
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void acquire_internal_unlocks(Acquirable lock, Lock internal) throws InterruptedException {
-        try (var releasable = lock.acquire()) {
-            verify(internal).lock();
+    @MethodSource({"locks"})
+    void hold(Holdable wrapper, Lock lock) throws InterruptedException {
+        try (var mutex = wrapper.hold()) {
+            verify(lock).lock();
             
         } finally {
-            verify(internal).unlock();
+            verify(lock).unlock();
         }
     }
     
     @ParameterizedTest
-    @MethodSource({"lock_provider"})
-    void acquire_interruptibly_internal_unlocks(Acquirable lock, Lock internal) throws InterruptedException {
-        try (var releasable = lock.acquireInterruptibly()) {
-            verify(internal).lockInterruptibly();
+    @MethodSource({"locks"})
+    void holdInterruptibly(Holdable wrapper, Lock lock) throws InterruptedException {
+        try (var mutex = wrapper.holdInterruptibly()) {
+            verify(lock).lockInterruptibly();
+            
         } finally {
-            verify(internal).unlock();
+            verify(lock).unlock();
         }
     } 
     
     
-    static Stream<Arguments> lock_provider() {
+    static Stream<Arguments> locks() {
         ReadLock reader = when(mock(ReadLock.class).toString()).thenReturn("delegate").getMock();
         var autoreader = new AutoReadLock(new AutoReadWriteLock(), reader);
         
@@ -107,14 +106,14 @@ class AutoReadWriteLockTest {
     
     
     @Test
-    void writelock_delegates() {
+    void writelock() {
         WriteLock writer = when(mock(WriteLock.class).toString()).thenReturn("delegate").getMock();
-        var autowriter = new AutoWriteLock(new AutoReadWriteLock(), writer);
+        var wrapper = new AutoWriteLock(new AutoReadWriteLock(), writer);
         
-        autowriter.getHoldCount();
+        wrapper.getHoldCount();
         verify(writer).getHoldCount();
         
-        autowriter.isHeldByCurrentThread();
+        wrapper.isHeldByCurrentThread();
         verify(writer).isHeldByCurrentThread();
     }
     

@@ -26,15 +26,15 @@ package com.karuslabs.annotations;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
  * Signifies that the annotated class consists exclusively of static constants and
- * methods. Instances of the annotated class should never be constructed.
+ * methods. Instances of the annotated class should never be created.
  */
 @Documented
-@Retention(RUNTIME)
+@Retention(SOURCE)
 @Target(TYPE)
 public @interface Static {
     

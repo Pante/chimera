@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,15 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.*;
+import net.minecraft.server.v1_15_R1.*;
+
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
@@ -37,16 +40,16 @@ import org.bukkit.entity.Player;
  * 
  * @param <T> the type of the argument
  */
-public abstract class CartesianType<T> implements Type<T> {    
-    
-    private static final String[] EMPTY = new String[]{};
-    
+interface CartesianType<T> extends Type<T> {
+
+    static final String[] EMPTY = new String[0];
+
     
     /**
-     * Splits the remaining string of the builder by a whitespace and forwards providing
-     * suggestions to {@link #suggest(SuggestionsBuilder, CommandContext, Location, String[])}
+     * Splits the remaining string of the builder by a whitespace and forwards 
+     * providing suggestions to {@link #suggest(SuggestionsBuilder, Location, String[])} 
      * if the source is a player and the block the player is looking at is within
-     * a 5 block radius. After which, forwards to {@link #suggest(SuggestionsBuilder, CommandContext, String[])}.
+     * a 5 block radius. After which, forwards to {@link #suggest(SuggestionsBuilder, String[])}.
      * 
      * @param <S> the type of the source
      * @param context the context
@@ -54,62 +57,118 @@ public abstract class CartesianType<T> implements Type<T> {
      * @return the suggestions
      */
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var source = context.getSource();
-        var parts = split(builder.getRemaining());
+    default <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
+        var remaining = builder.getRemaining();
+        var parts = remaining.isBlank() ? EMPTY : remaining.split(" ");
         
         if (source instanceof Player) {
             var block = ((Player) source).getTargetBlockExact(5);
             if (block != null) {
-                suggest(builder, context, block.getLocation(), parts);
+                suggest(builder, parts, block.getLocation());
             }
         }
         
-        suggest(builder, context, parts);
+        suggest(builder, parts);
         
         return builder.buildFuture();
     }
     
     /**
-     * Splits the given string by a whitespace.
-     * 
-     * @param remaining the string to be split
-     * @return the parts of the given string split by a whitespace
-     */
-    protected String[] split(String remaining) {
-        return remaining.isBlank() ? EMPTY : remaining.split(" ");
-    }
-    
-    
-    
-    /**
-     * Provides suggestions using the given builder, context, location and parts
-     * of the argument.
+     * Provides suggestions using the given parameters.
      * <br><br>
      * <b>Default implementation:</b><br>
      * Does nothing.
      * 
      * @param builder the builder
-     * @param context the context
+     * @param parts the parts of the argument split by a whitespace
      * @param location the location of the block that the source is looking at if 
      *                 within a 5 block radius
-     * @param parts the parts of the argument split by a whitespace
      */
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, Location location, String[] parts) {
-        
-    }
+    default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {}
     
     /**
-     * Provides suggestions using the given builder, context and parts of the argument.
+     * Provides suggestions using the given parameters.
+     * <br><br>
      * <b>Default implementation:</b><br>
      * Does nothing.
      * 
      * @param builder the builder
-     * @param context the context
      * @param parts the parts of the argument split by a whitespace
      */
-    protected void suggest(SuggestionsBuilder builder, CommandContext<?> context, String[] parts) {
+    default void suggest(SuggestionsBuilder builder, String[] parts) {}
+    
+}
+
+
+/**
+ * A 2D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
+interface Cartesian2DType<T> extends CartesianType<T> {
+    
+    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
+    
+    
+    @Override
+    default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {
+        switch (parts.length) {
+            case 0:
+                builder.suggest(String.valueOf(location.getX()));
+                builder.suggest(location.getX() + " " + location.getZ());
+                break;
+                
+            case 1:
+                builder.suggest(parts[0] + " " + location.getZ());
+                break;
+                
+            default: // Does nothing
+        }
+    }
+
+    @Override
+    default ArgumentType<?> mapped() {
+        return VECTOR_2D;
+    }
+    
+}
+
+
+/**
+ * A 3D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
+interface Cartesian3DType<T> extends CartesianType<T> {
+    
+    static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);
+    
+    
+    @Override
+    default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {
+        switch (parts.length) {
+            case 0:
+                builder.suggest(String.valueOf(location.getX()));
+                builder.suggest(location.getX() + " " + location.getY());
+                builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+                break;
         
+            case 1:
+                builder.suggest(parts[0] + " " + location.getY());
+                builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+                break;
+            
+            case 2:
+                builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
+                break;
+                
+            default: // Does nothing
+        }
+    }
+    
+    @Override
+    default ArgumentType<?> mapped() {
+        return VECTOR_3D;
     }
     
 }

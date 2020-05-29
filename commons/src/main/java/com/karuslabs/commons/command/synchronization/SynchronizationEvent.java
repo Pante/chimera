@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerCommandSendEvent;
  */
 public class SynchronizationEvent extends PlayerCommandSendEvent {
     
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
     
     
     /**
@@ -52,11 +52,11 @@ public class SynchronizationEvent extends PlayerCommandSendEvent {
     
     @Override
     public HandlerList getHandlers() {
-        return handlers;
+        return HANDLERS;
     }
 
     public static HandlerList getHandlerList() {
-        return handlers;
+        return HANDLERS;
     }
     
 }

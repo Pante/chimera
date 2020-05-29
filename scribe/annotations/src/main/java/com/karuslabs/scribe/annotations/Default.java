@@ -32,14 +32,16 @@ public enum Default {
     TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");
     
     
-    /**
-     * A string representation of this value.
-     */
-    public final String value;
+    private final String value;
     
     
     private Default(String value) {
         this.value = value;
+    }
+    
+    @Override
+    public String toString() {
+        return value;
     }
     
 }

@@ -21,35 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.commons.util.collection;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class ClassMapTest {    
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void containsKey(ClassMap<Object> map) {
         map.put(int.class, 1);
+        
         assertTrue(map.containsKey(int.class));
         assertFalse(map.containsKey(Integer.class));
     }
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void containsValue(ClassMap<Object> map) {  
         map.put(int.class, 1); 
         assertTrue(map.containsValue(1));
@@ -57,7 +54,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void get(ClassMap<Object> map) {
         map.put(String.class, "test");
         assertEquals(String.class, map.get(String.class).getClass());
@@ -65,15 +62,16 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void getOrDefault_value(ClassMap<Object> map) {
         map.put(int.class, 1);
-        assertEquals(1, (int) map.getOrDefault(int.class, 2));
+        
+        assertEquals(1, (int) map.getOrDefault(int.class, 3));
     }
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void getOrDefault_default(ClassMap<Object> map) {
         map.map().put(int.class, "invalid");
         assertEquals(2, (int) map.getOrDefault(int.class, 2));
@@ -81,7 +79,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void put(ClassMap<Object> map) {
         map.put(String.class, "first");
         assertEquals("first", map.put(String.class, "second"));
@@ -89,7 +87,7 @@ class ClassMapTest {
     
     
     @ParameterizedTest
-    @MethodSource("map_provider")
+    @MethodSource("maps")
     void remove(ClassMap<Object> map) {
         map.put(int.class, 1); 
         map.remove(int.class);
@@ -97,7 +95,7 @@ class ClassMapTest {
     }
     
     
-    static Stream<ClassMap<Object>> map_provider() {
+    static Stream<ClassMap<Object>> maps() {
         var hashed = ClassMap.of();
         var proxied = ClassMap.of(new HashMap<>());
         
@@ -107,7 +105,6 @@ class ClassMapTest {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class HashClassMapTest {
     
     ClassMap<Object> map = ClassMap.of(1);
@@ -121,7 +118,6 @@ class HashClassMapTest {
 }
 
 
-@ExtendWith(MockitoExtension.class)
 class ProxiedClassMapTest {
     
     Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);

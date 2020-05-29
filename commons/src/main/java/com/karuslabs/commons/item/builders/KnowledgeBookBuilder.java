@@ -77,7 +77,7 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBo
 
     
     @Override
-    protected KnowledgeBookBuilder self() {
+    KnowledgeBookBuilder self() {
         return this;
     }
     

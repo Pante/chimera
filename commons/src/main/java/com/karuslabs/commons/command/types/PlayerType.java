@@ -34,8 +34,6 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 /**
  * A {@code Player} type.
@@ -43,7 +41,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class PlayerType implements WordType<Player> {
     
     private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
-    private static final Collection<String> EXAMPLES = List.of("Bob", "Pante");
+    private static final List<String> EXAMPLES = List.of("Bob", "Pante");
 
     
     private Server server;
@@ -80,36 +78,21 @@ public class PlayerType implements WordType<Player> {
     
     /**
      * Returns the names of online players that start with the remaining input of 
-     * the given {@code SuggesitonBuilder}. If the source is a player, a check is 
+     * the given {@code SuggesitonBuilder}.If the source is a player, a check is 
      * performed to determine the visibility of the suggested player to the source. 
      * Players that are invisible to the source are not suggested.
-     * <br><br>
-     * <b>Implementation details:</b><br>
-     * Suggestion is forwarded to {@link #suggest(SuggestionsBuilder, Player)}.
      * 
      * @param <S> the type of the source
+     * @param source the source
      * @param context the context
      * @param builder the builder
      * @return the player names that begin with the remaining input
      */
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        var source = context.getSource() instanceof Player ? (Player) context.getSource() : null;
-        return suggest(builder, source); 
-    }
-    
-    /**
-     * Suggests online players whose names start with the remaining input of the given
-     * {@code SuggestionBuilder} and if the source is player, are visible to the 
-     * source.
-     * 
-     * @param builder the builder
-     * @param source the source, or {@code null} if the source is not a player
-     * @return the player names that begin with the remaining input
-     */
-    protected CompletableFuture<Suggestions> suggest(SuggestionsBuilder builder, @Nullable Player source) {
-        for (var player: server.getOnlinePlayers()) {
-            if ((source == null || source.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {
+    public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
+        var sender = source instanceof Player ? (Player) source : null;
+        for (var player : server.getOnlinePlayers()) {
+            if ((sender == null || sender.canSee(player)) && player.getName().startsWith(builder.getRemaining())) {
                 builder.suggest(player.getName());
             }
         }
@@ -119,7 +102,7 @@ public class PlayerType implements WordType<Player> {
     
 
     @Override
-    public Collection<String> getExamples() {
+    public List<String> getExamples() {
         return EXAMPLES;
     }
     

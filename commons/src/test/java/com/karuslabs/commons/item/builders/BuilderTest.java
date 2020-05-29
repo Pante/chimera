@@ -23,16 +23,14 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.commons.MockBukkit;
+
 import java.util.*;
 
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.bukkit.Material.*;
 import static org.bukkit.enchantments.Enchantment.CHANNELING;
@@ -41,11 +39,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-@ExtendWith(MockitoExtension.class)
 class BuilderTest {
     
-    @Mock ItemStack item;
-    ItemMeta meta = StubBukkit.meta(ItemMeta.class);
+    ItemStack item = mock(ItemStack.class);
+    ItemMeta meta = MockBukkit.meta(ItemMeta.class);
     Builder<ItemMeta, ItemBuilder> builder = ItemBuilder.of(WATER);
     
     

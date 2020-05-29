@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.core;
 
-import com.karuslabs.scribe.core.resolvers.*;
+import com.karuslabs.scribe.core.parsers.*;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -62,60 +62,49 @@ public abstract class Processor<T> {
     } 
     
     
-    Project project;
-    Extractor<T> extractor;
-    List<Resolver<T>> resolvers;
+    Environment<T> environment;
+    List<Parser<T>> parsers;
     @Nullable Set<Class<? extends Annotation>> annotations;
     
     
     /**
-     * Creates a {@code Processor} with the given parameters and all {@code Resolvers}
-     * except {@link PluginResolver}.
+     * Creates a {@code Processor} with the given parameters and all {@code Parser}s
+     * except {@link PluginParser}.
      * 
-     * @param project the project
-     * @param extractor the extractor
-     * @param resolver the resolver
+     * @param environment the environment
+     * @param parser the parser
      */
-    public Processor(Project project, Extractor<T> extractor, PluginResolver<T> resolver) {
-        this(project, extractor, List.of(
-            resolver,
-            new APIResolver(),
-            new CommandResolver(),
-            new InformationResolver(),
-            new LoadResolver(),
-            new PermissionResolver()
+    public Processor(Environment<T> environment, PluginParser<T> parser) {
+        this(environment, List.of(
+            parser,
+            new APIParser(environment),
+            new CommandParser(environment),
+            new InformationParser(environment),
+            new LoadParser(environment),
+            new PermissionParser(environment)
         ));
     }
     
     /**
      * Creates a {@code Processor} with the given parameters.
      * 
-     * @param project the project
-     * @param extractor the extractor
-     * @param resolvers a list of {@code Resolvers}.
+     * @param environment the environment
+     * @param parsers a list of {@code Parser}s.
      */
-    public Processor(Project project, Extractor<T> extractor, List<Resolver<T>> resolvers) {
-        this.project = project;
-        this.extractor = extractor;
-        this.resolvers = resolvers;
+    public Processor(Environment<T> environment, List<Parser<T>> parsers) {
+        this.environment = environment;
+        this.parsers = parsers;
     }
-    
     
     
     /**
      * Resolves all supported annotations on the types returned by {@link #annotated(Class)}.
-     * 
-     * @return a {@code Resolution} that represents the resolution of all supported annotations
      */
-    public Resolution<T> run() {
-        var resolution = new Resolution<T>();
-        for (var resolver : resolvers) {
-            var types = resolver.annotations().stream().collect(flatMapping(this::annotated, toSet()));
-            resolver.initialize(project, extractor, resolution);
-            resolver.resolve(types);
+    public void run() {
+        for (var parser : parsers) {
+            var types = parser.annotations().stream().collect(flatMapping(this::annotated, toSet()));
+            parser.parse(types);
         }
-        
-        return resolution;
     }
     
     /**
@@ -134,7 +123,7 @@ public abstract class Processor<T> {
      */
     public Set<Class<? extends Annotation>> annotations() {
         if (annotations == null) {
-            annotations = resolvers.stream().collect(flatMapping((resolver) -> resolver.annotations().stream(), toSet()));
+            annotations = parsers.stream().collect(flatMapping((resolver) -> resolver.annotations().stream(), toSet()));
         }
         
         return annotations;

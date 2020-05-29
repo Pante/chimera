@@ -1,3 +1,4 @@
+
 /*
  * The MIT License
  *
@@ -32,8 +33,8 @@ import static java.lang.Math.*;
 
 
 /**
- * This class contains exclusively of static methods to manipulate vector and other
- * similar structures.
+ * This class contains of static methods to manipulate vectors and other similar 
+ * structures.
  * 
  * @author EffectLib - Slikey
  */
@@ -45,7 +46,7 @@ public @Static class Vectors {
      * @param <T> the type of the {@code container}
      */
     @FunctionalInterface
-    public static interface Reducer<T> {
+    static interface Reduction<T> {
         
         /**
          * Reduces the coordinates to the {@code container}.
@@ -56,19 +57,13 @@ public @Static class Vectors {
          * @param z the Z coordinate
          * @return the {@code container}
          */
-        public T reduce(T container, double x, double y, double z);
+        public T reduce(T type, double x, double y, double z);
         
     }
     
-    /**
-     * Reduces the coordinates to a vector.
-     */
-    public static Reducer<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
+    private static Reduction<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
         
-    /**
-     * Reduces the coordinates to a location.
-     */
-    public static Reducer<Location> LOCATION = (location, x, y, z) -> {
+    private static Reduction<Location> LOCATION = (location, x, y, z) -> {
         location.setX(x);
         location.setY(y);
         location.setZ(z);
@@ -101,11 +96,11 @@ public @Static class Vectors {
      * @return the given vector
      */
     public static Vector rotateAroundXAxis(Vector vector, double angle) {
-        double y, z, cos, sin;
-        cos = cos(angle);
-        sin = sin(angle);
-        y = vector.getY() * cos - vector.getZ() * sin;
-        z = vector.getY() * sin + vector.getZ() * cos;
+        double cos = cos(angle);
+        double sin = sin(angle);
+        double y = vector.getY() * cos - vector.getZ() * sin;
+        double z = vector.getY() * sin + vector.getZ() * cos;
+        
         return vector.setY(y).setZ(z);
     }
     
@@ -117,11 +112,11 @@ public @Static class Vectors {
      * @return the given vector
      */
     public static Vector rotateAroundYAxis(Vector vector, double angle) {
-        double x, z, cos, sin;
-        cos = cos(angle);
-        sin = sin(angle);
-        x = vector.getX() * cos + vector.getZ() * sin;
-        z = vector.getX() * -sin + vector.getZ() * cos;
+        double cos = cos(angle);
+        double sin = sin(angle);
+        double x = vector.getX() * cos + vector.getZ() * sin;
+        double z = vector.getX() * -sin + vector.getZ() * cos;
+        
         return vector.setX(x).setZ(z);
     }
     
@@ -133,11 +128,11 @@ public @Static class Vectors {
      * @return the given vector
      */
     public static Vector rotateAroundZAxis(Vector vector, double angle) {
-        double x, y, cos, sin;
-        cos = cos(angle);
-        sin = sin(angle);
-        x = vector.getX() * cos - vector.getY() * sin;
-        y = vector.getX() * sin + vector.getY() * cos;
+        double cos = cos(angle);
+        double sin = sin(angle);
+        double x = vector.getX() * cos - vector.getY() * sin;
+        double y = vector.getX() * sin + vector.getY() * cos;
+        
         return vector.setX(x).setY(y);
     }
     
@@ -204,9 +199,7 @@ public @Static class Vectors {
      * @param pitchDegrees the pitch in degrees
      * @return the given location
      */
-    public static <T> T rotate(Reducer<T> reducer, T container, double initialX, double initialY, double initialZ, float yawDegrees, float pitchDegrees) {
-        double x, y, z;
-        
+    static <T> T rotate(Reduction<T> reducer, T container, double initialX, double initialY, double initialZ, float yawDegrees, float pitchDegrees) {
         double yaw = toRadians(-(yawDegrees + 90));
         double pitch = toRadians(-pitchDegrees);
 
@@ -215,8 +208,8 @@ public @Static class Vectors {
         double cosPitch = cos(pitch);
         double sinPitch = sin(pitch);
         
-        x = initialX * cosPitch - initialY * sinPitch;
-        y = initialX * sinPitch + initialY * cosPitch;
+        double x = initialX * cosPitch - initialY * sinPitch;
+        double y = initialX * sinPitch + initialY * cosPitch;
 
         // Z axis rotation (Pitch) 
         double cosYaw = cos(yaw);
@@ -224,7 +217,7 @@ public @Static class Vectors {
         
         initialX = x;
         x = initialZ * sinYaw + initialX * cosYaw;
-        z = initialZ * cosYaw - initialX * sinYaw;
+        double z = initialZ * cosYaw - initialX * sinYaw;
 
         return reducer.reduce(container, x, y, z);
     }

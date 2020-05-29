@@ -25,27 +25,23 @@ package com.karuslabs.scribe.annotations;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
 
-@ExtendWith(MockitoExtension.class)
 class VersionTest {
     
     @ParameterizedTest
-    @MethodSource("values_parameters")
-    void values(Version version, String value) {
-        assertEquals(value, version.version);
+    @MethodSource("toString_parameters")
+    void toString(Version version, String value) {
+        assertEquals(value, version.toString());
     }
     
     
-    static Stream<Arguments> values_parameters() {
+    static Stream<Arguments> toString_parameters() {
         return Stream.of(
             of(Version.INFERRED, "1.13"),
             of(Version.V1_13, "1.13"),

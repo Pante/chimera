@@ -87,7 +87,7 @@ public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, T
     
 
     @Override
-    protected TropicalFishBucketBuilder self() {
+    TropicalFishBucketBuilder self() {
         return this;
     }
     

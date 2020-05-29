@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface Aliasable<T> {
      * 
      * @return the aliases of this node
      */
-    public List<CommandNode<T>> aliases();
+    public List<LiteralCommandNode<T>> aliases();
     
     /**
      * Returns whether this node is an alias.
