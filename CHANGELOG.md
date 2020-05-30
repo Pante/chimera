@@ -74,6 +74,7 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Remove `com.karuslabs.commons.command.types.parser.VectorParser`
 
 **Command Annotations**
+
 Commands annotations have been rewritten to support AOT compilation and be less verbose. Please refer to the wiki for
 more information.
 
