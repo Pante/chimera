@@ -148,7 +148,7 @@ class RootTest {
         
         assertSame(destination, root.getRedirect());
         
-        assertSame(map, root.getDispatcherMap());
+        assertSame(map, root.map());
     }
 
 } 

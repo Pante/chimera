@@ -39,9 +39,8 @@ class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionPr
     
     @Override
     protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
-        // Fucking nasty workaround which Mojang abused using raw types. Then again, the name unobsfucated name is safelySwap(..).
-        // It only works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
-        // To fix this, Java would require covariant generics
+        // Fucking nasty workaround in whcih Mojang abused using raw types. It only 
+        // works because CommandListenerWrapper is the sole implementation of ICompleteionProvider.
         SuggestionProvider provider = command.getCustomSuggestions();
         return provider == null ? null: CompletionProviders.b(provider);
     }

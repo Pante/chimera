@@ -89,7 +89,7 @@ public class TreeWalker<T, R> {
         return result;
     }
     
-    protected void redirect(CommandNode<T> destination, CommandNode<R> result, @Nullable T source) {
+    protected void redirect(@Nullable CommandNode<T> destination, CommandNode<R> result, @Nullable T source) {
         if (destination != null && result instanceof Mutable<?>) {
             ((Mutable<R>) result).setRedirect(map(destination, source));
         }

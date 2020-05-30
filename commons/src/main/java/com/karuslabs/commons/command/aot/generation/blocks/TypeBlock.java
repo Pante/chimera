@@ -36,7 +36,7 @@ public class TypeBlock {
     }
     
     
-    public void start(String pack, String type) {
+    public void start(String pack, String name) {
         builder.setLength(0);
         if (!pack.isEmpty()) {
             builder.append("package ").append(pack).append(";\n\n");
@@ -49,7 +49,7 @@ public class TypeBlock {
         builder.append("/**\n");
         builder.append(" * This file was generated at ").append(LocalDateTime.now()).append(" using Chimera 4.6.0\n");
         builder.append(" */\n");
-        builder.append("public class ").append(type).append(" {\n\n");
+        builder.append("public class ").append(name).append(" {\n\n");
         builder.append("    private static final Predicate<CommandSender> REQUIREMENT = s -> true;\n\n");
     }
     

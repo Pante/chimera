@@ -94,7 +94,7 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
     }
     
     
-    public DispatcherMap getDispatcherMap() {
+    public DispatcherMap map() {
         return map;
     }
     

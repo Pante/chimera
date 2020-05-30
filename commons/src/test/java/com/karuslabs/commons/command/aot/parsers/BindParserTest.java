@@ -70,7 +70,7 @@ class BindParserTest {
         
         parser.parse(method);
         
-        verify(parser).match(any(), any(), any());
+        verify(parser).match(any(), any());
     }    
     
     
@@ -80,8 +80,8 @@ class BindParserTest {
         
         parser.parse(method);
         
-        verify(parser, times(0)).matchAny(any(), any(), any());
-        verify(parser, times(0)).match(any(), any(), any());
+        verify(parser, times(0)).matchAny(any(), any());
+        verify(parser, times(0)).match(any(), any());
     }
     
     
@@ -117,7 +117,7 @@ class BindParserTest {
     
     @Test
     void matchAny() {
-        doNothing().when(parser).resolve(any(), any(), any());
+        doNothing().when(parser).resolve(any(), any());
         
         var argument = Token.argument(mock(Element.class), "<child>", "child");
         var other = Token.literal(mock(Element.class), "child", "child", Set.of());
@@ -125,53 +125,53 @@ class BindParserTest {
         token.add(environment, child);
         token.add(environment, grandchild).add(environment, argument).add(environment, other);
         
-        parser.matchAny(method, token, bindingChild);
+        parser.matchAny(bindingChild, token);
         
-        verify(parser, times(2)).resolve(any(), any(), any());
-        verify(parser).resolve(method, child, bindingChild.location);
-        verify(parser).resolve(method, other, bindingChild.location);
+        verify(parser, times(2)).resolve(any(), any());
+        verify(parser).resolve(bindingChild.location, child);
+        verify(parser).resolve(bindingChild.location, other);
     }
     
     
     @Test
     void match() {
-        doNothing().when(parser).resolve(any(), any(), any());
+        doNothing().when(parser).resolve(any(), any());
         
         token.add(environment, child).add(environment, grandchild);
         
-        parser.match(method, token, List.of(bindingChild, bindingGrandchild));
+        parser.match(List.of(bindingChild, bindingGrandchild), token);
         
-        verify(parser).resolve(method, grandchild, bindingGrandchild.location);
+        verify(parser).resolve(bindingGrandchild.location, grandchild);
     }
     
     
     @Test
     void match_nothing() {
-        doNothing().when(parser).resolve(any(), any(), any());
+        doNothing().when(parser).resolve(any(), any());
         
         token.add(environment, child);
         
-        parser.match(method, token, List.of(bindingChild, bindingGrandchild));
+        parser.match(List.of(bindingChild, bindingGrandchild), token);
         
-        verify(environment).error(method, "\"child grandchild\" does not exist");
-        verify(parser, times(0)).resolve(any(), any(), any());
+        verify(environment).error(bindingGrandchild.location, "\"child grandchild\" does not exist");
+        verify(parser, times(0)).resolve(any(), any());
     }
     
     
     @Test
     void resolve_method() {
-        parser.resolve(method, token, type);
+        parser.resolve(method, token);
         
-        verify(parser.method).resolve(method, token, type);
+        verify(parser.method).resolve(method, token);
         verifyNoInteractions(environment);
     }
     
     
     @Test
     void resolve_variable() {
-        parser.resolve(variable, token, type);
+        parser.resolve(variable, token);
         
-        verify(parser.variable).resolve(variable, token, type);
+        verify(parser.variable).resolve(variable, token);
         verifyNoInteractions(environment);
     }
     
@@ -180,7 +180,7 @@ class BindParserTest {
     void resolve_error() {
         Element element = when(mock(Element.class).getKind()).thenReturn(ElementKind.CLASS).getMock();
         
-        parser.resolve(element, token, type);
+        parser.resolve(element, token);
         
         verify(environment).error(element, "@Bind annotation should not be used on a " + ElementKind.CLASS);
     }

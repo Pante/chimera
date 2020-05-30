@@ -38,7 +38,7 @@ import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-class NativeMap implements DispatcherMap {
+class PlatformMap implements DispatcherMap {
     
     String prefix;
     Plugin plugin;
@@ -46,7 +46,7 @@ class NativeMap implements DispatcherMap {
     @Nullable CommandDispatcher<CommandSender> dispatcher;
     
     
-    NativeMap(String prefix, Plugin plugin, CraftCommandMap map) {
+    PlatformMap(String prefix, Plugin plugin, CraftCommandMap map) {
         this.prefix = prefix;
         this.plugin = plugin;
         this.map = map;

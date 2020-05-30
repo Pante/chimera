@@ -56,7 +56,7 @@ public class VariableResolver extends Resolver<VariableElement> {
 
     
     @Override
-    public void resolve(VariableElement variable, Token token, Element location) {
+    public void resolve(VariableElement variable, Token token) {
         var modifiers = variable.getModifiers();
         if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
             environment.error(variable, "Field should be public and final");
@@ -65,16 +65,16 @@ public class VariableResolver extends Resolver<VariableElement> {
         
         var type = variable.asType();
         if (types.isSubtype(type, command)) {
-            token.bind(environment, COMMAND, location);
+            token.bind(environment, COMMAND, variable);
             
         } else if (types.isSubtype(type, argumentType)) {
-            token.bind(environment, TYPE, location);
+            token.bind(environment, TYPE, variable);
             
         } else if (types.isSubtype(type, requirement)) {
-            token.bind(environment, REQUIREMENT, location);
+            token.bind(environment, REQUIREMENT, variable);
             
         } else if (types.isSubtype(type, suggestions)) {
-            token.bind(environment, SUGGESTIONS, location);
+            token.bind(environment, SUGGESTIONS, variable);
             
         } else {
             environment.error(variable, quote(variable) + " should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");

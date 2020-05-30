@@ -71,7 +71,7 @@ public class Generator {
     }
     
     
-    public String descend(Token token) {
+    String descend(Token token) {
         var values = token.children.values();
         var children = new ArrayList<String>(values.size());
         

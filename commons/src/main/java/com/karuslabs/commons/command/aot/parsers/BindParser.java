@@ -66,29 +66,31 @@ public class BindParser extends Parser {
         
         for (var binding : bindings) {
             var tokens = lexer.lex(environment, element, binding);
-            if (tokens.size() == 1 && !matchAny(element, root, tokens.get(0))) {
+            if (tokens.size() == 1 && !matchAny(tokens.get(0), root)) {
                 environment.error(element, format(tokens.get(0), "does not exist"));
 
             } else if (tokens.size() > 1) {
-                match(element, root, tokens);
+                match(tokens, root);
             }
         }
     }
     
-    boolean matchAny(Element element, Token current, Token binding) {
+    boolean matchAny(Token binding, Token current) {
         var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
         if (match) {
-            resolve(element, current, binding.location);
+            resolve(binding.location, current);
         }
         
         for (var child : current.children.values()) {
-            match |= matchAny(element, child, binding);
+            match |= matchAny(binding, child);
         }
         
         return match;
     }
     
-    void match(Element element, Token current, List<Token> bindings) {
+    void match(List<Token> bindings, Token current) {
+        var element = bindings.get(bindings.size() - 1).location;
+        
         for (var binding : bindings) {
             current = current.children.get(binding.lexeme);
             if (current == null) {
@@ -102,16 +104,16 @@ public class BindParser extends Parser {
             }
         }
         
-        resolve(element, current, bindings.get(bindings.size() - 1).location);
+        resolve(element, current);
     }
     
     
-    void resolve(Element element, Token token, Element location) {
+    void resolve(Element element, Token token) {
         if (element instanceof ExecutableElement) {
-            method.resolve((ExecutableElement) element, token, location);
+            method.resolve((ExecutableElement) element, token);
             
         } else if (element instanceof VariableElement) {
-            variable.resolve((VariableElement) element, token, location);
+            variable.resolve((VariableElement) element, token);
             
         } else {
             environment.error(element, "@Bind annotation should not be used on a " + element.getKind().toString());

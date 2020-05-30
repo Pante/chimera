@@ -38,8 +38,8 @@ public class CommandLexer implements Lexer {
     
     
     public CommandLexer(Lexer argument, Lexer literal) {
-        this.literal = literal;
         this.argument = argument;
+        this.literal = literal;
     }
     
     

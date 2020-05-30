@@ -41,7 +41,7 @@ import static javax.lang.model.element.Modifier.ABSTRACT;
 public abstract class PluginParser<T> extends Parser<T> {
     
     public static PluginParser<Class<?>> type(Environment<Class<?>> environment) {
-        return new ClassPluginResolver(environment);
+        return new ClassPluginParser(environment);
     }
     
     public static PluginParser<Element> element(Environment<Element> environment, Elements elements, Types types) {
@@ -103,12 +103,12 @@ public abstract class PluginParser<T> extends Parser<T> {
 }
 
 
-class ClassPluginResolver extends PluginParser<Class<?>> {
+class ClassPluginParser extends PluginParser<Class<?>> {
     
     static final int ABSTRACT = 0x00000400;
 
     
-    ClassPluginResolver(Environment<Class<?>> environment) {
+    ClassPluginParser(Environment<Class<?>> environment) {
         super(environment);
     }
     

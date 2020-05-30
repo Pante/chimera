@@ -99,7 +99,7 @@ class MethodResolverTest {
         
         var token = mock(Token.class);
         
-        resolver.resolve(method, token, method);
+        resolver.resolve(method, token);
         
         verify(token).bind(environment, binding, method);
     }
@@ -122,7 +122,7 @@ class MethodResolverTest {
         
         when(method.getModifiers()).thenReturn(modifiers);
         
-        resolver.resolve(method, mock(Token.class), mock(Element.class));
+        resolver.resolve(method, mock(Token.class));
         
         verify(environment).error(method, error);
     }

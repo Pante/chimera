@@ -96,10 +96,10 @@ public class Token {
     public void bind(Environment environment, Binding binding, Element location) {
         var existing = bindings.get(binding);
         if (existing != null) {
-            environment.error(existing, binding.article + " " + binding.signature + " is already bound to " + quote(toString()));
+            environment.error(existing, binding.article + " " + binding.type + " is already bound to " + quote(toString()));
             
         } else if (type != Type.ARGUMENT && (binding == Binding.TYPE || binding == Binding.SUGGESTIONS)) {
-            environment.error(location, binding.article + " " + binding.signature + " should not be bound to a literal");
+            environment.error(location, binding.article + " " + binding.type + " should not be bound to a literal");
        
         } else {
             bindings.put(binding, location);

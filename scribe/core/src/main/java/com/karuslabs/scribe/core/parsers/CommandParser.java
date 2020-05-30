@@ -45,6 +45,7 @@ public class CommandParser<T> extends Parser<T> {
             this.value = value;
         }
         
+        @Override
         public String toString() {
             return value;
         }

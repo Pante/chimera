@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.annotations.Immutable;
+import com.karuslabs.annotations.*;
 import com.karuslabs.scribe.core.Environment;
 
 import java.lang.annotation.Annotation;
@@ -59,10 +59,12 @@ public abstract class Parser<T> {
         clear();
     }
     
+    @VisibleForOverride
     protected void check(Set<T> types) {}
   
     protected abstract void parse(T type);     
     
+    @VisibleForOverride
     protected void clear() {}
     
     

@@ -83,7 +83,7 @@ class VariableResolverTest {
         
         var token = mock(Token.class);
         
-        resolver.resolve(variable, token, variable);
+        resolver.resolve(variable, token);
         
         verify(token).bind(environment, binding, variable);
     }
@@ -103,7 +103,7 @@ class VariableResolverTest {
     void resolve_errors(VariableElement variable, String error) {
         when(environment.types.isSubtype(any(), any())).thenReturn(false);
         
-        resolver.resolve(variable, mock(Token.class), variable);
+        resolver.resolve(variable, mock(Token.class));
         
         verify(environment).error(variable, error);
     }
