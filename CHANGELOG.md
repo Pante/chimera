@@ -105,7 +105,7 @@ more information.
 - Add `Point`
 - Add `Type.box(Class<?>)`
 - Add `Type.unbox(Class<?>)`
-- Add `Type.VOID'
+- Add `Type.VOID`
 - Change `Trie.prefixed(String, Function<Entry<String, V>, T>, C) from public to package-private
 - Change boxed and unboxed values of `TYPE` constant in `Type` to `Object`
 - Change `Vectors.LOCATION` from public to package private
