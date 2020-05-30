@@ -120,7 +120,7 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
      * 
      * @return the {@code DispatcherMap} 
      */
-    public DispatcherMap getDispatcherMap() {
+    public DispatcherMap map() {
         return map;
     }
     

@@ -92,11 +92,12 @@ class GeneratorTest {
         
         verify(environment, times(0)).error(any(), any());
         
-        var contents = Files.readString(Paths.get(getClass().getClassLoader().getResource("aot/generation/Commands.java").toURI()), StandardCharsets.UTF_8);
+        // Don't you just love issues with Windows replacing LF with CRLF?
+        var expected = Files.readString(Paths.get(getClass().getClassLoader().getResource("aot/generation/Commands.java").toURI()), StandardCharsets.UTF_8);
+        expected = expected.replaceAll("\\r", "");
         
-        difference(contents, writer.toString().replaceFirst("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{0,9})", "test-time"));
-        
-        assertEquals(contents, writer.toString().replaceFirst("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{0,9})", "test-time"));
+        var actual = writer.toString().replaceFirst("(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{0,9})", "test-time").replaceAll("\\r", "");
+        assertEquals(expected, actual);
     }
     
     

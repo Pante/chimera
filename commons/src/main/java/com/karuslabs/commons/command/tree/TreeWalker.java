@@ -158,7 +158,7 @@ public class TreeWalker<T, R> {
      * @param result the result to be redirected
      * @param source the source
      */
-    protected void redirect(CommandNode<T> destination, CommandNode<R> result, @Nullable T source) {
+    protected void redirect(@Nullable CommandNode<T> destination, CommandNode<R> result, @Nullable T source) {
         if (destination != null && result instanceof Mutable<?>) {
             ((Mutable<R>) result).setRedirect(map(destination, source));
         }

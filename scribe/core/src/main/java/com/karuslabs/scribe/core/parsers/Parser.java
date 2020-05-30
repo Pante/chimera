@@ -23,7 +23,7 @@
  */
 package com.karuslabs.scribe.core.parsers;
 
-import com.karuslabs.annotations.Immutable;
+import com.karuslabs.annotations.*;
 import com.karuslabs.scribe.core.Environment;
 
 import java.lang.annotation.Annotation;
@@ -113,6 +113,7 @@ public abstract class Parser<T> {
      * 
      * @param types the annotated types to be validated
      */
+    @VisibleForOverride
     protected void check(Set<T> types) {}
   
     /**
@@ -130,6 +131,7 @@ public abstract class Parser<T> {
      * <br>
      * Does nothing.
      */
+    @VisibleForOverride
     protected void clear() {}
     
     

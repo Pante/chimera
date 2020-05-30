@@ -76,7 +76,7 @@ public abstract class Resolver<T extends Element> {
      * @param element the element
      * @param token the token
      */
-    public abstract void resolve(T element, Token token, Element location);
+    public abstract void resolve(T element, Token token);
     
     
     /**

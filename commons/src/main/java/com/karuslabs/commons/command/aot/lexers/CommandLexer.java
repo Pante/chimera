@@ -49,8 +49,8 @@ public class CommandLexer implements Lexer {
      * @param literal the lexical analyzer for literal tokens
      */
     public CommandLexer(Lexer argument, Lexer literal) {
-        this.literal = literal;
         this.argument = argument;
+        this.literal = literal;
     }
     
     

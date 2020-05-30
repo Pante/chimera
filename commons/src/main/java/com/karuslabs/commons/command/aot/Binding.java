@@ -41,13 +41,13 @@ public enum Binding {
     /**
      * The type that this binding represents.
      */
-    public final String signature;
+    public final String type;
     private final String value;
     
 
-    private Binding(String article, String signature, String value) {
+    private Binding(String article, String type, String value) {
         this.article = article;
-        this.signature = signature;
+        this.type = type;
         this.value = value;
     }
     

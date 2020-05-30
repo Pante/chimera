@@ -95,7 +95,7 @@ public abstract class PointType extends DynamicExampleType<Point> {
      * @param axis the axis
      * @throws CommandSyntaxException if the input was invalid
      */
-    Point parse(StringReader reader, Point point, Point.Axis axis) throws CommandSyntaxException {
+    void parse(StringReader reader, Point point, Axis axis) throws CommandSyntaxException {
         reader.skipWhitespace();
         
         if (point.rotation() ^ (reader.peek() == '^')) {
@@ -110,7 +110,7 @@ public abstract class PointType extends DynamicExampleType<Point> {
             point.relative(axis, true);
         }
         
-        return point.set(axis, reader.readDouble());  
+        point.set(axis, reader.readDouble());  
     }
     
 }

@@ -81,7 +81,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
      * @param token the token
      */
     @Override
-    public void resolve(ExecutableElement method, Token token, Element location) {
+    public void resolve(ExecutableElement method, Token token) {
         var modifiers = method.getModifiers();
         if (!modifiers.contains(PUBLIC)) {
             environment.error(method, "Method should be public");
@@ -89,13 +89,13 @@ public class MethodResolver extends Resolver<ExecutableElement> {
         }
         
         if (command(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
-            token.bind(environment, COMMAND, location);
+            token.bind(environment, COMMAND, method);
 
         } else if (predicate(method.getReturnType(), method.getParameters())) {
-            token.bind(environment, REQUIREMENT, location);
+            token.bind(environment, REQUIREMENT, method);
             
         } else if (suggestions(method.getReturnType(), method.getParameters()) && exceptions(method.getThrownTypes())) {
-            token.bind(environment, SUGGESTIONS, location);
+            token.bind(environment, SUGGESTIONS, method);
             
         } else {
             environment.error(method, "Signature should match Command<CommandSender>, Execution<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");

@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A {@code DispatcherMap} that wraps and registers {@code LiteralCommandNode}s
  * to Spigot's {@code CommandMap}.
  */
-class NativeMap implements DispatcherMap {
+class PlatformMap implements DispatcherMap {
     
     String prefix;
     Plugin plugin;
@@ -57,7 +57,7 @@ class NativeMap implements DispatcherMap {
      * @param plugin the owning plugin
      * @param map the map to which commands are registered
      */
-    NativeMap(String prefix, Plugin plugin, CraftCommandMap map) {
+    PlatformMap(String prefix, Plugin plugin, CraftCommandMap map) {
         this.prefix = prefix;
         this.plugin = plugin;
         this.map = map;

@@ -77,11 +77,11 @@ public class BindParser extends Parser {
         
         for (var binding : bindings) {
             var tokens = lexer.lex(environment, element, binding);
-            if (tokens.size() == 1 && !matchAny(element, root, tokens.get(0))) {
+            if (tokens.size() == 1 && !matchAny(tokens.get(0), root)) {
                 environment.error(element, format(tokens.get(0), "does not exist"));
 
             } else if (tokens.size() > 1) {
-                match(element, root, tokens);
+                match(tokens, root);
             }
         }
     }
@@ -92,19 +92,19 @@ public class BindParser extends Parser {
      * and {@code binding} matches, bind {@code binding} which represents a variable 
      * or method to {@code current}.
      * 
-     * @param current the current token that represents a command
      * @param binding the token that represents a variable or method
+     * @param current the current token that represents a command
      * @return {@code true} if any of {@code current} or its children matches
      *         {@code binding}; else {@code false}
      */
-    boolean matchAny(Element element, Token current, Token binding) {
+    boolean matchAny(Token binding, Token current) {
         var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
         if (match) {
-            resolve(element, current, binding.location);
+            resolve(binding.location, current);
         }
         
         for (var child : current.children.values()) {
-            match |= matchAny(element, child, binding);
+            match |= matchAny(binding, child);
         }
         
         return match;
@@ -116,10 +116,12 @@ public class BindParser extends Parser {
      * the sequence of binding tokens. If so, bind the last token in {@code binding}
      * which represents a variable or method to {@code current}.
      * 
-     * @param current the current token that represents a command
      * @param bindings the tokens that represent a variable or method
+     * @param current the current token that represents a command
      */
-    void match(Element element, Token current, List<Token> bindings) {
+    void match(List<Token> bindings, Token current) {
+        var element = bindings.get(bindings.size() - 1).location;
+        
         for (var binding : bindings) {
             current = current.children.get(binding.lexeme);
             if (current == null) {
@@ -133,7 +135,7 @@ public class BindParser extends Parser {
             }
         }
         
-        resolve(element, current, bindings.get(bindings.size() - 1).location);
+        resolve(element, current);
     }
     
     
@@ -141,15 +143,15 @@ public class BindParser extends Parser {
      * Binds {@code binding} to {@code token} if {@code binding} represents a
      * variable or method.
      * 
+     * @param element an element that represents a variable or method to bind 
      * @param token the token that represents a command
-     * @param binding an element that represents a variable or method to bind 
      */
-    void resolve(Element element, Token token, Element location) {
+    void resolve(Element element, Token token) {
         if (element instanceof ExecutableElement) {
-            method.resolve((ExecutableElement) element, token, location);
+            method.resolve((ExecutableElement) element, token);
             
         } else if (element instanceof VariableElement) {
-            variable.resolve((VariableElement) element, token, location);
+            variable.resolve((VariableElement) element, token);
             
         } else {
             environment.error(element, "@Bind annotation should not be used on a " + element.getKind().toString());

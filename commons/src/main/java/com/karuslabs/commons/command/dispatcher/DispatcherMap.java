@@ -31,7 +31,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A {@code DispatcherMap} wraps and registers {@code LiteralCommandNode}s to Spigot.
+ * A {@code DispatcherMap} wraps and registers {@code LiteralCommandNode}s to the
+ * platform..
  */
 public interface DispatcherMap {
     

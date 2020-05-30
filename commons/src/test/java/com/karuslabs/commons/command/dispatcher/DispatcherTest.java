@@ -85,7 +85,7 @@ class DispatcherTest {
         var dispatcher = Dispatcher.of(plugin);
         
         verify(services).register(any(), any(), any(), any());
-        assertSame(dispatcher, ((NativeMap) dispatcher.getRoot().getDispatcherMap()).dispatcher);
+        assertSame(dispatcher, ((PlatformMap) dispatcher.getRoot().map()).dispatcher);
     }
     
     

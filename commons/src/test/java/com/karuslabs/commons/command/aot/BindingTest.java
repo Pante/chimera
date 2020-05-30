@@ -38,7 +38,7 @@ class BindingTest {
     @MethodSource("fields")
     void fields(Binding binding, String article, String signature, String value) {
         assertEquals(article, binding.article);
-        assertEquals(signature, binding.signature);
+        assertEquals(signature, binding.type);
         assertEquals(value, binding.toString());
     }
     

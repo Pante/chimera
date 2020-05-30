@@ -1,6 +1,6 @@
 ## Next Release - Boy, and as the years go by
 
-This update focuses on Quality of Life and retrofitting old classes/packages
+This update focuses on inreoducting AOT command annotations in addition to quality of Life and retrofitting old classes/packages.
 
 Big Ol' list of changes:
 
@@ -121,6 +121,11 @@ more information.
 - Remove `com.karuslabs.commons.util.locale.spi`
 - Remove dependency on `lingua-franca`
 
+
+### Scribe
+
+Error and warning messages have been overhauled to improve readability.
+
 **Scribe Annotations**
 - Change `Default.value` from public to private
 - Change `Version.version` from public to private
@@ -133,11 +138,20 @@ more information.
 - Remove `Messages`
 
 **Scribe-Maven-Plugin**
+- Add `MavenEnvironment`
+- Add `ScribeMojo.valid(MavenEnvironment)`
+- Change `Messages` to `Console`
+- Change `MavenProcessor(Project, ClassGraph)` to `MavenProcessor(Environment, ClassGraph)`
+- Change `ScribeMojo.project()` from protected to package-private
 - Fix failed execution caused by project's dependencies not getting resolved
+- Remove `ScribeMojo.log(List<Message<Class?>>)`
+
+**Scribe Standalone**
+- Add `StandaloneEnvironment`
 
 **Others**
 - Add `CHANGELOG.md`
-- Finally changed the project's banner
+- Change the project's banner
 - Fix incorrect copyright header in files
 
 

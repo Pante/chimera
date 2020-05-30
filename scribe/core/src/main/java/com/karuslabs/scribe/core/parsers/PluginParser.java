@@ -66,7 +66,7 @@ public abstract class PluginParser<T> extends Parser<T> {
      * @return a {@code PluginParser} for classes
      */
     public static PluginParser<Class<?>> type(Environment<Class<?>> environment) {
-        return new ClassPluginResolver(environment);
+        return new ClassPluginParser(environment);
     }
     
     /**
@@ -167,12 +167,12 @@ public abstract class PluginParser<T> extends Parser<T> {
 /**
  * A {@code PluginParser} that parses annotations on a class.
  */
-class ClassPluginResolver extends PluginParser<Class<?>> {
+class ClassPluginParser extends PluginParser<Class<?>> {
     
     static final int ABSTRACT = 0x00000400;
 
     
-    ClassPluginResolver(Environment<Class<?>> environment) {
+    ClassPluginParser(Environment<Class<?>> environment) {
         super(environment);
     }
     
