@@ -179,8 +179,8 @@
                     <additionalOptions>-html5</additionalOptions>
                     <links>
                         <link>https://repo.karuslabs.com/repository/brigadier/</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>
+<!--                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>-->
                         <link>https://hub.spigotmc.org/javadocs/spigot</link>
                     </links>
                 </configuration>
