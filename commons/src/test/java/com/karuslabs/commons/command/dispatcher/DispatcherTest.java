@@ -85,7 +85,7 @@ class DispatcherTest {
         var dispatcher = Dispatcher.of(plugin);
         
         verify(services).register(any(), any(), any(), any());
-        assertSame(dispatcher, ((PlatformMap) dispatcher.getRoot().map()).dispatcher);
+        assertSame(dispatcher, ((SpigotMap) dispatcher.getRoot().map()).dispatcher);
     }
     
     

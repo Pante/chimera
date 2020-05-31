@@ -37,10 +37,10 @@ import org.bukkit.command.*;
 public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {
     
     private String prefix;
-    private DispatcherMap map;
+    private PlatformMap map;
     
     
-    public Root(String prefix, DispatcherMap map) {
+    public Root(String prefix, PlatformMap map) {
         this.prefix = prefix;
         this.map = map;
     }
@@ -94,7 +94,7 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
     }
     
     
-    public DispatcherMap map() {
+    public PlatformMap map() {
         return map;
     }
     

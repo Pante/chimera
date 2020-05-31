@@ -43,14 +43,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class PlatformMapTest {
+class SpigotMapTest {
     
     static final String PREFIX = "prefix";
     
     Plugin plugin = mock(Plugin.class);
     CraftCommandMap craftmap = spy(new CraftCommandMap(mock(Server.class)));
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
-    PlatformMap map;
+    SpigotMap map;
     
     Literal<CommandSender> literal = Literal.of("literal").alias("l").build();
     LiteralCommandNode<CommandSender> node = mock(LiteralCommandNode.class);
@@ -58,7 +58,7 @@ class PlatformMapTest {
     
     @BeforeEach
     void before() {
-        map = new PlatformMap(PREFIX, plugin, craftmap);
+        map = new SpigotMap(PREFIX, plugin, craftmap);
         map.dispatcher = dispatcher;
     }
     

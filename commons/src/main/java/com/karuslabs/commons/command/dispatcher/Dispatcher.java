@@ -60,7 +60,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         
         var synchronizer = Synchronizer.of(plugin);
         
-        var map = new PlatformMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
+        var map = new SpigotMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
         var root = new Root(prefix, map);
         var dispatcher = new Dispatcher(server, root, synchronizer);
         map.dispatcher = dispatcher;

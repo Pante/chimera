@@ -1,6 +1,7 @@
-## Next Release - Boy, and as the years go by
+## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
-This update focuses on inreoducting AOT command annotations in addition to quality of Life and retrofitting old classes/packages.
+This update focuses on introducing AOT-compiled command annotations in addition 
+to quality of Life and retrofitting old classes/packages.
 
 Big Ol' list of changes:
 
@@ -26,11 +27,11 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 **Commands**
 - Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
 - Add `Dispatcher.register(Map<String, CommandNode<CommandSender>>)`
-- Add `DispatcherMap`
 - Add `DynamicExampleType`
-- Add `NativeMap`
 - Add `Nodes`
+- Add `PlatformMap`
 - Add `PulseListener`
+- Add `SpigotMap`
 - Add `SynchronizationListener`
 - Add `TreeWalker<T, R>`
 - Add `Type.listSuggestions(S, CommandContext<S>, SugegstionsBuilder)`
