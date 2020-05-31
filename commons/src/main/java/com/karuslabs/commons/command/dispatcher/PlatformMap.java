@@ -23,98 +23,35 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.tree.nodes.Aliasable;
-
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import java.util.*;
-
-import org.bukkit.command.*;
-import org.bukkit.plugin.Plugin;
-
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
+import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A {@code DispatcherMap} that wraps and registers {@code LiteralCommandNode}s
- * to Spigot's {@code CommandMap}.
+ * A {@code DispatcherMap} wraps and registers {@code LiteralCommandNode}s to the
+ * platform.
  */
-class PlatformMap implements DispatcherMap {
-    
-    String prefix;
-    Plugin plugin;
-    CraftCommandMap map;
-    @Nullable CommandDispatcher<CommandSender> dispatcher;
-    
-    
+public interface PlatformMap {
+
     /**
-     * Creates a {@code NativeMap} with the given parameters.
-     * 
-     * @param prefix the prefix
-     * @param plugin the owning plugin
-     * @param map the map to which commands are registered
-     */
-    PlatformMap(String prefix, Plugin plugin, CraftCommandMap map) {
-        this.prefix = prefix;
-        this.plugin = plugin;
-        this.map = map;
-    }
-    
-    
-    @Override
-    public @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command) {
-        // We don't need to check if map contains "prefix:command_name" since Spigot will
-        // always override it
-        if (map.getKnownCommands().containsKey(command.getName())) {
-            return null;
-        }
-        
-        var wrapped = wrap(command);
-        map.register(prefix, wrapped);
-        return wrapped;
-    }
-    
-    
-    @Override
-    public @Nullable DispatcherCommand unregister(String name) {
-        var commands = map.getKnownCommands();
-        var command = commands.get(name);
-        if (!(command instanceof DispatcherCommand)) {
-            return null;
-        }
-        
-        commands.remove(name, command);
-        commands.remove(prefix + ":" + name, command);
-        
-        for (var alias : command.getAliases()) {
-            commands.remove(alias, command);
-            commands.remove(prefix + ":" + alias, command);
-        }
-        
-        command.unregister(map);
-        
-        return (DispatcherCommand) command;
-    }
-    
-    
-    /**
-     * Creates a {@code DispatcherCommand} that represents the given command.
+     * Registers the given command to the platform.
      * 
      * @param command the command
-     * @return a {@code DispatcherCommand} that represents {@code command}
+     * @return a {@code DispatcherCommand} that represents the given command, or
+     *         {@code null} if the command could not be registered
      */
-    DispatcherCommand wrap(LiteralCommandNode<CommandSender> command) {
-        var aliases = new ArrayList<String>();
-        if (command instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<?>) command).aliases()) {
-                aliases.add(alias.getName());
-            }
-        }
-        
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
-    }
-    
+    @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command);
+
+    /**
+     * Removes the given command from the platform.
+     * 
+     * @param name the name of the command
+     * @return a {@code DispatcherCommand} that represents the removed command,
+     *         or {@code null} if the command was not registered
+     */
+    @Nullable DispatcherCommand unregister(String name);
+
 }

@@ -41,7 +41,7 @@ import org.bukkit.command.*;
 public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {
     
     private String prefix;
-    private DispatcherMap map;
+    private PlatformMap map;
     
     
     /**
@@ -49,9 +49,9 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
      * plugin as a fallback prefix.
      * 
      * @param prefix the fallback prefix
-     * @param map the {@code DispatcherMap}
+     * @param map the {@code PlatformMap}
      */
-    public Root(String prefix, DispatcherMap map) {
+    public Root(String prefix, PlatformMap map) {
         this.prefix = prefix;
         this.map = map;
     }
@@ -116,11 +116,11 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
     
     
     /**
-     * Returns the {@code DispatcherMap}.
+     * Returns the {@code PlatformMap}.
      * 
-     * @return the {@code DispatcherMap} 
+     * @return the {@code PlatformMap} 
      */
-    public DispatcherMap map() {
+    public PlatformMap map() {
         return map;
     }
     

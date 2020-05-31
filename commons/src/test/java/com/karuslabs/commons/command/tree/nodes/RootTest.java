@@ -43,7 +43,7 @@ import static org.mockito.Mockito.*;
 
 class RootTest {
     
-    DispatcherMap map = mock(DispatcherMap.class);
+    PlatformMap map = mock(PlatformMap.class);
     Root root = new Root("test", map);
     Literal<CommandSender> literal = Literal.of("a").alias("a1").build();
     

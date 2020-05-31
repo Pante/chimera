@@ -1,6 +1,7 @@
-## Next Release - Boy, and as the years go by
+## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
-This update focuses on inreoducting AOT command annotations in addition to quality of Life and retrofitting old classes/packages.
+This update focuses on introducing AOT-compiled command annotations in addition 
+to quality of Life and retrofitting old classes/packages.
 
 Big Ol' list of changes:
 
@@ -26,11 +27,11 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 **Commands**
 - Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
 - Add `Dispatcher.register(Map<String, CommandNode<CommandSender>>)`
-- Add `DispatcherMap`
 - Add `DynamicExampleType`
-- Add `NativeMap`
 - Add `Nodes`
+- Add `PlatformMap`
 - Add `PulseListener`
+- Add `SpigotMap`
 - Add `SynchronizationListener`
 - Add `TreeWalker<T, R>`
 - Add `Type.listSuggestions(S, CommandContext<S>, SugegstionsBuilder)`
@@ -74,6 +75,7 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 - Remove `com.karuslabs.commons.command.types.parser.VectorParser`
 
 **Command Annotations**
+
 Commands annotations have been rewritten to support AOT compilation and be less verbose. Please refer to the wiki for
 more information.
 
@@ -105,7 +107,7 @@ more information.
 - Add `Point`
 - Add `Type.box(Class<?>)`
 - Add `Type.unbox(Class<?>)`
-- Add `Type.VOID'
+- Add `Type.VOID`
 - Change `Trie.prefixed(String, Function<Entry<String, V>, T>, C) from public to package-private
 - Change boxed and unboxed values of `TYPE` constant in `Type` to `Object`
 - Change `Vectors.LOCATION` from public to package private
