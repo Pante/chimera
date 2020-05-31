@@ -68,7 +68,7 @@ public class Token {
 
     
     /**
-     * Creates a {@code Token} with the given parameters that represents an argument.
+     * Creates a {@code Token} that represents an argument with the given parameters.
      * 
      * @param location the location at which this token was declared
      * @param literal the raw value of the declared argument
@@ -80,7 +80,7 @@ public class Token {
     }
     
     /**
-     * Creates a {@code Token} with the given parameters that represents a literal.
+     * Creates a {@code Token} that represents a literal with the given parameters.
      * 
      * @param location the location at which this token was declared
      * @param literal the raw value of the declared literal

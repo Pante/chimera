@@ -33,7 +33,7 @@ import javax.lang.model.element.*;
 
 
 /**
- * A code generator that generates a source file using an AST.
+ * A code generator that generates a source file from an AST.
  */
 public class Generator {
     
@@ -50,7 +50,7 @@ public class Generator {
      * @param resolver the resolver used to resolve the location of the generated
      *                 source file
      * @param type a generator for types in a source file
-     * @param method a generator for types in a type
+     * @param method a generator for methods in a type
      */
     public Generator(Environment environment, SourceResolver resolver, TypeBlock type, MethodBlock method) {
         this.environment = environment;

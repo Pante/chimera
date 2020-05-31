@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
- * Signifies that the annotated target is <a href = "https://docs.oracle.com/javase/9/docs/api/java/lang/doc-files/ValueBased.html">value-based</a>.
+ * Signifies that the annotated type is <a href = "https://docs.oracle.com/javase/9/docs/api/java/lang/doc-files/ValueBased.html">value-based</a>.
  * Annotated types are candidates to be changed to {@code record}s in subsequent Java releases.
  */
 @Documented

@@ -45,6 +45,17 @@
     
     
     <repositories>
+        <!-- We need to include our own repositories to prevent Maven Project Info Reports from going crazy -->
+        <repository>
+            <id>chimera-releases</id>
+            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
+        </repository>
+
+        <repository>
+            <id>chimera-snapshots</id>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
+        </repository>
+        
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -178,10 +189,11 @@
                     <docfilessubdirs>true</docfilessubdirs>
                     <additionalOptions>-html5</additionalOptions>
                     <links>
+                        <link>https://checkerframework.org/api/</link>
+                        <link>https://hub.spigotmc.org/javadocs/spigot</link>
                         <link>https://repo.karuslabs.com/repository/brigadier/</link>
 <!--                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
                         <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>-->
-                        <link>https://hub.spigotmc.org/javadocs/spigot</link>
                     </links>
                 </configuration>
                 <executions> 

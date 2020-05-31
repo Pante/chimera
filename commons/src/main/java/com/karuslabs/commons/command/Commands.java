@@ -78,8 +78,8 @@ public @Static class Commands {
     
     
     /**
-     * Removes the child from the given {@code command} if present. In addition,
-     * the aliases of the child will also be removed if it implements {@link Aliasable}.
+     * Removes the child from the given command. If the child is a {@code Aliasable},
+     * the aliases of the child will also be removed.
      * 
      * @param <T> the type of the source
      * @param command the command which child is to be removed

@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains facilities that assist in creating an annotation processor.
+ * Contains facilities that assist in the creation of an annotation processor.
  */
 package com.karuslabs.annotations.processor;

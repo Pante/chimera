@@ -48,8 +48,6 @@ public class WorldType implements StringType<World> {
      * Returns a world which name matches the string returned by the given {@code StringReader}.
      * A name that contains whitespaces must be enclosed in double quotation marks.
      * 
-     * @see VectorParser#parseWorld(StringReader) 
-     * 
      * @param reader the reader
      * @return a world with the given name
      * @throws CommandSyntaxException if a world with the given name does not exist

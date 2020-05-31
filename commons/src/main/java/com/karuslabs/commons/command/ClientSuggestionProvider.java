@@ -40,7 +40,7 @@ public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender
     
     
     /**
-     * Creates a {@code CompletableFuture} that contains an empty {@code Suggestions}.
+     * Returns a {@code CompletableFuture} that contains an empty {@code Suggestions}.
      * 
      * @param context the context
      * @param builder the builder

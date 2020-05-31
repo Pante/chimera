@@ -70,7 +70,7 @@ public class PermissionParser<T> extends Parser<T> {
     
     /**
      * Validates, processes and adds the {@code Permission} annotation on {@code type} 
-     * to the {@code permissions} section in {@link #resolution}.
+     * to the {@code permissions} section in {@code environment}.
      * 
      * @param type the annotated type
      */

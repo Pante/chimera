@@ -37,19 +37,19 @@ import java.util.regex.Pattern;
 public @Static class Readers {
     
     /**
-     * A RegEx pattern that represents a comma followed by zero or more whitespaces.
+     * A regular expression for a comma followed by zero or more whitespaces.
      */
     public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
     
     
     /**
      * Substrings the input between the current cursor of the {@code StringReader}
-     * and index of the first encountered {@code delimiter}.
+     * and index of the first encountered delimiter.
      * 
      * @param reader the reader
      * @param delimiter the delimiter
      * @return a string between the current cursor and index of the first encountered 
-     *         {@code delimiter}
+     *         delimiter
      */
     public static String until(StringReader reader, char delimiter) {
         var start = reader.getCursor();
@@ -62,7 +62,7 @@ public @Static class Readers {
     
     /**
      * Substrings the input between the current cursor of the {@code StringReader}
-     * and index of any of the {@code delimiters} first encountered.
+     * and index of any of the delimiters first encountered.
      * 
      * @param reader the reader
      * @param delimiters the delimiters
@@ -91,12 +91,12 @@ public @Static class Readers {
     
     /**
      * Substrings the input between the current cursor of the {@code StringReader}
-     * and the index of the character for which the given predicate is first true.
+     * and the index of the character for which the given predicate is {@code true}.
      * 
      * @param reader the reader
      * @param end the predicate
      * @return a string between the current cursor and the index of the character
-     *         for which the predicate is first true
+     *         for which the predicate is {@code true}
      */
     public static String until(StringReader reader, Predicate<Character> end) {
         var start = reader.getCursor();

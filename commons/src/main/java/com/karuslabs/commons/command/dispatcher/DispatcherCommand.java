@@ -36,7 +36,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * A {@link Command} subclass that forwards execution to a underlying {@code CommandDispatcher}.
  * <br><br>
- * <b>Implementation details:</b><br>
+ * <b>Note:</b><br>
  * This class was adapted from Spigot's {@code VanillaCommand}.
  */
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {

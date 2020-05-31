@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
 
 /**
- * Signifies that the annotated class consists of static constants and methods. 
- * Instances of the annotated class should never be created.
+ * Contains classes that handles dispatching of commands.
  */
-@Documented
-@Retention(SOURCE)
-@Target(TYPE)
-public @interface Static {
-    
-}
+package com.karuslabs.commons.command.dispatcher;

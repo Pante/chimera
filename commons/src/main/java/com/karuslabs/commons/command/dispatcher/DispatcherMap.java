@@ -32,12 +32,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A {@code DispatcherMap} wraps and registers {@code LiteralCommandNode}s to the
- * platform..
+ * platform.
  */
 public interface DispatcherMap {
     
     /**
-     * Registers the given command to Spigot.
+     * Registers the given command to the platform.
      * 
      * @param command the command
      * @return a {@code DispatcherCommand} that represents the given command, or
@@ -46,7 +46,7 @@ public interface DispatcherMap {
     @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command);
 
     /**
-     * Removes the given command from Spigot.
+     * Removes the given command from the platform.
      * 
      * @param name the name of the command
      * @return a {@code DispatcherCommand} that represents the removed command,

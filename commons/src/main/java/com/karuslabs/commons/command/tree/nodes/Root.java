@@ -35,7 +35,7 @@ import org.bukkit.command.*;
 
 
 /**
- * A {code RootCommandNode} subclass that facilities the wrapping and registration
+ * A {@code RootCommandNode} subclass that facilities the wrapping and registration
  * of a {@code CommandNode} to a {@code CommandMap}.
  */
 public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {

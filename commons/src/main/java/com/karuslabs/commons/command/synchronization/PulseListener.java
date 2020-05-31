@@ -35,11 +35,12 @@ import org.bukkit.scheduler.BukkitScheduler;
  * this {@code PulseListener} attempts to register a new {@code SynchronizationListener}
  * that is owned by this plugin to the {@code ServiceManager}. 
  * <br><br>
+ * <b>Implementation details:</b><br>
  * If successful, all plugins that require a {@code SynchronizationListener} will 
  * share the one owned by this plugin. Otherwise, the {@code SynchronizationListener}
  * that was registered by another plugin before this {@code PulseLitener} will be
- * used instead. 
- * <br><br>
+ * used instead.
+ * 
  * The order in which new {@code SychronizationListener}s are registered is undefined.
  */
 public class PulseListener implements Listener {
@@ -53,8 +54,8 @@ public class PulseListener implements Listener {
     /**
      * Creates a {@code PulseListener}
      * 
-     * @param synchronizer
-     * @param plugin 
+     * @param synchronizer the synchronizer
+     * @param plugin the owning plugin
      */
     public PulseListener(Synchronizer synchronizer, Plugin plugin) {
         this.synchronizer = synchronizer;

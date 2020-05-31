@@ -127,8 +127,8 @@ public abstract class PluginParser<T> extends Parser<T> {
     
     /**
      * Validates, processes and adds the {@code @Plugin} annotation on {@code type} to key-value pairs
-     * in {@link #resolution}. Infers the {@code name} and {@code version} from
-     * the respective values in {@link #project} if present.
+     * in {@code environment}. Infers the {@code name} and {@code version} from
+     * the respective values in {@code project} if present.
      * 
      * @param type the annotated type
      */

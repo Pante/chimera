@@ -39,7 +39,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A mapper that maps a command of type {@code T} to type {@code R} except for the 
  * children of the command. If the children of a command needs to be mapped too, 
- * a {@link Tree} should be used instead.
+ * a {@link TreeWalker} should be used instead.
  *
  * @param <T> the type of a command
  * @param <R> the resultant type of the mapped command

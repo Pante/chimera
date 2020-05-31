@@ -37,7 +37,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * This class recursively maps a command and its children of type {@code T} to type
  * {@code R}. Traversal of the children and redirected commands is handled by this
- * {@code Tree} while the mapping of individual commands is forwarded to a {@link Mapper}.
+ * {@code TreeWalker} while the mapping of individual commands is forwarded to a {@link Mapper}.
  * 
  * @param <T> the type of a given command
  * @param <R> the resultant type of a mapped command
@@ -122,7 +122,7 @@ public class TreeWalker<T, R> {
      * command. If not present, the command is then mapped and added to {@code mappings}
      * before proceeding to avoid infinite recursion. Mapping of redirected commands 
      * and the children are then forwarded to {@link #redirect(CommandNode, CommandNode, Object)} 
-     * and {@link #descend(CommandNode, CommandNode, Object)} respectively.
+     * and {@link #descend(Collection, CommandNode, Object)} respectively.
      * 
      * @param command the command to be mapped
      * @param source the source, or {@code null} if all commands are permitted
@@ -147,7 +147,7 @@ public class TreeWalker<T, R> {
     }
     
     /**
-     * Recursively maps {@code destination} and redirects {@result} to the mapped
+     * Recursively maps {@code destination} and redirects {@code result} to the mapped
      * command. Does nothing if either {@code destination} is {@code null} or
      * {@code result} is not a {@link Mutable}.
      * <br><br>

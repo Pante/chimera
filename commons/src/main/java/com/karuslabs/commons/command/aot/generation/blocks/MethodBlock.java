@@ -64,9 +64,9 @@ public class MethodBlock {
     
     
     /**
-     * Generates the signature of a method with {@code type} as a parameter
+     * Generates the signature of a method with {@code type} as a parameter.
      * 
-     * @param type the type to be used as a parameter
+     * @param type the type of the parameter
      */
     public void start(CharSequence type) {
         this.type = type;
@@ -84,6 +84,7 @@ public class MethodBlock {
      * 
      * @param token the token
      * @return a local variable
+     * @throws IllegalArgumentException if the token type is neither a argument nor literal
      */
     public String command(Token token) {
         var variable = "command";
@@ -109,7 +110,7 @@ public class MethodBlock {
     
     
     /**
-     * Generates a local variable that represents an argument with the given token.
+     * Generates a local variable that represents an argument, using the given token.
      * 
      * @param variable the variable name
      * @param token the token
@@ -126,7 +127,7 @@ public class MethodBlock {
     }
     
     /**
-     * Generates a local variable that represents a literal with the given token.
+     * Generates a local variable that represents a literal, using the given token.
      * 
      * @param variable the variable name
      * @param token the token
@@ -150,7 +151,8 @@ public class MethodBlock {
     
     
     /**
-     * Generates a parameter for the creation of a local variable using the given token.
+     * Generates a parameter used in the creation of a local variable, using the 
+     * given token.
      * 
      * @param token the token
      * @param binding the binding type

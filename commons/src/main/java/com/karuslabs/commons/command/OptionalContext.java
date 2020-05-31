@@ -35,8 +35,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * A {@code CommandContext} decorator that supports optional arguments. Overridden
- * operations are forwarded to an underlying {@code CommandContext}.
+ * A {@code CommandContext} that supports optional arguments. All operations are 
+ * forwarded to an underlying {@code CommandContext}.
  * <br><br>
  * <b>Implementation details:</b><br>
  * {@code VarHandle}s are used to manipulate the arguments of a {@code CommandContext}.

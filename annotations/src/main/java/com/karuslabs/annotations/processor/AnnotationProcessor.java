@@ -40,15 +40,15 @@ import static javax.tools.Diagnostic.Kind.*;
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
     /**
-     * Provides utility methods for operating on elements.
+     * Provides utility methods for manipulating {@code Element}s.
      */
     protected Elements elements;
     /**
-     * Provides utility methods for operating on types.
+     * Provides utility methods for manipulating {@code TypeMirror}s.
      */
     protected Types types;
     /**
-     * Used to report errors, warnings and other notices.
+     * Used to report errors, warnings and other notes.
      */
     protected Messager messager;
     
@@ -56,8 +56,7 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     /**
      * Initializes this processor and its fields with the processing environment.
      * 
-     * @param environment environment for facilities the tool framework provides 
-     *                    to the processor
+     * @param environment the environment
      */
     @Override
     public void init(ProcessingEnvironment environment) {
@@ -69,7 +68,7 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     
     
     /**
-     * Processes all elements provided in the given round annotated with the
+     * Processes all elements provided in {@code round} annotated with the
      * given annotations.
      * <br><br>
      * <b>Default implementation:</b><br>

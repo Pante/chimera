@@ -32,8 +32,7 @@ import static javax.tools.Diagnostic.Kind.*;
 
 
 /**
- * An environment which contains the ASTs for elements and utilities for reporting
- * errors and warning.
+ * An environment which contains ASTs and utilities for reporting errors and warning.
  */
 public class Environment {
 
@@ -79,7 +78,7 @@ public class Environment {
     
     
     /**
-     * Returns the AST for the given element.
+     * Returns the AST of the given element.
      * 
      * @param element the element
      * @return an AST

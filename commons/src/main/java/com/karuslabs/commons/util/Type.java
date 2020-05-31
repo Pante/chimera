@@ -82,7 +82,7 @@ public enum Type {
      * Returns the unboxed equivalent of the given type.  
      * 
      * @param type a wrapper type for a primitive
-     * @return an unboxed type if {@code type} is a wrapper type; else {@code Object.class}
+     * @return an unboxed type if {@code type} is a wrapper typel else {@code type}
      */
     public static Class<?> unbox(Class<?> type) {
         var unboxed = TYPES.get(type);
@@ -91,7 +91,7 @@ public enum Type {
 
     
     /**
-     * Returns the {@code Type} of the {@code type}, or {@link #TYPE} if the
+     * Returns the {@code Type} of {@code type}, or {@link #TYPE} if the
      * {@code type} is neither primitive nor boxed.
      * 
      * @param type the {@code class}

@@ -53,7 +53,7 @@ public class APIParser<T> extends SingleParser<T> {
 
     
     /**
-     * Processes and adds the {@code API} annotation on {@code type} to {@link #resolution}.
+     * Processes and adds the {@code API} annotation on {@code type} to {@code environment}.
      * Infers the value if {@link API#value} is {@link Version#INFERRED} using; 
      * otherwise defaults to {@link Version#V1_13} if the value cannot be inferred
      * 

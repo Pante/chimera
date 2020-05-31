@@ -29,7 +29,7 @@ import static com.karuslabs.annotations.processor.Messages.format;
 
 
 /**
- * An analyzer that analyzes the AST built by parsers in {@link com.karuslabs.commons.aot.parsers}.
+ * An analyzer that analyzes the ASTs built by parsers in {@link com.karuslabs.commons.command.aot.parsers}.
  */
 public class Analyzer {
     
@@ -37,9 +37,9 @@ public class Analyzer {
   
     
     /**
-     * Creates an {@code Analyzeer} with the given parameters.
+     * Creates an {@code Analyzeer} with the given environment.
      * 
-     * @param environment 
+     * @param environment the environment
      */
     public Analyzer(Environment environment) {
         this.environment = environment;

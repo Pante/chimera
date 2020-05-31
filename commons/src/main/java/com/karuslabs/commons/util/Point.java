@@ -86,7 +86,7 @@ public @ValueType final class Point extends Location {
     
     
     /**
-     * Creates a {@code Position} with the given world and coordinates.
+     * Creates a {@code Point} with the given world and coordinates.
      * 
      * @param world the world
      * @param x the x coordinate
@@ -98,7 +98,7 @@ public @ValueType final class Point extends Location {
     }
 
     /**
-     * Creates a {@code Position} with the given world, coordinates and direction.
+     * Creates a {@code Point} with the given world, coordinates and direction.
      * 
      * @param world the world
      * @param x the x coordinate

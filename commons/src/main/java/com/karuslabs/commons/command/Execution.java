@@ -37,22 +37,21 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 public interface Execution<T> extends Command<T> {
     
     /**
-     * Executes this {@code Executable} in the given {@code context}.
+     * Executes this {@code Execution} in the given {@code context}.
      * 
      * @param source the source
      * @param context the context
-     * @throws CommandSyntaxException if this {@code Executable} could not be executed
+     * @throws CommandSyntaxException if this {@code Execution} could not be executed
      */
     public void execute(T source, OptionalContext<T> context) throws CommandSyntaxException;
     
     
     /**
-     * Forwards execution to {@link #execute(Object, OptionalContext)} with the given 
-     * {@code context}.
+     * Forwards execution to {@link #execute(Object, OptionalContext)}.
      * 
      * @param context the context
      * @return {@link SINGLE_SUCCESS}
-     * @throws CommandSyntaxException if this {@code Executable} could not be executed
+     * @throws CommandSyntaxException if this {@code Execution} could not be executed
      */
     @Override
     public default int run(CommandContext<T> context) throws CommandSyntaxException {

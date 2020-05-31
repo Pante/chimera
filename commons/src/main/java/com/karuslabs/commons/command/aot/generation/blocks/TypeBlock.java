@@ -67,7 +67,7 @@ public class TypeBlock {
     
     
     /**
-     * Appends the generated method to this generated class.
+     * Adds the generated method to this generated class.
      * 
      * @param method the generated method
      */

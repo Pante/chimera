@@ -34,7 +34,7 @@ public @Static class Messages {
      * Creates an error message using the given value and reason.
      * 
      * @param value the subject of the error message
-     * @param reason the reason behind the error
+     * @param reason the reason
      * @return the error message
      */
     public static String format(Object value, String reason) {
@@ -45,8 +45,8 @@ public @Static class Messages {
      * Creates an error message using the given value, reason and resolution.
      * 
      * @param value the subject of the error message
-     * @param reason the reason behind the error
-     * @param resolution a short explanation on how to resolve the error
+     * @param reason the reason
+     * @param resolution a short description of how to resolve the error
      * @return the error message
      */
     public static String format(Object value, String reason, String resolution) {

@@ -23,7 +23,7 @@
  */
 
 /**
- * Contains classes nad utilities that facilitate the generation and compilation 
- * of commands ahead-of-time.
+ * Contains classes and utilities that facilitate the ahead-of-time compilation
+ * of commands.
  */
 package com.karuslabs.commons.command.aot;

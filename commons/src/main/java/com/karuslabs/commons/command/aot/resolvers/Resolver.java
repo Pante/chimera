@@ -52,7 +52,7 @@ public abstract class Resolver<T extends Element> {
      */
     protected Types types;
     /**
-     * A {@code TypeMirro} that represents a {@code CommandSender}.
+     * A {@code TypeMirror} that represents a {@code CommandSender}.
      */
     protected TypeMirror sender;
     
@@ -80,7 +80,8 @@ public abstract class Resolver<T extends Element> {
     
     
     /**
-     * Creates a specialized generic type.
+     * Returns a specialized generic type.
+     * 
      * @param type the generic type
      * @param parameters the type parameters
      * @return a specialized generic type

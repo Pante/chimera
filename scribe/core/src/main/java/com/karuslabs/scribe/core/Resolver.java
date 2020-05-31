@@ -41,7 +41,7 @@ public interface Resolver<T> {
      */
     public static final Resolver<Class<?>> CLASS = new ClassResolver();
     /**
-     * A resolver that resolves annotations on an {#link Element}.
+     * A resolver that resolves annotations on an {@link Element}.
      */
     public static final Resolver<Element> ELEMENT = new ElmeentResolver();
     

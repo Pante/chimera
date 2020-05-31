@@ -34,7 +34,8 @@ import java.util.concurrent.CompletableFuture;
  * An {@code ArgumentType} that has no supported client-side equivalent. 
  * <br><br>
  * <b>Implementation requirement:</b><br>
- * A supported {@code ArgumentType} to which this is mapped must be supported.
+ * {@link mapped()} must return an {@code ArgumentType} that is supported by the
+ * client. Otherwise the client will be disconnected from the server upon connection.
  * 
  * @param <T> the type of the argument
  */

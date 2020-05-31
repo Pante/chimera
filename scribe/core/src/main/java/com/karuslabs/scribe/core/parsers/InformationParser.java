@@ -56,7 +56,7 @@ public class InformationParser<T> extends SingleParser<T> {
     
     /**
      * Validates, processes and adds the {@code @Information} annotation on {@code type}
-     * to {@link #resolution}.
+     * to {@code environment}.
      * 
      * @param type the annotated type
      */
@@ -81,7 +81,7 @@ public class InformationParser<T> extends SingleParser<T> {
     }
     
     /**
-     * Processes and adds the {@code Information} to {@link #environment}.
+     * Processes and adds the {@code Information} to {@code environment}.
      * Infers the values for {@code authors}, {@code description} and {@code website} 
      * from {@code environment.project} if present.
      * 

@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 
 
 /**
- * This class consists of static method and classes to manipulate {@code CommandNodes}.
+ * This class consists of static methods and classes to manipulate {@code CommandNodes}.
  */
 public @Static class Nodes {
 

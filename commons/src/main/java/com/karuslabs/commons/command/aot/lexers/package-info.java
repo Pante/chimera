@@ -24,6 +24,6 @@
 
 /**
  * Contains lexical analyzers for commands declared in annotations provided by
- * {@link com.karuslabs.commons.command.aot.annotaations}.
+ * {@link com.karuslabs.commons.command.aot.annotations}.
  */
 package com.karuslabs.commons.command.aot.lexers;

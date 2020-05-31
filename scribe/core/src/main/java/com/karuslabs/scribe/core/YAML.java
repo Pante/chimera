@@ -64,7 +64,7 @@ public abstract class YAML {
     /**
      * Creates a {@code YAML} with the given project name.
      * 
-     * @param project the project name
+     * @param name the project name
      */
     public YAML(String name) {
         this.name = name;
@@ -72,6 +72,11 @@ public abstract class YAML {
     }
     
     
+    /**
+     * Writes the given mapping to a YAML file.
+     * 
+     * @param mapping the mapping
+     */
     public void write(Map<String, Object> mapping) {
         try (var writer = writer()) {
             writer.append("# This file was generated at " + LocalDateTime.now().format(ISO_DATE_TIME) + " using " + name + " 4.6.0 \n")

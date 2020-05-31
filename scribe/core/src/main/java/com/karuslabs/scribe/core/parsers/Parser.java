@@ -83,7 +83,7 @@ public abstract class Parser<T> {
     
     
     /**
-     * Processes and adds the annotations on {@code types} to {@link #environment}.
+     * Processes and adds the annotations on {@code types} to {@code environment}.
      * <br>
      * <br>
      * <b>Default implementation: </b>
@@ -117,7 +117,7 @@ public abstract class Parser<T> {
     protected void check(Set<T> types) {}
   
     /**
-     * Processes and adds the annotations on {@code type} to {@link #environnment}.
+     * Processes and adds the annotations on {@code type} to {@code environnment}.
      * 
      * @param type the annotated type
      */

@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
 /**
- * Denotes the location of the generated source file. The default value is "Commands.java"
+ * Denotes the location of the generated source file. The default value is {@code Commands.java}
  * in the package of the annotated type.
  */
 @Documented

@@ -91,7 +91,7 @@ public class CommandParser<T> extends Parser<T> {
     
     /**
      * Validates, processes and adds the {@code @Command} annotation on {@code type} to the {@code commands} section
-     * in {@link #resolution}. 
+     * in {@code environment}. 
      * 
      * @param type the type
      */
