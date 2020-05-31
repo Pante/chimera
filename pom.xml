@@ -193,7 +193,7 @@
                         <link>https://hub.spigotmc.org/javadocs/spigot</link>
                         <link>https://repo.karuslabs.com/repository/brigadier/</link>
                         <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/sctibe/scribe-annotations/apidocs/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe/scribe-annotations/apidocs/</link>
                     </links>
                 </configuration>
                 <executions> 
