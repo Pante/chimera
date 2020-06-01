@@ -1,7 +1,7 @@
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
 This update focuses on introducing AOT-compiled command annotations in addition 
-to quality of Life and retrofitting old classes/packages.
+to quality of life changes and retrofitting old classes/packages.
 
 Big Ol' list of changes:
 
