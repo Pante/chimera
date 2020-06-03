@@ -29,17 +29,41 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies a plugin's information which includes its authors, description,
+ * website and prefix.
+ */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface Information {
-        
+    
+    /**
+     * The authors of this plugin.
+     * 
+     * @return the authors
+     */
     String[] authors() default {};
     
+    /**
+     * A description of this plugin.
+     * 
+     * @return a description
+     */
     String description() default "";
     
+    /**
+     * The plugin's website.
+     * 
+     * @return the website
+     */
     String url() default "";
     
+    /**
+     * A prefix that replaces the name of this plugin when logging to console.
+     * 
+     * @return a prefix
+     */
     String prefix() default "";
     
 }

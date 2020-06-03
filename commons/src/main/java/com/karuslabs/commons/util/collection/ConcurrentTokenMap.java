@@ -31,16 +31,45 @@ import java.util.concurrent.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A concurrent {@code TokenMap}.
+ * 
+ * @param <N> the type of the keys
+ * @param <T> the type of the values 
+ */
 public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
+    /**
+     * Creates a {@code ConcurrentTokenMap}.
+     * 
+     * @param <N> the type of the keys
+     * @param <T> the type of the values
+     * @return a {@code ConcurrentTokenMap}
+     */
     public static <N, T> ConcurrentTokenMap<N, T> of() {
         return new ConcurrentHashTokenMap<>();
     }
     
+    /**
+     * Creates a {@code ConcurrentTokenMap} with the given initial capacity.
+     * 
+     * @param <N> the type of the keys
+     * @param <T> the type of the values
+     * @param capacity the initial capacity
+     * @return a {@code ConcurrentTokenMap}
+     */
     public static <N, T> ConcurrentTokenMap<N, T> of(int capacity) {
         return new ConcurrentHashTokenMap<>(capacity);
     }
     
+    /**
+     * Creates a {@code ConcurrentTokenMap} backed by the given map.
+     * 
+     * @param <N> the type of the keys
+     * @param <T> the type of the values
+     * @param map the backing map
+     * @return a {@code ConcurrentTokenMap}
+     */
     public static <N, T> @Delegate ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
         return new ConcurrentProxiedTokenMap<>(map);
     }
@@ -73,6 +102,9 @@ public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
 }
 
 
+/**
+ * A cached, thread local {@code Key} used for look-ups in {@code ConcurrentTokenMap}.
+ */
 class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
     
     static final ThreadLocalKey KEY = new ThreadLocalKey();
@@ -86,6 +118,12 @@ class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
 }
 
 
+/**
+ * A {@code ConcurrentTokenMap} subclass that is also a {@code ConcurrentHashMap}.
+ * 
+ * @param <N> the type of the keys
+ * @param <T> the type of the values 
+ */
 class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentHashTokenMap() {}
@@ -103,6 +141,12 @@ class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>
 }
 
 
+/**
+ * A {@code ConcurrentTokenMap} subclass that delegates execution to a {@code ConcurrentMap}.
+ * 
+ * @param <N> the type of the keys
+ * @param <T> the type of the values 
+ */
 @Delegate class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentMap<Key<N, ? extends T>, T> map;

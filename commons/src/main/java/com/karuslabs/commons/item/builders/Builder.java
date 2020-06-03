@@ -34,6 +34,12 @@ import org.bukkit.inventory.meta.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A {@code ItemStack} builder.
+ * 
+ * @param <Meta> the type of the ItemMeta
+ * @param <Self> {@code this}
+ */
 public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
     ItemStack item;
@@ -46,6 +52,11 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         meta = (Meta) item.getItemMeta();
     }
     
+    /**
+     * Creates a copy of the given {@code Builder}.
+     * 
+     * @param source the builder to copy
+     */
     Builder(Builder<ItemMeta, ?> source) {
         item = source.item;
         meta = (Meta) source.meta;
@@ -54,54 +65,108 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     }
     
     
+    /**
+     * Sets the amount.
+     * 
+     * @param amount the amount
+     * @return {@code this}
+     */
     public Self amount(int amount) {
         item.setAmount(amount);
         return self();
     }
     
+    /**
+     * Sets the damage.
+     * 
+     * @param damage the damage
+     * @return {@code this}
+     */
     public Self damage(int damage) {
         ((Damageable) meta).setDamage(damage);
         return self();
     }
     
     
+    /**
+     * Sets the display name.
+     * 
+     * @param name the display name
+     * @return {@code this}
+     */
     public Self display(@Nullable String name) {
         meta.setDisplayName(name);
         return self();
     }
     
+    /**
+     * Sets the localised name.
+     * 
+     * @param name the name
+     * @return {@code this}
+     */
     public Self localised(@Nullable String name) {
         meta.setLocalizedName(name);
         return self();
     }
     
     
+    /**
+     * Adds a modifier to the given attribute.
+     * 
+     * @param attribute the attribute
+     * @param modifier the attribute modifier
+     * @return {@code this}
+     */
     public Self attribute(Attribute attribute, AttributeModifier modifier) {
         meta.addAttributeModifier(attribute, modifier);
         return self();
     }
     
+    /**
+     * Set the custom model data.
+     * 
+     * @param data the custom model data
+     * @return {@code this}
+     */
     public Self model(@Nullable Integer data) {
         meta.setCustomModelData(data);
         return self();
     }
-    
     public Self enchantment(Enchantment enchantment, int level) {
         meta.addEnchant(enchantment, level, true);
         return self();
     }
     
     
+    /**
+     * Adds the given flags.
+     * 
+     * @param flags the flags
+     * @return {@code this}
+     */
     public Self flags(Collection<ItemFlag> flags) {
         return flags(flags.toArray(new ItemFlag[0]));
     }
     
+    /**
+     * Adds the given flags.
+     * 
+     * @param flags the flags
+     * @return {@code this}
+     */
     public Self flags(ItemFlag... flags) {
         meta.addItemFlags(flags);
         return self();
     }
     
     
+    /**
+     * Adds the given lore.
+     * 
+     * @param lines the lore
+     * @return {@code this}
+     */
     public Self lore(Collection<String> lines) {
         if (lore == null) {
             lore = new ArrayList<>(lines);
@@ -112,6 +177,12 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         return self();
     }
     
+    /**
+     * Adds the given lore.
+     * 
+     * @param lines the lore
+     * @return {@code this}
+     */
     public Self lore(String... lines) {
         if (lore == null) {
             lore = new ArrayList<>(lines.length);
@@ -122,12 +193,24 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
         return self();
     }
     
+    
+    /**
+     * Sets the breakability.
+     * 
+     * @param unbreakable the breakability
+     * @return {@code this}
+     */
     public Self unbreakable(boolean unbreakable) {
         meta.setUnbreakable(unbreakable);
         return self();
     }
     
     
+    /**
+     * Builds an {@code ItemStack}.
+     * 
+     * @return the {@code ItemStack}
+     */
     public ItemStack build() {
         meta.setLore(lore);
         item.setItemMeta(meta);

@@ -30,6 +30,10 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
+/**
+ * Signifies that the annotated type or method delegates execution to another type
+ * or method.
+ */
 @Documented
 @Retention(SOURCE)
 @Target({TYPE, METHOD})

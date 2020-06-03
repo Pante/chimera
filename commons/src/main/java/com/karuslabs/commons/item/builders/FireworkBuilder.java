@@ -28,9 +28,17 @@ import java.util.Collection;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
-
+/**
+ * A firework builder.
+ */
 public class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
     
+    /**
+     * Creates a {@code FireworkBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return a {@code FireworkBuilder}
+     */
     public static FireworkBuilder of(Material material) {
         return new FireworkBuilder(material);
     }
@@ -44,17 +52,35 @@ public class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
     }
     
     
+    /**
+     * Adds the given firework effects.
+     * 
+     * @param effects the effects
+     * @return {@code this}
+     */
     public FireworkBuilder effects(FireworkEffect... effects) {
         meta.addEffects(effects);
         return this;
     }
     
+    /**
+     * Adds the given firework effects.
+     * 
+     * @param effects the effects
+     * @return {@code this}
+     */
     public FireworkBuilder effects(Collection<FireworkEffect> effects) {
         meta.addEffects(effects);
         return this;
     }
     
     
+    /**
+     * Sets the power.
+     * 
+     * @param power the power
+     * @return {@code this}
+     */
     public FireworkBuilder power(int power) {
         meta.setPower(power);
         return this;

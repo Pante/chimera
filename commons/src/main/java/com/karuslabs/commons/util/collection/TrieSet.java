@@ -26,6 +26,9 @@ package com.karuslabs.commons.util.collection;
 import java.util.*;
 
 
+/**
+ * A {@code Set} backed by a {@code Trie}.
+ */
 public class TrieSet extends AbstractSet<String> {
     
     static final Object PRESENT = new Object();
@@ -34,11 +37,20 @@ public class TrieSet extends AbstractSet<String> {
     Trie<Object> trie;
     
     
+    /**
+     * Creates a {@code TrieSet}.
+     */
     public TrieSet() {
         trie = new Trie<>();
     }
     
     
+    /**
+     * Returns the elements that start with the given prefix
+     * 
+     * @param prefix the prefix
+     * @return the elements which start with the given prefix
+     */
     public Set<String> startsWith(String prefix) {
         return trie.prefixedKeys(prefix);
     }
@@ -48,7 +60,6 @@ public class TrieSet extends AbstractSet<String> {
     public boolean add(String string) {
         return trie.put(string, PRESENT) == null;
     }
-    
     
     @Override
     public boolean contains(Object object) {

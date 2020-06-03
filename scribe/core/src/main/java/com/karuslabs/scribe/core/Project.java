@@ -28,9 +28,18 @@ import com.karuslabs.annotations.*;
 import java.util.*;
 
 
+/**
+ * A {@code Project} contains values inferred from a source.
+ */
 public @ValueType class Project {
     
+    /**
+     * An empty project.
+     */
     public static Project EMPTY = new Project("", "", "", List.of(), "", "");
+    /**
+     * A map that associates the {@code artifactId} of a Spigot fork to its {@code groupId}.
+     */
     public static Map<String, String> DEPENDENCIES = Map.of(
         "bukkit", "org.bukkit",
         "craftbukkit", "org.bukkit",
@@ -49,6 +58,16 @@ public @ValueType class Project {
     public final String url;
     
     
+    /**
+     * Creates a {@code Project} with the given parameters.
+     * 
+     * @param name the name
+     * @param version the version
+     * @param api the API version
+     * @param authors the authors
+     * @param description the description
+     * @param url the URL
+     */
     public Project(String name, String version, String api, List<String> authors, String description, String url) {
         this.name = name;
         this.version = version;

@@ -7,7 +7,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 * Compile-time plugin.yml generation tools
 * Fully static, compile-time command annotations
 
-**Please view the [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 11+. [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
+**Requires Java 11+. [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 
 **Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started.**
 

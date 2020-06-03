@@ -29,6 +29,11 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
+/**
+ * Contains the commands declared in the scope of the annotated type. A command
+ * should match {@code (literal)( ((argument)|(literal)))*}. In which, an argument
+ * should match {@code <(name)>}, while a literal should match {@code (name)(|(alias))*}.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(TYPE)

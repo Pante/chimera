@@ -42,4 +42,4 @@ class ProjectTest {
         assertEquals("", project.url);
     }
 
-} 
+}

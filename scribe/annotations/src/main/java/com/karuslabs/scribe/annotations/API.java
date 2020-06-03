@@ -29,11 +29,19 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
+/**
+ * Signifies the {@code api-version} key-value pair.
+ */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface API {
     
+    /**
+     * The Spigot API version to use.
+     * 
+     * @return the version
+     */
     Version value();
     
 }

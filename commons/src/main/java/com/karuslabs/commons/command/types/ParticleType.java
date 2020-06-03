@@ -36,6 +36,9 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.Particle;
 
 
+/**
+ * A {@code Particle} type.
+ */
 public class ParticleType implements WordType<Particle> {
 
     static final Trie<Particle> PARTICLES;
@@ -50,6 +53,13 @@ public class ParticleType implements WordType<Particle> {
     }
     
     
+    /**
+     * Returns a particle which name matches the string returned by the given {@code StringReader}.
+     * 
+     * @param reader the reader
+     * @return a particle with the given name
+     * @throws CommandSyntaxException if a particle with the given name does not exist
+     */
     @Override
     public Particle parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString().toLowerCase();
@@ -61,7 +71,15 @@ public class ParticleType implements WordType<Particle> {
         
         return particles;
     }
-
+    
+    /**
+     * Returns the particles that start with the remaining input of the given {@code SuggesitonBuilder}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the particle names that start with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var particles : PARTICLES.prefixedKeys(builder.getRemaining())) {

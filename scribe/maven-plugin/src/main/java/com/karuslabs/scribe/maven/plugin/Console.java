@@ -30,11 +30,20 @@ import java.util.function.BiConsumer;
 import org.apache.maven.plugin.logging.Log;
 
 
+/**
+ * A console handles logging messages to console.
+ */
 public class Console {
     
+    /**
+     * A console for logging warnings.
+     */
     public static final Console WARNINGS = new Console((log, message) -> log.warn(message), "WARNING", "warning");
+    /**
+     * A console for logging errors.
+     */
     public static final Console ERRORS = new Console((log, message) -> log.error(message), "FAILURE", "error");
-    
+
     
     BiConsumer<Log, String> consumer;
     String header;
@@ -48,6 +57,12 @@ public class Console {
     }
     
     
+    /**
+     * Logs the messages using the given logger.
+     * 
+     * @param logger the logger
+     * @param messages the messages
+     */
     public void log(Log logger, List<Entry<Class<?>, String>> messages) {
         if (messages.isEmpty()) {
             return;

@@ -26,16 +26,28 @@ package com.karuslabs.commons.command.aot.generation.blocks;
 import java.time.LocalDateTime;
 
 
+/**
+ * A code generator for classes.
+ */
 public class TypeBlock {
 
     StringBuilder builder;
     
     
+    /**
+     * Creates a {@code TypeBlock}.
+     */
     public TypeBlock() {
         builder = new StringBuilder();
     }
     
     
+    /**
+     * Generates the package, required imports and a public class with the given name.
+     * 
+     * @param pack the package which contains the generated class
+     * @param name the name of the generated class
+     */
     public void start(String pack, String name) {
         builder.setLength(0);
         if (!pack.isEmpty()) {
@@ -54,11 +66,21 @@ public class TypeBlock {
     }
     
     
+    /**
+     * Adds the generated method to this generated class.
+     * 
+     * @param method the generated method
+     */
     public void method(String method) {
         builder.append(method);
     }
     
     
+    /**
+     * Returns the generated class.
+     * 
+     * @return the generated class
+     */
     public String end() {
         return builder.append("}\n").toString();
     }

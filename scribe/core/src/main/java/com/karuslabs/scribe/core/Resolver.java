@@ -29,19 +29,51 @@ import javax.lang.model.element.Element;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A resolver that resolves annotations on a type.
+ * 
+ * @param <T> the annotated type
+ */
 public interface Resolver<T> {
     
+    /**
+     * A resolver that resolves annotations on a class.
+     */
     public static final Resolver<Class<?>> CLASS = new ClassResolver();
+    /**
+     * A resolver that resolves annotations on an {@link Element}.
+     */
     public static final Resolver<Element> ELEMENT = new ElmeentResolver();
     
     
+    /**
+     * Resolves all annotations that match {@code annotation} on the {@code type}.
+     * 
+     * @param <A> the annotation type
+     * @param type the annotated type
+     * @param annotation the annotation type
+     * @return all annotations that match {@code annotation} on {@code type} if present; 
+     *         otherwise an empty array
+     */
     public <A extends Annotation> A[] all(T type, Class<A> annotation);
     
+    /**
+     * Resolves an annotation that matches {@code annotation} on {@code type}.
+     * 
+     * @param <A> the annotation type
+     * @param type the annotated type
+     * @param annotation the annotation type
+     * @return an annotation that matches {@code annotation} from {@code type} if 
+     *         present; otherwise {@code null}
+     */
     public <A extends Annotation> @Nullable A any(T type, Class<A> annotation);
     
 }
 
 
+/**
+ * A {@code Resolver} that resolves annotations on a class.
+ */
 class ClassResolver implements Resolver<Class<?>> {
 
     @Override
@@ -56,6 +88,9 @@ class ClassResolver implements Resolver<Class<?>> {
     
 }
 
+/**
+ * A {@code Resolver} that resolves annotations on a {@code Element}.
+ */
 class ElmeentResolver implements Resolver<Element> {
 
     @Override

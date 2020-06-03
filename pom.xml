@@ -36,10 +36,26 @@
             <id>karus</id>
             <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
         </snapshotRepository>
+        
+        <site>
+            <id>karus</id>
+            <url>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</url>
+        </site>
     </distributionManagement>
     
     
-    <repositories>   
+    <repositories>
+        <!-- We need to include our own repositories to prevent Maven Project Info Reports from going crazy -->
+        <repository>
+            <id>chimera-releases</id>
+            <url>https://repo.karuslabs.com/repository/chimera-releases</url>
+        </repository>
+
+        <repository>
+            <id>chimera-snapshots</id>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
+        </repository>
+        
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -49,7 +65,7 @@
             <id>noti-spigot-mirror</id>
             <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
-              
+                       
         <repository>
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
@@ -152,6 +168,64 @@
                 </executions>
             </plugin>
             
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId> 
+                <version>2.8.2</version>
+                <executions> 
+                    <execution>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals> 
+                    </execution> 
+                </executions> 
+            </plugin>
+            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <additionalOptions>-html5</additionalOptions>
+                    <links>
+                        <link>https://checkerframework.org/api/</link>
+                        <link>https://hub.spigotmc.org/javadocs/spigot</link>
+                        <link>https://repo.karuslabs.com/repository/brigadier/</link>
+<!--                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>-->
+                    </links>
+                </configuration>
+                <executions> 
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions> 
+            </plugin>
+        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-webdav-jackrabbit</artifactId>
+                        <version>3.1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>    
+            
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -167,4 +241,5 @@
             </plugin>
         </plugins>
     </build>
+    
 </project>

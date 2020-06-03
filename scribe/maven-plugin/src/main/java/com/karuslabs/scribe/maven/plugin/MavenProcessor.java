@@ -34,18 +34,33 @@ import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A {@code Processor} for Maven projects.
+ */
 public class MavenProcessor extends Processor<Class<?>> implements AutoCloseable {
     
     ClassGraph graph;
     @Nullable ScanResult results;
     
     
+    /**
+     * Creates a {@code MavenProcessor} with the given parameters.
+     * 
+     * @param environment the environment
+     * @param graph a graph
+     */
     public MavenProcessor(Environment<Class<?>> environment, ClassGraph graph) {
         super(environment, PluginParser.type(environment));
         this.graph = graph;
     }
     
     
+    /**
+     * Returns all classes annotated with the given annotation.
+     * 
+     * @param annotation the annotation
+     * @return all classes with the given annotation
+     */
     @Override
     protected Stream<Class<?>> annotated(Class<? extends Annotation> annotation) {
         if (results == null) {

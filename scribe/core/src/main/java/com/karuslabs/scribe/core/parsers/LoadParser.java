@@ -32,16 +32,39 @@ import java.util.regex.Matcher;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
+/**
+ * A parser that transforms a {@link Load} annotation into plugin load ordering
+ * related key-value pairs.
+ * <br>
+ * <br>
+ * The following constraints are enforced:
+ * <ul>
+ * <li>The existence of a <b>single</b> {@code Load} annotation</li>
+ * <li>A plugin name contain only alphanumeric and underscore ({@code _}) characters</li>
+ * </ul>
+ * 
+ * @param <T> the annotated type
+ */
 public class LoadParser<T> extends SingleParser<T> {
     
     private Matcher matcher;
     
     
+    /**
+     * Creates a {@code LoadParser} with the given environment.
+     * 
+     * @param environment the environment
+     */
     public LoadParser(Environment<T> environment) {
         super(environment, Set.of(Load.class), "Load");
         matcher = WORD.matcher("Load");
     }
-
+    
+    /**
+     * Processes and adds the {@code @Load} annotation on {@code type} to {@link #environment}.
+     * 
+     * @param type the annotated type
+     */
     @Override
     protected void parse(T type) {
         var load = environment.resolver.any(type, Load.class);
@@ -59,6 +82,12 @@ public class LoadParser<T> extends SingleParser<T> {
         mapping.put("depend", load.after());
     }
     
+    /**
+     * Determines if the given plugin names satisfy the constraints.
+     * 
+     * @param type the type
+     * @param names the plugin names
+     */
     protected void check(T type, String[] names) {
         for (var name : names) {
             if (!matcher.reset(name).matches()) {

@@ -34,8 +34,29 @@ import static com.karuslabs.annotations.processor.Messages.*;
 import static com.karuslabs.scribe.core.parsers.CommandParser.Label.*;
 
 
+/**
+ * A parser that transforms a {@link Command} annotation into a {@code command}
+ * section. 
+ * <br>
+ * <br>
+ * The following constraints are enforced:
+ * <ul>
+ * <li>All command aliases and names must be neither empty nor contain whitespaces</li>
+ * <li>All command aliases and names must be unique</li>
+ * </ul>
+ * <br>
+ * In addition, a compile-time warning will be issued under the following circumstances:
+ * <ul>
+ * <li>A permission does not match {@code \w+(\.\w+)*(.\*)?}</li>
+ * </ul>
+ * 
+ * @param <T> the annotated type
+ */
 public class CommandParser<T> extends Parser<T> {
 
+    /**
+     * Denotes if a string is an alias or name.
+     */
     public static enum Label {
         NAME("name"), ALIAS("alias");
         
@@ -56,6 +77,11 @@ public class CommandParser<T> extends Parser<T> {
     Matcher matcher;
     
     
+    /**
+     * Creates a {@code CommandParser} with the given environment.
+     * 
+     * @param environment the environment
+     */
     public CommandParser(Environment<T> environment) {
         super(environment, Set.of(Commands.class, Command.class));
         names = new HashMap<>();
@@ -63,6 +89,12 @@ public class CommandParser<T> extends Parser<T> {
     }
     
     
+    /**
+     * Validates, processes and adds the {@code @Command} annotation on {@code type} to the {@code commands} section
+     * in {@code environment}. 
+     * 
+     * @param type the type
+     */
     @Override
     protected void parse(T type) {
         var commands = new HashMap<String, Object>();
@@ -75,6 +107,13 @@ public class CommandParser<T> extends Parser<T> {
         environment.mappings.put("commands", commands);
     }
     
+    
+    /**
+     * Determines if the aliases and name of the given command satisfy the constraints.
+     * 
+     * @param type the annotated type
+     * @param command the command
+     */
     protected void check(T type, Command command) {
         check(type, command, command.name(), NAME);
         for (var alias : command.aliases()) {
@@ -82,6 +121,14 @@ public class CommandParser<T> extends Parser<T> {
         }
     }
     
+    /**
+     * Determines if the given type, command, name and label satisfies the constraints.
+     * 
+     * @param type the annotated type
+     * @param command the command 
+     * @param name the name
+     * @param label the label
+     */
     protected void check(T type, Command command, String name, Label label) {
         if (matcher.reset(name).matches()) {
             environment.error(type, format(name, "is not a valid command " + label, "should not contain whitespaces"));
@@ -102,6 +149,13 @@ public class CommandParser<T> extends Parser<T> {
     }
     
     
+    /**
+     * Parses the given command and type to a {@code command} section.
+     * 
+     * @param type the annotated type
+     * @param command the command
+     * @return a command section
+     */
     protected Map<String, Object> parse(T type, Command command) {
         var map = new HashMap<String, Object>();
         
@@ -130,6 +184,9 @@ public class CommandParser<T> extends Parser<T> {
     }
     
     
+    /**
+     * Clears the namespace for command aliases and names.
+     */
     @Override
     protected void clear() {
         names.clear();

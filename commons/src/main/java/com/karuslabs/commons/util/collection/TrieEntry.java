@@ -31,6 +31,19 @@ import java.util.Map.Entry;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A trie entry. Each entry represents a character in a string. Each entry points
+ * to the next character in a string. A entry that represents the last character in 
+ * a string also contains the string and, optionally, a value.
+ * 
+ * Children entries that contain an ASCII character are stored in an array to
+ * improve look-up. Non-ASCII characters are stored in a {@code HashMap} instead.
+ * 
+ * Strings that share the same starting characters can similarly share the same 
+ * starting entries. 
+ * 
+ * @param <T> the type of the value
+ */
 final @ValueType class TrieEntry<T> implements Entry<String, T> {
     
     static final int PRINTABLE = 95;
@@ -47,10 +60,24 @@ final @ValueType class TrieEntry<T> implements Entry<String, T> {
     @Nullable T value;
     
     
+    /**
+     * Creates an empty {@code TrieEntry} that contains the given character and parent.
+     * 
+     * @param character the character that this {@code TrieEntry} represents
+     * @param parent the parent {@code TrieEntry}
+     */
     TrieEntry(char character, @Nullable TrieEntry<T> parent) {
         this(character, parent, null, null);
     }
     
+    /**
+     * Creates a {@code TrieEntry} with the given values.
+     * 
+     * @param character the character that this {@code TrieEntry} represents
+     * @param parent the parent {@code TrieEntry}
+     * @param key the string
+     * @param value the value
+     */
     TrieEntry(char character, @Nullable TrieEntry<T> parent, String key, T value) {
         this.character = character;
         this.parent = parent;

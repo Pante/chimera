@@ -25,18 +25,41 @@ package com.karuslabs.annotations.processor;
 
 import com.karuslabs.annotations.Static;
 
-
+/**
+ * This class consists of static methods that format error messages. 
+ */
 public @Static class Messages {
     
+    /**
+     * Creates an error message using the given value and reason.
+     * 
+     * @param value the subject of the error message
+     * @param reason the reason
+     * @return the error message
+     */
     public static String format(Object value, String reason) {
         return quote(value) + " " + reason;
     }
     
+    /**
+     * Creates an error message using the given value, reason and resolution.
+     * 
+     * @param value the subject of the error message
+     * @param reason the reason
+     * @param resolution a short description of how to resolve the error
+     * @return the error message
+     */
     public static String format(Object value, String reason, String resolution) {
         return quote(value) + " " + reason + ", " + resolution;
     }
     
     
+    /**
+     * Encloses the given value in quotation marks.
+     * 
+     * @param value the value
+     * @return the enclosed value
+     */
     public static String quote(Object value) {
         return "\"" + value + "\"";
     }

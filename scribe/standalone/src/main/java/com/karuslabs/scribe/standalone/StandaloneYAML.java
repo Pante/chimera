@@ -33,12 +33,21 @@ import javax.tools.StandardLocation;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 
+/**
+ * A {@code YAML} that serializes an object to a YAML file in the resultant JAR.
+ */
 public class StandaloneYAML extends YAML {
-
+    
     Filer filer;
     Messager messager;
     
-    
+   
+    /**
+     * Creates a {@code StandaloneYAML} with the given filer and messager.
+     * 
+     * @param filer the filer
+     * @param messager the messager
+     */
     public StandaloneYAML(Filer filer, Messager messager) {
         super("Scribe Standalone");
         this.filer = filer;
@@ -51,6 +60,11 @@ public class StandaloneYAML extends YAML {
         return filer.createResource(StandardLocation.CLASS_OUTPUT, "", "plugin.yml").openWriter();
     }
 
+    /**
+     * Logs the given exception.
+     * 
+     * @param e the exception
+     */
     @Override
     protected void handle(IOException e) {
         messager.printMessage(ERROR, "Failed to create plugin.yml");

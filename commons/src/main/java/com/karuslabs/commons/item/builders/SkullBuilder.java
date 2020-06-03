@@ -35,8 +35,17 @@ import static org.bukkit.Bukkit.getOfflinePlayer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A skull builder.
+ */
 public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     
+    /**
+     * Creates a {@code SkullBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return a {@code SkullBuilder}
+     */
     public static SkullBuilder of(Material material) {
         return new SkullBuilder(material);
     }
@@ -50,19 +59,37 @@ public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
     }
     
     
+    /**
+     * Sets the head.
+     * 
+     * @param head the head
+     * @return {@code this}
+     */
     public SkullBuilder head(Head head) {
         return head(head.id);
     }
     
+    /**
+     * Sets the UUID.
+     * 
+     * @param id the UUID
+     * @return {@code this}
+     */
     public SkullBuilder head(UUID id) {
         return head(getOfflinePlayer(id));
     }
     
+    /**
+     * Sets the owner of the skull.
+     * 
+     * @param player the owner of the skull
+     * @return {@code this}
+     */
     public SkullBuilder head(@Nullable OfflinePlayer player) {
         meta.setOwningPlayer(player);
         return this;
     }
-    
+
     
     @Override
     SkullBuilder self() {

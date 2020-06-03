@@ -29,20 +29,71 @@ import com.mojang.brigadier.tree.CommandNode;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A mutable node that contains self-modification operations.
+ * 
+ * @param <T> the type of the source
+ */
 public interface Mutable<T> {
     
+    /**
+     * Adds the given child to this {@code Node} and its aliases. 
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The {@code child} must also be added to its aliases.
+     * 
+     * @param child the child
+     */
     public void addChild(CommandNode<T> child);
     
+    /**
+     * Removes the given child from this {@code Node} and its aliases.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The child must also be removed from its aliases.
+     * 
+     * @param child the child
+     * @return the child that was removed if present; otherwise {@code null}
+     */
     public @Nullable CommandNode<T> removeChild(String child);
     
     
+    /**
+     * Returns the {@code Command} to be executed.
+     * 
+     * @return the command to be executed
+     */
     public Command<T> getCommand();
     
+    /**
+     * Sets the {@code command} as the command to be executed by this {@code Node}
+     * and its aliases.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The {@code command} must also be set for its aliases.
+     * 
+     * @param command the command to be executed
+     */
     public void setCommand(Command<T> command);
     
     
+    /**
+     * Returns the destination of this {@code Node}, or {@code null} if this
+     * {@code Node} is not redirected.
+     * 
+     * @return the destination of this node, or {@code null} if this node is not 
+     *         redirected
+     */
     public @Nullable CommandNode<T> getRedirect();
     
+    /**
+     * Sets the destination of this {@code Node} and its aliases when redirected.
+     * <br><br>
+     * <b>Implementation requirement:</b><br>
+     * The destination must also be set for its aliases.
+     * 
+     * @param destination the node to which this node is redirected
+     */
     public void setRedirect(CommandNode<T> destination);
     
 }

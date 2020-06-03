@@ -32,14 +32,36 @@ import javax.lang.model.util.*;
 import org.bukkit.command.CommandSender;
 
 
+/**
+ * A {@code Resolver} checks the signature of an {@code Element} and if valid, binds 
+ * it to a token.
+ * @param <T> the type of the element
+ */
 public abstract class Resolver<T extends Element> {
-
+    
+    /**
+     * The current environment.
+     */
     protected Environment environment;
+    /**
+     * A utility for manipulating {@code Elements}.
+     */
     protected Elements elements;
+    /**
+     * A utility for manipulating {@code TypeMirror}s.
+     */
     protected Types types;
+    /**
+     * A {@code TypeMirror} that represents a {@code CommandSender}.
+     */
     protected TypeMirror sender;
     
     
+    /**
+     * Creates a {@code Resolver} with the given parameters.
+     * 
+     * @param environment the environment
+     */
     public Resolver(Environment environment) {
         this.environment = environment;
         this.elements = environment.elements;
@@ -48,9 +70,22 @@ public abstract class Resolver<T extends Element> {
     }
     
     
+    /**
+     * Checks the signature of the given element and if valid, binds it to {@code token}.
+     * 
+     * @param element the element
+     * @param token the token
+     */
     public abstract void resolve(T element, Token token);
     
     
+    /**
+     * Returns a specialized generic type.
+     * 
+     * @param type the generic type
+     * @param parameters the type parameters
+     * @return a specialized generic type
+     */
     protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
         return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
     }
