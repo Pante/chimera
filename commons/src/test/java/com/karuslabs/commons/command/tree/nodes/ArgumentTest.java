@@ -45,6 +45,19 @@ class ArgumentTest {
     
     
     @Test
+    void of() {
+        var command = Argument.of("name", StringArgumentType.string(), (context) -> 1, null, null);
+        var execution = Argument.of("name", StringArgumentType.string(), (source, context) -> {}, null, null);
+        
+        assertEquals("name", command.getName());
+        assertEquals(StringArgumentType.string().getClass(), command.getType().getClass());
+        
+        assertEquals("name", execution.getName());
+        assertEquals(StringArgumentType.string().getClass(), execution.getType().getClass());
+    }
+    
+    
+    @Test
     void addChild_child() {
         argument.addChild(child);
         
