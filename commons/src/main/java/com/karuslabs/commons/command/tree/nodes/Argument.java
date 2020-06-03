@@ -48,43 +48,16 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     }
     
     
-    /**
-     * Creates an {@code Argument} with the given parameters.
-     * 
-     * @param <V> the type of the argument
-     * @param name the name
-     * @param type the type
-     * @param command the command to be executed
-     * @param requirement the requirement
-     * @param suggestions the {@code SuggestionProvider}
-     * @return an {@code Argument}
-     */
-    public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Command<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
-        return new Argument<>(name, type, command, requirement, suggestions);
-    }
-    
-    /**
-     * Creates an {@code Argument} with the given parameters.
-     * 
-     * @param <V> the type of the argument
-     * @param name the name
-     * @param type the type
-     * @param command the execution to be executed
-     * @param requirement the requirement
-     * @param suggestions the {@code SuggestionProvider}
-     * @return an {@code Argument}
-     */
-    public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Execution<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
-        return new Argument<>(name, type, command, requirement, suggestions);
-    }
-    
-    
     private CommandNode<T> destination;
     private Consumer<CommandNode<T>> addition;
     
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);
+    }
+    
+    public Argument(String name, ArgumentType<V> type, Execution<T> execution, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
+        this(name, type, execution, requirement, null, null, false, suggestions);
     }
     
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {

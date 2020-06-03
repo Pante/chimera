@@ -2,8 +2,8 @@
 
 This update focuses on fixing an issue with code generated using command annotations.
 
-- Add `Argument.of(String, ArgumentType<V>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
-- Add `Argument.of(String, ArgumentType<V>, Execution<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Add `Argument(String, ArgumentType<V>, Execution<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Add `Literal(String, Execution<CommandSender>, Predicate<CommandSender>)`
 - Fix issue with the generic type of generated local variables not being inferable
 
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
