@@ -4,8 +4,8 @@
 
 Karus Labs' mono-repository for spigot libraries & tools. 
 * Allows Brigadier command framework usage in Spigot plugins
-* Ahead-of-time (AOT) compiled command annotations
 * Compile-time plugin.yml generation tools
+* Fully static, compile-time command annotations
 
 **Requires Java 11+. [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 

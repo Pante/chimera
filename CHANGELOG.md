@@ -1,6 +1,14 @@
+## 4.6.1 - When the road looks rough ahead (03/06/2020)
+
+This update focuses on fixing an issue with code generated using command annotations.
+
+- Add `Argument.of(String, ArgumentType<V>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Add `Argument.of(String, ArgumentType<V>, Execution<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Fix issue with the generic type of generated local variables not being inferable
+
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
-This update focuses on introducing AOT-compiled command annotations in addition 
+This update focuses on introducing compile-time command annotations in addition 
 to quality of life changes and retrofitting old classes/packages.
 
 Big Ol' list of changes:
@@ -22,7 +30,7 @@ Annotations has been undergone a few tweaks.
 ### Commons
 
 Numerous components of the project has been redesigned to reduce the overall API surface area while retaining functionality.
-Commands annotations have also been rewritten to support AOT compilation and be less verbose.
+Commands annotations have also been rewritten to support compile-time generation and be less verbose.
 
 **Commands**
 - Add `com.karuslabs.commons.commands.aot.*` packages to support AOT compilation
@@ -76,8 +84,8 @@ Commands annotations have also been rewritten to support AOT compilation and be 
 
 **Command Annotations**
 
-Commands annotations have been rewritten to support AOT compilation and be less verbose. Please refer to the wiki for
-more information.
+Commands annotations have been rewritten to support compile-time generation and be less verbose. 
+Please refer to the wiki for more information.
 
 **Concurrency**
 - Add `Context`

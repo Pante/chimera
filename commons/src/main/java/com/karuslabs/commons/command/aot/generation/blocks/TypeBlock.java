@@ -59,7 +59,7 @@ public class TypeBlock {
         builder.append("import java.util.function.Predicate;\n\n");
         builder.append("import org.bukkit.command.CommandSender;\n\n\n");
         builder.append("/**\n");
-        builder.append(" * This file was generated at ").append(LocalDateTime.now()).append(" using Chimera 4.6.0\n");
+        builder.append(" * This file was generated at ").append(LocalDateTime.now()).append(" using Chimera 4.6.1\n");
         builder.append(" */\n");
         builder.append("public class ").append(name).append(" {\n\n");
         builder.append("    private static final Predicate<CommandSender> REQUIREMENT = s -> true;\n\n");

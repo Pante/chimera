@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>scribe</artifactId>
-        <version>4.6.0</version>
+        <version>4.6.1</version>
     </parent>
     
     <artifactId>scribe-standalone</artifactId>
@@ -79,7 +79,7 @@
             
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.3</version>
+                <version>3.2.4</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <shadedArtifactAttached>true</shadedArtifactAttached>

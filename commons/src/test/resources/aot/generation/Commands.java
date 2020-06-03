@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 
 
 /**
- * This file was generated at test-time using Chimera 4.6.0
+ * This file was generated at test-time using Chimera 4.6.1
  */
 public class Commands {
 
@@ -20,7 +20,7 @@ public class Commands {
     public static Map<String, CommandNode<CommandSender>> of(aot.generation.TellCommand source) {
         var commands = new HashMap<String, CommandNode<CommandSender>>();
 
-        var command = new Argument<>("players", source.a, null, REQUIREMENT, aot.generation.TellCommand.suggestions);
+        var command = Argument.of("players", source.a, null, REQUIREMENT, aot.generation.TellCommand.suggestions);
 
         var command0 = new Literal<>("tell", aot.generation.TellCommand::b, REQUIREMENT);
         Literal.alias(command0, "t");
