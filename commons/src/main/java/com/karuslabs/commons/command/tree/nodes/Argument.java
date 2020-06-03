@@ -73,10 +73,32 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     }
     
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param suggestions the {@code SuggestionProvider}
+     * @return an {@code Argument}
+     */
     public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Command<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
         return new Argument<>(name, type, command, requirement, suggestions);
     }
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type
+     * @param command the execution to be executed
+     * @param requirement the requirement
+     * @param suggestions the {@code SuggestionProvider}
+     * @return an {@code Argument}
+     */
     public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Execution<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
         return new Argument<>(name, type, command, requirement, suggestions);
     }
