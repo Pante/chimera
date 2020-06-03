@@ -45,9 +45,9 @@ class ArgumentTest {
     
     
     @Test
-    void of() {
-        var command = Argument.of("name", StringArgumentType.string(), (context) -> 1, null, null);
-        var execution = Argument.of("name", StringArgumentType.string(), (source, context) -> {}, null, null);
+    void constructors() {
+        var command = new Argument<>("name", StringArgumentType.string(), (context) -> 1, null, null);
+        var execution = new Argument<>("name", StringArgumentType.string(), (source, context) -> {}, null, null);
         
         assertEquals("name", command.getName());
         assertEquals(StringArgumentType.string().getClass(), command.getType().getClass());

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.*;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.tree.*;
@@ -106,6 +106,18 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     public Literal(String name, Command<T> command, Predicate<T> requirement) {
         this(name, command, requirement, null, null, false);
     }
+    
+    /**
+     * Creates a {@code Literal} with the given parameters.
+     * 
+     * @param name the name of the command
+     * @param execution the execution to be executed
+     * @param requirement the requirement
+     */
+    public Literal(String name, Execution<T> execution, Predicate<T> requirement) {
+        this(name, execution, requirement, null, null, false);
+    }
+    
     
     /**
      * Creates a {@code Literal} with the given parameters.
