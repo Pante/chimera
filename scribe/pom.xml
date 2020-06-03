@@ -13,6 +13,7 @@
     <name>Scribe</name>
     <description>Compile-time plugin.yml generators</description>
     
+    
     <modules>
         <module>annotations</module>
         <module>core</module>

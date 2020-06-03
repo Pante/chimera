@@ -28,10 +28,6 @@ import java.util.UUID;
 import static java.util.UUID.fromString;
 
 
-/**
- * Represents <a href = "https://minecraft.gamepedia.com/Mob_head#Mojang_skins">
- * heads of players</a> that belong to Mojang.
- */
 public enum Head {
     
     ALEX("MHF_ALEX", "6ab43178-89fd-4905-97f6-0f67d9d76fd9"),

@@ -29,10 +29,6 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-/**
- * Signifies that the annotated method is only visible for subclasses to override.
- * Annotated methods should not be {@code abstract}.
- */
 @Documented
 @Retention(SOURCE)
 @Target(METHOD)

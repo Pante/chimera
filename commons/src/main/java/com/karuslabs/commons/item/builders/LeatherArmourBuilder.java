@@ -29,17 +29,8 @@ import org.bukkit.inventory.meta.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A leather armour builder.
- */
 public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
-    /**
-     * Creates a {@code LeatherArmourBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code LeatherArmourBuilder}
-     */
     public static LeatherArmourBuilder of(Material material) {
         return new LeatherArmourBuilder(material);
     }
@@ -53,12 +44,6 @@ public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmou
     }
     
     
-    /**
-     * Sets the colour.
-     * 
-     * @param colour the colour
-     * @return {@code this}
-     */
     public LeatherArmourBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;

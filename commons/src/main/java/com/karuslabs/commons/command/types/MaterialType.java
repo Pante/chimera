@@ -37,9 +37,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 
-/**
- * A {@code Material} type. Legacy materials are <b>not</b> supported.
- */
 public class MaterialType implements WordType<Material> {
     
     static final Trie<Material> MATERIALS;
@@ -62,13 +59,6 @@ public class MaterialType implements WordType<Material> {
     }
     
     
-    /**
-     * Returns a material which key matches the string returned by the given {@code StringReader}.
-     * 
-     * @param reader the reader
-     * @return a material with the given key
-     * @throws CommandSyntaxException if a material with the given key does not exist
-     */
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString().toLowerCase();
@@ -80,15 +70,7 @@ public class MaterialType implements WordType<Material> {
         
         return material;
     }
-    
-    /**
-     * Returns the materials that start with the remaining input of the given {@code SuggesitonBuilder}.
-     * 
-     * @param <S> the type of the source
-     * @param context the context
-     * @param builder the builder
-     * @return the material keys that start with the remaining input
-     */
+
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {

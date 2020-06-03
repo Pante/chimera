@@ -29,20 +29,9 @@ import java.util.List;
 import javax.lang.model.element.Element;
 
 
-/**
- * A lexical analyzer that produces tokens from a string.
- */
 @FunctionalInterface
 public interface Lexer {
 
-    /**
-     * Produces tokens using the given parameters.
-     * 
-     * @param environment the environment
-     * @param location the location that {@code raw} was declared
-     * @param raw the raw value
-     * @return the tokens produced from analyzing {@code raw}
-     */
     public List<Token> lex(Environment environment, Element location, String raw);
     
 }

@@ -29,43 +29,18 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-/**
- * Signifies a {@code permission} section which includes the permission's description, 
- * default value and children.
- */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 @Repeatable(Permissions.class)
 public @interface Permission {
     
-    /**
-     * The permission.
-     * 
-     * @return the permission
-     */
     String value();
     
-    /**
-     * A description of this permission.
-     * 
-     * @return a description
-     */
     String description() default "";
     
-    /**
-     * The default value of this permission.
-     * 
-     * @return the default value
-     */
     Default implicit() default Default.OP;
     
-    /**
-     * The permission's children. This permission's default value is inherited
-     * by its children.
-     * 
-     * @return the permission's children
-     */
     String[] children() default {};
     
 }

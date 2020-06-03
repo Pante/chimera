@@ -31,35 +31,12 @@ import java.util.Set;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
-/**
- * A parser that transforms a {@link Information} annotation into key-value pairs. 
- * <br>
- * <br>
- * The following constraints are enforced:
- * <ul>
- * <li>The existence of a <b>single</b> {@code Information} annotation</li>
- * <li>The URL is valid</li>
- * </ul>
- * 
- * @param <T> the annotated type
- */
 public class InformationParser<T> extends SingleParser<T> {
-    
-    /**
-     * Creates an {@code InformationParser} with the given environment.
-     * 
-     * @param environment the environment
-     */
+
     public InformationParser(Environment<T> environment) {
         super(environment, Set.of(Information.class), "Information");
     }
     
-    /**
-     * Validates, processes and adds the {@code @Information} annotation on {@code type}
-     * to {@code environment}.
-     * 
-     * @param type the annotated type
-     */
     @Override
     protected void parse(T type) {
         var information = environment.resolver.any(type, Information.class);
@@ -67,12 +44,6 @@ public class InformationParser<T> extends SingleParser<T> {
         parse(information);
     }
     
-    /**
-     * Determines if the URL in {@code information} is valid.
-     * 
-     * @param information the annotation
-     * @param type the annotated type
-     */
     protected void check(Information information, T type) {
         var url = information.url();
         if (!url.isEmpty() && !URL.matcher(url).matches()) {
@@ -80,17 +51,10 @@ public class InformationParser<T> extends SingleParser<T> {
         }
     }
     
-    /**
-     * Processes and adds the {@code Information} to {@code environment}.
-     * Infers the values for {@code authors}, {@code description} and {@code website} 
-     * from {@code environment.project} if present.
-     * 
-     * @param information the annotation
-     */
     protected void parse(Information information) {
         var project = environment.project;
         var mappings = environment.mappings;
-
+        
         if (information.authors().length > 0) {
             mappings.put("authors", information.authors());
             

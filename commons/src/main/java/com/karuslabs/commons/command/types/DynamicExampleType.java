@@ -26,21 +26,11 @@ package com.karuslabs.commons.command.types;
 import java.util.List;
 
 
-/**
- * A {@code Type} that contains examples.
- * 
- * @param <T> the type of the argument
- */
 public abstract class DynamicExampleType<T> implements Type<T> {
     
     private final List<String> examples;
     
     
-    /**
-     * Creates a {@code DynamicExampleType} with the given examples.
-     * 
-     * @param examples the examples
-     */
     public DynamicExampleType(List<String> examples) {
         this.examples = examples;
     }

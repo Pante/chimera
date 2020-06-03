@@ -27,17 +27,8 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
 
-/**
- * A firework effect builder.
- */
 public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
 
-    /**
-     * Creates a {@code FireworkEffectBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code FireworkEffectBuilder}
-     */
     public static FireworkEffectBuilder of(Material material) {
         return new FireworkEffectBuilder(material);
     }
@@ -51,18 +42,12 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkE
     }
     
     
-    /**
-     * Sets the main {@code FireworkEffect}.
-     * 
-     * @param effect the main effect
-     * @return {@code this}
-     */
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);
         return this;
     }
 
-
+    
     @Override
     FireworkEffectBuilder self() {
         return this;

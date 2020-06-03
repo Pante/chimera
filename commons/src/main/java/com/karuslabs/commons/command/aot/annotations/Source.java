@@ -29,16 +29,13 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-/**
- * Denotes the location of the generated source file. The default value is {@code Commands.java}
- * in the package of the annotated type.
- */
 @Documented
 @Retention(SOURCE)
 @Target({PACKAGE, TYPE})
 public @interface Source {
-    
+
     public static final String RELATIVE_PACKAGE = "${relative}";
+    
     
     String value() default RELATIVE_PACKAGE;
 

@@ -35,23 +35,12 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 
 
-/**
- * A {@code World} type.
- */
 public class WorldType implements StringType<World> {
     
     private static final DynamicCommandExceptionType WORLD = new DynamicCommandExceptionType(world -> new LiteralMessage("Unknown world: \"" + world + "\""));
     private static final List<String> EXAMPLES = List.of("my_fancy_world", "\"Yet another world\"");
     
     
-    /**
-     * Returns a world which name matches the string returned by the given {@code StringReader}.
-     * A name that contains whitespaces must be enclosed in double quotation marks.
-     * 
-     * @param reader the reader
-     * @return a world with the given name
-     * @throws CommandSyntaxException if a world with the given name does not exist
-     */
     @Override
     public World parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readString();
@@ -63,15 +52,8 @@ public class WorldType implements StringType<World> {
         
         return world;
     }
+
     
-    /**
-     * Returns the worlds that start with the remaining input of the given {@code SuggesitonBuilder}.
-     * 
-     * @param <S> the type of the source
-     * @param context the context
-     * @param builder the builder
-     * @return the world names that start with the remaining input
-     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var world : Bukkit.getWorlds()) {

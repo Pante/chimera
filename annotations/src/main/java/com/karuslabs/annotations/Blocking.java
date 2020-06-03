@@ -29,9 +29,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-/**
- * Signifies that the annotated target may suspend execution.
- */
 @Documented
 @Retention(SOURCE)
 @Target({TYPE, METHOD, CONSTRUCTOR})

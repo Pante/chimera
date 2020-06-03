@@ -29,11 +29,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-/**
- * Binds the annotated field or method to the given commands. A command should match 
- * {@code (literal)( ((argument)|(literal)))*}. In which, an argument should match 
- * {@code <(name)>}, while a literal should match {@code (name)(|(alias))*}.
- */
 @Documented
 @Retention(SOURCE)
 @Target({FIELD, METHOD})

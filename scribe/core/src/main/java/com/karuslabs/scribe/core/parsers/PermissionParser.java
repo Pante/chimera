@@ -32,48 +32,18 @@ import java.util.regex.Matcher;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
-/**
- * A parser that transforms a {@link Permission} annotation into a {@code permission}
- * section. 
- * <br>
- * <br>
- * The following constraints are enforced:
- * <ul>
- * <li>All permissions must be unique</li>
- * </ul>
- * <br>
- * In addition, a compile-time warning will be issued under the following circumstances:
- * <ul>
- * <li>A permission inherits itself</li>
- * <li>A permission or its children does not match {@code \w+(\.\w+)*(.\*)?}</li>
- * </ul>
- * 
- * @param <T> the annotated type
- */
 public class PermissionParser<T> extends Parser<T> {
 
     Set<String> names;
     Matcher matcher;
     
-
-    /**
-     * Creates a {@code PermissionParser} with the given environment.
-     * 
-     * @param environment the environment
-     */
+    
     public PermissionParser(Environment<T> environment) {
         super(environment, Set.of(Permission.class, Permissions.class));
         names = new HashSet<>();
         matcher = PERMISSION.matcher("");
     }
 
-    
-    /**
-     * Validates, processes and adds the {@code Permission} annotation on {@code type} 
-     * to the {@code permissions} section in {@code environment}.
-     * 
-     * @param type the annotated type
-     */
     @Override
     protected void parse(T type) {
         var permissions = new HashMap<String, Object>();
@@ -86,12 +56,6 @@ public class PermissionParser<T> extends Parser<T> {
         environment.mappings.put("permissions", permissions);
     }
     
-    /**
-     * Determines if the given permission and type satisfies the constraints.
-     * 
-     * @param type the annotated type
-     * @param permission the permission
-     */
     protected void check(T type, Permission permission) {
         String name = permission.value();
         
@@ -106,12 +70,6 @@ public class PermissionParser<T> extends Parser<T> {
         }
     }
     
-    /**
-     * Determines if the given permission and its children are malformed.
-     * 
-     * @param type the annotated type
-     * @param permission the permission
-     */
     protected void checkMalformed(T type, Permission permission) {
         String name = permission.value();
         if (!matcher.reset(name).matches()) {
@@ -126,12 +84,6 @@ public class PermissionParser<T> extends Parser<T> {
     }
     
     
-    /**
-     * Processes and adds the permission to the given permissions.
-     * 
-     * @param permission the permission
-     * @param permissions the permissions
-     */
     protected void parse(Permission permission, Map<String, Object> permissions) {
         var information = new HashMap<String, Object>();
         
@@ -154,9 +106,6 @@ public class PermissionParser<T> extends Parser<T> {
     }
     
     
-    /**
-     * Clears the namespace for permissions.
-     */
     @Override
     public void clear() {
         names.clear();

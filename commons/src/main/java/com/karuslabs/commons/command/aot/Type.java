@@ -24,16 +24,10 @@
 package com.karuslabs.commons.command.aot;
 
 
-/**
- * Represents the possible token types.
- */
 public enum Type {
     
     ARGUMENT("An", "argument"), LITERAL("A", "literal"), ROOT("A", "root");
-    
-    /**
-     * The grammatical article for this type.
-     */
+       
     public final String article;
     private final String value;
 

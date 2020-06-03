@@ -35,20 +35,9 @@ import java.util.List;
 import static com.karuslabs.commons.util.Point.Axis.*;
 
 
-/**
- * A {@code Point} type.
- * 
- * @see VectorType
- */
 public abstract class PointType extends DynamicExampleType<Point> {
 
-    /**
-     * A 2D {@code Point} type.
-     */
     public static final PointType FLAT = new Point2DType();
-    /**
-     * A 3D {@code Point} type.
-     */
     public static final PointType CUBIC = new Point3DType();
     
     
@@ -60,12 +49,6 @@ public abstract class PointType extends DynamicExampleType<Point> {
     private final Axis[] axes;
     
     
-    /**
-     * Creates a {@code PointType} with the given examples and axes.
-     * 
-     * @param examples the examples
-     * @param axes the axes that this type supports
-     */
     PointType(List<String> examples, Axis... axes) {
         super(examples);
         this.axes = axes;
@@ -87,14 +70,6 @@ public abstract class PointType extends DynamicExampleType<Point> {
         return point;
     }
     
-    /**
-     * Parses a value from {@code reader} and sets it on the given axis of {@code point}.
-     * 
-     * @param reader the reader
-     * @param point the point
-     * @param axis the axis
-     * @throws CommandSyntaxException if the input was invalid
-     */
     void parse(StringReader reader, Point point, Axis axis) throws CommandSyntaxException {
         reader.skipWhitespace();
         
@@ -116,10 +91,6 @@ public abstract class PointType extends DynamicExampleType<Point> {
 }
 
 
-
-/**
- * A 2D {@code Point} type.
- */
 class Point2DType extends PointType implements Cartesian2DType<Point> {
 
     Point2DType() {
@@ -141,9 +112,6 @@ class Point2DType extends PointType implements Cartesian2DType<Point> {
 }
 
 
-/**
- * A 3D {@code Point} type.
- */
 class Point3DType extends PointType implements Cartesian2DType<Point> {
 
     Point3DType() {

@@ -28,17 +28,8 @@ import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.meta.*;
 
 
-/**
- * A builder for items with {@code TropicalFishBucketMeta}.
- */
 public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, TropicalFishBucketBuilder> {
     
-    /**
-     * Creates a {@code TropicalFishBucketBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code TropicalFishBucketBuilder}
-     */
     public static TropicalFishBucketBuilder of(Material material) {
         return new TropicalFishBucketBuilder(material);
     }
@@ -52,34 +43,16 @@ public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, T
     }
     
     
-    /**
-     * Sets the body colour.
-     * 
-     * @param colour the body colour
-     * @return {@code this}
-     */
     public TropicalFishBucketBuilder body(DyeColor colour) {
         meta.setBodyColor(colour);
         return this;
     }
     
-    /**
-     * Sets the pattern.
-     * 
-     * @param pattern the pattern
-     * @return {@code this}
-     */
     public TropicalFishBucketBuilder pattern(Pattern pattern) {
         meta.setPattern(pattern);
         return this;
     }
     
-    /**
-     * Sets the pattern colour.
-     * 
-     * @param colour the pattern colour
-     * @return {@code this}
-     */
     public TropicalFishBucketBuilder pattern(DyeColor colour) {
         meta.setPatternColor(colour);
         return this;

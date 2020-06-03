@@ -29,9 +29,6 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-/**
- * A container for {@link Permission}s.
- */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})

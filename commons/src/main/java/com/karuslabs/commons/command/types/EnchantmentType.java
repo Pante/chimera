@@ -36,9 +36,6 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.enchantments.Enchantment;
 
 
-/**
- * An {@code Enchantment} type.
- */
 public class EnchantmentType implements WordType<Enchantment> {
     
     static final Trie<Enchantment> ENCHANTMENTS;
@@ -53,15 +50,6 @@ public class EnchantmentType implements WordType<Enchantment> {
     }
     
     
-    /**
-     * Returns an enchantment which name matches the string returned by the given
-     * {@code StringReader}.
-     * 
-     * @param reader the reader
-     * @return an enchantment with the given name
-     * @throws CommandSyntaxException if an enchantment with the given name does
-     *                                does not exist
-     */
     @Override
     public Enchantment parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString().toLowerCase();
@@ -73,16 +61,7 @@ public class EnchantmentType implements WordType<Enchantment> {
         
         return enchantment;
     }
-    
-    /**
-     * Returns the enchantments that start with the remaining input of the given 
-     * {@code SuggestionBuilder}.
-     * 
-     * @param <S> the type of the source
-     * @param context the context
-     * @param builder the builder
-     * @return the enchantment names that start with the remaining input
-     */
+
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var enchantment : ENCHANTMENTS.prefixedKeys(builder.getRemaining())) {

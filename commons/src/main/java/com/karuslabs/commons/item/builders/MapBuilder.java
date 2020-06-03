@@ -30,17 +30,8 @@ import org.bukkit.map.MapView;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A map builder.
- */
 public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     
-    /**
-     * Creates a {@code MapBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code MapBuilder}
-     */
     public static MapBuilder of(Material material) {
         return new MapBuilder(material);
     }
@@ -54,45 +45,21 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
     }
     
     
-    /**
-     * Sets the colour.
-     * 
-     * @param colour the colour
-     * @return {@code this}
-     */
     public MapBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
     
-    /**
-     * Sets the location name.
-     * 
-     * @param name the location name
-     * @return this
-     */
     public MapBuilder location(@Nullable String name) {
         meta.setLocationName(name);
         return this;
     }
     
-    /**
-     * Sets the map view.
-     * 
-     * @param map the map view
-     * @return {@code this}
-     */
     public MapBuilder view(MapView map) {
         meta.setMapView(map);
         return this;
     }
     
-    /**
-     * Sets the map scaling.
-     * 
-     * @param scaling the scaling
-     * @return {@code this}
-     */
     public MapBuilder scaling(boolean scaling) {
         meta.setScaling(scaling);
         return this;

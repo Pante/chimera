@@ -29,17 +29,8 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
 
-/**
- * A knowledge book builder.
- */
 public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBookBuilder> {
     
-    /**
-     * Creates a {@code KnowledgeBookBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code KnowledgeBookBuilder}
-     */
     public static KnowledgeBookBuilder of(Material material) {
         return new KnowledgeBookBuilder(material);
     }
@@ -53,23 +44,11 @@ public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBo
     }
     
     
-    /**
-     * Adds the given recipes.
-     * 
-     * @param recipes the recipes
-     * @return {@code this}
-     */
     public KnowledgeBookBuilder recipes(NamespacedKey... recipes) {
         meta.addRecipe(recipes);
         return this;
     }
     
-    /**
-     * Adds the given recipes.
-     * 
-     * @param recipes the recipes
-     * @return {@code this}
-     */
     public KnowledgeBookBuilder recipes(Collection<NamespacedKey> recipes) {
         meta.addRecipe(recipes.toArray(new NamespacedKey[0]));
         return this;

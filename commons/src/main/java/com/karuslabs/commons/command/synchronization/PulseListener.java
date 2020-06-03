@@ -29,20 +29,6 @@ import org.bukkit.plugin.*;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
-/**
- * A {@code Listener} that listens for a registered {@code SynchronizationListener}
- * service to be unregistered. When a {@code SynchronizationListener} is unregistered,
- * this {@code PulseListener} attempts to register a new {@code SynchronizationListener}
- * that is owned by this plugin to the {@code ServiceManager}. 
- * <br><br>
- * <b>Implementation details:</b><br>
- * If successful, all plugins that require a {@code SynchronizationListener} will 
- * share the one owned by this plugin. Otherwise, the {@code SynchronizationListener}
- * that was registered by another plugin before this {@code PulseLitener} will be
- * used instead.
- * 
- * The order in which new {@code SychronizationListener}s are registered is undefined.
- */
 public class PulseListener implements Listener {
     
     Synchronizer synchronizer;
@@ -51,12 +37,6 @@ public class PulseListener implements Listener {
     ServicesManager services;
     
     
-    /**
-     * Creates a {@code PulseListener}
-     * 
-     * @param synchronizer the synchronizer
-     * @param plugin the owning plugin
-     */
     public PulseListener(Synchronizer synchronizer, Plugin plugin) {
         this.synchronizer = synchronizer;
         this.plugin = plugin;
@@ -65,11 +45,6 @@ public class PulseListener implements Listener {
     }
     
     
-    /**
-     * Registers a {@code SynchronizationListener} owned by this plugin if no
-     * {@code SynchronizationListener} has been registered yet. Otherwise, does
-     * nothing.
-     */
     public void register() {
         if (!services.isProvidedFor(SynchronizationListener.class)) {
             var listener = new SynchronizationListener(synchronizer, scheduler, plugin);
@@ -79,12 +54,6 @@ public class PulseListener implements Listener {
     }
     
     
-    /**
-     * Attempts to register a {@code SynchronizationListener} owned by this plugin
-     * if a {@code SynchronizationListener} was unregistered.
-     * 
-     * @param event the event
-     */
     @EventHandler
     void listen(ServiceUnregisterEvent event) {
         if (event.getProvider().getService() == SynchronizationListener.class) {

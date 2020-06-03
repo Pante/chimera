@@ -33,26 +33,10 @@ import net.minecraft.server.v1_15_R1.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A mapper that maps the commands in the server's internal dispatcher to the type 
- * required by an outgoing {@code PacketPlayOutCommands}.
- */
 class SynchronizationMapper extends Mapper<CommandListenerWrapper, ICompletionProvider> {
     
     static final SynchronizationMapper MAPPER = new SynchronizationMapper();
     
-    /**
-     * Swaps the {@code SuggestionProvider} of the given command to 
-     * {@code net.minecraft.commands.synchronization.SuggestionProviders#ASK_SERVER}
-     * if present and not a {@coode net.minecraft.commands.synchronization.SuggestionProviders$Wrapper}.
-     * 
-     * Otherwise returns {@code null} if the {@code SuggestionProvider} of the given 
-     * command is not present.
-     * 
-     * @param command the command
-     * @return the swapped {@code SuggestionProvider}, or {@code null} if the
-     *         the {@code SuggestionProvider} of the given command is not present.
-     */
     @Override
     protected @Nullable SuggestionProvider<ICompletionProvider> suggestions(ArgumentCommandNode<CommandListenerWrapper, ?> command) {
         // Fucking nasty workaround in whcih Mojang abused using raw types. It only 

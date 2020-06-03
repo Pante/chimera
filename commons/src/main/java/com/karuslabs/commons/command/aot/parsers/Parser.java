@@ -32,51 +32,21 @@ import javax.lang.model.element.Element;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
-/**
- * A parser that builds an AST from {@code Element}s.
- */
 public abstract class Parser {
     
-    /**
-     * The environment.
-     */
     protected Environment environment;
-    /**
-     * The lexical analyzer that produces tokens from an {@code element}.
-     */
     protected Lexer lexer;
     
     
-    /**
-     * Creates a {@code Parser} with the given parameters.
-     * 
-     * @param environment the environment
-     * @param lexer the lexical analyzer
-     */
     public Parser(Environment environment, Lexer lexer) {
         this.environment = environment;
         this.lexer = lexer;
     }
     
     
-    /**
-     * Parses the given element.
-     * 
-     * @param element the element
-     */
     public abstract void parse(Element element);
     
     
-    /**
-     * Determines if the given sequence of tokens is valid.
-     * <br><br>
-     * <b>Implementation details:</b><br>
-     * The sequence of tokens is considered valid if it is not empty and does not
-     * start with an argument token.
-     * 
-     * @param tokens the tokens
-     * @return {@code true} if valid; else {@code false}
-     */
     protected boolean valid(List<Token> tokens) {
         if (tokens.isEmpty()) {
             return false;

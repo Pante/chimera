@@ -28,27 +28,16 @@ import java.util.Collection;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
-/**
- * An analyzer that analyzes the ASTs built by parsers in {@link com.karuslabs.commons.command.aot.parsers}.
- */
 public class Analyzer {
     
     private Environment environment;
-  
     
-    /**
-     * Creates an {@code Analyzeer} with the given environment.
-     * 
-     * @param environment the environment
-     */
+    
     public Analyzer(Environment environment) {
         this.environment = environment;
     }
-
     
-    /**
-     * Recursively analyzes the AST for each scope in the environment.
-     */
+    
     public void analyze() {
         analyze(environment.scopes.values());
     }

@@ -33,50 +33,23 @@ import org.snakeyaml.engine.v2.common.*;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 
-/**
- * A {@code YAML} serializes an object to a YAML file.
- */
 public abstract class YAML {
     
-    /**
-     * Creates a {@code YAML} with the given project name that serializes objects to the given
-     * file.
-     * 
-     * @param project the project name
-     * @param file the file to which objects are serialized
-     * @return a {@code YAML}
-     */
     public static YAML fromFile(String project, File file) {
         return new FileYAML(project, file);
     }
     
     
-    /**
-     * The project name.
-     */
     protected String name;
-    /**
-     * The dump used to serialize an object.
-     */
     protected Dump dump;
     
     
-    /**
-     * Creates a {@code YAML} with the given project name.
-     * 
-     * @param name the project name
-     */
     public YAML(String name) {
         this.name = name;
         dump = new Dump(DumpSettings.builder().setDefaultFlowStyle(FlowStyle.BLOCK).setDefaultScalarStyle(ScalarStyle.PLAIN).build());
     }
     
     
-    /**
-     * Writes the given mapping to a YAML file.
-     * 
-     * @param mapping the mapping
-     */
     public void write(Map<String, Object> mapping) {
         try (var writer = writer()) {
             writer.append("# This file was generated at " + LocalDateTime.now().format(ISO_DATE_TIME) + " using " + name + " 4.6.0 \n")
@@ -86,20 +59,9 @@ public abstract class YAML {
             handle(e);
         }
     }
-    
-    /**
-     * Returns a {@code Writer}.
-     * 
-     * @return a {@code Writer}
-     * @throws IOException if the {@code Writer} could not be created
-     */
+        
     protected abstract Writer writer() throws IOException;
     
-    /**
-     * Handles the given {@code IOException}.
-     * 
-     * @param e the exception
-     */
     protected abstract void handle(IOException e);
     
 }

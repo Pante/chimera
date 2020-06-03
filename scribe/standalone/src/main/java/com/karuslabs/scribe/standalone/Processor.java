@@ -35,9 +35,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 
 
-/**
- * A processor that builds a {@code plugin.yml} using annotations in {@link com.karuslabs.scribe.annotations}.
- */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedAnnotationTypes("com.karuslabs.scribe.annotations.*")
@@ -57,14 +54,6 @@ public class Processor extends AnnotationProcessor {
     }
     
     
-    /**
-     * Delegates processing of the given annotations to a resolver and builds a
-     * {@code plugin.yml}.
-     * 
-     * @param annotations the annotations used to build a {@code plugin.yml}
-     * @param round the round
-     * @return {@code false}
-     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
         if (round.getElementsAnnotatedWithAny(processor.annotations()).isEmpty()) {

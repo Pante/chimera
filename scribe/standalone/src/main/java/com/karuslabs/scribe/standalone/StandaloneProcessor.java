@@ -36,32 +36,16 @@ import javax.lang.model.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A {@code Processor} that builds a plugin.yml using annotations in {@link com.karuslabs.scribe.annotations}
- * on {@link Element}s.
- */
 public class StandaloneProcessor extends Processor<Element> {
     
     @Nullable RoundEnvironment round;
     
     
-    /**
-     * Creates a {@code StandaloneProcessor} with the given parameters.
-     * 
-     * @param environment the environment
-     * @param elements the elements
-     * @param types the types.
-     */
     public StandaloneProcessor(Environment<Element> environment, Elements elements, Types types) {
         super(environment, PluginParser.element(environment, elements, types));
     }
     
     
-    /**
-     * Initializes this {@code StandaloneProcessor} with the given round.
-     * 
-     * @param round the round
-     */
     public void initialize(RoundEnvironment round) {
         this.round = round;
     }

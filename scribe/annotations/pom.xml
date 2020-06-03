@@ -13,16 +13,6 @@
     <name>Scribe Annotations</name>
     <description>Annotations for other Scribe projects</description>
     
-    <dependencies>
-        <!-- Needed to generate Javadoc -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.15-R0.1-SNAPSHOT</version>
-            <optional>true</optional>
-        </dependency>
-    </dependencies> 
-    
     <build>
         <plugins>  
             <plugin>

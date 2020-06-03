@@ -31,17 +31,8 @@ import java.util.List;
 import javax.lang.model.element.Element;
 
 
-/**
- * A parser that builds an AST from the literal and argument tokens produced.
- */
 public class CommandParser extends Parser {
     
-    /**
-     * Creates a {@code CommandParser} with the given parameters.
-     * 
-     * @param environment the environment
-     * @param lexer the lexical analyzer
-     */
     public CommandParser(Environment environment, Lexer lexer) {
         super(environment, lexer);
     }
@@ -64,12 +55,6 @@ public class CommandParser extends Parser {
         }
     }
     
-    /**
-     * Adds the given tokens to {@code current}.
-     * 
-     * @param current the current token
-     * @param tokens the tokesn to be added
-     */
     void parse(Token current, List<Token> tokens) {
         for (var token : tokens) {
             current = current.add(environment, token);

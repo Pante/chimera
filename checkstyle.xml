@@ -7,6 +7,7 @@
     <module name="TreeWalker">
         <module name="ArrayTrailingComma"/>
         <module name="ArrayTypeStyle"/>
+        <module name="AtclauseOrder"/>
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>

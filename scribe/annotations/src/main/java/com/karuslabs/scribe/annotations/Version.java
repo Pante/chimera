@@ -24,9 +24,6 @@
 package com.karuslabs.scribe.annotations;
 
 
-/**
- * Supported versions for the {@code api-version} key-value pair.
- */
 public enum Version {
     
     INFERRED("1.13"),

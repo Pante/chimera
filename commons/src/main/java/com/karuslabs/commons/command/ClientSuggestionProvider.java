@@ -31,21 +31,11 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.command.CommandSender;
 
 
-/**
- * A client-side {@code SuggestionProvider}.
- */
 public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
     
     ENTITIES, RECIPES, SOUNDS;
     
     
-    /**
-     * Returns a {@code CompletableFuture} that contains an empty {@code Suggestions}.
-     * 
-     * @param context the context
-     * @param builder the builder
-     * @return an empty {@code Suggestions}
-     */
     @Override
     public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
         return builder.buildFuture();
