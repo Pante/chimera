@@ -20,7 +20,7 @@ public class Commands {
     public static Map<String, CommandNode<CommandSender>> of(aot.generation.TellCommand source) {
         var commands = new HashMap<String, CommandNode<CommandSender>>();
 
-        var command = Argument.of("players", source.a, null, REQUIREMENT, aot.generation.TellCommand.suggestions);
+        var command = new Argument<>("players", source.a, null, REQUIREMENT, aot.generation.TellCommand.suggestions);
 
         var command0 = new Literal<>("tell", aot.generation.TellCommand::b, REQUIREMENT);
         Literal.alias(command0, "t");
