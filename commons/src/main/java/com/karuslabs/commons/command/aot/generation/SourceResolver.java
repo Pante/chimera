@@ -36,10 +36,6 @@ import static com.karuslabs.annotations.processor.Messages.quote;
 import static com.karuslabs.commons.command.aot.annotations.Source.RELATIVE_PACKAGE;
 
 
-/**
- * Resolves the location of the source file to be generated from a {@code Source} 
- * annotation.
- */
 public class SourceResolver {
     
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
@@ -51,11 +47,6 @@ public class SourceResolver {
     private String file;
     
     
-    /**
-     * Creates a {@code SourceResolver} with the given environment.
-     * 
-     * @param environment the environment
-     */
     public SourceResolver(Environment environment) {
         this.environment = environment;
         this.folder = "";
@@ -63,12 +54,6 @@ public class SourceResolver {
     }
 
     
-    /**
-     * Resolves the location of the source file to be generated using the given
-     *  element.
-     * 
-     * @param element the element annotated with {@code @Source}.
-     */
     public void resolve(Element element) {
         this.element = element;
         var emit = element.getAnnotation(Source.class);
@@ -98,32 +83,14 @@ public class SourceResolver {
         }
     }
     
-    
-    /**
-     * Returns the element annotated with {@code Source}, or {@code null} if the
-     * location of the source file to be generated could not be resolved.
-     * 
-     * @return the element, or {@code null} if the location of the source file to
-     *         be generated could not be resolved
-     */
     public @Nullable Element element() {
         return element;
     }
     
-    /**
-     * Returns the package in which the source file is to be generated.
-     * 
-     * @return the package
-     */
     public String folder() {
         return folder;
     }
     
-    /**
-     * Returns the name of the source file to be generated.
-     * 
-     * @return the file name without the extension
-     */
     public String file() {
         return file;
     }

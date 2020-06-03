@@ -41,11 +41,6 @@ import javax.lang.model.element.*;
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
 
-/**
- * An annotation processor that generates a source file from annotations at
- * compile-time.
- * 
- */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(RELEASE_11)
 @SupportedAnnotationTypes("com.karuslabs.commons.command.aot.annotations.*")
@@ -98,11 +93,6 @@ public class Processor extends AnnotationProcessor {
     }
     
     
-    /**
-     * Resolves a {@code Source} annotation from the given elements.
-     * 
-     * @param elements the elements
-     */
     void resolveSource(Set<? extends Element> elements) {
         if (elements.size() == 1) {
             source.resolve(elements.toArray(new Element[0])[0]);
@@ -118,14 +108,6 @@ public class Processor extends AnnotationProcessor {
     }
     
     
-    /**
-     * Parses the elements in {@code round} that are annotated with {@code annotation}
-     * using the given parser.
-     * 
-     * @param parser the parser
-     * @param round the round
-     * @param annotation the annotation
-     */
     void parse(Parser parser, RoundEnvironment round, Class<? extends Annotation> annotation) {
         for (var element : round.getElementsAnnotatedWith(annotation)) {
             parser.parse(element);

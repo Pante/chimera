@@ -30,28 +30,10 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A {@code DispatcherMap} wraps and registers {@code LiteralCommandNode}s to the
- * platform.
- */
 public interface PlatformMap {
 
-    /**
-     * Registers the given command to the platform.
-     * 
-     * @param command the command
-     * @return a {@code DispatcherCommand} that represents the given command, or
-     *         {@code null} if the command could not be registered
-     */
     @Nullable DispatcherCommand register(LiteralCommandNode<CommandSender> command);
 
-    /**
-     * Removes the given command from the platform.
-     * 
-     * @param name the name of the command
-     * @return a {@code DispatcherCommand} that represents the removed command,
-     *         or {@code null} if the command was not registered
-     */
     @Nullable DispatcherCommand unregister(String name);
 
 }

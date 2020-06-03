@@ -31,33 +31,13 @@ import javax.lang.model.util.SimpleElementVisitor9;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A filter that recursively traverses enclosing elements to find an element.
- * @param <T> the type of the resultant element
- */
 public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
-    /**
-     * A {@code Filter} that finds the enclosing type of an element.
-     */
     public static final Filter<TypeElement> CLASS = new ClassFilter();
-    /**
-     * A {@code Filter} that finds the enclosing package of an element.
-     */
     public static final Filter<PackageElement> PACKAGE = new PackageFilter();
-    /**
-     * A {@code Filter} that finds the enclosing module of an element.
-     */
     public static final Filter<ModuleElement> MODULE = new ModuleFilter();
     
     
-    /**
-     * Recursively traverses the enclosed elements of the given element to find an element.
-     * 
-     * @param element the element
-     * @param parameter an ignored parameter
-     * @return {@link #DEFAULT_VALUE} or the element that was found.
-     */
     @Override
     protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();
@@ -66,42 +46,18 @@ public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T,
     
 }
 
-/**
- * A {@code Filter} subclass that finds the enclosing type of an element.
- */
 class ClassFilter extends Filter<TypeElement> {
     
-    /**
-     * Returns {@link #DEFAULT_VALUE}.
-     * 
-     * @param element the package
-     * @param parameter an ignored parameter
-     * @return {@link #DEFAULT_VALUE}
-     */
     @Override
     public @Nullable TypeElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
-    /**
-     * Returns {@link #DEFAULT_VALUE}.
-     * 
-     * @param element the package
-     * @param parameter an ignored parameter
-     * @return {@link #DEFAULT_VALUE}
-     */
     @Override
     public @Nullable TypeElement visitPackage(PackageElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
-    /**
-     * Returns the given type.
-     * 
-     * @param element the type
-     * @param parameter an ignored parameter
-     * @return the given type
-     */
     @Override
     public TypeElement visitType(TypeElement element, @Ignored Void parameter) {
         return element;
@@ -109,31 +65,14 @@ class ClassFilter extends Filter<TypeElement> {
     
 }
 
-/**
- * A {@code Filter} subclass that finds the enclosing package of an element.
- */
 class PackageFilter extends Filter<PackageElement> {
     
-    /**
-     * Returns {@link #DEFAULT_VALUE}.
-     * 
-     * @param element the package
-     * @param parameter an ignored parameter
-     * @return {@link #DEFAULT_VALUE}
-     */
     @Override
     public @Nullable PackageElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return DEFAULT_VALUE;
     }
     
     
-    /**
-     * Returns the given package.
-     * 
-     * @param element the package
-     * @param parameter an ignored parameter
-     * @return the given package
-     */
     @Override
     public @Nullable PackageElement visitPackage(PackageElement element, @Ignored Void parameter) {
         return element;
@@ -141,18 +80,8 @@ class PackageFilter extends Filter<PackageElement> {
     
 }
 
-/**
- * A {@code Filter} subclass that finds the enclosing module of an element.
- */
 class ModuleFilter extends Filter<ModuleElement> {
     
-    /**
-     * Returns the given module.
-     * 
-     * @param element the module
-     * @param parameter an ignored parameter
-     * @return the given module
-     */
     @Override
     public @Nullable ModuleElement visitModule(ModuleElement element, @Ignored Void parameter) {
         return element;

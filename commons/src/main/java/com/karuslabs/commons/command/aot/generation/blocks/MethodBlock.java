@@ -36,9 +36,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static javax.lang.model.element.Modifier.STATIC;
 
 
-/**
- * A code generator for methods.
- */
 public class MethodBlock {
     
     StringBuilder builder;
@@ -50,9 +47,6 @@ public class MethodBlock {
     @Nullable CharSequence type;
     
     
-    /**
-     * Creates a {@code MethodBlock}.
-     */
     public MethodBlock() {
         builder = new StringBuilder();
         argument = new MessageFormat("        var {0} = Argument.of(\"{1}\", {2}, {3}, {4}, {5});\n");
@@ -63,11 +57,6 @@ public class MethodBlock {
     }
     
     
-    /**
-     * Generates the signature of a method with {@code type} as a parameter.
-     * 
-     * @param type the type of the parameter
-     */
     public void start(CharSequence type) {
         this.type = type;
         variables.add("source");
@@ -79,13 +68,6 @@ public class MethodBlock {
     }
     
     
-    /**
-     * Generates a local variable that represents a command using the given token.
-     * 
-     * @param token the token
-     * @return a local variable
-     * @throws IllegalArgumentException if the token type is neither a argument nor literal
-     */
     public String command(Token token) {
         var variable = "command";
         while (!variables.add(variable)) {
@@ -109,12 +91,6 @@ public class MethodBlock {
     }
     
     
-    /**
-     * Generates a local variable that represents an argument, using the given token.
-     * 
-     * @param variable the variable name
-     * @param token the token
-     */
     void argument(String variable, Token token) {
         builder.append(argument.format(new Object[] {
             variable,
@@ -126,12 +102,6 @@ public class MethodBlock {
         }));
     }
     
-    /**
-     * Generates a local variable that represents a literal, using the given token.
-     * 
-     * @param variable the variable name
-     * @param token the token
-     */
     void literal(String variable, Token token) {
         builder.append(literal.format(new Object[] {
             variable,
@@ -150,16 +120,6 @@ public class MethodBlock {
     }
     
     
-    /**
-     * Generates a parameter used in the creation of a local variable, using the 
-     * given token.
-     * 
-     * @param token the token
-     * @param binding the binding type
-     * @param value the default value that is used if the parameter could not be
-     *              created
-     * @return the generated parameter
-     */
     String parameter(Token token, Binding binding, String value) {
         var element = token.bindings.get(binding);
         if (element == null) {
@@ -180,32 +140,16 @@ public class MethodBlock {
     }
     
     
-    /**
-     * Generates a statement that adds the given child to {@code variable}.
-     * 
-     * @param variable the variable that represents a command
-     * @param child the child to be added
-     */
     public void addChild(String variable, String child) {
         builder.append("        ").append(variable).append(".addChild(").append(child).append(");\n");
     }
     
     
-    /**
-     * Generates a new line.
-     */
     public void newLine() {
         builder.append("\n");
     }
     
     
-    /**
-     * Generates statements that add the given roots to a map and returns the
-     * generated method.
-     * 
-     * @param roots the roots
-     * @return the generated method
-     */
     public String end(List<String> roots) {
         variables.clear();
         count = 0;

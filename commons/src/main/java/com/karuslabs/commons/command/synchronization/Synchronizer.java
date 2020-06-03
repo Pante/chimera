@@ -43,10 +43,6 @@ import org.bukkit.plugin.*;
 import static java.util.stream.Collectors.toSet;
 
 
-/**
- * A {@code Synchronizer} that facilities synchronization between the server's internal
- * dispatcher and a client.
- */
 public class Synchronizer implements Listener {
     
     private MinecraftServer server;
@@ -55,12 +51,6 @@ public class Synchronizer implements Listener {
     TreeWalker<CommandListenerWrapper, ICompletionProvider> walker;
     
     
-    /**
-     * Creates a {@code Synchronizer} for the given plugin.
-     * 
-     * @param plugin the owning plugin
-     * @return a {@code Synchronizer}
-     */
     public static Synchronizer of(Plugin plugin) {
         var server = ((CraftServer) plugin.getServer());
         var tree = new TreeWalker<CommandListenerWrapper, ICompletionProvider>(SynchronizationMapper.MAPPER);
@@ -72,14 +62,6 @@ public class Synchronizer implements Listener {
     }
     
     
-    /**
-     * Creates a {@code Synchronizer} with the given parameters.
-     * 
-     * @param server the server
-     * @param plugin the owning plugin
-     * @param walker the walker used to map {@code CommandNode<CommandListenerWrapper>}s
-     *               to {@code CommandNode<ICompletionProivder>}s
-     */
     Synchronizer(MinecraftServer server, Plugin plugin, TreeWalker<CommandListenerWrapper, ICompletionProvider> walker) {
         this.server = server;
         this.plugin = plugin;
@@ -88,22 +70,12 @@ public class Synchronizer implements Listener {
     }
     
     
-    /**
-     * Synchronizes the internal dispatcher of the server with all currently online 
-     * players. Commands are ignored if a player is not permitted to use them.
-     */
     public void synchronize() {
         for (var player : server.server.getOnlinePlayers()) {
             synchronize(player);
         }
     }
     
-    /**
-     * Synchronizes the server's internal dispatcher with the given {@code player}.
-     * Commands are ignored if the given player is not permitted to use them.
-     * 
-     * @param player the player
-     */
     public void synchronize(Player player) {
         var permitted = dispatcher.getRoot().getChildren().stream().map(CommandNode::getName).collect(toSet());       
         server.server.getPluginManager().callEvent(new SynchronizationEvent(player, permitted));
@@ -111,13 +83,6 @@ public class Synchronizer implements Listener {
         synchronize(player, permitted);
     }
     
-    /**
-     * Synchronizes the given {@code commands} in the server's internal dispatcher
-     * with the given {@code player}.
-     * 
-     * @param player the player
-     * @param commands the names of the commands
-     */
     public void synchronize(Player player, Collection<String> commands) {    
         var entity = ((CraftPlayer) player).getHandle();
         var root = new RootCommandNode<ICompletionProvider>();
@@ -127,13 +92,7 @@ public class Synchronizer implements Listener {
         entity.playerConnection.sendPacket(new PacketPlayOutCommands(root));
     }
     
-    
-    /**
-     * Reloads this {@code Synchronizer}'s dispatcher each time the server is
-     * reloaded.
-     * 
-     * @param event the event
-     */
+
     @EventHandler
     void load(ServerLoadEvent event) {
         dispatcher = server.commandDispatcher.a();

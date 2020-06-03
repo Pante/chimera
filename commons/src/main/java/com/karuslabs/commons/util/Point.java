@@ -33,20 +33,13 @@ import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * An optionally relative 3D point in a world.
- */
 public @ValueType final class Point extends Location {
     
     private static final double EPSILON = 0.000001;
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
-
     
-    /**
-     * Represents the axes of a {@code Point}.
-     */
     public static enum Axis {
         
         X(0),
@@ -66,47 +59,18 @@ public @ValueType final class Point extends Location {
     private boolean rotation;
     
     
-    /**
-     * Creates a {@code Point} with no world at {@code 0, 0, 0}.
-     */
     public Point() {
         this(0, 0, 0);
     }
     
-    /**
-     * Creates a {@code Point} with no world at the given coordinates.
-     * 
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     */
     public Point(double x, double y, double z) {
         this(null, x, y, z);
     }
     
-    
-    /**
-     * Creates a {@code Point} with the given world and coordinates.
-     * 
-     * @param world the world
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     */
     public Point(@Nullable World world, double x, double y, double z) {
         this(world, x, y, z, 0, 0);
     }
 
-    /**
-     * Creates a {@code Point} with the given world, coordinates and direction.
-     * 
-     * @param world the world
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     * @param yaw the yaw
-     * @param pitch the pitch
-     */
     public Point(@Nullable World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
         relative = new boolean[]{ false, false, false };
@@ -114,12 +78,6 @@ public @ValueType final class Point extends Location {
     }
     
     
-    /**
-     * Copies the optionally relative coordinates of {@code origin} to {@code result}.
-     * 
-     * @param origin the origin
-     * @param result the location to which {@code origin} is copied
-     */
     public void copy(Location origin, Location result) {
         result.setX(relative[X] ? getX() + origin.getX() : getX());
         result.setY(relative[Y] ? getY() + origin.getY() : getY());
@@ -130,13 +88,6 @@ public @ValueType final class Point extends Location {
         }
     }
     
-
-    /**
-     * Copies coordinates of {@code origin} to {@code result}.
-     * 
-     * @param origin the origin
-     * @param result the vector to which {@code origin} is copied
-     */
     public void copy(Location origin, Vector result) {
         result.setX(relative[X] ? getX() + origin.getX() : getX())
               .setY(relative[Y] ? getY() + origin.getY() : getY())
@@ -147,12 +98,6 @@ public @ValueType final class Point extends Location {
         }
     }
     
-
-    /**
-     * Copies the optionally relative coordinates of {@code origin} to this point.
-     * 
-     * @param origin the origin
-     */
     public void align(Location origin) {
         if (relative[X]) setX(getX() + origin.getX());
         if (relative[Y]) setY(getY() + origin.getY());
@@ -161,13 +106,6 @@ public @ValueType final class Point extends Location {
     }
     
     
-    /**
-     * Sets the value for the given axis.
-     * 
-     * @param axis the axis
-     * @param value the coordinate for the axis
-     * @return {@code this}
-     */
     public Point set(Axis axis, double value) {
         switch (axis) {
             case X:
@@ -185,54 +123,22 @@ public @ValueType final class Point extends Location {
         
         return this;
     }
-        
     
-    /**
-     * Returns whether the coordinate for the given axis is absolute or relative.
-     * 
-     * @see #X
-     * @see #Y
-     * @see #Z
-     * 
-     * @param axis the axis
-     * @return {@code true} if the coordinate for the given axis is relative
-     */
+    
     public boolean relative(Axis axis) {
         return relative[axis.index];
     }
     
-    /**
-     * Sets the relativity of the coordinate for the given axis.
-     * 
-     * @see #X
-     * @see #Y
-     * @see #Z
-     * 
-     * @param axis the axis
-     * @param relative {@code true} if the coordinate for the axis is relative
-     * @return {@code this}
-     */
     public Point relative(Axis axis, boolean relative) {
         this.relative[axis.index] = relative;
         return this;
     }
     
     
-    /**
-     * Returns whether this point is to be rotated.
-     * 
-     * @return {@code true} if this point is to be rotated
-     */
     public boolean rotation() {
         return rotation;
     }
     
-    /**
-     * Sets whether this point is to be rotated.
-     * 
-     * @param rotation {@code true} if this point is to be rotated
-     * @return {@code this}
-     */
     public Point rotation(boolean rotation) {
         this.rotation = rotation;
         return this;

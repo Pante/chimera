@@ -29,37 +29,17 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 
-/**
- * A resolver that determines if only a <b>single</b> supported annotation is present.
- * 
- * @param <T> the annotated type
- */
 public abstract class SingleParser<T> extends Parser<T> {
 
-    /**
-     * The name of the annotation supported by this resolver.
-     */
     protected String name;
     
     
-    /**
-     * Creates a {@code SingleParser} with the given annotations and name.
-     * 
-     * @param environment the environment
-     * @param annotations the annotations supported by this resolver
-     * @param name the name of the annotation supported by this resolver
-     */
     public SingleParser(Environment environment, Set<Class<? extends Annotation>> annotations, String name) {
         super(environment, annotations);
         this.name = name;
     }
 
     
-    /**
-     * Determines if only only a <b>single</b> annotated type is present.
-     * 
-     * @param types the annotated types
-     */
     @Override
     protected void check(Set<T> types) {
         if (types.size() > 1) {

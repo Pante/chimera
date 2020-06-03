@@ -29,28 +29,13 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-/**
- * Signifies the information needed to bootstrap a plugin which includes its name 
- * and version. The {@code main} key-value pair is derived from the annotated class
- * which must extend either {@link org.bukkit.plugin.Plugin} or {@link org.bukkit.plugin.java.JavaPlugin}.
- */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface Plugin {
     
-    /**
-     * The plugin's name.
-     * 
-     * @return the name
-     */
     String name() default "";
     
-    /**
-     * The plugin's version.
-     * 
-     * @return the version
-     */
     String version() default "";
     
 }

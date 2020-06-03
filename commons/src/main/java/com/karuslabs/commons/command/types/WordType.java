@@ -26,25 +26,12 @@ package com.karuslabs.commons.command.types;
 import com.mojang.brigadier.arguments.*;
 
 
-/**
- * A word type that is mapped to an unquoted {@code StringArgumentType}.
- * 
- * @param <T> the type of the argument
- */
 @FunctionalInterface
 public interface WordType<T> extends Type<T> {
     
-    /**
-     * An unquoted {code StringArgumentType} to which this type is mapped.
-     */
     public static final StringArgumentType WORD = StringArgumentType.word();
-
     
-    /**
-     * Returns an unquoted {@code StringArgumentType}.
-     * 
-     * @return an unquoted {@code StringArgumentType}
-     */
+    
     @Override
     public default StringArgumentType mapped() {
         return WORD;

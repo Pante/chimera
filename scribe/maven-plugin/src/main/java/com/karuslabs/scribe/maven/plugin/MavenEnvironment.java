@@ -30,20 +30,12 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
 
-/**
- * A {@code Environment} for Maven projects.
- */
 public class MavenEnvironment extends Environment<Class<?>> {
     
     final List<Entry<Class<?>, String>> errors;
     final List<Entry<Class<?>, String>> warnings;
     
     
-    /**
-     * Creates a {@code MavenEnvironment} with the given project.
-     * 
-     * @param project the project
-     */
     public MavenEnvironment(Project project) {
         super(project, Resolver.CLASS);
         errors = new ArrayList<>();

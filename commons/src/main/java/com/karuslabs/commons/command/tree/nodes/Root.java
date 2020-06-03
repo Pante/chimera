@@ -34,38 +34,18 @@ import java.util.*;
 import org.bukkit.command.*;
 
 
-/**
- * A {@code RootCommandNode} subclass that facilities the wrapping and registration
- * of a {@code CommandNode} to a {@code CommandMap}.
- */
 public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {
     
     private String prefix;
     private PlatformMap map;
     
     
-    /**
-     * Creates a {@code Root} with the given parameters and the name of the given 
-     * plugin as a fallback prefix.
-     * 
-     * @param prefix the fallback prefix
-     * @param map the {@code PlatformMap}
-     */
     public Root(String prefix, PlatformMap map) {
         this.prefix = prefix;
         this.map = map;
     }
     
     
-    /**
-     * Adds the {@code command} if the provided {@code DispatcherMap} does not contain 
-     * a command with the same name. In addition, a fallback alias of the {@code command} 
-     * is always created and added. If the {@code command} implements {@link Aliasable},
-     * the aliases and the fallback of the aliases are also added in a similar fashion.
-     * 
-     * @param command the command to be added
-     * @throws IllegalArgumentException if the {@code command} is not a {@code LiteralCommandNode}
-     */
     @Override
     public void addChild(CommandNode<CommandSender> command) {
         if (getChild(command.getName()) != null) {
@@ -97,7 +77,6 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
         }
     }
 
-    
     @Override
     public CommandNode<CommandSender> removeChild(String child) {
         return Commands.remove(this, child);
@@ -115,11 +94,6 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
     }
     
     
-    /**
-     * Returns the {@code PlatformMap}.
-     * 
-     * @return the {@code PlatformMap} 
-     */
     public PlatformMap map() {
         return map;
     }

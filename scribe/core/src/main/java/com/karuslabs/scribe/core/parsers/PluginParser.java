@@ -38,45 +38,12 @@ import static javax.lang.model.element.ElementKind.CONSTRUCTOR;
 import static javax.lang.model.element.Modifier.ABSTRACT;
 
 
-/**
- * A parser that transforms a {@code @Plugin} annotation into bootstrapping related key-value pairs. 
- * <br>
- * <br>
- * The following constraints are enforced:
- * <ul>
- * <li>The existence of a <b>single</b> {@code @Plugin} annotation</li>
- * <li>The plugin name contains only alphanumeric and underscore ({@code _}) characters</li>
- * <li>The main class inherits from either {@link org.bukkit.plugin.Plugin} or {@link org.bukkit.plugin.java.JavaPlugin}</li>
- * <li>The main class has no constructors with parameters</li>
- * </ul>
- * <br>
- * In addition, a compile-time warning will be issued under the following circumstances:
- * <ul>
- * <li>The version does not follow <a href = "https://semver.org/">SemVer 2.0.0</a></li>
- * </ul>
- * 
- * @param <T> the annotated type
- */
 public abstract class PluginParser<T> extends Parser<T> {
     
-    /**
-     * Creates a {@code PluginParser} that parses annotations on a {@code Class<?>}.
-     * 
-     * @param environment the environment
-     * @return a {@code PluginParser} for classes
-     */
     public static PluginParser<Class<?>> type(Environment<Class<?>> environment) {
         return new ClassPluginParser(environment);
     }
     
-    /**
-     * Creates a {@code PluginParser} that parses annotations on an {@link Element}.
-     * 
-     * @param environment the environment
-     * @param elements the elements
-     * @param types the types
-     * @return a {@code PluginParser} for {@code Element}s.
-     */
     public static PluginParser<Element> element(Environment<Element> environment, Elements elements, Types types) {
         return new ElementPluginParser(environment, elements, types);
     }
@@ -85,22 +52,12 @@ public abstract class PluginParser<T> extends Parser<T> {
     Matcher matcher;
     
     
-    /**
-     * Creates a {@code PluginParser} with the given environment.
-     * 
-     * @param environment the environment
-     */
     public PluginParser(Environment<T> environment) {
         super(environment, Set.of(Plugin.class));
         matcher = WORD.matcher("");
     }
     
     
-    /**
-     * Determines if the number of given types and each individual type satisfy the constraints.
-     * 
-     * @param types the annotated types
-     */
     @Override
     protected void check(Set<T> types) {
         if (types.isEmpty()) {
@@ -116,22 +73,10 @@ public abstract class PluginParser<T> extends Parser<T> {
         }
     }
     
-    /**
-     * Determines if the given type satisfy the constraints.
-     * 
-     * @param type the annotated type.
-     */
     protected abstract void check(T type);
     
     
     
-    /**
-     * Validates, processes and adds the {@code @Plugin} annotation on {@code type} to key-value pairs
-     * in {@code environment}. Infers the {@code name} and {@code version} from
-     * the respective values in {@code project} if present.
-     * 
-     * @param type the annotated type
-     */
     @Override
     protected void parse(T type) {
         var plugin = environment.resolver.any(type, Plugin.class);
@@ -153,20 +98,11 @@ public abstract class PluginParser<T> extends Parser<T> {
         environment.mappings.put("version", version);
     }
     
-    /**
-     * Transforms the given type into a {@code String}.
-     * 
-     * @param type the annotated type
-     * @return a string representation of the given type
-     */
     protected abstract String stringify(T type);
 
 }
 
 
-/**
- * A {@code PluginParser} that parses annotations on a class.
- */
 class ClassPluginParser extends PluginParser<Class<?>> {
     
     static final int ABSTRACT = 0x00000400;
@@ -202,9 +138,6 @@ class ClassPluginParser extends PluginParser<Class<?>> {
 }
 
 
-/**
- * A {@code PluginParser} that parses annotations on a an {@code Element}.
- */
 class ElementPluginParser extends PluginParser<Element> {
     
     Types types;
@@ -231,10 +164,6 @@ class ElementPluginParser extends PluginParser<Element> {
     }
     
     
-    /**
-     * A visitor that checks if a class annotated with {@code @Plugin} is valid
-     * and contains no constructors with parameters.
-     */
     class Visitor extends SimpleElementVisitor9<Boolean, Boolean> {
         
         Visitor() {

@@ -26,9 +26,6 @@ package com.karuslabs.commons.util;
 import java.util.*;
 
 
-/**
- * Constants of primitive types and their corresponding boxed types.
- */
 public enum Type {
     
     BOOLEAN(Boolean.class, boolean.class),
@@ -66,50 +63,23 @@ public enum Type {
     }
     
     
-    /**
-     * Returns the boxed equivalent of the given type.
-     * 
-     * @param type a primitive type
-     * @return a boxed type if {@code type} is a primitive type; else {@code type}
-     */
     public static Class<?> box(Class<?> type) {
         var boxed = TYPES.get(type);
         return boxed == null ? type : boxed.boxed;
     }
     
-    
-    /**
-     * Returns the unboxed equivalent of the given type.  
-     * 
-     * @param type a wrapper type for a primitive
-     * @return an unboxed type if {@code type} is a wrapper typel else {@code type}
-     */
     public static Class<?> unbox(Class<?> type) {
         var unboxed = TYPES.get(type);
         return unboxed == null ? type : unboxed.unboxed;
     }
 
     
-    /**
-     * Returns the {@code Type} of {@code type}, or {@link #TYPE} if the
-     * {@code type} is neither primitive nor boxed.
-     * 
-     * @param type the {@code class}
-     * @return the {@code Type} of the {@code class}, or {@code TYPE} if the object
-     *         is neither primitive nor boxed
-     */
     public static Type of(Class<?> type) {
         return TYPES.getOrDefault(type, TYPE);
     }
     
     
-    /**
-     * The boxed type.
-     */
     public final Class<?> boxed;
-    /**
-     * The primitive type.
-     */
     public final Class<?> unboxed;
 
 

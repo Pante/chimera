@@ -24,9 +24,6 @@
 package com.karuslabs.scribe.annotations;
 
 
-/**
- * Possible default values for a permission.
- */
 public enum Default {
     
     TRUE("true"), FALSE("false"), OP("op"), NOT_OP("not op");

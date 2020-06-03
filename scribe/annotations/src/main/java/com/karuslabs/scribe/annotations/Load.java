@@ -30,45 +30,17 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-/**
- * Signifies a plugin's loading phase and sequence.
- */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 public @interface Load {
     
-    /**
-     * The server initialization phase in which to load this plugin.
-     * 
-     * @return the phase
-     */
     Phase during() default Phase.POSTWORLD;
     
-    /**
-     * The names of plugins to be loaded <b>after</b> this plugin if available at 
-     * runtime. Unavailable plugins will be skipped. A plugin's name can neither 
-     * be empty nor contain whitespaces.
-     * 
-     * @return the names of other plugins
-     */
     String[] before() default {};
     
-    /**
-     * The names of plugins to be loaded <b>before</b> this plugin if available at
-     * runtime. Unavailable plugins will prevent this plugin from fully loading.
-     * 
-     * @return the names of other plugins
-     */
     String[] after() default {};
     
-    /**
-     * The names of plugins to be loaded optionally <b>before</b> this plugin if 
-     * available at runtime. 
-     * Unavailable plugins will be skipped.
-     * 
-     * @return the names of other plugins
-     */
     String[] optionallyAfter() default {};
     
 }

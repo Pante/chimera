@@ -30,15 +30,6 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.concurrent.CompletableFuture;
 
 
-/**
- * An {@code ArgumentType} that has no supported client-side equivalent. 
- * <br><br>
- * <b>Implementation requirement:</b><br>
- * {@link #mapped} must return an {@code ArgumentType} that is supported by the
- * client. Otherwise the client will be disconnected from the server upon connection.
- * 
- * @param <T> the type of the argument
- */
 public interface Type<T> extends ArgumentType<T> {
     
     @Override

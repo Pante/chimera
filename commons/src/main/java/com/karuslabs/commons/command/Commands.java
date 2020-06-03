@@ -35,14 +35,6 @@ import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * This class consists of static methods that modify {@code CommandNode}s.
- * <br><br>
- * <b>Implementation details:</b><br>
- * {@code VarHandle}s are used to manipulate the fields in a {@code CommandNode}.
- * Hence, an {@code ExceptionInInitializerError} will be thrown if strong module
- * encapsulation is enabled.
- */
 public @Static class Commands {
     
     private static final VarHandle COMMAND;
@@ -62,31 +54,13 @@ public @Static class Commands {
             throw new ExceptionInInitializerError(e);
         }
     }
+
     
-    
-    /**
-     * Sets the {@code execution} which {@code command} is to execute.
-     * 
-     * @param <T> the type of the source
-     * @param command the command
-     * @param execution the {@code execution} which {@code command} is to execute
-     */
     public static <T> void execution(CommandNode<T> command, Command<T> execution) {
         COMMAND.set(command, execution);
     }
     
-    
-    
-    /**
-     * Removes the child from the given command. If the child is a {@code Aliasable},
-     * the aliases of the child will also be removed.
-     * 
-     * @param <T> the type of the source
-     * @param command the command which child is to be removed
-     * @param child the name of the child to be removed
-     * @return the child that was removed, or {@code null} if no child with the 
-     *         given name exists
-     */
+        
     public static <T> @Nullable CommandNode<T> remove(CommandNode<T> command, String child) {
         var children = (Map<String, CommandNode<T>>) CHILDREN.get(command);
         var literals = (Map<String, ?>) LITERALS.get(command);

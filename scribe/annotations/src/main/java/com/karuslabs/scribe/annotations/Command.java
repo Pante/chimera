@@ -29,59 +29,23 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-/**
- * Signifies a {@code command} section which includes the command's aliases, description,
- * syntax, permission and permission message.
- */
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE})
 @Repeatable(Commands.class)
 public @interface Command {
     
-    /**
-     * The name of this command which can neither be empty nor contain whitespaces.
-     * 
-     * @return the command's name
-     */
     String name();
     
-    /**
-     * The aliases of this command. An alias can neither be empty nor contain whitespaces.
-     * 
-     * @return the command's aliases
-     */
     String[] aliases() default {};
     
-    /**
-     * A description of this command. 
-     * 
-     * @return a description
-     */
     String description() default "";
     
-    /**
-     * The command's syntax.
-     * 
-     * @return the command's syntax
-     */
     String syntax() default "";
     
     
-    /**
-     * The permission required to execute this command.
-     * 
-     * @return the permission
-     */
     String permission() default "";
     
-    /**
-     * A message to display when this command is executed without the required permission.
-     * 
-     * @return the message
-     * 
-     * @see #permission()
-     */
     String message() default "";
     
 }

@@ -28,17 +28,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.inventory.meta.*;
 
 
-/**
- * A builder for items with {@code BlockStateMeta}.
- */
 public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder> {
     
-    /**
-     * Creates a {@code BlockStateBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code BlockStateBuilder}
-     */
     public static BlockStateBuilder of(Material material) {
         return new BlockStateBuilder(material);
     } 
@@ -51,12 +42,7 @@ public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder
         super(source);
     }
     
-    /**
-     * Sets the block state.
-     * 
-     * @param state the BlockState
-     * @return {@code this}
-     */
+    
     public BlockStateBuilder state(BlockState state) {
         meta.setBlockState(state);
         return this;

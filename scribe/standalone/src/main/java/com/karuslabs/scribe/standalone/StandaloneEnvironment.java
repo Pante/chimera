@@ -31,19 +31,11 @@ import javax.lang.model.element.Element;
 import static javax.tools.Diagnostic.Kind.*;
 
 
-/**
- * An {@code Environment} for a standalone project.
- */
 public class StandaloneEnvironment extends Environment<Element> {
     
     Messager messager;
     
     
-    /**
-     * Creates a {@code StandaloneEnvironment} with the given messager.
-     * 
-     * @param messager the messager
-     */
     public StandaloneEnvironment(Messager messager) {
         super(Project.EMPTY, Resolver.ELEMENT);
         this.messager = messager;
@@ -59,6 +51,7 @@ public class StandaloneEnvironment extends Environment<Element> {
         messager.printMessage(ERROR, message, location);
     }
 
+    
     @Override
     public void warn(String message) {
         messager.printMessage(WARNING, message);

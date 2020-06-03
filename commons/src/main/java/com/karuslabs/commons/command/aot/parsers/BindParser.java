@@ -36,23 +36,12 @@ import javax.lang.model.element.*;
 import static com.karuslabs.annotations.processor.Messages.format;
 
 
-/**
- * A parser that resolves the binding of variables and methods to commands.
- */
 public class BindParser extends Parser {
     
     Resolver<ExecutableElement> method;
     Resolver<VariableElement> variable;
     
     
-    /**
-     * Creates a {@code BindParser} with the given parameters.
-     * 
-     * @param environment the environment
-     * @param lexer the lexical analyzer
-     * @param method the resolver for methods
-     * @param variable the resolver for variables
-     */
     public BindParser(Environment environment, Lexer lexer, Resolver<ExecutableElement> method, Resolver<VariableElement> variable) {
         super(environment, lexer);
         this.method = method;
@@ -86,17 +75,6 @@ public class BindParser extends Parser {
         }
     }
     
-    
-    /**
-     * Recursively traverses {@code current} and its children. If {@code current}
-     * and {@code binding} matches, bind {@code binding} which represents a variable 
-     * or method to {@code current}.
-     * 
-     * @param binding the token that represents a variable or method
-     * @param current the current token that represents a command
-     * @return {@code true} if any of {@code current} or its children matches
-     *         {@code binding}; else {@code false}
-     */
     boolean matchAny(Token binding, Token current) {
         var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
         if (match) {
@@ -110,15 +88,6 @@ public class BindParser extends Parser {
         return match;
     }
     
-    
-    /**
-     * Checks if {@code current} and its children contains a path that matches
-     * the sequence of binding tokens. If so, bind the last token in {@code binding}
-     * which represents a variable or method to {@code current}.
-     * 
-     * @param bindings the tokens that represent a variable or method
-     * @param current the current token that represents a command
-     */
     void match(List<Token> bindings, Token current) {
         var element = bindings.get(bindings.size() - 1).location;
         
@@ -139,13 +108,6 @@ public class BindParser extends Parser {
     }
     
     
-    /**
-     * Binds {@code binding} to {@code token} if {@code binding} represents a
-     * variable or method.
-     * 
-     * @param element an element that represents a variable or method to bind 
-     * @param token the token that represents a command
-     */
     void resolve(Element element, Token token) {
         if (element instanceof ExecutableElement) {
             method.resolve((ExecutableElement) element, token);

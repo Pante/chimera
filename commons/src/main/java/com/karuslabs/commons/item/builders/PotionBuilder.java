@@ -30,17 +30,8 @@ import org.bukkit.potion.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-/**
- * A potion builder.
- */
 public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
-    /**
-     * Creates a {@code PotionBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code PotionBuilder}
-     */
     public static PotionBuilder of(Material material) {
         return new PotionBuilder(material);
     }
@@ -54,34 +45,16 @@ public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     }
     
     
-    /**
-     * Sets the colour.
-     * 
-     * @param colour the colour
-     * @return {@code this}
-     */
     public PotionBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
     
-    /**
-     * Sets the base potion data.
-     * 
-     * @param data the data
-     * @return {@code this}
-     */
     public PotionBuilder data(PotionData data) {
         meta.setBasePotionData(data);
         return this;
     }
     
-    /**
-     * Adds the given potion effect.
-     * 
-     * @param effect the potion effect
-     * @return {@code this}
-     */
     public PotionBuilder effect(PotionEffect effect) {
         meta.addCustomEffect(effect, true);
         return this;

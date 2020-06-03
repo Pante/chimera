@@ -29,36 +29,13 @@ import com.karuslabs.scribe.core.Environment;
 import java.util.Set;
 
 
-/**
- * A parser that transforms a {@link API} annotation into a {@code api-version}
- * key-value pair. 
- * <br>
- * <br>
- * The following constraints are enforced:
- * <ul>
- * <li>The existence of a <b>single</b> {@code API} annotation</li>
- * </ul>
- * 
- * @param <T> the annotated type
- */
 public class APIParser<T> extends SingleParser<T> {
     
-    /**
-     * Creates an {@code APIParser} with the given environment.
-     * @param environment the environment
-     */
     public APIParser(Environment<T> environment) {
         super(environment, Set.of(API.class), "API");
     }
 
     
-    /**
-     * Processes and adds the {@code API} annotation on {@code type} to {@code environment}.
-     * Infers the value if {@link API#value} is {@link Version#INFERRED} using; 
-     * otherwise defaults to {@link Version#V1_13} if the value cannot be inferred
-     * 
-     * @param type the annotated type
-     */
     @Override
     protected void parse(T type) {
        var api = environment.resolver.any(type, API.class);

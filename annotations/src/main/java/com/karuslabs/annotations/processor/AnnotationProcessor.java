@@ -33,31 +33,13 @@ import javax.lang.model.util.*;
 import static javax.tools.Diagnostic.Kind.*;
 
 
-/**
- * A skeletal {@code Processor} implementation to minimize the effort required to
- * implement it.
- */
-public abstract class AnnotationProcessor extends AbstractProcessor {
+public abstract class AnnotationProcessor extends AbstractProcessor {    
     
-    /**
-     * Provides utility methods for manipulating {@code Element}s.
-     */
     protected Elements elements;
-    /**
-     * Provides utility methods for manipulating {@code TypeMirror}s.
-     */
     protected Types types;
-    /**
-     * Used to report errors, warnings and other notes.
-     */
     protected Messager messager;
     
     
-    /**
-     * Initializes this processor and its fields with the processing environment.
-     * 
-     * @param environment the environment
-     */
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
@@ -67,17 +49,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     }
     
     
-    /**
-     * Processes all elements provided in {@code round} annotated with the
-     * given annotations.
-     * <br><br>
-     * <b>Default implementation:</b><br>
-     * Forwards the processing of each annotated element to {@link #process(Element)}.
-     * 
-     * @param annotations the annotations types requested to be processed
-     * @param round environment for information about the current and prior round 
-     * @return {@code false}
-     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
         for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
@@ -89,87 +60,39 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         return false;
     }
     
-    /**
-     * Processes the given element.
-     * <br><br>
-     * <b>Default implementation:</b><br>
-     * Does nothing.
-     * 
-     * @param element the element
-     */
     @VisibleForOverride
     protected void process(Element element) {
         
     }
     
-    /**
-     * Clears this processor after each round of annotation processing.
-     * <br><br>
-     * <b>Default implementation:</b><br>
-     * Does nothing.
-     */
     @VisibleForOverride
     protected void clear() {
         
     }
     
     
-    /**
-     * Emits an error message.
-     * 
-     * @param message the error message
-     */
     public void error(String message) {
         messager.printMessage(ERROR, message);
     }
     
-    /**
-     * Emits an error message at the location of the given element.
-     * 
-     * @param element the element
-     * @param message the error message
-     */
     public void error(Element element, String message) {
         messager.printMessage(ERROR, message, element);
     }
     
     
-    /**
-     * Emits a warning.
-     * 
-     * @param message the warning message
-     */
     public void warn(String message) {
         messager.printMessage(WARNING, message);
     }
     
-    /**
-     * Emits a warning at the location of the given element.
-     * 
-     * @param element the element
-     * @param message the warning
-     */
     public void warn(Element element, String message) {
         messager.printMessage(WARNING, message, element);
     }
     
     
-    /**
-     * Emits a note at the location of the given element.
-     * 
-     * @param message the note
-    */
     public void note(String message) {
          messager.printMessage(NOTE, message);
     }
     
-
-    /**
-     * Emits a note at the location of the given element.
-     * 
-     * @param element the element
-     * @param message the note
-     */
     public void note(Element element, String message) {
         messager.printMessage(NOTE, message, element);
     }
