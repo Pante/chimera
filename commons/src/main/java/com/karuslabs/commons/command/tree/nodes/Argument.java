@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.karuslabs.commons.command.Commands;
+import com.karuslabs.commons.command.*;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -45,6 +45,15 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
+    }
+    
+    
+    public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Command<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
+        return new Argument<>(name, type, command, requirement, suggestions);
+    }
+    
+    public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Execution<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
+        return new Argument<>(name, type, command, requirement, suggestions);
     }
     
     

@@ -49,7 +49,7 @@ public class MethodBlock {
     
     public MethodBlock() {
         builder = new StringBuilder();
-        argument = new MessageFormat("        var {0} = new Argument<>(\"{1}\", {2}, {3}, {4}, {5});\n");
+        argument = new MessageFormat("        var {0} = Argument.of(\"{1}\", {2}, {3}, {4}, {5});\n");
         literal = new MessageFormat("        var {0} = new Literal<>(\"{1}\", {2}, {3});\n");
         alias = new MessageFormat("        Literal.alias({0}, \"{1}\");\n");
         variables = new HashSet<>();

@@ -1,3 +1,11 @@
+## 4.6.1 - When the road looks rough ahead (03/06/2020)
+
+This update focuses on fixing an issue with code generated using command annotations.
+
+- Add `Argument.of(String, ArgumentType<V>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Add `Argument.of(String, ArgumentType<V>, Execution<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
+- Fix issue with the generic type of generated local variables not being inferable
+
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
 This update focuses on introducing compile-time command annotations in addition 
