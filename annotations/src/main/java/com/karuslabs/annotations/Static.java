@@ -29,6 +29,10 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
+/**
+ * Signifies that the annotated class consists of static constants and methods. 
+ * Instances of the annotated class should never be created.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(TYPE)

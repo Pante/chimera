@@ -37,6 +37,14 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A {@code Player} type that supports a comma separated list of player names enclosed 
+ * in double quotation marks in addition to the following tags:
+ * <ul>
+ * <li>{@code @a} - All online players</li>
+ * <li>{@code @r} - A random online player</li>
+ * </ul>
+ */
 public class PlayersType implements StringType<List<Player>> {
     
     private static final SimpleCommandExceptionType INVALID = new SimpleCommandExceptionType(new LiteralMessage("'@a' cannot be used in a list of players."));
@@ -49,11 +57,25 @@ public class PlayersType implements StringType<List<Player>> {
     private Server server;
     
     
+    /**
+     * Creates a {@code Player} type.
+     */
     public PlayersType() {
         this.server = Bukkit.getServer();
     }
     
     
+    /**
+     * Returns the online players whose names are contained in the string returned 
+     * by the given {@code StringReader} or were chosen through the supported tags.
+     * 
+     * @param reader the reader
+     * @return the online players whose names are contained in the given string 
+     *         or were chosen through the supported tags
+     * @throws CommandSyntaxException if an unknown tag or player name was given
+     *                                or @a was used in a comma separated list of
+     *                                arguments
+     */
     @Override
     public List<Player> parse(StringReader reader) throws CommandSyntaxException {
         var argument = reader.peek() == '"' ? reader.readQuotedString() : Readers.until(reader, ' ');
@@ -99,6 +121,15 @@ public class PlayersType implements StringType<List<Player>> {
     }
     
     
+    /**
+     * Returns the names of online players and tags that start with the given input.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the names of online players and tags that start with the remaining 
+     *         input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
         var remaining = builder.getRemaining();

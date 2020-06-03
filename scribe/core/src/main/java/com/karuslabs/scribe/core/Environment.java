@@ -26,27 +26,69 @@ package com.karuslabs.scribe.core;
 import java.util.*;
 
 
+/**
+ * An environment which contains the mappings for the generation of a {@code plugin.yml}.
+ * 
+ * @param <T> the type of the annotated types
+ */
 public abstract class Environment<T> {
     
+    /**
+     * The project.
+     */
     public final Project project;
+    /**
+     * A resolver.
+     */
     public final Resolver<T> resolver;
+    /**
+     * The mappings.
+     */
     public final Map<String, Object> mappings;
     
-    
+
+    /**
+     * Creates an {@code Environment} with the given parameters.
+     * 
+     * @param project the project
+     * @param resolver the resolver
+     */
     public Environment(Project project, Resolver<T> resolver) {
         this.project = project;
         this.resolver = resolver;
         mappings = new HashMap<>();
     }
     
-        
+    
+    /**
+     * Emits an error.
+     * 
+     * @param message the error
+     */
     public abstract void error(String message);
     
+    /**
+     * Emits a error at the given location.
+     * 
+     * @param location the location
+     * @param message the error
+     */
     public abstract void error(T location, String message);
     
         
+    /**
+     * Emits a warning.
+     * 
+     * @param message the warning
+     */
     public abstract void warn(String message);
     
+    /**
+     * Emits a warning at the given location.
+     * 
+     * @param location the location
+     * @param message the warning
+     */
     public abstract void warn(T location, String message);
     
 }

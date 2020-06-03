@@ -32,6 +32,9 @@ import javax.annotation.processing.FilerException;
 import javax.lang.model.element.*;
 
 
+/**
+ * A code generator that generates a source file from an AST.
+ */
 public class Generator {
     
     private Environment environment;
@@ -40,6 +43,15 @@ public class Generator {
     private MethodBlock method;
     
     
+    /**
+     * Creates a {@code Generator} with the given parameters.
+     * 
+     * @param environment the environment
+     * @param resolver the resolver used to resolve the location of the generated
+     *                 source file
+     * @param type a generator for types in a source file
+     * @param method a generator for methods in a type
+     */
     public Generator(Environment environment, SourceResolver resolver, TypeBlock type, MethodBlock method) {
         this.environment = environment;
         this.resolver = resolver;
@@ -48,6 +60,9 @@ public class Generator {
     }
     
     
+    /**
+     * Generates a source file at the location provided by {@code resolver}.
+     */
     public void generate() {
         var file = resolver.folder().isEmpty() ? resolver.file() : resolver.folder() + "." + resolver.file();
         var elements = environment.scopes.keySet().toArray(new Element[0]);
@@ -71,6 +86,12 @@ public class Generator {
     }
     
     
+    /**
+     * Recursively generates the contents of a method using the given token.
+     * 
+     * @param token the token
+     * @return the generated contents of a method
+     */
     String descend(Token token) {
         var values = token.children.values();
         var children = new ArrayList<String>(values.size());

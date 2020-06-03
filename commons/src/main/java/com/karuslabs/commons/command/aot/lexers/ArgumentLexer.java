@@ -32,8 +32,20 @@ import static com.karuslabs.annotations.processor.Messages.format;
 import static java.util.Collections.EMPTY_LIST;
 
 
+/**
+ * A {@code Lexer} subclass that produces a single argument token from a string.
+ * Arguments should match {@code <(name)>}.
+ */
 public class ArgumentLexer implements Lexer {
     
+    /**
+     * Produces a single argument token from {@code raw}.
+     * 
+     * @param environment the environment
+     * @param location the location that {@code raw} was declared
+     * @param raw the value
+     * @return a single argument token if {@code raw} is valid; else an empty list
+     */
     @Override
     public List<Token> lex(Environment environment, Element location, String raw) {
         if (!raw.startsWith("<") || !raw.endsWith(">")) {

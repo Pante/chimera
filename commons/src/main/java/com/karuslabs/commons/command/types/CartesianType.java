@@ -35,11 +35,27 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 interface CartesianType<T> extends Type<T> {
 
     static final String[] EMPTY = new String[0];
 
     
+    /**
+     * Splits the remaining string of the builder by a whitespace and forwards 
+     * providing suggestions to {@link #suggest(SuggestionsBuilder, Location, String[])} 
+     * if the source is a player and the block the player is looking at is within
+     * a 5 block radius. After which, forwards to {@link #suggest(SuggestionsBuilder, String[])}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the suggestions
+     */
     @Override
     default <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
         var remaining = builder.getRemaining();
@@ -57,13 +73,38 @@ interface CartesianType<T> extends Type<T> {
         return builder.buildFuture();
     }
     
+    /**
+     * Provides suggestions using the given parameters.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Does nothing.
+     * 
+     * @param builder the builder
+     * @param parts the parts of the argument split by a whitespace
+     * @param location the location of the block that the source is looking at if 
+     *                 within a 5 block radius
+     */
     default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {}
     
+    /**
+     * Provides suggestions using the given parameters.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Does nothing.
+     * 
+     * @param builder the builder
+     * @param parts the parts of the argument split by a whitespace
+     */
     default void suggest(SuggestionsBuilder builder, String[] parts) {}
     
 }
 
 
+/**
+ * A 2D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 interface Cartesian2DType<T> extends CartesianType<T> {
     
     static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
@@ -93,6 +134,11 @@ interface Cartesian2DType<T> extends CartesianType<T> {
 }
 
 
+/**
+ * A 3D Cartesian type.
+ * 
+ * @param <T> the type of the argument
+ */
 interface Cartesian3DType<T> extends CartesianType<T> {
     
     static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);

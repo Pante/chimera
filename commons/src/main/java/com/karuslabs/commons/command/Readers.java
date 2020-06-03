@@ -31,11 +31,26 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
+/**
+ * This class consists of static methods that manipulates the input of a {@code StringReader}.
+ */
 public @Static class Readers {
     
+    /**
+     * A regular expression for a comma followed by zero or more whitespaces.
+     */
     public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
     
     
+    /**
+     * Substrings the input between the current cursor of the {@code StringReader}
+     * and index of the first encountered delimiter.
+     * 
+     * @param reader the reader
+     * @param delimiter the delimiter
+     * @return a string between the current cursor and index of the first encountered 
+     *         delimiter
+     */
     public static String until(StringReader reader, char delimiter) {
         var start = reader.getCursor();
         while (reader.canRead() && reader.peek() != delimiter) {
@@ -45,6 +60,15 @@ public @Static class Readers {
         return reader.getString().substring(start, reader.getCursor());
     }
     
+    /**
+     * Substrings the input between the current cursor of the {@code StringReader}
+     * and index of any of the delimiters first encountered.
+     * 
+     * @param reader the reader
+     * @param delimiters the delimiters
+     * @return a string between the current cursor and the index of the first encountered 
+     *         delimiter
+     */
     public static String until(StringReader reader, char... delimiters) {
         var start = reader.getCursor();
         while (reader.canRead() && !contains(delimiters, reader.peek())) {
@@ -64,7 +88,16 @@ public @Static class Readers {
         return false;
     }
     
-        
+    
+    /**
+     * Substrings the input between the current cursor of the {@code StringReader}
+     * and the index of the character for which the given predicate is {@code true}.
+     * 
+     * @param reader the reader
+     * @param end the predicate
+     * @return a string between the current cursor and the index of the character
+     *         for which the predicate is {@code true}
+     */
     public static String until(StringReader reader, Predicate<Character> end) {
         var start = reader.getCursor();
         while (reader.canRead() && !end.test(reader.peek())) {

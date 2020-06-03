@@ -24,10 +24,35 @@
 package com.karuslabs.commons.util.concurrent.locks;
 
 
+/**
+ * A resource from which concurrent access to it can be held.
+ */
 public interface Holdable {
     
+    /**
+     * Holds mutually exclusive access to this.
+     * <br><br>
+     * If the object is not available then the current thread becomes disabled for 
+     * thread scheduling purposes and lies dormant until the object has been acquired. 
+     * 
+     * @return a {@code Mutex}
+     */
     public Mutex hold();
     
+    /**
+     * Holds mutually exclusive access to this unless the current thread is interrupted.
+     * <br><br>
+     * If the object is not available then the current thread becomes disabled for 
+     * thread scheduling purposes and lies dormant until one of two things happens:
+     * <ul>
+     * <li> The object is acquired by the current thread
+     * <li> Some other thread interrupts the current thread 
+     * </ul>
+     * 
+     * @return a {@code Mutex}
+     * @throws InterruptedException if the current thread is interrupted while acquiring 
+     *                              the object
+     */
     public Mutex holdInterruptibly() throws InterruptedException;
     
 }

@@ -41,6 +41,9 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.COMPILE;
 
 
+/**
+ * A MOJO that represents the {@code scribe} goal.
+ */
 @Mojo(name = "scribe", defaultPhase = COMPILE, threadSafe = false, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class ScribeMojo extends AbstractMojo {    
     
@@ -54,6 +57,11 @@ public class ScribeMojo extends AbstractMojo {
     File folder;
     
 
+    /**
+     * Processes all annotations in a project and emits a {code plugin.yml}.
+     * 
+     * @throws MojoFailureException if an error occurs during annotation resolution
+     */
     @Override
     public void execute() throws MojoFailureException {
         var graph = new ClassGraph().enableClassInfo().enableAnnotationInfo().addClassLoader(Processor.loader(classpaths));
@@ -72,6 +80,11 @@ public class ScribeMojo extends AbstractMojo {
         }
     }
     
+    /**
+     * Creates a {@code Project} from this project's {@code pom.xml}.
+     * 
+     * @return a {@code Project}
+     */
     Project project() {
         var authors = Stream.of(pom.getContributors(), pom.getDevelopers())
                             .flatMap(Collection::stream)
@@ -89,6 +102,14 @@ public class ScribeMojo extends AbstractMojo {
         return new Project(pom.getName(), pom.getVersion(), api, authors, pom.getDescription(), pom.getUrl());
     }
     
+    
+    /**
+     * Checks if the given environment contains any errors and warnings. If so,
+     * log the errors and warnings to console.
+     * 
+     * @param environment the environment
+     * @return {@code true} if the given environment contains errors; else {@code false}
+     */
     boolean valid(MavenEnvironment environment) {
         Console.WARNINGS.log(getLog(), environment.warnings);
         Console.ERRORS.log(getLog(), environment.errors);

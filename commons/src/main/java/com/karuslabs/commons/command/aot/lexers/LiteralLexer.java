@@ -32,8 +32,20 @@ import static com.karuslabs.annotations.processor.Messages.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
+/**
+ * A {@code Lexer} subclass that produces a single literal token from a string.
+ * Literals should match {@code (name)(|(alias))*}.
+ */
 public class LiteralLexer implements Lexer {
-
+    
+    /**
+     * Produces a single literal token from {@code raw}.
+     * 
+     * @param environment the environment
+     * @param location the location that {@code raw} was declared
+     * @param raw the value
+     * @return a single literal token if {@code raw} is valid; else an empty list
+     */
     @Override
     public List<Token> lex(Environment environment, Element location, String raw) {
         if (raw.contains("<") || raw.contains(">")) {
@@ -61,6 +73,15 @@ public class LiteralLexer implements Lexer {
     }
     
     
+    /**
+     * Checks if the given value is valid.
+     * 
+     * @param environment the environment
+     * @param location the location that {@code raw} was declared
+     * @param context the context
+     * @param value the value
+     * @return {@code true} if valid; else {@code false}
+     */
     boolean valid(Environment environment, Element location, String context, String value) {
         var error = value.isEmpty();
         if (error) {

@@ -24,14 +24,23 @@
 package com.karuslabs.commons.command.aot;
 
 
+/**
+ * Represents the types that can be bound to a token.
+ */
 public enum Binding {
-    
+
     COMMAND("A", "Command<CommandSender>", "command"), 
     TYPE("An", "ArgumentType<?>", "type"),
     REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
     SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "suggestions");
     
+    /**
+     * The grammatical article for a binding.
+     */
     public final String article;
+    /**
+     * The type that this binding represents.
+     */
     public final String type;
     private final String value;
     

@@ -27,8 +27,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
 
+/**
+ * A {@code ItemStack} builder.
+ */
 public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
+    /**
+     * Creates a {@code ItemBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return an {@code ItemBuilder}
+     */
     public static ItemBuilder of(Material material) {
         return new ItemBuilder(material);
     }
@@ -38,71 +47,128 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     
+    /**
+     * Creates a {@code BannerBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code BannerBuilder}
+     */
     public BannerBuilder asBanner() {
         return new BannerBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code BlockStateBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code BlockStateBuilder}
+     */
     public BlockStateBuilder asBlockState() {
         return new BlockStateBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code BookBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code BookBuilder}
+     */
     public BookBuilder asBook() {
         return new BookBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code CrossBowBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code CrossBowBuilder}
+     */
     public CrossbowBuilder asCrossbow() {
         return new CrossbowBuilder(this);
     }
     
-    
+    /**
+     * Creates an {@code EnchantmentStorageBuilder} for this {@code ItemStack}.
+     * 
+     * @return an {@code EnchantmentStorageBuilder}
+     */
     public EnchantmentStorageBuilder asEnchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code FireworkBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code FireworkBuilder}
+     */
     public FireworkBuilder asFirework() {
         return new FireworkBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code FireworkEffectBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code FireworkEffectBuilder}
+     */
     public FireworkEffectBuilder asFireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code KnowledgeBookBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code KnowledgeBookBuilder}
+     */
     public KnowledgeBookBuilder asKnowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code LeatherArmourBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code LeatherArmourBuilder}
+     */
     public LeatherArmourBuilder asLeatherArmour() {
         return new LeatherArmourBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code MapBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code MapBuilder}
+     */
     public MapBuilder asMap() {
         return new MapBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code PotionBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code PotionBuilder}
+     */
     public PotionBuilder asPotion() {
         return new PotionBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code SkullBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code SkullBuilder}
+     */
     public SkullBuilder asSkull() {
         return new SkullBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code SuspiciousStewBuilder} for this {@code ItemStack}.
+     * 
+     * @return a  {@code SuspiciousStewBuilder}
+     */
     public SuspiciousStewBuilder asStew() {
         return new SuspiciousStewBuilder(this);
     }
     
-    
+    /**
+     * Creates a {@code TropicalFishBucketBuilder} for this {@code ItemStack}.
+     * 
+     * @return a  {@code TropicalFishBucketBuilder}
+     */
     public TropicalFishBucketBuilder asBucket() {
         return new TropicalFishBucketBuilder(this);
     }

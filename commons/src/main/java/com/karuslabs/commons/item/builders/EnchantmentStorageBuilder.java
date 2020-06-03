@@ -28,8 +28,17 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.*;
 
 
+/**
+ * A builder for items with {@code EnchantmentStorageMeta}.
+ */
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, EnchantmentStorageBuilder> {
     
+    /**
+     * Creates an {@code EnchantmentStoragBuilder} for the given material.
+     * 
+     * @param material the material
+     * @return an {@code EnchantmentStoragBuilder}
+     */
     public static EnchantmentStorageBuilder of(Material material) {
         return new EnchantmentStorageBuilder(material);
     }
@@ -43,6 +52,13 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, E
     }
     
     
+    /**
+     * Adds the enchantment with the given level.
+     * 
+     * @param enchantment the enchantment
+     * @param level the enchantment level; level restrictions are ignored
+     * @return {@code this}
+     */
     public EnchantmentStorageBuilder stored(Enchantment enchantment, int level) {
         meta.addStoredEnchant(enchantment, level, true);
         return this;

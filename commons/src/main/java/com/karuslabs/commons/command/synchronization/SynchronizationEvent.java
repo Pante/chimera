@@ -30,11 +30,21 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 
 
+/**
+ * A {@code PlayerCommandSendEvent} subclass that is emitted when the internal 
+ * dispatcher of the server and a client are synchronized.
+ */
 public class SynchronizationEvent extends PlayerCommandSendEvent {
     
     private static final HandlerList HANDLERS = new HandlerList();
     
     
+    /**
+     * Creates a {@code SynchronizationEvent} with the given player and commands.
+     * 
+     * @param player the player
+     * @param commands the commands to be sent to the player
+     */
     public SynchronizationEvent(Player player, Collection<String> commands) {
         super(player, commands);
     }

@@ -37,21 +37,68 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * An {@code ArgumentCommandNode} subclass that provides additional convenience
+ * methods.
+ * 
+ * @param <T> the type of the source
+ * @param <V> the type of the argument
+ */
 public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
     
+    /**
+     * Creates an {@code Argument} builder with the given name and type.
+     * 
+     * @param <T> the type of the source
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a {@code Builder}
+     */
     public static <T, V> Builder<T, V> builder(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
+    /**
+     * Creates an {@code Argument} builder with {@code CommandSender} as the source
+     * type, and the given name and type.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type of the argument
+     * @return a {@code Builder}
+     */
     public static <V> Builder<CommandSender, V> of(String name, ArgumentType<V> type) {
         return new Builder<>(name, type);
     }
     
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param suggestions the {@code SuggestionProvider}
+     * @return an {@code Argument}
+     */
     public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Command<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
         return new Argument<>(name, type, command, requirement, suggestions);
     }
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name
+     * @param type the type
+     * @param command the execution to be executed
+     * @param requirement the requirement
+     * @param suggestions the {@code SuggestionProvider}
+     * @return an {@code Argument}
+     */
     public static <V> Argument<CommandSender, V> of(String name, ArgumentType<V> type, Execution<CommandSender> command, Predicate<CommandSender> requirement, SuggestionProvider<CommandSender> suggestions) {
         return new Argument<>(name, type, command, requirement, suggestions);
     }
@@ -61,10 +108,31 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     private Consumer<CommandNode<T>> addition;
     
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param name the name of the argument
+     * @param type the type of the argument
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param suggestions the {@code SuggestionProvider}
+     */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
         this(name, type, command, requirement, null, null, false, suggestions);
     }
     
+    /**
+     * Creates an {@code Argument} with the given parameters.
+     * 
+     * @param name the name of the argument
+     * @param type the type of the argument
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param destination the destination to which this argument is redirected
+     * @param modifier the redirection modifier
+     * @param fork the fork
+     * @param suggestions the {@code SuggestionProvider}
+     */
     public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
@@ -79,7 +147,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     
     
     @Override
-    public CommandNode<T> removeChild(String child) {
+    public @Nullable CommandNode<T> removeChild(String child) {
         return Commands.remove(this, child);
     }
     
@@ -99,8 +167,14 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
     }
-
     
+    
+    /**
+     * An {@code Argument} builder.
+     * 
+     * @param <T> the type of the source
+     * @param <V> the type of the argument
+     */
     public static class Builder<T, V> extends Nodes.Builder<T, Builder<T, V>> {
         
         String name;
@@ -108,12 +182,26 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         @Nullable SuggestionProvider<T> suggestions;
         
         
+        /**
+         * Creates a {@code Builder} with the given name and type.
+         * 
+         * @see #builder(String, ArgumentType) 
+         * @see #of(String, ArgumentType) 
+         * 
+         * @param name the name
+         * @param type the type
+         */
         protected Builder(String name, ArgumentType<V> type) {
             this.name = name;
             this.type = type;
         }
-
         
+        /**
+         * Sets the {@code SuggestionProvider}.
+         * 
+         * @param suggestions the {@code SuggestionProvider}
+         * @return {@code this}
+         */
         public Builder<T, V> suggests(SuggestionProvider<T> suggestions) {
             this.suggestions = suggestions;
             return getThis();
@@ -124,7 +212,12 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         protected Builder<T, V> getThis() {
             return this;
         }
-
+        
+        /**
+         * Builds the {@code Argument}.
+         * 
+         * @return the {@code Argument}
+         */
         @Override
         public Argument<T, V> build() {
             var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);

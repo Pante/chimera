@@ -35,6 +35,9 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 
+/**
+ * A {@code Player} type.
+ */
 public class PlayerType implements WordType<Player> {
     
     private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(name -> new LiteralMessage("Unknown player: " + name));
@@ -44,11 +47,22 @@ public class PlayerType implements WordType<Player> {
     private Server server;
     
     
+    /**
+     *  Creates a {@code PlayerType}.
+     */
     public PlayerType() {
         this.server = Bukkit.getServer();
     }
     
     
+    /**
+     * Returns a online player whose name matches the string returned by the given 
+     * {@code StringReader}.
+     * 
+     * @param reader the reader
+     * @return a player with the given name
+     * @throws CommandSyntaxException if a player with the give name does not exist
+     */
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString();
@@ -62,6 +76,18 @@ public class PlayerType implements WordType<Player> {
     }
 
     
+    /**
+     * Returns the names of online players that start with the remaining input of 
+     * the given {@code SuggesitonBuilder}.If the source is a player, a check is 
+     * performed to determine the visibility of the suggested player to the source. 
+     * Players that are invisible to the source are not suggested.
+     * 
+     * @param <S> the type of the source
+     * @param source the source
+     * @param context the context
+     * @param builder the builder
+     * @return the player names that begin with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(S source, CommandContext<S> context, SuggestionsBuilder builder) {
         var sender = source instanceof Player ? (Player) source : null;

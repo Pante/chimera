@@ -38,12 +38,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
 
+/**
+ * This class consists exclusively of static methods that handle exceptions which
+ * occur when parsing and executing commands.
+ * <br><br>
+ * To be honest, I copied the methods in Spigot and I have absolutely no clue what 
+ * the methods do.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * This class was adapted from Spigot's {@code CommandDispatcher}.
+ */
 @Static class Exceptions {
     
     private static final Object[] EMPTY = new Object[0];
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 187
+    /**
+     * Reports the given exception to the {@code sender}.
+     * 
+     * Source: net.minecraft.server.CommandDispatcher #line: 187
+     * 
+     * @param sender the sender
+     * @param exception the exception
+     */
     static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         
@@ -81,7 +98,15 @@ import org.bukkit.entity.minecart.CommandMinecart;
     }
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 212
+    /**
+     * Reports the given exception to the {@code sender}.
+     * 
+     * Source: net.minecraft.server.CommandDispatcher #line: 212
+     * 
+     * @param sender the sender
+     * @param exception the exception
+     */
+    // 
     static void report(CommandSender sender, Exception exception) {
         var listener = from(sender);
         
@@ -100,7 +125,14 @@ import org.bukkit.entity.minecart.CommandMinecart;
     }
     
     
-    // Source: package org.bukkit.craftbukkit.command.VanillaCommandWrapper#getListener(CommandSender)
+    /**
+     * Transforms the given {@code CommandSneder} to a {@code CommandListenerWrapper}.
+     * 
+     * Source: package org.bukkit.craftbukkit.command.VanillaCommandWrapper#getListener(CommandSender)
+     * 
+     * @param sender the sender
+     * @return a {@code CommandListenerWrapper}
+     */
     static CommandListenerWrapper from(CommandSender sender) {
         if (sender instanceof Player) {
             return ((CraftPlayer) sender).getHandle().getCommandListener();

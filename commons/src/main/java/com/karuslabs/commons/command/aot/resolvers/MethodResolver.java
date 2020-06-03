@@ -39,6 +39,10 @@ import static com.karuslabs.commons.command.aot.Binding.*;
 import static javax.lang.model.element.Modifier.*;
 
 
+/**
+ * A {@code Resolver} that checks the signature of a method and if valid, binds 
+ * the method to a token.
+ */
 public class MethodResolver extends Resolver<ExecutableElement> {
 
     TypeMirror completable;
@@ -48,6 +52,11 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     TypeMirror exception;
     
     
+    /**
+     * Creates a {@code MethodResolver} with the given environment.
+     * 
+     * @param environment the environment
+     */
     public MethodResolver(Environment environment) {
         super(environment);
         var suggestions = elements.getTypeElement(Suggestions.class.getName()).asType();
@@ -60,6 +69,17 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     }
 
     
+    /**
+     * Checks the signature of the given method and if valid, binds it to {@code token}.
+     * <br><br>
+     * <b>Implementation details:</b><br><br>
+     * A method is considered to be valid if it is public and signature matches
+     * {@code Command<CommandSender}, {@code Execution<CommandSender>}, {@code Predicate<CommandSender>} 
+     * or {@code SuggestionProvider<CommandSender>}.
+     * 
+     * @param method the method
+     * @param token the token
+     */
     @Override
     public void resolve(ExecutableElement method, Token token) {
         var modifiers = method.getModifiers();
@@ -83,6 +103,14 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     }
 
     
+    /**
+     * Returns whether the given return type and parameters matches that of a {@code Command<CommandSender>}
+     * or {@code Execution<CommandSender>}.
+     * 
+     * @param type the return type
+     * @param parameters the parameters
+     * @return {@code true} if the given return type and parameters match
+     */
     boolean command(TypeMirror type, List<? extends VariableElement> parameters) {
         if (parameters.size() < 1) {
             return false;
@@ -96,6 +124,14 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     }
 
     
+    /**
+     * Returns whether the given return type and parameters match that of a 
+     * {@code Predicate<CommandSender>}.
+     * 
+     * @param type the return type
+     * @param parameters the parameters
+     * @return {@code true} if the given return type and parameters match
+     */
     boolean predicate(TypeMirror type, List<? extends VariableElement> parameters) {
         return type.getKind() == TypeKind.BOOLEAN 
             && parameters.size() == 1 
@@ -103,6 +139,14 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     }
     
     
+    /**
+     * Returns whether the given return type and parameters match that of a 
+     * {@code SuggestionProvider<CommandSender>}.
+     * 
+     * @param type the return type
+     * @param parameters the parameters
+     * @return {@code true} if the given return type and parameters match
+     */
     boolean suggestions(TypeMirror type, List<? extends VariableElement> parameters) {
         return types.isSubtype(type, completable)
             && parameters.size() == 2
@@ -111,6 +155,13 @@ public class MethodResolver extends Resolver<ExecutableElement> {
     }
     
     
+    /**
+     * Returns whether the given thrown exceptions is empty or contains a single 
+     * {@code CommandSyntaxExcetpion}.
+     * 
+     * @param thrown the exceptions that were thrown
+     * @return {@code true} if {@code thrown} is empty or contains a single {@code CommandSyntaxException}
+     */
     boolean exceptions(List<? extends TypeMirror> thrown) {
         return thrown.isEmpty() || (thrown.size() == 1 && types.isSubtype(thrown.get(0), exception));
     }

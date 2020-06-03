@@ -36,8 +36,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static java.util.stream.Collectors.*;
 
 
+/**
+ * A processor that builds a plugin.yml using annotations in {@link com.karuslabs.scribe.annotations}.
+ * 
+ * @param <T> the annotated type
+ */
 public abstract class Processor<T> {
     
+    /**
+     * Returns a {@code ClassLoader} with the given classpaths.
+     * 
+     * @param classpaths the classpaths.
+     * @return a ClassLoader
+     */
     public static ClassLoader loader(List<String> classpaths) {
         return URLClassLoader.newInstance(classpaths.stream().map(classpath -> {
                 try {
@@ -56,6 +67,13 @@ public abstract class Processor<T> {
     @Nullable Set<Class<? extends Annotation>> annotations;
     
     
+    /**
+     * Creates a {@code Processor} with the given parameters and all {@code Parser}s
+     * except {@link PluginParser}.
+     * 
+     * @param environment the environment
+     * @param parser the parser
+     */
     public Processor(Environment<T> environment, PluginParser<T> parser) {
         this(environment, List.of(
             parser,
@@ -67,13 +85,21 @@ public abstract class Processor<T> {
         ));
     }
     
+    /**
+     * Creates a {@code Processor} with the given parameters.
+     * 
+     * @param environment the environment
+     * @param parsers a list of {@code Parser}s.
+     */
     public Processor(Environment<T> environment, List<Parser<T>> parsers) {
         this.environment = environment;
         this.parsers = parsers;
     }
     
     
-    
+    /**
+     * Resolves all supported annotations on the types returned by {@link #annotated(Class)}.
+     */
     public void run() {
         for (var parser : parsers) {
             var types = parser.annotations().stream().collect(flatMapping(this::annotated, toSet()));
@@ -81,9 +107,20 @@ public abstract class Processor<T> {
         }
     }
     
+    /**
+     * Returns all types annotated with {@code annotation}.
+     * 
+     * @param annotation the annotation
+     * @return a stream of all types annotated with {@code annotation}
+     */
     protected abstract Stream<T> annotated(Class<? extends Annotation> annotation);
     
     
+    /**
+     * Returns all annotations supported by this {@code Processor}.
+     * 
+     * @return all supported annotations
+     */
     public Set<Class<? extends Annotation>> annotations() {
         if (annotations == null) {
             annotations = parsers.stream().collect(flatMapping((resolver) -> resolver.annotations().stream(), toSet()));

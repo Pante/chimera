@@ -38,6 +38,10 @@ import static com.karuslabs.annotations.processor.Messages.quote;
 import static javax.lang.model.element.Modifier.*;
 
 
+/**
+ * A {@code Resolver} that checks the signature of a variable and if valid, binds 
+ * the variable to a token.
+ */
 public class VariableResolver extends Resolver<VariableElement> {
 
     TypeMirror command;
@@ -46,6 +50,11 @@ public class VariableResolver extends Resolver<VariableElement> {
     TypeMirror suggestions;
     
     
+    /**
+     * Creates a {@code VariableResolver} with the environment.
+     * 
+     * @param environment the environment
+     */
     public VariableResolver(Environment environment) {
         super(environment);
         command = specialize(Command.class, sender);
@@ -55,6 +64,17 @@ public class VariableResolver extends Resolver<VariableElement> {
     }
 
     
+    /**
+     * Checks the signature of the given variable and if valid, binds it to {@code token}.
+     * <br><br>
+     * <b>Implementation details:</b><br><br>
+     * A variable is considered to be valid if it is public, final and type matches
+     * {@code Command<CommandSender}, {@code Execution<CommandSender>}, {@code Predicate<CommandSender>} 
+     * or {@code SuggestionProvider<CommandSender>}.
+     * 
+     * @param variable the variable
+     * @param token the token
+     */
     @Override
     public void resolve(VariableElement variable, Token token) {
         var modifiers = variable.getModifiers();

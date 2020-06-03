@@ -31,6 +31,19 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
+/**
+ * A {@code Listener} that listens for {@code PlayerCommandSendEvent}s to resynchronize
+ * the server's internal dispatcher with a client. 
+ * <br><br>
+ * A single {@code SynchronizationListener} is shared among several plugins on a server 
+ * to prevent redundant resynchronization. 
+ * <br><br>
+ * <b>Note:</b><br>
+ * An issue in Minecraft's command mapping causes redirected commands to be incorrectly
+ * mapped and sent to clients if the name of the redirected command is alphabetically 
+ * before the name of the destination. Hence, commands are re-mapped and resent after 
+ * a {@code PlayerCommanndSendEvent} is emitted.
+ */
 class SynchronizationListener implements Runnable, Listener {
 
     private Synchronizer synchronizer;
@@ -40,6 +53,13 @@ class SynchronizationListener implements Runnable, Listener {
     boolean running;
     
     
+    /**
+     * Creates a {@code SynchronizationListener​} with the given parameters.
+     * 
+     * @param synchronizer the owning {@code Synchronizer}
+     * @param scheduler the scheduler
+     * @param plugin the owning plugin
+     */
     SynchronizationListener(Synchronizer synchronizer, BukkitScheduler scheduler, Plugin plugin) {
         this.synchronizer = synchronizer;
         this.scheduler = scheduler;
@@ -49,6 +69,9 @@ class SynchronizationListener implements Runnable, Listener {
     }
     
     
+    /**
+     * Synchronizes the internal dispatcher with the players in the queued {@code PlayerCommandSendEvent}s.
+     */
     @Override
     public void run() {
         for (var event : events) {

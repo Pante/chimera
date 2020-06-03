@@ -36,13 +36,45 @@ import java.util.function.Predicate;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
+/**
+ * A mapper that maps a command of type {@code T} to type {@code R} except for the 
+ * children of the command. If the children of a command needs to be mapped too, 
+ * a {@link TreeWalker} should be used instead.
+ *
+ * @param <T> the type of a command
+ * @param <R> the resultant type of the mapped command
+ */
 public class Mapper<T, R> {
     
+    /**
+     * An empty command that always returns {@code 0}.
+     */
     public static final Command<?> NONE = context -> 0;
+    /**
+     * A predicate that is always {@code true}.
+     */
     public static final Predicate<?> TRUE = source -> true;
+    /**
+     * A {@code SuggestionProvider} that always returns an empty {@code Suggestions}.
+     */
     public static final SuggestionProvider<?> EMPTY = (suggestions, builder) -> builder.buildFuture();
     
     
+    /**
+     * Maps the given command to the resultant type.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Mapping of the different commands are forwarded to their respective methods.
+     * <ul>
+     * <li>{@code ArgumentCommandNode} to {@link #argument(CommandNode)}</li>
+     * <li>{@code LiteralCommandNode} to {@link #literal(CommandNode)}</li>
+     * <li>{@code RootCommand} to {@link #root(CommandNode)}</li>
+     * <li>All other commands to {@link #otherwise(CommandNode)}</li>
+     * </ul>
+     * 
+     * @param command the command to be mapped
+     * @return the mapped command
+     */
     public CommandNode<R> map(CommandNode<T> command) {
         if (command instanceof ArgumentCommandNode<?, ?>) {
             return argument(command);
@@ -59,43 +91,130 @@ public class Mapper<T, R> {
     }
 
     
+    /**
+     * Maps the given argument to the resultant type.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Mapping of the different fields are forwarded to their respective methods.
+     * <ul>
+     * <li>{@code ArgumentType} to {@link #type(ArgumentCommandNode)}</li>
+     * <li>{@code Command} to {@link #execution(CommandNode)}</li>
+     * <li>{@code Predicate} to {@link #requirement(CommandNode)}</li>
+     * <li>{@code SuggestionProvider} to {@link #suggestions(ArgumentCommandNode)}</li>
+     * </ul>
+     * 
+     * @param command the argument to be mapped
+     * @return the mapped {@code Argument}
+     * @throws ClassCastException if the given {@code command} does not inherit
+     *                            from {@code ArgumentCommandNode}
+     */
     @VisibleForOverride
     protected CommandNode<R> argument(CommandNode<T> command) {
-        var parameter = (ArgumentCommandNode<T, ?>) command;
-        return new Argument<>(parameter.getName(), type(parameter), execution(parameter), requirement(parameter), suggestions(parameter));
+        var argument = (ArgumentCommandNode<T, ?>) command;
+        return new Argument<>(argument.getName(), type(argument), execution(argument), requirement(argument), suggestions(argument));
     }
 
+    /**
+     * Maps the given literal to the resultant type.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Mapping of the different fields are forwarded to their respective methods.
+     * <ul>
+     * <li>{@code Command} to {@link #execution(CommandNode)}</li>
+     * <li>{@code Predicate} to {@link #requirement(CommandNode)}</li>
+     * </ul>
+     * 
+     * @param command the literal to be mapped
+     * @return the mapped {@code Literal}
+     * @throws ClassCastException if the given {@code command} does not inherit
+     *                            from {@code LiteralCommandNode}
+     */
     @VisibleForOverride
     protected CommandNode<R> literal(CommandNode<T> command) {
         return new Literal<>(command.getName(), execution(command), requirement(command));
     }
-
+    
+    /**
+     * Maps the given command to the resultant type.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * A {@code RootCommandNode} is always created and returned.
+     * 
+     * @param command the command to be mapped
+     * @return a {@code RootCommandNode}
+     */
     @VisibleForOverride
     protected CommandNode<R> root(CommandNode<T> command) {
         return new RootCommandNode<>();
     }
 
+    /**
+     * Maps the given command to the resultant type.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * A {@code UnsupportedOperationException} is thrown.
+     * 
+     * @param command the command to mapped
+     * @return a mapped command
+     * @throws UnsupportedOperationException if this operation is not overridden
+     */
     @VisibleForOverride
     protected CommandNode<R> otherwise(CommandNode<T> command) {
         throw new IllegalArgumentException("Unsupported command, '" + command.getName() + "' of type: " + command.getClass().getName());
     }
     
     
+    /**
+     * Maps the {@code ArgumentType} of the given command.
+     * <br><br>
+     * <b>Default implementations:</b><br>
+     * Returns the {@code ArgumentType} of the given command.
+     * 
+     * @param command the command which {@code ArgumentType} is to be mapped
+     * @return the mapped {@code ArgumentType}
+     */
     @VisibleForOverride
     protected ArgumentType<?> type(ArgumentCommandNode<T, ?> command) {
         return command.getType();
     }
     
+    /**
+     * Maps the {@code Command} of the given command.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Always returns {@link #NONE}.
+     * 
+     * @param command the command which {@code Command} is to be mapped
+     * @return the mapped {@code Command}
+     */
     @VisibleForOverride
     protected Command<R> execution(CommandNode<T> command) {
         return (Command<R>) NONE;
     }
-
+    
+    /**
+     * Maps the {@code requirement} of the given command.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Always returns {@link #TRUE}.
+     * 
+     * @param command the command which {@code requirement} is to be mapped
+     * @return the mapped {@code requirement}
+     */
     @VisibleForOverride
     protected Predicate<R> requirement(CommandNode<T> command) {
         return (Predicate<R>) TRUE;
     }
-
+    
+    /**
+     * Maps the {@code SuggestionProvider} of the given command.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Always returns {@code null}.
+     * 
+     * @param command the command which {@code SuggestionProvider} is to be mapped
+     * @return the mapped {@code SuggestionProvider}
+     */
     @VisibleForOverride
     protected @Nullable SuggestionProvider<R> suggestions(ArgumentCommandNode<T, ?> command) {
         return null;
