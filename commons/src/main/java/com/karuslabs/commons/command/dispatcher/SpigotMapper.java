@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.karuslabs.commons.command.types.Type;
 
 
-class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
+class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     static final Map<ClientSuggestionProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
     
@@ -57,7 +57,7 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     private CommandDispatcher<CommandSender> dispatcher;
     
     
-    NativeMapper(CommandDispatcher<CommandSender> dispatcher) {
+    SpigotMapper(CommandDispatcher<CommandSender> dispatcher) {
         this.dispatcher = dispatcher;
     }
     
@@ -97,7 +97,7 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         } 
     }
     
-    protected SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
+    SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());
@@ -105,7 +105,7 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         };
     }
     
-    protected SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
+    SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());

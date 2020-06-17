@@ -1,3 +1,18 @@
+## 4.7.0 - I'll be there someday (Next release)
+
+- TODO: Look into optimizing reparsing
+- TODO: Implement specialized optimization for CommandListenerWrapper to ICompletionProvider
+mapping in Paper
+
+### Commons
+
+Additional optimizations has been added for Paper through utilizing their `paper-mojangapi`
+expanded API which exposes Brigadier.
+
+- Change `NativeMapper` to `SpigotMapper`
+
+
+
 ## 4.6.1 - When the road looks rough ahead (03/06/2020)
 
 This update focuses on fixing an issue with code generated using command annotations.

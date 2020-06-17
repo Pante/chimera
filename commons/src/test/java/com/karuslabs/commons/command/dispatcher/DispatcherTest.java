@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.tree.CommandNode;
@@ -54,7 +53,6 @@ class DispatcherTest {
     CraftCommandMap map = when(mock(CraftCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
-    ServicesManager services = mock(ServicesManager.class);
     CommandDispatcher wrapper = mock(CommandDispatcher.class);
     com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> internal = new com.mojang.brigadier.CommandDispatcher();
     
@@ -66,7 +64,6 @@ class DispatcherTest {
         when(craftserver.getCommandMap()).thenReturn(map);
         when(craftserver.getScheduler()).thenReturn(scheduler);
         when(craftserver.getPluginManager()).thenReturn(manager);
-        when(craftserver.getServicesManager()).thenReturn(services);
         
         server.server = craftserver;
         server.commandDispatcher = when(wrapper.a()).thenReturn(internal).getMock();
@@ -78,13 +75,9 @@ class DispatcherTest {
     @Test
     void of() {
         reset(manager);
-        reset(services);
-        
-        when(services.isProvidedFor(any())).thenReturn(false);
         
         var dispatcher = Dispatcher.of(plugin);
         
-        verify(services).register(any(), any(), any(), any());
         assertSame(dispatcher, ((SpigotMap) dispatcher.getRoot().map()).dispatcher);
     }
     
@@ -111,12 +104,10 @@ class DispatcherTest {
     @Test
     void update() {
         dispatcher.getRoot().addChild(Literal.of("a").build());
-        dispatcher.synchronizer = mock(Synchronizer.class);
         
         dispatcher.update();
         
         assertNotNull(dispatcher.dispatcher.getRoot().getChild("a"));
-        verify(dispatcher.synchronizer()).synchronize();
     }
     
     

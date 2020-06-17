@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.synchronization.*;
 import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
@@ -50,7 +49,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     private MinecraftServer server;
     private Root root;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
-    Synchronizer synchronizer;
     TreeWalker<CommandSender, CommandListenerWrapper> walker;
 
     
@@ -58,31 +56,23 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var prefix = plugin.getName().toLowerCase();
         var server = ((CraftServer) plugin.getServer());
         
-        var synchronizer = Synchronizer.of(plugin);
-        
         var map = new SpigotMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
         var root = new Root(prefix, map);
-        var dispatcher = new Dispatcher(server, root, synchronizer);
+        var dispatcher = new Dispatcher(server, root);
         map.dispatcher = dispatcher;
         
         server.getPluginManager().registerEvents(dispatcher, plugin);
-        
-        var listener = new PulseListener(synchronizer, plugin);
-        listener.register();
-        
-        server.getPluginManager().registerEvents(listener, plugin);
         
         return dispatcher;
     }
     
     
-    protected Dispatcher(Server server, Root root, Synchronizer synchronizer) {
+    protected Dispatcher(Server server, Root root) {
         super(root);
         this.root = root;
         this.server = ((CraftServer) server).getServer();
         this.dispatcher = this.server.commandDispatcher.a();
-        this.synchronizer = synchronizer;
-        this.walker = new TreeWalker<>(new NativeMapper(this));
+        this.walker = new TreeWalker<>(new SpigotMapper(this));
     }
     
     
@@ -102,7 +92,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     public void update() {
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
-        synchronizer.synchronize();
     }
     
     
@@ -116,11 +105,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @Override
     public Root getRoot()  {
         return root;
-    }
- 
-    
-    public Synchronizer synchronizer() {
-        return synchronizer;
     }
     
 }
