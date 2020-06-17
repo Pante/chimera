@@ -1,8 +1,7 @@
 ## 4.7.0 - I'll be there someday (Next release)
 
-- TODO: Look into optimizing reparsing
-- TODO: Implement specialized optimization for CommandListenerWrapper to ICompletionProvider
-mapping in Paper
+- Remove `com.karuslabs.commons.command.synchronization.*` - No longer needed since
+the bug in Spigot has been fixed. See https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/pull-requests/675/overview
 
 ### Commons
 
