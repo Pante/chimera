@@ -1,6 +1,5 @@
 language: java
-sudo: required
-dist: bionic
+dist: focal
 jdk:
   - openjdk11
 
