@@ -45,7 +45,9 @@ class VersionTest {
         return Stream.of(
             of(Version.INFERRED, "1.13"),
             of(Version.V1_13, "1.13"),
-            of(Version.V1_14, "1.14")
+            of(Version.V1_14, "1.14"),
+            of(Version.V1_15, "1.15"),
+            of(Version.V1_16, "1.16")
         );
     }
 

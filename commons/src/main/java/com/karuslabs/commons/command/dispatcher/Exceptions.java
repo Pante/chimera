@@ -27,11 +27,11 @@ import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.command.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.*;
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.command.*;
+import org.bukkit.craftbukkit.v1_16_R1.entity.*;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ import org.bukkit.entity.minecart.CommandMinecart;
     private static final Object[] EMPTY = new Object[0];
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 187
+    // Source: net.minecraft.server.CommandDispatcher #line: 188
     static void report(CommandSender sender, CommandSyntaxException exception) {
         var listener = from(sender);
         
@@ -53,50 +53,53 @@ import org.bukkit.entity.minecart.CommandMinecart;
         if (input != null && exception.getCursor() >= 0) {
             var index = Math.min(input.length(), exception.getCursor());
 
-            var text = new ChatComponentText("");
+            var text = (new ChatComponentText("")).a(EnumChatFormat.GRAY).format(modifier -> 
+                modifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, input))
+            );
+            
             if (index > 10) {
-                text.a("...");
+                text.c("...");
             }
 
-            text.a(input.substring(Math.max(0, index - 10), index));
+            text.c(input.substring(Math.max(0, index - 10), index));
             
             if (index < input.length()) {
-                var error = new ChatComponentText(input.substring(index));
-                error.getChatModifier().setColor(EnumChatFormat.RED);
-                error.getChatModifier().setUnderline(true);
-                
+                var error = new ChatComponentText(input.substring(index)).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
                 text.addSibling(error);
             }
-
-            var context = new ChatMessage("command.context.here", EMPTY);
-            context.getChatModifier().setItalic(true);
-            context.getChatModifier().setColor(EnumChatFormat.RED);
             
+            var context = new ChatMessage("command.context.here").a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC});
             text.addSibling(context);
-            text.getChatModifier().setColor(EnumChatFormat.GRAY);
-            text.getChatModifier().setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, input));
             
             listener.sendFailureMessage(text);
         }
     }
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 212
+    // Source: net.minecraft.server.CommandDispatcher #line: 213
     static void report(CommandSender sender, Exception exception) {
         var listener = from(sender);
         
         var message = exception.getMessage();
-        var details = new ChatComponentText(message == null ? exception.getClass().getName() : message);
+        var details = new ChatComponentText(message == null ? exception.getClass().getName() : message);        
         
+        // We send the stacktrace regardless of whether debug is enabled since we
+        // cannot access the CommandDispatcher's logger.
         var stacktrace = exception.getStackTrace();
         for (int i = 0; i < Math.min(stacktrace.length, 3); i++) {
-            details.a("\n\n" + stacktrace[i].getMethodName() + "\n " + stacktrace[i].getFileName() + ":" + stacktrace[i].getLineNumber());
+            var element = stacktrace[i];
+            details.c("\n\n").c(element.getMethodName()).c("\n ").c(element.getFileName()).c(":").c(String.valueOf(element.getLineNumber()));
         }
                 
-        var failure = new ChatMessage("command.failed", EMPTY);
-        failure.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, details));
-        
+        var failure = new ChatMessage("command.failed").format(modifier -> 
+            modifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, details))
+        );
         listener.sendFailureMessage(failure);
+        
+        if (SharedConstants.d) {
+            listener.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
+            // We do not log the error since we cannot access the logger
+        }
     }
     
     

@@ -29,13 +29,13 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.Map;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
 import org.bukkit.command.CommandSender;
 
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
-import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R1.scheduler.CraftScheduler;
 import org.bukkit.plugin.*;
 
 import org.junit.jupiter.api.*;
@@ -53,8 +53,8 @@ class DispatcherTest {
     CraftCommandMap map = when(mock(CraftCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
-    CommandDispatcher wrapper = mock(CommandDispatcher.class);
     com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> internal = new com.mojang.brigadier.CommandDispatcher();
+    CommandDispatcher wrapper = when(mock(CommandDispatcher.class).a()).thenReturn(internal).getMock();
     
     
     @BeforeEach
@@ -66,7 +66,7 @@ class DispatcherTest {
         when(craftserver.getPluginManager()).thenReturn(manager);
         
         server.server = craftserver;
-        server.commandDispatcher = when(wrapper.a()).thenReturn(internal).getMock();
+        when(server.getCommandDispatcher()).thenReturn(wrapper);
         
         dispatcher = spy(Dispatcher.of(plugin));
     }

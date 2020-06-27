@@ -32,10 +32,10 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.Map;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.command.CraftCommandMap;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -71,7 +71,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         super(root);
         this.root = root;
         this.server = ((CraftServer) server).getServer();
-        this.dispatcher = this.server.commandDispatcher.a();
+        this.dispatcher = this.server.getCommandDispatcher().a();
         this.walker = new TreeWalker<>(new SpigotMapper(this));
     }
     
@@ -97,7 +97,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     @EventHandler
     protected void update(ServerLoadEvent event) {
-        dispatcher = server.commandDispatcher.a();
+        dispatcher = server.getCommandDispatcher().a();
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
     
