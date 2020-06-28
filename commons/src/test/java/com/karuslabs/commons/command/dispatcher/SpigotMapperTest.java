@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class NativeMapperTest {
+class SpigotMapperTest {
     
     static final SuggestionProvider<CommandListenerWrapper> PROVIDER = (a, b) -> null;
     
