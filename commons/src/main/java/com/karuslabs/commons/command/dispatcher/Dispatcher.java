@@ -92,6 +92,9 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     
     public void update() {
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
+        for (var player : server.server.getOnlinePlayers()) {
+            player.updateCommands();
+        }
     }
     
     

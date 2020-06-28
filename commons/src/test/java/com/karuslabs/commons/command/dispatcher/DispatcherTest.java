@@ -27,16 +27,17 @@ import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.tree.CommandNode;
 
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.server.v1_16_R1.*;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.*;
 
 import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_16_R1.scheduler.CraftScheduler;
-import org.bukkit.plugin.*;
 
 import org.junit.jupiter.api.*;
 
@@ -103,11 +104,16 @@ class DispatcherTest {
     
     @Test
     void update() {
+        var player = mock(CraftPlayer.class);
+        when(craftserver.getOnlinePlayers()).thenReturn(List.of(player));
+        
         dispatcher.getRoot().addChild(Literal.of("a").build());
         
         dispatcher.update();
         
+        
         assertNotNull(dispatcher.dispatcher.getRoot().getChild("a"));
+        verify(player).updateCommands();
     }
     
     
