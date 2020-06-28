@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.synchronization.*;
 import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.tree.TreeWalker;
 import com.karuslabs.commons.command.tree.nodes.Literal;
@@ -33,10 +32,10 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.Map;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.command.CraftCommandMap;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -57,16 +56,13 @@ import org.bukkit.plugin.Plugin;
  * This dispatcher holds a reference to the internal dispatcher of the server. The 
  * internal dispatcher is flushed after all plugins are enabled when the server 
  * is either started or reloaded. In both cases, this dispatcher and the internal 
- * dispatcher are synchronized automatically. After synchronization between this 
- * dispatcher and the internal dispatcher, the internal dispatcher and clients are 
- * then also automatically synchronized via a {@link Synchronizer}.
+ * dispatcher are synchronized automatically.
  */
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
     private MinecraftServer server;
     private Root root;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
-    Synchronizer synchronizer;
     TreeWalker<CommandSender, CommandListenerWrapper> walker;
 
     
@@ -80,19 +76,12 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         var prefix = plugin.getName().toLowerCase();
         var server = ((CraftServer) plugin.getServer());
         
-        var synchronizer = Synchronizer.of(plugin);
-        
         var map = new SpigotMap(prefix, plugin, (CraftCommandMap) server.getCommandMap());
         var root = new Root(prefix, map);
-        var dispatcher = new Dispatcher(server, root, synchronizer);
+        var dispatcher = new Dispatcher(server, root);
         map.dispatcher = dispatcher;
         
         server.getPluginManager().registerEvents(dispatcher, plugin);
-        
-        var listener = new PulseListener(synchronizer, plugin);
-        listener.register();
-        
-        server.getPluginManager().registerEvents(listener, plugin);
         
         return dispatcher;
     }
@@ -105,15 +94,13 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
      * 
      * @param server the server
      * @param root the root for this dispatcher
-     * @param synchronizer the synchronizer
      */
-    protected Dispatcher(Server server, Root root, Synchronizer synchronizer) {
+    protected Dispatcher(Server server, Root root) {
         super(root);
         this.root = root;
         this.server = ((CraftServer) server).getServer();
-        this.dispatcher = this.server.commandDispatcher.a();
-        this.synchronizer = synchronizer;
-        this.walker = new TreeWalker<>(new NativeMapper(this));
+        this.dispatcher = this.server.getCommandDispatcher().a();
+        this.walker = new TreeWalker<>(new SpigotMapper(this));
     }
     
     
@@ -142,7 +129,9 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
      */
     public void update() {
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
-        synchronizer.synchronize();
+        for (var player : server.server.getOnlinePlayers()) {
+            player.updateCommands();
+        }
     }
     
     
@@ -154,7 +143,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
      */
     @EventHandler
     protected void update(ServerLoadEvent event) {
-        dispatcher = server.commandDispatcher.a();
+        dispatcher = server.getCommandDispatcher().a();
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
     
@@ -162,16 +151,6 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     @Override
     public Root getRoot()  {
         return root;
-    }
- 
-    
-    /**
-     * Returns a {@code Synchronizer}.
-     * 
-     * @return a {@code Synchronizer}
-     */
-    public Synchronizer synchronizer() {
-        return synchronizer;
     }
     
 }

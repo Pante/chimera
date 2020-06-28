@@ -35,7 +35,7 @@ import com.mojang.brigadier.suggestion.*;
 
 import java.util.function.Predicate;
 
-import net.minecraft.server.v1_15_R1.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R1.CommandListenerWrapper;
 
 import org.bukkit.command.CommandSender;
 
@@ -45,13 +45,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class NativeMapperTest {
+class SpigotMapperTest {
     
     static final SuggestionProvider<CommandListenerWrapper> PROVIDER = (a, b) -> null;
     
     
     CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
-    NativeMapper mapper = spy(new NativeMapper(dispatcher));
+    SpigotMapper mapper = spy(new SpigotMapper(dispatcher));
     
     CommandSender sender = mock(CommandSender.class);
     CommandListenerWrapper listener = when(mock(CommandListenerWrapper.class).getBukkitSender()).thenReturn(sender).getMock();
@@ -68,7 +68,7 @@ class NativeMapperTest {
     
     @Test
     void requirement() {
-        assertSame(NativeMapper.TRUE, mapper.requirement(Literal.of("a").requires(null).build()));
+        assertSame(SpigotMapper.TRUE, mapper.requirement(Literal.of("a").requires(null).build()));
         
         Predicate<CommandSender> predicate = mock(Predicate.class);
         mapper.requirement(Literal.of("a").requires(predicate).build()).test(listener);
@@ -95,7 +95,7 @@ class NativeMapperTest {
     
     @Test
     void suggestions_clientside() {
-        assertSame(NativeMapper.CLIENT_SIDE.get(ClientSuggestionProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientSuggestionProvider.ENTITIES).build()));
+        assertSame(SpigotMapper.CLIENT_SIDE.get(ClientSuggestionProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientSuggestionProvider.ENTITIES).build()));
     }
     
     

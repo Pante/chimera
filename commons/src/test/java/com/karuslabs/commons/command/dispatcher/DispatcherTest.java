@@ -23,21 +23,21 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.synchronization.Synchronizer;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.tree.CommandNode;
 
-import java.util.Map;
+import java.util.*;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
 import org.bukkit.command.CommandSender;
-
-import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_15_R1.command.CraftCommandMap;
-import org.bukkit.craftbukkit.v1_15_R1.scheduler.CraftScheduler;
 import org.bukkit.plugin.*;
+
+import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.scheduler.CraftScheduler;
 
 import org.junit.jupiter.api.*;
 
@@ -54,9 +54,8 @@ class DispatcherTest {
     CraftCommandMap map = when(mock(CraftCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
-    ServicesManager services = mock(ServicesManager.class);
-    CommandDispatcher wrapper = mock(CommandDispatcher.class);
     com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> internal = new com.mojang.brigadier.CommandDispatcher();
+    CommandDispatcher wrapper = when(mock(CommandDispatcher.class).a()).thenReturn(internal).getMock();
     
     
     @BeforeEach
@@ -66,10 +65,9 @@ class DispatcherTest {
         when(craftserver.getCommandMap()).thenReturn(map);
         when(craftserver.getScheduler()).thenReturn(scheduler);
         when(craftserver.getPluginManager()).thenReturn(manager);
-        when(craftserver.getServicesManager()).thenReturn(services);
         
         server.server = craftserver;
-        server.commandDispatcher = when(wrapper.a()).thenReturn(internal).getMock();
+        when(server.getCommandDispatcher()).thenReturn(wrapper);
         
         dispatcher = spy(Dispatcher.of(plugin));
     }
@@ -78,13 +76,9 @@ class DispatcherTest {
     @Test
     void of() {
         reset(manager);
-        reset(services);
-        
-        when(services.isProvidedFor(any())).thenReturn(false);
         
         var dispatcher = Dispatcher.of(plugin);
         
-        verify(services).register(any(), any(), any(), any());
         assertSame(dispatcher, ((SpigotMap) dispatcher.getRoot().map()).dispatcher);
     }
     
@@ -110,13 +104,16 @@ class DispatcherTest {
     
     @Test
     void update() {
+        var player = mock(CraftPlayer.class);
+        when(craftserver.getOnlinePlayers()).thenReturn(List.of(player));
+        
         dispatcher.getRoot().addChild(Literal.of("a").build());
-        dispatcher.synchronizer = mock(Synchronizer.class);
         
         dispatcher.update();
         
+        
         assertNotNull(dispatcher.dispatcher.getRoot().getChild("a"));
-        verify(dispatcher.synchronizer()).synchronize();
+        verify(player).updateCommands();
     }
     
     

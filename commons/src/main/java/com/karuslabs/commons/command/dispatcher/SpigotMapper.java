@@ -34,7 +34,7 @@ import com.mojang.brigadier.tree.*;
 import java.util.*;
 import java.util.function.Predicate;
 
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_16_R1.*;
 
 import org.bukkit.command.CommandSender;
 
@@ -46,7 +46,7 @@ import com.karuslabs.commons.command.types.Type;
  * A mapper that maps the commands in a {@link Dispatcher} to the internal dispatcher 
  * of the server.
  */
-class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
+class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     static final Map<ClientSuggestionProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE;
     
@@ -54,7 +54,8 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         CLIENT_SIDE = new EnumMap<>(ClientSuggestionProvider.class);
         CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, CompletionProviders.b);
         CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, CompletionProviders.c);
-        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.d);
+        CLIENT_SIDE.put(ClientSuggestionProvider.BIOMES, CompletionProviders.d);
+        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.e);
     }
     
     
@@ -62,11 +63,11 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     
     
     /**
-     * Creates a {@code NativeMapper} with the given {@code dispatcher}.
+     * Creates a {@code SpigotMapper} with the given {@code dispatcher}.
      * 
      * @param dispatcher the dispatcher
      */
-    NativeMapper(CommandDispatcher<CommandSender> dispatcher) {
+    SpigotMapper(CommandDispatcher<CommandSender> dispatcher) {
         this.dispatcher = dispatcher;
     }
     
@@ -146,7 +147,7 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @param type the type
      * @return a {@code SuggestionProvider}
      */
-    protected SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
+    SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());
@@ -161,7 +162,7 @@ class NativeMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @param suggestor the {@code SuggestionProvider}
      * @return the {@code SuggestionProvider}
      */
-    protected SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
+    SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());

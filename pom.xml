@@ -4,7 +4,7 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.6.1</version>
+    <version>4.7.0</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
@@ -210,12 +210,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.9.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
                         <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.4.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -223,7 +223,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>    
             
             <plugin>
