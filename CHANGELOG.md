@@ -1,15 +1,17 @@
-## 4.7.0 - I'll be there someday (Next release)
+## 4.7.0 - I'll be there someday (28/06/2020)
 
-- Remove `com.karuslabs.commons.command.synchronization.*` - No longer needed since
-the bug in Spigot has been fixed. See https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/pull-requests/675/overview
+This update focuses on updating Chimera to support Spigot 1.16.1.
 
 ### Commons
 
-Additional optimizations has been added for Paper through utilizing their `paper-mojangapi`
-expanded API which exposes Brigadier.
-
+- Add `ClientSuggstionProvider.BIOMES`
 - Change `NativeMapper` to `SpigotMapper`
+- Fix `PointType.CUBIC` displaying 2D coordinates
+- Remove `com.karuslabs.commons.command.synchronization.*` - See https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/pull-requests/675/overview
 
+### Scribe Annotations
+
+- Add `com.karuslabs.scribe.annotations.Version.V1_16`
 
 
 ## 4.6.1 - When the road looks rough ahead (03/06/2020)
@@ -19,6 +21,7 @@ This update focuses on fixing an issue with code generated using command annotat
 - Add `Argument(String, ArgumentType<V>, Execution<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>)`
 - Add `Literal(String, Execution<CommandSender>, Predicate<CommandSender>)`
 - Fix issue with the generic type of generated local variables not being inferable
+
 
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
 

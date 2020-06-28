@@ -50,7 +50,8 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         CLIENT_SIDE = new EnumMap<>(ClientSuggestionProvider.class);
         CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, CompletionProviders.b);
         CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, CompletionProviders.c);
-        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.d);
+        CLIENT_SIDE.put(ClientSuggestionProvider.BIOMES, CompletionProviders.d);
+        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.e);
     }
     
     

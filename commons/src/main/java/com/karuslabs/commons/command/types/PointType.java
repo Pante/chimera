@@ -112,7 +112,7 @@ class Point2DType extends PointType implements Cartesian2DType<Point> {
 }
 
 
-class Point3DType extends PointType implements Cartesian2DType<Point> {
+class Point3DType extends PointType implements Cartesian3DType<Point> {
 
     Point3DType() {
         super(List.of("0 0 0", "0.0 0.0 0.0", "^ ^ ^", "~ ~ ~"), X, Y, Z);
