@@ -192,8 +192,6 @@
                         <link>https://checkerframework.org/api/</link>
                         <link>https://hub.spigotmc.org/javadocs/spigot</link>
                         <link>https://repo.karuslabs.com/repository/brigadier/</link>
-<!--                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/annotations/apidocs/</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${project.version}/scribe-annotations/apidocs/</link>-->
                     </links>
                 </configuration>
                 <executions> 
@@ -210,12 +208,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.9.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.wagon</groupId>
                         <artifactId>wagon-webdav-jackrabbit</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.4.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -223,7 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>    
             
             <plugin>
