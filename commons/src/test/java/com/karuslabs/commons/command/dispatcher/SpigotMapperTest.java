@@ -113,6 +113,7 @@ class SpigotMapperTest {
         Type<Object> provider = mock(Type.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
         CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();
+        when(context.getInput()).thenReturn("/test");
         
         mapper.reparse(provider).getSuggestions(context, builder);
         
@@ -125,6 +126,7 @@ class SpigotMapperTest {
         SuggestionProvider provider = mock(SuggestionProvider.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
         CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();
+        when(context.getInput()).thenReturn("/test");
         
         mapper.reparse(provider).getSuggestions(context, builder);
         
