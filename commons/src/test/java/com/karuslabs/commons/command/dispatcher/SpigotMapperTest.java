@@ -34,14 +34,18 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import net.minecraft.server.v1_16_R1.CommandListenerWrapper;
 
 import org.bukkit.command.CommandSender;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
 
@@ -50,7 +54,7 @@ class SpigotMapperTest {
     static final SuggestionProvider<CommandListenerWrapper> PROVIDER = (a, b) -> null;
     
     
-    CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
+    CommandDispatcher<CommandSender> dispatcher = spy(new CommandDispatcher<>());
     SpigotMapper mapper = spy(new SpigotMapper(dispatcher));
     
     CommandSender sender = mock(CommandSender.class);
@@ -108,29 +112,42 @@ class SpigotMapperTest {
     }
     
     
-    @Test
-    void reparse_type() throws CommandSyntaxException {
+    @ParameterizedTest
+    void reparse_type(String command, String trimmed) throws CommandSyntaxException {
         Type<Object> provider = mock(Type.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
+        
         CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();
-        when(context.getInput()).thenReturn("/test");
+        when(context.getInput()).thenReturn(command);
         
         mapper.reparse(provider).getSuggestions(context, builder);
         
+        verify(dispatcher).parse(trimmed, sender);
         verify(provider).listSuggestions(any(CommandContext.class), eq(builder));
     }
     
     
-    @Test
-    void reparse_suggestion_provider() throws CommandSyntaxException {
+    @ParameterizedTest
+    @MethodSource("command_parameters")
+    void reparse_suggestion_provider(String command, String trimmed) throws CommandSyntaxException {
         SuggestionProvider provider = mock(SuggestionProvider.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
+        
         CommandContext<CommandListenerWrapper> context = when(mock(CommandContext.class).getSource()).thenReturn(listener).getMock();
-        when(context.getInput()).thenReturn("/test");
+        when(context.getInput()).thenReturn(command);
         
         mapper.reparse(provider).getSuggestions(context, builder);
         
+        verify(dispatcher).parse(trimmed, sender);
         verify(provider).getSuggestions(any(CommandContext.class), eq(builder));
+    }
+    
+    static Stream<Arguments> command_parameters() {
+        return Stream.of(
+            of("/command", "command"),
+            of("/", ""),
+            of("", "")
+        );
     }
 
 } 

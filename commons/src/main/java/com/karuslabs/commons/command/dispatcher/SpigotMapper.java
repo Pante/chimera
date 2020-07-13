@@ -105,7 +105,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
             var input = context.getInput();
             input = input.length() <= 1 ? "" : input.substring(1);
             
-            var reparsed = dispatcher.parse(context.getInput(), sender).getContext().build(context.getInput());
+            var reparsed = dispatcher.parse(input, sender).getContext().build(context.getInput());
             return type.listSuggestions(reparsed, suggestions);
         };
     }
