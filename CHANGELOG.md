@@ -1,6 +1,6 @@
 ## 4.7.1 - We're not that different at all (13/07/2020)
 
-**Compatible Spigot versions: 1.16.1*
+**Compatible Spigot versions: 1.16.1**
 
 This update fixes a few issues with `SuggestionProviders` not parsing arguments
 correctly.
@@ -11,7 +11,7 @@ correctly.
 
 ## 4.7.0 - I'll be there someday (28/06/2020)
 
-**Compatible Spigot versions: 1.16.1*
+**Compatible Spigot versions: 1.16.1**
 
 This update focuses on updating Chimera to support Spigot 1.16.1.
 
@@ -29,7 +29,7 @@ This update focuses on updating Chimera to support Spigot 1.16.1.
 
 ## 4.6.1 - When the road looks rough ahead (03/06/2020)
 
-**Compatible Spigot versions: 1.15.2*
+**Compatible Spigot versions: 1.15.2**
 
 This update focuses on fixing an issue with code generated using command annotations.
 
@@ -40,7 +40,7 @@ This update focuses on fixing an issue with code generated using command annotat
 
 ## 4.6.0 - Boy, and as the years go by (01/06/2020)
 
-**Compatible Spigot versions: 1.15.2*
+**Compatible Spigot versions: 1.15.2**
 
 This update focuses on introducing compile-time command annotations in addition 
 to quality of life changes and retrofitting old classes/packages.
@@ -201,7 +201,7 @@ Error and warning messages have been overhauled to improve readability.
 
 ## 4.5.0 - It's a world of laughter (23/02/2020)
 
-**Compatible Spigot versions: 1.15.2*
+**Compatible Spigot versions: 1.15.2**
 
 This update introduces `Scribe Maven Plugin` for Maven.
 
@@ -229,7 +229,7 @@ Scribe has been rewritten to target multiple platforms.
 
 ## 4.4.0 - Through an endless diamond sky (12/12/2019)
 
-**Compatible Spigot versions: 1.15.2*
+**Compatible Spigot versions: 1.15.2**
 
 This update focuses on porting the project to 1.15 and modularizing scribe.
 
@@ -262,7 +262,7 @@ Annotation processors previously in `scribe-annotations` have been moved to `scr
 
 ## 4.3.0 - Colours of the wind (30/11/2019)
 
-**Compatible Spigot versions: 1.14 - 1.14.4*
+**Compatible Spigot versions: 1.14 - 1.14.4**
 
 his update introduces Scribe-Annotations, a compile-time annotation processor that generates a `plugin.yml` from annotations.
 
@@ -289,7 +289,7 @@ Big Ol' list of changes:
 
 ## 4.2.0 - Just kiss the girl (18/05/2019)
 
-**Compatible Spigot versions: 1.14 - 1.14.4*
+**Compatible Spigot versions: 1.14 - 1.14.4**
 
 This update focuses on updating the project to support Spigot 1.14 and 1.14.1.
 
@@ -304,7 +304,7 @@ This update focuses on updating the project to support Spigot 1.14 and 1.14.1.
 
 ## 4.1.0 - Oh underneath a magic moon (08/05/2019)
 
-**Compatible Spigot versions: 1.13.2*
+**Compatible Spigot versions: 1.13.2**
 
 This update focuses mainly on providing annotations from which a `CommandNode` can be created. In addition, several annotation processors that perform static analysis on the annotations are also included.
 
@@ -337,7 +337,7 @@ Big Ol' list of changes:
 
 ## 4.0.1 - I can open your eyes (10/04/2019)
 
-**Compatible Spigot versions: 1.13.2*
+**Compatible Spigot versions: 1.13.2**
 
 This is a patch that fixes some tinny-tiny issues.  
 
@@ -349,7 +349,7 @@ This is a patch that fixes some tinny-tiny issues.
 
 ## 4.0.0 - A whole new world (09/04/2019)
 
-**Compatible Spigot versions: 1.13.2*
+**Compatible Spigot versions: 1.13.2**
 
 The entire library has been razed to the ground and a new library has risen from the ruins. 
 In all seriousness, this is a pretty significant rewrite that bridges the Brigadier command framework to Spigot plugins.
