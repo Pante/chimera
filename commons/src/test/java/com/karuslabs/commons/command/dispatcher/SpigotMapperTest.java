@@ -113,6 +113,7 @@ class SpigotMapperTest {
     
     
     @ParameterizedTest
+    @MethodSource("command_parameters")
     void reparse_type(String command, String trimmed) throws CommandSyntaxException {
         Type<Object> provider = mock(Type.class);
         SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
