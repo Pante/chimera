@@ -1,3 +1,8 @@
+## 4.8.0 - Next Release
+
+** Compatible Spigot versions: 1.16.1**
+
+
 ## 4.7.1 - We're not that different at all (13/07/2020)
 
 **Compatible Spigot versions: 1.16.1**
