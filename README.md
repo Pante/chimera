@@ -11,7 +11,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 **Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started.**
 
-[![Travis-CI](https://img.shields.io/travis/pante/chimera/master?logo=travis)](https://travis-ci.com/Pante/Chimera)
+[![CI/CD](https://github.com/Pante/Chimera/workflows/CI/CD/badge.svg)](https://github.com/Pante/Chimera/actions?query=workflow%3ACI%2FCD)
 [![Funding](https://img.shields.io/badge/%F0%9F%A4%8D%20-sponsorship-ff69b4?style=flat-square)](https://github.com/sponsors/Pante)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d03deef9f37d3d90636d/maintainability)](https://codeclimate.com/github/Pante/Karus-Commons/maintainability)
 [![Codecov](https://codecov.io/gh/Pante/Chimera/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/Chimera)
