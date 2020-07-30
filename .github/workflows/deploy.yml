@@ -10,9 +10,12 @@ env:
   SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
 
 jobs:
-  setup:
+  deploy:
     runs-on: ubuntu-20.04
     steps:
+      - uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
