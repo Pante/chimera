@@ -1,4 +1,4 @@
-name: Chimera CI/CD
+name: CI/CD
 
 on:
   push:
