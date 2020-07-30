@@ -1,6 +1,14 @@
 name: Chimera CI/CD
 
-on: pull_request
+on:
+  push:
+    branches-ignore:
+      - master
+      - staging
+      - stable
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:

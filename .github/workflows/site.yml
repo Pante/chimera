@@ -1,0 +1,22 @@
+name: Chimera CI/CD
+
+on:
+  push:
+    branches:
+      - staging
+      - stable
+
+env:
+  SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
+  SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
+  
+jobs:
+  setup:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - mvn deploy site site-deploy -Dhttps.protocols=TLSv1.2 -D maven.wagon.http.ssl.insecure=true -D maven.wagon.http.ssl.allowall=true --settings travis-settings.xml
+      - bash <(curl -s https://codecov.io/bash)
