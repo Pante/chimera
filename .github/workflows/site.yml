@@ -18,5 +18,5 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - mvn deploy site site-deploy -Dhttps.protocols=TLSv1.2 -D maven.wagon.http.ssl.insecure=true -D maven.wagon.http.ssl.allowall=true --settings travis-settings.xml
-      - bash <(curl -s https://codecov.io/bash)
+      - run: mvn deploy site site-deploy -Dhttps.protocols=TLSv1.2 -D maven.wagon.http.ssl.insecure=true -D maven.wagon.http.ssl.allowall=true --settings travis-settings.xml
+      - run: bash <(curl -s https://codecov.io/bash)
