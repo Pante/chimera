@@ -4,7 +4,7 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.7.1-SNAPSHOT</version>
+    <version>4.8.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
@@ -112,14 +112,14 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.6</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.6</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -151,7 +151,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.34</version>
+                        <version>8.35</version>
                     </dependency>
                 </dependencies>
                 <configuration>
