@@ -644,5 +644,10 @@ public class MockServer implements Server {
     public int getWaterAmbientSpawnLimit() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Recipe getRecipe(NamespacedKey recipeKey) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

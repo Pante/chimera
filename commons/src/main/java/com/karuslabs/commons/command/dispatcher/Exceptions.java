@@ -27,11 +27,11 @@ import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.minecraft.server.v1_16_R1.*;
+import net.minecraft.server.v1_16_R2.*;
 
-import org.bukkit.craftbukkit.v1_16_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R1.command.*;
-import org.bukkit.craftbukkit.v1_16_R1.entity.*;
+import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R2.command.*;
+import org.bukkit.craftbukkit.v1_16_R2.entity.*;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
