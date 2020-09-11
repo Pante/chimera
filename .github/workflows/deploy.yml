@@ -20,5 +20,5 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - run: mvn deploy -X -Dhttps.protocols=TLSv1.2 --settings travis-settings.xml
+      - run: mvn deploy -Dhttps.protocols=TLSv1.2 --settings travis-settings.xml
       - run: bash <(curl -s https://codecov.io/bash)
