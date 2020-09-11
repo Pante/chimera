@@ -31,11 +31,11 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 @Documented
 @Retention(SOURCE)
-@Target({PACKAGE, TYPE})
-public @interface Source {
-
-    public static final String RELATIVE_PACKAGE = "${relative}";
+@Target(PARAMETER)
+public @interface Argument {
     
-    String value() default RELATIVE_PACKAGE;
+    public static final String INFERRED_ARGUMENT = "${inferred argument}";
 
+    public String value() default INFERRED_ARGUMENT;
+    
 }
