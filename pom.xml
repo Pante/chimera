@@ -39,15 +39,15 @@
     </distributionManagement>
     
     
-    <repositories>   
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-                
+    <repositories>     
         <repository>
             <id>noti-spigot-mirror</id>
             <url>https://repo.karuslabs.com/repository/spigot/</url>
+        </repository>
+        
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         
         <repository>
