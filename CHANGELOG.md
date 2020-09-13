@@ -1,8 +1,15 @@
-## 4.8.0 - Next Release
+## 4.9.0 - Next release
 
-** Compatible Spigot versions: 1.16.3**
+**Compatible Spigot versions: 1.16.3**
 
-This update adds argument inference to the code generation command framework.
+This update adds inferred arguments during code generation for the command framework.
+
+
+## 4.8.0 - Can't hold it back anymore (13/09/2020)
+
+**Compatible Spigot versions: 1.16.3**
+
+This update focuses on support for 1.16.3
 
 ### Commons
 
