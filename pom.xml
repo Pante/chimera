@@ -55,17 +55,17 @@
             <id>chimera-snapshots</id>
             <url>https://repo.karuslabs.com/repository/chimera-snapshots</url>
         </repository>
-        
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-                
+           
         <repository>
             <id>noti-spigot-mirror</id>
             <url>https://repo.karuslabs.com/repository/spigot/</url>
         </repository>
                        
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        
         <repository>
             <id>minecraft-libraries</id>
             <url>https://libraries.minecraft.net</url>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.5.0</version>
+            <version>3.6.1</version>
             <scope>compile</scope>
         </dependency>
         
@@ -112,14 +112,14 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.10</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -151,7 +151,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.34</version>
+                        <version>8.36</version>
                     </dependency>
                 </dependencies>
                 <configuration>

@@ -1,0 +1,24 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
+  SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - run: mvn deploy -Dhttps.protocols=TLSv1.2 --settings ci-settings.xml
+      - run: bash <(curl -s https://codecov.io/bash)

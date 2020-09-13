@@ -29,7 +29,7 @@ import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.server.v1_16_R1.*;
+import net.minecraft.server.v1_16_R2.*;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

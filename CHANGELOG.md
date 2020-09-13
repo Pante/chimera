@@ -1,3 +1,21 @@
+## 4.9.0 - Next release
+
+**Compatible Spigot versions: 1.16.3**
+
+This update adds inferred arguments during code generation for the command framework.
+
+
+## 4.8.0 - Can't hold it back anymore (13/09/2020)
+
+**Compatible Spigot versions: 1.16.3**
+
+This update focuses on support for 1.16.3
+
+### Commons
+
+- Add `UUIDType`
+
+
 ## 4.7.1 - We're not that different at all (13/07/2020)
 
 **Compatible Spigot versions: 1.16.1**
