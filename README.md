@@ -4,8 +4,8 @@
 
 Karus Labs' mono-repository for spigot libraries & tools. 
 * Allows Brigadier command framework usage in Spigot plugins
+* Code-generation driven command framework 
 * Compile-time plugin.yml generation tools
-* Fully static, compile-time command annotations
 
 **Requires Java 11+. [Why Java 11?](https://github.com/Pante/Chimera/wiki/faq#why-does-the-project-require-java-11-and-above)**
 
@@ -20,6 +20,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
+| 4.8.0           | 1.16.3            |
 | 4.7.1           | 1.16.1            |
 | 4.6.1           | 1.15.2            |
 | 4.3.0           | 1.14 - 1.14.4     |
@@ -37,12 +38,12 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Annotations - Contains general purpose annotations
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/annotations/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/annotations/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.7.1-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.7.1/annotations/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/annotations/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>4.7.1</version>
+    <version>4.8.0</version>
 </dependency>
 ```
 
@@ -50,12 +51,12 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Commons - Contains the command framework and other common utilities for Spigot plugin development
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/commons)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/commons)
-[![javadoc](https://img.shields.io/badge/javadoc-4.7.1-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.7.1/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/commons/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>4.7.1</version>
+    <version>4.8.0</version>
 </dependency>
 ```
 
@@ -63,13 +64,13 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Scribe Annotations - Contains annotations that other scribe projects use to generate a plugin.yml
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/scribe-annotations/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/scribe-annotations)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/scribe-annotations/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/scribe-annotations)
-[![javadoc](https://img.shields.io/badge/javadoc-4.7.1-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.7.1/scribe/scribe-annotations/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/scribe/scribe-annotations/apidocs/index.html)
 
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>scribe-annotations</artifactId>
-    <version>4.7.1</version>
+    <version>4.8.0</version>
 </dependency>
 ```
 
@@ -77,13 +78,13 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Scribe Standalone - Standalone annotation processor that generates a plugin.yml
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/scribe-standalone/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/scribe-standalone)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/scribe-standalone/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/scribe-standalone)
-[![javadoc](https://img.shields.io/badge/javadoc-4.7.1-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.7.1/scribe/scribe-standalone/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/scribe/scribe-standalone/apidocs/index.html)
 ```XML
 <!-- Standalone annotation processor, provides scribe-annotations as a transitive dependency -->
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>scribe-standalone</artifactId>
-    <version>4.7.1</version>
+    <version>4.8.0</version>
 </dependency>
 ```
 
@@ -91,18 +92,18 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Scribe Maven Plugin - Maven plugin that generates a plugin.yml and infers values from a project's pom.xml
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/scribe-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/scribe-maven-plugin)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/scribe-maven-plugin/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/scribe-maven-plugin)
-[![javadoc](https://img.shields.io/badge/javadoc-4.7.1-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.7.1/scribe/scribe-maven-plugin/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/scribe/scribe-maven-plugin/apidocs/index.html)
 ```XML
 <dependency>
   <groupId>com.karuslabs</groupId>
   <artifactId>scribe-annotations</artifactId>
-  <version>4.7.1</version>
+  <version>4.8.0</version>
 </dependency>
 
 <plugin>
   <groupId>com.karuslabs</groupId>
   <artifactId>scribe-maven-plugin</artifactId>
-  <version>4.7.1</version>
+  <version>4.8.0</version>
   <executions>
     <execution>
       <goals>
