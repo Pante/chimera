@@ -28,6 +28,6 @@ package com.karuslabs.commons.util.concurrent.locks;
 public interface Mutex extends AutoCloseable {
     
     @Override
-    public void close();
+    void close();
     
 }

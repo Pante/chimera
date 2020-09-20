@@ -28,7 +28,7 @@ import com.karuslabs.annotations.*;
 import java.util.*;
 
 
-public @ValueType class Project {
+public @Record class Project {
     
     public static Project EMPTY = new Project("", "", "", List.of(), "", "");
     public static Map<String, String> DEPENDENCIES = Map.of(

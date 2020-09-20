@@ -48,7 +48,7 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
     }
     
     
-    private CommandContext<T> context;
+    private final CommandContext<T> context;
     private @Nullable Map<String, ParsedArgument<T, ?>> arguments;
     
     

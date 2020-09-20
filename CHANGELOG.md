@@ -4,6 +4,11 @@
 
 This update adds inferred arguments during code generation for the command framework.
 
+### Annotations
+
+- Add `Monad`
+- Change `ValueType` to `Record`
+
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 

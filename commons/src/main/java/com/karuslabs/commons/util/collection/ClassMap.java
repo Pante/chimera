@@ -33,33 +33,33 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface ClassMap<T> {
     
-    public static <T> ClassMap<T> of() {
+    static <T> ClassMap<T> of() {
         return new HashClassMap<>();
     }
     
-    public static <T> ClassMap<T> of(int capacity) {
+    static <T> ClassMap<T> of(int capacity) {
         return new HashClassMap<>(capacity);
     }
     
-    public static <T> @Delegate ClassMap<T> of(Map<Class<? extends T>, T> map) {
+    static <T> @Delegate ClassMap<T> of(Map<Class<? extends T>, T> map) {
         return new ProxiedClassMap<>(map);
     }
     
     
-    public default <U extends T> boolean containsKey(Class<U> type) {
+    default <U extends T> boolean containsKey(Class<U> type) {
         return map().containsKey(type);
     }
     
-    public default <U extends T> boolean containsValue(@Nullable U value) {
+    default <U extends T> boolean containsValue(@Nullable U value) {
         return map().containsValue(value);
     }
         
     
-    public default @Nullable <U extends T> U get(Class<U> type) {
+    default @Nullable <U extends T> U get(Class<U> type) {
         return (U) map().get(type);
     }
     
-    public default <U extends T> U getOrDefault(Class<U> type, U value) {
+    default <U extends T> U getOrDefault(Class<U> type, U value) {
         var item = map().get(type);
         if (item != null && Type.box(type).isAssignableFrom(item.getClass())) {
             return (U) item;
@@ -69,11 +69,11 @@ public interface ClassMap<T> {
         }
     }
     
-    public default <U extends T> @Nullable U put(Class<U> type, U value) {
+    default <U extends T> @Nullable U put(Class<U> type, U value) {
         return (U) map().put(type, value);
     }
     
-    public default <U extends T> @Nullable U remove(Class<U> type) {
+    default <U extends T> @Nullable U remove(Class<U> type) {
         return (U) map().remove(type);
     }
     

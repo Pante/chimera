@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-import com.karuslabs.annotations.Blocking;
+import com.karuslabs.annotations.*;                                            
 
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -31,7 +31,7 @@ import java.util.concurrent.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class Maybe<T> extends FutureTask<T> {
+public @Monad class Maybe<T> extends FutureTask<T> {
     
     private static final Callable<?> CALLABLE = () -> null;
     

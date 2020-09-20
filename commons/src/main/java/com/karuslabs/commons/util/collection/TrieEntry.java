@@ -23,22 +23,20 @@
  */
 package com.karuslabs.commons.util.collection;
 
-import com.karuslabs.annotations.ValueType;
-
 import java.util.*;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-final @ValueType class TrieEntry<T> implements Entry<String, T> {
+final class TrieEntry<T> implements Entry<String, T> {
     
     static final int PRINTABLE = 95;
     static final int OFFSET = 32;
     
     
     final char character;
-    @Nullable TrieEntry<T> parent;
+    final @Nullable TrieEntry<T> parent;
     @Nullable TrieEntry<T>[] ascii;
     @Nullable Map<Character, TrieEntry<T>> expanded;
     int children;
@@ -179,14 +177,7 @@ final @ValueType class TrieEntry<T> implements Entry<String, T> {
         }
         
         var entry = (TrieEntry<?>) other;
-        return equals(key, entry.getKey()) && equals(value, entry.getValue());
-    }
-        
-    /**
-     * See https://bugs.openjdk.java.net/browse/JDK-8015417
-     */
-    static boolean equals(Object o1, Object o2) {
-        return o1 == null ? o2 == null : o1.equals(o2);
+        return Objects.equals(key, entry.getKey()) && Objects.equals(value, entry.getValue());
     }
 
     

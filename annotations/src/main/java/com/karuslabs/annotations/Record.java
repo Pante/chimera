@@ -21,13 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.util.concurrent.locks;
+package com.karuslabs.annotations;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-public interface Holdable {
-    
-    Mutex hold();
-    
-    Mutex holdInterruptibly() throws InterruptedException;
+@Documented
+@Retention(SOURCE)
+@Target(TYPE)
+public @interface Record {
     
 }

@@ -30,8 +30,7 @@ public class TrieSet extends AbstractSet<String> {
     
     static final Object PRESENT = new Object();
     
-    
-    Trie<Object> trie;
+    private final Trie<Object> trie;
     
     
     public TrieSet() {
@@ -42,7 +41,6 @@ public class TrieSet extends AbstractSet<String> {
     public Set<String> startsWith(String prefix) {
         return trie.prefixedKeys(prefix);
     }
-    
         
     @Override
     public boolean add(String string) {
@@ -55,12 +53,10 @@ public class TrieSet extends AbstractSet<String> {
         return trie.containsKey(object);
     }
     
-    
     @Override
     public boolean remove(Object object) {
         return trie.remove(object, PRESENT);
     }
-    
     
     @Override
     public Iterator<String> iterator() {
