@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.ValueType;
+import com.karuslabs.annotations.Record;
 
 import java.util.*;
 
@@ -32,8 +32,7 @@ import org.bukkit.util.Vector;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
-public @ValueType final class Point extends Location {
+public final @Record class Point extends Location {
     
     private static final double EPSILON = 0.000001;
     private static final int X = 0;
@@ -41,7 +40,6 @@ public @ValueType final class Point extends Location {
     private static final int Z = 2;
     
     public static enum Axis {
-        
         X(0),
         Y(1),
         Z(2);
@@ -51,13 +49,10 @@ public @ValueType final class Point extends Location {
         private Axis(int index) {
             this.index = index;
         }
-        
-    }
-    
+    } 
     
     private boolean[] relative;
     private boolean rotation;
-    
     
     public Point() {
         this(0, 0, 0);
@@ -175,7 +170,6 @@ public @ValueType final class Point extends Location {
         
         return hash;
     }
-    
     
     @Override
     public String toString() {

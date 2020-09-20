@@ -27,7 +27,6 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.*;
 
-
 public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, EnchantmentStorageBuilder> {
     
     public static EnchantmentStorageBuilder of(Material material) {
@@ -42,12 +41,10 @@ public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, E
         super(source);
     }
     
-    
     public EnchantmentStorageBuilder stored(Enchantment enchantment, int level) {
         meta.addStoredEnchant(enchantment, level, true);
         return this;
     }
-    
     
     @Override
     EnchantmentStorageBuilder self() {

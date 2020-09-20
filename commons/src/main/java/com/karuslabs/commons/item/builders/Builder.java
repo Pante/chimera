@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.item.builders;
 
+import com.karuslabs.annotations.Lazy;
+
 import java.util.*;
 
 import org.bukkit.*;
@@ -33,13 +35,11 @@ import org.bukkit.inventory.meta.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
 public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     
-    ItemStack item;
-    Meta meta;
-    @Nullable List<String> lore;
-    
+    final ItemStack item;
+    final Meta meta;
+    @Lazy List<String> lore;
     
     Builder(Material material) {
         item = new ItemStack(material);
@@ -49,8 +49,6 @@ public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
     Builder(Builder<ItemMeta, ?> source) {
         item = source.item;
         meta = (Meta) source.meta;
-        source.item = null;
-        source.meta = null;
     }
     
     

@@ -23,27 +23,25 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Lazy;
+
 import java.util.*;
 import java.util.Map.Entry;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 final class TrieEntry<T> implements Entry<String, T> {
     
     static final int PRINTABLE = 95;
     static final int OFFSET = 32;
     
-    
     final char character;
     final @Nullable TrieEntry<T> parent;
-    @Nullable TrieEntry<T>[] ascii;
-    @Nullable Map<Character, TrieEntry<T>> expanded;
-    int children;
-    
     @Nullable String key;
     @Nullable T value;
-    
+    @Lazy TrieEntry<T>[] ascii;
+    @Lazy Map<Character, TrieEntry<T>> expanded;
+    int children;
     
     TrieEntry(char character, @Nullable TrieEntry<T> parent) {
         this(character, parent, null, null);
@@ -58,7 +56,7 @@ final class TrieEntry<T> implements Entry<String, T> {
     }
     
     
-    @Nullable TrieEntry<T> get(char character) {
+    @Nullable TrieEntry<T> child(char character) {
         if (ascii != null && 31 < character && character < 127) {
             return ascii[character - OFFSET];
             

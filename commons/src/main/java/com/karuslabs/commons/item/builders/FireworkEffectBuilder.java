@@ -26,7 +26,6 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
-
 public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
 
     public static FireworkEffectBuilder of(Material material) {
@@ -41,12 +40,10 @@ public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkE
         super(source);
     }
     
-    
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);
         return this;
     }
-
     
     @Override
     FireworkEffectBuilder self() {

@@ -43,6 +43,11 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     
+    public BlockDataBuilder asBlockData() {
+        return new BlockDataBuilder(this);
+    }
+     
+    
     public BlockStateBuilder asBlockState() {
         return new BlockStateBuilder(this);
     }
@@ -50,6 +55,11 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     public BookBuilder asBook() {
         return new BookBuilder(this);
+    }
+    
+    
+    public CompassBuilder asCompass() {
+        return new CompassBuilder(this);
     }
     
     

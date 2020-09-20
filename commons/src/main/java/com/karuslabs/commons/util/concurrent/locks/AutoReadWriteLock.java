@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock.*;
 
-
 public class AutoReadWriteLock extends ReentrantReadWriteLock {
     
     private final AutoReadLock reader;

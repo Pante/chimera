@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TokenMapTest {    
     
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void containsKey(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertTrue(map.containsKey("a", int.class));

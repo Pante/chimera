@@ -25,7 +25,6 @@ package com.karuslabs.commons.util.concurrent.locks;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-
 public class AutoLock extends ReentrantLock implements Holdable {
     
     private final Mutex mutex;

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-
 public interface Holdable {
     
     Mutex hold();

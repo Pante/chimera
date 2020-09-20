@@ -25,7 +25,6 @@ package com.karuslabs.commons.util;
 
 import java.util.*;
 
-
 public enum Type {
     
     BOOLEAN(Boolean.class, boolean.class),
@@ -39,7 +38,6 @@ public enum Type {
     DOUBLE(Double.class, double.class),
     VOID(Void.class, void.class),
     TYPE(Object.class, Object.class);
-    
     
     private static final Map<Class<?>, Type> TYPES;
     
@@ -81,7 +79,6 @@ public enum Type {
     
     public final Class<?> boxed;
     public final Class<?> unboxed;
-
 
     private Type(Class<?> boxed, Class<?> unboxed) {
         this.boxed = boxed;

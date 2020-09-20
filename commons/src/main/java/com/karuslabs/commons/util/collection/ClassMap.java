@@ -30,7 +30,6 @@ import java.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
 public interface ClassMap<T> {
     
     static <T> ClassMap<T> of() {
@@ -78,12 +77,11 @@ public interface ClassMap<T> {
     }
     
     
-    public Map<Class<? extends T>, T> map();
+    Map<Class<? extends T>, T> map();
     
 }
 
-
-class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap<T> {
+final class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap<T> {
     
     HashClassMap() {}
     
@@ -98,7 +96,7 @@ class HashClassMap<T> extends HashMap<Class<? extends T>, T> implements ClassMap
     
 }
 
-@Delegate class ProxiedClassMap<T> implements ClassMap<T> {
+final @Delegate class ProxiedClassMap<T> implements ClassMap<T> {
     
     private final Map<Class<? extends T>, T> map;
     

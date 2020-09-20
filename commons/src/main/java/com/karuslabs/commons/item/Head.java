@@ -27,14 +27,13 @@ import java.util.UUID;
 
 import static java.util.UUID.fromString;
 
-
 public enum Head {
     
-    ALEX("MHF_ALEX", "6ab43178-89fd-4905-97f6-0f67d9d76fd9"),
-    BLAZE("MHF_BLAZE", "4c38ed11-596a-4fd4-ab1d-26f386c1cbac"),
+    ALEX("MHF_Alex", "6ab43178-89fd-4905-97f6-0f67d9d76fd9"),
+    BLAZE("MHF_Blaze", "4c38ed11-596a-4fd4-ab1d-26f386c1cbac"),
     CAVE_SPIDER("MHF_CaveSpider", "cab28771-f0cd-4fe7-b129-02c69eba79a5"),
     CHICKEN("MHF_Chicken", "92deafa9-4307-42d9-b003-88601598d6c0"),
-    COW("MHF_COW", "f159b274-c22e-4340-b7c1-52abde147713"),
+    COW("MHF_Cow", "f159b274-c22e-4340-b7c1-52abde147713"),
     CREEPER("MHF_Creeper", "057b1c47-1321-4863-a6fe-8887f9ec265f"),
     ENDERMAN("MHF_Enderman", "40ffb372-12f6-4678-b3f2-2176bf56dd4b"),
     GHAST("MHF_Ghast", "063085a6-797f-4785-be1a-21cd7580f752"),
@@ -54,9 +53,10 @@ public enum Head {
     WITHER_SKELETON("MHF_WSkeleton", "7ed571a5-9fb8-416c-8b9d-fb2f446ab5b2"),
     ZOMBIE("MHF_Zombie", "daca2c3d-719b-41f5-b624-e4039e6c04bd"),
     ZOMBIE_PIGMAN("MHF_PigZombie", "18a2bb50-334a-4084-9184-2c380251a24b"),
+    
     CACTUS("MHF_Cactus", "1d9048db-e836-4b9a-a108-55014922f1ae"),
     CAKE("MHF_Cake", "afb489c4-9fc8-48a4-98f2-dd7bea414c9a"),
-    CHEST("MHF_CHEST", "73d4e068-3a6d-4c8b-8f85-3323546955c4"),
+    CHEST("MHF_Chest", "73d4e068-3a6d-4c8b-8f85-3323546955c4"),
     BROWN_COCONUT("MHF_CoconutB", "62efa973-f626-4092-aede-57ffbe84ff2b"),
     GREEN_COCONUT("MHF_CoconutG", "74556fea-28ed-4458-8db2-9a8220da0c12"),
     MELON("MHF_Melon", "1c7d9784-47ea-4bf3-bc23-acf260b436e6"),
@@ -66,6 +66,7 @@ public enum Head {
     PUMPKIN("MHF_Pumpkin", "f44d355b-b6ae-4ba8-8e62-ae6441854785"),
     DERPY_TNT("MHF_TNT", "d43af93c-c330-4a3d-bab8-ee74234a011a"),
     TNT("MHF_TNT2", "55e73380-a973-4a52-9bb5-1efa5256125c"),
+    
     UP_ARROW("MHF_ArrowUp", "fef039ef-e6cd-4987-9c84-26a3e6134277"),
     DOWN_ARROW("MHF_ArrowDown", "68f59b9b-5b0b-4b05-a9f2-e1d1405aa348"),
     LEFT_ARROW("MHF_ArrowLeft", "a68f0b64-8d14-4000-a95f-4b9ba14f8df9"),

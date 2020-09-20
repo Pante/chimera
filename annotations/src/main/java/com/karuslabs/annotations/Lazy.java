@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,49 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.annotations;
 
-import org.bukkit.*;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.*;
+import java.lang.annotation.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+   
+@Documented
+@Retention(SOURCE)
+@Target(FIELD)
+public @interface Lazy {
 
-//TODO: remove constructors
-public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
-    
-    public static PotionBuilder of(Material material) {
-        return new PotionBuilder(material);
-    }
-    
-    public PotionBuilder(Material material) {
-        super(material);
-    }
-    
-    PotionBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
-    
-    
-    public PotionBuilder colour(@Nullable Color colour) {
-        meta.setColor(colour);
-        return this;
-    }
-    
-    public PotionBuilder data(PotionData data) {
-        meta.setBasePotionData(data);
-        return this;
-    }
-    
-    public PotionBuilder effect(PotionEffect effect) {
-        meta.addCustomEffect(effect, true);
-        return this;
-    }
-    
-    
-    @Override
-    PotionBuilder self() {
-        return this;
-    }
-    
 }

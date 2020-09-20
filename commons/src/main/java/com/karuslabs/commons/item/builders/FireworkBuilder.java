@@ -28,7 +28,6 @@ import java.util.Collection;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
-
 public class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
     
     public static FireworkBuilder of(Material material) {

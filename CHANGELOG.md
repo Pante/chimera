@@ -6,8 +6,14 @@ This update adds inferred arguments during code generation for the command frame
 
 ### Annotations
 
+- Add `Lazy`
 - Add `Monad`
 - Change `ValueType` to `Record`
+
+### Commons
+
+- Change package private fields and methods, we went full capitalist and privatized (and finalized) them
+- Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
 
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)

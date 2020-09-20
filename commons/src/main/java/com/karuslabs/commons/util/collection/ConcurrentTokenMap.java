@@ -30,53 +30,50 @@ import java.util.concurrent.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
 public interface ConcurrentTokenMap<N, T> extends TokenMap<N, T> {
     
-    public static <N, T> ConcurrentTokenMap<N, T> of() {
+    static <N, T> ConcurrentTokenMap<N, T> of() {
         return new ConcurrentHashTokenMap<>();
     }
     
-    public static <N, T> ConcurrentTokenMap<N, T> of(int capacity) {
+    static <N, T> ConcurrentTokenMap<N, T> of(int capacity) {
         return new ConcurrentHashTokenMap<>(capacity);
     }
     
-    public static <N, T> @Delegate ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
+    static <N, T> @Delegate ConcurrentTokenMap<N, T> of(ConcurrentMap<Key<N, ? extends T>, T> map) {
         return new ConcurrentProxiedTokenMap<>(map);
     }
     
     
     @Override
-    public default <U extends T> boolean containsKey(N name, Class<U> type) {
+    default <U extends T> boolean containsKey(N name, Class<U> type) {
         return map().containsKey(ThreadLocalKey.KEY.get().set(name, type));
     }
     
     @Override
-    public default <U extends T> @Nullable U get(N name, Class<U> type) {
+    default <U extends T> @Nullable U get(N name, Class<U> type) {
         return get((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
     
     @Override
-    public default <U extends T> U getOrDefault(N name, Class<U> type, U value) {
+    default <U extends T> U getOrDefault(N name, Class<U> type, U value) {
         return getOrDefault((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type), value);
     }
     
     @Override
-    public default <U extends T> @Nullable U remove(N name, Class<U> type) {
+    default <U extends T> @Nullable U remove(N name, Class<U> type) {
         return remove((Key<N, U>) ThreadLocalKey.KEY.get().set(name, type));
     }
 
 
     @Override
-    public ConcurrentMap<Key<N, ? extends T>, T> map();
+    ConcurrentMap<Key<N, ? extends T>, T> map();
     
 }
-
 
 class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
     
     static final ThreadLocalKey KEY = new ThreadLocalKey();
-    
     
     @Override
     protected Key<Object, Object> initialValue() {
@@ -85,15 +82,13 @@ class ThreadLocalKey extends ThreadLocal<Key<Object, Object>> {
     
 }
 
-
-class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>, T> implements ConcurrentTokenMap<N, T> {
+final class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>, T> implements ConcurrentTokenMap<N, T> {
     
     ConcurrentHashTokenMap() {}
     
     ConcurrentHashTokenMap(int capacity) {
         super(capacity);
     }
-    
     
     @Override
     public ConcurrentMap<Key<N, ? extends T>, T> map() {
@@ -102,16 +97,13 @@ class ConcurrentHashTokenMap<N, T> extends ConcurrentHashMap<Key<N, ? extends T>
     
 }
 
-
-@Delegate class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
+final @Delegate class ConcurrentProxiedTokenMap<N, T> implements ConcurrentTokenMap<N, T> {
     
-    ConcurrentMap<Key<N, ? extends T>, T> map;
-    
+    private final ConcurrentMap<Key<N, ? extends T>, T> map;
     
     ConcurrentProxiedTokenMap(ConcurrentMap<Key<N, ? extends T>, T> map) {
         this.map = map;
     }
-    
     
     @Override
     public ConcurrentMap<Key<N, ? extends T>, T> map() {

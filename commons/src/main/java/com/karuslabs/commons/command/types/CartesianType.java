@@ -34,7 +34,6 @@ import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-
 interface CartesianType<T> extends Type<T> {
 
     static final String[] EMPTY = new String[0];

@@ -23,11 +23,10 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+import com.karuslabs.annotations.Lazy;
+
 import java.util.concurrent.*;
 import java.util.function.Consumer;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 
 public class Scheduler extends ScheduledThreadPoolExecutor {
     
@@ -60,8 +59,7 @@ public class Scheduler extends ScheduledThreadPoolExecutor {
     @Override
     protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> future) {
         if (runnable instanceof RunnableContext) {
-            var context = (RunnableContext) runnable;
-            context.future = future;
+            ((RunnableContext) runnable).future = future;
         }
         
         return future;
@@ -69,19 +67,16 @@ public class Scheduler extends ScheduledThreadPoolExecutor {
     
 }
 
-
 class RunnableContext implements Context, Runnable {
     
-    @Nullable Future<?> future;
-    Consumer<Context> task;
+    private final Consumer<Context> task;
+    @Lazy Future<?> future;
     volatile long times;
-    
     
     RunnableContext(Consumer<Context> task, long times) {
         this.task = task;
         this.times = times;
     }
-    
     
     @Override
     public void run() {

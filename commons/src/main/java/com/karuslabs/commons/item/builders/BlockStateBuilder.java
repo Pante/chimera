@@ -27,14 +27,9 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.meta.*;
 
-
-public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder> {
+public final class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder> {
     
-    public static BlockStateBuilder of(Material material) {
-        return new BlockStateBuilder(material);
-    } 
-    
-    BlockStateBuilder(Material material) {
+    public BlockStateBuilder(Material material) {
         super(material);
     }
     
@@ -42,13 +37,11 @@ public class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder
         super(source);
     }
     
-    
     public BlockStateBuilder state(BlockState state) {
         meta.setBlockState(state);
         return this;
     }
     
-
     @Override
     BlockStateBuilder self() {
         return this;

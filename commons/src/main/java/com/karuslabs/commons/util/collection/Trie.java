@@ -23,27 +23,26 @@
  */
 package com.karuslabs.commons.util.collection;
 
+import com.karuslabs.annotations.Lazy;
+
 import java.util.*;
 import java.util.function.Function;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
 public class Trie<V> extends AbstractMap<String, V> {
     
-    TrieEntry<V> root;
+    private final TrieEntry<V> root;
+    private int size;
     int modifications;
-    int size;
-    
-    @Nullable EntrySet entries;
-    @Nullable KeySet keys;
-    @Nullable ValueCollection values;
-    
+    @Lazy EntrySet entries;
+    @Lazy KeySet keys;
+    @Lazy ValueCollection values;
     
     public Trie() {
         root = new TrieEntry<>((char) 0, null);
-        modifications = 0;
         size = 0;
+        modifications = 0;
     }
     
     
@@ -63,7 +62,7 @@ public class Trie<V> extends AbstractMap<String, V> {
     <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
         var entry = root;
         for (var character : prefix.toCharArray()) {
-            entry = entry.get(character);
+            entry = entry.child(character);
             if (entry == null) {
                 return collection;
             }
@@ -73,7 +72,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         return collection;
     }
     
-    <C extends Collection<T>, T> void map(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
+    private <C extends Collection<T>, T> void map(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
         if (entry.key != null) {
             leaves.add(mapper.apply(entry));
         }
@@ -99,7 +98,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         return contains(root, value);
     }
     
-    boolean contains(TrieEntry<V> entry, Object value) {
+    private boolean contains(TrieEntry<V> entry, Object value) {
         if (entry.key != null && Objects.equals(entry.value, value)) {
             return true;
         }
@@ -144,7 +143,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
         var entry = root;
         for (char character : ((String) key).toCharArray()) {
-            entry = entry.get(character);
+            entry = entry.child(character);
             if (entry == null) {
                 return null;
             }
@@ -168,7 +167,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
         int i = 0;
         for (; i < array.length - 1; i++) {
-            var next = entry.get(array[i]);
+            var next = entry.child(array[i]);
             if (next == null) {
                 break;
             }
@@ -199,7 +198,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         return entry != null ? removeEntry(entry) : null;
     }
     
-    @Nullable V removeEntry(TrieEntry<V> entry) {
+    private @Nullable V removeEntry(TrieEntry<V> entry) {
         var removed = entry;
         var value = removed.value;
         
@@ -266,7 +265,7 @@ public class Trie<V> extends AbstractMap<String, V> {
     }
     
     
-    class EntrySet extends AbstractSet<Entry<String, V>> {
+    final class EntrySet extends AbstractSet<Entry<String, V>> {
         
         @Override
         public boolean contains(Object object) {
@@ -302,7 +301,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
     }
     
-    class KeySet extends AbstractSet<String> {
+    final class KeySet extends AbstractSet<String> {
         
         @Override
         public boolean contains(Object key) {
@@ -326,7 +325,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
     }
     
-    class ValueCollection extends AbstractCollection<V> {
+    final class ValueCollection extends AbstractCollection<V> {
 
         @Override
         public boolean contains(Object value) {
@@ -348,35 +347,32 @@ public class Trie<V> extends AbstractMap<String, V> {
     
     abstract class TrieIterator<T> implements Iterator<T> {
         
-        Deque<TrieEntry<V>> stack;
-        @Nullable TrieEntry<V> returned;
         int expectedModifications;
-        
+        private final Deque<TrieEntry<V>> queue;
+        private @Lazy TrieEntry<V> returned;
         
         TrieIterator() {
-            stack = new ArrayDeque<>();
-            children(root);
-            returned = null;
             expectedModifications = modifications;
+            queue = new ArrayDeque<>();
+            children(root);
         }
-        
         
         @Override
         public T next() {
              if (expectedModifications != modifications) {
                 throw new ConcurrentModificationException();
                 
-            } else if (stack.isEmpty()) {
+            } else if (queue.isEmpty()) {
                 throw new NoSuchElementException();
             }
              
             return get(returned = nextEntry());
         }
         
-        TrieEntry<V> nextEntry() {
+        private TrieEntry<V> nextEntry() {
             TrieEntry<V> entry;
             do {
-                entry = stack.pollLast();
+                entry = queue.pollLast();
                 if (entry.children > 0) {
                     children(entry);
                 }
@@ -386,18 +382,18 @@ public class Trie<V> extends AbstractMap<String, V> {
             return entry;
         }
 
-        final void children(TrieEntry<V> entry) {
+        private void children(TrieEntry<V> entry) {
             if (entry.ascii != null) {
                 for (var child : entry.ascii) {
                     if (child != null) {
-                        stack.add(child);
+                        queue.add(child);
                     }
                 }
             }
             
             if (entry.expanded != null) {
                 for (var child : entry.expanded.values()) {
-                    stack.add(child);
+                    queue.add(child);
                 }
             }
         }
@@ -405,10 +401,9 @@ public class Trie<V> extends AbstractMap<String, V> {
         abstract T get(TrieEntry<V> entry);
         
         
-        
         @Override
         public boolean hasNext() {
-            return !stack.isEmpty();
+            return !queue.isEmpty();
         }
 
         @Override
@@ -427,7 +422,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
     }
     
-    class EntryIterator extends TrieIterator<Entry<String, V>> {
+    final class EntryIterator extends TrieIterator<Entry<String, V>> {
 
         @Override
         Entry<String, V> get(TrieEntry<V> entry) {
@@ -436,7 +431,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
     }
     
-    class KeyIterator extends TrieIterator<String> {
+    final class KeyIterator extends TrieIterator<String> {
 
         @Override
         String get(TrieEntry<V> entry) {
@@ -445,7 +440,7 @@ public class Trie<V> extends AbstractMap<String, V> {
         
     }
     
-    class ValueIterator extends TrieIterator<V> {
+    final class ValueIterator extends TrieIterator<V> {
 
         @Override
         V get(TrieEntry<V> entry) {

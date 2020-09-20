@@ -23,14 +23,12 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
-
 public interface Context {
 
     public static final long INFINITE = -1;
     
+    void cancel();
     
-    public void cancel();
-    
-    public long times();
+    long times();
     
 }

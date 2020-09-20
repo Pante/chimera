@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.ValueType;
+import com.karuslabs.annotations.Monad;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -33,53 +33,50 @@ import java.util.stream.Stream;
 import static com.karuslabs.commons.util.WeakValue.EMPTY;
 import static java.util.stream.Stream.ofNullable;
 
-
-public @ValueType interface Weak<T> {
+public @Monad interface Weak<T> {
     
-    public static <T> Weak<T> of(T value) {
+    static <T> Weak<T> of(T value) {
         return new WeakValue<>(value);
     }
     
-    public static <T> Weak<T> empty() {
+    static <T> Weak<T> empty() {
         return (Weak<T>) EMPTY;
     }
     
     
-    public Weak<T> filter(Predicate<? super T> predicate);
+    Weak<T> filter(Predicate<? super T> predicate);
     
-    public <U> Weak<U> flatMap(Function<? super T, ? extends Weak<? extends U>> mapper);
+    <U> Weak<U> flatMap(Function<? super T, ? extends Weak<? extends U>> mapper);
     
-    public <U> Weak<U> map(Function<? super T, ? extends U> mapper);
-    
-    
-    public Weak<T> orElse(Supplier<? extends Weak<? extends T>> other);
+    <U> Weak<U> map(Function<? super T, ? extends U> mapper);
     
     
-    public T or(T other);
+    Weak<T> orElse(Supplier<? extends Weak<? extends T>> other);
     
-    public T or(Supplier<T> other);
     
-    public T orThrow();
+    T or(T other);
     
-    public <E extends Throwable> T orThrow(Supplier<? extends E> exception) throws E;
+    T or(Supplier<T> other);
+    
+    T orThrow();
+    
+    <E extends Throwable> T orThrow(Supplier<? extends E> exception) throws E;
             
     
-    public void ifPresent(Consumer<? super T> action);
+    void ifPresent(Consumer<? super T> action);
     
-    public void ifPresent(Consumer<? super T> action, Runnable otherwise);
+    void ifPresent(Consumer<? super T> action, Runnable otherwise);
     
-    public boolean isPresent();
+    boolean isPresent();
     
     
-    public Stream<T> stream();
+    Stream<T> stream();
     
 }
 
-
-@ValueType final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
+final @Monad class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     static final Weak<?> EMPTY = new WeakValue<>(null);
-    
     
     WeakValue(T referent) {
         super(referent);
@@ -180,7 +177,7 @@ public @ValueType interface Weak<T> {
             return true;
         }
 
-        if (!(other instanceof Weak)) {
+        if (!(other instanceof Weak<?>)) {
             return false;
         }
 

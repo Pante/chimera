@@ -25,18 +25,14 @@ package com.karuslabs.commons.util.collection;
 
 import java.util.*;
 
-
 public class TrieSet extends AbstractSet<String> {
     
-    static final Object PRESENT = new Object();
-    
+    private static final Object PRESENT = new Object();
     private final Trie<Object> trie;
-    
     
     public TrieSet() {
         trie = new Trie<>();
     }
-    
     
     public Set<String> startsWith(String prefix) {
         return trie.prefixedKeys(prefix);
@@ -46,7 +42,6 @@ public class TrieSet extends AbstractSet<String> {
     public boolean add(String string) {
         return trie.put(string, PRESENT) == null;
     }
-    
     
     @Override
     public boolean contains(Object object) {

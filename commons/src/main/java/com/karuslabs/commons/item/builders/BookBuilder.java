@@ -31,15 +31,10 @@ import org.bukkit.inventory.meta.BookMeta.Generation;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+public final class BookBuilder extends Builder<BookMeta, BookBuilder> {
 
-public class BookBuilder extends Builder<BookMeta, BookBuilder> {
-    
-    public static BookBuilder of(Material material) {
-        return new BookBuilder(material);
-    }
-    
-    BookBuilder(Material material) {
-        super(material);
+    public BookBuilder() {
+        super(Material.BOOK);
     }
     
     BookBuilder(Builder<ItemMeta, ?> source) {

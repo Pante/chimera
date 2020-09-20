@@ -29,21 +29,15 @@ import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.inventory.meta.*;
 
-
-public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
+public final class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     
-    public static BannerBuilder of(Material material) {
-        return new BannerBuilder(material);
-    }
-    
-    BannerBuilder(Material material) {
+    public BannerBuilder(Material material) {
         super(material);
     }
     
     BannerBuilder(Builder<ItemMeta, ?> source) {
         super(source);
     }
-    
     
     public BannerBuilder patterns(Collection<Pattern> patterns) {
         return patterns(patterns.toArray(new Pattern[0]));
@@ -56,7 +50,6 @@ public class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
         return this;
     }
     
-
     @Override
     BannerBuilder self() {
         return this;

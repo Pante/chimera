@@ -29,7 +29,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
-
 public class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
      
     public static CrossbowBuilder of() {

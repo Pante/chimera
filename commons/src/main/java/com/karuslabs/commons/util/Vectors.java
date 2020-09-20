@@ -30,7 +30,6 @@ import org.bukkit.util.Vector;
 
 import static java.lang.Math.*;
 
-
 public @Static class Vectors {
     
     @FunctionalInterface
@@ -40,16 +39,16 @@ public @Static class Vectors {
         
     }
     
-    private static Reduction<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
+    private static final Reduction<Vector> VECTOR = (vector, x, y, z) -> vector.setX(x).setY(y).setZ(z);
         
-    private static Reduction<Location> LOCATION = (location, x, y, z) -> {
+    private static final Reduction<Location> LOCATION = (location, x, y, z) -> {
         location.setX(x);
         location.setY(y);
         location.setZ(z);
         return location;
     };
 
-    
+   
     public static Vector rotate(Vector vector, double angleX, double angleY, double angleZ) {
         rotateAroundXAxis(vector, angleX);
         rotateAroundYAxis(vector, angleY);
@@ -85,6 +84,7 @@ public @Static class Vectors {
         return vector.setX(x).setY(y);
     }
 
+    
     public static Vector rotate(Vector vector, Location pivot) {
         return rotate(vector, pivot.getYaw(), pivot.getPitch());
     }

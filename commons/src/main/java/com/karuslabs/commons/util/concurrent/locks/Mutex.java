@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util.concurrent.locks;
 
-
 @FunctionalInterface
 public interface Mutex extends AutoCloseable {
     

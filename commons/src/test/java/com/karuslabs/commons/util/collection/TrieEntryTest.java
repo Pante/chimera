@@ -44,7 +44,7 @@ class TrieEntryTest {
     
     @Test
     void get_null() {
-        assertNull(entry.get(' '));
+        assertNull(entry.child(' '));
     }
     
     
@@ -52,7 +52,7 @@ class TrieEntryTest {
     @MethodSource("characters")
     void add(char character) {
         entry.add(character);
-        assertEquals(character, entry.get(character).character);
+        assertEquals(character, entry.child(character).character);
         
         assertEquals(1, entry.children);
     }
@@ -63,7 +63,7 @@ class TrieEntryTest {
     void add_key_value(char character) {
         entry.add(character, "key", "value");
         
-        var child = entry.get(character);
+        var child = entry.child(character);
         
         assertEquals(character, child.character);
         assertEquals("key", child.getKey());
@@ -82,7 +82,7 @@ class TrieEntryTest {
         assertNull(entry.set((char) (character + 1), "key2", "value2"));
         assertEquals(2, entry.children);
         
-        var added = entry.get((char) (character + 1));
+        var added = entry.child((char) (character + 1));
 
         assertEquals(character + 1, added.character);
         assertEquals("key2", added.getKey());
@@ -103,7 +103,7 @@ class TrieEntryTest {
         assertEquals("key1", old.key);
         assertEquals("value1", old.value);
         
-        var added = entry.get(character);
+        var added = entry.child(character);
         
         assertEquals(character, added.character);
         assertEquals("key2", added.getKey());
@@ -151,8 +151,8 @@ class TrieEntryTest {
         entry.clear();
         
         assertEquals(0, entry.children);
-        assertNull(entry.get('a'));
-        assertNull(entry.get('ü'));
+        assertNull(entry.child('a'));
+        assertNull(entry.child('ü'));
     }
     
     
