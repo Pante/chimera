@@ -29,14 +29,21 @@ import org.bukkit.potion.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-//TODO: remove constructors
-public class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
+public final class PotionBuilder extends Builder<PotionMeta, PotionBuilder> {
     
-    public static PotionBuilder of(Material material) {
-        return new PotionBuilder(material);
+    public static PotionBuilder lingering() {
+        return new PotionBuilder(Material.LINGERING_POTION);
     }
     
-    public PotionBuilder(Material material) {
+    public static PotionBuilder potion() {
+        return new PotionBuilder(Material.POTION);
+    }
+    
+    public static PotionBuilder splash() {
+        return new PotionBuilder(Material.SPLASH_POTION);
+    }
+    
+    PotionBuilder(Material material) {
         super(material);
     }
     

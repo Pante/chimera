@@ -31,12 +31,11 @@ import static java.util.UUID.fromString;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 class HeadTest {
     
     @Test
     void head() {
-        assertEquals("MHF_ALEX", ALEX.name);
+        assertEquals("MHF_Alex", ALEX.name);
         assertEquals(fromString("6ab43178-89fd-4905-97f6-0f67d9d76fd9"), ALEX.id);
     }
     

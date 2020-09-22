@@ -23,30 +23,53 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import com.karuslabs.commons.MockBukkit;
+import com.karuslabs.commons.item.Head;
 
-import org.bukkit.inventory.meta.SkullMeta;
+import java.util.UUID;
 
-import org.junit.jupiter.api.Test;
+import org.bukkit.*;
+import org.bukkit.inventory.meta.*;
 
-import static com.karuslabs.commons.item.Head.ALEX;
-import static org.bukkit.Material.WATER;
-import static org.mockito.Mockito.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static org.bukkit.Bukkit.getOfflinePlayer;
 
-class SkullBuilderTest {
+public final class HeadBuilder extends Builder<SkullMeta, HeadBuilder> {
     
-    SkullMeta meta = MockBukkit.meta(SkullMeta.class);
+    public static HeadBuilder head() {
+        return new HeadBuilder(Material.PLAYER_HEAD);
+    }
+    
+    public static HeadBuilder wall() {
+        return new HeadBuilder(Material.PLAYER_WALL_HEAD);
+    }
+    
+    HeadBuilder(Material material) {
+        super(material);
+    }
+    
+    HeadBuilder(Builder<ItemMeta, ?> source) {
+        super(source);
+    }
     
     
-    @Test
-    void owner() {
-        var builder = SkullBuilder.of(WATER).self();
-        var owner = MockBukkit.offline();
-        
-        builder.head(ALEX);
-        
-        verify(meta).setOwningPlayer(owner);
+    public HeadBuilder head(Head head) {
+        return head(head.id);
+    }
+    
+    public HeadBuilder head(UUID id) {
+        return head(getOfflinePlayer(id));
+    }
+    
+    public HeadBuilder head(@Nullable OfflinePlayer player) {
+        meta.setOwningPlayer(player);
+        return this;
+    }
+    
+    
+    @Override
+    HeadBuilder self() {
+        return this;
     }
     
 }

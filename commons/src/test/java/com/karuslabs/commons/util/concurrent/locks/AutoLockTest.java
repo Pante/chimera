@@ -28,11 +28,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-
 class AutoLockTest {
     
     AutoLock lock = spy(new AutoLock());
-    
     
     @Test
     void hold() {
@@ -41,14 +39,12 @@ class AutoLockTest {
         verify(lock).lock();
     }
     
-    
     @Test
     void holdInterruptibly() throws InterruptedException {
         lock.holdInterruptibly();
         
         verify(lock).lockInterruptibly();
     }
-    
     
     @Test
     void close() {

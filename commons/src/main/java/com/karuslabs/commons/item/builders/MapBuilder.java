@@ -30,10 +30,14 @@ import org.bukkit.map.MapView;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class MapBuilder extends Builder<MapMeta, MapBuilder> {
+public final class MapBuilder extends Builder<MapMeta, MapBuilder> {
     
-    public static MapBuilder of(Material material) {
-        return new MapBuilder(material);
+    public static MapBuilder filled() {
+        return new MapBuilder(Material.FILLED_MAP);
+    }
+    
+    public static MapBuilder empty() {
+        return new MapBuilder(Material.MAP);
     }
     
     MapBuilder(Material material) {
@@ -64,7 +68,6 @@ public class MapBuilder extends Builder<MapMeta, MapBuilder> {
         meta.setScaling(scaling);
         return this;
     }
-
     
     @Override
     MapBuilder self() {

@@ -33,7 +33,6 @@ import org.junit.jupiter.api.Test;
 import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
-
 class BlockStateBuilderTest {
     
     BlockStateMeta meta = MockBukkit.meta(BlockStateMeta.class);

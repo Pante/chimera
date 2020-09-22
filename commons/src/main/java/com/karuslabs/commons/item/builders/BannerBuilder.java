@@ -31,7 +31,11 @@ import org.bukkit.inventory.meta.*;
 
 public final class BannerBuilder extends Builder<BannerMeta, BannerBuilder> {
     
-    public BannerBuilder(Material material) {
+    public static BannerBuilder of(Material material) {
+        return new BannerBuilder(material);
+    }
+    
+    BannerBuilder(Material material) {
         super(material);
     }
     

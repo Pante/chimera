@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +25,24 @@ package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.MockBukkit;
 
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.Location;
+import org.bukkit.inventory.meta.CompassMeta;
 
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-class SuspiciousStewBuilderTest {
+class CompassBuilderTest {
     
-    SuspiciousStewMeta meta = MockBukkit.meta(SuspiciousStewMeta.class);
-    PotionEffect effect = mock(PotionEffect.class);
-    
+    CompassMeta meta = MockBukkit.meta(CompassMeta.class);
+    Location location = mock(Location.class);
     
     @Test
-    void effect() {
-        SuspiciousStewBuilder.of().self().effect(effect, true);
-        verify(meta).addCustomEffect(effect, true);
+    void build() {
+        CompassBuilder.of().self().lodestone(location).track(false);
+        
+        verify(meta).setLodestone(location);
+        verify(meta).setLodestoneTracked(false);
     }
 
 } 

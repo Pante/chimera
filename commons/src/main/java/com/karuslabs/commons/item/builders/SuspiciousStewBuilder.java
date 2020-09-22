@@ -27,15 +27,14 @@ import org.bukkit.Material;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 
-
-public class SuspiciousStewBuilder extends Builder<SuspiciousStewMeta, SuspiciousStewBuilder> {
+public final class SuspiciousStewBuilder extends Builder<SuspiciousStewMeta, SuspiciousStewBuilder> {
     
     public static SuspiciousStewBuilder of() {
-        return new SuspiciousStewBuilder(Material.SUSPICIOUS_STEW);
+        return new SuspiciousStewBuilder();
     }
     
-    SuspiciousStewBuilder(Material material) {
-        super(material);
+    SuspiciousStewBuilder() {
+        super(Material.SUSPICIOUS_STEW);
     }
     
     SuspiciousStewBuilder(Builder<ItemMeta, ?> source) {

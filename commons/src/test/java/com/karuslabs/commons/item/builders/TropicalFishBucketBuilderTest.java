@@ -30,7 +30,6 @@ import org.bukkit.inventory.meta.*;
 import org.junit.jupiter.api.Test;
 
 import static org.bukkit.DyeColor.*;
-import static org.bukkit.Material.WATER;
 import static org.bukkit.entity.TropicalFish.Pattern.DASHER;
 import static org.mockito.Mockito.*;
 
@@ -39,10 +38,9 @@ class TropicalFishBucketBuilderTest {
     
     TropicalFishBucketMeta meta = MockBukkit.meta(TropicalFishBucketMeta.class);
     
-    
     @Test
     void build() {
-        TropicalFishBucketBuilder.of(WATER).self().body(BLUE).pattern(RED).pattern(DASHER);
+        TropicalFishBucketBuilder.of().self().body(BLUE).pattern(RED).pattern(DASHER);
         
         verify(meta).setBodyColor(BLUE);
         verify(meta).setPatternColor(RED);

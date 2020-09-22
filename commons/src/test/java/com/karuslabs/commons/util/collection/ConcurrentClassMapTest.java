@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class ConcurrentClassMapTest {
     
     @Test
@@ -40,7 +39,6 @@ class ConcurrentClassMapTest {
     
 }
 
-
 class ConcurrentHashClassMapTest {
     
     @Test
@@ -50,7 +48,6 @@ class ConcurrentHashClassMapTest {
     }
     
 }
-
 
 class ConcurrentProxiedClassMapTest {
     

@@ -27,15 +27,14 @@ import org.bukkit.*;
 import org.bukkit.entity.TropicalFish.Pattern;
 import org.bukkit.inventory.meta.*;
 
-
-public class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, TropicalFishBucketBuilder> {
+public final class TropicalFishBucketBuilder extends Builder<TropicalFishBucketMeta, TropicalFishBucketBuilder> {
     
-    public static TropicalFishBucketBuilder of(Material material) {
-        return new TropicalFishBucketBuilder(material);
+    public static TropicalFishBucketBuilder of() {
+        return new TropicalFishBucketBuilder();
     }
     
-    TropicalFishBucketBuilder(Material material) {
-        super(material);
+    TropicalFishBucketBuilder() {
+        super(Material.TROPICAL_FISH_BUCKET);
     }
     
     TropicalFishBucketBuilder(Builder<ItemMeta, ?> source) {

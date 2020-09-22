@@ -34,7 +34,6 @@ import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class TokenMapTest {    
     
     @ParameterizedTest
@@ -44,9 +43,8 @@ class TokenMapTest {
         assertTrue(map.containsKey("a", int.class));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void containsValue(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertTrue(map.containsValue(1));
@@ -54,46 +52,41 @@ class TokenMapTest {
     
     
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void get(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.get("a", int.class));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void getOrDefault_value(TokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.getOrDefault("a", int.class, 2));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void getOrDefault_default(TokenMap<String, Object> map) {
         map.map().put(TokenMap.key("a", String.class), "b");
         assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void put(TokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         assertEquals("b", map.put("a", String.class, "c"));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void remove_name(TokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         map.remove("a", String.class);
         
         assertFalse(map.containsKey(TokenMap.key("a", String.class)));
     }
-    
     
     @Test
     void remove_key() {
@@ -105,7 +98,6 @@ class TokenMapTest {
         assertFalse(map.containsKey(TokenMap.key("a", String.class)));
     }
     
-    
     static Stream<TokenMap<String, Object>> maps() {
         TokenMap<String, Object> hashed = TokenMap.of(1);
         TokenMap<String, Object> proxied = TokenMap.of(new HashMap<>());
@@ -114,23 +106,19 @@ class TokenMapTest {
     
 }
 
-
 class KeyTest {
     
     Key<String, String> key = TokenMap.key("name", String.class);
-    
     
     @Test
     void equals_same() {
         assertTrue(key.equals(key));
     }
     
-    
     @Test
     void equals_hash() {
         assertFalse(key.equals(TokenMap.key("name", int.class)));
     }
-    
     
     @Test
     void toString_value() {

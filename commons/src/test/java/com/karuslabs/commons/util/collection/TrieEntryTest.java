@@ -33,7 +33,6 @@ import org.junit.jupiter.params.provider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
-
 class TrieEntryTest {
     
     static final TrieEntry<String> ENTRY = new TrieEntry<>('a', null, "key", "value");
@@ -47,7 +46,6 @@ class TrieEntryTest {
         assertNull(entry.child(' '));
     }
     
-    
     @ParameterizedTest
     @MethodSource("characters")
     void add(char character) {
@@ -56,7 +54,6 @@ class TrieEntryTest {
         
         assertEquals(1, entry.children);
     }
-    
     
     @ParameterizedTest
     @MethodSource("characters")
@@ -71,7 +68,6 @@ class TrieEntryTest {
         assertEquals(1, entry.children);
     }
 
-    
     
     @ParameterizedTest
     @MethodSource("characters")
@@ -88,7 +84,6 @@ class TrieEntryTest {
         assertEquals("key2", added.getKey());
         assertEquals("value2", added.getValue());
     }
-    
     
     @ParameterizedTest
     @MethodSource("characters")
@@ -110,7 +105,6 @@ class TrieEntryTest {
         assertEquals("value2", added.getValue());
     }
     
-    
     @ParameterizedTest
     @MethodSource("characters")
     void remove_size_decrease(char character) {
@@ -124,7 +118,6 @@ class TrieEntryTest {
         assertEquals("key1", removed.getKey());
         assertEquals("value1", removed.getValue());
     }
-    
     
     @ParameterizedTest
     @MethodSource("characters")
@@ -155,7 +148,6 @@ class TrieEntryTest {
         assertNull(entry.child('ü'));
     }
     
-    
     @Test
     void setValue() {
         entry.value = "old";
@@ -164,20 +156,17 @@ class TrieEntryTest {
         assertEquals("new", entry.value);
     }
     
-    
     @ParameterizedTest
     @MethodSource("equality_parameters")
     void equals(Object other, boolean expected) {
         assertEquals(expected, ENTRY.equals(other));
     }
     
-    
     @ParameterizedTest
     @MethodSource("equality_parameters")
     void hashCode(Object other, boolean expected) {
         assertEquals(expected, ENTRY.hashCode() == Objects.hashCode(other));
     }
-    
     
     static Stream<Arguments> equality_parameters() {
         return Stream.of(
@@ -190,7 +179,6 @@ class TrieEntryTest {
             of(new TrieEntry<>(' ', null, "invalidkey", "invalidvalue"), false)
         );
     }
-    
     
     @Test
     void to_string() {

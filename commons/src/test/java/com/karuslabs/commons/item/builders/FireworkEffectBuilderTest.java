@@ -30,19 +30,16 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
-
 
 class FireworkEffectBuilderTest {
     
     FireworkEffectMeta meta = MockBukkit.meta(FireworkEffectMeta.class);
     FireworkEffect effect = mock(FireworkEffect.class);
     
-    
     @Test
     void effect() {
-        FireworkEffectBuilder.of(WATER).self().effect(effect);
+        FireworkEffectBuilder.of().self().effect(effect);
         
         verify(meta).setEffect(effect);
     }

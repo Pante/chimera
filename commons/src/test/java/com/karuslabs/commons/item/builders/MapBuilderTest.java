@@ -24,25 +24,31 @@
 package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.MockBukkit;
+
+import org.bukkit.Material;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
 import org.junit.jupiter.api.Test;
 
 import static org.bukkit.Color.SILVER;
-import static org.bukkit.Material.WATER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
 
 class MapBuilderTest {
     
     MapMeta meta = MockBukkit.meta(MapMeta.class);
     
+    @Test
+    void constructors() {
+        assertEquals(MapBuilder.empty().build().getType(), Material.MAP);
+        assertEquals(MapBuilder.filled().build().getType(), Material.FILLED_MAP);
+    }
     
     @Test
     void build() {
         var view = mock(MapView.class);
-        MapBuilder.of(WATER).self().colour(SILVER).view(view).location("name").scaling(true);
+        MapBuilder.empty().self().colour(SILVER).view(view).location("name").scaling(true);
         
         verify(meta).setColor(SILVER);
         verify(meta).setMapView(view);

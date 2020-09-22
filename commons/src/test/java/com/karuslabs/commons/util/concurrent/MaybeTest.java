@@ -36,13 +36,11 @@ class MaybeTest {
     Maybe<String> maybe = new Maybe<>(() -> "expected");
     Maybe<String> exceptional = new Maybe<>(() -> { throw new IllegalArgumentException(); }, null);
     
-    
     @BeforeEach
     void before() {
         maybe.run();
         exceptional.run();
     }
-    
     
     @Test
     void value_constructor() {
@@ -50,48 +48,40 @@ class MaybeTest {
         assertEquals("a", maybe.value());
     }
     
-    
     @Test
     void some() {
         assertEquals("expected", maybe.some().orElseThrow());
     }
-    
     
     @Test
     void some_throws_exception() {
         assertEquals(Optional.empty(), exceptional.some());
     }
     
-    
     @Test
     void some_timeout() {
         assertEquals("expected", maybe.some(1, TimeUnit.MINUTES).orElseThrow());
     }
     
-    
     @Test
     void some_timeout_throws_exception() {
         assertEquals(Optional.empty(), exceptional.some(0, TimeUnit.MINUTES));
     }
-    
-    
+        
     @Test
     void value() {
         assertEquals("expected", maybe.value());
     }
-    
     
     @Test
     void value_throws_exception() {
         assertNull(exceptional.value());
     }
     
-    
     @Test
     void value_timeout() {
         assertEquals("expected", maybe.value(1, TimeUnit.MINUTES));
     }
-    
     
     @Test
     void value_timeout_throws_exception() {

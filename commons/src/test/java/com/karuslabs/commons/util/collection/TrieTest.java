@@ -33,7 +33,6 @@ import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class TrieTest {
     
     static final Trie<String> TRIE = new Trie<>();
@@ -63,7 +62,6 @@ class TrieTest {
         assertTrue(entries.contains(new TrieEntry<>('n', null, "application", "application_value")));
     }
     
-    
     @Test
     void prefixedKeys() {
         var keys = populated.prefixedKeys("app");
@@ -72,7 +70,6 @@ class TrieTest {
         assertTrue(keys.contains("apple"));
         assertTrue(keys.contains("application"));
     }
-    
     
     @Test
     void prefixedValues() {
@@ -83,19 +80,16 @@ class TrieTest {
         assertTrue(values.contains("application_value"));
     }
     
-    
     @Test
     void prefixed() {
         populated.put("applyingÜee", "value");
         assertEquals(1, populated.prefixed("applyin", entry -> entry, new ArrayList<>()).size());
     }
     
-    
     @Test
     void prefixed_null() {
         assertTrue(populated.prefixed("applying", entry -> entry, new ArrayList<>()).isEmpty());
     }
-    
     
     @ParameterizedTest
     @CsvSource({", true", "apple_value, true", "value, true", "apply_value, false"})
@@ -103,7 +97,6 @@ class TrieTest {
         populated.put("applÜe", "value");
         assertEquals(expected, populated.containsValue(value));
     }
-
     
     @ParameterizedTest
     @CsvSource({"app, true", "banana, true", "applicant, false"})
@@ -111,19 +104,16 @@ class TrieTest {
         assertEquals(expected, populated.containsKey(key));
     }
     
-    
     @ParameterizedTest
     @CsvSource({"application, application_value", "applicant, ", "appl, "})
     void get(String key, String expected) {
         assertEquals(expected, populated.get(key));
     }
     
-    
     @Test
     void get_throws_exception() {
         assertEquals("Null keys are not permitted in a trie", assertThrows(NullPointerException.class, () -> trie.get(null)).getMessage());
-    }
-        
+    }  
     
     @Test
     void putAll() {
@@ -134,7 +124,6 @@ class TrieTest {
         assertEquals("value1", trie.get("key1"));
         assertEquals("value2", trie.get("key2"));
     }
-    
     
     @Test
     void put_new() {
@@ -154,7 +143,6 @@ class TrieTest {
         assertEquals(2, trie.modifications);
     }
     
-    
     @Test
     void put_replacement() {
         trie = new Trie<String>();
@@ -171,7 +159,6 @@ class TrieTest {
         assertEquals(2, trie.modifications);
     }
     
-    
     @Test
     void remove_preserve_parent_chain() {
         assertEquals("application_value", populated.remove("application"));
@@ -184,7 +171,6 @@ class TrieTest {
         assertEquals(1, populated.getEntry("app").children);
     }
     
-    
     @Test
     void remove_preserve_child_chain() {
         assertEquals("app_value", populated.remove("app"));
@@ -195,14 +181,12 @@ class TrieTest {
         assertNull(populated.get("app"));
     }
     
-    
     @Test
     void remove_preserve_root() {
         populated.remove("banana");
         
         assertEquals("app_value", populated.get("app"));
     }
-    
     
     @Test
     void clear() {
@@ -212,7 +196,6 @@ class TrieTest {
         assertEquals(5, populated.modifications);
         assertNull(populated.get("app"));
     }
-    
     
     @Test
     void entryset_contains() {
@@ -225,7 +208,6 @@ class TrieTest {
         assertFalse(entries.contains(new TrieEntry<>('X', null, "application", "appliction_value")));
     }
     
-    
     @ParameterizedTest
     @CsvSource({"app, app_value, true, 3", "apple, invalid_value, false, 4", "appli, application_value, false, 4"})
     void entryset_remove(String key, String value, boolean expected, int size) {
@@ -236,7 +218,6 @@ class TrieTest {
         assertEquals(size, entries.size());
     }
     
-    
     @Test
     void keyset_contains() {
         var keys = populated.keySet();
@@ -245,7 +226,6 @@ class TrieTest {
         assertTrue(keys.contains("app"));
         assertFalse(keys.contains("invalid"));
     }
-    
     
     @ParameterizedTest
     @CsvSource({"app, true, 3", "appl, false, 4"})
@@ -257,7 +237,6 @@ class TrieTest {
         assertEquals(size, keys.size());
     }
     
-    
     @Test
     void values_contains() {
         var values = populated.values();
@@ -267,7 +246,6 @@ class TrieTest {
         assertTrue(values.contains(null));
         assertFalse(values.contains("invalid"));
     }
-    
     
     @ParameterizedTest
     @CsvSource({"app_value, true, 3", ", true, 3", "application, false, 4"})
@@ -279,7 +257,6 @@ class TrieTest {
         assertEquals(size, values.size());
     }
     
-    
     @Test
     void trie_iterator_next_throws_concurrent_exception() {
         var iterator = populated.keySet().iterator();
@@ -288,14 +265,12 @@ class TrieTest {
         assertThrows(ConcurrentModificationException.class, iterator::next);
     }
     
-    
     @Test
     void trie_iterator_next_throws_empty_exception() {
         var iterator = trie.keySet().iterator();
         
         assertThrows(NoSuchElementException.class, iterator::next);
     }
-    
     
     @Test
     void trie_iterator_next() {
@@ -311,7 +286,6 @@ class TrieTest {
         assertEquals(5, counter);
     }
     
-    
     @Test
     void trie_iterator_remove_throws_concurrent_exception() {
         var iterator = populated.keySet().iterator();
@@ -319,7 +293,6 @@ class TrieTest {
         
         assertThrows(ConcurrentModificationException.class, iterator::remove);
     }
-    
     
     @Test
     void trie_iterator_remove_throws_state_exception() {
@@ -329,8 +302,7 @@ class TrieTest {
         
         assertThrows(IllegalStateException.class, iterator::remove);
     }
-    
-    
+
     @Test
     void trie_iterator_remove() {
         var iterator = (TrieIterator) populated.keySet().iterator();
@@ -341,20 +313,17 @@ class TrieTest {
         assertEquals(populated.modifications, iterator.expectedModifications);
     }
     
-    
     @Test
     void entryset_iterator() {
         var iterator = populated.entrySet().iterator();
         assertTrue(iterator.next() instanceof TrieEntry<?>);
     }
     
-    
     @Test
     void keyset_iterator() {
         var iterator = populated.keySet().iterator();
         assertTrue(Set.of("app", "apple", "application", "banana").contains(iterator.next()));
     }
-    
     
     @Test
     void values_iterator() {

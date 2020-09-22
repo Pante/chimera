@@ -28,14 +28,14 @@ import java.util.Collection;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
-public class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
+public final class FireworkBuilder extends Builder<FireworkMeta, FireworkBuilder> {
     
-    public static FireworkBuilder of(Material material) {
-        return new FireworkBuilder(material);
+    public static FireworkBuilder of() {
+        return new FireworkBuilder();
     }
     
-    FireworkBuilder(Material material) {
-        super(material);
+    FireworkBuilder() {
+        super(Material.FIREWORK_ROCKET);
     }
     
     FireworkBuilder(Builder<ItemMeta, ?> source) {

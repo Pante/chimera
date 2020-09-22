@@ -28,7 +28,11 @@ import org.bukkit.inventory.meta.*;
 
 public final class CompassBuilder extends Builder<CompassMeta, CompassBuilder> {
     
-    public CompassBuilder() {
+    public static CompassBuilder of() {
+        return new CompassBuilder();
+    }
+    
+    CompassBuilder() {
         super(Material.COMPASS);
     }
     

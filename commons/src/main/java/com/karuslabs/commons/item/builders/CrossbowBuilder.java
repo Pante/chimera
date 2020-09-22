@@ -29,14 +29,14 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
-public class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
-     
+public final class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
+        
     public static CrossbowBuilder of() {
-        return new CrossbowBuilder(Material.CROSSBOW);
+        return new CrossbowBuilder();
     }
-            
-    CrossbowBuilder(Material material) {
-        super(material);
+    
+    CrossbowBuilder() {
+        super(Material.CROSSBOW);
     }
     
     CrossbowBuilder(Builder<ItemMeta, ?> source) {

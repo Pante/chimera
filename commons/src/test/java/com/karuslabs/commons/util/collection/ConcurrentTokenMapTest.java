@@ -34,42 +34,37 @@ import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class ConcurrentTokenMapTest {
     
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void containsKey(ConcurrentTokenMap<String, Object> map) {
         map.put("a", String.class, "b");
         assertTrue(map.containsKey("a", String.class));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void get(ConcurrentTokenMap<String, Object> map) {
         map.put("a", int.class, 1);
         assertEquals(1, (int) map.get("a", int.class));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void getOrDefault(ConcurrentTokenMap<String, Object> map) {
         map.map().put(TokenMap.key("a", int.class), map);
         assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
     }
     
-    
     @ParameterizedTest
-    @MethodSource({"maps"})
+    @MethodSource("maps")
     void remove(ConcurrentTokenMap<String, Object> map) {
         map.put(TokenMap.key("a", int.class), 1);
         map.remove("a", int.class);
         
         assertEquals(1, (int) map.getOrDefault("a", int.class, 1));
     }
-    
     
     static Stream<ConcurrentTokenMap<String, Object>> maps() {
         ConcurrentTokenMap<String, Object> hashed = ConcurrentTokenMap.of();

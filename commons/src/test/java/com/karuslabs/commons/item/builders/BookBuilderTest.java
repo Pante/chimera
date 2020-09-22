@@ -31,19 +31,16 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Material.WATER;
 import static org.bukkit.inventory.meta.BookMeta.Generation.ORIGINAL;
 import static org.mockito.Mockito.*;
-
 
 class BookBuilderTest {
     
     BookMeta meta = MockBukkit.meta(BookMeta.class);
     
-    
     @Test
     void build() {
-        BookBuilder.of(WATER).self().author("Pante").title("Karus Commons").generation(ORIGINAL).pages(List.of("A", "B"));
+        BookBuilder.of().self().author("Pante").title("Karus Commons").generation(ORIGINAL).pages(List.of("A", "B"));
         
         verify(meta).setAuthor("Pante");
         verify(meta).setTitle("Karus Commons");

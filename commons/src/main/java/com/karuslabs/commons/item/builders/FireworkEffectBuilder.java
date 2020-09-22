@@ -26,14 +26,14 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
-public class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
-
-    public static FireworkEffectBuilder of(Material material) {
-        return new FireworkEffectBuilder(material);
+public final class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
+    
+    public static FireworkEffectBuilder of() {
+        return new FireworkEffectBuilder();
     }
     
-    FireworkEffectBuilder(Material material) {
-        super(material);
+    FireworkEffectBuilder() {
+        super(Material.FIREWORK_STAR);
     }
     
     FireworkEffectBuilder(Builder<ItemMeta, ?> source) {

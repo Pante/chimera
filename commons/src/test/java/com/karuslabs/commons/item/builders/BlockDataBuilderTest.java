@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +25,24 @@ package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.MockBukkit;
 
-import org.bukkit.inventory.meta.SuspiciousStewMeta;
-import org.bukkit.potion.PotionEffect;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.meta.BlockDataMeta;
 
 import org.junit.jupiter.api.Test;
 
+import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
 
-class SuspiciousStewBuilderTest {
+class BlockDataBuilderTest {
     
-    SuspiciousStewMeta meta = MockBukkit.meta(SuspiciousStewMeta.class);
-    PotionEffect effect = mock(PotionEffect.class);
-    
+    BlockDataMeta meta = MockBukkit.meta(BlockDataMeta.class);
+    BlockData data = mock(BlockData.class);
     
     @Test
-    void effect() {
-        SuspiciousStewBuilder.of().self().effect(effect, true);
-        verify(meta).addCustomEffect(effect, true);
+    void data() {
+        BlockDataBuilder.of(WATER).self().data(data);
+        
+        verify(meta).setBlockData(data);
     }
-
-} 
+    
+}

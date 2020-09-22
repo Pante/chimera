@@ -26,8 +26,7 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 
-
-public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
+public final class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     
     public static ItemBuilder of(Material material) {
         return new ItemBuilder(material);
@@ -38,85 +37,69 @@ public class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     
-    public BannerBuilder asBanner() {
+    public BannerBuilder banner() {
         return new BannerBuilder(this);
     }
     
-    
-    public BlockDataBuilder asBlockData() {
+    public BlockDataBuilder blockData() {
         return new BlockDataBuilder(this);
     }
      
-    
-    public BlockStateBuilder asBlockState() {
+    public BlockStateBuilder blockState() {
         return new BlockStateBuilder(this);
     }
     
-    
-    public BookBuilder asBook() {
+    public BookBuilder book() {
         return new BookBuilder(this);
     }
     
-    
-    public CompassBuilder asCompass() {
+    public CompassBuilder compass() {
         return new CompassBuilder(this);
     }
     
-    
-    public CrossbowBuilder asCrossbow() {
+    public CrossbowBuilder crossbow() {
         return new CrossbowBuilder(this);
     }
     
-    
-    public EnchantmentStorageBuilder asEnchantmentStorage() {
+    public EnchantmentStorageBuilder enchantmentStorage() {
         return new EnchantmentStorageBuilder(this);
     }
     
-    
-    public FireworkBuilder asFirework() {
+    public FireworkBuilder firework() {
         return new FireworkBuilder(this);
     }
     
-    
-    public FireworkEffectBuilder asFireworkEffect() {
+    public FireworkEffectBuilder fireworkEffect() {
         return new FireworkEffectBuilder(this);
     }
     
+    public HeadBuilder head() {
+        return new HeadBuilder(this);
+    }
     
-    public KnowledgeBookBuilder asKnowledgeBook() {
+    public KnowledgeBookBuilder knowledgeBook() {
         return new KnowledgeBookBuilder(this);
     }
     
-    
-    public LeatherArmourBuilder asLeatherArmour() {
+    public LeatherArmourBuilder leatherArmour() {
         return new LeatherArmourBuilder(this);
     }
     
-    
-    public MapBuilder asMap() {
+    public MapBuilder map() {
         return new MapBuilder(this);
     }
     
-    
-    public PotionBuilder asPotion() {
+    public PotionBuilder potion() {
         return new PotionBuilder(this);
     }
     
-    
-    public SkullBuilder asSkull() {
-        return new SkullBuilder(this);
-    }
-    
-    
-    public SuspiciousStewBuilder asStew() {
+    public SuspiciousStewBuilder stew() {
         return new SuspiciousStewBuilder(this);
     }
     
-    
-    public TropicalFishBucketBuilder asBucket() {
+    public TropicalFishBucketBuilder tropicalFishBucket() {
         return new TropicalFishBucketBuilder(this);
     }
-
     
     @Override
     ItemBuilder self() {

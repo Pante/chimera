@@ -32,7 +32,6 @@ import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class ClassMapTest {    
     
     @ParameterizedTest
@@ -104,11 +103,9 @@ class ClassMapTest {
     
 }
 
-
 class HashClassMapTest {
     
     ClassMap<Object> map = ClassMap.of(1);
-    
     
     @Test
     void map() {
@@ -117,12 +114,10 @@ class HashClassMapTest {
     
 }
 
-
 class ProxiedClassMapTest {
     
     Map<Class<? extends Object>, Object> proxied = new HashMap<>(0);
     ClassMap<Object> map = ClassMap.of(proxied);
-    
     
     @Test
     void map() {

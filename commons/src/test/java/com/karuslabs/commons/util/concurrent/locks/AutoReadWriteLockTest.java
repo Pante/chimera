@@ -42,12 +42,11 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 import static org.mockito.quality.Strictness.LENIENT;
 
-
 @MockitoSettings(strictness = LENIENT)
 class AutoReadWriteLockTest {
     
     @ParameterizedTest
-    @MethodSource({"locks"})
+    @MethodSource("locks")
     void lock(Lock wrapper, Lock lock) throws InterruptedException {
         wrapper.lock();
         verify(lock).lock();
@@ -69,10 +68,9 @@ class AutoReadWriteLockTest {
         
         assertEquals(wrapper.toString(), "delegate");
     }
-
     
     @ParameterizedTest
-    @MethodSource({"locks"})
+    @MethodSource("locks")
     void hold(Holdable wrapper, Lock lock) throws InterruptedException {
         try (var mutex = wrapper.hold()) {
             verify(lock).lock();
@@ -83,7 +81,7 @@ class AutoReadWriteLockTest {
     }
     
     @ParameterizedTest
-    @MethodSource({"locks"})
+    @MethodSource("locks")
     void holdInterruptibly(Holdable wrapper, Lock lock) throws InterruptedException {
         try (var mutex = wrapper.holdInterruptibly()) {
             verify(lock).lockInterruptibly();
@@ -92,7 +90,6 @@ class AutoReadWriteLockTest {
             verify(lock).unlock();
         }
     } 
-    
     
     static Stream<Arguments> locks() {
         ReadLock reader = when(mock(ReadLock.class).toString()).thenReturn("delegate").getMock();
@@ -103,7 +100,6 @@ class AutoReadWriteLockTest {
 
         return Stream.of(of(autoreader, reader), of(autowriter, writer));
     }
-    
     
     @Test
     void writelock() {

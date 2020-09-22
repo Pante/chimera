@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
-
 class CrossbowBuilderTest {
     
     CrossbowMeta meta = MockBukkit.meta(CrossbowMeta.class);

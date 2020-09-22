@@ -29,19 +29,16 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Material.WATER;
 import static org.bukkit.enchantments.Enchantment.CHANNELING;
 import static org.mockito.Mockito.*;
-
 
 class EnchantmentStorageBuilderTest {
     
     EnchantmentStorageMeta meta = MockBukkit.meta(EnchantmentStorageMeta.class);
     
-    
     @Test
     void build() {
-        EnchantmentStorageBuilder.of(WATER).self().stored(CHANNELING, 1);
+        EnchantmentStorageBuilder.of().self().stored(CHANNELING, 1);
         
         verify(meta).addStoredEnchant(CHANNELING, 1, true);
     }

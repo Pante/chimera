@@ -32,12 +32,10 @@ import org.mockito.ArgumentCaptor;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 class SchedulerTest {
     
     Scheduler scheduler = spy(new Scheduler(1));
     RunnableScheduledFuture<?> task = mock(RunnableScheduledFuture.class);
-    
     
     @Test
     void schedule_consumer() {
@@ -51,7 +49,6 @@ class SchedulerTest {
         assertEquals(Context.INFINITE, runnable.getValue().times());
     }
     
-    
     @Test
     void decorateTask_runnableContext() {
         var runnable = mock(RunnableContext.class);
@@ -59,7 +56,6 @@ class SchedulerTest {
         assertEquals(task, scheduler.decorateTask(runnable, task));
         assertSame(task, runnable.future);
     }
-    
     
     @Test
     void decorateTask_runnable() {
@@ -73,19 +69,16 @@ class SchedulerTest {
     
 }
 
-
 class RunnableContextTest {
     
     Consumer<Context> consumer = mock(Consumer.class);
     RunnableContext runnable = new RunnableContext(consumer, 1);
     Future<String> future = mock(Future.class);
     
-    
     @BeforeEach
     void before() {
         runnable.future = future;
     }
-    
     
     @Test
     void run() {        
@@ -98,8 +91,7 @@ class RunnableContextTest {
         assertEquals(0, runnable.times());
         verify(future).cancel(false);
     }
-    
-    
+
     @Test
     void run_infinite() {
         runnable.times = Context.INFINITE;

@@ -32,9 +32,7 @@ import org.bukkit.inventory.meta.KnowledgeBookMeta;
 
 import org.junit.jupiter.api.Test;
 
-import static org.bukkit.Material.WATER;
 import static org.mockito.Mockito.*;
-
 
 class KnowledgeBookBuilderTest {
     
@@ -45,7 +43,7 @@ class KnowledgeBookBuilderTest {
     
     @Test
     void recipes() {
-        KnowledgeBookBuilder.of(WATER).self().recipes(first).recipes(Set.of(second));
+        KnowledgeBookBuilder.of().self().recipes(first).recipes(Set.of(second));
         
         verify(meta).addRecipe(first);
         verify(meta).addRecipe(second);

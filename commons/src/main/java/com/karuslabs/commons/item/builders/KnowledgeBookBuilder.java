@@ -29,14 +29,14 @@ import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
 
-public class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBookBuilder> {
+public final class KnowledgeBookBuilder extends Builder<KnowledgeBookMeta, KnowledgeBookBuilder> {
     
-    public static KnowledgeBookBuilder of(Material material) {
-        return new KnowledgeBookBuilder(material);
+    public static KnowledgeBookBuilder of() {
+        return new KnowledgeBookBuilder();
     }
     
-    KnowledgeBookBuilder(Material material) {
-        super(material);
+    KnowledgeBookBuilder() {
+        super(Material.KNOWLEDGE_BOOK);
     }
     
     KnowledgeBookBuilder(Builder<ItemMeta, ?> source) {

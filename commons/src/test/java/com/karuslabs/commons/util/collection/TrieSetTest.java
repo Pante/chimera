@@ -27,11 +27,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class TrieSetTest {
     
     TrieSet set = new TrieSet();
-    
     
     TrieSetTest() {
         set.add("app");
@@ -49,13 +47,11 @@ class TrieSetTest {
         assertTrue(prefixed.contains("application"));
     }
     
-    
     @Test
     void add() {
         assertTrue(set.add("lol"));
         assertFalse(set.add("lol"));
     }
-    
     
     @Test
     void contains() {
@@ -65,7 +61,6 @@ class TrieSetTest {
         assertFalse(set.contains("lo"));
     }
     
-    
     @Test
     void remove() {
         assertTrue(set.remove("app"));
@@ -73,7 +68,6 @@ class TrieSetTest {
         assertEquals(2, set.size());
         assertFalse(set.remove("app"));
     }
-    
     
     @Test
     void iterator() {

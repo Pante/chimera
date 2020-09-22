@@ -29,7 +29,11 @@ import org.bukkit.inventory.meta.*;
 
 public final class BlockDataBuilder extends Builder<BlockDataMeta, BlockDataBuilder> {
     
-    public BlockDataBuilder(Material material) {
+    public static BlockDataBuilder of(Material material) {
+        return new BlockDataBuilder(material);
+    }
+    
+    BlockDataBuilder(Material material) {
         super(material);
     }
     
@@ -38,6 +42,7 @@ public final class BlockDataBuilder extends Builder<BlockDataMeta, BlockDataBuil
     }
     
     BlockDataBuilder data(BlockData data) {
+        meta.setBlockData(data);
         return this;
     }
     

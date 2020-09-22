@@ -37,7 +37,6 @@ import static org.bukkit.Material.WATER;
 import static org.bukkit.block.banner.PatternType.*;
 import static org.mockito.Mockito.*;
 
-
 class BannerBuilderTest {
     
     BannerMeta meta = MockBukkit.meta(BannerMeta.class);

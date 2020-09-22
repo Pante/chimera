@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.Record;
 
 import java.util.*;
 
@@ -31,8 +30,9 @@ import org.bukkit.*;
 import org.bukkit.util.Vector;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import com.karuslabs.annotations.ValueType;
 
-public final @Record class Point extends Location {
+public final @ValueType class Point extends Location {
     
     private static final double EPSILON = 0.000001;
     private static final int X = 0;

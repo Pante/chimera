@@ -27,7 +27,6 @@ import com.karuslabs.commons.MockBukkit;
 
 import java.util.*;
 
-import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 
 import org.junit.jupiter.api.Test;
@@ -38,13 +37,10 @@ import static org.bukkit.inventory.ItemFlag.HIDE_DESTROYS;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 class BuilderTest {
     
-    ItemStack item = mock(ItemStack.class);
     ItemMeta meta = MockBukkit.meta(ItemMeta.class);
     Builder<ItemMeta, ItemBuilder> builder = ItemBuilder.of(WATER);
-    
     
     @Test
     void lore_collection() {
@@ -52,23 +48,22 @@ class BuilderTest {
         assertEquals(builder.lore, List.of("A", "B", "C"));
     }
     
-    
     @Test
     void lore_array() {
         builder.lore("A", "B").lore("C");
         assertEquals(builder.lore, List.of("A", "B", "C"));
     }
     
-    
     @Test
     void build() {
-        builder.item = item;
-        builder.amount(10).model(3).damage(20)
+        var item = builder.amount(10).model(3).damage(20)
                .display("display name").localised("localised name")
                .enchantment(CHANNELING, 1).flags(Set.of(HIDE_DESTROYS))
                .unbreakable(true).build();
         
-        verify(item).setAmount(10);
+        assertEquals(item.getAmount(), 10);
+        assertEquals(item.getItemMeta(), meta);
+        
         verify((Damageable) meta).setDamage(20);
         verify(meta).setDisplayName("display name");
         verify(meta).setLocalizedName("localised name");
@@ -77,7 +72,6 @@ class BuilderTest {
         verify(meta).setCustomModelData(3);
         verify(meta).setUnbreakable(true);
         verify(meta).setLore(null);
-        verify(item).setItemMeta(meta);
     }
     
 }

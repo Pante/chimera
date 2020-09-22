@@ -21,17 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations;
+package com.karuslabs.commons.item.builders;
 
-import java.lang.annotation.*;
+import com.karuslabs.commons.MockBukkit;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import org.bukkit.Material;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import org.junit.jupiter.api.Test;
 
-@Documented
-@Retention(SOURCE)
-@Target(TYPE)
-public @interface Record {
+import static com.karuslabs.commons.item.Head.ALEX;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+class HeadBuilderTest {
+    
+    SkullMeta meta = MockBukkit.meta(SkullMeta.class);
+    
+    @Test
+    void constructors() {
+        assertEquals(HeadBuilder.head().build().getType(), Material.PLAYER_HEAD);
+        assertEquals(HeadBuilder.wall().build().getType(), Material.PLAYER_WALL_HEAD);
+    }
+    
+    @Test
+    void owner() {
+        var builder = HeadBuilder.head().self();
+        var owner = MockBukkit.offline();
+        
+        builder.head(ALEX);
+        
+        verify(meta).setOwningPlayer(owner);
+    }
     
 }

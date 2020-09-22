@@ -27,14 +27,14 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.*;
 
-public class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, EnchantmentStorageBuilder> {
+public final class EnchantmentStorageBuilder extends Builder<EnchantmentStorageMeta, EnchantmentStorageBuilder> {
     
-    public static EnchantmentStorageBuilder of(Material material) {
-        return new EnchantmentStorageBuilder(material);
+    public static EnchantmentStorageBuilder of() {
+        return new EnchantmentStorageBuilder();
     }
     
-    EnchantmentStorageBuilder(Material material) {
-        super(material);
+    EnchantmentStorageBuilder() {
+        super(Material.ENCHANTED_BOOK);
     }
     
     EnchantmentStorageBuilder(Builder<ItemMeta, ?> source) {

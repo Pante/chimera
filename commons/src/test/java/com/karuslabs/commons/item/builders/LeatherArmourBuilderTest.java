@@ -25,23 +25,30 @@ package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.MockBukkit;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import org.junit.jupiter.api.Test;
 
 import static org.bukkit.Color.SILVER;
-import static org.bukkit.Material.WATER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
-
 
 class LeatherArmourBuilderTest {
     
     LeatherArmorMeta meta = MockBukkit.meta(LeatherArmorMeta.class);
     
+    @Test
+    void constructors() {
+        assertEquals(LeatherArmourBuilder.helmet().build().getType(), Material.LEATHER_HELMET);
+        assertEquals(LeatherArmourBuilder.chestplate().build().getType(), Material.LEATHER_CHESTPLATE);
+        assertEquals(LeatherArmourBuilder.leggings().build().getType(), Material.LEATHER_LEGGINGS);
+        assertEquals(LeatherArmourBuilder.boots().build().getType(), Material.LEATHER_BOOTS);
+    }
     
     @Test
     void build() {
-        LeatherArmourBuilder.of(WATER).self().colour(SILVER);
+        LeatherArmourBuilder.helmet().self().colour(SILVER);
         
         verify(meta).setColor(SILVER);
     }

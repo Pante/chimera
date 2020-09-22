@@ -29,7 +29,11 @@ import org.bukkit.inventory.meta.*;
 
 public final class BlockStateBuilder extends Builder<BlockStateMeta, BlockStateBuilder> {
     
-    public BlockStateBuilder(Material material) {
+    public static BlockStateBuilder of(Material material) {
+        return new BlockStateBuilder(material);
+    }
+    
+    BlockStateBuilder(Material material) {
         super(material);
     }
     

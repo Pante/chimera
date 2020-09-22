@@ -29,10 +29,22 @@ import org.bukkit.inventory.meta.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 
-public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
+public final class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
-    public static LeatherArmourBuilder of(Material material) {
-        return new LeatherArmourBuilder(material);
+    public static LeatherArmourBuilder helmet() {
+        return new LeatherArmourBuilder(Material.LEATHER_HELMET);
+    }
+    
+    public static LeatherArmourBuilder chestplate() {
+        return new LeatherArmourBuilder(Material.LEATHER_CHESTPLATE);
+    }
+    
+    public static LeatherArmourBuilder leggings() {
+        return new LeatherArmourBuilder(Material.LEATHER_LEGGINGS);
+    }
+    
+    public static LeatherArmourBuilder boots() {
+        return new LeatherArmourBuilder(Material.LEATHER_BOOTS);
     }
     
     LeatherArmourBuilder(Material material) {
@@ -48,7 +60,7 @@ public class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmou
         meta.setColor(colour);
         return this;
     }
-
+    
     
     @Override
     LeatherArmourBuilder self() {

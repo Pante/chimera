@@ -21,52 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.annotations;
 
-import com.karuslabs.commons.item.Head;
+import java.lang.annotation.*;
 
-import java.util.UUID;
-
-import org.bukkit.*;
-import org.bukkit.inventory.meta.*;
-
-import static org.bukkit.Bukkit.getOfflinePlayer;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 
-public class SkullBuilder extends Builder<SkullMeta, SkullBuilder> {
-    
-    public static SkullBuilder of(Material material) {
-        return new SkullBuilder(material);
-    }
-    
-    SkullBuilder(Material material) {
-        super(material);
-    }
-    
-    SkullBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
-    
-    
-    public SkullBuilder head(Head head) {
-        return head(head.id);
-    }
-    
-    public SkullBuilder head(UUID id) {
-        return head(getOfflinePlayer(id));
-    }
-    
-    public SkullBuilder head(@Nullable OfflinePlayer player) {
-        meta.setOwningPlayer(player);
-        return this;
-    }
-    
-    
-    @Override
-    SkullBuilder self() {
-        return this;
-    }
+@Documented
+@Retention(SOURCE)
+@Target(TYPE)
+public @interface ValueType {
     
 }

@@ -25,15 +25,15 @@ package com.karuslabs.commons.item.builders;
 
 import com.karuslabs.commons.MockBukkit;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.*;
 
 import org.junit.jupiter.api.Test;
 
 import static org.bukkit.Color.SILVER;
-import static org.bukkit.Material.WATER;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 
 public class PotionBuilderTest {
     
@@ -41,10 +41,16 @@ public class PotionBuilderTest {
     PotionData data = mock(PotionData.class);
     PotionEffect effect = mock(PotionEffect.class);
     
+    @Test
+    void constructors() {
+        assertEquals(PotionBuilder.lingering().build().getType(), Material.LINGERING_POTION);
+        assertEquals(PotionBuilder.potion().build().getType(), Material.POTION);
+        assertEquals(PotionBuilder.splash().build().getType(), Material.SPLASH_POTION);
+    }
     
     @Test
     void build() {
-        PotionBuilder.of(WATER).self().colour(SILVER).data(data).effect(effect);
+        PotionBuilder.potion().self().colour(SILVER).data(data).effect(effect);
         
         verify(meta).setColor(SILVER);
         verify(meta).setBasePotionData(data);

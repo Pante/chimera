@@ -8,13 +8,52 @@ This update adds inferred arguments during code generation for the command frame
 
 - Add `Lazy`
 - Add `Monad`
-- Change `ValueType` to `Record`
 
 ### Commons
 
-- Change package private fields and methods, we went full capitalist and privatized (and finalized) them
-- Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
+We went full capitalist and privatized (and finalized) several package private fields and methods. `ItemStack` builders
+also received an styling update and safety improvements.
 
+- Add `BlockDataBuilder`
+- Add `CompassBuilder`
+- Add `ItemBuilder.banner()`
+- Add `ItemBuilder.blockData()`
+- Add `ItemBuilder.blockState()`
+- Add `ItemBuilder.book()`
+- Add `ItemBuilder.compass()`
+- Add `ItemBuilder.crossbow()`
+- Add `ItemBuilder.enchantmentStorage()`
+- Add `ItemBuilder.firework()`
+- Add `ItemBuilder.fireworkEffect()`
+- Add `ItemBuilder.head()`
+- Add `ItemBuilder.knowledgeBook()`
+- Add `ItemBuilder.leatherArmour()`
+- Add `ItemBuilder.map()`
+- Add `ItemBuilder.potion()`
+- Add `ItemBuilder.suspiciousStew()`
+- Add `ItemBuilder.tropicalFishBucket()`
+- Add `LeatherArmourBuilder.helmet()`
+- Add `LeatherArmourBuilder.chestplate()`
+- Add `LeatherArmourBuilder.leggings()`
+- Add `LeatherArmourBuilder.boots()`
+- Add `MapBuilder.empty()`
+- Add `MapBuilder.filled()`
+- Add `PotionBuilder.lingering()`
+- Add `PotionBuilder.potion()`
+- Add `PotionBuilder.splash()`
+- Change classes in `com.karuslabs.commons.item.builders` to be final
+- Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
+- Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`
+- Change `FireworkBuilder.of(Material)` to `FireworkBuilder.of()` - only firework rockets contain a `FireworkMeta`
+- Change `FireworkEffectBuilder.of(Material)` to `FireworkBuilder.of()` - only firework stars contain a `FireworkEffectMeta`
+- Change `KnowledgeBookBuilder.of(Material)` to `KnowledgeBookBuilder.of()` - only knowledge books contain a `KnowledgeBookMeta`
+- Change `SkullBuilder` to `HeadBuilder`
+- Change `TropicalFishBucketBuilder.of(Material)` to `TropicalFishBucketBuilder.of()` - only tropical fish buckets contain a `TropicalFishBucketMeta`
+- Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
+- Remove methods prefixed with `as` in `com.karuslabs.commons.item.ItemBuilder` - replaced with equivalent methods without prefixes
+- Remove `LeatherArmourBuilder.of(Material)` - replaced with equivalent methods for specific leather armour items
+- Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps
+- Remove `PotionBuilder.of(Material)` replaced with equivalent methods for different potion types
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 
