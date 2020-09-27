@@ -21,40 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.resolvers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
-import java.util.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
 
-import static com.karuslabs.commons.command.aot.Identifier.Type.ARGUMENT;
-import static java.util.Collections.EMPTY_LIST;
+import org.bukkit.command.CommandSender;
 
-public class ArgumentLexer extends MemoizeLexer {
+
+public abstract class Resolver<T extends Element> {
+
+    protected Environment environment;
+    protected Elements elements;
+    protected Types types;
+    protected TypeMirror sender;
     
-    @Override
-    public List<Token> lex(Logger logger, String lexeme) {
-        if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
-            logger.error(lexeme, "is an invalid argument", "should be enclosed by \"<\" and \">\"");
-            return EMPTY_LIST;
-        }
-        
-        if (lexeme.contains("|")) {
-            logger.error(lexeme, "contains \"|\"", "an argument should not have aliases");
-            return EMPTY_LIST;
-        }
-        
-        var argument = lexeme.substring(1, lexeme.length() - 1);
-        if (argument.isEmpty()) {
-            logger.error(lexeme, "is empty", "an argument should not be empty");
-            return EMPTY_LIST;
-        }
-        
-        if (argument.startsWith("<") || argument.endsWith(">")) {
-            logger.error(lexeme, "contains trailing \"<\"s or \">\"s");
-        }
-        
-        return List.of(token(ARGUMENT, lexeme, argument, Set.of()));
+    
+    public Resolver(Environment environment) {
+        this.environment = environment;
+        this.elements = environment.elements;
+        this.types = environment.types;
+        this.sender = elements.getTypeElement(CommandSender.class.getName()).asType();
+    }
+    
+    
+    public abstract void resolve(T element, Identifier token);
+    
+    
+    protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
+        return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
     }
     
 }

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.resolvers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
 import com.mojang.brigadier.Command;
@@ -56,7 +57,7 @@ public class VariableResolver extends Resolver<VariableElement> {
 
     
     @Override
-    public void resolve(VariableElement variable, Token token) {
+    public void resolve(VariableElement variable, Identifier token) {
         var modifiers = variable.getModifiers();
         if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
             environment.error(variable, "Field should be public and final");

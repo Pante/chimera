@@ -27,41 +27,52 @@ import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
-import java.util.List;
-import javax.lang.model.element.Element;
+import java.util.*;
+import javax.lang.model.element.*;
 
+import static com.karuslabs.annotations.processor.Messages.quote;
 
 public class CommandParser extends Parser {
-    
-    public CommandParser(Environment environment, Lexer lexer) {
-        super(environment, lexer);
+
+    public CommandParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
     }
 
-    
     @Override
-    public void parse(Element element) {
-        var commands = element.getAnnotation(Command.class).value();
-        if (commands.length == 0) {
-            environment.error(element, "@Command annotation should not be empty");
+    protected void process(Element element, Map<Identifier, Mirrors.Command> namespace) {
+        var lines = element.getAnnotation(Command.class).value();
+        if (lines.length == 0) {
+            logger.error("@Command annotation should not be empty");
             return;
         }
         
-        var root = environment.scope(element);
-        for (var command : commands) {
-            var tokens = lexer.lex(environment, element, command);
-            if (valid(tokens)) {
-                parse(root, tokens);
+        for (var line : lines) {
+            var commands = namespace;
+            
+            var tokens = lexer.lex(logger, line);
+            for (var token : tokens) {
+                var command = commands.get(token.identifier);
+                if (command == null) {
+                    command = new Mirrors.Command(token.identifier, (TypeElement) element, token.aliases);
+                    commands.put(token.identifier, command);
+                    
+                } else if (!token.aliases.isEmpty()) {
+                    mergeAliases(command, token);
+                }
+                
+                commands = command.children;
             }
         }
     }
     
-    void parse(Token current, List<Token> tokens) {
-        for (var token : tokens) {
-            current = current.add(environment, token);
-            if (current == null) {
-                return;
-            }
+    private void mergeAliases(Mirrors.Command command, Token token) {
+        var intersection = new HashSet<>(command.aliases);
+        intersection.retainAll(token.aliases);
+        if (!intersection.isEmpty()) {
+            logger.warn(quote(command.identifier.lexeme) + " contains duplicate aliases: " + quote(String.join(", ", intersection)));
         }
+
+        command.aliases.addAll(token.aliases);
     }
 
 }

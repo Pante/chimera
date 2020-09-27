@@ -21,8 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
+import com.karuslabs.commons.command.aot.lexers.LiteralLexer;
+import com.karuslabs.commons.command.aot.lexers.CommandLexer;
+import com.karuslabs.commons.command.aot.lexers.ArgumentLexer;
+import com.karuslabs.commons.command.aot.Command;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processor.AnnotationProcessor;

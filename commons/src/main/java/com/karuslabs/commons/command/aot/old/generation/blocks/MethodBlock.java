@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation.blocks;
+package com.karuslabs.commons.command.aot.old.generation.blocks;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
 import java.text.MessageFormat;
@@ -68,7 +69,7 @@ public class MethodBlock {
     }
     
     
-    public String command(Token token) {
+    public String command(Identifier token) {
         var variable = "command";
         while (!variables.add(variable)) {
             variable = variable + count++;
@@ -91,7 +92,7 @@ public class MethodBlock {
     }
     
     
-    void argument(String variable, Token token) {
+    void argument(String variable, Identifier token) {
         builder.append(argument.format(new Object[] {
             variable,
             StringEscapeUtils.escapeJava(token.lexeme),
@@ -102,7 +103,7 @@ public class MethodBlock {
         }));
     }
     
-    void literal(String variable, Token token) {
+    void literal(String variable, Identifier token) {
         builder.append(literal.format(new Object[] {
             variable,
             StringEscapeUtils.escapeJava(token.lexeme),
@@ -120,7 +121,7 @@ public class MethodBlock {
     }
     
     
-    String parameter(Token token, Binding binding, String value) {
+    String parameter(Identifier token, Binding binding, String value) {
         var element = token.bindings.get(binding);
         if (element == null) {
             return value;

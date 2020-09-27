@@ -29,14 +29,12 @@ import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class TypeTest {
     
     @Test
     void box_primitive() {
         assertEquals(Integer.class, Type.box(int.class));
     }
-    
     
     @Test
     void box_type() {
@@ -49,7 +47,6 @@ class TypeTest {
         assertEquals(int.class, Type.unbox(Integer.class));
     }
     
-    
     @Test
     void unbox_type() {
         assertEquals(TypeTest.class, Type.unbox(TypeTest.class));
@@ -61,7 +58,6 @@ class TypeTest {
     void of(Type type) {
         assertEquals(type.boxed, Type.of(type.unboxed).boxed);
     }
-    
     
     @Test
     void of_type() {

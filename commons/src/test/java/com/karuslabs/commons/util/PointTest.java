@@ -37,7 +37,6 @@ import org.junit.jupiter.params.provider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
-
 class PointTest {
     
     static final Point POINT = new Point(null, 1, 2, 3, 90, 180);
@@ -55,7 +54,6 @@ class PointTest {
         assertEquals(new Point(2, -4, -6), point);
     }
     
-    
     @Test
     void copy_absolute_location() {
         source.copy(origin, point);
@@ -68,7 +66,6 @@ class PointTest {
         source.relative(Axis.X, true).relative(Axis.Y, true).relative(Axis.Z, true).rotation(true).copy(origin, vector);
         assertEquals(new Vector(2, -4, -6), vector);
     }
-    
     
     @Test
     void copy_absolute_vector() {
@@ -100,7 +97,6 @@ class PointTest {
     void relative() {
         assertTrue(point.relative(Axis.X, true).relative(Axis.X));
     }
-    
     
     @Test
     void rotation() {

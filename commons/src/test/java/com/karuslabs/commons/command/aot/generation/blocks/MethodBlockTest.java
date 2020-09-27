@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.generation.blocks;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.Set;
@@ -41,9 +42,8 @@ class MethodBlockTest {
     
     @Test
     void command_throws_exception() {
-        assertEquals(
-            "Invalid token type: \"root\", found when generating method",
-            assertThrows(IllegalArgumentException.class, () -> block.command(Token.root())).getMessage()
+        assertEquals("Invalid token type: \"root\", found when generating method",
+            assertThrows(IllegalArgumentException.class, () -> block.command(Identifier.root())).getMessage()
         );
     }
     
@@ -53,7 +53,7 @@ class MethodBlockTest {
         Element type = when(mock(Element.class).getKind()).thenReturn(ElementKind.CLASS).getMock();
         when(type.getModifiers()).thenReturn(Set.of());
         
-        var token = Token.root();
+        var token = Identifier.root();
         token.bindings.put(Binding.TYPE, type);
         
         assertEquals(

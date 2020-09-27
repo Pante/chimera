@@ -23,6 +23,11 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.lexers.LiteralLexer;
+import com.karuslabs.commons.command.aot.lexers.CommandLexer;
+import com.karuslabs.commons.command.aot.lexers.ArgumentLexer;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.*;
 
@@ -43,7 +48,7 @@ class ParserTest {
     
     @Test
     void valid() {
-        assertTrue(parser.valid(List.of(Token.literal(null, "", "", Set.of()))));
+        assertTrue(parser.valid(List.of(Identifier.literal(null, "", "", Set.of()))));
         verifyNoInteractions(environment);
     }
     
@@ -57,7 +62,7 @@ class ParserTest {
     
     @Test
     void valid_invalid() {
-        var argument = Token.argument(mock(Element.class), "<argument>", "argument");
+        var argument = Identifier.argument(mock(Element.class), "<argument>", "argument");
         
         assertFalse(parser.valid(List.of(argument)));
         verify(environment).error(argument.location, "\"<argument>\" is at an invalid position, command should not start with an argument");

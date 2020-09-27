@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.resolvers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.*;
@@ -97,7 +98,7 @@ class MethodResolverTest {
         doReturn(map(parameters)).when(method).getParameters();
         when(method.getThrownTypes()).thenReturn(List.of());
         
-        var token = mock(Token.class);
+        var token = mock(Identifier.class);
         
         resolver.resolve(method, token);
         
@@ -122,7 +123,7 @@ class MethodResolverTest {
         
         when(method.getModifiers()).thenReturn(modifiers);
         
-        resolver.resolve(method, mock(Token.class));
+        resolver.resolve(method, mock(Identifier.class));
         
         verify(environment).error(method, error);
     }

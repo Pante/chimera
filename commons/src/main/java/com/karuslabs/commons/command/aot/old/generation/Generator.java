@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation;
+package com.karuslabs.commons.command.aot.old.generation;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.generation.blocks.*;
 
@@ -71,7 +72,7 @@ public class Generator {
     }
     
     
-    String descend(Token token) {
+    String descend(Identifier token) {
         var values = token.children.values();
         var children = new ArrayList<String>(values.size());
         

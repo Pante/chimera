@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.resolvers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.aot.*;
 
@@ -61,7 +62,7 @@ public class MethodResolver extends Resolver<ExecutableElement> {
 
     
     @Override
-    public void resolve(ExecutableElement method, Token token) {
+    public void resolve(ExecutableElement method, Identifier token) {
         var modifiers = method.getModifiers();
         if (!modifiers.contains(PUBLIC)) {
             environment.error(method, "Method should be public");

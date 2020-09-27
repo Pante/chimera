@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.karuslabs.commons.util;
 
 import java.util.NoSuchElementException;
@@ -35,7 +34,6 @@ import org.junit.jupiter.params.provider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
-
 
 class WeakTest {
     
@@ -76,7 +74,6 @@ class WeakTest {
         assertEquals(expected, reference.or("OTHER").equals("OTHER"));
     }
     
-    
     @ParameterizedTest
     @MethodSource("weaks")
     void or_supplier(Weak<String> reference, boolean expected) {
@@ -89,18 +86,15 @@ class WeakTest {
         assertEquals(VALUE, WEAK.orThrow());
     }
     
-    
     @Test
     void orThrow_exception() {
         assertEquals("Value was reclaimed", assertThrows(NoSuchElementException.class, () -> Weak.empty().orThrow()).getMessage());
     }
     
-    
     @Test
     void orThrow_supplier() {
         assertEquals(VALUE, WEAK.orThrow(RuntimeException::new));
     }
-    
     
     @Test
     void orThrow_supplier_exception() {
@@ -149,7 +143,6 @@ class WeakTest {
     void equals() {
         assertFalse(WEAK.equals("string"));
     }
-    
     
     @Test
     void hash() {

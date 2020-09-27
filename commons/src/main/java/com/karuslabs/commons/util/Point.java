@@ -23,7 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-
 import java.util.*;
 
 import org.bukkit.*;

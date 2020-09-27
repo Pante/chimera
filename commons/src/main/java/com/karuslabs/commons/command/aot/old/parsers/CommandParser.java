@@ -21,38 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.resolvers;
+package com.karuslabs.commons.command.aot.old.parsers;
 
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identifier;
+import com.karuslabs.commons.command.aot.annotations.Command;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
 
+import java.util.List;
 import javax.lang.model.element.Element;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
-
-import org.bukkit.command.CommandSender;
 
 
-public abstract class Resolver<T extends Element> {
-
-    protected Environment environment;
-    protected Elements elements;
-    protected Types types;
-    protected TypeMirror sender;
+public class CommandParser extends Parser {
     
+    public CommandParser(Environment environment, Lexer lexer) {
+        super(environment, lexer);
+    }
+
     
-    public Resolver(Environment environment) {
-        this.environment = environment;
-        this.elements = environment.elements;
-        this.types = environment.types;
-        this.sender = elements.getTypeElement(CommandSender.class.getName()).asType();
+    @Override
+    public void parse(Element element) {
+        var commands = element.getAnnotation(Command.class).value();
+        if (commands.length == 0) {
+            environment.error(element, "@Command annotation should not be empty");
+            return;
+        }
+        
+        var root = environment.scope(element);
+        for (var command : commands) {
+            var tokens = lexer.lex(environment, element, command);
+            if (valid(tokens)) {
+                parse(root, tokens);
+            }
+        }
     }
     
-    
-    public abstract void resolve(T element, Token token);
-    
-    
-    protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
-        return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
+    void parse(Identifier current, List<Identifier> tokens) {
+        for (var token : tokens) {
+            current = current.add(environment, token);
+            if (current == null) {
+                return;
+            }
+        }
     }
-    
+
 }

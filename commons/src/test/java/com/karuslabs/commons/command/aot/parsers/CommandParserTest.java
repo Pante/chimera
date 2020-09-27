@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.lexers.LiteralLexer;
+import com.karuslabs.commons.command.aot.lexers.CommandLexer;
+import com.karuslabs.commons.command.aot.lexers.ArgumentLexer;
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Command;
 import com.karuslabs.commons.command.aot.lexers.*;
@@ -41,16 +45,16 @@ class CommandParserTest {
     
     Environment environment = mock(Environment.class);
     CommandParser parser = new CommandParser(environment, new CommandLexer(new ArgumentLexer(), new LiteralLexer()));
-    Token root = Token.root();
-    Token literal = Token.literal(mock(Element.class), "a", "a", Set.of());
-    Token child = Token.literal(mock(Element.class), "b", "b", Set.of());
-    Token argument = Token.argument(mock(Element.class), "<b>", "b");
+    Identifier root = Identifier.root();
+    Identifier literal = Identifier.literal(mock(Element.class), "a", "a", Set.of());
+    Identifier child = Identifier.literal(mock(Element.class), "b", "b", Set.of());
+    Identifier argument = Identifier.argument(mock(Element.class), "<b>", "b");
     
     
     @Test
     void parse() {
         Element element = when(mock(Element.class).getAnnotation(Command.class)).thenReturn(new StubCommand("a")).getMock();
-        var root = Token.root();
+        var root = Identifier.root();
         when(environment.scope(element)).thenReturn(root);
         
         parser.parse(element);

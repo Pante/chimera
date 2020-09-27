@@ -24,14 +24,29 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identifier.Type;
 
-import java.util.List;
-import javax.lang.model.element.Element;
-
+import java.util.*;
 
 @FunctionalInterface
 public interface Lexer {
 
-    public List<Token> lex(Environment environment, Element location, String raw);
+    List<Token> lex(Logger logger, String lexeme);
+    
+}
+
+abstract class MemoizeLexer implements Lexer {
+    
+    private final Map<String, Identifier> identifiers = new HashMap<>();
+    
+    Token token(Type type, String lexeme, String value, Set<String> aliases) {
+        var identifier = identifiers.get(lexeme);
+        if (identifier == null) {
+            identifier = new Identifier(type, lexeme, value);
+            identifiers.put(lexeme, identifier);
+        }
+        
+        return new Token(identifier, aliases);
+    }
     
 }

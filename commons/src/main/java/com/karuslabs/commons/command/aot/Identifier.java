@@ -23,29 +23,66 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.annotations.ValueType;
 
-public enum Binding {
-    
-    COMMAND("A", "Command<CommandSender>", "command"), 
-    TYPE("An", "ArgumentType<?>", "type"),
-    REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
-    SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "suggestions");
-    
-    public final String article;
-    public final String type;
-    private final String value;
-    
+import java.util.*;
 
-    private Binding(String article, String type, String value) {
-        this.article = article;
+public final @ValueType class Identifier {
+    
+    public final Type type;
+    public final String lexeme;
+    public final String value;
+    
+    public Identifier(Type type, String lexeme, String value) {
         this.type = type;
+        this.lexeme = lexeme;
         this.value = value;
     }
+
     
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        
+        if (!(other instanceof Identifier)) {
+            return false;
+        } 
+        
+        var token = (Identifier) other;
+        return type == token.type && value.equals(token.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.type);
+        hash = 59 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
     
     @Override
     public String toString() {
-        return value;
+        return lexeme;
+    }
+    
+    
+    public enum Type {
+        ARGUMENT("An", "argument"), LITERAL("A", "literal");
+        
+        public final String article;
+        public final String value;
+        
+        private Type(String article, String value) {
+            this.article = article;
+            this.value = value;
+        }
+        
+        @Override
+        public String toString() {
+            return value;
+        }
     }
     
 }

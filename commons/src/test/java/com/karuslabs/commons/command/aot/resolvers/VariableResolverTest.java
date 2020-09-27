@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.resolvers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.Set;
@@ -81,7 +82,7 @@ class VariableResolverTest {
         when(variable.getModifiers()).thenReturn(Set.of(PUBLIC, FINAL)).getMock();
         when(environment.types.isSubtype(type, expected)).thenReturn(true);
         
-        var token = mock(Token.class);
+        var token = mock(Identifier.class);
         
         resolver.resolve(variable, token);
         
@@ -103,7 +104,7 @@ class VariableResolverTest {
     void resolve_errors(VariableElement variable, String error) {
         when(environment.types.isSubtype(any(), any())).thenReturn(false);
         
-        resolver.resolve(variable, mock(Token.class));
+        resolver.resolve(variable, mock(Identifier.class));
         
         verify(environment).error(variable, error);
     }

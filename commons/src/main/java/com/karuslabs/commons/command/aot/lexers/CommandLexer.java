@@ -26,15 +26,13 @@ package com.karuslabs.commons.command.aot.lexers;
 import com.karuslabs.commons.command.aot.*;
 
 import java.util.*;
-import javax.lang.model.element.Element;
 
 import static java.util.Collections.EMPTY_LIST;
 
-
 public class CommandLexer implements Lexer {
 
-    private Lexer argument;
-    private Lexer literal;
+    private final Lexer argument;
+    private final Lexer literal;
     
     
     public CommandLexer(Lexer argument, Lexer literal) {
@@ -44,19 +42,19 @@ public class CommandLexer implements Lexer {
     
     
     @Override
-    public List<Token> lex(Environment environment, Element location, String raw) {
+    public List<Token> lex(Logger logger, String raw) {
         if (raw.isBlank()) {
-            environment.error(location, "Command should not be blank");
+            logger.error("Command should not be blank");
             return EMPTY_LIST;
         }
         
         var tokens = new ArrayList<Token>();
         for (var command : raw.split("\\s+")) {
             if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(environment, location, command));
+                tokens.addAll(argument.lex(logger, command));
                 
             } else {
-                tokens.addAll(literal.lex(environment, location, command));
+                tokens.addAll(literal.lex(logger, command));
             }
         }
         

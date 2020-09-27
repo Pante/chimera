@@ -24,50 +24,41 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identifier.Type;
 
 import java.util.*;
-import javax.lang.model.element.Element;
 
 import static com.karuslabs.annotations.processor.Messages.*;
 import static java.util.Collections.EMPTY_LIST;
 
 
-public class LiteralLexer implements Lexer {
+public class LiteralLexer extends MemoizeLexer {
 
     @Override
-    public List<Token> lex(Environment environment, Element location, String raw) {
-        if (raw.contains("<") || raw.contains(">")) {
-            environment.error(location, format(raw, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s"));
+    public List<Token> lex(Logger logger, String lexeme) {
+        if (lexeme.contains("<") || lexeme.contains(">")) {
+            logger.error(lexeme, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s");
             return EMPTY_LIST;
         }
         
-        var names = raw.split("\\|", -1);
+        var identifiers = lexeme.split("\\|", -1);
         
-        for (var name : names) {
-            if (!valid(environment, location, raw, name)) {
+        for (var identifier : identifiers) {
+            if (identifier.isEmpty()) {
+                logger.error(lexeme, "contains an empty literal alias or name", "should not be empty");
                 return EMPTY_LIST;
             }
         }
         
         var aliases = new HashSet<String>();
-        for (int i = 1; i < names.length; i++) {
-            var alias = names[i];
+        for (int i = 1; i < identifiers.length; i++) {
+            var alias = identifiers[i];
             if (!aliases.add(alias)) {
-                environment.warn(location, "Duplicate alias: " + quote(alias));
+                logger.warn("Duplicate alias: " + quote(alias));
             }
         }
         
-        return List.of(Token.literal(location, raw, names[0], aliases));
-    }
-    
-    
-    boolean valid(Environment environment, Element location, String context, String value) {
-        var error = value.isEmpty();
-        if (error) {
-            environment.error(location, format(context, "contains an empty literal alias or name", "should not be empty"));
-        }
-        
-        return !error;
+        return List.of(token(Type.LITERAL, lexeme, identifiers[0], aliases));
     }
 
 }

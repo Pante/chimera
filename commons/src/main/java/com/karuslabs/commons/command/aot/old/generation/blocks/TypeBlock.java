@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation.blocks;
+package com.karuslabs.commons.command.aot.old.generation.blocks;
 
 import java.time.LocalDateTime;
 

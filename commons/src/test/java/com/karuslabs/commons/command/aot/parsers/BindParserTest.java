@@ -23,6 +23,10 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.lexers.LiteralLexer;
+import com.karuslabs.commons.command.aot.lexers.CommandLexer;
+import com.karuslabs.commons.command.aot.lexers.ArgumentLexer;
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.*;
@@ -47,18 +51,18 @@ class BindParserTest {
     ExecutableElement method = when(mock(ExecutableElement.class).accept(any(), any())).thenReturn(type).getMock();
     VariableElement variable = mock(VariableElement.class);
     
-    Token token = Token.literal(mock(Element.class), "token", "token", Set.of());
-    Token child = Token.literal(mock(Element.class), "child", "child", Set.of());
-    Token grandchild = Token.literal(mock(Element.class), "grandchild", "grandchild", Set.of());
+    Identifier token = Identifier.literal(mock(Element.class), "token", "token", Set.of());
+    Identifier child = Identifier.literal(mock(Element.class), "child", "child", Set.of());
+    Identifier grandchild = Identifier.literal(mock(Element.class), "grandchild", "grandchild", Set.of());
     
     
-    Token bindingChild = Token.literal(mock(Element.class), "child", "child", Set.of());
-    Token bindingGrandchild = Token.literal(mock(Element.class), "grandchild", "grandchild", Set.of());
+    Identifier bindingChild = Identifier.literal(mock(Element.class), "child", "child", Set.of());
+    Identifier bindingGrandchild = Identifier.literal(mock(Element.class), "grandchild", "grandchild", Set.of());
     
     
     @BeforeEach
     void before() {
-        environment.scopes.put(type, Token.root());
+        environment.scopes.put(type, Identifier.root());
     }
     
     
@@ -119,8 +123,8 @@ class BindParserTest {
     void matchAny() {
         doNothing().when(parser).resolve(any(), any());
         
-        var argument = Token.argument(mock(Element.class), "<child>", "child");
-        var other = Token.literal(mock(Element.class), "child", "child", Set.of());
+        var argument = Identifier.argument(mock(Element.class), "<child>", "child");
+        var other = Identifier.literal(mock(Element.class), "child", "child", Set.of());
         
         token.add(environment, child);
         token.add(environment, grandchild).add(environment, argument).add(environment, other);

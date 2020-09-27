@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.parsers;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.annotations.processor.Filter;
 
 import com.karuslabs.commons.command.aot.*;
@@ -75,7 +76,7 @@ public class BindParser extends Parser {
         }
     }
     
-    boolean matchAny(Token binding, Token current) {
+    boolean matchAny(Identifier binding, Identifier current) {
         var match = current.lexeme.equals(binding.lexeme) && current.type == binding.type;
         if (match) {
             resolve(binding.location, current);
@@ -88,7 +89,7 @@ public class BindParser extends Parser {
         return match;
     }
     
-    void match(List<Token> bindings, Token current) {
+    void match(List<Identifier> bindings, Identifier current) {
         var element = bindings.get(bindings.size() - 1).location;
         
         for (var binding : bindings) {
@@ -108,7 +109,7 @@ public class BindParser extends Parser {
     }
     
     
-    void resolve(Element element, Token token) {
+    void resolve(Element element, Identifier token) {
         if (element instanceof ExecutableElement) {
             method.resolve((ExecutableElement) element, token);
             

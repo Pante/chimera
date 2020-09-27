@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.generation;
 
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.generation.blocks.*;
 
@@ -71,12 +72,12 @@ class GeneratorTest {
         when(argumentType.getModifiers()).thenReturn(Set.of(PUBLIC, FINAL));
         when(suggestions.getModifiers()).thenReturn(Set.of(PUBLIC, STATIC, FINAL));
         
-        var root = Token.root();
+        var root = Identifier.root();
         
-        var tell = Token.literal(mock(Element.class), "tell|t", "tell", Set.of("t"));
+        var tell = Identifier.literal(mock(Element.class), "tell|t", "tell", Set.of("t"));
         tell.bindings.put(COMMAND, command);
         
-        var argument = Token.argument(mock(Element.class), "<players>", "players");
+        var argument = Identifier.argument(mock(Element.class), "<players>", "players");
         argument.bindings.put(TYPE, argumentType);
         argument.bindings.put(SUGGESTIONS, suggestions);
         

@@ -23,42 +23,36 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.annotations.processor.Filter;
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Mirrors.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
-import java.util.List;
-import javax.lang.model.element.Element;
-
-import static com.karuslabs.annotations.processor.Messages.format;
-
+import java.util.*;
+import javax.lang.model.element.*;
 
 public abstract class Parser {
+
+    protected final Logger logger;
+    protected final Lexer lexer;
     
-    protected Environment environment;
-    protected Lexer lexer;
-    
-    
-    public Parser(Environment environment, Lexer lexer) {
-        this.environment = environment;
+    public Parser(Logger logger, Lexer lexer) {
+        this.logger = logger;
         this.lexer = lexer;
     }
     
-    
-    public abstract void parse(Element element);
-    
-    
-    protected boolean valid(List<Token> tokens) {
-        if (tokens.isEmpty()) {
-            return false;
-        }
+    public void parse(Element element, Map<TypeElement, Map<Identifier, Command>> namespaces) {
+        logger.of(element);
         
-        var token = tokens.get(0);
-        var error = token.type == Type.ARGUMENT;
-        if (error) {
-            environment.error(token.location, format(token, "is at an invalid position", "command should not start with an argument"));
-        }
+        var type = element.accept(Filter.CLASS, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
         
-        return !error;
+        process(element, namespace);
     }
+    
+    protected abstract void process(Element element, Map<Identifier, Command> namespace);
     
 }

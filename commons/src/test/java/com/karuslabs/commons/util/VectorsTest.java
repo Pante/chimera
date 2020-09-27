@@ -29,7 +29,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class VectorsTest {
     
     Vector vector = new Vector(1, 2, 3);
@@ -48,12 +47,10 @@ class VectorsTest {
         assertEquals(new Vector(1.0, -2.4033450173804924, -2.687737473681602), Vectors.rotateAroundXAxis(vector, 3));
     }
     
-    
     @Test
     void rotateAroundYAxis() {
         assertEquals(new Vector(-0.5666324724208438, 2.0, -3.111097497861204), Vectors.rotateAroundYAxis(vector, 3));
     }
-    
     
     @Test
     void rotateAroundZAxis() {
@@ -66,7 +63,6 @@ class VectorsTest {
         assertEquals(new Vector(1, -2, -3), Vectors.rotate(vector, pivot));
     }
     
-    
     @Test
     void rotate_vector_degrees() {
         assertEquals(new Vector(1, -2, -3), Vectors.rotate(vector, 90, -180));
@@ -77,7 +73,6 @@ class VectorsTest {
     void roatate_location_pivot() {
         assertEquals(new Point(null, 3, -2, -1), Vectors.rotate(position, pivot));
     }
-    
     
     @Test
     void roatate_location_degrees() {

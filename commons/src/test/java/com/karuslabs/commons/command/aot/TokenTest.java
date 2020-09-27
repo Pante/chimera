@@ -38,8 +38,8 @@ import static org.mockito.Mockito.*;
 
 class TokenTest {
     
-    Token argument = spy(Token.argument(mock(Element.class), "<c>", "c"));
-    Token literal = Token.literal(mock(Element.class), "a|b", "a", new HashSet<>(Set.of("b")));
+    Identifier argument = spy(Identifier.argument(mock(Element.class), "<c>", "c"));
+    Identifier literal = Identifier.literal(mock(Element.class), "a|b", "a", new HashSet<>(Set.of("b")));
     Element element = mock(Element.class);
     Environment environment = mock(Environment.class);
     
@@ -66,7 +66,7 @@ class TokenTest {
     
     @Test
     void root() {
-        var root = Token.root();
+        var root = Identifier.root();
         
         assertNull(root.location);
         assertEquals("", root.literal);
@@ -95,7 +95,7 @@ class TokenTest {
     
     @Test
     void merge_duplicate_aliases() {
-        assertEquals(literal, literal.merge(environment, Token.literal(mock(Element.class), "a|b", "a", Set.of("b"))));
+        assertEquals(literal, literal.merge(environment, Identifier.literal(mock(Element.class), "a|b", "a", Set.of("b"))));
         verify(environment).warn(literal.location, "Duplicate alias: \"b\"");
     }
     

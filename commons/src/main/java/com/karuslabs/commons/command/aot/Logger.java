@@ -23,62 +23,66 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
+import javax.tools.Diagnostic;
 
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static com.karuslabs.annotations.processor.Messages.format;
 import static javax.tools.Diagnostic.Kind.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
+public class Logger {
 
-class EnvironmentTest {
+    private final Messager messager;
+    private @Nullable Element location;
+    private boolean error;
     
-    Environment environment = new Environment(mock(Messager.class), null, null, null);
-    Element element = mock(Element.class);
-    
-    
-    @Test
-    void scope() {
-        var root = environment.scope(element);
-        
-        assertEquals(Type.ROOT, root.type);
-        assertSame(root, environment.scopes.get(element));
-    }
-    
-    
-    @Test
-    void clear() {
-        environment.scopes.put(element, Identifier.root());
-        environment.error = true;
-        
-        environment.clear();
-        
-        assertTrue(environment.scopes.isEmpty());
-        assertFalse(environment.error());
-    }
-    
-    
-    @Test
-    void error() {
-        environment.error = false;
-        
-        environment.error(element, "error message");
-        
-        assertTrue(environment.error());
-        verify(environment.messager).printMessage(ERROR, "error message", element);
-    }
-    
-    
-    @Test
-    void warn() {
-        environment.error = false;
-        
-        environment.warn(element, "warning message");
-        
-        assertFalse(environment.error());
-        verify(environment.messager).printMessage(WARNING, "warning message", element);
+    public Logger(Messager messager) {
+        this.messager = messager;
+        this.error = false;
     }
 
-} 
+    
+    public void error(Object value, String reason, String resolution) {
+        error(format(value, reason, resolution));
+    }
+    
+    public void error(Object value, String reason) {
+        error(format(value, reason));
+    }
+    
+    public void error(String message) {
+        print(ERROR, message);
+        error = true;
+    }
+    
+    public void warn(String message) {
+        print(WARNING, message);
+    }
+    
+    private void print(Diagnostic.Kind kind, String message) {
+        if (location != null) {
+            messager.printMessage(kind, message, location);
+            
+        } else {
+            messager.printMessage(kind, message);
+        }
+    }
+
+    
+    public Logger of(Element location) {
+        this.location = location;
+        return this;
+    }
+    
+    public void clear() {
+        location = null;
+        error = false;
+    }
+    
+    public boolean error() {
+        return error;
+    }
+    
+}

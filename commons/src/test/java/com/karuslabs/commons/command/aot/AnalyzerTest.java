@@ -35,9 +35,9 @@ class AnalyzerTest {
     
     Environment environment = spy(new Environment(null, null, null, null));
     Analyzer analyzer = new Analyzer(environment);
-    Token argument = Token.argument(mock(Element.class), "argument", "argument");
-    Token invalid = Token.argument(mock(Element.class), "<invalid>", "invalid");
-    Token literal = Token.literal(mock(Element.class), "literal", "literal", Set.of());
+    Identifier argument = Identifier.argument(mock(Element.class), "argument", "argument");
+    Identifier invalid = Identifier.argument(mock(Element.class), "<invalid>", "invalid");
+    Identifier literal = Identifier.literal(mock(Element.class), "literal", "literal", Set.of());
     
     
     @BeforeEach
@@ -47,7 +47,7 @@ class AnalyzerTest {
         literal.add(environment, argument);
         literal.add(environment, invalid);
         
-        environment.scopes.put(mock(Element.class), Token.root().add(environment, literal));
+        environment.scopes.put(mock(Element.class), Identifier.root().add(environment, literal));
         
         doNothing().when(environment).error(any(), any());
     }
