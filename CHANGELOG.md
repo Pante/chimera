@@ -6,8 +6,9 @@ This update adds inferred arguments during code generation for the command frame
 
 ### Annotations
 
-- Add `Lazy`
-- Add `Monad`
+- Add `@Lazy`
+- Add `@Monad`
+- Add `Typing`
 
 ### Commons
 

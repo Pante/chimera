@@ -65,7 +65,7 @@ public class CommandParser extends Parser {
         }
     }
     
-    private void mergeAliases(Mirrors.Command command, Token token) {
+    void mergeAliases(Mirrors.Command command, Token token) {
         var intersection = new HashSet<>(command.aliases);
         intersection.retainAll(token.aliases);
         if (!intersection.isEmpty()) {
