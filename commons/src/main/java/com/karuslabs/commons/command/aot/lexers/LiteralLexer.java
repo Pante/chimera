@@ -23,14 +23,14 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.annotations.processor.Logger;
+import com.karuslabs.commons.command.aot.Token;
 import com.karuslabs.commons.command.aot.Identifier.Type;
 
 import java.util.*;
 
 import static com.karuslabs.annotations.processor.Messages.*;
 import static java.util.Collections.EMPTY_LIST;
-
 
 public class LiteralLexer extends MemoizeLexer {
 

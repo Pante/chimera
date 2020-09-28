@@ -30,7 +30,6 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
 public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
     public static final Filter<TypeElement> CLASS = new ClassFilter();

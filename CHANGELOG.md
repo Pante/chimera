@@ -8,7 +8,14 @@ This update adds inferred arguments during code generation for the command frame
 
 - Add `@Lazy`
 - Add `@Monad`
+- Add `Logger`
 - Add `Typing`
+- Remove `AnnotationProcessor.error(String)`
+- Remove `AnnotationProcessor.error(Element, String)`
+- Remove `AnnotationProcessor.note(String)`
+- Remove `AnnotationProcessor.note(Element, String)`
+- Remove `AnnotationProcessor.warn(String)`
+- Remove `AnnotationProcessor.warn(Element, String)`
 
 ### Commons
 

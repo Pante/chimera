@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.annotations.processor;
 
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
-import javax.tools.Diagnostic;
+import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -57,11 +57,35 @@ public class Logger {
         error = true;
     }
     
+    
+    public void warn(Object value, String reason, String resolution) {
+        warn(format(value, reason, resolution));
+    }
+    
+    public void warn(Object value, String reason) {
+        warn(format(value, reason));
+    }
+    
     public void warn(String message) {
         print(WARNING, message);
     }
     
-    private void print(Diagnostic.Kind kind, String message) {
+    
+    public void note(Object value, String reason, String resolution) {
+        note(format(value, reason, resolution));
+    }
+    
+    public void note(Object value, String reason) {
+        note(format(value, reason));
+    }
+    
+    public void note(String message) {
+        print(NOTE, message);
+    }
+    
+    
+    
+    private void print(Kind kind, String message) {
         if (location != null) {
             messager.printMessage(kind, message, location);
             
@@ -71,7 +95,7 @@ public class Logger {
     }
 
     
-    public Logger of(Element location) {
+    public Logger zone(@Nullable Element location) {
         this.location = location;
         return this;
     }

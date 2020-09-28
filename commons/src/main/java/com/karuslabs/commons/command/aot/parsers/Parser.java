@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.Filter;
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Mirrors.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
@@ -42,7 +42,7 @@ public abstract class Parser {
     }
     
     public void parse(Element element, Map<TypeElement, Map<Identifier, Command>> namespaces) {
-        logger.of(element);
+        logger.zone(element);
         
         var type = element.accept(Filter.CLASS, null);
         var namespace = namespaces.get(type);

@@ -30,11 +30,9 @@ import javax.lang.model.element.*;
 import org.junit.jupiter.api.*;
 import org.mockito.junit.jupiter.*;
 
-import static javax.tools.Diagnostic.Kind.*;
 import static org.mockito.quality.Strictness.LENIENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 
 @MockitoSettings(strictness = LENIENT)
 class AnnotationProcessorTest {
@@ -57,45 +55,6 @@ class AnnotationProcessorTest {
         doReturn(Set.of(mock(Element.class))).when(round).getElementsAnnotatedWithAny(any(TypeElement[].class));
         
         assertFalse(processor.process(Set.of(), round));
-    }
-    
-    
-    @Test
-    void error() {
-        processor.error("Error");
-        verify(messager).printMessage(ERROR, "Error");
-    }
-    
-    @Test
-    void error_element() {
-        processor.error(element, "Error");
-        verify(messager).printMessage(ERROR, "Error", element);
-    }
-    
-    
-    @Test
-    void warn() {
-        processor.warn("Warning");
-        verify(messager).printMessage(WARNING, "Warning");
-    }
-    
-    @Test
-    void warn_element() {      
-        processor.warn(element, "Warning");
-        verify(messager).printMessage(WARNING, "Warning", element);
-    }
-    
-    
-    @Test
-    void note() {
-        processor.note("Note");
-        verify(messager).printMessage(NOTE, "Note");
-    }
-    
-    @Test
-    void note_element() {
-        processor.note(element, "Note");
-        verify(messager).printMessage(NOTE, "Note", element);
     }
 
 } 

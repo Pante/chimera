@@ -30,14 +30,11 @@ import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
-import static javax.tools.Diagnostic.Kind.*;
-
-
 public abstract class AnnotationProcessor extends AbstractProcessor {    
     
     protected Elements elements;
     protected Types types;
-    protected Messager messager;
+    protected Logger logger;
     
     
     @Override
@@ -45,7 +42,7 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         super.init(environment);
         elements = environment.getElementUtils();
         types = environment.getTypeUtils();
-        messager = environment.getMessager();
+        logger = new Logger(environment.getMessager());
     }
     
     
@@ -68,33 +65,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     @VisibleForOverride
     protected void clear() {
         
-    }
-    
-    
-    public void error(String message) {
-        messager.printMessage(ERROR, message);
-    }
-    
-    public void error(Element element, String message) {
-        messager.printMessage(ERROR, message, element);
-    }
-    
-    
-    public void warn(String message) {
-        messager.printMessage(WARNING, message);
-    }
-    
-    public void warn(Element element, String message) {
-        messager.printMessage(WARNING, message, element);
-    }
-    
-    
-    public void note(String message) {
-         messager.printMessage(NOTE, message);
-    }
-    
-    public void note(Element element, String message) {
-        messager.printMessage(NOTE, message, element);
     }
     
 }

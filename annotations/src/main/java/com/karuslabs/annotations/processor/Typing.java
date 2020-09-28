@@ -44,6 +44,15 @@ public class Typing {
         return types.erasure(elements.getTypeElement(type.getName()).asType());
     }
     
+    public final TypeMirror specialize(Class<?> type, Class<?>... parameters) {
+        var mirrors = new TypeMirror[parameters.length];
+        for (int i = 0; i < parameters.length; i++) {
+            mirrors[i] = type(parameters[i]);
+        }
+        
+        return specialize(type, mirrors);
+    }
+    
     public final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
         return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
     }

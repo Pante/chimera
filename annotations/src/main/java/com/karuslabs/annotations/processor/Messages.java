@@ -25,7 +25,6 @@ package com.karuslabs.annotations.processor;
 
 import com.karuslabs.annotations.Static;
 
-
 public @Static class Messages {
     
     public static String format(Object value, String reason) {

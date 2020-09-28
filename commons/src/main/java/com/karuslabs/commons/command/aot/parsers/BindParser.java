@@ -23,20 +23,25 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.Filter;
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Mirrors.Command;
 import com.karuslabs.commons.command.aot.annotations.Bind;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+
 import java.util.Map;
 import javax.lang.model.element.Element;
 
-
 public class BindParser extends Parser {
+    
+    public BindParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
+    }
     
     @Override
     protected void process(Element element, Map<Identifier, Command> namespace) {
         if (namespace.isEmpty()) {
-            logger.of(element.accept(Filter.CLASS, null)).error("Class should be annotated with @Command");
+            logger.zone(element.accept(Filter.CLASS, null)).error("Class should be annotated with @Command");
             return;
         }
         

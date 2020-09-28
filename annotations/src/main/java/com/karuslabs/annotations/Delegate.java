@@ -23,12 +23,10 @@
  */
 package com.karuslabs.annotations;
 
-
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
-
 
 @Documented
 @Retention(SOURCE)

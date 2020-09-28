@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.annotations.processor.Logger;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;

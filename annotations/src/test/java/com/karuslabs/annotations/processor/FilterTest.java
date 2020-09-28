@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
-
 class FilterTest {
     
     static final Element MODULE;
