@@ -24,15 +24,18 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Identifier.Type;
 
 import java.util.*;
 
 import static com.karuslabs.annotations.processor.Messages.*;
+
 import static java.util.Collections.EMPTY_LIST;
 
-public class LiteralLexer extends MemoizeLexer {
+
+// Split into alisable and none aliasable
+public class LiteralLexer implements Lexer {
 
     @Override
     public List<Token> lex(Logger logger, String lexeme) {
@@ -58,7 +61,9 @@ public class LiteralLexer extends MemoizeLexer {
             }
         }
         
-        return List.of(token(Type.LITERAL, lexeme, identifiers[0], aliases));
+        // We cannot memomize literal identifiers since .equals(...) ignores aliases
+        // but .toString() returns the (raw) lexeme;
+        return List.of(new Token(new Identifier(Type.LITERAL, lexeme, identifiers[0]), aliases));
     }
 
 }

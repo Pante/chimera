@@ -38,6 +38,7 @@ class FilterTest {
     static final Element MODULE;
     static final Element PACKAGE;
     static final Element TYPE;
+    static final Element EXECUTABLE;
     static final Element DEFAULT;
     static final Element ENCLOSED;
     
@@ -50,6 +51,10 @@ class FilterTest {
         ).getMock();
         TYPE = when(mock(TypeElement.class).accept(any(), any())).then(
             invocation -> invocation.getArgument(0, ElementVisitor.class).visitType((TypeElement) invocation.getMock(), null)
+        ).getMock();
+        
+        EXECUTABLE = when(mock(ExecutableElement.class).accept(any(), any())).then(
+            invocation -> invocation.getArgument(0, ElementVisitor.class).visitExecutable((ExecutableElement) invocation.getMock(), null)
         ).getMock();
         
         DEFAULT = when(mock(VariableElement.class).accept(any(), any())).then(
@@ -73,6 +78,13 @@ class FilterTest {
     
     static Stream<Arguments> filters() {
         return Stream.of(
+            of(Filter.EXECUTABLE, MODULE, null),
+            of(Filter.EXECUTABLE, PACKAGE, null),
+            of(Filter.EXECUTABLE, TYPE, null),
+            of(Filter.EXECUTABLE, EXECUTABLE, EXECUTABLE),
+            of(Filter.EXECUTABLE, DEFAULT, null),
+            of(Filter.EXECUTABLE, ENCLOSED, null),
+            
             of(Filter.CLASS, MODULE, null),
             of(Filter.CLASS, PACKAGE, null),
             of(Filter.CLASS, TYPE, TYPE),

@@ -24,18 +24,23 @@
 package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.annotations.processor.*;
-import com.karuslabs.commons.command.aot.Identifier;
-import com.karuslabs.commons.command.aot.Mirrors.Command;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Mirrors.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
-import java.util.Map;
+import java.util.*;
 import javax.lang.model.element.Element;
+
+import static java.util.stream.Collectors.toList;
 
 public class BindParser extends Parser {
     
-    public BindParser(Logger logger, Lexer lexer) {
+    private final Binder binder;
+    
+    public BindParser(Binder binder, Logger logger, Lexer lexer) {
         super(logger, lexer);
+        this.binder = binder;
     }
     
     @Override
@@ -57,8 +62,47 @@ public class BindParser extends Parser {
                 continue;
             }
             
-            var identifier = tokens.get(tokens.size() - 1).identifier;
+            var member = element.accept(binder, tokens.get(tokens.size() - 1).identifier);
+            if (member == null) {
+                continue;
+            }
+            
+            if (tokens.size() == 1 && !match(member, namespace)) {
+                logger.error(member.identifier, "does not exist");
+                
+            } else if (tokens.size() > 1) {
+                find(tokens, member, namespace);
+            }
         }
+    }
+    
+    boolean match(Member member, Map<Identifier, Command> namespace) {
+        var match = false;
+        for (var entry : namespace.entrySet()) {
+            match(member, entry.getValue().children);
+            if (member.identifier.equals(entry.getKey())) {
+                entry.getValue().members.put(member.site, member);
+                match = true;
+            }
+        }
+        
+        return match;
+    }
+    
+    void find(List<Token> tokens, Member member, Map<Identifier, Command> namespace) {
+        Command command = null;
+        for (var token : tokens) {
+            command = namespace.get(token.identifier);
+            
+            if (command == null) {
+                logger.error(String.join(" ", tokens.stream().map(t -> t.identifier.toString()).collect(toList())), " does not exist");
+                return;
+            }
+            
+            namespace = command.children;
+        }
+        
+        command.members.put(member.site, member);
     }
     
 }

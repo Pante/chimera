@@ -10,6 +10,7 @@ This update adds inferred arguments during code generation for the command frame
 - Add `@Monad`
 - Add `Logger`
 - Add `Typing`
+- Add `Filter.EXECUTABLE`
 - Remove `AnnotationProcessor.error(String)`
 - Remove `AnnotationProcessor.error(Element, String)`
 - Remove `AnnotationProcessor.note(String)`

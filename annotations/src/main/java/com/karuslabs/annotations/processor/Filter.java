@@ -32,6 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
+    public static final Filter<ExecutableElement> EXECUTABLE = new ExecutableFilter();
     public static final Filter<TypeElement> CLASS = new ClassFilter();
     public static final Filter<PackageElement> PACKAGE = new PackageFilter();
     public static final Filter<ModuleElement> MODULE = new ModuleFilter();
@@ -41,6 +42,30 @@ public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T,
     protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();
         return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
+    }
+    
+}
+
+class ExecutableFilter extends Filter<ExecutableElement> {
+    
+    @Override
+    public @Nullable ExecutableElement visitModule(ModuleElement element, @Ignored Void parameter) {
+        return DEFAULT_VALUE;
+    }
+    
+    @Override
+    public @Nullable ExecutableElement visitPackage(PackageElement element, @Ignored Void parameter) {
+        return DEFAULT_VALUE;
+    }
+    
+    @Override
+    public @Nullable ExecutableElement visitType(TypeElement element, @Ignored Void parameter) {
+        return DEFAULT_VALUE;
+    }
+    
+    @Override
+    public ExecutableElement visitExecutable(ExecutableElement element, @Ignored Void parameter) {
+        return element;
     }
     
 }

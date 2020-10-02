@@ -28,33 +28,46 @@ import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Mirrors.*;
 import com.karuslabs.commons.command.aot.Mirrors.Member.Type;
 
-import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleElementVisitor9;
 
+import org.bukkit.command.CommandSender;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
+public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     
     private final Typing typing;
     private final Logger logger;
     private final TypeMirror completable;
+    private final TypeMirror argument;
+    private final TypeMirror command;
+    private final TypeMirror requirement;
+    private final TypeMirror suggestions;
     
     
-    Binder(Typing typing, Logger logger) {
+    
+    public Binder(Typing typing, Logger logger) {
         this.typing = typing;
         this.logger = logger;
-        this.completable = typing.specialize(CompletableFuture.class, Suggestions.class);
+        completable = typing.specialize(CompletableFuture.class, Suggestions.class);
+        argument = typing.erasure(ArgumentType.class);
+        command = typing.specialize(Command.class, CommandSender.class);
+        requirement = typing.specialize(Predicate.class, CommandSender.class);
+        suggestions = typing.specialize(SuggestionProvider.class, CommandSender.class);
     }
     
     @Override
     public @Nullable Method visitExecutable(ExecutableElement element, Identifier identifier) {
         var type = infer(element.getReturnType());
         if (type == null) {
-            // Log error
+            logger.error(element.getSimpleName(), "has an invalid return type", "should return an integer, void, boolean or CompletableFuture<Suggestions>");
             return null;
         }
         
@@ -69,7 +82,7 @@ class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
             return Member.Type.REQUIREMENT;
             
         } else if (typing.types.isSubtype(returned, completable)) {
-            return Member.Type.SUGGESTIONS;
+            return Member.Type.SUGGESTION_PROVIDER;
             
         } else {
             return null;
@@ -77,8 +90,39 @@ class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     }
     
     @Override
-    public Field visitVariable(VariableElement element, Identifier identifier) {
-        var type = element.asType();
+    public @Nullable Field visitVariable(VariableElement element, Identifier identifier) {
+        var type = type(element.asType());
+        if (type == null) {
+            logger.error(element.getSimpleName(), "has an invalid type", "should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
+            return null;
+        }
+        
+        return new Field(identifier, element, type);
+    }
+    
+    @Nullable Type type(TypeMirror type) {
+        if (typing.types.isSubtype(type, argument)) {
+            return Member.Type.ARGUMENT_TYPE;
+            
+        } else if (typing.types.isSubtype(type, command)) {
+            return Member.Type.COMMAND;
+            
+        } else if (typing.types.isSubtype(type, requirement)) {
+            return Member.Type.REQUIREMENT;
+            
+        } else if (typing.types.isSubtype(type, suggestions)) {
+            return Member.Type.SUGGESTION_PROVIDER;
+            
+        } else {
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public @Nullable Member<?> defaultAction(Element element, Identifier identifier) {
+        logger.error(identifier.lexeme, "is used on an invalid target", "should annotate either a field or method");
+        return null;
     }
     
 }

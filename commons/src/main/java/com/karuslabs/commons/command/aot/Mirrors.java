@@ -35,14 +35,14 @@ public @Static class Mirrors {
         public final Identifier identifier;
         public final TypeElement site;
         public final Set<String> aliases;
-        public final Map<Member.Type, Member<?>> members;
+        public final Map<Element, Member<?>> members;
         public final Map<Identifier, Command> children;
 
         public Command(Identifier identifier, TypeElement site, Set<String> aliases) {
             this.identifier = identifier;
             this.site = site;
             this.aliases = aliases;
-            members = new EnumMap<>(Member.Type.class);
+            members = new HashMap<>();
             children = new HashMap<>();
         }
 
@@ -82,10 +82,10 @@ public @Static class Mirrors {
 
         public enum Type {
 
+            ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
             COMMAND("A", "Command<CommandSender>", "command"),
-            TYPE("An", "ArgumentType<?>", "type"),
             REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
-            SUGGESTIONS("A", "SuggestionProvider<CommandSender>", "suggestions");
+            SUGGESTION_PROVIDER("A", "SuggestionProvider<CommandSender>", "suggestions");
 
             public final String article;
             public final String type;
@@ -109,15 +109,15 @@ public @Static class Mirrors {
     
     public static final class Pointer {
 
-        public final Identifier identifier;
+        public final String name;
+        public final int index;
         public final VariableElement site;
         public final Command value;
-        public final String explicit;
 
-        public Pointer(Identifier identifier, VariableElement site, String explicit, Command value) {
-            this.identifier = identifier;
+        public Pointer(String name, int index, VariableElement site, Command value) {
+            this.name = name;
+            this.index = index;
             this.site = site;
-            this.explicit = explicit;
             this.value = value;
         }
 

@@ -21,47 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.parsers;
+package com.karuslabs.commons.command.aot.old.resolvers;
 
 import com.karuslabs.commons.command.aot.Identifier;
-import com.karuslabs.commons.command.aot.annotations.Command;
+import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.List;
 import javax.lang.model.element.Element;
 
+import static com.karuslabs.annotations.processor.Messages.format;
 
-public class CommandParser extends Parser {
+
+public abstract class Parser {
     
-    public CommandParser(Environment environment, Lexer lexer) {
-        super(environment, lexer);
+    protected Environment environment;
+    protected Lexer lexer;
+    
+    
+    public Parser(Environment environment, Lexer lexer) {
+        this.environment = environment;
+        this.lexer = lexer;
     }
-
     
-    @Override
-    public void parse(Element element) {
-        var commands = element.getAnnotation(Command.class).value();
-        if (commands.length == 0) {
-            environment.error(element, "@Command annotation should not be empty");
-            return;
+    
+    public abstract void parse(Element element);
+    
+    
+    protected boolean valid(List<Identifier> tokens) {
+        if (tokens.isEmpty()) {
+            return false;
         }
         
-        var root = environment.scope(element);
-        for (var command : commands) {
-            var tokens = lexer.lex(environment, element, command);
-            if (valid(tokens)) {
-                parse(root, tokens);
-            }
+        var token = tokens.get(0);
+        var error = token.type == Type.ARGUMENT;
+        if (error) {
+            environment.error(token.location, format(token, "is at an invalid position", "command should not start with an argument"));
         }
+        
+        return !error;
     }
     
-    void parse(Identifier current, List<Identifier> tokens) {
-        for (var token : tokens) {
-            current = current.add(environment, token);
-            if (current == null) {
-                return;
-            }
-        }
-    }
-
 }
