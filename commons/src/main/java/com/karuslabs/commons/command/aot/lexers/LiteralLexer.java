@@ -33,10 +33,16 @@ import static com.karuslabs.annotations.processor.Messages.*;
 
 import static java.util.Collections.EMPTY_LIST;
 
+public abstract class LiteralLexer implements Lexer {
 
-// Split into alisable and none aliasable
-public class LiteralLexer implements Lexer {
-
+    public static LiteralLexer aliases() {
+        return new LiteralAliasLexer();
+    }
+    
+    public static LiteralLexer single() {
+        return new SingleLiteralLexer();
+    }
+    
     @Override
     public List<Token> lex(Logger logger, String lexeme) {
         if (lexeme.contains("<") || lexeme.contains(">")) {
@@ -44,8 +50,17 @@ public class LiteralLexer implements Lexer {
             return EMPTY_LIST;
         }
         
-        var identifiers = lexeme.split("\\|", -1);
-        
+        return process(logger, lexeme, lexeme.split("\\|", -1));
+    }
+    
+    abstract List<Token> process(Logger logger, String lexeme, String... identifiers);
+
+}
+
+class LiteralAliasLexer extends LiteralLexer {
+
+    @Override
+    List<Token> process(Logger logger, String lexeme, String... identifiers) {        
         for (var identifier : identifiers) {
             if (identifier.isEmpty()) {
                 logger.error(lexeme, "contains an empty literal alias or name", "should not be empty");
@@ -65,5 +80,26 @@ public class LiteralLexer implements Lexer {
         // but .toString() returns the (raw) lexeme;
         return List.of(new Token(new Identifier(Type.LITERAL, lexeme, identifiers[0]), aliases));
     }
-
+    
 }
+
+class SingleLiteralLexer extends LiteralLexer {
+    
+    private final Memoizer memoizer = new Memoizer();
+    
+    @Override
+    public List<Token> process(Logger logger, String lexeme, String... identifiers) {
+        if (identifiers.length > 1) {
+            logger.error(lexeme, "contains aliases", "should not contain aliases in this context");
+            return EMPTY_LIST;
+            
+        } else if (identifiers.length == 0) {
+            logger.error(lexeme, "is empty");
+            return EMPTY_LIST;
+        }
+        
+        return List.of(memoizer.token(Type.LITERAL, lexeme, identifiers[0], Set.of()));
+    }
+    
+}
+

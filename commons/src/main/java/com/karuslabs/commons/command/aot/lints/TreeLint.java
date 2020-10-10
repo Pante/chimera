@@ -21,33 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identifier.Type;
+import com.karuslabs.commons.command.aot.Identifier;
+import com.karuslabs.commons.command.aot.Mirrors.Command;
 
-import java.util.*;
+import java.util.List;
 
-@FunctionalInterface
-public interface Lexer {
+public class TreeLint implements Lint {
 
-    List<Token> lex(Logger logger, String lexeme);
+    private final List<Lint> lints;
     
-}
-
-class Memoizer {
-    
-    private final Map<String, Identifier> identifiers = new HashMap<>();
-    
-    Token token(Type type, String lexeme, String value, Set<String> aliases) {
-        var identifier = identifiers.get(lexeme);
-        if (identifier == null) {
-            identifier = new Identifier(type, lexeme, value);
-            identifiers.put(lexeme, identifier);
-        }
-        
-        return new Token(identifier, aliases);
+    public TreeLint(Lint... lints) {
+        this.lints = List.of(lints);
     }
     
+    @Override
+    public void lint(Logger logger, Identifier identifier, Command command) {
+        for (var lints : lints) {
+            lints.lint(logger, identifier, command);
+        }
+        
+        for (var entry : command.children.entrySet()) {
+            lint(logger, entry.getKey(), entry.getValue());
+        }
+    }
+
 }

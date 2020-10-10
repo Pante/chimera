@@ -21,33 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.lints.signatures;
 
-import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identifier.Type;
+import com.karuslabs.annotations.processor.*;
+import com.karuslabs.commons.command.aot.Mirrors.Method;
 
-import java.util.*;
+import javax.lang.model.element.ExecutableElement;
 
-@FunctionalInterface
-public interface Lexer {
+public interface Signature {
 
-    List<Token> lex(Logger logger, String lexeme);
-    
-}
+    void lint(Logger logger, Method method, ExecutableElement executable);
 
-class Memoizer {
-    
-    private final Map<String, Identifier> identifiers = new HashMap<>();
-    
-    Token token(Type type, String lexeme, String value, Set<String> aliases) {
-        var identifier = identifiers.get(lexeme);
-        if (identifier == null) {
-            identifier = new Identifier(type, lexeme, value);
-            identifiers.put(lexeme, identifier);
-        }
-        
-        return new Token(identifier, aliases);
-    }
-    
 }

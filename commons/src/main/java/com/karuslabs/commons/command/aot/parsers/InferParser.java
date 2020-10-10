@@ -30,9 +30,7 @@ import com.karuslabs.commons.command.aot.annotations.Infer;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.Map;
-
-import javax.lang.model.element.Element;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 
 public class InferParser extends Parser {
     
@@ -42,14 +40,12 @@ public class InferParser extends Parser {
 
     @Override
     protected void process(Element element, Map<Identifier, Command> namespace) {
-        var name = element.getSimpleName().toString();
         var line = element.getAnnotation(Infer.class).value();
-        
         if (line.equals(Infer.INFERRED_ARGUMENT)) {
-            line = "<" + name + ">";
+            line = "<" + element.getSimpleName().toString() + ">";
         }
         
-        Command address = null;
+        Command command = null;
         
         var tokens = lexer.lex(logger, line);
         if (tokens.isEmpty()) {
@@ -57,24 +53,25 @@ public class InferParser extends Parser {
         }
         
         for (var token : lexer.lex(logger, line)) {
-            address = namespace.get(token.identifier);
-            if (address == null) {
+            command = namespace.get(token.identifier);
+            if (command == null) {
                 logger.error(line, "does not exist");
                 return;
             }
             
-            namespace = address.children;
+            namespace = command.children;
         }
         
         var executable = element.accept(Filter.EXECUTABLE, null);
-        var member = address.members.get(executable);
+        var member = command.members.get(executable);
         if (member instanceof Method) {
             var index = executable.getParameters().indexOf(element);
-            ((Method) member).parameters.put(name, new Pointer(name, index, (VariableElement) element, address));
+            ((Method) member).parameters.put(index, new Pointer(index, (VariableElement) element, command));
             
         } else {
             logger.error(executable.getSimpleName(), "is not annotated with @Bind", "method should be annotated with @Bind");
         }
+        
     }
     
 }

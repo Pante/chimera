@@ -75,8 +75,11 @@ public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     }
     
     @Nullable Type infer(TypeMirror returned) {
-        if (returned.getKind() == TypeKind.INT || returned.getKind() == TypeKind.VOID) {
+        if (returned.getKind() == TypeKind.INT) {
             return Member.Type.COMMAND;
+            
+        } else if (returned.getKind() == TypeKind.VOID) {
+            return Member.Type.EXECUTABLE;
             
         } else if (returned.getKind() == TypeKind.BOOLEAN) {
             return Member.Type.REQUIREMENT;

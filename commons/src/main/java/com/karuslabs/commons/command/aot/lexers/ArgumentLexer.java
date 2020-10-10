@@ -31,7 +31,9 @@ import java.util.*;
 import static com.karuslabs.commons.command.aot.Identifier.Type.ARGUMENT;
 import static java.util.Collections.EMPTY_LIST;
 
-public class ArgumentLexer extends MemoizeLexer {
+public class ArgumentLexer implements Lexer {
+    
+    private final Memoizer memoizer = new Memoizer();
     
     @Override
     public List<Token> lex(Logger logger, String lexeme) {
@@ -55,7 +57,7 @@ public class ArgumentLexer extends MemoizeLexer {
             logger.error(lexeme, "contains trailing \"<\"s or \">\"s");
         }
         
-        return List.of(token(ARGUMENT, lexeme, argument, Set.of()));
+        return List.of(memoizer.token(ARGUMENT, lexeme, argument, Set.of()));
     }
     
 }

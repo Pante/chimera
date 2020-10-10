@@ -21,33 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Identifier.Type;
+import com.karuslabs.commons.command.aot.*;
 
-import java.util.*;
+public class ArgumentPositionLint implements Lint {
 
-@FunctionalInterface
-public interface Lexer {
-
-    List<Token> lex(Logger logger, String lexeme);
-    
-}
-
-class Memoizer {
-    
-    private final Map<String, Identifier> identifiers = new HashMap<>();
-    
-    Token token(Type type, String lexeme, String value, Set<String> aliases) {
-        var identifier = identifiers.get(lexeme);
-        if (identifier == null) {
-            identifier = new Identifier(type, lexeme, value);
-            identifiers.put(lexeme, identifier);
+    @Override
+    public void lint(Logger logger, Identifier identifier, Mirrors.Command command) {
+        if (identifier.type == Type.ARGUMENT) {
+            logger.zone(command.site).error(identifier.value, "is at an invalid position", "command should not start with an argument");
         }
-        
-        return new Token(identifier, aliases);
     }
-    
+
 }

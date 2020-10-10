@@ -51,7 +51,7 @@ public @Static class Mirrors {
     
     public static final class Method extends Member<ExecutableElement> {
     
-        public final Map<String, Pointer> parameters;
+        public final Map<Integer, Pointer> parameters;
 
         public Method(Identifier identifier, ExecutableElement site, Type type) {
             super(identifier, site, type);
@@ -84,6 +84,7 @@ public @Static class Mirrors {
 
             ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
             COMMAND("A", "Command<CommandSender>", "command"),
+            EXECUTABLE("An", "Executable<CommandSender>", "command"),
             REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
             SUGGESTION_PROVIDER("A", "SuggestionProvider<CommandSender>", "suggestions");
 
@@ -109,13 +110,11 @@ public @Static class Mirrors {
     
     public static final class Pointer {
 
-        public final String name;
         public final int index;
         public final VariableElement site;
         public final Command value;
 
-        public Pointer(String name, int index, VariableElement site, Command value) {
-            this.name = name;
+        public Pointer(int index, VariableElement site, Command value) {
             this.index = index;
             this.site = site;
             this.value = value;

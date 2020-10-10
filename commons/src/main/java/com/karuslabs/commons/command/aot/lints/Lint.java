@@ -21,34 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lints;
 
-import java.util.Collection;
+import com.karuslabs.annotations.processor.Logger;
+import com.karuslabs.commons.command.aot.Identifier;
+import com.karuslabs.commons.command.aot.Mirrors.Command;
 
-import static com.karuslabs.annotations.processor.Messages.format;
+public interface Lint {
 
-
-public class Analyzer {
-    
-    private Environment environment;
-    
-    
-    public Analyzer(Environment environment) {
-        this.environment = environment;
-    }
-    
-    
-    public void analyze() {
-        analyze(environment.scopes.values());
-    }
-    
-    void analyze(Collection<Token> tokens) {
-        for (var token : tokens) {
-            analyze(token.children.values());
-            if (token.type == Type.ARGUMENT && !token.bindings.containsKey(Binding.TYPE)) {
-                environment.error(token.location, format(token, "is an invalid argument", "an ArgumentType<?> should be bound to it"));
-            }
-        }
-    }
+    void lint(Logger logger, Identifier identifier, Command command);
     
 }

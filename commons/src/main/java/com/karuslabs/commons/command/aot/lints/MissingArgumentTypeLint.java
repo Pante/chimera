@@ -21,33 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Identifier.Type;
+import com.karuslabs.commons.command.aot.Mirrors.*;
 
-import java.util.*;
+public class MissingArgumentTypeLint implements Lint {
 
-@FunctionalInterface
-public interface Lexer {
-
-    List<Token> lex(Logger logger, String lexeme);
-    
-}
-
-class Memoizer {
-    
-    private final Map<String, Identifier> identifiers = new HashMap<>();
-    
-    Token token(Type type, String lexeme, String value, Set<String> aliases) {
-        var identifier = identifiers.get(lexeme);
-        if (identifier == null) {
-            identifier = new Identifier(type, lexeme, value);
-            identifiers.put(lexeme, identifier);
+    @Override
+    public void lint(Logger logger, Identifier identifier, Command command) {
+        if (identifier.type != Type.ARGUMENT) {
+            return;
         }
         
-        return new Token(identifier, aliases);
+        for (var member : command.members.values()) {
+            if (member.type == Member.Type.ARGUMENT_TYPE) {
+                return;
+            }
+        }
+        
+        logger.zone(command.site).error(identifier.value, "is missing an argument type", "an ArgumentType<?> should be bound to it");
     }
-    
+
 }

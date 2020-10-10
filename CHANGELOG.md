@@ -21,8 +21,17 @@ This update adds inferred arguments during code generation for the command frame
 ### Commons
 
 We went full capitalist and privatized (and finalized) several package private fields and methods. `ItemStack` builders
-also received an styling update and safety improvements.
+also received an styling update and safety improvements. More importantly, Chimera command code generation has been rewritten
+to support inferred parameters for methods annotated with `@Bind`.
 
+- Add `com.karuslabs.commons.command.aot.lints`
+- Add `com.karuslabs.commons.command.aot.lints.signatures`
+- Add `Binder`
+- Add `@Infer`
+- Add `InferParser`
+- Add `LiteralAliasLexer`
+- Add `Memoizer`
+- Add `SingleLiteralLexer`
 - Add `BlockDataBuilder`
 - Add `CompassBuilder`
 - Add `ItemBuilder.banner()`
@@ -50,6 +59,9 @@ also received an styling update and safety improvements.
 - Add `PotionBuilder.lingering()`
 - Add `PotionBuilder.potion()`
 - Add `PotionBuilder.splash()`
+- Change classes in `com.karuslabs.commons.command.aot`
+- Change lexical analyzers in `com.karuslabs.commons.command.aot.lexers`
+- Change pasers in `com.karuslabs.commons.command.aot.parsers`
 - Change classes in `com.karuslabs.commons.item.builders` to be final
 - Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
 - Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`
@@ -58,7 +70,9 @@ also received an styling update and safety improvements.
 - Change `KnowledgeBookBuilder.of(Material)` to `KnowledgeBookBuilder.of()` - only knowledge books contain a `KnowledgeBookMeta`
 - Change `SkullBuilder` to `HeadBuilder`
 - Change `TropicalFishBucketBuilder.of(Material)` to `TropicalFishBucketBuilder.of()` - only tropical fish buckets contain a `TropicalFishBucketMeta`
+- Fix Chimera command generation not checking if predicate methods annotated with `@Bind` throw exceptions
 - Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
+- Remove `com.karuslabs.commons.command.aot.resolvers`
 - Remove methods prefixed with `as` in `com.karuslabs.commons.item.ItemBuilder` - replaced with equivalent methods without prefixes
 - Remove `LeatherArmourBuilder.of(Material)` - replaced with equivalent methods for specific leather armour items
 - Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps

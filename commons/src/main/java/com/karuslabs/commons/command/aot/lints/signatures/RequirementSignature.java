@@ -21,39 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.resolvers;
+package com.karuslabs.commons.command.aot.lints.signatures;
 
-import com.karuslabs.commons.command.aot.Identifier;
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.annotations.processor.*;
+import com.karuslabs.commons.command.aot.Mirrors.Method;
 
-import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
 
 import org.bukkit.command.CommandSender;
 
+public class RequirementSignature implements Signature {
 
-public abstract class Resolver<T extends Element> {
+    private final Typing typing;
+    private final TypeMirror source;
+    boolean declared;
 
-    protected Environment environment;
-    protected Elements elements;
-    protected Types types;
-    protected TypeMirror sender;
-    
-    
-    public Resolver(Environment environment) {
-        this.environment = environment;
-        this.elements = environment.elements;
-        this.types = environment.types;
-        this.sender = elements.getTypeElement(CommandSender.class.getName()).asType();
+    public RequirementSignature(Typing typing) {
+        this.typing = typing;
+        source = typing.type(CommandSender.class);
     }
     
-    
-    public abstract void resolve(T element, Identifier token);
-    
-    
-    protected final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
-        return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
+    @Override
+    public void lint(Logger logger, Method method, ExecutableElement executable) {
+        var parameters = executable.getParameters();
+        if (parameters.size() != 1) {
+            logger.zone(executable).error("Method should have only 1 parameter");
+            
+        } else if (!typing.types.isSubtype(source, parameters.get(0).asType())) {
+            logger.zone(parameters.get(0)).error("Parameter should be a CommandSender");
+        }
+        
+        if (!executable.getThrownTypes().isEmpty()) {
+            logger.zone(executable).error("Method should not throw exceptions");
+        }
     }
-    
+
 }

@@ -21,45 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.resolvers;
+package com.karuslabs.commons.command.aot.lints;
 
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.Identifier;
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.Mirrors.Command;
 
-import java.util.List;
-import javax.lang.model.element.Element;
+import static javax.lang.model.element.Modifier.*;
 
-import static com.karuslabs.annotations.processor.Messages.format;
-
-
-public abstract class Parser {
+public class PublicFinalFieldLint implements Lint {
     
-    protected Environment environment;
-    protected Lexer lexer;
-    
-    
-    public Parser(Environment environment, Lexer lexer) {
-        this.environment = environment;
-        this.lexer = lexer;
-    }
-    
-    
-    public abstract void parse(Element element);
-    
-    
-    protected boolean valid(List<Identifier> tokens) {
-        if (tokens.isEmpty()) {
-            return false;
+    @Override
+    public void lint(Logger logger, Identifier identifier, Command command) {
+        for (var entry : command.members.entrySet()) {
+            var modifiers = entry.getValue().site.getModifiers();
+            if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
+                logger.zone(entry.getValue().site).error("Field should be public and final");
+            }
         }
-        
-        var token = tokens.get(0);
-        var error = token.type == Type.ARGUMENT;
-        if (error) {
-            environment.error(token.location, format(token, "is at an invalid position", "command should not start with an argument"));
-        }
-        
-        return !error;
     }
-    
+
 }
