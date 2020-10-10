@@ -75,7 +75,7 @@ public class PointerValueLint implements Lint {
                 var argumentType = (DeclaredType) type;
                 var parameters = argumentType.getTypeArguments();
                 if (parameters.isEmpty()) {
-                    logger.zone(member.site).warn(member.site.getSimpleName(), "has a raw type parameter");
+                    logger.zone(member.site).warn(member.site.getSimpleName(), "contains a raw type parameter");
                     
                 } else {
                     typing.types.isSubtype(parameters.get(0), pointer.site.asType());
