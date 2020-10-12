@@ -92,13 +92,13 @@ class ProcessorTest {
         doReturn(Set.of()).when(round).getElementsAnnotatedWith(Source.class);
         doReturn(false).when(processor.environment).error();
         doNothing().when(processor).resolveSource(Set.of());
-        doNothing().when(processor).parse(any(Parser.class), eq(round), any());
+        doNothing().when(processor).parse(any(TokenParser.class), eq(round), any());
         
         processor.process(Set.of(), round);
         
         assertTrue(processor.processed);
         verify(processor).resolveSource(Set.of());
-        verify(processor, times(2)).parse(any(Parser.class), eq(round), any());
+        verify(processor, times(2)).parse(any(TokenParser.class), eq(round), any());
         verify(processor.analyzer).analyze();
         verify(processor.generator).generate();
         verify(processor.environment).clear();
@@ -123,13 +123,13 @@ class ProcessorTest {
         doReturn(Set.of()).when(round).getElementsAnnotatedWith(Source.class);
         doReturn(true).when(processor.environment).error();
         doNothing().when(processor).resolveSource(Set.of());
-        doNothing().when(processor).parse(any(Parser.class), eq(round), any());
+        doNothing().when(processor).parse(any(TokenParser.class), eq(round), any());
         
         processor.process(Set.of(), round);
         
         assertTrue(processor.processed);
         verify(processor).resolveSource(Set.of());
-        verify(processor, times(2)).parse(any(Parser.class), eq(round), any());
+        verify(processor, times(2)).parse(any(TokenParser.class), eq(round), any());
         verify(processor.analyzer).analyze();
         verify(processor.environment).clear();
         
@@ -164,7 +164,7 @@ class ProcessorTest {
     
     @Test
     void parse() {
-        var parser = mock(Parser.class);
+        var parser = mock(TokenParser.class);
         doReturn(Set.of(a, b)).when(round).getElementsAnnotatedWith(Source.class);
         
         processor.parse(parser, round, Source.class);

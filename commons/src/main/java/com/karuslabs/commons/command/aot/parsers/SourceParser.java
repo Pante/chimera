@@ -21,78 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.generation;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.Filter;
-import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.annotations.Source;
+import com.karuslabs.commons.command.aot.generation.Generation;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import static com.karuslabs.annotations.processor.Messages.quote;
 import static com.karuslabs.commons.command.aot.annotations.Source.RELATIVE_PACKAGE;
 
+public class SourceParser implements Parser<Generation> {
 
-public class SourceResolver {
-    
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
+    private final Logger logger;
     
-    private Environment environment;
-    private @Nullable Element element;
-    private String folder;
-    private String file;
-    
-    
-    public SourceResolver(Environment environment) {
-        this.environment = environment;
-        this.folder = "";
-        this.file = "Commands";
+    public SourceParser(Logger logger) {
+        this.logger = logger;
     }
-
     
-    public void resolve(Element element) {
-        this.element = element;
-        var emit = element.getAnnotation(Source.class);
-        var value = emit.value();
+    
+    @Override
+    public void parse(Element element, Generation generation) {
+        logger.zone(element);
         
-        if (RELATIVE_PACKAGE.equals(value)) {
-            folder = element.accept(Filter.PACKAGE, null).getQualifiedName().toString();
+        var source = element.getAnnotation(Source.class).value();
+        if (RELATIVE_PACKAGE.equals(source)) {
+            generation.path(element, element.accept(Filter.PACKAGE, null).getQualifiedName().toString(), "Commands");
             return;
             
-        } else if (value.endsWith(".java") || value.endsWith(".class")) {
-            var parts = value.split("\\.");
-            environment.error(element, "File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
+        } else if (source.endsWith(".java") || source.endsWith(".class")) {
+            var parts = source.split("\\.");
+            logger.error("File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
             return;
             
-        }  else if (!PACKAGE.reset(value).matches()) {
-            environment.error(element, "Invalid package name");
+        }  else if (!PACKAGE.reset(source).matches()) {
+            logger.error("Invalid package name");
             return;
         } 
         
-        int dot = value.lastIndexOf(".");
+        int dot = source.lastIndexOf(".");
         if (dot != -1) {
-            folder = value.substring(0, dot);
-            file = value.substring(dot + 1, value.length());
+            generation.path(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
             
         } else {
-            file = value;
+            generation.path(element, "", source);
         }
-    }
-    
-    public @Nullable Element element() {
-        return element;
-    }
-    
-    public String folder() {
-        return folder;
-    }
-    
-    public String file() {
-        return file;
+        
     }
 
 }

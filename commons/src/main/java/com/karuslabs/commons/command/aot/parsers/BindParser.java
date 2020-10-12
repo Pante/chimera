@@ -34,7 +34,7 @@ import javax.lang.model.element.Element;
 
 import static java.util.stream.Collectors.toList;
 
-public class BindParser extends Parser {
+public class BindParser extends TokenParser {
     
     private final Binder binder;
     

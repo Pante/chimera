@@ -23,10 +23,37 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.annotations.processor.*;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Mirrors.Command;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+
+import java.util.*;
 import javax.lang.model.element.*;
 
-public interface Parser<T> {
+public abstract class TokenParser implements Parser<Map<TypeElement, Map<Identifier, Command>>> {
 
-    void parse(Element element, T value);
+    protected final Logger logger;
+    protected final Lexer lexer;
+    
+    public TokenParser(Logger logger, Lexer lexer) {
+        this.logger = logger;
+        this.lexer = lexer;
+    }
+    
+    @Override
+    public void parse(Element element, Map<TypeElement, Map<Identifier, Command>> namespaces) {
+        logger.zone(element);
+        
+        var type = element.accept(Filter.CLASS, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
+        
+        process(element, namespace);
+    }
+    
+    protected abstract void process(Element element, Map<Identifier, Command> namespace);
     
 }

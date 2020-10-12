@@ -43,7 +43,7 @@ import static org.mockito.Mockito.*;
 class ParserTest {
     
     Environment environment = mock(Environment.class);
-    Parser parser = new StubParser(environment, new CommandLexer(new ArgumentLexer(), new LiteralLexer()));
+    TokenParser parser = new StubParser(environment, new CommandLexer(new ArgumentLexer(), new LiteralLexer()));
     
     
     @Test
@@ -70,7 +70,7 @@ class ParserTest {
 
 } 
 
-class StubParser extends Parser {
+class StubParser extends TokenParser {
 
     public StubParser(Environment environment, Lexer lexer) {
         super(environment, lexer);

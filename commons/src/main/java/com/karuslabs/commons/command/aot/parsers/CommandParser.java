@@ -33,7 +33,7 @@ import javax.lang.model.element.*;
 
 import static com.karuslabs.annotations.processor.Messages.quote;
 
-public class CommandParser extends Parser {
+public class CommandParser extends TokenParser {
 
     public CommandParser(Logger logger, Lexer lexer) {
         super(logger, lexer);

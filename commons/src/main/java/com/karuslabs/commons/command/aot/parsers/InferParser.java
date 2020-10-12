@@ -32,7 +32,7 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import java.util.Map;
 import javax.lang.model.element.*;
 
-public class InferParser extends Parser {
+public class InferParser extends TokenParser {
     
     public InferParser(Logger logger, Lexer lexer) {
         super(logger, lexer);

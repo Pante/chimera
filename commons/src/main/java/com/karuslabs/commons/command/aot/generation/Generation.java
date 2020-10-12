@@ -21,12 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.generation;
 
-import javax.lang.model.element.*;
+import com.karuslabs.annotations.Lazy;
+import javax.lang.model.element.Element;
 
-public interface Parser<T> {
+public class Generation {
 
-    void parse(Element element, T value);
+    private @Lazy Element source;
+    private @Lazy String folder;
+    private @Lazy String file;
+    
+    public Generation() {
+    }
+    
+    public void path(Element source, String folder, String file) {
+        this.source = source;
+        this.folder = folder;
+        this.file = file;
+    }
     
 }

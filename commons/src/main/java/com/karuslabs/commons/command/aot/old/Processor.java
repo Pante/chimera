@@ -51,8 +51,8 @@ import static javax.lang.model.SourceVersion.RELEASE_11;
 public class Processor extends AnnotationProcessor {
     
     Environment environment;
-    Parser command;
-    Parser bind;
+    TokenParser command;
+    TokenParser bind;
     Analyzer analyzer;
     SourceResolver source;
     Generator generator;
@@ -112,7 +112,7 @@ public class Processor extends AnnotationProcessor {
     }
     
     
-    void parse(Parser parser, RoundEnvironment round, Class<? extends Annotation> annotation) {
+    void parse(TokenParser parser, RoundEnvironment round, Class<? extends Annotation> annotation) {
         for (var element : round.getElementsAnnotatedWith(annotation)) {
             parser.parse(element);
         }
