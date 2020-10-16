@@ -21,19 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.commons.command.aot.generation.contexts;
 
-import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.Identifier.Type;
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.annotations.Lazy;
 
-public class ArgumentPositionLint implements Lint {
+import javax.lang.model.element.Element;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public class FileContext extends Context<FileContext> {
+
+    private @Lazy Element element;
+    private @Lazy String folder;
+    private @Lazy String file;
+    
+    public void location(Element element, String folder, String file) {
+        this.element = element;
+        this.folder = folder;
+        this.file = file;
+    }
+    
+    public @Nullable Element element() {
+        return element;
+    }
+    
+    public @Nullable String folder() {
+        return folder;
+    }
+    
+    public @Nullable String file() {
+        return file;
+    }
+    
     @Override
-    public void lint(Logger logger, Identifier identifier, Mirrors.Command command) {
-        if (identifier.type == Type.ARGUMENT) {
-            logger.zone(command.site).error(identifier.name, "is at an invalid position", "command should not start with an argument");
-        }
+    protected FileContext self() {
+        return this;
     }
 
 }

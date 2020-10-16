@@ -23,10 +23,13 @@
  */
 package com.karuslabs.annotations.processor;
 
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.*;
 import javax.lang.model.util.*;
 
-public class Typing {
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public final class Typing {
     
     public final Elements elements;
     public final Types types;
@@ -36,15 +39,36 @@ public class Typing {
         this.types = types;
     }
     
-    public final TypeMirror type(Class<?> type) {
+    
+    public @Nullable TypeElement element(TypeMirror type) {
+        var element = types.asElement(type);
+        if (element instanceof TypeElement) {
+            return (TypeElement) element;
+            
+        } else {
+            return null;
+        }
+    }
+    
+    public TypeMirror box(TypeMirror type) {
+        if (type instanceof PrimitiveType) {
+            return types.boxedClass((PrimitiveType) type).asType();
+            
+        } else {
+            return type;
+        }
+    }
+    
+    
+    public TypeMirror type(Class<?> type) {
         return elements.getTypeElement(type.getName()).asType();
     }
     
-    public final TypeMirror erasure(Class<?> type) {
+    public TypeMirror erasure(Class<?> type) {
         return types.erasure(elements.getTypeElement(type.getName()).asType());
     }
     
-    public final TypeMirror specialize(Class<?> type, Class<?>... parameters) {
+    public TypeMirror specialize(Class<?> type, Class<?>... parameters) {
         var mirrors = new TypeMirror[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             mirrors[i] = type(parameters[i]);
@@ -53,7 +77,7 @@ public class Typing {
         return specialize(type, mirrors);
     }
     
-    public final TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
+    public TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
         return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
     }
     

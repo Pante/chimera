@@ -21,19 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.commons.command.aot.generation.blocks;
 
-import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.Identifier.Type;
-import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Mirrors.Method;
+import com.karuslabs.commons.command.aot.generation.contexts.LambdaContext;
 
-public class ArgumentPositionLint implements Lint {
-
+public class LambdaBlock implements Block<LambdaContext, Method> {
+    
+    private final PointerBlock pointer;
+    private final MethodCallBlock call;
+    
+    public LambdaBlock(PointerBlock pointer, MethodCallBlock call) {
+        this.pointer = pointer;
+        this.call = call;
+    }
+    
     @Override
-    public void lint(Logger logger, Identifier identifier, Mirrors.Command command) {
-        if (identifier.type == Type.ARGUMENT) {
-            logger.zone(command.site).error(identifier.name, "is at an invalid position", "command should not start with an argument");
+    public void emit(LambdaContext lambda, Method method) {
+        // TODO generate signature
+        for (var entry : method.parameters.entrySet()) {
+            pointer.emit(lambda, entry);
         }
+        
+        call.emit(lambda, method);
     }
 
 }

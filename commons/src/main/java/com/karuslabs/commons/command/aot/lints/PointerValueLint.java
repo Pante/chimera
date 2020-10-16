@@ -28,7 +28,7 @@ import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Identifier.Type;
 import com.karuslabs.commons.command.aot.Mirrors.*;
 
-import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.*;
 
 import static com.karuslabs.annotations.processor.Messages.quote;
 
@@ -76,9 +76,9 @@ public class PointerValueLint implements Lint {
                 var parameters = argumentType.getTypeArguments();
                 if (parameters.isEmpty()) {
                     logger.zone(member.site).warn(member.site.getSimpleName(), "contains a raw type parameter");
-                    
+                
                 } else {
-                    typing.types.isSubtype(parameters.get(0), pointer.site.asType());
+                    typing.types.isSubtype(parameters.get(0), typing.box(pointer.site.asType()));
                 }
             }
         }

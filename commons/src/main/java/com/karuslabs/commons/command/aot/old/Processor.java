@@ -31,8 +31,6 @@ import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.processor.AnnotationProcessor;
 import com.karuslabs.commons.command.aot.annotations.*;
-import com.karuslabs.commons.command.aot.generation.*;
-import com.karuslabs.commons.command.aot.generation.blocks.*;
 import com.karuslabs.commons.command.aot.lexers.*;
 import com.karuslabs.commons.command.aot.parsers.*;
 import com.karuslabs.commons.command.aot.resolvers.*;

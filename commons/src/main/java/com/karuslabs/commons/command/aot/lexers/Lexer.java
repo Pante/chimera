@@ -40,10 +40,10 @@ class Memoizer {
     
     private final Map<String, Identifier> identifiers = new HashMap<>();
     
-    Token token(Type type, String lexeme, String value, Set<String> aliases) {
+    Token token(Type type, String lexeme, String name, Set<String> aliases) {
         var identifier = identifiers.get(lexeme);
         if (identifier == null) {
-            identifier = new Identifier(type, lexeme, value);
+            identifier = new Identifier(type, lexeme, name);
             identifiers.put(lexeme, identifier);
         }
         

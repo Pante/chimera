@@ -23,10 +23,34 @@
  */
 package com.karuslabs.commons.command.aot.generation.blocks;
 
-import com.karuslabs.commons.command.aot.generation.contexts.Context;
+import com.karuslabs.commons.command.aot.generation.contexts.FileContext;
+import java.time.LocalDateTime;
 
-public interface Block<T extends Context<T>, U> {
-
-    void emit(T context, U value);
+public class HeaderBlock implements Block<FileContext, String> {
     
+    private static final String VERSION = "4.9.0-SNAPSHOT";
+    
+    @Override
+    public void emit(FileContext header, String pack) {
+        if (!pack.isEmpty()) {
+            header.line("package ", pack, ";");
+        }
+        
+        header.line("import com.karuslabs.commons.command.Execution;")
+              .line("import com.karuslabs.commons.command.tree.nodes.*;")
+              .line()
+              .line("import com.mojang.brigadier.Command;")
+              .line("import com.mojang.brigadier.suggestion.SuggestionProvider;")
+              .line("import com.mojang.brigadier.tree.CommandNode;")
+              .line()
+              .line("import java.util.*;")
+              .line("import java.util.function.Predicate;")
+              .line()
+              .line("import org.bukkit.command.CommandSender;")
+              .line()
+              .line("/**")
+              .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
+              .line(" */");
+    }
+
 }

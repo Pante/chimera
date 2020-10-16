@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.annotations.Source;
-import com.karuslabs.commons.command.aot.generation.Generation;
+import com.karuslabs.commons.command.aot.generation.contexts.FileContext;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
@@ -33,7 +33,7 @@ import javax.lang.model.element.Element;
 import static com.karuslabs.annotations.processor.Messages.quote;
 import static com.karuslabs.commons.command.aot.annotations.Source.RELATIVE_PACKAGE;
 
-public class SourceParser implements Parser<Generation> {
+public class SourceParser implements Parser<FileContext> {
 
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
@@ -45,12 +45,12 @@ public class SourceParser implements Parser<Generation> {
     
     
     @Override
-    public void parse(Element element, Generation generation) {
+    public void parse(Element element, FileContext file) {
         logger.zone(element);
         
         var source = element.getAnnotation(Source.class).value();
         if (RELATIVE_PACKAGE.equals(source)) {
-            generation.path(element, element.accept(Filter.PACKAGE, null).getQualifiedName().toString(), "Commands");
+            file.location(element, element.accept(Filter.PACKAGE, null).getQualifiedName().toString(), "Commands");
             return;
             
         } else if (source.endsWith(".java") || source.endsWith(".class")) {
@@ -65,10 +65,10 @@ public class SourceParser implements Parser<Generation> {
         
         int dot = source.lastIndexOf(".");
         if (dot != -1) {
-            generation.path(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
+            file.location(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
             
         } else {
-            generation.path(element, "", source);
+            file.location(element, "", source);
         }
         
     }

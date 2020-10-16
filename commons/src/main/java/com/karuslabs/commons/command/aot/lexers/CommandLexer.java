@@ -43,14 +43,14 @@ public class CommandLexer implements Lexer {
     
     
     @Override
-    public List<Token> lex(Logger logger, String raw) {
-        if (raw.isBlank()) {
+    public List<Token> lex(Logger logger, String line) {
+        if (line.isBlank()) {
             logger.error("Command should not be blank");
             return EMPTY_LIST;
         }
         
         var tokens = new ArrayList<Token>();
-        for (var command : raw.split("\\s+")) {
+        for (var command : line.split("\\s+")) {
             if (command.startsWith("<")) {
                 tokens.addAll(argument.lex(logger, command));
                 

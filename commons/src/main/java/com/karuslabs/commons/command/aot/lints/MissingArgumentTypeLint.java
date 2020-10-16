@@ -42,7 +42,7 @@ public class MissingArgumentTypeLint implements Lint {
             }
         }
         
-        logger.zone(command.site).error(identifier.value, "is missing an argument type", "an ArgumentType<?> should be bound to it");
+        logger.zone(command.site).error(identifier.name, "is missing an argument type", "an ArgumentType<?> should be bound to it");
     }
 
 }

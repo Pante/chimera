@@ -23,13 +23,13 @@
  */
 package com.karuslabs.annotations.processor;
 
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TypingTest {
@@ -40,6 +40,35 @@ class TypingTest {
     Elements elements = when(mock(Elements.class).getTypeElement(int.class.getName())).thenReturn(element).getMock();
     Types types = mock(Types.class);
     Typing typing = new Typing(elements, types);
+    
+    @Test
+    void element_type() {
+        when(types.asElement(type)).thenReturn(element);
+        
+        assertEquals(element, typing.element(type));
+    }
+    
+    @Test
+    void element_primitive() {
+        when(types.asElement(type)).thenReturn(mock(Element.class));
+        
+        assertNull(typing.element(type));
+    }
+    
+    @Test
+    void box_primitive() {
+        var primitive = mock(PrimitiveType.class);
+        when(types.boxedClass(primitive)).thenReturn(element);
+        
+        assertEquals(type, typing.box(primitive));
+        verify(types, times(1)).boxedClass(primitive);
+    }
+    
+    @Test
+    void box_non_primitive() {
+        assertSame(type, typing.box(type));
+        verify(types, never()).boxedClass(any());
+    }
     
     @Test
     void type() {

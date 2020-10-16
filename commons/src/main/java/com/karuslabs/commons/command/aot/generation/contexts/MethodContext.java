@@ -21,19 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.commons.command.aot.generation.contexts;
 
-import com.karuslabs.annotations.processor.Logger;
-import com.karuslabs.commons.command.aot.Identifier.Type;
-import com.karuslabs.commons.command.aot.*;
+public class MethodContext extends Context<MethodContext> {
 
-public class ArgumentPositionLint implements Lint {
-
+    public final String type;
+    public final String parameter;
+    
+    public MethodContext(String type, String parameter) {
+        this.type = type;
+        this.parameter = parameter;
+    }
+    
     @Override
-    public void lint(Logger logger, Identifier identifier, Mirrors.Command command) {
-        if (identifier.type == Type.ARGUMENT) {
-            logger.zone(command.site).error(identifier.name, "is at an invalid position", "command should not start with an argument");
-        }
+    protected MethodContext self() {
+        return this;
     }
 
 }

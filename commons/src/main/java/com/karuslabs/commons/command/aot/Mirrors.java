@@ -48,26 +48,6 @@ public @Static class Mirrors {
 
     }
     
-    
-    public static final class Method extends Member<ExecutableElement> {
-    
-        public final Map<Integer, Pointer> parameters;
-
-        public Method(Identifier identifier, ExecutableElement site, Type type) {
-            super(identifier, site, type);
-            parameters = new HashMap<>();
-        }
-
-    }
-    
-    public static final class Field extends Member<VariableElement> {
-
-        public Field(Identifier identifier, VariableElement site, Type type) {
-            super(identifier, site, type);
-        }
-
-    }
-    
     public static abstract class Member<T extends Element> {
 
         public final Identifier identifier;
@@ -103,6 +83,25 @@ public @Static class Mirrors {
                 return value;
             }
 
+        }
+
+    }
+    
+    public static final class Method extends Member<ExecutableElement> {
+    
+        public final Map<Integer, Pointer> parameters;
+
+        public Method(Identifier identifier, ExecutableElement site, Type type) {
+            super(identifier, site, type);
+            parameters = new HashMap<>();
+        }
+
+    }
+    
+    public static final class Field extends Member<VariableElement> {
+
+        public Field(Identifier identifier, VariableElement site, Type type) {
+            super(identifier, site, type);
         }
 
     }

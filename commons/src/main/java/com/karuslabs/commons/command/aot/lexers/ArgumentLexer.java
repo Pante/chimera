@@ -47,17 +47,17 @@ public class ArgumentLexer implements Lexer {
             return EMPTY_LIST;
         }
         
-        var argument = lexeme.substring(1, lexeme.length() - 1);
-        if (argument.isEmpty()) {
+        var name = lexeme.substring(1, lexeme.length() - 1);
+        if (name.isEmpty()) {
             logger.error(lexeme, "is empty", "an argument should not be empty");
             return EMPTY_LIST;
         }
         
-        if (argument.startsWith("<") || argument.endsWith(">")) {
+        if (name.startsWith("<") || name.endsWith(">")) {
             logger.error(lexeme, "contains trailing \"<\"s or \">\"s");
         }
         
-        return List.of(memoizer.token(ARGUMENT, lexeme, argument, Set.of()));
+        return List.of(memoizer.token(ARGUMENT, lexeme, name, Set.of()));
     }
     
 }

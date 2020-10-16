@@ -25,7 +25,6 @@ package com.karuslabs.commons.command.aot.generation;
 
 import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.generation.blocks.*;
 
 import java.io.*;
 import java.net.URISyntaxException;

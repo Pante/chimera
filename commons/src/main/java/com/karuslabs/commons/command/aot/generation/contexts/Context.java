@@ -21,24 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation;
+package com.karuslabs.commons.command.aot.generation.contexts;
 
-import com.karuslabs.annotations.Lazy;
-import javax.lang.model.element.Element;
-
-public class Generation {
-
-    private @Lazy Element source;
-    private @Lazy String folder;
-    private @Lazy String file;
+public abstract class Context<Self extends Context> {
     
-    public Generation() {
+    // TODO: add support for indentation
+    
+    public final StringBuilder builder = new StringBuilder();;
+    public int count = 0;
+    
+    public Self line(Object element) {
+        builder.append(element).append('\n');
+        return self();
     }
     
-    public void path(Element source, String folder, String file) {
-        this.source = source;
-        this.folder = folder;
-        this.file = file;
+    public Self line(Object... elements) {
+        for (var element : elements) {
+            builder.append(element);
+        }
+        
+        builder.append('\n');
+        return self();
     }
+    
+    protected abstract Self self();
     
 }

@@ -31,12 +31,12 @@ public final @ValueType class Identifier {
     
     public final Type type;
     public final String lexeme;
-    public final String value;
+    public final String name;
     
-    public Identifier(Type type, String lexeme, String value) {
+    public Identifier(Type type, String lexeme, String name) {
         this.type = type;
         this.lexeme = lexeme;
-        this.value = value;
+        this.name = name;
     }
 
     
@@ -51,14 +51,14 @@ public final @ValueType class Identifier {
         } 
         
         var token = (Identifier) other;
-        return type == token.type && value.equals(token.value);
+        return type == token.type && name.equals(token.name);
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 59 * hash + Objects.hashCode(this.type);
-        hash = 59 * hash + Objects.hashCode(this.value);
+        hash = 59 * hash + Objects.hashCode(this.name);
         return hash;
     }
     
