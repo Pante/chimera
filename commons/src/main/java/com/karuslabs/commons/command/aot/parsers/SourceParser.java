@@ -23,15 +23,16 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.*;
-import com.karuslabs.commons.command.aot.annotations.Source;
+import com.karuslabs.smoke.Filter;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.generation.contexts.FileContext;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.annotations.processor.Messages.quote;
-import static com.karuslabs.commons.command.aot.annotations.Source.RELATIVE_PACKAGE;
+import static com.karuslabs.smoke.Messages.quote;
+import static com.karuslabs.commons.command.aot.annotations.Pack.RELATIVE_PACKAGE;
+import com.karuslabs.commons.command.aot.annotations.Pack;
 
 public class SourceParser implements Parser<FileContext> {
 
@@ -48,7 +49,7 @@ public class SourceParser implements Parser<FileContext> {
     public void parse(Element element, FileContext file) {
         logger.zone(element);
         
-        var source = element.getAnnotation(Source.class).value();
+        var source = element.getAnnotation(Pack.class).value();
         if (RELATIVE_PACKAGE.equals(source)) {
             file.location(element, element.accept(Filter.PACKAGE, null).getQualifiedName().toString(), "Commands");
             return;

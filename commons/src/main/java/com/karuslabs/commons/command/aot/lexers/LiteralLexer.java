@@ -23,13 +23,13 @@
  */
 package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.annotations.processor.Logger;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Identifier.Type;
 
 import java.util.*;
 
-import static com.karuslabs.annotations.processor.Messages.*;
+import static com.karuslabs.smoke.Messages.*;
 
 import static java.util.Collections.EMPTY_LIST;
 

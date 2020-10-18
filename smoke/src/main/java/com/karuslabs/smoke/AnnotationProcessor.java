@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.annotations.VisibleForOverride;
 
-import java.util.*;
+import java.util.Set;
+import javax.annotation.processing.*;
+import javax.lang.model.element.*;
+import javax.lang.model.util.*;
 
-import static java.util.Collections.EMPTY_LIST;
-
-public class CommandLexer implements Lexer {
-
-    private final Lexer argument;
-    private final Lexer literal;
+public abstract class AnnotationProcessor extends AbstractProcessor {    
+    
+    protected Elements elements;
+    protected Types types;
+    protected Logger logger;
     
     
-    public CommandLexer(Lexer argument, Lexer literal) {
-        this.argument = argument;
-        this.literal = literal;
+    @Override
+    public void init(ProcessingEnvironment environment) {
+        super.init(environment);
+        elements = environment.getElementUtils();
+        types = environment.getTypeUtils();
+        logger = new Logger(environment.getMessager());
     }
     
     
     @Override
-    public List<Token> lex(Logger logger, String line) {
-        if (line.isBlank()) {
-            logger.error("Command should not be blank");
-            return EMPTY_LIST;
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
+        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
+            process(element);
         }
         
-        var tokens = new ArrayList<Token>();
-        for (var command : line.split("\\s+")) {
-            if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(logger, command));
-                
-            } else {
-                tokens.addAll(literal.lex(logger, command));
-            }
-        }
+        clear();
         
-        return tokens;
+        return false;
+    }
+    
+    @VisibleForOverride
+    protected void process(Element element) {
+        
+    }
+    
+    @VisibleForOverride
+    protected void clear() {
+        
     }
     
 }

@@ -23,8 +23,9 @@
  */
 package com.karuslabs.commons.command.aot.lints.signatures;
 
+import com.karuslabs.smoke.Typing;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.annotations.VisibleForOverride;
-import com.karuslabs.annotations.processor.*;
 import com.karuslabs.commons.command.aot.Mirrors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

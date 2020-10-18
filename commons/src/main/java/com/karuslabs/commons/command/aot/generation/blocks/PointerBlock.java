@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.generation.blocks;
 
-import com.karuslabs.annotations.processor.Typing;
+import com.karuslabs.smoke.Typing;
 import com.karuslabs.commons.command.aot.Mirrors.Pointer;
 import com.karuslabs.commons.command.aot.generation.contexts.LambdaContext;
 

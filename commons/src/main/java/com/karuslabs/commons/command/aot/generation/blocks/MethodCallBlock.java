@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.generation.blocks;
 
-import com.karuslabs.annotations.processor.Typing;
+import com.karuslabs.smoke.Typing;
 import com.karuslabs.commons.command.OptionalContext;
 import com.karuslabs.commons.command.aot.Mirrors.Method;
 import com.karuslabs.commons.command.aot.generation.contexts.LambdaContext;
@@ -37,7 +37,7 @@ import javax.lang.model.type.*;
 
 import org.bukkit.command.CommandSender;
 
-import static com.karuslabs.annotations.processor.Messages.quote;
+import static com.karuslabs.smoke.Messages.quote;
 
 public class MethodCallBlock implements Block<LambdaContext, Method> {
 

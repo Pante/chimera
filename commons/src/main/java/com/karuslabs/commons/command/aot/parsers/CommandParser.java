@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.Logger;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Command;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
@@ -31,7 +31,7 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import java.util.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.annotations.processor.Messages.quote;
+import static com.karuslabs.smoke.Messages.quote;
 
 public class CommandParser extends TokenParser {
 

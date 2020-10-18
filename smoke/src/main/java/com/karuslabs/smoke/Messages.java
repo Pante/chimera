@@ -21,45 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.annotations.Static;
 
-import java.util.*;
-
-import static java.util.Collections.EMPTY_LIST;
-
-public class CommandLexer implements Lexer {
-
-    private final Lexer argument;
-    private final Lexer literal;
+public @Static class Messages {
     
+    public static String format(Object value, String reason) {
+        return quote(value) + " " + reason;
+    }
     
-    public CommandLexer(Lexer argument, Lexer literal) {
-        this.argument = argument;
-        this.literal = literal;
+    public static String format(Object value, String reason, String resolution) {
+        return quote(value) + " " + reason + ", " + resolution;
     }
     
     
-    @Override
-    public List<Token> lex(Logger logger, String line) {
-        if (line.isBlank()) {
-            logger.error("Command should not be blank");
-            return EMPTY_LIST;
-        }
-        
-        var tokens = new ArrayList<Token>();
-        for (var command : line.split("\\s+")) {
-            if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(logger, command));
-                
-            } else {
-                tokens.addAll(literal.lex(logger, command));
-            }
-        }
-        
-        return tokens;
+    public static String quote(Object value) {
+        return "\"" + value + "\"";
     }
     
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2019 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.smoke.AnnotationProcessor;
+import java.util.Set;
+import javax.annotation.processing.*;
+import javax.lang.model.element.*;
 
-import java.util.*;
+import org.junit.jupiter.api.*;
+import org.mockito.junit.jupiter.*;
 
-import static java.util.Collections.EMPTY_LIST;
+import static org.mockito.quality.Strictness.LENIENT;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class CommandLexer implements Lexer {
-
-    private final Lexer argument;
-    private final Lexer literal;
+@MockitoSettings(strictness = LENIENT)
+class AnnotationProcessorTest {
+    
+    AnnotationProcessor processor = spy(new AnnotationProcessor() {});
+    Messager messager = mock(Messager.class);
+    ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
+    Element element = mock(Element.class);
     
     
-    public CommandLexer(Lexer argument, Lexer literal) {
-        this.argument = argument;
-        this.literal = literal;
+    @BeforeEach
+    void before() {
+        processor.init(environment);
     }
     
     
-    @Override
-    public List<Token> lex(Logger logger, String line) {
-        if (line.isBlank()) {
-            logger.error("Command should not be blank");
-            return EMPTY_LIST;
-        }
+    @Test
+    void process() {
+        RoundEnvironment round = mock(RoundEnvironment.class);
+        doReturn(Set.of(mock(Element.class))).when(round).getElementsAnnotatedWithAny(any(TypeElement[].class));
         
-        var tokens = new ArrayList<Token>();
-        for (var command : line.split("\\s+")) {
-            if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(logger, command));
-                
-            } else {
-                tokens.addAll(literal.lex(logger, command));
-            }
-        }
-        
-        return tokens;
+        assertFalse(processor.process(Set.of(), round));
     }
-    
-}
+
+} 

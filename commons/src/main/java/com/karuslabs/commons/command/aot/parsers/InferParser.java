@@ -23,14 +23,15 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.annotations.processor.*;
+import com.karuslabs.smoke.Filter;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Mirrors.*;
-import com.karuslabs.commons.command.aot.annotations.Infer;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 
 import java.util.Map;
 import javax.lang.model.element.*;
+import com.karuslabs.commons.command.aot.annotations.Let;
 
 public class InferParser extends TokenParser {
     
@@ -40,8 +41,8 @@ public class InferParser extends TokenParser {
 
     @Override
     protected void process(Element element, Map<Identifier, Command> namespace) {
-        var line = element.getAnnotation(Infer.class).value();
-        if (line.equals(Infer.INFERRED_ARGUMENT)) {
+        var line = element.getAnnotation(Let.class).value();
+        if (line.equals(Let.INFERRED_ARGUMENT)) {
             line = "<" + element.getSimpleName().toString() + ">";
         }
         

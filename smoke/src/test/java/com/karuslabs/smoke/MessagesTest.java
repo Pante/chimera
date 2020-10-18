@@ -21,45 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.smoke.Messages;
+import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static java.util.Collections.EMPTY_LIST;
-
-public class CommandLexer implements Lexer {
-
-    private final Lexer argument;
-    private final Lexer literal;
+class MessagesTest {
     
-    
-    public CommandLexer(Lexer argument, Lexer literal) {
-        this.argument = argument;
-        this.literal = literal;
+    @Test
+    void format_reason() {
+        assertEquals("\"something\" why", Messages.format("something", "why"));
     }
     
     
-    @Override
-    public List<Token> lex(Logger logger, String line) {
-        if (line.isBlank()) {
-            logger.error("Command should not be blank");
-            return EMPTY_LIST;
-        }
-        
-        var tokens = new ArrayList<Token>();
-        for (var command : line.split("\\s+")) {
-            if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(logger, command));
-                
-            } else {
-                tokens.addAll(literal.lex(logger, command));
-            }
-        }
-        
-        return tokens;
+    @Test
+    void format_reason_resolution() {
+        assertEquals("\"something\" why, how", Messages.format("something", "why", "how"));
     }
     
-}
+    
+    @Test
+    void quote() {
+        assertEquals("\"something\"", Messages.quote("something"));
+    }
+
+} 

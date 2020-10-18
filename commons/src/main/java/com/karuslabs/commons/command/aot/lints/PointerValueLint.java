@@ -23,14 +23,15 @@
  */
 package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.annotations.processor.*;
+import com.karuslabs.smoke.Typing;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Identifier.Type;
 import com.karuslabs.commons.command.aot.Mirrors.*;
 
 import javax.lang.model.type.*;
 
-import static com.karuslabs.annotations.processor.Messages.quote;
+import static com.karuslabs.smoke.Messages.quote;
 
 public class PointerValueLint implements Lint {
 

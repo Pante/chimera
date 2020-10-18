@@ -24,14 +24,7 @@ We went full capitalist and privatized (and finalized) several package private f
 also received an styling update and safety improvements. More importantly, Chimera command code generation has been rewritten
 to support inferred parameters for methods annotated with `@Bind`.
 
-- Add `com.karuslabs.commons.command.aot.lints`
-- Add `com.karuslabs.commons.command.aot.lints.signatures`
-- Add `Binder`
-- Add `@Infer`
-- Add `InferParser`
-- Add `LiteralAliasLexer`
-- Add `Memoizer`
-- Add `SingleLiteralLexer`
+- Add `@Let`
 - Add `BlockDataBuilder`
 - Add `CompassBuilder`
 - Add `ItemBuilder.banner()`
@@ -59,9 +52,7 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Add `PotionBuilder.lingering()`
 - Add `PotionBuilder.potion()`
 - Add `PotionBuilder.splash()`
-- Change classes in `com.karuslabs.commons.command.aot`
-- Change lexical analyzers in `com.karuslabs.commons.command.aot.lexers`
-- Change pasers in `com.karuslabs.commons.command.aot.parsers`
+- Change `@Source` to `@Pack`
 - Change classes in `com.karuslabs.commons.item.builders` to be final
 - Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
 - Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`

@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.annotations.processor.*;
+import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.Identifier;
 import com.karuslabs.commons.command.aot.Mirrors.Command;
 
