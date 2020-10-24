@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke;
+package com.karuslabs.smoke.match;
 
-import java.util.Set;
-import javax.annotation.processing.*;
-import javax.lang.model.element.*;
+import com.karuslabs.smoke.Typing;
 
-import org.junit.jupiter.api.*;
-import org.mockito.junit.jupiter.*;
+import java.util.*;
+import javax.lang.model.element.Element;
 
-import static org.mockito.quality.Strictness.LENIENT;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+@FunctionalInterface
+public interface Match<T extends Element> {
 
-@MockitoSettings(strictness = LENIENT)
-class AnnotationProcessorTest {
+    Map<Element, List<Error>> match(T element, Typing typing);
     
-    AnnotationProcessor processor = spy(new AnnotationProcessor() {});
-    Messager messager = mock(Messager.class);
-    ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
-    Element element = mock(Element.class);
-    
-    
-    @BeforeEach
-    void before() {
-        processor.init(environment);
-    }
-    
-    @Test
-    void process() {
-        RoundEnvironment round = mock(RoundEnvironment.class);
-        doReturn(Set.of(mock(Element.class))).when(round).getElementsAnnotatedWithAny(any(TypeElement[].class));
+    default Match<T> and(Match<T> match) {
         
-        assertFalse(processor.process(Set.of(), round));
     }
-
-} 
+    
+}

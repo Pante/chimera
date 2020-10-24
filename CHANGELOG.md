@@ -6,17 +6,13 @@ This update adds inferred arguments during code generation for the command frame
 
 ### Annotations
 
+Annotation processing related packages have been moved to new project, Smoke.
+
 - Add `@Lazy`
 - Add `@Monad`
 - Add `Logger`
 - Add `Typing`
-- Add `Filter.EXECUTABLE`
-- Remove `AnnotationProcessor.error(String)`
-- Remove `AnnotationProcessor.error(Element, String)`
-- Remove `AnnotationProcessor.note(String)`
-- Remove `AnnotationProcessor.note(Element, String)`
-- Remove `AnnotationProcessor.warn(String)`
-- Remove `AnnotationProcessor.warn(Element, String)`
+- Remove `com.karuslabs.annotations.processor` - package has been moved to Smoke, a new annotation processing project.
 
 ### Commons
 
@@ -68,6 +64,11 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Remove `LeatherArmourBuilder.of(Material)` - replaced with equivalent methods for specific leather armour items
 - Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps
 - Remove `PotionBuilder.of(Material)` replaced with equivalent methods for different potion types
+
+### Smoke
+
+- Add `com.karuslabs.smoke`
+- Add `com.karuslabs.smoke.signature`
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 

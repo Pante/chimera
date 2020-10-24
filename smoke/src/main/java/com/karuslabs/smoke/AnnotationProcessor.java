@@ -36,7 +36,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     protected Types types;
     protected Logger logger;
     
-    
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
@@ -44,7 +43,6 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
         types = environment.getTypeUtils();
         logger = new Logger(environment.getMessager());
     }
-    
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {

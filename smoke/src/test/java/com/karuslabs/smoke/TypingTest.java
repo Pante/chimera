@@ -23,7 +23,6 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Typing;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.*;

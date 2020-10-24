@@ -23,7 +23,6 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Messages;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

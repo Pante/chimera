@@ -37,7 +37,6 @@ public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T,
     public static final Filter<PackageElement> PACKAGE = new PackageFilter();
     public static final Filter<ModuleElement> MODULE = new ModuleFilter();
     
-    
     @Override
     protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
         var enclosing = element.getEnclosingElement();

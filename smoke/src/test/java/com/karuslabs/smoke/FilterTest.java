@@ -23,7 +23,6 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Filter;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 
@@ -75,7 +74,6 @@ class FilterTest {
     void visit(ElementVisitor<Element, Void> visitor, Element element, Element expected) {
         assertEquals(expected, element.accept(visitor, null));
     }
-    
     
     static Stream<Arguments> filters() {
         return Stream.of(

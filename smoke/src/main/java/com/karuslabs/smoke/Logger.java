@@ -35,57 +35,55 @@ import static javax.tools.Diagnostic.Kind.*;
 public class Logger {
 
     private final Messager messager;
-    private @Nullable Element location;
     private boolean error;
     
     public Logger(Messager messager) {
         this.messager = messager;
         this.error = false;
     }
-
     
-    public void error(Object value, String reason, String resolution) {
-        error(format(value, reason, resolution));
+    
+    public void error(@Nullable Element location, Object value, String reason, String resolution) {
+        error(location, format(value, reason, resolution));
     }
     
-    public void error(Object value, String reason) {
-        error(format(value, reason));
+    public void error(@Nullable Element location, Object value, String reason) {
+        error(location, format(value, reason));
     }
     
-    public void error(String message) {
-        print(ERROR, message);
+    public void error(@Nullable Element location, String message) {
+        print(location, ERROR, message);
         error = true;
     }
     
     
-    public void warn(Object value, String reason, String resolution) {
-        warn(format(value, reason, resolution));
+    public void warn(@Nullable Element location, Object value, String reason, String resolution) {
+        warn(location, format(value, reason, resolution));
     }
     
-    public void warn(Object value, String reason) {
-        warn(format(value, reason));
+    public void warn(@Nullable Element location, Object value, String reason) {
+        warn(location, format(value, reason));
     }
     
-    public void warn(String message) {
-        print(WARNING, message);
-    }
-    
-    
-    public void note(Object value, String reason, String resolution) {
-        note(format(value, reason, resolution));
-    }
-    
-    public void note(Object value, String reason) {
-        note(format(value, reason));
-    }
-    
-    public void note(String message) {
-        print(NOTE, message);
+    public void warn(@Nullable Element location, String message) {
+        print(location, WARNING, message);
     }
     
     
+    public void note(@Nullable Element location, Object value, String reason, String resolution) {
+        note(location, format(value, reason, resolution));
+    }
     
-    private void print(Kind kind, String message) {
+    public void note(@Nullable Element location, Object value, String reason) {
+        note(location, format(value, reason));
+    }
+    
+    public void note(@Nullable Element location, String message) {
+        print(location, NOTE, message);
+    }
+    
+    
+    private void print(@Nullable Element location, Kind kind, String message) {
         if (location != null) {
             messager.printMessage(kind, message, location);
             
@@ -93,15 +91,8 @@ public class Logger {
             messager.printMessage(kind, message);
         }
     }
-
-    
-    public Logger zone(@Nullable Element location) {
-        this.location = location;
-        return this;
-    }
     
     public void clear() {
-        location = null;
         error = false;
     }
     

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.smoke.Logger;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.tools.Diagnostic.Kind;
@@ -34,6 +33,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import static com.karuslabs.smoke.Messages.format;
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,20 +43,19 @@ import static org.mockito.Mockito.*;
 
 class LoggerTest {
     
-    static final Element ELEMENT = mock(Element.class);
     static final Messager MESSAGER = mock(Messager.class);
-    static final Logger LOGGER = new Logger(MESSAGER).zone(ELEMENT);
+    static final Logger LOGGER = new Logger(MESSAGER);
     
     Element element = mock(Element.class);
     Messager messager = mock(Messager.class);
-    Logger logger = new Logger(messager).zone(element);
+    Logger logger = new Logger(messager);
     
     @ParameterizedTest
     @MethodSource("log_value_reason_resolution_parameters")
     void log_value_reason_resolution(Log log, Kind kind) {
-        log.accept(1, "reason", "resolution");
+        log.accept(element, 1, "reason", "resolution");
         
-        verify(MESSAGER).printMessage(kind, format(1, "reason", "resolution"), ELEMENT);
+        verify(MESSAGER).printMessage(kind, format(1, "reason", "resolution"), element);
         reset(MESSAGER);
     }
     
@@ -69,62 +69,60 @@ class LoggerTest {
     
     @ParameterizedTest
     @MethodSource("log_value_reason_parameters")
-    void log_value_reason(BiConsumer<Object, String> consumer, Kind kind) {
-        consumer.accept(1, "reason");
+    void log_value_reason(PartialLog log, Kind kind) {
+        log.accept(element, 1, "reason");
         
-        verify(MESSAGER).printMessage(kind, format(1, "reason"), ELEMENT);
+        verify(MESSAGER).printMessage(kind, format(1, "reason"), element);
         reset(MESSAGER);
     }
     
     static Stream<Arguments> log_value_reason_parameters() {
         return Stream.of(
-            of((BiConsumer<Object, String>) LOGGER::error, ERROR),
-            of((BiConsumer<Object, String>) LOGGER::warn, WARNING),
-            of((BiConsumer<Object, String>) LOGGER::note, NOTE)
+            of((PartialLog) LOGGER::error, ERROR),
+            of((PartialLog) LOGGER::warn, WARNING),
+            of((PartialLog) LOGGER::note, NOTE)
         );
     }
     
     @ParameterizedTest
     @MethodSource("log_message_parameters")
-    void log_value(Consumer<String> consumer, Kind kind) {
-        consumer.accept("message");
+    void log_value(BiConsumer<Element, String> consumer, Kind kind) {
+        consumer.accept(element, "message");
         
-        verify(MESSAGER).printMessage(kind, "message", ELEMENT);
+        verify(MESSAGER).printMessage(kind, "message", element);
         reset(MESSAGER);
     }
     
     static Stream<Arguments> log_message_parameters() {
         return Stream.of(
-            of((Consumer<String>) LOGGER::error, ERROR),
-            of((Consumer<String>) LOGGER::warn, WARNING),
-            of((Consumer<String>) LOGGER::note, NOTE)
+            of((BiConsumer<Element, String>) LOGGER::error, ERROR),
+            of((BiConsumer<Element, String>) LOGGER::warn, WARNING),
+            of((BiConsumer<Element, String>) LOGGER::note, NOTE)
         );
-    }
-    
-    
-    @Test
-    void zone() {
-        logger.zone(null).error("message");
-        
-        assertTrue(logger.error());
-        verify(messager).printMessage(ERROR, "message");
     }
     
     @Test
     void clear() {
-        logger.error("first");
+        logger.error(element, "first");
         assertTrue(logger.error());
         
         logger.clear();
         
-        logger.warn("second");
+        logger.warn(element, "second");
         assertFalse(logger.error());
-        verify(messager).printMessage(WARNING, "second");
+        verify(messager).printMessage(WARNING, "second", element);
     }
     
 }
 
 @FunctionalInterface
 interface Log {
-    void accept(Object value, String reason, String resolution);
+    void accept(@Nullable Element location, Object value, String reason, String resolution);
+}
+
+@FunctionalInterface
+interface PartialLog {
+    
+    void accept(@Nullable Element location, Object value, String reason);
+    
 }

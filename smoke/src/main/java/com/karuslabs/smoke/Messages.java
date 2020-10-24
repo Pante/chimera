@@ -25,7 +25,37 @@ package com.karuslabs.smoke;
 
 import com.karuslabs.annotations.Static;
 
+import java.util.Collection;
+
 public @Static class Messages {
+    
+    public static String and(Collection<?> elements) {
+        return join(elements, "and");
+    }
+    
+    public static String or(Collection<?> elements) {
+        return join(elements, "or");
+    }
+    
+    public static String join(Collection<?> elements, String conjunction) {
+        var builder = new StringBuilder();
+        
+        int i = 0;
+        for (var element : elements) {
+            builder.append(element);
+            if (i <  elements.size() - 2) {
+                builder.append(", ");
+                
+            } else if (i < elements.size() - 1) {
+                builder.append(' ').append(conjunction).append(' ');
+            }
+            
+            i++;
+        }
+        
+        return builder.toString();
+    }
+    
     
     public static String format(Object value, String reason) {
         return quote(value) + " " + reason;
