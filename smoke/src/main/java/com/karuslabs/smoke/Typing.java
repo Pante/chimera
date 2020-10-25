@@ -31,6 +31,31 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class Typing {
     
+    public static TypeKind kind(Class<?> type) {
+        switch (type.getName()) {
+            case "boolean":
+                return TypeKind.BOOLEAN;
+            case "byte":
+                return TypeKind.BYTE;
+            case "short":
+                return TypeKind.SHORT;
+            case "int":
+                return TypeKind.INT;
+            case "long":
+                return TypeKind.LONG;
+            case "float":
+                return TypeKind.FLOAT;
+            case "double":
+                return TypeKind.DOUBLE;
+            case "char":
+                return TypeKind.CHAR;
+            case "void":
+                return TypeKind.VOID;
+            default:
+                return TypeKind.DECLARED;
+        }
+    }
+    
     public final Elements elements;
     public final Types types;
     

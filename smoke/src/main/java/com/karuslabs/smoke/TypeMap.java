@@ -21,20 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke.match;
-
-import com.karuslabs.smoke.Typing;
+package com.karuslabs.smoke;
 
 import java.util.*;
-import javax.lang.model.element.Element;
+import javax.lang.model.type.*;
+import javax.lang.model.util.Types;
 
-@FunctionalInterface
-public interface Match<T extends Element> {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-    Map<Element, List<Error>> match(T element, Typing typing);
+public class TypeMap<T> {
+
+    private final Types types;
+    private final Map<TypeKind, T> primitives;
+    private final Map<TypeMirror, T> declared;
     
-    default Match<T> and(Match<T> match) {
-        
+    public TypeMap(Types types, Map<TypeKind, T> primitives, Map<TypeMirror, T> declared) {
+        this.types = types;
+        this.primitives = primitives;
+        this.declared = declared;
+    }
+    
+    public @Nullable T exactly(TypeMirror type) {
+        var mapped = primitives.get(type.getKind());
+        if (mapped == null) {
+            for (var entry : declared.entrySet()) {
+                if (types.isSameType(entry.getKey(), type)) {
+                    return entry.getValue();
+                }
+            }
+        }
+        return mapped;
     }
     
 }
