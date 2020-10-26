@@ -20,9 +20,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 <details>
     <summary>
-    
-        **Version Compatibility**
-        
+        <b>Version Compatibility</b>
     </summary>
 
 | Chimera Version | Minecraft Version |
