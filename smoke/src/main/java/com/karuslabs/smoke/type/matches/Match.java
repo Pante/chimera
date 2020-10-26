@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke.matches;
+package com.karuslabs.smoke.type.matches;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.util.Types;
