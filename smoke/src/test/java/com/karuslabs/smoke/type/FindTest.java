@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke;
+package com.karuslabs.smoke.type;
 
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
-class FilterTest {
+class FindTest {
     
     static final Element MODULE;
     static final Element PACKAGE;
@@ -70,35 +70,35 @@ class FilterTest {
     
     
     @ParameterizedTest
-    @MethodSource("filters")
+    @MethodSource("finders")
     void visit(ElementVisitor<Element, Void> visitor, Element element, Element expected) {
         assertEquals(expected, element.accept(visitor, null));
     }
     
-    static Stream<Arguments> filters() {
+    static Stream<Arguments> finders() {
         return Stream.of(
-            of(Filter.EXECUTABLE, MODULE, null),
-            of(Filter.EXECUTABLE, PACKAGE, null),
-            of(Filter.EXECUTABLE, TYPE, null),
-            of(Filter.EXECUTABLE, EXECUTABLE, EXECUTABLE),
-            of(Filter.EXECUTABLE, DEFAULT, null),
-            of(Filter.EXECUTABLE, ENCLOSED, null),
+            of(Find.EXECUTABLE, MODULE, null),
+            of(Find.EXECUTABLE, PACKAGE, null),
+            of(Find.EXECUTABLE, TYPE, null),
+            of(Find.EXECUTABLE, EXECUTABLE, EXECUTABLE),
+            of(Find.EXECUTABLE, DEFAULT, null),
+            of(Find.EXECUTABLE, ENCLOSED, null),
             
-            of(Filter.CLASS, MODULE, null),
-            of(Filter.CLASS, PACKAGE, null),
-            of(Filter.CLASS, TYPE, TYPE),
-            of(Filter.CLASS, DEFAULT, null),
-            of(Filter.CLASS, ENCLOSED, null),
+            of(Find.TYPE, MODULE, null),
+            of(Find.TYPE, PACKAGE, null),
+            of(Find.TYPE, TYPE, TYPE),
+            of(Find.TYPE, DEFAULT, null),
+            of(Find.TYPE, ENCLOSED, null),
             
-            of(Filter.PACKAGE, MODULE, null),
-            of(Filter.PACKAGE, PACKAGE, PACKAGE),
-            of(Filter.PACKAGE, TYPE, null),
-            of(Filter.PACKAGE, ENCLOSED, null),
+            of(Find.PACKAGE, MODULE, null),
+            of(Find.PACKAGE, PACKAGE, PACKAGE),
+            of(Find.PACKAGE, TYPE, null),
+            of(Find.PACKAGE, ENCLOSED, null),
             
-            of(Filter.MODULE, MODULE, MODULE),
-            of(Filter.MODULE, PACKAGE, null),
-            of(Filter.MODULE, TYPE, null),
-            of(Filter.MODULE, ENCLOSED, MODULE)
+            of(Find.MODULE, MODULE, MODULE),
+            of(Find.MODULE, PACKAGE, null),
+            of(Find.MODULE, TYPE, null),
+            of(Find.MODULE, ENCLOSED, MODULE)
         );
     }
 

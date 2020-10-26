@@ -35,52 +35,50 @@ import org.junit.jupiter.params.provider.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.smoke.Messages.format;
+import static com.karuslabs.smoke.Format.format;
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
-class LoggerTest {
+class LogTest {
     
     static final Messager MESSAGER = mock(Messager.class);
-    static final Logger LOGGER = new Logger(MESSAGER);
+    static final Log LOG = new Log(MESSAGER);
     
     Element element = mock(Element.class);
     Messager messager = mock(Messager.class);
-    Logger logger = new Logger(messager);
+    Log log = new Log(messager);
     
     @ParameterizedTest
     @MethodSource("log_value_reason_resolution_parameters")
-    void log_value_reason_resolution(Log log, Kind kind) {
-        log.accept(element, 1, "reason", "resolution");
+    void log_value_reason_resolution(Printer consumer, Kind kind) {
+        consumer.accept(element, 1, "reason", "resolution");
         
         verify(MESSAGER).printMessage(kind, format(1, "reason", "resolution"), element);
         reset(MESSAGER);
     }
     
     static Stream<Arguments> log_value_reason_resolution_parameters() {
-        return Stream.of(
-            of((Log) LOGGER::error, ERROR),
-            of((Log) LOGGER::warn, WARNING),
-            of((Log) LOGGER::note, NOTE)
+        return Stream.of(of((Printer) LOG::error, ERROR),
+            of((Printer) LOG::warn, WARNING),
+            of((Printer) LOG::note, NOTE)
         );
     }
     
     @ParameterizedTest
     @MethodSource("log_value_reason_parameters")
-    void log_value_reason(PartialLog log, Kind kind) {
-        log.accept(element, 1, "reason");
+    void log_value_reason(PartialPrinter printer, Kind kind) {
+        printer.accept(element, 1, "reason");
         
         verify(MESSAGER).printMessage(kind, format(1, "reason"), element);
         reset(MESSAGER);
     }
     
     static Stream<Arguments> log_value_reason_parameters() {
-        return Stream.of(
-            of((PartialLog) LOGGER::error, ERROR),
-            of((PartialLog) LOGGER::warn, WARNING),
-            of((PartialLog) LOGGER::note, NOTE)
+        return Stream.of(of((PartialPrinter) LOG::error, ERROR),
+            of((PartialPrinter) LOG::warn, WARNING),
+            of((PartialPrinter) LOG::note, NOTE)
         );
     }
     
@@ -94,34 +92,33 @@ class LoggerTest {
     }
     
     static Stream<Arguments> log_message_parameters() {
-        return Stream.of(
-            of((BiConsumer<Element, String>) LOGGER::error, ERROR),
-            of((BiConsumer<Element, String>) LOGGER::warn, WARNING),
-            of((BiConsumer<Element, String>) LOGGER::note, NOTE)
+        return Stream.of(of((BiConsumer<Element, String>) LOG::error, ERROR),
+            of((BiConsumer<Element, String>) LOG::warn, WARNING),
+            of((BiConsumer<Element, String>) LOG::note, NOTE)
         );
     }
     
     @Test
     void clear() {
-        logger.error(element, "first");
-        assertTrue(logger.error());
+        log.error(element, "first");
+        assertTrue(log.error());
         
-        logger.clear();
+        log.clear();
         
-        logger.warn(element, "second");
-        assertFalse(logger.error());
+        log.warn(element, "second");
+        assertFalse(log.error());
         verify(messager).printMessage(WARNING, "second", element);
     }
     
 }
 
 @FunctionalInterface
-interface Log {
+interface Printer {
     void accept(@Nullable Element location, Object value, String reason, String resolution);
 }
 
 @FunctionalInterface
-interface PartialLog {
+interface PartialPrinter {
     
     void accept(@Nullable Element location, Object value, String reason);
     

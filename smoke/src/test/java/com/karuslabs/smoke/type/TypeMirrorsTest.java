@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke;
+package com.karuslabs.smoke.type;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -32,14 +32,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TypingTest {
+class TypeMirrorsTest {
  
     TypeMirror mirror = mock(TypeMirror.class);
     TypeMirror type = mock(TypeMirror.class);
     TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(type).getMock();
     Elements elements = when(mock(Elements.class).getTypeElement(int.class.getName())).thenReturn(element).getMock();
     Types types = mock(Types.class);
-    Typing typing = new Typing(elements, types);
+    TypeMirrors typing = new TypeMirrors(elements, types);
     
     @Test
     void element_type() {

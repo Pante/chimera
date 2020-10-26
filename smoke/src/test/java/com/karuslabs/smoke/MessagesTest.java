@@ -31,19 +31,19 @@ class MessagesTest {
     
     @Test
     void format_reason() {
-        assertEquals("\"something\" why", Messages.format("something", "why"));
+        assertEquals("\"something\" why", Format.format("something", "why"));
     }
     
     
     @Test
     void format_reason_resolution() {
-        assertEquals("\"something\" why, how", Messages.format("something", "why", "how"));
+        assertEquals("\"something\" why, how", Format.format("something", "why", "how"));
     }
     
     
     @Test
     void quote() {
-        assertEquals("\"something\"", Messages.quote("something"));
+        assertEquals("\"something\"", Format.quote("something"));
     }
 
 } 

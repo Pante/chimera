@@ -29,15 +29,15 @@ import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.smoke.Messages.format;
+import static com.karuslabs.smoke.Format.format;
 import static javax.tools.Diagnostic.Kind.*;
 
-public class Logger {
+public class Log {
 
     private final Messager messager;
     private boolean error;
     
-    public Logger(Messager messager) {
+    public Log(Messager messager) {
         this.messager = messager;
         this.error = false;
     }

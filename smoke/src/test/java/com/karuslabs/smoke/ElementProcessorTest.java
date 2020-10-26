@@ -35,9 +35,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @MockitoSettings(strictness = LENIENT)
-class AnnotationProcessorTest {
+class ElementProcessorTest {
     
-    AnnotationProcessor processor = spy(new AnnotationProcessor() {});
+    ElementProcessor processor = spy(new ElementProcessor() {
+        @Override
+        protected void process(Element element) {}
+    });
     Messager messager = mock(Messager.class);
     ProcessingEnvironment environment = when(mock(ProcessingEnvironment.class).getMessager()).thenReturn(messager).getMock();
     Element element = mock(Element.class);

@@ -23,46 +23,24 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.annotations.VisibleForOverride;
+import com.karuslabs.smoke.type.TypeMirrors;
+import com.karuslabs.annotations.*;
 
-import java.util.Set;
 import javax.annotation.processing.*;
-import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 public abstract class AnnotationProcessor extends AbstractProcessor {    
     
-    protected Elements elements;
-    protected Types types;
-    protected Logger logger;
+    protected @Lazy Elements elements;
+    protected @Lazy TypeMirrors types;
+    protected @Lazy Log log;
     
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
         elements = environment.getElementUtils();
-        types = environment.getTypeUtils();
-        logger = new Logger(environment.getMessager());
-    }
-    
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
-        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
-            process(element);
-        }
-        
-        clear();
-        
-        return false;
-    }
-    
-    @VisibleForOverride
-    protected void process(Element element) {
-        
-    }
-    
-    @VisibleForOverride
-    protected void clear() {
-        
+        types = new TypeMirrors(elements, environment.getTypeUtils());
+        log = new Log(environment.getMessager());
     }
     
 }

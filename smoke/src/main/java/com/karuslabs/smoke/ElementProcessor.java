@@ -23,51 +23,31 @@
  */
 package com.karuslabs.smoke;
 
-import com.karuslabs.annotations.Static;
+import com.karuslabs.annotations.VisibleForOverride;
 
-import java.util.Collection;
+import java.util.Set;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
-public @Static class Messages {
-    
-    public static String and(Collection<?> elements) {
-        return join(elements, "and");
-    }
-    
-    public static String or(Collection<?> elements) {
-        return join(elements, "or");
-    }
-    
-    public static String join(Collection<?> elements, String conjunction) {
-        var builder = new StringBuilder();
-        
-        int i = 0;
-        for (var element : elements) {
-            builder.append(element);
-            if (i <  elements.size() - 2) {
-                builder.append(", ");
-                
-            } else if (i < elements.size() - 1) {
-                builder.append(' ').append(conjunction).append(' ');
-            }
-            
-            i++;
+public abstract class ElementProcessor extends AnnotationProcessor {
+
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
+        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
+            process(element);
         }
         
-        return builder.toString();
+        clear();
+        
+        return false;
     }
     
+    protected abstract void process(Element element);
     
-    public static String format(Object value, String reason) {
-        return quote(value) + " " + reason;
-    }
-    
-    public static String format(Object value, String reason, String resolution) {
-        return quote(value) + " " + reason + ", " + resolution;
-    }
-    
-    
-    public static String quote(Object value) {
-        return "\"" + value + "\"";
+    @VisibleForOverride
+    protected void clear() {
+        
     }
     
 }

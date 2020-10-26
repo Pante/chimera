@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke;
+package com.karuslabs.smoke.type;
 
 import com.karuslabs.annotations.*;
 
@@ -30,12 +30,12 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T, Void> {
+public abstract class Find<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
-    public static final Filter<ExecutableElement> EXECUTABLE = new ExecutableFilter();
-    public static final Filter<TypeElement> CLASS = new ClassFilter();
-    public static final Filter<PackageElement> PACKAGE = new PackageFilter();
-    public static final Filter<ModuleElement> MODULE = new ModuleFilter();
+    public static final Find<ExecutableElement> EXECUTABLE = new FindExecutable();
+    public static final Find<TypeElement> TYPE = new FindType();
+    public static final Find<PackageElement> PACKAGE = new FindPackage();
+    public static final Find<ModuleElement> MODULE = new FindModule();
     
     @Override
     protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
@@ -45,7 +45,7 @@ public abstract class Filter<T extends Element> extends SimpleElementVisitor9<T,
     
 }
 
-class ExecutableFilter extends Filter<ExecutableElement> {
+class FindExecutable extends Find<ExecutableElement> {
     
     @Override
     public @Nullable ExecutableElement visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -69,7 +69,7 @@ class ExecutableFilter extends Filter<ExecutableElement> {
     
 }
 
-class ClassFilter extends Filter<TypeElement> {
+class FindType extends Find<TypeElement> {
     
     @Override
     public @Nullable TypeElement visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -88,7 +88,7 @@ class ClassFilter extends Filter<TypeElement> {
     
 }
 
-class PackageFilter extends Filter<PackageElement> {
+class FindPackage extends Find<PackageElement> {
     
     @Override
     public @Nullable PackageElement visitModule(ModuleElement element, @Ignored Void parameter) {
@@ -103,7 +103,7 @@ class PackageFilter extends Filter<PackageElement> {
     
 }
 
-class ModuleFilter extends Filter<ModuleElement> {
+class FindModule extends Find<ModuleElement> {
     
     @Override
     public @Nullable ModuleElement visitModule(ModuleElement element, @Ignored Void parameter) {
