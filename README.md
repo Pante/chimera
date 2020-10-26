@@ -19,7 +19,10 @@ Karus Labs' mono-repository for spigot libraries & tools.
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
 <details>
-    <summary>**Version Compatibility**</summary>
+    <summary>
+        **Version Compatibility**
+    </summary>
+
     | Chimera Version | Minecraft Version |
     |-----------------|-------------------|
     | 4.8.0           | 1.16.3            |
