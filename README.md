@@ -18,13 +18,16 @@ Karus Labs' mono-repository for spigot libraries & tools.
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Chimera/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-| Chimera Version | Minecraft Version |
-|-----------------|-------------------|
-| 4.8.0           | 1.16.3            |
-| 4.7.1           | 1.16.1            |
-| 4.6.1           | 1.15.2            |
-| 4.3.0           | 1.14 - 1.14.4     |
-| 4.1.0           | 1.13.2            |
+<details>
+    <summary>**Version Compatibility**</summary>
+    | Chimera Version | Minecraft Version |
+    |-----------------|-------------------|
+    | 4.8.0           | 1.16.3            |
+    | 4.7.1           | 1.16.1            |
+    | 4.6.1           | 1.15.2            |
+    | 4.3.0           | 1.14 - 1.14.4     |
+    | 4.1.0           | 1.13.2            |
+</details>
 
 #### Maven Repository
 ```XML

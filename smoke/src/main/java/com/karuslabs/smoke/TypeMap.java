@@ -32,10 +32,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class TypeMap<T> {
 
     private final Types types;
-    private final Map<TypeKind, T> primitives;
+    private final EnumMap<TypeKind, T> primitives;
     private final Map<TypeMirror, T> declared;
     
-    public TypeMap(Types types, Map<TypeKind, T> primitives, Map<TypeMirror, T> declared) {
+    public TypeMap(Types types, EnumMap<TypeKind, T> primitives, Map<TypeMirror, T> declared) {
         this.types = types;
         this.primitives = primitives;
         this.declared = declared;
@@ -46,6 +46,30 @@ public class TypeMap<T> {
         if (mapped == null) {
             for (var entry : declared.entrySet()) {
                 if (types.isSameType(entry.getKey(), type)) {
+                    return entry.getValue();
+                }
+            }
+        }
+        return mapped;
+    }
+    
+    public @Nullable T subtype(TypeMirror type) {
+        var mapped = primitives.get(type.getKind());
+        if (mapped == null) {
+            for (var entry : declared.entrySet()) {
+                if (types.isAssignable(type, entry.getKey())) {
+                    return entry.getValue();
+                }
+            }
+        }
+        return mapped;
+    }
+    
+    public @Nullable T supertype(TypeMirror type) {
+        var mapped = primitives.get(type.getKind());
+        if (mapped == null) {
+            for (var entry : declared.entrySet()) {
+                if (types.isAssignable(entry.getKey(), type)) {
                     return entry.getValue();
                 }
             }
