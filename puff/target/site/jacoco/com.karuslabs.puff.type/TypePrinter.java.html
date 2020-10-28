@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TypePrinter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Puff</a> &gt; <a href="index.source.html" class="el_package">com.karuslabs.puff.type</a> &gt; <span class="el_source">TypePrinter.java</span></div><h1>TypePrinter.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright 2020 Karus Labs.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.karuslabs.puff.type;
+
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.SimpleTypeVisitor9;
+
+<span class="nc" id="L30">public abstract class TypePrinter extends SimpleTypeVisitor9&lt;Void, StringBuilder&gt; {</span>
+
+<span class="nc" id="L32">    public static final TypePrinter QUALIFIED = new QualifiedTypePrinter();</span>
+<span class="nc" id="L33">    public static final TypePrinter SIMPLE = new SimpleTypePrinter();</span>
+    
+    public static String qualified(TypeMirror type) {
+<span class="nc" id="L36">        var builder = new StringBuilder();</span>
+<span class="nc" id="L37">        type.accept(QUALIFIED, builder);</span>
+<span class="nc" id="L38">        return builder.toString();</span>
+    }
+    
+    public static String simple(TypeMirror type) {
+<span class="nc" id="L42">        var builder = new StringBuilder();</span>
+<span class="nc" id="L43">        type.accept(SIMPLE, builder);</span>
+<span class="nc" id="L44">        return builder.toString();</span>
+    }
+    
+    
+    @Override
+    public Void visitDeclared(DeclaredType type, StringBuilder builder) {
+<span class="nc" id="L50">        rawType(type, builder);</span>
+<span class="nc" id="L51">        var arguments = type.getTypeArguments();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!arguments.isEmpty()) {</span>
+<span class="nc" id="L53">            builder.append('&lt;');</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            for (int i = 0; i &lt; arguments.size() - 1; i++) {</span>
+<span class="nc" id="L55">                arguments.get(i).accept(this, builder);</span>
+<span class="nc" id="L56">                builder.append(&quot;, &quot;);</span>
+            }
+<span class="nc" id="L58">            arguments.get(arguments.size() - 1).accept(this, builder);</span>
+<span class="nc" id="L59">            builder.append('&gt;');</span>
+        }
+
+<span class="nc" id="L62">        return null;</span>
+    }
+    
+    @Override
+    public Void visitTypeVariable(TypeVariable variable, StringBuilder builder) {
+<span class="nc" id="L67">        builder.append((TypeParameterElement) variable.asElement().getSimpleName());</span>
+        
+        // We do this to ignore the default T extends Object upper bound
+<span class="nc" id="L70">        var upper = variable.getUpperBound();</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (!TypeMirrors.isType(upper, Object.class)) {</span>
+<span class="nc" id="L72">            upper.accept(this, builder.append(&quot; extends &quot;));</span>
+        }
+        
+<span class="nc" id="L75">        var lower = variable.getLowerBound();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (lower.getKind() != TypeKind.NULL) {</span>
+<span class="nc" id="L77">            lower.accept(this, builder.append(&quot; super &quot;));</span>
+        }
+        
+<span class="nc" id="L80">        return null;</span>
+    }
+    
+    @Override
+    public Void visitWildcard(WildcardType type, StringBuilder builder) {
+<span class="nc" id="L85">        builder.append('?');</span>
+        
+<span class="nc" id="L87">        var extension = type.getExtendsBound();</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (extension != null) {</span>
+<span class="nc" id="L89">            extension.accept(this, builder.append(&quot; extends &quot;));</span>
+        }
+        
+<span class="nc" id="L92">        var superBound = type.getSuperBound();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (superBound != null) {</span>
+<span class="nc" id="L94">            superBound.accept(this, builder.append(&quot; super &quot;));</span>
+        }
+        
+<span class="nc" id="L97">        return null;</span>
+    }
+    
+    @Override
+    public Void visitIntersection(IntersectionType intersection, StringBuilder builder) {
+<span class="nc" id="L102">        var bounds = intersection.getBounds();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (bounds.isEmpty()) {</span>
+<span class="nc" id="L104">            return null;</span>
+        }
+        
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        for (int i = 0; i &lt; bounds.size() - 1; i++) {</span>
+<span class="nc" id="L108">            bounds.get(i).accept(this, builder);</span>
+<span class="nc" id="L109">            builder.append(&quot; &amp; &quot;);</span>
+        }
+        
+<span class="nc" id="L112">        bounds.get(bounds.size() - 1).accept(this, builder);</span>
+<span class="nc" id="L113">        return null;</span>
+    }
+    
+    @Override
+    public Void visitArray(ArrayType type, StringBuilder builder) {
+<span class="nc" id="L118">        type.getComponentType().accept(this, builder);</span>
+<span class="nc" id="L119">        builder.append(&quot;[]&quot;);</span>
+<span class="nc" id="L120">        return null;</span>
+    }
+    
+    @Override
+    public Void visitPrimitive(PrimitiveType type, StringBuilder builder) {
+<span class="nc" id="L125">        builder.append(type.getKind().toString().toLowerCase());</span>
+<span class="nc" id="L126">        return null;</span>
+    }
+    
+    @Override
+    protected Void defaultAction(TypeMirror type, StringBuilder builder) {
+<span class="nc" id="L131">        builder.setLength(0);</span>
+<span class="nc" id="L132">        throw new UnsupportedOperationException(&quot;TypePrinter does not support &quot; + type.getKind());</span>
+    }
+    
+    protected abstract void rawType(DeclaredType type, StringBuilder builder);
+    
+}
+
+<span class="nc" id="L139">class QualifiedTypePrinter extends TypePrinter {</span>
+    @Override
+    protected void rawType(DeclaredType type, StringBuilder builder) {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (type.asElement() instanceof TypeElement) {</span>
+<span class="nc" id="L143">            var element = (TypeElement) type.asElement();</span>
+<span class="nc" id="L144">            builder.append(element.getQualifiedName().toString());</span>
+<span class="nc" id="L145">        } else {</span>
+<span class="nc" id="L146">            throw new IllegalStateException(&quot;DeclaredType should be a TypeElement&quot;);</span>
+        }
+        
+<span class="nc" id="L149">    }</span>
+}
+
+<span class="nc" id="L152">class SimpleTypePrinter extends TypePrinter {</span>
+    @Override
+    protected void rawType(DeclaredType type, StringBuilder builder) {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (type.asElement() instanceof TypeElement) {</span>
+<span class="nc" id="L156">            var element = (TypeElement) type.asElement();</span>
+<span class="nc" id="L157">            var pack = element.accept(Find.PACKAGE, null).getQualifiedName().toString();</span>
+<span class="nc" id="L158">            var qualified = element.getQualifiedName().toString();</span>
+            
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (pack.isEmpty()) {</span>
+<span class="nc" id="L161">                builder.append(qualified);</span>
+                
+            } else {
+<span class="nc" id="L164">                builder.append(qualified.substring(pack.length() + 1));</span>
+            }
+            
+<span class="nc" id="L167">        } else {</span>
+<span class="nc" id="L168">            throw new IllegalStateException(&quot;DeclaredType should be a TypeElement&quot;);</span>
+        }
+<span class="nc" id="L170">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

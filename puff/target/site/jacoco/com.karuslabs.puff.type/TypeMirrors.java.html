@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TypeMirrors.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Puff</a> &gt; <a href="index.source.html" class="el_package">com.karuslabs.puff.type</a> &gt; <span class="el_source">TypeMirrors.java</span></div><h1>TypeMirrors.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright 2020 Karus Labs.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.karuslabs.puff.type;
+
+import java.util.List;
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public final class TypeMirrors implements Types {   
+    
+    public static boolean isType(TypeMirror type, Class&lt;?&gt; expected) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (!(type instanceof DeclaredType)) {</span>
+<span class="nc" id="L37">            return false;</span>
+        }
+        
+<span class="nc" id="L40">        var element = ((DeclaredType) type).asElement();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (!(element instanceof TypeElement)) {</span>
+<span class="nc" id="L42">            return false;</span>
+        }
+        
+<span class="nc" id="L45">        return ((TypeElement) element).getQualifiedName().contentEquals(expected.getName());</span>
+    }
+    
+    public static TypeKind kind(Class&lt;?&gt; type) {
+<span class="nc bnc" id="L49" title="All 10 branches missed.">        switch (type.getName()) {</span>
+            case &quot;boolean&quot;:
+<span class="nc" id="L51">                return TypeKind.BOOLEAN;</span>
+            case &quot;byte&quot;:
+<span class="nc" id="L53">                return TypeKind.BYTE;</span>
+            case &quot;short&quot;:
+<span class="nc" id="L55">                return TypeKind.SHORT;</span>
+            case &quot;int&quot;:
+<span class="nc" id="L57">                return TypeKind.INT;</span>
+            case &quot;long&quot;:
+<span class="nc" id="L59">                return TypeKind.LONG;</span>
+            case &quot;float&quot;:
+<span class="nc" id="L61">                return TypeKind.FLOAT;</span>
+            case &quot;double&quot;:
+<span class="nc" id="L63">                return TypeKind.DOUBLE;</span>
+            case &quot;char&quot;:
+<span class="nc" id="L65">                return TypeKind.CHAR;</span>
+            case &quot;void&quot;:
+<span class="nc" id="L67">                return TypeKind.VOID;</span>
+            default:
+<span class="nc" id="L69">                return TypeKind.DECLARED;</span>
+        }
+    }
+    
+    
+    private final Elements elements;
+    private final Types types;
+    
+<span class="fc" id="L77">    public TypeMirrors(Elements elements, Types types) {</span>
+<span class="fc" id="L78">        this.elements = elements;</span>
+<span class="fc" id="L79">        this.types = types;</span>
+<span class="fc" id="L80">    }</span>
+    
+    
+    public @Nullable TypeElement element(TypeMirror type) {
+<span class="fc" id="L84">        var element = types.asElement(type);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (element instanceof TypeElement) {</span>
+<span class="fc" id="L86">            return (TypeElement) element;</span>
+            
+        } else {
+<span class="fc" id="L89">            return null;</span>
+        }
+    }
+    
+    public TypeMirror box(TypeMirror type) {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (type instanceof PrimitiveType) {</span>
+<span class="fc" id="L95">            return types.boxedClass((PrimitiveType) type).asType();</span>
+            
+        } else {
+<span class="fc" id="L98">            return type;</span>
+        }
+    }
+    
+    
+    public TypeMirror type(Class&lt;?&gt; type) {
+<span class="fc" id="L104">        return elements.getTypeElement(type.getName()).asType();</span>
+    }
+    
+    public TypeMirror erasure(Class&lt;?&gt; type) {
+<span class="fc" id="L108">        return types.erasure(elements.getTypeElement(type.getName()).asType());</span>
+    }
+    
+    public TypeMirror specialize(Class&lt;?&gt; type, Class&lt;?&gt;... parameters) {
+<span class="fc" id="L112">        var mirrors = new TypeMirror[parameters.length];</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (int i = 0; i &lt; parameters.length; i++) {</span>
+<span class="fc" id="L114">            mirrors[i] = type(parameters[i]);</span>
+        }
+        
+<span class="fc" id="L117">        return specialize(type, mirrors);</span>
+    }
+    
+    public TypeMirror specialize(Class&lt;?&gt; type, TypeMirror... parameters) {
+<span class="fc" id="L121">        return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);</span>
+    }
+
+    
+    @Override
+    public Element asElement(TypeMirror t) {
+<span class="nc" id="L127">        return types.asElement(t);</span>
+    }
+
+    @Override
+    public boolean isSameType(TypeMirror t1, TypeMirror t2) {
+<span class="nc" id="L132">        return types.isSameType(t1, t2);</span>
+    }
+
+    @Override
+    public boolean isSubtype(TypeMirror t1, TypeMirror t2) {
+<span class="nc" id="L137">        return types.isSubtype(t1, t2);</span>
+    }
+
+    @Override
+    public boolean isAssignable(TypeMirror t1, TypeMirror t2) {
+<span class="nc" id="L142">        return types.isAssignable(t1, t2);</span>
+    }
+
+    @Override
+    public boolean contains(TypeMirror t1, TypeMirror t2) {
+<span class="nc" id="L147">        return types.contains(t1, t2);</span>
+    }
+
+    @Override
+    public boolean isSubsignature(ExecutableType m1, ExecutableType m2) {
+<span class="nc" id="L152">        return types.isSubsignature(m1, m2);</span>
+    }
+
+    @Override
+    public List&lt;? extends TypeMirror&gt; directSupertypes(TypeMirror t) {
+<span class="nc" id="L157">        return types.directSupertypes(t);</span>
+    }
+
+    @Override
+    public TypeMirror erasure(TypeMirror t) {
+<span class="nc" id="L162">        return types.erasure(t);</span>
+    }
+
+    @Override
+    public TypeElement boxedClass(PrimitiveType p) {
+<span class="nc" id="L167">        return types.boxedClass(p);</span>
+    }
+
+    @Override
+    public PrimitiveType unboxedType(TypeMirror t) {
+<span class="nc" id="L172">        return types.unboxedType(t);</span>
+    }
+
+    @Override
+    public TypeMirror capture(TypeMirror t) {
+<span class="nc" id="L177">        return types.capture(t);</span>
+    }
+
+    @Override
+    public PrimitiveType getPrimitiveType(TypeKind kind) {
+<span class="nc" id="L182">        return types.getPrimitiveType(kind);</span>
+    }
+
+    @Override
+    public NullType getNullType() {
+<span class="nc" id="L187">        return types.getNullType();</span>
+    }
+
+    @Override
+    public NoType getNoType(TypeKind kind) {
+<span class="nc" id="L192">        return types.getNoType(kind);</span>
+    }
+
+    @Override
+    public ArrayType getArrayType(TypeMirror componentType) {
+<span class="nc" id="L197">        return types.getArrayType(componentType);</span>
+    }
+
+    @Override
+    public WildcardType getWildcardType(TypeMirror extendsBound, TypeMirror superBound) {
+<span class="nc" id="L202">        return types.getWildcardType(extendsBound, superBound);</span>
+    }
+
+    @Override
+    public DeclaredType getDeclaredType(TypeElement typeElem, TypeMirror... typeArgs) {
+<span class="nc" id="L207">        return types.getDeclaredType(typeElem, typeArgs);</span>
+    }
+
+    @Override
+    public DeclaredType getDeclaredType(DeclaredType containing, TypeElement typeElem, TypeMirror... typeArgs) {
+<span class="nc" id="L212">        return types.getDeclaredType(typeElem, typeArgs);</span>
+    }
+
+    @Override
+    public TypeMirror asMemberOf(DeclaredType containing, Element element) {
+<span class="nc" id="L217">        return types.asMemberOf(containing, element);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

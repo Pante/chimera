@@ -6,7 +6,7 @@ This update adds inferred arguments during code generation for the command frame
 
 ### Annotations
 
-Annotation processing related packages have been moved to new project, Smoke.
+Annotation processing related packages have been moved to new project, Puff.
 
 - Add `@Lazy`
 - Add `@Monad`
@@ -65,10 +65,10 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps
 - Remove `PotionBuilder.of(Material)` replaced with equivalent methods for different potion types
 
-### Smoke
+### Puff
 
-- Add `com.karuslabs.smoke`
-- Add `com.karuslabs.smoke.signature`
+- Add `com.karuslabs.puff`
+- Add `com.karuslabs.puff.signature`
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 

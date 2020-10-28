@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Log.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Puff</a> &gt; <a href="index.source.html" class="el_package">com.karuslabs.puff</a> &gt; <span class="el_source">Log.java</span></div><h1>Log.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright 2020 Karus Labs.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.karuslabs.puff;
+
+import javax.annotation.processing.Messager;
+import javax.lang.model.element.Element;
+import javax.tools.Diagnostic.Kind;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import static com.karuslabs.puff.Format.format;
+import static javax.tools.Diagnostic.Kind.*;
+
+public class Log {
+
+    private final Messager messager;
+    private boolean error;
+    
+<span class="fc" id="L40">    public Log(Messager messager) {</span>
+<span class="fc" id="L41">        this.messager = messager;</span>
+<span class="fc" id="L42">        this.error = false;</span>
+<span class="fc" id="L43">    }</span>
+    
+    
+    public void error(@Nullable Element location, Object value, String reason, String resolution) {
+<span class="fc" id="L47">        error(location, format(value, reason, resolution));</span>
+<span class="fc" id="L48">    }</span>
+    
+    public void error(@Nullable Element location, Object value, String reason) {
+<span class="fc" id="L51">        error(location, format(value, reason));</span>
+<span class="fc" id="L52">    }</span>
+    
+    public void error(@Nullable Element location, String message) {
+<span class="fc" id="L55">        print(location, ERROR, message);</span>
+<span class="fc" id="L56">        error = true;</span>
+<span class="fc" id="L57">    }</span>
+    
+    
+    public void warn(@Nullable Element location, Object value, String reason, String resolution) {
+<span class="fc" id="L61">        warn(location, format(value, reason, resolution));</span>
+<span class="fc" id="L62">    }</span>
+    
+    public void warn(@Nullable Element location, Object value, String reason) {
+<span class="fc" id="L65">        warn(location, format(value, reason));</span>
+<span class="fc" id="L66">    }</span>
+    
+    public void warn(@Nullable Element location, String message) {
+<span class="fc" id="L69">        print(location, WARNING, message);</span>
+<span class="fc" id="L70">    }</span>
+    
+    
+    public void note(@Nullable Element location, Object value, String reason, String resolution) {
+<span class="fc" id="L74">        note(location, format(value, reason, resolution));</span>
+<span class="fc" id="L75">    }</span>
+    
+    public void note(@Nullable Element location, Object value, String reason) {
+<span class="fc" id="L78">        note(location, format(value, reason));</span>
+<span class="fc" id="L79">    }</span>
+    
+    public void note(@Nullable Element location, String message) {
+<span class="fc" id="L82">        print(location, NOTE, message);</span>
+<span class="fc" id="L83">    }</span>
+    
+    
+    private void print(@Nullable Element location, Kind kind, String message) {
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (location != null) {</span>
+<span class="fc" id="L88">            messager.printMessage(kind, message, location);</span>
+            
+        } else {
+<span class="nc" id="L91">            messager.printMessage(kind, message);</span>
+        }
+<span class="fc" id="L93">    }</span>
+    
+    public void clear() {
+<span class="fc" id="L96">        error = false;</span>
+<span class="fc" id="L97">    }</span>
+    
+    public boolean error() {
+<span class="fc" id="L100">        return error;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

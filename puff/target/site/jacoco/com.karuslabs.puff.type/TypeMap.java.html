@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TypeMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Puff</a> &gt; <a href="index.source.html" class="el_package">com.karuslabs.puff.type</a> &gt; <span class="el_source">TypeMap.java</span></div><h1>TypeMap.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License
+ *
+ * Copyright 2020 Karus Labs.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.karuslabs.puff.type;
+
+import java.util.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.Types;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public class TypeMap&lt;T&gt; {
+
+    private final Types types;
+    private final EnumMap&lt;TypeKind, T&gt; primitives;
+    private final Map&lt;TypeMirror, T&gt; declared;
+    
+    public TypeMap(Types types) {
+<span class="nc" id="L39">        this(types, new EnumMap&lt;TypeKind, T&gt;(TypeKind.class), new HashMap&lt;&gt;());</span>
+<span class="nc" id="L40">    }</span>
+    
+<span class="nc" id="L42">    public TypeMap(Types types, EnumMap&lt;TypeKind, T&gt; primitives, Map&lt;TypeMirror, T&gt; declared) {</span>
+<span class="nc" id="L43">        this.types = types;</span>
+<span class="nc" id="L44">        this.primitives = primitives;</span>
+<span class="nc" id="L45">        this.declared = declared;</span>
+<span class="nc" id="L46">    }</span>
+    
+    
+    public @Nullable T exactly(TypeMirror type) {
+<span class="nc" id="L50">        var mapped = primitives.get(type.getKind());</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (mapped == null) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            for (var entry : declared.entrySet()) {</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (types.isSameType(entry.getKey(), type)) {</span>
+<span class="nc" id="L54">                    return entry.getValue();</span>
+                }
+<span class="nc" id="L56">            }</span>
+        }
+<span class="nc" id="L58">        return mapped;</span>
+    }
+    
+    public @Nullable T subtype(TypeMirror type) {
+<span class="nc" id="L62">        var mapped = primitives.get(type.getKind());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (mapped == null) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            for (var entry : declared.entrySet()) {</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                if (types.isAssignable(type, entry.getKey())) {</span>
+<span class="nc" id="L66">                    return entry.getValue();</span>
+                }
+<span class="nc" id="L68">            }</span>
+        }
+<span class="nc" id="L70">        return mapped;</span>
+    }
+    
+    public @Nullable T supertype(TypeMirror type) {
+<span class="nc" id="L74">        var mapped = primitives.get(type.getKind());</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (mapped == null) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (var entry : declared.entrySet()) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                if (types.isAssignable(entry.getKey(), type)) {</span>
+<span class="nc" id="L78">                    return entry.getValue();</span>
+                }
+<span class="nc" id="L80">            }</span>
+        }
+<span class="nc" id="L82">        return mapped;</span>
+    }
+    
+    
+    public TypeMap&lt;T&gt; put(TypeKind kind, T value) {
+<span class="nc" id="L87">        primitives.put(kind, value);</span>
+<span class="nc" id="L88">        return this;</span>
+    }
+    
+    public TypeMap&lt;T&gt; put(TypeMirror type, T value) {
+<span class="nc" id="L92">        declared.put(type, value);</span>
+<span class="nc" id="L93">        return this;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
