@@ -25,10 +25,34 @@ package com.karuslabs.puff.type.matches;
 
 import com.karuslabs.annotations.Static;
 
+import java.lang.annotation.Annotation;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.*;
 
 public @Static class Matches {
-
+    
+    public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+        return new ContainsAnnotations(annotations);
+    }
+    
+    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+        return new NoAnnotations(annotations);
+    }
+    
+    
+    public static Match<Modifier> exactly(Modifier... modifiers) {
+        return new ExactlyModifiers(modifiers);
+    }
+    
+    public static Match<Modifier> contains(Modifier... modifiers) {
+        return new ContainsModifiers(modifiers);
+    }
+    
+    public static Match<Modifier> no(Modifier... modifiers) {
+        return new NoModifiers(modifiers);
+    }
+    
+            
     public static Match<TypeMirror> exactly(TypeKind primitive) {
         return new ExactlyPrimitive(primitive);
     }

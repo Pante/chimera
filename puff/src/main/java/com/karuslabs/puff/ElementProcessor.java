@@ -27,8 +27,7 @@ import com.karuslabs.annotations.VisibleForOverride;
 
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
 
 public abstract class ElementProcessor extends AnnotationProcessor {
 
@@ -37,7 +36,6 @@ public abstract class ElementProcessor extends AnnotationProcessor {
         for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
             process(element);
         }
-        
         clear();
         
         return false;

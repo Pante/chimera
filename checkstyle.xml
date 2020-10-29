@@ -17,7 +17,6 @@
         <module name="AvoidNestedBlocks"/>
         <module name="CatchParameterName"/>
         <module name="ClassMemberImpliedModifier"/>
-        <module name="CommentsIndentation"/>
         <module name="CovariantEquals"/>
         <module name="DefaultComesLast"/>
         <module name="EmptyCatchBlock">

@@ -64,7 +64,7 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
     
     @Override
     public Void visitTypeVariable(TypeVariable variable, StringBuilder builder) {
-        builder.append((TypeParameterElement) variable.asElement().getSimpleName());
+        builder.append(variable.asElement().getSimpleName());
         
         // We do this to ignore the default T extends Object upper bound
         var upper = variable.getUpperBound();

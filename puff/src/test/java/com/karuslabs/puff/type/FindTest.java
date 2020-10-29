@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke.type;
+package com.karuslabs.puff.type;
 
-import com.karuslabs.puff.type.Find;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 

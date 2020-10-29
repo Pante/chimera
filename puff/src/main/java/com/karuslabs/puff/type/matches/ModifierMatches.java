@@ -24,28 +24,22 @@
 package com.karuslabs.puff.type.matches;
 
 import com.karuslabs.puff.Format;
-import com.karuslabs.puff.type.TypePrinter;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
-    
-    static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
-    
-    static String map(Element element) {
-        return Format.and(element.getAnnotationMirrors(), (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
-    }
+abstract class ModifierMatch extends Many<Modifier> {
+
+    static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase());
     
     private final String expected;
     
-    AnnotationMatch(String expected, Class<? extends Annotation>... annotations) {
-        super(annotations);
+    ModifierMatch(String expected, Modifier... modifiers) {
+        super(modifiers);
         this.expected = expected;
     }
     
@@ -56,38 +50,53 @@ abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
     
 }
 
-class ContainsAnnotations extends AnnotationMatch {
+class ExactlyModifiers extends ModifierMatch {
 
-    ContainsAnnotations(Class<? extends Annotation>... annotations) {
-        super(Format.and(List.of(annotations), FORMAT), annotations);
+    ExactlyModifiers(Modifier... modifiers) {
+        super("exactly " + Format.and(List.of(modifiers), FORMAT));
     }
     
     @Override
     public @Nullable String match(Element element, Types types) {
-        for (var annotation : elements) {
-            if (element.getAnnotationsByType(annotation).length == 0) {
-                return map(element);
-            }
+        if (element.getModifiers().equals(elements)) {
+            return null;
         }
-        return null;
+        
+        return Format.and(element.getModifiers(), FORMAT);
     }
     
 }
 
-class NoAnnotations extends AnnotationMatch {
-    
-    NoAnnotations(Class<? extends Annotation>... annotations) {
-        super("neither " + Format.or(List.of(annotations), FORMAT), annotations);
-    }
+class ContainsModifiers extends ModifierMatch {
 
+    ContainsModifiers(Modifier... modifiers) {
+        super(Format.and(List.of(modifiers), FORMAT), modifiers);
+    }
+    
     @Override
     public @Nullable String match(Element element, Types types) {
-        for (var annotation : elements) {
-            if (element.getAnnotationsByType(annotation).length != 0) {
-                return map(element);
-            }
+        if (element.getModifiers().containsAll(elements)) {
+            return null;
         }
-        return null;
+        
+        return Format.and(element.getModifiers(), FORMAT);
+    }
+    
+}
+
+class NoModifiers extends ModifierMatch {
+
+    NoModifiers(Modifier... modifiers) {
+        super("neither " + Format.or(List.of(modifiers), FORMAT), modifiers);
+    }
+    
+    @Override
+    public @Nullable String match(Element element, Types types) {
+        if (Collections.disjoint(element.getModifiers(), elements)) {
+            return null;
+        }
+        
+        return Format.and(element.getModifiers(), FORMAT);
     }
     
 }

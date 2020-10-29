@@ -26,38 +26,28 @@ package com.karuslabs.puff;
 import com.karuslabs.annotations.Static;
 
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 public @Static class Format {
     
-    public static String and(Collection<?> elements) {
-        return join(elements, "and");
-    }
-    
-    public static <T> String and(Collection<? extends T> elements, Function<T, String> format) {
+    public static <T> String and(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
         return join(elements, format, "and");
-    } 
-    
-    
-    public static String or(Collection<?> elements) {
-        return join(elements, "or");
     }
     
-    public static <T> String or(Collection<? extends T> elements, Function<T, String> format) {
+    public static <T> String or(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
         return join(elements, format, "or");
     }
     
-    
-    public static String join(Collection<?> elements, String conjunction) {
-        return join(elements, Object::toString, conjunction);
+    public static <T> String join(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format, String conjunction) {
+        var builder = new StringBuilder();
+        join(elements, builder, format, conjunction);
+        return builder.toString();
     }
     
-    public static <T> String join(Collection<? extends T> elements, Function<T, String> format, String conjunction) {
-        var builder = new StringBuilder();
-        
+    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<T, StringBuilder> format, String conjunction) {
         int i = 0;
         for (var element : elements) {
-            builder.append(format.apply(element));
+            format.accept(element, builder);
             if (i <  elements.size() - 2) {
                 builder.append(", ");
                 
@@ -67,8 +57,6 @@ public @Static class Format {
             
             i++;
         }
-        
-        return builder.toString();
     }
     
     

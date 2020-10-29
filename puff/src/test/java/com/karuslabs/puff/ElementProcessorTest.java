@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.smoke;
+package com.karuslabs.puff;
 
-import com.karuslabs.puff.ElementProcessor;
-import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
@@ -32,7 +30,6 @@ import org.junit.jupiter.api.*;
 import org.mockito.junit.jupiter.*;
 
 import static org.mockito.quality.Strictness.LENIENT;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @MockitoSettings(strictness = LENIENT)
