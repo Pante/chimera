@@ -21,29 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.puff.type.TypePrinter;
+import com.karuslabs.puff.type.match.Match;
+import com.karuslabs.puff.type.*;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.*;
-import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 abstract class TypeMatch implements Match<TypeMirror> {
 
     final TypeMirror expected;
-    private final String description;
+    private final String condition;
     
-    TypeMatch(TypeMirror expected, String description) {
+    TypeMatch(TypeMirror expected, String condition) {
         this.expected = expected;
-        this.description = description;
+        this.condition = condition;
     }
     
     @Override
-    public String expected() {
-        return description;
+    public String condition() {
+        return condition;
     }
     
 }
@@ -51,15 +51,15 @@ abstract class TypeMatch implements Match<TypeMirror> {
 class ExactlyPrimitive implements Match<TypeMirror> {
 
     private final TypeKind expected;
-    private final String description;
+    private final String condition;
     
     ExactlyPrimitive(TypeKind expected) {
         this.expected = expected;
-        this.description = expected.toString().toLowerCase();
+        this.condition = expected.toString().toLowerCase();
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
+    public @Nullable String match(Element element, TypeMirrors types) {
         var kind = element.asType().getKind();
         if (kind != expected) {
             return kind.toString().toLowerCase();
@@ -70,8 +70,8 @@ class ExactlyPrimitive implements Match<TypeMirror> {
     }
 
     @Override
-    public String expected() {
-        return description;
+    public String condition() {
+        return condition;
     }
     
 }
@@ -83,7 +83,7 @@ class ExactlyType extends TypeMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
+    public @Nullable String match(Element element, TypeMirrors types) {
         var type = element.asType();
         if (!types.isSameType(expected, type)) {
             return type.toString();
@@ -102,7 +102,7 @@ class Subtype extends TypeMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
+    public @Nullable String match(Element element, TypeMirrors types) {
         var type = element.asType();
         if (!types.isSubtype(type, expected)) {
             return type.toString();
@@ -121,7 +121,7 @@ class Supertype extends TypeMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
+    public @Nullable String match(Element element, TypeMirrors types) {
         var type = element.asType();
         if (!types.isSubtype(expected, type)) {
             return type.toString();

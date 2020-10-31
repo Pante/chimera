@@ -21,16 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match;
 
-import java.util.Set;
+import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.puff.type.match.matches.And;
+import com.karuslabs.puff.type.match.matches.Or;
 
-public abstract class Many<T> implements Match<T> {
+import javax.lang.model.element.Element;
 
-    protected final Set<T> elements;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public interface Match<T> extends Description {
+
+    @Nullable String match(Element element, TypeMirrors types);
     
-    public Many(T... elements) {
-        this.elements = Set.of(elements);
+    default Match<T> and(Match<T> other) {
+        return new And<>(this, other);
     }
-
+    
+    default Match<T> or(Match<T> other) {
+        return new Or<>(this, other);
+    }
+    
 }

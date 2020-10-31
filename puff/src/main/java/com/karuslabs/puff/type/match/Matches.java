@@ -1,3 +1,7 @@
+
+
+
+
 /*
  * The MIT License
  *
@@ -21,9 +25,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match;
 
 import com.karuslabs.annotations.Static;
+import com.karuslabs.puff.type.match.matches.*;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.Modifier;
@@ -31,24 +36,25 @@ import javax.lang.model.type.*;
 
 public @Static class Matches {
     
-    public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
-        return new ContainsAnnotations(annotations);
+    public static Many<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+        return Annotations.contains(annotations);
     }
     
-    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return new NoAnnotations(annotations);
+    public static Many<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+        return Annotations.no(annotations);
     }
     
     
-    public static Match<Modifier> exactly(Modifier... modifiers) {
+    public static Many<Modifier> exactly(Modifier... modifiers) {
+        field(no(A).or(B));
         return new ExactlyModifiers(modifiers);
     }
     
-    public static Match<Modifier> contains(Modifier... modifiers) {
+    public static Many<Modifier> contains(Modifier... modifiers) {
         return new ContainsModifiers(modifiers);
     }
     
-    public static Match<Modifier> no(Modifier... modifiers) {
+    public static Many<Modifier> no(Modifier... modifiers) {
         return new NoModifiers(modifiers);
     }
     

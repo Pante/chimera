@@ -21,10 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.matches;
+
+import com.karuslabs.puff.type.match.Match;
+import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
-import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -39,7 +41,7 @@ public class And<T> implements Match<T> {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
+    public @Nullable String match(Element element, TypeMirrors types) {
         var actual =  this.left.match(element, types);
         if (actual != null) {
             return actual;
@@ -50,8 +52,8 @@ public class And<T> implements Match<T> {
     }
 
     @Override
-    public String expected() {
-        return left.expected() + ", and " + right.expected();
+    public String condition() {
+        return left.condition() + ", and " + right.condition();
     }
 
 }

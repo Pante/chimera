@@ -23,12 +23,14 @@
  */
 package com.karuslabs.puff;
 
+import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
 import org.mockito.junit.jupiter.*;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.quality.Strictness.LENIENT;
 import static org.mockito.Mockito.*;
 

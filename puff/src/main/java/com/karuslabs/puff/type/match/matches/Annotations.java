@@ -21,18 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.matches;
 
+import com.karuslabs.annotations.Static;
 import com.karuslabs.puff.Format;
-import com.karuslabs.puff.type.TypePrinter;
+import com.karuslabs.puff.type.*;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
-import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+public @Static class Annotations {
+    
+    public static Many<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+        return new ContainsAnnotations(annotations);
+    }
+    
+    public static Many<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+        return new NoAnnotations(annotations);
+    }
+    
+}
 
 abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
     
@@ -42,16 +54,26 @@ abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
         return Format.and(element.getAnnotationMirrors(), (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
     }
     
-    private final String expected;
+    private final String condition;
     
-    AnnotationMatch(String expected, Class<? extends Annotation>... annotations) {
+    AnnotationMatch(String condition, Class<? extends Annotation>... annotations) {
         super(annotations);
-        this.expected = expected;
+        this.condition = condition;
     }
     
     @Override
-    public String expected() {
-        return expected;
+    public String condition() {
+        return condition;
+    }
+    
+    @Override
+    public String singular() {
+        return singular + " annotated with " + condition;
+    }
+    
+    @Override
+    public String plural() {
+        return plural + " annotated with " + condition;
     }
     
 }
@@ -63,8 +85,8 @@ class ContainsAnnotations extends AnnotationMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
-        for (var annotation : elements) {
+    public @Nullable String match(Element element, TypeMirrors types) {
+        for (var annotation : values) {
             if (element.getAnnotationsByType(annotation).length == 0) {
                 return map(element);
             }
@@ -81,8 +103,8 @@ class NoAnnotations extends AnnotationMatch {
     }
 
     @Override
-    public @Nullable String match(Element element, Types types) {
-        for (var annotation : elements) {
+    public @Nullable String match(Element element, TypeMirrors types) {
+        for (var annotation : values) {
             if (element.getAnnotationsByType(annotation).length != 0) {
                 return map(element);
             }

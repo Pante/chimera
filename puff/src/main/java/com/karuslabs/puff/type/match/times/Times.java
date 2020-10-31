@@ -21,25 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.times;
+
+import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.puff.type.match.Match;
 
 import javax.lang.model.element.Element;
-import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public interface Match<T> {
-
-    @Nullable String match(Element element, Types types);
+public abstract class Times<T> {
     
-    String expected();
-    
-    default Match<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public static <T> Times<T> exactly(int times, Match<T> match) {
+        return new Exactly<>(times, match);
     }
     
-    default Match<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    
+    protected final Match<T> match;
+    protected int current;
+    
+    public Times(Match<T> match) {
+        this.match = match;
+        this.current = 0;
     }
+    
+    public abstract @Nullable String match();
+    
+    public void add(Element element, TypeMirrors types) {
+        if (match.match(element, types) == null) {
+            current++;
+        }
+    }
+    
+    public void reset() {
+        current = 0;
+    }
+    
+    public abstract String condition();
     
 }

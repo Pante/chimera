@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.matches;
 
 import com.karuslabs.puff.Format;
+import com.karuslabs.puff.type.TypeMirrors;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.*;
-import javax.lang.model.util.Types;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -44,7 +44,7 @@ abstract class ModifierMatch extends Many<Modifier> {
     }
     
     @Override
-    public String expected() {
+    public String condition() {
         return expected;
     }
     
@@ -57,8 +57,8 @@ class ExactlyModifiers extends ModifierMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
-        if (element.getModifiers().equals(elements)) {
+    public @Nullable String match(Element element, TypeMirrors types) {
+        if (element.getModifiers().equals(values)) {
             return null;
         }
         
@@ -74,8 +74,8 @@ class ContainsModifiers extends ModifierMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
-        if (element.getModifiers().containsAll(elements)) {
+    public @Nullable String match(Element element, TypeMirrors types) {
+        if (element.getModifiers().containsAll(values)) {
             return null;
         }
         
@@ -91,8 +91,8 @@ class NoModifiers extends ModifierMatch {
     }
     
     @Override
-    public @Nullable String match(Element element, Types types) {
-        if (Collections.disjoint(element.getModifiers(), elements)) {
+    public @Nullable String match(Element element, TypeMirrors types) {
+        if (Collections.disjoint(element.getModifiers(), values)) {
             return null;
         }
         

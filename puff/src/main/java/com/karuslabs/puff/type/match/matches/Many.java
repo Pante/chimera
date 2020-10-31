@@ -21,36 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.matches;
+package com.karuslabs.puff.type.match.matches;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.util.Types;
+import java.util.Set;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+public abstract class Many<T> extends Noun<T> {
 
-public class Or<T> implements Match<T> {
-
-    public final Match<T> left;
-    public final Match<T> right;
+    protected final Set<T> values;
     
-    public Or(Match<T> left, Match<T> right) {
-        this.left = left;
-        this.right = right;
-    }
-    
-    @Override
-    public @Nullable String match(Element element, Types types) {
-        var actual = left.match(element, types);
-        if (actual == null) {
-            return null;
-        }
-        
-        return right.match(element, types);
-    }
-
-    @Override
-    public String expected() {
-        return left.expected() + ", or" + right.expected();
+    public Many(T... values) {
+        this.values = Set.of(values);
     }
 
 }
