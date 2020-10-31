@@ -36,16 +36,26 @@ abstract class ModifierMatch extends Many<Modifier> {
 
     static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase());
     
-    private final String expected;
+    private final String condition;
     
-    ModifierMatch(String expected, Modifier... modifiers) {
+    ModifierMatch(String condition, Modifier... modifiers) {
         super(modifiers);
-        this.expected = expected;
+        this.condition = condition;
     }
     
     @Override
     public String condition() {
-        return expected;
+        return condition;
+    }
+    
+    @Override
+    public String singular() {
+        return condition() + " " + singular;
+    }
+
+    @Override
+    public String plural() {
+        return condition() + " " + plural;
     }
     
 }

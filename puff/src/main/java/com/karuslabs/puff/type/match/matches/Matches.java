@@ -25,10 +25,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match;
+package com.karuslabs.puff.type.match.matches;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.puff.type.match.matches.*;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.Modifier;
@@ -36,25 +35,52 @@ import javax.lang.model.type.*;
 
 public @Static class Matches {
     
-    public static Many<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
-        return Annotations.contains(annotations);
+    public static <T> Match<T> type(Match<T> match) {
+        return noun(match, "type", "types");
     }
     
-    public static Many<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return Annotations.no(annotations);
+    public static <T> Match<T> method(Match<T> match) {
+        return noun(match, "method", "methods");
+    }
+    
+    public static <T> Match<T> argument(Match<T> match) {
+        return noun(match, "argument", "arguments");
+    }
+    
+    public static <T> Match<T> field(Match<T> match) {
+        return noun(match, "field", "fields");
+    }
+    
+    public static <T> Match<T> variable(Match<T> match) {
+        return noun(match, "variable", "variables");
+    }
+    
+    static <T> Match<T> noun(Match<T> match, String singular, String plural) {
+        if (match instanceof Noun) {
+            ((Noun) match).set(singular, plural);
+        }
+        return match;
     }
     
     
-    public static Many<Modifier> exactly(Modifier... modifiers) {
-        field(no(A).or(B));
+    public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+        return new ContainsAnnotations(annotations);
+    }
+    
+    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+        return new NoAnnotations(annotations);
+    }
+    
+    
+    public static Match<Modifier> exactly(Modifier... modifiers) {
         return new ExactlyModifiers(modifiers);
     }
     
-    public static Many<Modifier> contains(Modifier... modifiers) {
+    public static Match<Modifier> contains(Modifier... modifiers) {
         return new ContainsModifiers(modifiers);
     }
     
-    public static Many<Modifier> no(Modifier... modifiers) {
+    public static Match<Modifier> no(Modifier... modifiers) {
         return new NoModifiers(modifiers);
     }
     

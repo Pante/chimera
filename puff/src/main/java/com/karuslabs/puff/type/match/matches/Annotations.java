@@ -23,7 +23,6 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.annotations.Static;
 import com.karuslabs.puff.Format;
 import com.karuslabs.puff.type.*;
 
@@ -33,18 +32,6 @@ import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-public @Static class Annotations {
-    
-    public static Many<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
-        return new ContainsAnnotations(annotations);
-    }
-    
-    public static Many<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return new NoAnnotations(annotations);
-    }
-    
-}
 
 abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
     

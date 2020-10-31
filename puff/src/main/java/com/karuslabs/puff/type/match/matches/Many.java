@@ -23,14 +23,25 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
+
 import java.util.Set;
 
-public abstract class Many<T> extends Noun<T> {
+public abstract class Many<T> extends Noun implements Match<T> {
 
     protected final Set<T> values;
+    protected String singular = "element";
+    protected String plural = "elements";
     
     public Many(T... values) {
         this.values = Set.of(values);
+    }
+    
+    @Override
+    void set(String singular, String plural) {
+        if ("element".equals(this.singular) && "elements".equals(this.plural)) {
+            this.singular = singular;
+            this.plural = plural;
+        }
     }
 
 }

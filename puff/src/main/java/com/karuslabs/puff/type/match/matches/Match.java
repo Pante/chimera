@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match;
+package com.karuslabs.puff.type.match.matches;
 
 import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.matches.And;
-import com.karuslabs.puff.type.match.matches.Or;
+import com.karuslabs.puff.type.match.Description;
 
 import javax.lang.model.element.Element;
 

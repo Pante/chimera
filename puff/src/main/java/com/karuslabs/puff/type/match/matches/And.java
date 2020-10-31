@@ -23,17 +23,16 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.puff.type.match.Match;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class And<T> implements Match<T> {
+public class And<T> extends Noun implements Match<T> {
     
-    public final Match left;
-    public final Match right;
+    public final Match<T> left;
+    public final Match<T> right;
     
     public And(Match left, Match right) {
         this.left = left;
@@ -54,6 +53,28 @@ public class And<T> implements Match<T> {
     @Override
     public String condition() {
         return left.condition() + ", and " + right.condition();
+    }
+
+    @Override
+    public String singular() {
+        return left.singular() + ", and" + right.condition();
+    }
+
+    @Override
+    public String plural() {
+        return left.plural() + ", and " + right.condition();
+    }
+
+    
+    @Override
+    void set(String singular, String plural) {
+        if (left instanceof Noun) {
+            ((Noun) left).set(singular, plural);
+        }
+        
+        if (right instanceof Noun) {
+            ((Noun) right).set(singular, plural);
+        }
     }
 
 }

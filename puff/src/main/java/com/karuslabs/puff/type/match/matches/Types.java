@@ -23,7 +23,7 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.puff.type.match.Match;
+import com.karuslabs.annotations.Static;
 import com.karuslabs.puff.type.*;
 
 import javax.lang.model.element.Element;
@@ -31,10 +31,16 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+public @Static class Types {
+    
+    
+    
+}
+
 abstract class TypeMatch implements Match<TypeMirror> {
 
     final TypeMirror expected;
-    private final String condition;
+    final String condition;
     
     TypeMatch(TypeMirror expected, String condition) {
         this.expected = expected;
@@ -73,6 +79,16 @@ class ExactlyPrimitive implements Match<TypeMirror> {
     public String condition() {
         return condition;
     }
+
+    @Override
+    public String singular() {
+        return condition;
+    }
+
+    @Override
+    public String plural() {
+        return condition + "s";
+    }
     
 }
 
@@ -92,13 +108,30 @@ class ExactlyType extends TypeMatch {
             return null;
         }
     }
+
+    @Override
+    public String singular() {
+        return condition;
+    }
+
+    @Override
+    public String plural() {
+        return condition + "s";
+    }
     
 }
 
 class Subtype extends TypeMatch {
 
+    private final String plural;
+    
     Subtype(TypeMirror expected) {
-        super(expected, "subtype of " + TypePrinter.simple(expected));
+        this(expected, TypePrinter.simple(expected));
+    }
+    
+    Subtype(TypeMirror expected, String type) {
+        super(expected, "subtype of " + type);
+        plural = "subtypes of " + type;
     }
     
     @Override
@@ -111,13 +144,30 @@ class Subtype extends TypeMatch {
             return null;
         }
     }
+
+    @Override
+    public String singular() {
+        return condition;
+    }
+
+    @Override
+    public String plural() {
+        return plural;
+    }
     
 }
 
 class Supertype extends TypeMatch {
     
+    private final String plural;
+    
     Supertype(TypeMirror expected) {
-        super(expected, "supertype of " + TypePrinter.simple(expected));
+        this(expected, TypePrinter.simple(expected));
+    }
+    
+    Supertype(TypeMirror expected, String type) {
+        super(expected, "supertypes of " + type);
+        plural = "supertypes of " + type;
     }
     
     @Override
@@ -129,6 +179,16 @@ class Supertype extends TypeMatch {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public String singular() {
+        return condition;
+    }
+
+    @Override
+    public String plural() {
+        return plural;
     }
     
 }

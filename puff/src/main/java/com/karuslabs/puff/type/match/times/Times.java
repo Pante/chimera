@@ -24,7 +24,7 @@
 package com.karuslabs.puff.type.match.times;
 
 import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.Match;
+import com.karuslabs.puff.type.match.matches.Match;
 
 import javax.lang.model.element.Element;
 

@@ -23,14 +23,13 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.puff.type.match.Match;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class Or<T> implements Match<T> {
+public class Or<T> extends Noun implements Match<T> {
 
     public final Match<T> left;
     public final Match<T> right;
@@ -53,6 +52,27 @@ public class Or<T> implements Match<T> {
     @Override
     public String condition() {
         return left.condition() + ", or" + right.condition();
+    }
+
+    @Override
+    public String singular() {
+        return left.singular() + ", or " + right.condition();
+    }
+
+    @Override
+    public String plural() {
+        return left.plural() + ", or " + right.condition();
+    }
+    
+    @Override
+    void set(String singular, String plural) {
+        if (left instanceof Noun) {
+            ((Noun) left).set(singular, plural);
+        }
+        
+        if (right instanceof Noun) {
+            ((Noun) right).set(singular, plural);
+        }
     }
 
 }
