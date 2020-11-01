@@ -23,19 +23,12 @@
  */
 package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.annotations.Static;
 import com.karuslabs.puff.type.*;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-public @Static class Types {
-    
-    
-    
-}
 
 abstract class TypeMatch implements Match<TypeMirror> {
 
@@ -49,6 +42,11 @@ abstract class TypeMatch implements Match<TypeMirror> {
     
     @Override
     public String condition() {
+        return condition;
+    }
+    
+    @Override
+    public String singular() {
         return condition;
     }
     
@@ -110,11 +108,6 @@ class ExactlyType extends TypeMatch {
     }
 
     @Override
-    public String singular() {
-        return condition;
-    }
-
-    @Override
     public String plural() {
         return condition + "s";
     }
@@ -146,11 +139,6 @@ class Subtype extends TypeMatch {
     }
 
     @Override
-    public String singular() {
-        return condition;
-    }
-
-    @Override
     public String plural() {
         return plural;
     }
@@ -179,11 +167,6 @@ class Supertype extends TypeMatch {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public String singular() {
-        return condition;
     }
 
     @Override

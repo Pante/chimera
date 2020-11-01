@@ -29,7 +29,7 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class And<T> extends Noun implements Match<T> {
+public class And<T> extends Subject<T> {
     
     public final Match<T> left;
     public final Match<T> right;
@@ -67,14 +67,16 @@ public class And<T> extends Noun implements Match<T> {
 
     
     @Override
-    void set(String singular, String plural) {
-        if (left instanceof Noun) {
-            ((Noun) left).set(singular, plural);
+    Match<T> set(String singular, String plural) {
+        if (left instanceof Subject) {
+            ((Subject) left).set(singular, plural);
         }
         
-        if (right instanceof Noun) {
-            ((Noun) right).set(singular, plural);
+        if (right instanceof Subject) {
+            ((Subject) right).set(singular, plural);
         }
+        
+        return this;
     }
 
 }

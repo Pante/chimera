@@ -24,18 +24,31 @@
 package com.karuslabs.puff.type.match.times;
 
 import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.puff.type.match.Description;
 import com.karuslabs.puff.type.match.matches.Match;
 
 import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Times<T> {
+public abstract class Times<T> implements Description {
     
     public static <T> Times<T> exactly(int times, Match<T> match) {
         return new Exactly<>(times, match);
     }
     
+    public static <T> Times<T> between(int min, int max, Match<T> match) {
+        return new Between<>(min, max, match);
+    }
+    
+    static String format(int times, Match<?> match) {
+        if (times == 0) {
+            return "no " + match.singular();
+            
+        } else {
+            return times + " " + match.plural();
+        }
+    }
     
     protected final Match<T> match;
     protected int current;
@@ -57,6 +70,62 @@ public abstract class Times<T> {
         current = 0;
     }
     
-    public abstract String condition();
+    @Override
+    public String singular() {
+        return condition();
+    }
+    
+    @Override
+    public String plural() {
+        return condition();
+    }
+    
+}
+
+class Exactly<T> extends Times<T> {
+
+    private final int times;
+    private final String condition;
+    
+    public Exactly(int times, Match<T> match) {
+        super(match);
+        this.times = times;
+        condition = format(times, match);
+    }
+
+    @Override
+    public @Nullable String match() {
+        return current == times ? null : format(current, match);
+    }
+
+    @Override
+    public String condition() {
+        return condition;
+    }
+
+}
+
+class Between<T> extends Times<T> {
+
+    private final int min;
+    private final int max;
+    private final String condition;
+    
+    Between(int min, int max, Match<T> match) {
+        super(match);
+        this.min = min;
+        this.max = max;
+        condition = "between " + min + " to " + max + " " + match.plural();
+    }
+
+    @Override
+    public String match() {
+        return current > min && current <= max ? null : format(current, match);
+    }
+
+    @Override
+    public String condition() {
+        return condition;
+    }
     
 }

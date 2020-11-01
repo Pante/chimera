@@ -34,11 +34,11 @@ public interface Match<T> extends Description {
 
     @Nullable String match(Element element, TypeMirrors types);
     
-    default Match<T> and(Match<T> other) {
+    default Subject<T> and(Match<T> other) {
         return new And<>(this, other);
     }
     
-    default Match<T> or(Match<T> other) {
+    default Subject<T> or(Match<T> other) {
         return new Or<>(this, other);
     }
     

@@ -21,29 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.times;
+package com.karuslabs.puff.type.match.matches;
 
-import com.karuslabs.puff.type.match.matches.Match;
+public abstract class Subject<T> implements Match<T> {
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-class Exactly<T> extends Times<T> {
-
-    private final int times;
+    abstract Match<T> set(String singular, String plural);
     
-    public Exactly(int times, Match<T> match) {
-        super(match);
-        this.times = times;
-    }
-
-    @Override
-    public @Nullable String match() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String condition() {
-        return times + " " + match.condition();
-    }
-
 }

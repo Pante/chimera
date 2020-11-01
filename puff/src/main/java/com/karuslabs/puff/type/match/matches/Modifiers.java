@@ -32,13 +32,13 @@ import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-abstract class ModifierMatch extends Many<Modifier> {
+public abstract class Modifiers extends Many<Modifier> {
 
     static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase());
     
     private final String condition;
     
-    ModifierMatch(String condition, Modifier... modifiers) {
+    Modifiers(String condition, Modifier... modifiers) {
         super(modifiers);
         this.condition = condition;
     }
@@ -60,7 +60,7 @@ abstract class ModifierMatch extends Many<Modifier> {
     
 }
 
-class ExactlyModifiers extends ModifierMatch {
+class ExactlyModifiers extends Modifiers {
 
     ExactlyModifiers(Modifier... modifiers) {
         super("exactly " + Format.and(List.of(modifiers), FORMAT));
@@ -77,7 +77,7 @@ class ExactlyModifiers extends ModifierMatch {
     
 }
 
-class ContainsModifiers extends ModifierMatch {
+class ContainsModifiers extends Modifiers {
 
     ContainsModifiers(Modifier... modifiers) {
         super(Format.and(List.of(modifiers), FORMAT), modifiers);
@@ -94,7 +94,7 @@ class ContainsModifiers extends ModifierMatch {
     
 }
 
-class NoModifiers extends ModifierMatch {
+class NoModifiers extends Modifiers {
 
     NoModifiers(Modifier... modifiers) {
         super("neither " + Format.or(List.of(modifiers), FORMAT), modifiers);

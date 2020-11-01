@@ -35,52 +35,45 @@ import javax.lang.model.type.*;
 
 public @Static class Matches {
     
-    public static <T> Match<T> type(Match<T> match) {
-        return noun(match, "type", "types");
+    public static <T> Match<T> type(Subject<T> match) {
+        return match.set("type", "types");
     }
     
-    public static <T> Match<T> method(Match<T> match) {
-        return noun(match, "method", "methods");
+    public static <T> Match<T> method(Subject<T> match) {
+        return match.set("method", "methods");
     }
     
-    public static <T> Match<T> argument(Match<T> match) {
-        return noun(match, "argument", "arguments");
+    public static <T> Match<T> argument(Subject<T> match) {
+        return match.set("argument", "arguments");
     }
     
-    public static <T> Match<T> field(Match<T> match) {
-        return noun(match, "field", "fields");
+    public static <T> Match<T> field(Subject<T> match) {
+        return match.set("field", "fields");
     }
     
-    public static <T> Match<T> variable(Match<T> match) {
-        return noun(match, "variable", "variables");
-    }
-    
-    static <T> Match<T> noun(Match<T> match, String singular, String plural) {
-        if (match instanceof Noun) {
-            ((Noun) match).set(singular, plural);
-        }
-        return match;
+    public static <T> Match<T> variable(Subject<T> match) {
+        return match.set("variable", "variables");
     }
     
     
-    public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+    public static Subject<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
         return new ContainsAnnotations(annotations);
     }
     
-    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+    public static Subject<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
         return new NoAnnotations(annotations);
     }
     
     
-    public static Match<Modifier> exactly(Modifier... modifiers) {
+    public static Subject<Modifier> exactly(Modifier... modifiers) {
         return new ExactlyModifiers(modifiers);
     }
     
-    public static Match<Modifier> contains(Modifier... modifiers) {
+    public static Subject<Modifier> contains(Modifier... modifiers) {
         return new ContainsModifiers(modifiers);
     }
     
-    public static Match<Modifier> no(Modifier... modifiers) {
+    public static Subject<Modifier> no(Modifier... modifiers) {
         return new NoModifiers(modifiers);
     }
     

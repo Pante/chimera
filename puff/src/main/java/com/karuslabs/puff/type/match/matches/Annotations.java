@@ -33,7 +33,7 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
+public abstract class Annotations extends Many<Class<? extends Annotation>> {
     
     static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
@@ -43,7 +43,7 @@ abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
     
     private final String condition;
     
-    AnnotationMatch(String condition, Class<? extends Annotation>... annotations) {
+    Annotations(String condition, Class<? extends Annotation>... annotations) {
         super(annotations);
         this.condition = condition;
     }
@@ -65,7 +65,7 @@ abstract class AnnotationMatch extends Many<Class<? extends Annotation>> {
     
 }
 
-class ContainsAnnotations extends AnnotationMatch {
+class ContainsAnnotations extends Annotations {
 
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
         super(Format.and(List.of(annotations), FORMAT), annotations);
@@ -83,7 +83,7 @@ class ContainsAnnotations extends AnnotationMatch {
     
 }
 
-class NoAnnotations extends AnnotationMatch {
+class NoAnnotations extends Annotations {
     
     NoAnnotations(Class<? extends Annotation>... annotations) {
         super("neither " + Format.or(List.of(annotations), FORMAT), annotations);
