@@ -41,6 +41,14 @@ public abstract class Times<T> implements Description {
         return new Between<>(min, max, match);
     }
     
+    public static <T> Times<T> least(int least, Match<T> match) {
+        return new Least<>(least, match);
+    }
+    
+    public static <T> Times<T> most(int most, Match<T> match) {
+        return new Most<>(most, match);
+    }
+    
     static String format(int times, Match<?> match) {
         if (times == 0) {
             return "no " + match.singular();
@@ -51,10 +59,12 @@ public abstract class Times<T> implements Description {
     }
     
     protected final Match<T> match;
+    protected final String condition;
     protected int current;
     
-    public Times(Match<T> match) {
+    public Times(Match<T> match, String condition) {
         this.match = match;
+        this.condition = condition;
         this.current = 0;
     }
     
@@ -71,13 +81,18 @@ public abstract class Times<T> implements Description {
     }
     
     @Override
+    public String condition() {
+        return condition;
+    }
+    
+    @Override
     public String singular() {
-        return condition();
+        return condition;
     }
     
     @Override
     public String plural() {
-        return condition();
+        return condition;
     }
     
 }
@@ -85,22 +100,15 @@ public abstract class Times<T> implements Description {
 class Exactly<T> extends Times<T> {
 
     private final int times;
-    private final String condition;
     
     public Exactly(int times, Match<T> match) {
-        super(match);
+        super(match, format(times, match));
         this.times = times;
-        condition = format(times, match);
     }
 
     @Override
     public @Nullable String match() {
         return current == times ? null : format(current, match);
-    }
-
-    @Override
-    public String condition() {
-        return condition;
     }
 
 }
@@ -109,23 +117,48 @@ class Between<T> extends Times<T> {
 
     private final int min;
     private final int max;
-    private final String condition;
     
     Between(int min, int max, Match<T> match) {
-        super(match);
+        super(match, "between " + min + " to " + max + " " + match.plural());
         this.min = min;
         this.max = max;
-        condition = "between " + min + " to " + max + " " + match.plural();
     }
 
     @Override
     public String match() {
         return current > min && current <= max ? null : format(current, match);
     }
+    
+}
+
+class Least<T> extends Times<T> {
+    
+    private final int least;
+    
+    Least(int least, Match<T> match) {
+        super(match, "at least " + least + " " + match.plural());
+        this.least = least;
+    }
 
     @Override
-    public String condition() {
-        return condition;
+    public @Nullable String match() {
+        return current >= least ? null : format(current, match);
+    }
+    
+}
+
+class Most<T> extends Times<T> {
+    
+    private final int most;
+    
+    Most(int most, Match<T> match) {
+        super(match, "at most " + most + " " + match.plural());
+        this.most = most;
+    }
+
+    @Override
+    public @Nullable String match() {
+        return current <= most ? null : format(current, match);
     }
     
 }
