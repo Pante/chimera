@@ -50,12 +50,12 @@ public abstract class Modifiers extends Many<Modifier> {
     
     @Override
     public String singular() {
-        return condition() + " " + singular;
+        return condition + " " + singular;
     }
 
     @Override
     public String plural() {
-        return condition() + " " + plural;
+        return condition + " " + plural;
     }
     
 }

@@ -37,8 +37,13 @@ public abstract class Annotations extends Many<Class<? extends Annotation>> {
     
     static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
-    static String map(Element element) {
-        return Format.and(element.getAnnotationMirrors(), (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
+    static String format(Element element) {
+        var annotations = element.getAnnotationMirrors();
+        if (annotations.isEmpty()) {
+            return "no annotations";
+        }
+        
+        return Format.and(annotations, (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
     }
     
     private final String condition;
@@ -75,7 +80,7 @@ class ContainsAnnotations extends Annotations {
     public @Nullable String match(Element element, TypeMirrors types) {
         for (var annotation : values) {
             if (element.getAnnotationsByType(annotation).length == 0) {
-                return map(element);
+                return format(element);
             }
         }
         return null;
@@ -93,7 +98,7 @@ class NoAnnotations extends Annotations {
     public @Nullable String match(Element element, TypeMirrors types) {
         for (var annotation : values) {
             if (element.getAnnotationsByType(annotation).length != 0) {
-                return map(element);
+                return format(element);
             }
         }
         return null;

@@ -49,9 +49,13 @@ public abstract class Times<T> implements Description {
         return new Most<>(most, match);
     }
     
+    public static <T> Times<T> no(Match<T> match) {
+        return new No<>(match);
+    }
+    
     static String format(int times, Match<?> match) {
         if (times == 0) {
-            return "no " + match.singular();
+            return "no " + match.plural();
             
         } else {
             return times + " " + match.plural();
@@ -159,6 +163,19 @@ class Most<T> extends Times<T> {
     @Override
     public @Nullable String match() {
         return current <= most ? null : format(current, match);
+    }
+    
+}
+
+class No<T> extends Times<T> {
+    
+    No(Match<T> match) {
+        super(match, "no " + match.plural());
+    }
+
+    @Override
+    public String match() {
+        return current == 0 ? null : format(current, match);
     }
     
 }
