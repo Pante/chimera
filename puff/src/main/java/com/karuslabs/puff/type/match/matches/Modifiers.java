@@ -34,13 +34,18 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Modifiers extends Many<Modifier> {
 
-    static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase());
+    static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase().replace('_', ' '));
     
     private final String condition;
     
     Modifiers(String condition, Modifier... modifiers) {
         super(modifiers);
         this.condition = condition;
+    }
+    
+    @Override
+    public String actual(Element element) {
+        return Format.and(element.getModifiers(), FORMAT);
     }
     
     @Override
@@ -72,7 +77,7 @@ class ExactlyModifiers extends Modifiers {
             return null;
         }
         
-        return Format.and(element.getModifiers(), FORMAT);
+        return actual(element);
     }
     
 }
@@ -89,7 +94,7 @@ class ContainsModifiers extends Modifiers {
             return null;
         }
         
-        return Format.and(element.getModifiers(), FORMAT);
+        return actual(element);
     }
     
 }
@@ -106,7 +111,7 @@ class NoModifiers extends Modifiers {
             return null;
         }
         
-        return Format.and(element.getModifiers(), FORMAT);
+        return actual(element);
     }
     
 }

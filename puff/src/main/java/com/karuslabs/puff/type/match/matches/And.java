@@ -49,6 +49,11 @@ public class And<T> extends Subject<T> {
             return right.match(element, types);
         }
     }
+    
+    @Override
+    public String actual(Element element) {
+        return left.actual(element);
+    }
 
     @Override
     public String condition() {
@@ -67,7 +72,7 @@ public class And<T> extends Subject<T> {
 
     
     @Override
-    Match<T> set(String singular, String plural) {
+    protected Match<T> set(String singular, String plural) {
         if (left instanceof Subject) {
             ((Subject) left).set(singular, plural);
         }

@@ -24,24 +24,42 @@
 package com.karuslabs.puff.type.match.matches;
 
 import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.Description;
-
 import javax.lang.model.element.Element;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public interface Match<T> extends Description {
+public class Any<T> implements Match<T> {
 
-    @Nullable String match(Element element, TypeMirrors types);
+    private final String singular;
+    private final String plural;
     
-    String actual(Element element);
-    
-    default Subject<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public Any(String singular, String plural) {
+        this.singular = singular;
+        this.plural = plural;
     }
     
-    default Subject<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    @Override
+    public @Nullable String match(Element element, TypeMirrors types) {
+        return null;
     }
-    
+
+    @Override
+    public String actual(Element element) {
+        return "";
+    }
+
+    @Override
+    public String condition() {
+        return singular;
+    }
+
+    @Override
+    public String singular() {
+        return singular;
+    }
+
+    @Override
+    public String plural() {
+        return plural;
+    }
+
 }

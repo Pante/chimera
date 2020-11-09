@@ -41,6 +41,11 @@ abstract class TypeMatch implements Match<TypeMirror> {
     }
     
     @Override
+    public String actual(Element element) {
+        return element.asType().toString();
+    }
+    
+    @Override
     public String condition() {
         return condition;
     }
@@ -66,11 +71,16 @@ class ExactlyPrimitive implements Match<TypeMirror> {
     public @Nullable String match(Element element, TypeMirrors types) {
         var kind = element.asType().getKind();
         if (kind != expected) {
-            return kind.toString().toLowerCase();
+            return actual(element);
             
         } else {
             return null;
         }
+    }
+    
+    @Override
+    public String actual(Element element) {
+        return element.asType().toString().toLowerCase().replace('_', ' ');
     }
 
     @Override

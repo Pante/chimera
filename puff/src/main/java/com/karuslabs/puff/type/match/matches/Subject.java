@@ -25,6 +25,6 @@ package com.karuslabs.puff.type.match.matches;
 
 public abstract class Subject<T> implements Match<T> {
 
-    abstract Match<T> set(String singular, String plural);
+    protected abstract Match<T> set(String singular, String plural);
     
 }

@@ -35,6 +35,19 @@ import javax.lang.model.type.*;
 
 public @Static class Matches {
     
+    public static final Match<Modifier> ANY_MODIFIER = new Any("", "");
+    public static final Match<TypeMirror> ANY_TYPE = new Any("any type", "any types");
+    public static final Match<Class<? extends Annotation>> ANY_ANNOTATION = new Any("any annotation", "any annotations");
+    
+    public static <T> Match<T> any(String singular, String plural) {
+        return new Any<>(singular, plural);
+    }
+    
+    public static Variable.Builder variable() {
+        return new Variable.Builder();
+    }
+    
+    
     public static <T> Match<T> type(Subject<T> match) {
         return match.set("type", "types");
     }

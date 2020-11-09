@@ -36,11 +36,32 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Contents<T> implements Description {
     
+    public static <T> Contents<T> types(SubjectContents<T> contents) {
+        return contents.set("type", "types");
+    }
+    
+    public static <T> Contents<T> methods(SubjectContents<T> contents) {
+        return contents.set("method", "methods");
+    }
+    
+    public static <T> Contents<T> arguments(SubjectContents<T> contents) {
+        return contents.set("argument", "arguments");
+    }
+    
+    public static <T> Contents<T> fields(SubjectContents<T> contents) {
+        return contents.set("field", "fields");
+    }
+    
+    public static <T> Contents<T> variables(SubjectContents<T> contents) {
+        return contents.set("variable", "variables");
+    }
+    
+    
     public static <T> Contents<T> contains(Times<T>... times) {
         return new ContainsContents(times);
     }
     
-    public static <T> Contents<T> exactly(Match<T>... matches) {
+    public static <T> SubjectContents<T> exactly(Match<T>... matches) {
         return new ExactlyContents<>(matches);
     }
     
@@ -49,13 +70,9 @@ public abstract class Contents<T> implements Description {
     }
     
     private final String condition;
-    protected String singular;
-    protected String plural;
     
     public Contents(String condition) {
         this.condition = condition;
-        singular = "element";
-        plural = "elements";
     }
     
     public abstract @Nullable String match(Collection<? extends Element> elements, TypeMirrors types);
@@ -114,7 +131,7 @@ class ContainsContents<T> extends Contents<T> {
     
 }
 
-class ExactlyContents<T> extends Contents<T> {
+class ExactlyContents<T> extends SubjectContents<T> {
 
     private final Match<T>[] matches;
     

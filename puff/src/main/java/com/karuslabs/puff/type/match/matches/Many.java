@@ -36,7 +36,7 @@ public abstract class Many<T> extends Subject<T> {
     }
     
     @Override
-    Match<T> set(String singular, String plural) {
+    protected Match<T> set(String singular, String plural) {
         if ("element".equals(this.singular) && "elements".equals(this.plural)) {
             this.singular = singular;
             this.plural = plural;

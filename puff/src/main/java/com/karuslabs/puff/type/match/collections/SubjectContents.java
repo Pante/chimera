@@ -21,27 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.type.match.collections;
 
-import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.Description;
-
-import javax.lang.model.element.Element;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public interface Match<T> extends Description {
-
-    @Nullable String match(Element element, TypeMirrors types);
+public abstract class SubjectContents<T> extends Contents<T> {
     
-    String actual(Element element);
+    protected String singular;
+    protected String plural;
     
-    default Subject<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public SubjectContents(String condition) {
+        super(condition);
+        singular = "element";
+        plural = "elements";
     }
     
-    default Subject<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    protected Contents<T> set(String singular, String plural) {
+        if ("element".equals(this.singular) && "elements".equals(this.plural)) {
+            this.singular = singular;
+            this.plural = plural;
+        }
+        
+        return this;
     }
     
 }
