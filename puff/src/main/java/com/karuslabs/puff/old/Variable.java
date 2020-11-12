@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.old;
 
 import com.karuslabs.puff.type.TypeMirrors;
 
@@ -31,7 +31,8 @@ import javax.lang.model.type.TypeMirror;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.puff.type.match.matches.Matches.*;
+import static com.karuslabs.puff.Format.prefix;
+import static com.karuslabs.puff.old.Matches.*;
 
 public class Variable implements Match<VariableElement> {
     
@@ -45,9 +46,8 @@ public class Variable implements Match<VariableElement> {
         this.modifiers = modifiers;
         this.type = type;
         this.annotations = annotations;
-        // TODO: Handle empty condition
-        singular = modifiers.condition() + " " + type.singular() + " annotated with " + annotations.condition();
-        plural = modifiers.condition() + " " + type.plural() + " annotated with " + annotations.condition();
+        singular = prefix(modifiers.condition(), type.singular()) + " annotated with " + annotations.condition();
+        plural = prefix(modifiers.condition(), type.plural()) + " annotated with " + annotations.condition();
     }
     
     @Override
@@ -97,6 +97,10 @@ public class Variable implements Match<VariableElement> {
         public Builder type(Match<TypeMirror> type) {
             this.type = type;
             return this;
+        }
+        
+        public Builder type(Class<?> type) {
+            this.type = exactly(type);
         }
         
         public Builder annotations(Match<Class<? extends Annotation>> annotations) {
