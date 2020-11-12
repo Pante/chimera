@@ -21,97 +21,74 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.match;
 
-import com.karuslabs.puff.Format;
+import com.karuslabs.puff.Texts;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public abstract class Modifiers extends Many<Modifier> {
+abstract class ModifierMatch implements Match<Modifier> {
 
     static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase().replace('_', ' '));
     
-    private final String condition;
+    final Set<Modifier> modifiers;
+    final String expectation;
     
-    Modifiers(String condition, Modifier... modifiers) {
-        super(modifiers);
-        this.condition = condition;
-    }
-    
-    @Override
-    public String actual(Element element) {
-        return Format.and(element.getModifiers(), FORMAT);
-    }
-    
-    @Override
-    public String condition() {
-        return condition;
-    }
-    
-    @Override
-    public String singular() {
-        return condition + " " + singular;
+    ModifierMatch(Set<Modifier> modifiers, String expectation) {
+        this.modifiers = modifiers;
+        this.expectation = expectation;
     }
 
     @Override
-    public String plural() {
-        return condition + " " + plural;
+    public String describe(Element element) {
+        return Texts.and(element.getModifiers(), FORMAT);
+    }
+
+    @Override
+    public String expectation() {
+        return expectation;
     }
     
 }
 
-class ExactlyModifiers extends Modifiers {
+class ExactlyModifiers extends ModifierMatch {
 
     ExactlyModifiers(Modifier... modifiers) {
-        super("exactly " + Format.and(List.of(modifiers), FORMAT));
+        super(Set.of(modifiers), "exactly " + Texts.and(modifiers, FORMAT));
     }
     
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        if (element.getModifiers().equals(values)) {
-            return null;
-        }
-        
-        return actual(element);
+    public boolean match(TypeMirrors types, Element element) {
+        return element.getModifiers().equals(modifiers);
     }
     
 }
 
-class ContainsModifiers extends Modifiers {
+class ContainsModifiers extends ModifierMatch {
 
     ContainsModifiers(Modifier... modifiers) {
-        super(Format.and(List.of(modifiers), FORMAT), modifiers);
+        super(Set.of(modifiers), Texts.and(modifiers, FORMAT));
     }
     
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        if (element.getModifiers().containsAll(values)) {
-            return null;
-        }
-        
-        return actual(element);
+    public boolean match(TypeMirrors types, Element element) {
+        return element.getModifiers().containsAll(modifiers);
     }
     
 }
 
-class NoModifiers extends Modifiers {
+class NoModifiers extends ModifierMatch {
 
     NoModifiers(Modifier... modifiers) {
-        super("neither " + Format.or(List.of(modifiers), FORMAT), modifiers);
+        super(Set.of(modifiers), "neither " + Texts.or(modifiers, FORMAT));
     }
     
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        if (Collections.disjoint(element.getModifiers(), values)) {
-            return null;
-        }
-        
-        return actual(element);
+    public boolean match(TypeMirrors types, Element element) {
+        return Collections.disjoint(element.getModifiers(), modifiers);
     }
     
 }

@@ -28,21 +28,38 @@ import com.karuslabs.annotations.Static;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 
-public @Static class Format {
+public @Static class Texts {
     
     public static <T> String and(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
         return join(elements, format, "and");
     }
     
+    public static <T> String and(T[] elements, BiConsumer<T, StringBuilder> format) {
+        return join(elements, format, "and");
+    }
+    
+    
     public static <T> String or(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
         return join(elements, format, "or");
     }
+    
+    public static <T> String or(T[] elements, BiConsumer<T, StringBuilder> format) {
+        return join(elements, format, "or");
+    }
+    
     
     public static <T> String join(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format, String conjunction) {
         var builder = new StringBuilder();
         join(elements, builder, format, conjunction);
         return builder.toString();
     }
+    
+    public static <T> String join(T[] elements, BiConsumer<T, StringBuilder> format, String conjunction) {
+        var builder = new StringBuilder();
+        join(elements, builder, format, conjunction);
+        return builder.toString();
+    }
+    
     
     public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<T, StringBuilder> format, String conjunction) {
         int i = 0;
@@ -59,6 +76,30 @@ public @Static class Format {
         }
     }
     
+    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<T, StringBuilder> format, String conjunction) {
+        for (var i = 0; i < elements.length; i++) {
+            format.accept(elements[i], builder);
+            if (i <  elements.length - 2) {
+                builder.append(", ");
+                
+            } else if (i < elements.length - 1) {
+                builder.append(' ').append(conjunction).append(' ');
+            }
+        }
+    }
+    
+    public static String join(String first, String separator, String second) {
+        if (first.isBlank()) {
+            return second;
+            
+        } else if (second.isBlank()) {
+            return first;
+            
+        } else {
+            return first + separator + second;
+        }
+    }
+    
     
     public static String format(Object value, String reason) {
         return quote(value) + " " + reason;
@@ -71,6 +112,18 @@ public @Static class Format {
     
     public static String quote(Object value) {
         return "\"" + value + "\"";
+    }
+    
+    public static String plural(String noun) {
+        if (noun.isBlank()) {
+            return noun;
+            
+        } else if (noun.endsWith("s") || noun.endsWith("sh") || noun.endsWith("ch") || noun.endsWith("x") || noun.endsWith("z")) {
+            return noun + "es";
+            
+        } else {
+            return noun + "s";
+        }
     }
     
 }

@@ -21,45 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.match;
 
-import com.karuslabs.puff.type.TypeMirrors;
 import javax.lang.model.element.Element;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class Any<T> implements Match<T> {
-
-    private final String singular;
-    private final String plural;
+public interface Description {
     
-    public Any(String singular, String plural) {
-        this.singular = singular;
-        this.plural = plural;
+    String describe(Element element);
+
+    String expectation();
+    
+    default String expectations() {
+        return expectation();
     }
     
-    @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        return null;
-    }
-
-    @Override
-    public String actual(Element element) {
-        return "";
-    }
-
-    @Override
-    public String condition() {
-        return singular;
-    }
-
-    @Override
-    public String singular() {
-        return singular;
-    }
-
-    @Override
-    public String plural() {
-        return plural;
-    }
-
 }

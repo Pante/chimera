@@ -21,26 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.collections;
+package com.karuslabs.puff.match.sequence;
 
-public abstract class SubjectContents<T> extends Contents<T> {
-    
-    protected String singular;
-    protected String plural;
-    
-    public SubjectContents(String condition) {
-        super(condition);
-        singular = "element";
-        plural = "elements";
-    }
-    
-    protected Contents<T> set(String singular, String plural) {
-        if ("element".equals(this.singular) && "elements".equals(this.plural)) {
-            this.singular = singular;
-            this.plural = plural;
-        }
-        
-        return this;
-    }
+import com.karuslabs.puff.type.TypeMirrors;
+
+import java.util.Collection;
+import javax.lang.model.element.Element;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public abstract class Seqeunce<T> {
+
+    public abstract @Nullable String match(Collection<? extends Element> elements, TypeMirrors types);
     
 }

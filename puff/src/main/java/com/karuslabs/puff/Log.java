@@ -29,7 +29,7 @@ import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.puff.Format.format;
+import static com.karuslabs.puff.Texts.format;
 import static javax.tools.Diagnostic.Kind.*;
 
 public class Log {

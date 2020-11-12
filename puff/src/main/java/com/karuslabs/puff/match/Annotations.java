@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.match;
 
-import com.karuslabs.puff.Format;
+import com.karuslabs.puff.Texts;
 import com.karuslabs.puff.type.*;
 
 import java.lang.annotation.Annotation;
@@ -31,78 +31,68 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+abstract class AnnotationMatch implements Match<Class<? extends Annotation>> {
 
-public abstract class Annotations extends Many<Class<? extends Annotation>> {
-    
     static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
-    private final String condition;
+    final List<Class<? extends Annotation>> annotations;
+    final String expectation;
     
-    Annotations(String condition, Class<? extends Annotation>... annotations) {
-        super(annotations);
-        this.condition = condition;
+    AnnotationMatch(List<Class<? extends Annotation>> annotations, String expectation) {
+        this.annotations = annotations;
+        this.expectation = expectation;
     }
     
     @Override
-    public String actual(Element element) {
+    public String describe(Element element) {
         var annotations = element.getAnnotationMirrors();
         if (annotations.isEmpty()) {
-            return "no annotations";
+            return "no annotation";
         }
         
-        return Format.and(annotations, (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
+        return Texts.and(annotations, (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
     }
-    
+
     @Override
-    public String condition() {
-        return condition;
-    }
-    
-    @Override
-    public String singular() {
-        return singular + " annotated with " + condition;
-    }
-    
-    @Override
-    public String plural() {
-        return plural + " annotated with " + condition;
+    public String expectation() {
+        return expectation;
     }
     
 }
 
-class ContainsAnnotations extends Annotations {
+class ContainsAnnotations extends AnnotationMatch {
 
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
-        super(Format.and(List.of(annotations), FORMAT), annotations);
+        super(List.of(annotations), Texts.and(annotations, FORMAT));
     }
     
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        for (var annotation : values) {
+    public boolean match(TypeMirrors types, Element element) {
+        for (var annotation : annotations) {
             if (element.getAnnotationsByType(annotation).length == 0) {
-                return actual(element);
+                return false;
             }
         }
-        return null;
+        
+        return true;
     }
     
 }
 
-class NoAnnotations extends Annotations {
+class NoAnnotations extends AnnotationMatch {
     
     NoAnnotations(Class<? extends Annotation>... annotations) {
-        super("neither " + Format.or(List.of(annotations), FORMAT), annotations);
+        super(List.of(annotations), "neither " + Texts.or(annotations, FORMAT));
     }
 
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
-        for (var annotation : values) {
+    public boolean match(TypeMirrors types, Element element) {
+        for (var annotation : annotations) {
             if (element.getAnnotationsByType(annotation).length != 0) {
-                return actual(element);
+                return false;
             }
         }
-        return null;
+        return true;
     }
     
 }

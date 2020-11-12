@@ -21,18 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.times;
+package com.karuslabs.puff.match.times;
 
+import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.Description;
-import com.karuslabs.puff.type.match.matches.Match;
 
 import javax.lang.model.element.Element;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 public abstract class Times<T> implements Description {
-    
+
     public static <T> Times<T> exactly(int times, Match<T> match) {
         return new Exactly<>(times, match);
     }
@@ -55,27 +52,27 @@ public abstract class Times<T> implements Description {
     
     static String format(int times, Match<?> match) {
         if (times == 0) {
-            return "no " + match.plural();
+            return "no " + match.expectations();
             
         } else {
-            return times + " " + match.plural();
+            return times + " " + match.expectations();
         }
     }
     
     protected final Match<T> match;
-    protected final String condition;
+    protected final String expectation;
     protected int current;
     
-    public Times(Match<T> match, String condition) {
+    public Times(Match<T> match, String expectation) {
         this.match = match;
-        this.condition = condition;
+        this.expectation = expectation;
         this.current = 0;
     }
     
-    public abstract @Nullable String match();
-    
-    public void add(Element element, TypeMirrors types) {
-        if (match.match(element, types) == null) {
+    public abstract boolean verify();
+        
+    public void add(TypeMirrors types, Element element) {
+        if (match.match(types, element)) {
             current++;
         }
     }
@@ -85,20 +82,20 @@ public abstract class Times<T> implements Description {
     }
     
     @Override
-    public String condition() {
-        return condition;
+    public String describe(Element element) {
+        if (current == 0) {
+            return "no " + match.expectations();
+            
+        } else {
+            return current + " " + match.expectations();
+        }
     }
-    
+
     @Override
-    public String singular() {
-        return condition;
+    public String expectation() {
+        return expectation;
     }
-    
-    @Override
-    public String plural() {
-        return condition;
-    }
-    
+
 }
 
 class Exactly<T> extends Times<T> {
@@ -111,8 +108,8 @@ class Exactly<T> extends Times<T> {
     }
 
     @Override
-    public @Nullable String match() {
-        return current == times ? null : format(current, match);
+    public boolean verify() {
+        return current == times;
     }
 
 }
@@ -123,14 +120,14 @@ class Between<T> extends Times<T> {
     private final int max;
     
     Between(int min, int max, Match<T> match) {
-        super(match, "between " + min + " to " + max + " " + match.plural());
+        super(match, "between " + min + " to " + max + " " + match.expectations());
         this.min = min;
         this.max = max;
     }
 
     @Override
-    public String match() {
-        return current > min && current <= max ? null : format(current, match);
+    public boolean verify() {
+        return current > min && current <= max;
     }
     
 }
@@ -140,13 +137,13 @@ class Least<T> extends Times<T> {
     private final int least;
     
     Least(int least, Match<T> match) {
-        super(match, "at least " + least + " " + match.plural());
+        super(match, "at least " + least + " " + match.expectations());
         this.least = least;
     }
 
     @Override
-    public @Nullable String match() {
-        return current >= least ? null : format(current, match);
+    public boolean verify() {
+        return current >= least;
     }
     
 }
@@ -156,13 +153,13 @@ class Most<T> extends Times<T> {
     private final int most;
     
     Most(int most, Match<T> match) {
-        super(match, "at most " + most + " " + match.plural());
+        super(match, "at most " + most + " " + match.expectations());
         this.most = most;
     }
 
     @Override
-    public @Nullable String match() {
-        return current <= most ? null : format(current, match);
+    public boolean verify() {
+        return current <= most;
     }
     
 }
@@ -170,12 +167,12 @@ class Most<T> extends Times<T> {
 class No<T> extends Times<T> {
     
     No(Match<T> match) {
-        super(match, "no " + match.plural());
+        super(match, "no " + match.expectations());
     }
 
     @Override
-    public String match() {
-        return current == 0 ? null : format(current, match);
+    public boolean verify() {
+        return current == 0;
     }
     
 }

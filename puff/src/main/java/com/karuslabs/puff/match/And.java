@@ -21,10 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.match;
 
-public abstract class Subject<T> implements Match<T> {
+import com.karuslabs.puff.Texts;
+import com.karuslabs.puff.type.TypeMirrors;
 
-    protected abstract Match<T> set(String singular, String plural);
+import javax.lang.model.element.Element;
+
+public class And<T> implements Match<T> {
+
+    private final Match<T> left;
+    private final Match<T> right;
+    
+    public And(Match<T> left, Match<T> right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public boolean match(TypeMirrors types, Element element) {
+        return left.match(types, element) && right.match(types, element);
+    }
+
+    @Override
+    public String describe(Element value) {
+        return left.describe(value);
+    }
+
+    @Override
+    public String expectation() {
+        return Texts.join(left.expectation(), " and ", right.expectation());
+    }
+    
+    @Override
+    public String expectations() {
+        return Texts.join(left.expectations(), " and ", right.expectations());
+    }
     
 }

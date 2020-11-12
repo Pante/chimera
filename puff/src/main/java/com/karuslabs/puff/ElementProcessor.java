@@ -44,8 +44,6 @@ public abstract class ElementProcessor extends AnnotationProcessor {
     protected abstract void process(Element element);
     
     @VisibleForOverride
-    protected void clear() {
-        
-    }
+    protected void clear() {}
     
 }

@@ -21,27 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.type.match.matches;
+package com.karuslabs.puff.match;
 
+import com.karuslabs.puff.Texts;
 import com.karuslabs.puff.type.TypeMirrors;
-import com.karuslabs.puff.type.match.Description;
 
 import javax.lang.model.element.Element;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+public class Or<T> implements Match<T> {
 
-public interface Match<T> extends Description {
-
-    @Nullable String match(Element element, TypeMirrors types);
+    private final Match<T> left;
+    private final Match<T> right;
     
-    String actual(Element element);
-    
-    default Subject<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public Or(Match<T> left, Match<T> right) {
+        this.left = left;
+        this.right = right;
     }
     
-    default Subject<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    @Override
+    public boolean match(TypeMirrors types, Element element) {
+        return left.match(types, element) || right.match(types, element);
+    }
+
+    @Override
+    public String describe(Element value) {
+        return left.describe(value);
+    }
+
+    @Override
+    public String expectation() {
+        return Texts.join(left.expectation(), " or ", right.expectation());
+    }
+    
+    @Override
+    public String expectations() {
+        return Texts.join(left.expectations(), " or ", right.expectations());
     }
     
 }
