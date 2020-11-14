@@ -23,11 +23,7 @@
  */
 package com.karuslabs.puff.match;
 
-import javax.lang.model.element.Element;
-
 public interface Description {
-    
-    String describe(Element element);
 
     String expectation();
     

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.puff.match;
 
-import com.karuslabs.puff.match.Description;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
@@ -31,6 +30,8 @@ import javax.lang.model.element.Element;
 public interface Match<T> extends Description {
 
     boolean match(TypeMirrors types, Element element);
+    
+    String describe(Element element);
     
     default Match<T> and(Match<T> other) {
         return new And<>(this, other);

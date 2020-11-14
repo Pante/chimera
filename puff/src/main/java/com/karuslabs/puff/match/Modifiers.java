@@ -32,6 +32,18 @@ import javax.lang.model.element.*;
 
 abstract class ModifierMatch implements Match<Modifier> {
 
+    public static Match<Modifier> exactly(Modifier... modifiers) {
+        return new ExactModifiers(modifiers);
+    }
+    
+    public static Match<Modifier> contains(Modifier... modifiers) {
+        return new ContainsModifiers(modifiers);
+    }
+    
+    public static Match<Modifier> no(Modifier... modifiers) {
+        return new NoModifiers(modifiers);
+    }
+    
     static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase().replace('_', ' '));
     
     final Set<Modifier> modifiers;
@@ -54,9 +66,9 @@ abstract class ModifierMatch implements Match<Modifier> {
     
 }
 
-class ExactlyModifiers extends ModifierMatch {
+class ExactModifiers extends ModifierMatch {
 
-    ExactlyModifiers(Modifier... modifiers) {
+    ExactModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), "exactly " + Texts.and(modifiers, FORMAT));
     }
     

@@ -41,7 +41,7 @@ public @Static class Matches {
     
     
     public static Match<Modifier> exactly(Modifier... modifiers) {
-        return new ExactlyModifiers(modifiers);
+        return new ExactModifiers(modifiers);
     }
     
     public static Match<Modifier> contains(Modifier... modifiers) {
@@ -53,31 +53,31 @@ public @Static class Matches {
     }
     
     
-    public static Match<TypeMirror> exactly(TypeKind primitive) {
+    public static Timeable<TypeMirror> exactly(TypeKind primitive) {
         return new PrimitiveMatch(primitive);
     }
     
-    public static Match<TypeMirror> exactly(Class<?> type) {
+    public static Timeable<TypeMirror> exactly(Class<?> type) {
         return new ClassMatch(Relation.EXACTLY, type);
     }
     
-    public static Match<TypeMirror> exactly(TypeMirror type) {
+    public static Timeable<TypeMirror> exactly(TypeMirror type) {
         return new TypeMirrorMatch(Relation.EXACTLY, type);
     }
     
-    public static Match<TypeMirror> subtype(Class<?>... types) {
+    public static Timeable<TypeMirror> subtype(Class<?>... types) {
         return new ClassMatch(Relation.SUBTYPE, types);
     }
     
-    public static Match<TypeMirror> subtype(TypeMirror... types) {
+    public static Timeable<TypeMirror> subtype(TypeMirror... types) {
         return new TypeMirrorMatch(Relation.SUBTYPE, types);
     }
     
-    public static Match<TypeMirror> supertype(Class<?>... types) {
+    public static Timeable<TypeMirror> supertype(Class<?>... types) {
         return new ClassMatch(Relation.SUPERTYPE, types);
     }
     
-    public static Match<TypeMirror> supertype(TypeMirror... types) {
+    public static Timeable<TypeMirror> supertype(TypeMirror... types) {
         return new TypeMirrorMatch(Relation.SUPERTYPE, types);
     }
     

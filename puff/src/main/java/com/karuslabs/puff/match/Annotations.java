@@ -32,13 +32,21 @@ import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
 
 abstract class AnnotationMatch implements Match<Class<? extends Annotation>> {
-
+    
+    public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
+        return new ContainsAnnotations(annotations);
+    }
+    
+    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
+        return new NoAnnotations(annotations);
+    }
+    
     static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
-    final List<Class<? extends Annotation>> annotations;
+    final Class<? extends Annotation>[] annotations;
     final String expectation;
     
-    AnnotationMatch(List<Class<? extends Annotation>> annotations, String expectation) {
+    AnnotationMatch(Class<? extends Annotation>[] annotations, String expectation) {
         this.annotations = annotations;
         this.expectation = expectation;
     }
@@ -63,7 +71,7 @@ abstract class AnnotationMatch implements Match<Class<? extends Annotation>> {
 class ContainsAnnotations extends AnnotationMatch {
 
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
-        super(List.of(annotations), Texts.and(annotations, FORMAT));
+        super(annotations, Texts.and(annotations, FORMAT));
     }
     
     @Override
@@ -82,7 +90,7 @@ class ContainsAnnotations extends AnnotationMatch {
 class NoAnnotations extends AnnotationMatch {
     
     NoAnnotations(Class<? extends Annotation>... annotations) {
-        super(List.of(annotations), "neither " + Texts.or(annotations, FORMAT));
+        super(annotations, "neither " + Texts.or(annotations, FORMAT));
     }
 
     @Override

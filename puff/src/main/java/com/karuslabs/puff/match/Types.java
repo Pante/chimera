@@ -33,13 +33,13 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-abstract class TypeMatch implements Match<TypeMirror> {
+abstract class TypeMatch implements Timeable<TypeMirror> {
     
     final Relation relation;
-    final List<TypeMirror> mirrors;
+    final TypeMirror[] mirrors;
     final String list;
     
-    TypeMatch(Relation relation, List<TypeMirror> mirrors, String list) {
+    TypeMatch(Relation relation, TypeMirror[] mirrors, String list) {
         this.relation = relation;
         this.mirrors = mirrors;
         this.list = list;
@@ -62,7 +62,7 @@ abstract class TypeMatch implements Match<TypeMirror> {
     
 }
 
-class PrimitiveMatch implements Match<TypeMirror> {
+class PrimitiveMatch implements Timeable<TypeMirror> {
 
     final TypeKind primitive;
     
@@ -92,7 +92,7 @@ class TypeMirrorMatch extends TypeMatch {
     static final BiConsumer<TypeMirror, StringBuilder> FORMAT = (type, builder) -> type.accept(TypePrinter.SIMPLE, builder);
     
     TypeMirrorMatch(Relation relation, TypeMirror... mirrors) {
-        super(relation, List.of(mirrors), Texts.and(mirrors, FORMAT));
+        super(relation, mirrors, Texts.and(mirrors, FORMAT));
     }
     
     @Override
@@ -106,18 +106,18 @@ class ClassMatch extends TypeMatch {
 
     static final BiConsumer<Class<?>, StringBuilder> FORMAT = (type, builder) -> builder.append(type.getSimpleName());
     
-    @Nullable List<Class<?>> classes;
+    @Nullable Class<?>[] classes;
     
     ClassMatch(Relation relation, Class<?>... classes) {
-        super(relation, new ArrayList<>(), Texts.and(classes, FORMAT));
-        this.classes = List.of(classes);
+        super(relation, new TypeMirror[classes.length], Texts.and(classes, FORMAT));
+        this.classes = classes;
     }
     
     @Override
     public boolean match(TypeMirrors types, Element element) {
         if (classes != null) {
-            for (var type : classes) {
-                mirrors.add(types.type(type));
+            for (int i = 0; i < classes.length; i++) {
+                mirrors[i] = types.type(classes[i]);
             }
             classes = null;
         }
@@ -134,9 +134,9 @@ abstract class Relation {
     static final Relation SUBTYPE = new Subtype();
     static final Relation SUPERTYPE = new Supertype();
     
-    boolean test(TypeMirrors types, TypeMirror type, List<TypeMirror> expected) {
+    boolean test(TypeMirrors types, TypeMirror type, TypeMirror[]... expected) {
         for (var mirror : expected) {
-            if (!test(types, type, expected)) {
+            if (!test(types, type, mirror)) {
                 return false;
             }
         }

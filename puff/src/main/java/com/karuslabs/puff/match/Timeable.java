@@ -21,17 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match.sequence;
+package com.karuslabs.puff.match;
 
-import com.karuslabs.puff.type.TypeMirrors;
+public interface Timeable<T> extends Match<T> {
 
-import java.util.Collection;
-import javax.lang.model.element.Element;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public abstract class Seqeunce<T> {
-
-    public abstract @Nullable String match(Collection<? extends Element> elements, TypeMirrors types);
-    
 }

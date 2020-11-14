@@ -30,27 +30,27 @@ import javax.lang.model.element.Element;
 
 public abstract class Times<T> implements Description {
 
-    public static <T> Times<T> exactly(int times, Match<T> match) {
+    public static <T> Times<T> exactly(int times, Timeable<T> match) {
         return new Exactly<>(times, match);
     }
     
-    public static <T> Times<T> between(int min, int max, Match<T> match) {
+    public static <T> Times<T> between(int min, int max, Timeable<T> match) {
         return new Between<>(min, max, match);
     }
     
-    public static <T> Times<T> least(int least, Match<T> match) {
+    public static <T> Times<T> least(int least, Timeable<T> match) {
         return new Least<>(least, match);
     }
     
-    public static <T> Times<T> most(int most, Match<T> match) {
+    public static <T> Times<T> most(int most, Timeable<T> match) {
         return new Most<>(most, match);
     }
     
-    public static <T> Times<T> no(Match<T> match) {
+    public static <T> Times<T> no(Timeable<T> match) {
         return new No<>(match);
     }
     
-    static String format(int times, Match<?> match) {
+    static String format(int times, Timeable<?> match) {
         if (times == 0) {
             return "no " + match.expectations();
             
@@ -59,11 +59,11 @@ public abstract class Times<T> implements Description {
         }
     }
     
-    protected final Match<T> match;
+    protected final Timeable<T> match;
     protected final String expectation;
     protected int current;
     
-    public Times(Match<T> match, String expectation) {
+    public Times(Timeable<T> match, String expectation) {
         this.match = match;
         this.expectation = expectation;
         this.current = 0;
@@ -81,8 +81,7 @@ public abstract class Times<T> implements Description {
         current = 0;
     }
     
-    @Override
-    public String describe(Element element) {
+    public String describe() {
         if (current == 0) {
             return "no " + match.expectations();
             
@@ -102,7 +101,7 @@ class Exactly<T> extends Times<T> {
 
     private final int times;
     
-    public Exactly(int times, Match<T> match) {
+    public Exactly(int times, Timeable<T> match) {
         super(match, format(times, match));
         this.times = times;
     }
@@ -119,7 +118,7 @@ class Between<T> extends Times<T> {
     private final int min;
     private final int max;
     
-    Between(int min, int max, Match<T> match) {
+    Between(int min, int max, Timeable<T> match) {
         super(match, "between " + min + " to " + max + " " + match.expectations());
         this.min = min;
         this.max = max;
@@ -136,7 +135,7 @@ class Least<T> extends Times<T> {
     
     private final int least;
     
-    Least(int least, Match<T> match) {
+    Least(int least, Timeable<T> match) {
         super(match, "at least " + least + " " + match.expectations());
         this.least = least;
     }
@@ -152,7 +151,7 @@ class Most<T> extends Times<T> {
     
     private final int most;
     
-    Most(int most, Match<T> match) {
+    Most(int most, Timeable<T> match) {
         super(match, "at most " + most + " " + match.expectations());
         this.most = most;
     }
@@ -166,7 +165,7 @@ class Most<T> extends Times<T> {
 
 class No<T> extends Times<T> {
     
-    No(Match<T> match) {
+    No(Timeable<T> match) {
         super(match, "no " + match.expectations());
     }
 
