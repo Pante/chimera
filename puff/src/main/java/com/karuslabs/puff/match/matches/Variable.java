@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.old;
+package com.karuslabs.puff.match.matches;
 
+import com.karuslabs.puff.Texts;
+import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
@@ -31,67 +33,75 @@ import javax.lang.model.type.TypeMirror;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.puff.Format.prefix;
-import static com.karuslabs.puff.old.Matches.*;
+import static com.karuslabs.puff.Texts.join;
+import static com.karuslabs.puff.match.matches.Matches.*;
 
-public class Variable implements Match<VariableElement> {
-    
+public class Variable extends AbstractDescription implements Timeable<VariableElement> {
+
     private final Match<Modifier> modifiers;
     private final Match<TypeMirror> type;
     private final Match<Class<? extends Annotation>> annotations;
-    private final String singular;
-    private final String plural;
     
     public Variable(Match<Modifier> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations) {
+        this(
+            modifiers, 
+            type, 
+            annotations, 
+            join(join(modifiers.expectation(), " ", type.expectation()), " annotated with ", annotations.expectation()),
+            join(join(modifiers.expectation(), " ", type.expectations()), " annotated with ", annotations.expectation())
+        );
+    }
+    
+    public Variable(Match<Modifier> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations, String expectation, String expectations) {
+        super(expectation, expectations);
         this.modifiers = modifiers;
         this.type = type;
         this.annotations = annotations;
-        singular = prefix(modifiers.condition(), type.singular()) + " annotated with " + annotations.condition();
-        plural = prefix(modifiers.condition(), type.plural()) + " annotated with " + annotations.condition();
     }
     
     @Override
-    public @Nullable String match(Element element, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Element element) {
+        if (!(element instanceof VariableElement)) {
+            return false;
+        }
+        
+        return modifiers.match(types, element) && type.match(types, element) && annotations.match(types, element);
+    }
+
+    @Override
+    public String describe(Element element) {
         if (!(element instanceof VariableElement)) {
             return element.getKind().toString().toLowerCase().replace('_', ' ');
-            
-        } else if (modifiers.match(element, types) != null || type.match(element, types) != null || annotations.match(element, types) != null) {
-             return actual(element);
-            
-        } else {
-            return null;
         }
+        
+        var description = modifiers.describe(element) + " " + type.describe(element);
+        var annotated = annotations.describe(element);
+        if (!annotated.isEmpty()) {
+            description += " annotated with " + annotated;
+        }
+        return description;
     }
     
-    @Override
-    public String actual(Element element) {
-        return modifiers.actual(element) + " " + type.actual(element) + " annotated with " + annotations.actual(element);
-    }
-
-    @Override
-    public String condition() {
-        return singular;
-    }
-
-    @Override
-    public String singular() {
-        return singular;
-    }
-
-    @Override
-    public String plural() {
-        return plural;
-    }
     
     public static class Builder {
         
         private Match<Modifier> modifiers = ANY_MODIFIER;
         private Match<TypeMirror> type = ANY_TYPE;
         private Match<Class<? extends Annotation>> annotations = ANY_ANNOTATION;
+        private @Nullable String single;
+        private @Nullable String plural;
+        
+        public Builder modifiers(Modifier... modifiers) {
+            return modifiers(exactly(modifiers));
+        }
         
         public Builder modifiers(Match<Modifier> modifiers) {
             this.modifiers = modifiers;
             return this;
+        }
+        
+        public Builder type(Class<?> type) {
+            return type(exactly(type));
         }
         
         public Builder type(Match<TypeMirror> type) {
@@ -99,17 +109,19 @@ public class Variable implements Match<VariableElement> {
             return this;
         }
         
-        public Builder type(Class<?> type) {
-            this.type = exactly(type);
-        }
-        
         public Builder annotations(Match<Class<? extends Annotation>> annotations) {
             this.annotations = annotations;
             return this;
         }
         
+        public Builder expectation(String single, String plural) {
+            this.single = single;
+            this.plural = plural;
+            return this;
+        }
+        
         public Variable build() {
-            return new Variable(modifiers, type, annotations);
+            return single == null || plural == null ? new Variable(modifiers, type, annotations) : new Variable(modifiers, type, annotations, single, plural);
         }
         
     }

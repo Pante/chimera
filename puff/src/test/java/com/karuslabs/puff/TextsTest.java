@@ -21,41 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff;
 
-import com.karuslabs.puff.Texts;
-import com.karuslabs.puff.type.TypeMirrors;
+import org.junit.jupiter.api.Test;
 
-import javax.lang.model.element.Element;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class And<T> implements Match<T> {
-
-    private final Match<T> left;
-    private final Match<T> right;
+class TextsTest {
     
-    public And(Match<T> left, Match<T> right) {
-        this.left = left;
-        this.right = right;
-    }
-
-    @Override
-    public boolean match(TypeMirrors types, Element element) {
-        return left.match(types, element) && right.match(types, element);
-    }
-
-    @Override
-    public String describe(Element value) {
-        return left.describe(value);
-    }
-
-    @Override
-    public String expectation() {
-        return Texts.join(left.expectation(), " and ", right.expectation());
+    @Test
+    void format_reason() {
+        assertEquals("\"something\" why", Texts.format("something", "why"));
     }
     
-    @Override
-    public String expectations() {
-        return Texts.join(left.expectations(), " and ", right.expectations());
+    
+    @Test
+    void format_reason_resolution() {
+        assertEquals("\"something\" why, how", Texts.format("something", "why", "how"));
     }
     
-}
+    
+    @Test
+    void quote() {
+        assertEquals("\"something\"", Texts.quote("something"));
+    }
+
+} 

@@ -21,16 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.match.matches;
 
 import com.karuslabs.annotations.Static;
+import com.karuslabs.puff.match.*;
+import com.karuslabs.puff.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
-import javax.lang.model.element.Modifier;
+import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
 public @Static class Matches {
 
+    public static final Timeable<TypeMirror> ANY_TYPE = new AnyType();
+    public static final Match<Modifier> ANY_MODIFIER = new AnyModifier();
+    public static final Match<Class<? extends Annotation>> ANY_ANNOTATION = new AnyAnnotation();
+    
+    
+    public static Variable.Builder variable() {
+        return new Variable.Builder();
+    }
+    
+    
     public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
         return new ContainsAnnotations(annotations);
     }
@@ -58,11 +70,22 @@ public @Static class Matches {
     }
     
     public static Timeable<TypeMirror> exactly(Class<?> type) {
-        return new ClassMatch(Relation.EXACTLY, type);
+        var kind = TypeMirrors.kind(type);
+        if (kind.isPrimitive()) {
+            return new PrimitiveMatch(kind);
+                
+        } else {
+            return new ClassMatch(Relation.EXACTLY, type);
+        }
     }
     
     public static Timeable<TypeMirror> exactly(TypeMirror type) {
-        return new TypeMirrorMatch(Relation.EXACTLY, type);
+        if (type.getKind().isPrimitive()) {
+            return new PrimitiveMatch(type.getKind());
+            
+        } else {
+            return new TypeMirrorMatch(Relation.EXACTLY, type);
+        }
     }
     
     public static Timeable<TypeMirror> subtype(Class<?>... types) {

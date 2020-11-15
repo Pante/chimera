@@ -21,26 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.match.matches;
 
-import com.karuslabs.puff.match.matches.And;
-import com.karuslabs.puff.match.matches.Or;
+import com.karuslabs.puff.Texts;
+import com.karuslabs.puff.match.Match;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public interface Match<T> extends Description {
+public class Or<T> implements Match<T> {
 
-    boolean match(TypeMirrors types, Element element);
+    private final Match<T> left;
+    private final Match<T> right;
     
-    String describe(Element element);
-    
-    default Match<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public Or(Match<T> left, Match<T> right) {
+        this.left = left;
+        this.right = right;
     }
     
-    default Match<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    @Override
+    public boolean match(TypeMirrors types, Element element) {
+        return left.match(types, element) || right.match(types, element);
+    }
+
+    @Override
+    public String describe(Element value) {
+        return left.describe(value);
+    }
+
+    @Override
+    public String expectation() {
+        return Texts.join(left.expectation(), " or ", right.expectation());
+    }
+    
+    @Override
+    public String expectations() {
+        return Texts.join(left.expectations(), " or ", right.expectations());
     }
     
 }

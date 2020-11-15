@@ -21,29 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff;
+package com.karuslabs.puff.match;
 
-import org.junit.jupiter.api.Test;
+public class AbstractDescription implements Description {
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class MessagesTest {
+    protected final String expectation;
+    protected final String expectations;
     
-    @Test
-    void format_reason() {
-        assertEquals("\"something\" why", Format.format("something", "why"));
+    public AbstractDescription(String expectation) {
+        this(expectation, expectation);
     }
     
-    
-    @Test
-    void format_reason_resolution() {
-        assertEquals("\"something\" why, how", Format.format("something", "why", "how"));
+    public AbstractDescription(String expectation, String expectations) {
+        this.expectation = expectation;
+        this.expectations = expectations;
     }
     
+    @Override
+    public String expectation() {
+        return expectation;
+    }
     
-    @Test
-    void quote() {
-        assertEquals("\"something\"", Format.quote("something"));
+    @Override
+    public String expectations() {
+        return expectations;
     }
 
-} 
+}

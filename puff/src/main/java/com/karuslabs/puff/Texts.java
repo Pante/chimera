@@ -30,6 +30,8 @@ import java.util.function.BiConsumer;
 
 public @Static class Texts {
     
+    public static BiConsumer<String, StringBuilder> STRING = (string, builder) -> builder.append(string);
+    
     public static <T> String and(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
         return join(elements, format, "and");
     }

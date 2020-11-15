@@ -33,6 +33,18 @@ import javax.lang.model.element.Element;
 
 public abstract class Sequence<T> {
 
+    public static <T> Sequence<T> contains(Times<T>... times) {
+        return new ContainsSequence<>(times);
+    }
+    
+    public static <T> Sequence<T> exactly(Match<T>... matches) {
+        return new ExactSequence<>(matches);
+    }
+    
+    public static <T> Sequence<T> each(Match<T> match) {
+        return new EachSequence<>(match);
+    }
+    
     private final String expectation;
     
     public Sequence(String expectation) {
@@ -108,18 +120,71 @@ class ExactSequence<T> extends Sequence<T> {
         
         int i = 0;
         for (var element : elements) {
-            
+            if (!matches[i++].match(types, element)) {
+                return false;
+            }
         }
+        
+        return true;
     }
 
     @Override
     public String describe(Collection<? extends Element> elements) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (matches.length > 0 && elements.isEmpty()) {
+            return "empty";
+            
+        } else if (matches.length < elements.size()) {
+            return elements.size() + " identifiers";
+            
+        } else {
+            var descriptions = new String[elements.size()];
+            int i = 0;
+            for (var element : elements) {
+                descriptions[i] = matches[i].describe(element);
+                i++;
+            }
+            
+            return Texts.and(descriptions, Texts.STRING);
+        }
     }
 
     @Override
-    public void reset() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void reset() {}
+    
+}
+
+class EachSequence<T> extends Sequence<T> {
+    
+    private final Match<T> match;
+    
+    EachSequence(Match<T> match) {
+        super(match.expectations());
+        this.match = match;
     }
+
+    @Override
+    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+        for (var element : elements) {
+            if (!match.match(types, element)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    @Override
+    public String describe(Collection<? extends Element> elements) {
+        var descriptions = new String[elements.size()];
+        int i = 0;
+        for (var element : elements) {
+            descriptions[i++] = match.describe(element);
+        }
+        
+        return Texts.and(descriptions, Texts.STRING);
+    }
+
+    @Override
+    public void reset() {}
     
 }

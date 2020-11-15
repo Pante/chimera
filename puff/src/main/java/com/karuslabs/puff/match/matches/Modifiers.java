@@ -21,47 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.match.matches;
 
 import com.karuslabs.puff.Texts;
+import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.*;
 
-abstract class ModifierMatch implements Match<Modifier> {
-
-    public static Match<Modifier> exactly(Modifier... modifiers) {
-        return new ExactModifiers(modifiers);
-    }
-    
-    public static Match<Modifier> contains(Modifier... modifiers) {
-        return new ContainsModifiers(modifiers);
-    }
-    
-    public static Match<Modifier> no(Modifier... modifiers) {
-        return new NoModifiers(modifiers);
-    }
+abstract class ModifierMatch extends AbstractDescription implements Match<Modifier> {
     
     static final BiConsumer<Modifier, StringBuilder> FORMAT = (modifier, builder) -> builder.append(modifier.toString().toLowerCase().replace('_', ' '));
     
     final Set<Modifier> modifiers;
-    final String expectation;
     
     ModifierMatch(Set<Modifier> modifiers, String expectation) {
+        super(expectation);
         this.modifiers = modifiers;
-        this.expectation = expectation;
     }
 
     @Override
     public String describe(Element element) {
         return Texts.and(element.getModifiers(), FORMAT);
     }
+    
+}
+
+class AnyModifier extends ModifierMatch {
+
+    AnyModifier() {
+        super(Set.of(), "");
+    }
 
     @Override
-    public String expectation() {
-        return expectation;
+    public boolean match(TypeMirrors types, Element element) {
+        return true;
     }
     
 }

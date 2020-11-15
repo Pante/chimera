@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.puff.Format.format;
+import static com.karuslabs.puff.Texts.format;
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;

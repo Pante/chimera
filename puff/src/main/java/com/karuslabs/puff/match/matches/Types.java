@@ -21,25 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.match.matches;
 
 import com.karuslabs.puff.Texts;
+import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.*;
 
-import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-abstract class TypeMatch implements Timeable<TypeMirror> {
+abstract class TypeMatch extends AbstractDescription implements Timeable<TypeMirror> {
     
     final Relation relation;
     final TypeMirror[] mirrors;
     final String list;
     
     TypeMatch(Relation relation, TypeMirror[] mirrors, String list) {
+        super(relation.relation() + list, relation.relations() + list);
         this.relation = relation;
         this.mirrors = mirrors;
         this.list = list;
@@ -50,14 +51,28 @@ abstract class TypeMatch implements Timeable<TypeMirror> {
         return TypePrinter.simple(element.asType());
     }
     
+}
+
+class AnyType implements Timeable<TypeMirror> {
+
+    @Override
+    public boolean match(TypeMirrors types, Element element) {
+        return true;
+    }
+    
+    @Override
+    public String describe(Element element) {
+        return TypePrinter.simple(element.asType());
+    }
+    
     @Override
     public String expectation() {
-        return relation.relation() + list;
+        return "any type";
     }
     
     @Override
     public String expectations() {
-        return relation.relations() + list;
+        return "any types";
     }
     
 }
@@ -82,7 +97,7 @@ class PrimitiveMatch implements Timeable<TypeMirror> {
 
     @Override
     public String expectation() {
-        return "";
+        return primitive.toString().toLowerCase().replace('_', ' ');
     }
     
 }
