@@ -48,7 +48,12 @@ abstract class TypeMatch extends AbstractDescription implements Timeable<TypeMir
     
     @Override
     public String describe(Element element) {
-        return TypePrinter.simple(element.asType());
+        return describe(element.asType());
+    }
+    
+    @Override
+    public String describe(TypeMirror type) {
+        return TypePrinter.simple(type);
     }
     
 }
@@ -62,7 +67,12 @@ class AnyType implements Timeable<TypeMirror> {
     
     @Override
     public String describe(Element element) {
-        return TypePrinter.simple(element.asType());
+        return describe(element.asType());
+    }
+    
+    @Override
+    public String describe(TypeMirror type) {
+        return TypePrinter.simple(type);
     }
     
     @Override
@@ -92,7 +102,12 @@ class PrimitiveMatch implements Timeable<TypeMirror> {
 
     @Override
     public String describe(Element element) {
-        return TypePrinter.simple(element.asType());
+        return describe(element.asType());
+    }
+    
+    @Override
+    public String describe(TypeMirror type) {
+        return TypePrinter.simple(type);
     }
 
     @Override

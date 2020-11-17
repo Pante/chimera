@@ -23,6 +23,16 @@
  */
 package com.karuslabs.puff.match;
 
-public interface Timeable<T> extends Match<T> {
+import com.karuslabs.puff.match.matches.*;
 
+public interface Timeable<T> extends Match<T> {
+    
+    public default Timeable<T> and(Timeable<T> match) {
+        return new And<>(this, match);
+    }
+    
+    public default Timeable<T> or(Timeable<T> match) {
+        return new Or<>(this, match);
+    }
+    
 }

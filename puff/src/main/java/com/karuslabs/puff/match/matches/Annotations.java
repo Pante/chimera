@@ -52,6 +52,11 @@ abstract class AnnotationMatch extends AbstractDescription implements Match<Clas
         return Texts.and(annotations, (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@')));
     }
     
+    @Override
+    public String describe(Class<? extends Annotation> annotation) {
+        return "@" + annotation.getSimpleName();
+    }
+    
 }
 
 class AnyAnnotation extends AnnotationMatch {

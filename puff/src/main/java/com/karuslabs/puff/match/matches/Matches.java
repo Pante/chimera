@@ -38,6 +38,10 @@ public @Static class Matches {
     public static final Match<Class<? extends Annotation>> ANY_ANNOTATION = new AnyAnnotation();
     
     
+    public static Method.Builder method() {
+        return new Method.Builder();
+    }
+    
     public static Variable.Builder variable() {
         return new Variable.Builder();
     }

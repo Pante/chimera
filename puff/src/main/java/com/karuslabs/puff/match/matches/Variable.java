@@ -23,7 +23,6 @@
  */
 package com.karuslabs.puff.match.matches;
 
-import com.karuslabs.puff.Texts;
 import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
@@ -70,15 +69,22 @@ public class Variable extends AbstractDescription implements Timeable<VariableEl
 
     @Override
     public String describe(Element element) {
-        if (!(element instanceof VariableElement)) {
+        if (element instanceof VariableElement) {
+            return describe((VariableElement) element);
+            
+        } else {
             return element.getKind().toString().toLowerCase().replace('_', ' ');
         }
-        
+    }
+
+    @Override
+    public String describe(VariableElement element) {
         var description = modifiers.describe(element) + " " + type.describe(element);
         var annotated = annotations.describe(element);
         if (!annotated.isEmpty()) {
             description += " annotated with " + annotated;
         }
+        
         return description;
     }
     

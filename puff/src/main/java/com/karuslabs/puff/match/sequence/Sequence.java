@@ -53,7 +53,7 @@ public abstract class Sequence<T> {
     
     public abstract boolean match(Collection<? extends Element> elements, TypeMirrors types);
     
-    public abstract String describe(Collection<? extends Element> elements);
+    public abstract String describe(Collection<? extends T> values);
     
     public abstract void reset();
     
@@ -90,7 +90,7 @@ class ContainsSequence<T> extends Sequence<T> {
     }
     
     @Override
-    public String describe(Collection<? extends Element> elements) {
+    public String describe(Collection<? extends T> values) {
         return Texts.and(times, (time, builder) -> builder.append(time.describe()));
     }
     
@@ -129,18 +129,18 @@ class ExactSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public String describe(Collection<? extends Element> elements) {
-        if (matches.length > 0 && elements.isEmpty()) {
+    public String describe(Collection<? extends T> values) {
+        if (matches.length > 0 && values.isEmpty()) {
             return "empty";
             
-        } else if (matches.length < elements.size()) {
-            return elements.size() + " identifiers";
+        } else if (matches.length < values.size()) {
+            return values.size() + " identifiers";
             
         } else {
-            var descriptions = new String[elements.size()];
+            var descriptions = new String[values.size()];
             int i = 0;
-            for (var element : elements) {
-                descriptions[i] = matches[i].describe(element);
+            for (var value : values) {
+                descriptions[i] = matches[i].describe(value);
                 i++;
             }
             
@@ -174,11 +174,11 @@ class EachSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public String describe(Collection<? extends Element> elements) {
-        var descriptions = new String[elements.size()];
+    public String describe(Collection<? extends T> values) {
+        var descriptions = new String[values.size()];
         int i = 0;
-        for (var element : elements) {
-            descriptions[i++] = match.describe(element);
+        for (var value : values) {
+            descriptions[i++] = match.describe(value);
         }
         
         return Texts.and(descriptions, Texts.STRING);

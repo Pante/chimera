@@ -47,6 +47,11 @@ abstract class ModifierMatch extends AbstractDescription implements Match<Modifi
         return Texts.and(element.getModifiers(), FORMAT);
     }
     
+    @Override
+    public String describe(Modifier modifier) {
+        return modifier.toString().toLowerCase().replace('_', ' ');
+    }
+    
 }
 
 class AnyModifier extends ModifierMatch {

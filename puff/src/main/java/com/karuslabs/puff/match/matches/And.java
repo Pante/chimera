@@ -24,12 +24,12 @@
 package com.karuslabs.puff.match.matches;
 
 import com.karuslabs.puff.Texts;
-import com.karuslabs.puff.match.Match;
+import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public class And<T> implements Match<T> {
+public class And<T> implements Timeable<T> {
 
     private final Match<T> left;
     private final Match<T> right;
@@ -48,6 +48,11 @@ public class And<T> implements Match<T> {
     public String describe(Element value) {
         return left.describe(value);
     }
+    
+    @Override
+    public String describe(T value) {
+        return left.describe(value);
+    }
 
     @Override
     public String expectation() {
@@ -58,5 +63,5 @@ public class And<T> implements Match<T> {
     public String expectations() {
         return Texts.join(left.expectations(), " and ", right.expectations());
     }
-    
+
 }

@@ -90,6 +90,18 @@ public @Static class Texts {
         }
     }
     
+    public static String join(String first, String second) {
+        if (first.isBlank()) {
+            return second;
+            
+        } else if (second.isBlank()) {
+            return first;
+            
+        } else {
+            return first + second;
+        }
+    }
+    
     public static String join(String first, String separator, String second) {
         if (first.isBlank()) {
             return second;

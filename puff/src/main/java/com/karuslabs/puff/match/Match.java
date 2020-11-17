@@ -35,6 +35,8 @@ public interface Match<T> extends Description {
     
     String describe(Element element);
     
+    String describe(T value);
+    
     default Match<T> and(Match<T> other) {
         return new And<>(this, other);
     }
