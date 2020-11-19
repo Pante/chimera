@@ -164,7 +164,7 @@ abstract class Relation {
     static final Relation SUBTYPE = new Subtype();
     static final Relation SUPERTYPE = new Supertype();
     
-    boolean test(TypeMirrors types, TypeMirror type, TypeMirror[]... expected) {
+    boolean test(TypeMirrors types, TypeMirror type, TypeMirror[] expected) {
         for (var mirror : expected) {
             if (!test(types, type, mirror)) {
                 return false;

@@ -56,12 +56,12 @@ public class And<T> implements Timeable<T> {
 
     @Override
     public String expectation() {
-        return Texts.join(left.expectation(), " and ", right.expectation());
+        return Texts.join(left.expectation(), ", and ", right.expectation());
     }
     
     @Override
     public String expectations() {
-        return Texts.join(left.expectations(), " and ", right.expectations());
+        return Texts.join(left.expectations(), ", and ", right.expectations());
     }
 
 }

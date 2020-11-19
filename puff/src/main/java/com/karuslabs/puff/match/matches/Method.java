@@ -46,7 +46,7 @@ public class Method extends AbstractDescription {
         return join(description, " that ", and(new String[] {
             join("accepts ", arguments),
             join("returns ", type),
-            join("throws ", thrown)
+            join("throws ", thrown),
         }, STRING));
     }
     
@@ -78,9 +78,14 @@ public class Method extends AbstractDescription {
         }
         
         var method = (ExecutableElement) element;
+        var parameters = arguments.match(types, method.getParameters());
+        var exceptions = thrown.match(types, method.getThrownTypes().stream().map(type -> types.asElement(type)).collect(toList()));
+        
+        // Work-around since types.asElement(..) will return null if given a primitive type
+        var returned = method.getReturnType();
         return modifiers.match(types, method) && annotations.match(types, method) 
-            && type.match(types, method) && arguments.match(method.getParameters(), types) 
-            && thrown.match(method.getThrownTypes().stream().map(type -> types.asElement(type)).collect(toList()), types);
+            && type.match(types, returned.getKind().isPrimitive() ? new PrimitiveElement(returned) : types.asElement(returned)) 
+            && parameters && exceptions;
     }
 
     public String describe(Element element) {
@@ -176,7 +181,7 @@ class AnyArguments extends Sequence<VariableElement> {
     }
 
     @Override
-    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
         return true;
     }
 
@@ -197,7 +202,7 @@ class AnyTypes extends Sequence<TypeMirror> {
     }
 
     @Override
-    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
         return true;
     }
 

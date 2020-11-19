@@ -57,12 +57,12 @@ public class Or<T> implements Timeable<T> {
 
     @Override
     public String expectation() {
-        return Texts.join(left.expectation(), " or ", right.expectation());
+        return Texts.join(left.expectation(), ", or ", right.expectation());
     }
     
     @Override
     public String expectations() {
-        return Texts.join(left.expectations(), " or ", right.expectations());
+        return Texts.join(left.expectations(), ", or ", right.expectations());
     }
     
 }

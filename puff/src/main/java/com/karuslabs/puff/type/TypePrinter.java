@@ -127,6 +127,12 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
     }
     
     @Override
+    public Void visitNoType(NoType type, StringBuilder builder) {
+        builder.append("void");
+        return null;
+    }
+    
+    @Override
     protected Void defaultAction(TypeMirror type, StringBuilder builder) {
         builder.setLength(0);
         throw new UnsupportedOperationException("TypePrinter does not support " + type.getKind());

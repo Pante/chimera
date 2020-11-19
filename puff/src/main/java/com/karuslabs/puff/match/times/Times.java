@@ -69,13 +69,16 @@ public abstract class Times<T> implements Description {
         this.current = 0;
     }
     
-    public abstract boolean verify();
-        
-    public void add(TypeMirrors types, Element element) {
-        if (match.match(types, element)) {
+    public boolean add(TypeMirrors types, Element element) {
+        var valid = match.match(types, element);
+        if (valid) {
             current++;
         }
+        
+        return valid;
     }
+    
+    public abstract boolean verify();
     
     public void reset() {
         current = 0;

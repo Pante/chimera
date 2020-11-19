@@ -37,6 +37,10 @@ public abstract class Sequence<T> {
         return new ContainsSequence<>(times);
     }
     
+    public static <T> Sequence<T> match(Times<T>... times) {
+        return new MatchSequence<>(times);
+    }
+    
     public static <T> Sequence<T> exactly(Match<T>... matches) {
         return new ExactSequence<>(matches);
     }
@@ -51,7 +55,7 @@ public abstract class Sequence<T> {
         this.expectation = expectation;
     }
     
-    public abstract boolean match(Collection<? extends Element> elements, TypeMirrors types);
+    public abstract boolean match(TypeMirrors types, Collection<? extends Element> elements);
     
     public abstract String describe(Collection<? extends T> values);
     
@@ -73,7 +77,7 @@ class ContainsSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
         for (var element : elements) {
             for (var time : times) {
                 time.add(types, element);
@@ -103,6 +107,45 @@ class ContainsSequence<T> extends Sequence<T> {
     
 }
 
+class MatchSequence<T> extends Sequence<T> {
+
+    private final Times<T>[] times;
+    
+    MatchSequence(Times<T>... times) {
+        super(Texts.and(times, (time, builder) -> builder.append(time.expectations())));
+        this.times = times;
+    }
+    
+    @Override
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
+        for (var element : elements) {
+            var match = false;
+            for (var time : times) {
+                match |= time.add(types, element);
+            }
+            
+            if (!match) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    @Override
+    public String describe(Collection<? extends T> values) {
+        return Texts.and(times, (time, builder) -> builder.append(time.describe()));
+    }
+
+    @Override
+    public void reset() {
+        for (var time : times) {
+            time.reset();
+        }
+    }
+    
+}
+
 class ExactSequence<T> extends Sequence<T> {
 
     private final Match<T>[] matches;
@@ -113,7 +156,7 @@ class ExactSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
         if (elements.size() != matches.length) {
             return false;
         }
@@ -163,7 +206,7 @@ class EachSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public boolean match(Collection<? extends Element> elements, TypeMirrors types) {
+    public boolean match(TypeMirrors types, Collection<? extends Element> elements) {
         for (var element : elements) {
             if (!match.match(types, element)) {
                 return false;
