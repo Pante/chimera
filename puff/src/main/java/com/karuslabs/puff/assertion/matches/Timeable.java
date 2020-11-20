@@ -21,18 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.assertion.matches;
 
-import com.karuslabs.puff.match.matches.*;
+import java.util.function.Supplier;
 
 public interface Timeable<T> extends Match<T> {
-    
-    public default Timeable<T> and(Timeable<T> match) {
-        return new And<>(this, match);
+
+    public default Timeable<T> and(Supplier<? extends Timeable<T>> other) {
+        return and(other.get());
     }
     
-    public default Timeable<T> or(Timeable<T> match) {
-        return new Or<>(this, match);
+    public default Timeable<T> and(Timeable<T> other) {
+        return new And<>(this, other);
+    }
+    
+     public default Timeable<T> or(Supplier<? extends Timeable<T>> other) {
+        return and(other.get());
+    }
+    
+    public default Timeable<T> or(Timeable<T> other) {
+        return new Or<>(this, other);
     }
     
 }

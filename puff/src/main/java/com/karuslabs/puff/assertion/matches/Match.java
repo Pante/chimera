@@ -21,14 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.assertion.matches;
 
-public interface Description {
+import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.puff.assertion.Assertion;
 
-    String expectation();
+import javax.lang.model.element.Element;
+
+public interface Match<T> extends Assertion {
     
-    default String expectations() {
-        return expectation();
+    public boolean test(TypeMirrors types, Element element);
+        
+    public boolean test(TypeMirrors types, T value);
+    
+    public String describe(Element element);
+    
+    public String describe(T value);
+    
+    public default Match<T> and(Match<T> other) {
+        return new And<>(this, other);
+    }
+    
+    public default Match<T> or(Match<T> other) {
+        return new Or<>(this, other);
     }
     
 }

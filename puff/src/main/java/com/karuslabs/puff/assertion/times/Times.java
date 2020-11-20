@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match.times;
+package com.karuslabs.puff.assertion.times;
 
-import com.karuslabs.puff.match.*;
+import com.karuslabs.puff.assertion.SkeletonAssertion;
+import com.karuslabs.puff.assertion.matches.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public abstract class Times<T> implements Description {
-
+public abstract class Times<T> extends SkeletonAssertion {    
+    
     public static <T> Times<T> exactly(int times, Timeable<T> match) {
         return new Exactly<>(times, match);
     }
@@ -38,39 +39,51 @@ public abstract class Times<T> implements Description {
         return new Between<>(min, max, match);
     }
     
-    public static <T> Times<T> least(int least, Timeable<T> match) {
-        return new Least<>(least, match);
+    public static <T> Times<T> min(int min, Timeable<T> match) {
+        return new Min<>(min, match);
     }
     
-    public static <T> Times<T> most(int most, Timeable<T> match) {
-        return new Most<>(most, match);
+    public static <T> Times<T> max(int max, Timeable<T> match) {
+        return new Max<>(max, match);
     }
     
     public static <T> Times<T> no(Timeable<T> match) {
         return new No<>(match);
     }
     
+    
     static String format(int times, Timeable<?> match) {
-        if (times == 0) {
-            return "no " + match.expectations();
-            
-        } else {
-            return times + " " + match.expectations();
+        switch (times) {
+            case 0:
+                return "no " + match.condition();
+            case 1:
+                return "1 " + match.condition();
+            default:
+                return times + " " + match.conditions();
         }
     }
     
     protected final Timeable<T> match;
-    protected final String expectation;
     protected int current;
     
-    public Times(Timeable<T> match, String expectation) {
+    public Times(Timeable<T> match, String condition) {
+        super(condition);
         this.match = match;
-        this.expectation = expectation;
         this.current = 0;
     }
     
+    public abstract boolean test();
+    
+    
     public boolean add(TypeMirrors types, Element element) {
-        var valid = match.match(types, element);
+        return increment(match.test(types, element));
+    }
+    
+    public boolean add(TypeMirrors types, T value) {
+        return increment(match.test(types, value));
+    }
+    
+    private boolean increment(boolean valid) {
         if (valid) {
             current++;
         }
@@ -78,24 +91,14 @@ public abstract class Times<T> implements Description {
         return valid;
     }
     
-    public abstract boolean verify();
     
     public void reset() {
         current = 0;
     }
     
+    
     public String describe() {
-        if (current == 0) {
-            return "no " + match.expectations();
-            
-        } else {
-            return current + " " + match.expectations();
-        }
-    }
-
-    @Override
-    public String expectation() {
-        return expectation;
+        return format(current, match);
     }
 
 }
@@ -110,7 +113,7 @@ class Exactly<T> extends Times<T> {
     }
 
     @Override
-    public boolean verify() {
+    public boolean test() {
         return current == times;
     }
 
@@ -122,45 +125,45 @@ class Between<T> extends Times<T> {
     private final int max;
     
     Between(int min, int max, Timeable<T> match) {
-        super(match, "between " + min + " to " + max + " " + match.expectations());
+        super(match, min + " to " + max + " " + match.conditions());
         this.min = min;
         this.max = max;
     }
 
     @Override
-    public boolean verify() {
+    public boolean test() {
         return current > min && current <= max;
     }
     
 }
 
-class Least<T> extends Times<T> {
+class Min<T> extends Times<T> {
     
     private final int least;
     
-    Least(int least, Timeable<T> match) {
-        super(match, "at least " + least + " " + match.expectations());
+    Min(int least, Timeable<T> match) {
+        super(match, least + " or more " + match.conditions());
         this.least = least;
     }
 
     @Override
-    public boolean verify() {
+    public boolean test() {
         return current >= least;
     }
     
 }
 
-class Most<T> extends Times<T> {
+class Max<T> extends Times<T> {
     
     private final int most;
     
-    Most(int most, Timeable<T> match) {
-        super(match, "at most " + most + " " + match.expectations());
+    Max(int most, Timeable<T> match) {
+        super(match, most + " or more " + match.conditions());
         this.most = most;
     }
 
     @Override
-    public boolean verify() {
+    public boolean test() {
         return current <= most;
     }
     
@@ -169,11 +172,11 @@ class Most<T> extends Times<T> {
 class No<T> extends Times<T> {
     
     No(Timeable<T> match) {
-        super(match, "no " + match.expectations());
+        super(match, "no " + match.condition());
     }
 
     @Override
-    public boolean verify() {
+    public boolean test() {
         return current == 0;
     }
     

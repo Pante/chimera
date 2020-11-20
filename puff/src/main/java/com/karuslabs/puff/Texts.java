@@ -30,40 +30,41 @@ import java.util.function.BiConsumer;
 
 public @Static class Texts {
     
-    public static BiConsumer<String, StringBuilder> STRING = (string, builder) -> builder.append(string);
+    public static final BiConsumer<String, StringBuilder> STRING = (string, builder) -> builder.append(string);
+    public static BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
     
-    public static <T> String and(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
+    public static <T> String and(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format) {
         return join(elements, format, "and");
     }
     
-    public static <T> String and(T[] elements, BiConsumer<T, StringBuilder> format) {
+    public static <T> String and(T[] elements, BiConsumer<? super T, StringBuilder> format) {
         return join(elements, format, "and");
     }
     
     
-    public static <T> String or(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format) {
+    public static <T> String or(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format) {
         return join(elements, format, "or");
     }
     
-    public static <T> String or(T[] elements, BiConsumer<T, StringBuilder> format) {
+    public static <T> String or(T[] elements, BiConsumer<? super T, StringBuilder> format) {
         return join(elements, format, "or");
     }
     
     
-    public static <T> String join(Collection<? extends T> elements, BiConsumer<T, StringBuilder> format, String conjunction) {
+    public static <T> String join(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format, String conjunction) {
         var builder = new StringBuilder();
         join(elements, builder, format, conjunction);
         return builder.toString();
     }
     
-    public static <T> String join(T[] elements, BiConsumer<T, StringBuilder> format, String conjunction) {
+    public static <T> String join(T[] elements, BiConsumer<? super T, StringBuilder> format, String conjunction) {
         var builder = new StringBuilder();
         join(elements, builder, format, conjunction);
         return builder.toString();
     }
     
     
-    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<T, StringBuilder> format, String conjunction) {
+    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
         int i = 0;
         for (var element : elements) {
             format.accept(element, builder);
@@ -78,7 +79,7 @@ public @Static class Texts {
         }
     }
     
-    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<T, StringBuilder> format, String conjunction) {
+    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
         for (var i = 0; i < elements.length; i++) {
             format.accept(elements[i], builder);
             if (i <  elements.length - 2) {

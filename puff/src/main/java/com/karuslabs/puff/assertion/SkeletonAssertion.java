@@ -21,30 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.assertion;
 
-public class AbstractDescription implements Description {
+public abstract class SkeletonAssertion implements Assertion {
 
-    protected final String expectation;
-    protected final String expectations;
+    protected final String condition;
+    protected final String conditions;
     
-    public AbstractDescription(String expectation) {
-        this(expectation, expectation);
+    public SkeletonAssertion(String condition) {
+        this(condition, condition);
     }
     
-    public AbstractDescription(String expectation, String expectations) {
-        this.expectation = expectation;
-        this.expectations = expectations;
+    public SkeletonAssertion(String condition, String conditions) {
+        this.condition = condition;
+        this.conditions = conditions;
     }
     
     @Override
-    public String expectation() {
-        return expectation;
+    public String condition() {
+        return condition;
     }
     
     @Override
-    public String expectations() {
-        return expectations;
+    public String conditions() {
+        return conditions;
     }
 
 }

@@ -21,28 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match;
+package com.karuslabs.puff.assertion;
 
-import com.karuslabs.puff.match.matches.And;
-import com.karuslabs.puff.match.matches.Or;
-import com.karuslabs.puff.type.TypeMirrors;
-
-import javax.lang.model.element.Element;
-
-public interface Match<T> extends Description {
-
-    boolean match(TypeMirrors types, Element element);
+public interface Assertion {
     
-    String describe(Element element);
+    public String condition();
     
-    String describe(T value);
-    
-    default Match<T> and(Match<T> other) {
-        return new And<>(this, other);
-    }
-    
-    default Match<T> or(Match<T> other) {
-        return new Or<>(this, other);
-    }
+    public String conditions();
     
 }
