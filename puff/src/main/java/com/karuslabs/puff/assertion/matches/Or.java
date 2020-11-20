@@ -21,27 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match.matches;
+package com.karuslabs.puff.assertion.matches;
 
-import com.karuslabs.puff.Texts;
-import com.karuslabs.puff.match.*;
+import com.karuslabs.puff.assertion.SkeletonAssertion;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public class Or<T> implements Timeable<T> {
+import static com.karuslabs.puff.Texts.join;
+
+public class Or<T> extends SkeletonAssertion implements Timeable<T> {
 
     private final Match<T> left;
     private final Match<T> right;
     
     public Or(Match<T> left, Match<T> right) {
+        super(join(left.condition(), ", or ", right.condition()), join(left.conditions(), ", or ", right.conditions()));
         this.left = left;
         this.right = right;
     }
     
     @Override
-    public boolean match(TypeMirrors types, Element element) {
-        return left.match(types, element) || right.match(types, element);
+    public boolean test(TypeMirrors types, Element element) {
+        return left.test(types, element) || right.test(types, element);
+    }
+
+    @Override
+    public boolean test(TypeMirrors types, T value) {
+        return left.test(types, value) || right.test(types, value);
     }
 
     @Override
@@ -52,17 +59,6 @@ public class Or<T> implements Timeable<T> {
     @Override
     public String describe(T value) {
         return left.describe(value);
-    }
-    
-
-    @Override
-    public String expectation() {
-        return Texts.join(left.expectation(), ", or ", right.expectation());
-    }
-    
-    @Override
-    public String expectations() {
-        return Texts.join(left.expectations(), ", or ", right.expectations());
     }
     
 }

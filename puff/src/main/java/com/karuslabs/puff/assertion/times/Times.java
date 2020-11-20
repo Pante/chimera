@@ -53,13 +53,11 @@ public abstract class Times<T> extends SkeletonAssertion {
     
     
     static String format(int times, Timeable<?> match) {
-        switch (times) {
-            case 0:
-                return "no " + match.condition();
-            case 1:
-                return "1 " + match.condition();
-            default:
-                return times + " " + match.conditions();
+        if (times == 1) {
+            return "1 " + match.condition();
+            
+        } else {
+            return times + " " + match.conditions();
         }
     }
     

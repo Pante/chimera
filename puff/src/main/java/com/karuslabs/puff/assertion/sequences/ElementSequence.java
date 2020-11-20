@@ -23,7 +23,6 @@
  */
 package com.karuslabs.puff.assertion.sequences;
 
-import com.karuslabs.puff.assertion.matches.Variable;
 import com.karuslabs.puff.type.*;
 
 import javax.lang.model.element.VariableElement;
@@ -31,11 +30,9 @@ import javax.lang.model.type.TypeMirror;
 import java.util.Collection;
 
 import static com.karuslabs.puff.Texts.and;
-import static com.karuslabs.puff.assertion.Assertions.variable;
+import static com.karuslabs.puff.assertion.Assertions.*;
 
 class AnyParameter extends Sequence<VariableElement> {
-    
-    static final Variable variable = variable().get();
     
     AnyParameter() {
         super("");
@@ -48,7 +45,15 @@ class AnyParameter extends Sequence<VariableElement> {
 
     @Override
     public String describe(Collection<? extends VariableElement> values) {
-        return and(values, (value, builder) -> builder.append(variable.describe(value)));
+        return and(values, (element, builder) -> {
+            var description = ANY_MODIFIER.describe(element) + " " + ANY_TYPE.describe(element);
+            var annotated = ANY_ANNOTATION.describe(element);
+            if (!annotated.isEmpty()) {
+                description += " annotated with " + annotated;
+            }
+        
+            builder.append(description);
+        });
     }
 
     @Override

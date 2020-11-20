@@ -93,7 +93,7 @@ public @Static class Texts {
     
     public static String join(String first, String second) {
         if (first.isBlank()) {
-            return second;
+            return "";
             
         } else if (second.isBlank()) {
             return first;

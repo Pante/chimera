@@ -21,52 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match.matches;
+package com.karuslabs.puff.assertion.matches;
 
-import com.karuslabs.puff.match.*;
 import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.puff.assertion.SkeletonAssertion;
 
 import java.lang.annotation.Annotation;
+import java.util.Set;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.function.Supplier;
+
 import static com.karuslabs.puff.Texts.join;
-import static com.karuslabs.puff.match.matches.Matches.*;
+import static com.karuslabs.puff.assertion.Assertions.*;
 
-public class Variable extends AbstractDescription implements Timeable<VariableElement> {
+public class Variable extends SkeletonAssertion implements Timeable<VariableElement> {
 
-    private final Match<Modifier> modifiers;
+    private final Match<Set<Modifier>> modifiers;
     private final Match<TypeMirror> type;
     private final Match<Class<? extends Annotation>> annotations;
     
-    public Variable(Match<Modifier> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations) {
+    public Variable(Match<Set<Modifier>> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations) {
         this(
             modifiers, 
             type, 
             annotations, 
-            join(join(modifiers.expectation(), " ", type.expectation()), " annotated with ", annotations.expectation()),
-            join(join(modifiers.expectation(), " ", type.expectations()), " annotated with ", annotations.expectation())
+            join(join(modifiers.condition(), " ", type.condition()), " annotated with ", annotations.condition()),
+            join(join(modifiers.condition(), " ", type.conditions()), " annotated with ", annotations.condition())
         );
     }
     
-    public Variable(Match<Modifier> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations, String expectation, String expectations) {
-        super(expectation, expectations);
+    public Variable(Match<Set<Modifier>> modifiers, Match<TypeMirror> type, Match<Class<? extends Annotation>> annotations, String condition, String conditions) {
+        super(condition, conditions);
         this.modifiers = modifiers;
         this.type = type;
         this.annotations = annotations;
     }
     
     @Override
-    public boolean match(TypeMirrors types, Element element) {
-        if (!(element instanceof VariableElement)) {
-            return false;
-        }
-        
-        return modifiers.match(types, element) && type.match(types, element) && annotations.match(types, element);
+    public boolean test(TypeMirrors types, Element element) {
+        return element instanceof VariableElement && test(types, (VariableElement) element);
+    }
+    
+    @Override
+    public boolean test(TypeMirrors types, VariableElement element) {
+        return modifiers.test(types, element) && type.test(types, element) && annotations.test(types, element);
     }
 
+    
     @Override
     public String describe(Element element) {
         if (element instanceof VariableElement) {
@@ -89,25 +94,25 @@ public class Variable extends AbstractDescription implements Timeable<VariableEl
     }
     
     
-    public static class Builder {
+    public static class Builder implements Supplier<Variable> {
         
-        private Match<Modifier> modifiers = ANY_MODIFIER;
+        private Match<Set<Modifier>> modifiers = ANY_MODIFIER;
         private Match<TypeMirror> type = ANY_TYPE;
         private Match<Class<? extends Annotation>> annotations = ANY_ANNOTATION;
         private @Nullable String single;
         private @Nullable String plural;
         
         public Builder modifiers(Modifier... modifiers) {
-            return modifiers(exactly(modifiers));
+            return modifiers(match(modifiers));
         }
         
-        public Builder modifiers(Match<Modifier> modifiers) {
+        public Builder modifiers(Match<Set<Modifier>> modifiers) {
             this.modifiers = modifiers;
             return this;
         }
         
         public Builder type(Class<?> type) {
-            return type(exactly(type));
+            return type(is(type));
         }
         
         public Builder type(Match<TypeMirror> type) {
@@ -120,13 +125,18 @@ public class Variable extends AbstractDescription implements Timeable<VariableEl
             return this;
         }
         
-        public Builder expectation(String single, String plural) {
+        public Builder condition(String single) {
+            return condition(single, single);
+        }
+        
+        public Builder condition(String single, String plural) {
             this.single = single;
             this.plural = plural;
             return this;
         }
         
-        public Variable build() {
+        @Override
+        public Variable get() {
             return single == null || plural == null ? new Variable(modifiers, type, annotations) : new Variable(modifiers, type, annotations, single, plural);
         }
         

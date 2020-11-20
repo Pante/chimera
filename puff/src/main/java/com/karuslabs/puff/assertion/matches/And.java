@@ -21,47 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.match.matches;
+package com.karuslabs.puff.assertion.matches;
 
-import com.karuslabs.puff.Texts;
-import com.karuslabs.puff.match.*;
+import com.karuslabs.puff.assertion.SkeletonAssertion;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public class And<T> implements Timeable<T> {
+import static com.karuslabs.puff.Texts.join;
+
+public class And<T> extends SkeletonAssertion implements Timeable<T> {
 
     private final Match<T> left;
     private final Match<T> right;
     
     public And(Match<T> left, Match<T> right) {
+        super(join(left.condition(), ", and ", right.condition()), join(left.conditions(), ", and ", right.conditions())
+        );
         this.left = left;
         this.right = right;
     }
 
     @Override
-    public boolean match(TypeMirrors types, Element element) {
-        return left.match(types, element) && right.match(types, element);
+    public boolean test(TypeMirrors types, Element element) {
+        return left.test(types, element) && right.test(types, element);
+    }
+    
+    @Override
+    public boolean test(TypeMirrors types, T value) {
+        return left.test(types, value) && right.test(types, value);
     }
 
     @Override
-    public String describe(Element value) {
-        return left.describe(value);
+    public String describe(Element element) {
+        return left.describe(element);
     }
-    
+
     @Override
     public String describe(T value) {
         return left.describe(value);
-    }
-
-    @Override
-    public String expectation() {
-        return Texts.join(left.expectation(), ", and ", right.expectation());
-    }
-    
-    @Override
-    public String expectations() {
-        return Texts.join(left.expectations(), ", and ", right.expectations());
     }
 
 }

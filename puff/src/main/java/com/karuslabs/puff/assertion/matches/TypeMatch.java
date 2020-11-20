@@ -49,7 +49,7 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
             return new PrimitiveMatch(kind);
                 
         } else {
-            return new ClassMatch(Relation.EXACTLY, type);
+            return new ClassMatch(Relation.IS, type);
         }
     }
     
@@ -58,7 +58,7 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
             return new PrimitiveMatch(type.getKind());
             
         } else {
-            return new TypeMirrorMatch(Relation.EXACTLY, type);
+            return new TypeMirrorMatch(Relation.IS, type);
         }
     }
     
@@ -109,13 +109,13 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
     
     public static abstract class Relation {
     
-        public static final Relation EXACTLY = new Exact();
+        public static final Relation IS = new Is();
         public static final Relation SUBTYPE = new Subtype();
         public static final Relation SUPERTYPE = new Supertype();
 
         boolean test(TypeMirrors types, TypeMirror type, TypeMirror[] expected) {
             for (var mirror : expected) {
-                if (!test(types, type, mirror)) {
+                if (!verify(types, type, mirror)) {
                     return false;
                 }
             }
@@ -123,7 +123,7 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
             return true;
         }
 
-        public abstract boolean test(TypeMirrors types, TypeMirror type, TypeMirror expected);
+        public abstract boolean verify(TypeMirrors types, TypeMirror type, TypeMirror expected);
 
         public abstract String relation();
 
@@ -136,12 +136,17 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
 class AnyType extends TypeMatch {
 
     public AnyType() {
-        super(new Exact(), new TypeMirror[0], "type");
+        super(Relation.IS, new TypeMirror[0], "type");
     }
 
     @Override
     public boolean test(TypeMirrors types, TypeMirror value) {
         return true;
+    }
+    
+    @Override
+    public String conditions() {
+        return "types";
     }
     
 }
@@ -226,10 +231,10 @@ class ClassMatch extends TypeMatch {
     
 }
 
-class Exact extends Relation {
+class Is extends Relation {
 
     @Override
-    public boolean test(TypeMirrors types, TypeMirror type, TypeMirror expected) {
+    public boolean verify(TypeMirrors types, TypeMirror type, TypeMirror expected) {
         return types.isSameType(type, expected);
     }
 
@@ -248,7 +253,7 @@ class Exact extends Relation {
 class Subtype extends Relation {
     
     @Override
-    public boolean test(TypeMirrors types, TypeMirror type, TypeMirror expected) {
+    public boolean verify(TypeMirrors types, TypeMirror type, TypeMirror expected) {
         return types.isSubtype(type, expected);
     }
     
@@ -267,7 +272,7 @@ class Subtype extends Relation {
 class Supertype extends Relation {
 
     @Override
-    public boolean test(TypeMirrors types, TypeMirror type, TypeMirror expected) {
+    public boolean verify(TypeMirrors types, TypeMirror type, TypeMirror expected) {
         return types.isSubtype(expected, type);
     }
 

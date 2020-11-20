@@ -42,11 +42,18 @@ public class Method extends SkeletonAssertion {
 
     public static String format(String annotations, String modifiers, String type, String arguments, String exceptions) {
         var description = "";
-        description += join("[", annotations, "]\n");
+        
+        if (!annotations.isBlank()) {
+            description = "[" + annotations + "]\n";
+        }
+        
         description += join(join(modifiers, " ", join("[", type , "]")), " method ", join("(", arguments, ")"));
-        description += join("\n    throws ", exceptions);
+        
+        if (!exceptions.isBlank()) {
+            description += " throws " + exceptions;
+        }
 
-        return description;
+        return "\n" + description + "\n";
     }
     
     private final Match<Class<? extends Annotation>> annotations;

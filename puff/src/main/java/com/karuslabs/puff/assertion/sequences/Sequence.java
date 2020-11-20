@@ -116,7 +116,7 @@ class MatchSequence<T> extends Sequence<T> {
                 i++;
             }
             
-            return Texts.and(descriptions, Texts.STRING);
+            return Texts.join(descriptions, Texts.STRING, ", ");
         }
     }
     
@@ -150,7 +150,7 @@ class EachSequence<T> extends Sequence<T> {
             descriptions[i++] = match.describe(value);
         }
         
-        return Texts.and(descriptions, Texts.STRING);
+        return Texts.join(descriptions, Texts.STRING, ", ");
     }
     
 }

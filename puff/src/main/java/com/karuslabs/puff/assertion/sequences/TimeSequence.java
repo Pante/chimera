@@ -42,7 +42,7 @@ abstract class TimeSequence<T> extends Sequence<T> {
     
     @Override
     public String describe(Collection<? extends T> values) {
-        return Texts.and(times, (time, builder) -> builder.append(time.describe()));
+        return Texts.join(times, (time, builder) -> builder.append(time.describe()), ", ");
     }
     
     @Override
