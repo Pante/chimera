@@ -61,3 +61,5 @@ Temporary Items
 /scribe/standalone/target/
 /puff/target/
 /Puffy/target/
+
+*.iml
