@@ -58,7 +58,7 @@ public abstract class Sequence<T> extends SkeletonAssertion {
     
     
     protected static String format(Assertion... assertions) {
-        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ", ");
+        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ",");
     }
 
     
@@ -112,11 +112,11 @@ class MatchSequence<T> extends Sequence<T> {
             var descriptions = new String[values.size()];
             int i = 0;
             for (var value : values) {
-                descriptions[i] = matches[i].describe(value);
+                descriptions[i] = "[" + matches[i].describe(value) + "]";
                 i++;
             }
             
-            return Texts.join(descriptions, Texts.STRING, ", ");
+            return Texts.join(descriptions, Texts.STRING, ",");
         }
     }
     
@@ -147,10 +147,10 @@ class EachSequence<T> extends Sequence<T> {
         var descriptions = new String[values.size()];
         int i = 0;
         for (var value : values) {
-            descriptions[i++] = match.describe(value);
+            descriptions[i++] = "[" + match.describe(value) + "]";
         }
         
-        return Texts.join(descriptions, Texts.STRING, ", ");
+        return Texts.join(descriptions, Texts.STRING, ",");
     }
     
 }

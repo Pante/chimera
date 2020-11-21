@@ -93,7 +93,7 @@ class AnyAnnotation extends AnnotationMatch {
 class ContainsAnnotation extends AnnotationMatch {
 
     ContainsAnnotation(Class<? extends Annotation>[] annotations) {
-        super(annotations, Texts.join(annotations, CLASS_FORMAT, ", "));
+        super(annotations, Texts.join(annotations, CLASS_FORMAT, ","));
     }
 
     @Override

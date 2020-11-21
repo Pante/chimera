@@ -53,7 +53,7 @@ public class Method extends SkeletonAssertion {
             description += " throws " + exceptions;
         }
 
-        return "\n" + description + "\n";
+        return description;
     }
     
     private final Match<Class<? extends Annotation>> annotations;
