@@ -41,28 +41,28 @@ public class Source implements CharSequence {
     
     
     public Source assign(String name, String value) {
-        builder.append(indentation).append("var ").append(name).append(" = ").append(value).append(";\n");
+        builder.append(indentation).append("var ").append(name).append(" = ").append(value).append(";").append(System.lineSeparator());
         return this;
     }
     
     public Source cast(String name, String type, String value) {
-        builder.append(indentation).append("var ").append(name).append(" = (").append(type).append(") ").append(value).append(";\n");
+        builder.append(indentation).append("var ").append(name).append(" = (").append(type).append(") ").append(value).append(";").append(System.lineSeparator());
         return this;
     }
     
     public Source include(String pack) {
-        builder.append("package ").append(pack).append(";\n");
+        builder.append("package ").append(pack).append(";").append(System.lineSeparator());
         return this;
     }
     
     
     public Source line() {
-        builder.append('\n');
+        builder.append(System.lineSeparator());
         return this;
     }
     
     public Source line(Object element) {
-        builder.append(indentation).append(element).append('\n');
+        builder.append(indentation).append(element).append(System.lineSeparator());
         return this;
     }
     
@@ -72,7 +72,7 @@ public class Source implements CharSequence {
             builder.append(element);
         }
         
-        builder.append('\n');
+        builder.append(System.lineSeparator());
         return this;
     }
     

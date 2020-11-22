@@ -44,7 +44,7 @@ public class Method extends SkeletonAssertion {
         var description = "";
         
         if (!annotations.isBlank()) {
-            description = "[" + annotations + "]\n";
+            description = "[" + annotations + "]" + System.lineSeparator();
         }
         
         description += join(join(modifiers, " ", join("[", type , "]")), " method ", join("(", arguments, ")"));

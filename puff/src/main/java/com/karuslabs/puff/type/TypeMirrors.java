@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public final class TypeMirrors implements Types {   
     
-    public static boolean isType(TypeMirror type, Class<?> expected) {
+    public static boolean is(TypeMirror type, Class<?> expected) {
         if (!(type instanceof DeclaredType)) {
             return false;
         }
@@ -209,7 +209,7 @@ public final class TypeMirrors implements Types {
 
     @Override
     public DeclaredType getDeclaredType(DeclaredType containing, TypeElement typeElem, TypeMirror... typeArgs) {
-        return types.getDeclaredType(typeElem, typeArgs);
+        return types.getDeclaredType(containing, typeElem, typeArgs);
     }
 
     @Override

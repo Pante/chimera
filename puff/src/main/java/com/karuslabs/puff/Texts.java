@@ -91,18 +91,6 @@ public @Static class Texts {
         }
     }
     
-    public static String join(String first, String second) {
-        if (first.isBlank()) {
-            return "";
-            
-        } else if (second.isBlank()) {
-            return first;
-            
-        } else {
-            return first + second;
-        }
-    }
-    
     public static String join(String first, String separator, String second) {
         if (first.isBlank()) {
             return second;
@@ -125,20 +113,27 @@ public @Static class Texts {
     }
     
     
-    public static String quote(Object value) {
-        return "\"" + value + "\"";
+    public static String method(String actual, String expected) {
+        return "Method is: " + System.lineSeparator()
+             + indent(actual, 4) + System.lineSeparator()
+             + System.lineSeparator()
+             + "should be: " + System.lineSeparator()
+             + indent(expected, 4);
     }
     
-    public static String plural(String noun) {
-        if (noun.isBlank()) {
-            return noun;
-            
-        } else if (noun.endsWith("s") || noun.endsWith("sh") || noun.endsWith("ch") || noun.endsWith("x") || noun.endsWith("z")) {
-            return noun + "es";
-            
-        } else {
-            return noun + "s";
-        }
+    
+    public static String indent(String message) {
+        return indent(message, 4);
+    }
+    
+    public static String indent(String message, int level) {
+        var indentation = " ".repeat(level);
+        return indentation + message.replace(System.lineSeparator(), System.lineSeparator() + indentation);
+    }
+    
+    
+    public static String quote(Object value) {
+        return "\"" + value + "\"";
     }
     
 }
