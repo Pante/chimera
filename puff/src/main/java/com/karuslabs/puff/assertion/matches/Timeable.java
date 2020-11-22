@@ -23,7 +23,12 @@
  */
 package com.karuslabs.puff.assertion.matches;
 
+<<<<<<< Updated upstream:puff/src/main/java/com/karuslabs/puff/assertion/matches/Timeable.java
 import java.util.function.Supplier;
+=======
+<<<<<<< Updated upstream:puff/src/main/java/com/karuslabs/puff/match/Timeable.java
+import com.karuslabs.puff.match.matches.*;
+>>>>>>> Stashed changes:puff/src/main/java/com/karuslabs/puff/match/Timeable.java
 
 public interface Timeable<T> extends Match<T> {
 
@@ -42,5 +47,20 @@ public interface Timeable<T> extends Match<T> {
     public default Timeable<T> or(Timeable<T> other) {
         return new Or<>(this, other);
     }
+=======
+import com.karuslabs.puff.match.Description;
+import com.karuslabs.puff.type.TypeMirrors;
+
+import java.util.Collection;
+import javax.lang.model.element.Element;
+
+public abstract class Seqeunce<T> implements Description {
+
+    public abstract boolean match(Collection<? extends Element> elements, TypeMirrors types);
+    
+    public abstract void reset();
+    
+    public abstract String describe(Collection<? extends Element> elements);
+>>>>>>> Stashed changes:puff/src/main/java/com/karuslabs/puff/match/sequence/Seqeunce.java
     
 }
