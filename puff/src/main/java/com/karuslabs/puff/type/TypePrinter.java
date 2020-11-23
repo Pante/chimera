@@ -147,7 +147,7 @@ class QualifiedTypePrinter extends TypePrinter {
     protected void rawType(DeclaredType type, StringBuilder builder) {
         if (type.asElement() instanceof TypeElement) {
             var element = (TypeElement) type.asElement();
-            builder.append(element.getQualifiedName().toString());
+            builder.append(element.getQualifiedName());
         } else {
             throw new IllegalStateException("DeclaredType should be a TypeElement");
         }

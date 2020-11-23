@@ -21,26 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.assertion.matches;
+package com.karuslabs.puff.mock;
 
-import java.util.function.Supplier;
+import org.junit.jupiter.api.*;
 
-public interface Timeable<T> extends Match<T> {
+import static org.junit.jupiter.api.Assertions.*;
 
-    default Timeable<T> and(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
+class MockNameTest {
+
+    public static final String VALUE = Object.class.getSimpleName();
+    public static final MockName NAME = new MockName(Object.class);
+    
+    @Test
+    void contentEquals() {
+        assertTrue(NAME.contentEquals(VALUE));
     }
     
-    default Timeable<T> and(Timeable<T> other) {
-        return new And<>(this, other);
+    @Test
+    void length() {
+        assertEquals(VALUE.length(), NAME.length());
     }
     
-    default Timeable<T> or(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
+    @Test
+    void charAt() {
+        assertEquals(VALUE.charAt(1), NAME.charAt(1));
     }
     
-    default Timeable<T> or(Timeable<T> other) {
-        return new Or<>(this, other);
+    @Test
+    void subSequence() {
+        assertEquals(VALUE.subSequence(0, 2), NAME.subSequence(0, 2));
+    }
+    
+    @Test
+    void toString_() {
+        assertEquals(VALUE, NAME.toString());
     }
     
 }

@@ -50,8 +50,13 @@ public class Source implements CharSequence {
         return this;
     }
     
-    public Source include(String pack) {
+    public Source pack(String pack) {
         builder.append("package ").append(pack).append(";").append(System.lineSeparator());
+        return this;
+    }
+    
+    public Source include(String pack) {
+        builder.append("import ").append(pack).append(";").append(System.lineSeparator());
         return this;
     }
     

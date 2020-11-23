@@ -21,26 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.puff.assertion.matches;
+package com.karuslabs.puff.mock;
 
-import java.util.function.Supplier;
+import javax.lang.model.element.Name;
 
-public interface Timeable<T> extends Match<T> {
+public class MockName implements Name {
+    
+    private final String name;
+    
+    public MockName(Class<?> type) {
+        this(type.getSimpleName());
+    }
+    
+    public MockName(String name) {
+        this.name = name;
+    }
 
-    default Timeable<T> and(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
+    @Override
+    public boolean contentEquals(CharSequence sequence) {
+        return name.contentEquals(sequence);
+    }
+
+    @Override
+    public int length() {
+        return name.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return name.charAt(index);
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return name.subSequence(start, end);
     }
     
-    default Timeable<T> and(Timeable<T> other) {
-        return new And<>(this, other);
+    @Override
+    public String toString() {
+        return name;
     }
-    
-    default Timeable<T> or(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
-    }
-    
-    default Timeable<T> or(Timeable<T> other) {
-        return new Or<>(this, other);
-    }
-    
+
 }
