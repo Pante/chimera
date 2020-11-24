@@ -65,11 +65,15 @@ public @Static class Texts {
     
     
     public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
+        join(elements, builder, format, ", ", conjunction);
+    }
+    
+    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String separator, String conjunction) {
         int i = 0;
         for (var element : elements) {
             format.accept(element, builder);
             if (i <  elements.size() - 2) {
-                builder.append(", ");
+                builder.append(separator);
                 
             } else if (i < elements.size() - 1) {
                 builder.append(' ').append(conjunction).append(' ');
@@ -80,10 +84,14 @@ public @Static class Texts {
     }
     
     public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
+        join(elements, builder, format, ", ", conjunction);
+    }
+    
+    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String separator, String conjunction) {
         for (var i = 0; i < elements.length; i++) {
             format.accept(elements[i], builder);
             if (i <  elements.length - 2) {
-                builder.append(", ");
+                builder.append(separator);
                 
             } else if (i < elements.length - 1) {
                 builder.append(' ').append(conjunction).append(' ');

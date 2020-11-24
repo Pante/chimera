@@ -62,12 +62,12 @@ public abstract class ModifierMatch extends SkeletonAssertion implements Match<S
 
     @Override
     public String describe(Element element) {
-        return Texts.and(element.getModifiers(), SCREAMING_CASE);
+        return Texts.join(element.getModifiers(), SCREAMING_CASE, " ", " ");
     }
 
     @Override
     public String describe(Set<Modifier> modifiers) {
-        return Texts.and(modifiers, SCREAMING_CASE);
+        return Texts.join(modifiers, SCREAMING_CASE, "");
     }
 
 }
@@ -93,7 +93,7 @@ class ContainsModifier extends ModifierMatch {
     
     @Override
     public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
-        return this.modifiers.containsAll(modifiers);
+        return modifiers.containsAll(this.modifiers);
     }
     
 }
