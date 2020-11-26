@@ -36,8 +36,7 @@ public class And<T> extends SkeletonAssertion implements Timeable<T> {
     private final Match<T> right;
     
     public And(Match<T> left, Match<T> right) {
-        super(join(left.condition(), ", and ", right.condition()), join(left.conditions(), ", and ", right.conditions())
-        );
+        super(join(left.condition(), ", and ", right.condition()), join(left.conditions(), ", and ", right.conditions()));
         this.left = left;
         this.right = right;
     }

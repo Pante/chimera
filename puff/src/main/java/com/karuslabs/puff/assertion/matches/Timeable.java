@@ -36,7 +36,7 @@ public interface Timeable<T> extends Match<T> {
     }
     
     default Timeable<T> or(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
+        return or(other.get());
     }
     
     default Timeable<T> or(Timeable<T> other) {

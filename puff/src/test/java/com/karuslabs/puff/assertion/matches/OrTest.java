@@ -35,55 +35,69 @@ import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AndTest {
+class OrTest {
 
-    Match<Set<Modifier>> match = contains(PUBLIC).and(contains(FINAL));
+    Match<Set<Modifier>> match = match(PUBLIC, FINAL).or(match(PRIVATE, STATIC));
+    Set<Modifier> left = Set.of(PUBLIC, FINAL);
+    Set<Modifier> right = Set.of(PRIVATE, STATIC);
+    Element element = mock(Element.class);
     TypeMirrors types = mock(TypeMirrors.class);
-    Set<Modifier> modifiers = Set.of(PUBLIC, FINAL);
-    Element element = when(mock(Element.class).getModifiers()).thenReturn(modifiers).getMock();
     
     @Test
-    void test_element_both_true() {
+    void test_element_left_true() {
+        when(element.getModifiers()).thenReturn(left);
         assertTrue(match.test(types, element));
     }
     
     @Test
-    void test_element_right_false() {
-        when(element.getModifiers()).thenReturn(Set.of(PUBLIC));
+    void test_element_right_true() {
+        when(element.getModifiers()).thenReturn(right);
+        assertTrue(match.test(types, element));
+    }
+    
+    @Test
+    void test_element_false() {
+        when(element.getModifiers()).thenReturn(Set.of(PUBLIC, STATIC));
         assertFalse(match.test(types, element));
     }
     
     
     @Test
-    void test_value_both_true() {
-        assertTrue(match.test(types, modifiers));
+    void test_value_left_true() {
+        assertTrue(match.test(types, left));
     }
     
     @Test
-    void test_value_right_false() {
-        assertFalse(match.test(types, Set.of(PUBLIC)));
+    void test_value_right_true() {
+        assertTrue(match.test(types, right));
+    }
+    
+    @Test
+    void test_value_false() {
+        assertFalse(match.test(types, Set.of(PUBLIC, STATIC)));
     }
     
     
     @Test
     void describe_element() {
-        assertEquals("public final", match.describe(element));
+        when(element.getModifiers()).thenReturn(right);
+        assertEquals("private static", match.describe(element));
     }
     
     @Test
     void describe_value() {
-        assertEquals("public final", match.describe(modifiers));
+        assertEquals("public final", match.describe(left));
     }
     
     
     @Test
     void condition() {
-        assertEquals("public, and final", match.condition());
+        assertEquals("public final, or private static", match.condition());
     }
     
     @Test
     void conditions() {
-        assertEquals("public, and final", match.conditions());
+        assertEquals("public final, or private static", match.conditions());
     }
     
 }

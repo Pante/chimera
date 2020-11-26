@@ -31,73 +31,87 @@ import java.util.function.BiConsumer;
 public @Static class Texts {
     
     public static final BiConsumer<String, StringBuilder> STRING = (string, builder) -> builder.append(string);
-    public static BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
+    public static final BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
     
-    public static <T> String and(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format) {
-        return join(elements, format, "and");
+    
+    public static <T> String and(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> consumer) {
+        return conjunction(elements, consumer, "and");
     }
     
-    public static <T> String and(T[] elements, BiConsumer<? super T, StringBuilder> format) {
-        return join(elements, format, "and");
-    }
-    
-    
-    public static <T> String or(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format) {
-        return join(elements, format, "or");
-    }
-    
-    public static <T> String or(T[] elements, BiConsumer<? super T, StringBuilder> format) {
-        return join(elements, format, "or");
+    public static <T> String and(T[] elements, BiConsumer<? super T, StringBuilder> consumer) {
+        return conjunction(elements, consumer, "and");
     }
     
     
-    public static <T> String join(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> format, String conjunction) {
+    public static <T> String or(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> consumer) {
+        return conjunction(elements, consumer, "or");
+    }
+    
+    public static <T> String or(T[] elements, BiConsumer<? super T, StringBuilder> consumer) {
+        return conjunction(elements, consumer, "or");
+    }
+    
+    
+    public static <T> String conjunction(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> consumer, String conjunction) {
         var builder = new StringBuilder();
-        join(elements, builder, format, conjunction);
-        return builder.toString();
-    }
-    
-    public static <T> String join(T[] elements, BiConsumer<? super T, StringBuilder> format, String conjunction) {
-        var builder = new StringBuilder();
-        join(elements, builder, format, conjunction);
-        return builder.toString();
-    }
-    
-    
-    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
-        join(elements, builder, format, ", ", conjunction);
-    }
-    
-    public static <T> void join(Collection<? extends T> elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String separator, String conjunction) {
-        int i = 0;
+        var i = 0;
         for (var element : elements) {
-            format.accept(element, builder);
-            if (i <  elements.size() - 2) {
-                builder.append(separator);
+            consumer.accept(element, builder);
+            if (i < elements.size() - 2) {
+                builder.append(", ");
                 
             } else if (i < elements.size() - 1) {
                 builder.append(' ').append(conjunction).append(' ');
             }
-            
             i++;
         }
+        
+        
+        return builder.toString();
     }
     
-    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String conjunction) {
-        join(elements, builder, format, ", ", conjunction);
-    }
-    
-    public static <T> void join(T[] elements, StringBuilder builder, BiConsumer<? super T, StringBuilder> format, String separator, String conjunction) {
-        for (var i = 0; i < elements.length; i++) {
-            format.accept(elements[i], builder);
-            if (i <  elements.length - 2) {
-                builder.append(separator);
+    public static <T> String conjunction(T[] elements, BiConsumer<? super T, StringBuilder> consumer, String conjunction) {
+        var builder = new StringBuilder();
+        for (int i = 0; i < elements.length; i++) {
+            consumer.accept(elements[i], builder);
+            if (i < elements.length - 2) {
+                builder.append(", ");
                 
             } else if (i < elements.length - 1) {
                 builder.append(' ').append(conjunction).append(' ');
             }
         }
+        
+        return builder.toString();
     }
+    
+    
+    public static <T> String join(Collection<? extends T> elements, BiConsumer<? super T, StringBuilder> consumer, String separator) {
+        var builder = new StringBuilder();
+        var i = 0;
+        for (var element : elements) {
+            consumer.accept(element, builder);
+            if (i < elements.size() - 1) {
+                builder.append(separator);
+            }
+            i++;
+        }
+        
+        return builder.toString();
+    }
+    
+    public static <T> String join(T[] elements, BiConsumer<? super T, StringBuilder> consumer, String separator) {
+        var builder = new StringBuilder();
+        for (int i = 0; i < elements.length; i++) {
+            consumer.accept(elements[i], builder);
+            if (i < elements.length - 1) {
+                builder.append(separator);
+            }
+        }
+        
+        return builder.toString();
+    }
+    
     
     public static String join(String first, String separator, String second) {
         if (first.isBlank()) {

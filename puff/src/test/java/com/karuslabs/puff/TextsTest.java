@@ -36,35 +36,54 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 class TextsTest {
     
     @ParameterizedTest
-    @MethodSource("join_parameters")
+    @MethodSource("conjunction_parameters")
     void and_list(String expected, String[] values) {
         assertEquals(expected.replace("|", "and"), Texts.and(List.of(values), Texts.STRING));
     }
     
     @ParameterizedTest
-    @MethodSource("join_parameters")
+    @MethodSource("conjunction_parameters")
     void and_array(String expected, String[] values) {
         assertEquals(expected.replace("|", "and"), Texts.and(values, Texts.STRING));
     }
     
     @ParameterizedTest
-    @MethodSource("join_parameters")
+    @MethodSource("conjunction_parameters")
     void or_list(String expected, String[] values) {
         assertEquals(expected.replace("|", "or"), Texts.or(List.of(values), Texts.STRING));
     }
     
     @ParameterizedTest
-    @MethodSource("join_parameters")
+    @MethodSource("conjunction_parameters")
     void or_array(String expected, String[] values) {
         assertEquals(expected.replace("|", "or"), Texts.or(values, Texts.STRING));
     }
     
-    
-    static Stream<Arguments> join_parameters() {
+    static Stream<Arguments> conjunction_parameters() {
         return Stream.of(
             of("A", new String[] {"A"}),
             of("A | B", new String[] {"A", "B"}),
             of("A, B | C", new String[] {"A", "B", "C"})
+        );
+    }
+    
+    @ParameterizedTest
+    @MethodSource("join_parameters")
+    void join_list(String expected, String[] values) {
+        assertEquals(expected, Texts.join(List.of(values), Texts.STRING, " "));
+    }
+    
+    @ParameterizedTest
+    @MethodSource("join_parameters")
+    void join_array(String expected, String[] values) {
+        assertEquals(expected, Texts.join(values, Texts.STRING, " "));
+    }
+    
+    static Stream<Arguments> join_parameters() {
+        return Stream.of(
+            of("A", new String[] {"A"}),
+            of("A B", new String[] {"A", "B"}),
+            of("A B C", new String[] {"A", "B", "C"})
         );
     }
     

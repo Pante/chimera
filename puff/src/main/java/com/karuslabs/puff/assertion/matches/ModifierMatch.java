@@ -48,6 +48,34 @@ public abstract class ModifierMatch extends SkeletonAssertion implements Match<S
         return new NoModifier(modifiers);
     }
     
+    
+    public static List<Modifier> sort(Set<Modifier> modifiers) {
+        var list = new ArrayList<>(modifiers);
+        list.sort((a, b) -> Integer.compare(order(a), order(b)));
+        return list;
+    }
+    
+    public static Modifier[] sort(Modifier... modifiers) {
+        Arrays.sort(modifiers, (a, b) -> Integer.compare(order(a), order(b)));
+        return modifiers;
+    }
+    
+    static int order(Modifier modifier) {
+        switch (modifier) {
+            case PUBLIC:
+            case PROTECTED:
+            case PRIVATE:
+                return 0;
+            case STATIC:
+                return 1;
+            case ABSTRACT:
+                return 2;
+            default:
+                return 3;
+        }
+    }
+    
+    
     final Set<Modifier> modifiers;
     
     public ModifierMatch(Set<Modifier> modifiers, String condition) {
@@ -62,12 +90,12 @@ public abstract class ModifierMatch extends SkeletonAssertion implements Match<S
 
     @Override
     public String describe(Element element) {
-        return Texts.join(element.getModifiers(), SCREAMING_CASE, " ", " ");
+        return describe(element.getModifiers());
     }
 
     @Override
     public String describe(Set<Modifier> modifiers) {
-        return Texts.join(modifiers, SCREAMING_CASE, "");
+        return Texts.join(sort(modifiers), SCREAMING_CASE, " ");
     }
 
 }
@@ -88,7 +116,7 @@ class AnyModifier extends ModifierMatch {
 class ContainsModifier extends ModifierMatch {
 
     ContainsModifier(Modifier... modifiers) {
-        super(Set.of(modifiers), Texts.and(modifiers, SCREAMING_CASE));
+        super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
     }
     
     @Override
@@ -101,7 +129,7 @@ class ContainsModifier extends ModifierMatch {
 class MatchModifier extends ModifierMatch {
 
     MatchModifier(Modifier... modifiers) {
-        super(Set.of(modifiers), Texts.and(modifiers, SCREAMING_CASE));
+        super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
     }
     
     @Override
@@ -114,7 +142,7 @@ class MatchModifier extends ModifierMatch {
 class NoModifier extends ModifierMatch {
 
     NoModifier(Modifier... modifiers) {
-        super(Set.of(modifiers), "neither " + Texts.or(modifiers, SCREAMING_CASE));
+        super(Set.of(modifiers), "neither " + Texts.or(sort(modifiers), SCREAMING_CASE));
     }
     
     @Override

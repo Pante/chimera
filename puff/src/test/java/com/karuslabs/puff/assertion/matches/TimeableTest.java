@@ -25,65 +25,40 @@ package com.karuslabs.puff.assertion.matches;
 
 import com.karuslabs.puff.type.TypeMirrors;
 
-import java.util.Set;
-import javax.lang.model.element.*;
+import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
 import static com.karuslabs.puff.assertion.Assertions.*;
-import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AndTest {
+class TimeableTest {
 
-    Match<Set<Modifier>> match = contains(PUBLIC).and(contains(FINAL));
+    Timeable<TypeMirror> match = is(int.class);
+    TypeMirror integer = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.INT).getMock();
+    TypeMirror bool = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
     TypeMirrors types = mock(TypeMirrors.class);
-    Set<Modifier> modifiers = Set.of(PUBLIC, FINAL);
-    Element element = when(mock(Element.class).getModifiers()).thenReturn(modifiers).getMock();
     
     @Test
-    void test_element_both_true() {
-        assertTrue(match.test(types, element));
+    void and_supplier() {
+        assertTrue(match.and(() -> is(int.class)).test(types, integer));
     }
     
     @Test
-    void test_element_right_false() {
-        when(element.getModifiers()).thenReturn(Set.of(PUBLIC));
-        assertFalse(match.test(types, element));
+    void and_timeable() {
+        assertTrue(match.and(is(int.class)).test(types, integer));
     }
     
     
     @Test
-    void test_value_both_true() {
-        assertTrue(match.test(types, modifiers));
+    void or_supplier() {
+        assertTrue(match.or(() -> is(boolean.class)).test(types, bool));
     }
     
     @Test
-    void test_value_right_false() {
-        assertFalse(match.test(types, Set.of(PUBLIC)));
-    }
-    
-    
-    @Test
-    void describe_element() {
-        assertEquals("public final", match.describe(element));
-    }
-    
-    @Test
-    void describe_value() {
-        assertEquals("public final", match.describe(modifiers));
-    }
-    
-    
-    @Test
-    void condition() {
-        assertEquals("public, and final", match.condition());
-    }
-    
-    @Test
-    void conditions() {
-        assertEquals("public, and final", match.conditions());
+    void or_timeable() {
+        assertTrue(match.or(is(boolean.class)).test(types, bool));
     }
     
 }

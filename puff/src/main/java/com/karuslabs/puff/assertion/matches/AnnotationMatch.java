@@ -41,7 +41,7 @@ public abstract class AnnotationMatch extends SkeletonAssertion implements Match
     }
     
     public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return new NoAnnotations(annotations);
+        return new NoAnnotation(annotations);
     }
     
     public static final BiConsumer<Class<? extends Annotation>, StringBuilder> CLASS_FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
@@ -61,7 +61,7 @@ public abstract class AnnotationMatch extends SkeletonAssertion implements Match
             return "";
             
         } else {
-            return Texts.and(annotations, MIRROR_FORMAT);
+            return Texts.join(annotations, MIRROR_FORMAT, " ");
         }
     }
  
@@ -93,7 +93,7 @@ class AnyAnnotation extends AnnotationMatch {
 class ContainsAnnotation extends AnnotationMatch {
 
     ContainsAnnotation(Class<? extends Annotation>[] annotations) {
-        super(annotations, Texts.join(annotations, CLASS_FORMAT, ","));
+        super(annotations, Texts.join(annotations, CLASS_FORMAT, " "));
     }
 
     @Override
@@ -120,10 +120,10 @@ class ContainsAnnotation extends AnnotationMatch {
     
 }
 
-class NoAnnotations extends AnnotationMatch {
+class NoAnnotation extends AnnotationMatch {
     
-    NoAnnotations(Class<? extends Annotation>... annotations) {
-        super(annotations, "neither " + Texts.or(annotations, CLASS_FORMAT));
+    NoAnnotation(Class<? extends Annotation>... annotations) {
+        super(annotations, "neither " + Texts.conjunction(annotations, CLASS_FORMAT, "nor"));
     }
 
     @Override
