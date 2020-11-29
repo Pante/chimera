@@ -130,27 +130,32 @@ public @Static class Assertions {
     }
     
     
+    public static <T> Timeable<T> not(Supplier<? extends Timeable<T>> match) {
+        return not(match.get());
+    }
+    
+    public static <T> Timeable<T> not(Timeable<T> match) {
+        return Not.of(match);
+    }
+    
+    public static <T> Match<T> not(Match<T> match) {
+        return Not.of(match);
+    }
+    
+    
     public static Match<Class<? extends Annotation>> contains(Class<? extends Annotation>... annotations) {
         return AnnotationMatch.contains(annotations);
     }
     
-    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return AnnotationMatch.no(annotations);
-    }
     
-    
-    public static final Match<Set<Modifier>> contains(Modifier... modifiers) {
+    public static Match<Set<Modifier>> contains(Modifier... modifiers) {
         return ModifierMatch.contains(modifiers);
     }
     
-    public static final Match<Set<Modifier>> match(Modifier... modifiers) {
+    public static Match<Set<Modifier>> match(Modifier... modifiers) {
         return ModifierMatch.match(modifiers);
     }
-    
-    public static final Match<Set<Modifier>> no(Modifier... modifiers) {
-        return ModifierMatch.no(modifiers);
-    }
-    
+
     
     public static Timeable<TypeMirror> is(TypeKind primitive) {
         return TypeMatch.is(primitive);

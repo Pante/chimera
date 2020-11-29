@@ -30,7 +30,7 @@ import javax.lang.model.element.Element;
 
 import static com.karuslabs.puff.Texts.join;
 
-public class Or<T> extends SkeletonAssertion implements Timeable<T> {
+public final class Or<T> extends SkeletonAssertion implements Timeable<T> {
 
     private final Match<T> left;
     private final Match<T> right;

@@ -66,7 +66,7 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
     public Void visitTypeVariable(TypeVariable variable, StringBuilder builder) {
         builder.append(variable.asElement().getSimpleName());
         
-        // We do this to ignore the default T extends Object upper bound
+        // We do this to ignore the default <T extends Object> upper bound
         var upper = variable.getUpperBound();
         if (!TypeMirrors.is(upper, Object.class)) {
             upper.accept(this, builder.append(" extends "));

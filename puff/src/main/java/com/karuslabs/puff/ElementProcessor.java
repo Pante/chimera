@@ -33,7 +33,7 @@ public abstract class ElementProcessor extends AnnotationProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
-        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(new TypeElement[0]))) {
+        for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(TypeElement[]::new))) {
             process(element);
         }
         clear();

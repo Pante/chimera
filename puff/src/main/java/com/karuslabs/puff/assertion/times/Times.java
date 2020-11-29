@@ -29,7 +29,11 @@ import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-public abstract class Times<T> extends SkeletonAssertion {    
+public abstract class Times<T> extends SkeletonAssertion {
+    
+    public static <T> Times<T> no(Timeable<T> match) {
+        return exactly(0, match);
+    }
     
     public static <T> Times<T> exactly(int times, Timeable<T> match) {
         return new Exactly<>(times, match);
@@ -45,10 +49,6 @@ public abstract class Times<T> extends SkeletonAssertion {
     
     public static <T> Times<T> max(int max, Timeable<T> match) {
         return new Max<>(max, match);
-    }
-    
-    public static <T> Times<T> no(Timeable<T> match) {
-        return new No<>(match);
     }
     
     
@@ -130,7 +130,7 @@ class Between<T> extends Times<T> {
 
     @Override
     public boolean test() {
-        return current > min && current <= max;
+        return current >= min && current < max;
     }
     
 }
@@ -163,19 +163,6 @@ class Max<T> extends Times<T> {
     @Override
     public boolean test() {
         return current <= most;
-    }
-    
-}
-
-class No<T> extends Times<T> {
-    
-    No(Timeable<T> match) {
-        super(match, "no " + match.condition());
-    }
-
-    @Override
-    public boolean test() {
-        return current == 0;
     }
     
 }

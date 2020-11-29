@@ -98,6 +98,14 @@ class LogTest {
         );
     }
     
+    
+    @Test
+    void log_no_element() {
+        log.error(null, "message");
+        verify(messager).printMessage(ERROR, "message");
+    }
+    
+    
     @Test
     void clear() {
         log.error(element, "first");

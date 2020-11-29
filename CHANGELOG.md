@@ -1,8 +1,8 @@
 ## 4.9.0 - Next release
 
-**Compatible Spigot versions: 1.16.3**
+**Compatible Spigot versions: 1.16.4**
 
-This update adds inferred arguments during code generation for the command framework.
+This update adds argument type matching overhauls code generation for the command framework.
 
 ### Annotations
 
@@ -10,9 +10,7 @@ Annotation processing related packages have been moved to new project, Puff.
 
 - Add `@Lazy`
 - Add `@Monad`
-- Add `Logger`
-- Add `Typing`
-- Remove `com.karuslabs.annotations.processor` - package has been moved to Smoke, a new annotation processing project.
+- Remove `com.karuslabs.annotations.processor` - package has been moved to Puff, a new annotation processing project.
 
 ### Commons
 
@@ -67,8 +65,7 @@ to support inferred parameters for methods annotated with `@Bind`.
 
 ### Puff
 
-- Add `com.karuslabs.puff`
-- Add `com.karuslabs.puff.signature`
+Puff is a library that simplifies the creation of annotation processors. It also contains utilities for matching `Element`s and `TypeMirror`s.
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 

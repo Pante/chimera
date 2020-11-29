@@ -40,10 +40,6 @@ public abstract class AnnotationMatch extends SkeletonAssertion implements Match
         return new ContainsAnnotation(annotations);
     }
     
-    public static Match<Class<? extends Annotation>> no(Class<? extends Annotation>... annotations) {
-        return new NoAnnotation(annotations);
-    }
-    
     public static final BiConsumer<Class<? extends Annotation>, StringBuilder> CLASS_FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     public static final BiConsumer<AnnotationMirror, StringBuilder> MIRROR_FORMAT = (annotation, builder) -> annotation.getAnnotationType().accept(TypePrinter.SIMPLE, builder.append('@'));
     
@@ -116,34 +112,6 @@ class ContainsAnnotation extends AnnotationMatch {
         }
         
         return false;
-    }
-    
-}
-
-class NoAnnotation extends AnnotationMatch {
-    
-    NoAnnotation(Class<? extends Annotation>... annotations) {
-        super(annotations, "neither " + Texts.conjunction(annotations, CLASS_FORMAT, "nor"));
-    }
-
-    @Override
-    public boolean test(TypeMirrors types, Element element) {
-        for (var annotation : annotations) {
-            if (element.getAnnotationsByType(annotation).length != 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    public boolean test(TypeMirrors types, Class<? extends Annotation> value) {
-        for (var annotation : annotations) {
-            if (annotation.equals(value)) {
-                return false;
-            }
-        }
-        return true;
     }
     
 }

@@ -39,18 +39,19 @@ public abstract class TypeMatch extends SkeletonAssertion implements Timeable<Ty
 
     public static final Timeable<TypeMirror> ANY = new AnyType();
     
-    public static Timeable<TypeMirror> is(TypeKind primitive) {
-        return new PrimitiveMatch(primitive);
-    }
     
     public static Timeable<TypeMirror> is(Class<?> type) {
         var kind = TypeMirrors.kind(type);
         if (kind.isPrimitive()) {
-            return new PrimitiveMatch(kind);
+            return is(kind);
                 
         } else {
             return new ClassMatch(Relation.IS, type);
         }
+    }
+    
+    public static Timeable<TypeMirror> is(TypeKind primitive) {
+        return new PrimitiveMatch(primitive);
     }
     
     public static Timeable<TypeMirror> is(TypeMirror type) {
@@ -151,11 +152,16 @@ class AnyType extends TypeMatch {
     
 }
 
-class PrimitiveMatch implements Timeable<TypeMirror> {
+class PrimitiveMatch extends SkeletonAssertion implements Timeable<TypeMirror> {
 
     final TypeKind primitive;
     
     PrimitiveMatch(TypeKind primitive) {
+        this(primitive, primitive.toString().toLowerCase());
+    }
+    
+    PrimitiveMatch(TypeKind primitive, String condition) {
+        super(condition, condition + "s");
         this.primitive = primitive;
     }
     
@@ -177,31 +183,6 @@ class PrimitiveMatch implements Timeable<TypeMirror> {
     @Override
     public String describe(TypeMirror type) {
         return TypePrinter.simple(type);
-    }
-
-    @Override
-    public String condition() {
-        return primitive.toString().toLowerCase().replace('_', ' ');
-    }
-    
-    @Override
-    public String conditions() {
-        return primitive.toString().toLowerCase().replace('_', ' ') + "s";
-    }
-    
-}
-
-class TypeMirrorMatch extends TypeMatch {
-    
-    static final BiConsumer<TypeMirror, StringBuilder> FORMAT = (type, builder) -> type.accept(TypePrinter.SIMPLE, builder);
-    
-    TypeMirrorMatch(Relation relation, TypeMirror... mirrors) {
-        super(relation, mirrors, Texts.and(mirrors, FORMAT));
-    }
-    
-    @Override
-    public boolean test(TypeMirrors types, TypeMirror type) {
-        return relation.test(types, type, mirrors);
     }
     
 }
@@ -226,6 +207,21 @@ class ClassMatch extends TypeMatch {
             classes = null;
         }
         
+        return relation.test(types, type, mirrors);
+    }
+    
+}
+
+class TypeMirrorMatch extends TypeMatch {
+    
+    static final BiConsumer<TypeMirror, StringBuilder> FORMAT = (type, builder) -> type.accept(TypePrinter.SIMPLE, builder);
+    
+    TypeMirrorMatch(Relation relation, TypeMirror... mirrors) {
+        super(relation, mirrors, Texts.and(mirrors, FORMAT));
+    }
+    
+    @Override
+    public boolean test(TypeMirrors types, TypeMirror type) {
         return relation.test(types, type, mirrors);
     }
     

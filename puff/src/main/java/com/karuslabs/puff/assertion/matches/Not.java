@@ -28,37 +28,43 @@ import com.karuslabs.puff.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.puff.Texts.join;
+public final class Not<T> extends SkeletonAssertion implements Timeable<T> {
 
-public final class And<T> extends SkeletonAssertion implements Timeable<T> {
-
-    private final Match<T> left;
-    private final Match<T> right;
-    
-    protected And(Match<T> left, Match<T> right) {
-        super(join(left.condition(), ", and ", right.condition()), join(left.conditions(), ", and ", right.conditions()));
-        this.left = left;
-        this.right = right;
+    public static <T> Timeable<T> of(Timeable<T> match) {
+        return new Not<>(match);
     }
-
+    
+    public static <T> Match<T> of(Match<T> match) {
+        return new Not<>(match);
+    }
+    
+    
+    private final Match<T> match;
+    
+    private Not(Match<T> match) {
+        super("not " + match.condition(), "not " + match.conditions());
+        this.match = match;
+    }
+    
+    
     @Override
     public boolean test(TypeMirrors types, Element element) {
-        return left.test(types, element) && right.test(types, element);
+        return !match.test(types, element);
     }
-    
+
     @Override
     public boolean test(TypeMirrors types, T value) {
-        return left.test(types, value) && right.test(types, value);
+        return !match.test(types, value);
     }
 
     @Override
     public String describe(Element element) {
-        return left.describe(element);
+        return match.describe(element);
     }
 
     @Override
     public String describe(T value) {
-        return left.describe(value);
+        return match.describe(value);
     }
 
 }

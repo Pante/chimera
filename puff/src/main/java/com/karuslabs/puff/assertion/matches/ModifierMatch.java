@@ -44,12 +44,8 @@ public abstract class ModifierMatch extends SkeletonAssertion implements Match<S
         return new MatchModifier(modifiers);
     }
     
-    public static final Match<Set<Modifier>> no(Modifier... modifiers) {
-        return new NoModifier(modifiers);
-    }
     
-    
-    public static List<Modifier> sort(Set<Modifier> modifiers) {
+    public static List<Modifier> sort(Collection<Modifier> modifiers) {
         var list = new ArrayList<>(modifiers);
         list.sort((a, b) -> Integer.compare(order(a), order(b)));
         return list;
@@ -107,7 +103,7 @@ class AnyModifier extends ModifierMatch {
     }
 
     @Override
-    public boolean test(TypeMirrors types, Set<Modifier> value) {
+    public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
         return true;
     }
     
@@ -135,19 +131,6 @@ class MatchModifier extends ModifierMatch {
     @Override
     public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
         return this.modifiers.equals(modifiers);
-    }
-    
-}
-
-class NoModifier extends ModifierMatch {
-
-    NoModifier(Modifier... modifiers) {
-        super(Set.of(modifiers), "neither " + Texts.or(sort(modifiers), SCREAMING_CASE));
-    }
-    
-    @Override
-    public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
-        return Collections.disjoint(this.modifiers, modifiers);
     }
     
 }

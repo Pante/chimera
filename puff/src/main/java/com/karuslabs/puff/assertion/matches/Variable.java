@@ -84,7 +84,13 @@ public class Variable extends SkeletonAssertion implements Timeable<VariableElem
 
     @Override
     public String describe(VariableElement element) {
-        var description = modifiers.describe(element) + " " + type.describe(element);
+        var description = type.describe(element);
+        
+        var mods = modifiers.describe(element);
+        if (!mods.isEmpty()) {
+            description = mods + " " + description;
+        }
+        
         var annotated = annotations.describe(element);
         if (!annotated.isEmpty()) {
             description += " annotated with " + annotated;
