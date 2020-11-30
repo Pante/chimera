@@ -58,7 +58,7 @@ public abstract class Sequence<T> extends SkeletonAssertion {
     
     
     protected static String format(Assertion... assertions) {
-        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ",");
+        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ", ");
     }
 
     
@@ -102,21 +102,21 @@ class MatchSequence<T> extends Sequence<T> {
 
     @Override
     public String describe(Collection<? extends T> values) {
-        if (matches.length > 0 && values.isEmpty()) {
-            return "empty";
+        if (values.isEmpty()) {
+            return "";
             
-        } else if (matches.length < values.size()) {
-            return values.size() + " identifiers";
+        } else if (matches.length == 0) {
+            return values.size() == 1 ? "1 value" : values.size() + " values";
             
         } else {
             var descriptions = new String[values.size()];
             int i = 0;
             for (var value : values) {
-                descriptions[i] = "[" + matches[i].describe(value) + "]";
+                descriptions[i] = "[" + matches[0].describe(value) + "]";
                 i++;
             }
             
-            return Texts.join(descriptions, Texts.STRING, ",");
+            return Texts.join(descriptions, Texts.STRING, ", ");
         }
     }
     
