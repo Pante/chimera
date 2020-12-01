@@ -41,12 +41,15 @@ abstract class TimeSequence<T> extends Sequence<T> {
     }
     
     @Override
-    public String describe(Collection<? extends T> values) {
-        return Texts.join(times, (time, builder) -> builder.append('[').append(time.describe()).append(']'), ",");
+    public String describe(TypeMirrors types, Collection<? extends T> values) {
+        test(types, values);
+        var description = Texts.join(times, (time, builder) -> builder.append('[').append(time.describe()).append(']'), ", ");
+        reset();
+        
+        return description;
     }
     
-    @Override
-    public void reset() {
+    protected void reset() {
         for (var time : times) {
             time.reset();
         }

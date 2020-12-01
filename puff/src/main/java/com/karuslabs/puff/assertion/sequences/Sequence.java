@@ -23,8 +23,6 @@
  */
 package com.karuslabs.puff.assertion.sequences;
 
-import com.karuslabs.annotations.VisibleForOverride;
-
 import com.karuslabs.puff.Texts;
 import com.karuslabs.puff.assertion.*;
 import com.karuslabs.puff.assertion.matches.Match;
@@ -68,10 +66,7 @@ public abstract class Sequence<T> extends SkeletonAssertion {
     
     public abstract boolean test(TypeMirrors types, Collection<? extends T> values);
     
-    public abstract String describe(Collection<? extends T> values);
-    
-    @VisibleForOverride
-    public void reset() {}
+    public abstract String describe(TypeMirrors types, Collection<? extends T> values);
     
 }
 
@@ -101,7 +96,7 @@ class MatchSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public String describe(Collection<? extends T> values) {
+    public String describe(TypeMirrors types, Collection<? extends T> values) {
         if (values.isEmpty()) {
             return "";
             
@@ -112,8 +107,7 @@ class MatchSequence<T> extends Sequence<T> {
             var descriptions = new String[values.size()];
             int i = 0;
             for (var value : values) {
-                descriptions[i] = "[" + matches[0].describe(value) + "]";
-                i++;
+                descriptions[i++] = matches[0].describe(value);
             }
             
             return Texts.join(descriptions, Texts.STRING, ", ");
@@ -143,14 +137,14 @@ class EachSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public String describe(Collection<? extends T> values) {
+    public String describe(TypeMirrors types, Collection<? extends T> values) {
         var descriptions = new String[values.size()];
         int i = 0;
         for (var value : values) {
-            descriptions[i++] = "[" + match.describe(value) + "]";
+            descriptions[i++] = match.describe(value);
         }
         
-        return Texts.join(descriptions, Texts.STRING, ",");
+        return Texts.join(descriptions, Texts.STRING, ", ");
     }
     
 }

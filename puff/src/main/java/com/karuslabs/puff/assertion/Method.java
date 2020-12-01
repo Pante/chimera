@@ -104,20 +104,14 @@ public class Method extends SkeletonAssertion {
         }
     }
     
-    public String describe(ExecutableElement method) {
+    public String describe(TypeMirrors types, ExecutableElement method) {
         return format(
             annotations.describe(method),
             modifiers.describe(method),
             type.describe(method.getReturnType()),
-            parameters.describe(method.getParameters()),
-            exceptions.describe(method.getThrownTypes())
+            parameters.describe(types, method.getParameters()),
+            exceptions.describe(types, method.getThrownTypes())
         );
-    }
-    
-            
-    public void reset() {
-        parameters.reset();
-        exceptions.reset();
     }
     
     

@@ -59,28 +59,55 @@ class MatchSequenceTest {
     
     @Test
     void describe() {
-        var actual = sequence.describe(List.of(Set.of(PRIVATE, FINAL), Set.of(PROTECTED)));
-        assertEquals("[private final], [protected]", actual);
+        var actual = sequence.describe(types, List.of(Set.of(PRIVATE, FINAL), Set.of(PROTECTED)));
+        assertEquals("private final, protected", actual);
     }
     
     @Test
     void describe_empty_values() {
-        assertEquals("", sequence.describe(List.of()));
+        assertEquals("", sequence.describe(types, List.of()));
     }
     
     @Test
     void describe_no_matches_single_value() {
-        assertEquals("1 value", empty.describe(List.of(Set.of(PUBLIC))));
+        assertEquals("1 value", empty.describe(types, List.of(Set.of(PUBLIC))));
     }
     
     @Test
     void describe_no_matches_multiple_values() {
-        assertEquals("2 values", empty.describe(List.of(Set.of(PUBLIC), Set.of(PRIVATE))));
+        assertEquals("2 values", empty.describe(types, List.of(Set.of(PUBLIC), Set.of(PRIVATE))));
     }
     
     @Test
     void condition() {
         assertEquals("match [public static], [private], [protected]", sequence.condition());
+    }
+    
+}
+
+class EachSequenceTest {
+    
+    Sequence<Set<Modifier>> sequence = each(match(PUBLIC));
+    TypeMirrors types = mock(TypeMirrors.class);
+    
+    @Test
+    void test() {
+        assertTrue(sequence.test(types, List.of(Set.of(PUBLIC), Set.of(PUBLIC))));
+    }
+    
+    @Test
+    void test_fails() {
+        assertFalse(sequence.test(types, List.of(Set.of(PUBLIC), Set.of(PRIVATE), Set.of(PUBLIC))));
+    }
+    
+    @Test
+    void describe() {
+        assertEquals("private static final, native", sequence.describe(types, List.of(Set.of(PRIVATE, STATIC, FINAL), Set.of(NATIVE))));
+    }
+    
+    @Test
+    void condition() {
+        assertEquals("each [public]",  sequence.condition());
     }
     
 }
