@@ -23,7 +23,6 @@
         <module>annotations</module>
         <module>commons</module>
         <module>puff</module>
-        <module>scribe</module>
     </modules>
           
           

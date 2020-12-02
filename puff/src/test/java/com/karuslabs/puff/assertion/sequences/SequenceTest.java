@@ -87,7 +87,7 @@ class MatchSequenceTest {
 
 class EachSequenceTest {
     
-    Sequence<Set<Modifier>> sequence = each(match(PUBLIC));
+    Sequence<Set<Modifier>> sequence = each(() -> match(PUBLIC));
     TypeMirrors types = mock(TypeMirrors.class);
     
     @Test

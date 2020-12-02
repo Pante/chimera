@@ -67,13 +67,12 @@ public @Static class Assertions {
         return match(supplied);
     }
     
-    public static <T> Sequence<T> match(Times<T>... matches) {
+    public static <T> Sequence<T> match(Match<T>... matches) {
         return Sequence.match(matches);
     }
     
     
-    
-    public static <T> Sequence<T> match(Match<T>... matches) {
+    public static <T> Sequence<T> match(Times<T>... matches) {
         return Sequence.match(matches);
     }
     

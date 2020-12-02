@@ -28,13 +28,12 @@ import com.karuslabs.puff.assertion.times.Times;
 
 import java.util.*;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
 import static com.karuslabs.puff.assertion.Assertions.*;
-import static javax.lang.model.element.Modifier.PRIVATE;
-import javax.lang.model.type.TypeKind;
+import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -65,14 +64,15 @@ class TimeSequenceTest {
 
 class ContainsSequenceTest {
     
-    Sequence<VariableElement> sequence = contains(min(1, variable().modifiers(PRIVATE)), exactly(2, variable()));
+    Sequence<VariableElement> sequence = contains(min(1, variable().modifiers(PRIVATE)), exactly(1, variable().modifiers(PUBLIC)));
     TypeMirrors types = mock(TypeMirrors.class);
     VariableElement element = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of(PRIVATE)).getMock();
     
     @Test
     void test() {
-        VariableElement other = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of()).getMock();
-        assertTrue(sequence.test(types, List.of(element, other)));
+        VariableElement other = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of(PUBLIC)).getMock();
+        VariableElement empty = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of()).getMock();
+        assertTrue(sequence.test(types, List.of(element, other, empty)));
     }
     
     @Test
@@ -82,7 +82,32 @@ class ContainsSequenceTest {
     
     @Test
     void condition() {
-        assertEquals("contains [1 or more private types], [2 types]", sequence.condition());
+        assertEquals("contains [1 or more private types], [1 public type]", sequence.condition());
+    }
+    
+}
+
+class MatchTimeSequenceTest {
+    
+    Sequence<VariableElement> sequence = match(min(1, variable().modifiers(PRIVATE)), exactly(1, variable().modifiers(PUBLIC)));
+    TypeMirrors types = mock(TypeMirrors.class);
+    VariableElement element = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of(PRIVATE)).getMock();
+    VariableElement other = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of(PUBLIC)).getMock();
+    
+    @Test
+    void test() {
+        sequence.test(types, List.of(element, other));
+    }
+    
+    @Test
+    void test_times_fail() {
+        VariableElement empty = when(mock(VariableElement.class).getModifiers()).thenReturn(Set.of()).getMock();
+        sequence.test(types, List.of(element, other, empty));
+    }
+    
+    @Test
+    void condition() {
+        assertEquals("match [1 or more private types], [1 public type]", sequence.condition());
     }
     
 }

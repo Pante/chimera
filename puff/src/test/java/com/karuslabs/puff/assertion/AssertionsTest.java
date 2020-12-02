@@ -21,47 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.scribe.standalone;
+package com.karuslabs.puff.assertion;
 
-import com.karuslabs.scribe.annotations.Plugin;
-import com.karuslabs.scribe.core.Environment;
+import com.karuslabs.puff.type.TypeMirrors;
 
-import java.util.Set;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.*;
-import javax.lang.model.util.*;
+import javax.lang.model.type.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import static java.util.stream.Collectors.toSet;
+import static com.karuslabs.puff.assertion.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+class AssertionsTest {
 
-class StandaloneProcessorTest {
-    
-    Elements elements = when(mock(Elements.class).getTypeElement(any())).thenReturn(mock(TypeElement.class)).getMock();
-    Types types = mock(Types.class);
-    RoundEnvironment round = mock(RoundEnvironment.class);
-    StandaloneProcessor processor = new StandaloneProcessor(mock(Environment.class), elements, types);
-    Element element = mock(Element.class);
-    
+    TypeMirrors types = mock(TypeMirrors.class);
+    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
     
     @Test
-    void initalize() {
-        processor.initialize(round);
-        
-        assertEquals(round, processor.round);
+    void is_typekind() {
+        assertTrue(is(TypeKind.BOOLEAN).test(types, type));
     }
     
-    
-    @Test
-    void annotated() {
-        doReturn(Set.of(element)).when(round).getElementsAnnotatedWith(Plugin.class);
-
-        processor.round = round;
-        
-        assertEquals(Set.of(element), processor.annotated(Plugin.class).collect(toSet()));
-    }
-
-} 
+}

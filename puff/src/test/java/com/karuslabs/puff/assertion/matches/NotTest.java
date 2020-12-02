@@ -47,7 +47,7 @@ class NotTest {
     @Test
     void timeable_test() {
         TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.INT).getMock();
-        assertFalse(not(is(int.class)).test(types, type));
+        assertFalse(not(() -> is(int.class)).test(types, type));
     }
     
     

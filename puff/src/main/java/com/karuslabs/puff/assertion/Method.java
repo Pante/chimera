@@ -47,7 +47,7 @@ public class Method extends SkeletonAssertion {
             description = "[" + annotations + "]" + System.lineSeparator();
         }
         
-        description += join(join(modifiers, " ", join("[", type , "]")), " method ", join("(", arguments, ")"));
+        description += join(join(modifiers, " ", join("[", type , "]")), " method", join("(", arguments.isEmpty() ? "..." : arguments, ")"));
         
         if (!exceptions.isBlank()) {
             description += " throws " + exceptions;
@@ -95,9 +95,9 @@ public class Method extends SkeletonAssertion {
     }
 
     
-    public String describe(Element element) {
+    public String describe(TypeMirrors types, Element element) {
         if (element instanceof ExecutableElement) {
-            return describe((ExecutableElement) element);
+            return describe(types, (ExecutableElement) element);
             
         } else {
             return element.getKind().toString().toLowerCase().replace('_', ' ');

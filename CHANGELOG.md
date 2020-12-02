@@ -2,7 +2,7 @@
 
 **Compatible Spigot versions: 1.16.4**
 
-This update adds argument type matching overhauls code generation for the command framework.
+This update adds argument type matching overhauls code generation for the command framework. The Scribe project has also been removed.
 
 ### Annotations
 
@@ -66,6 +66,16 @@ to support inferred parameters for methods annotated with `@Bind`.
 ### Puff
 
 Puff is a library that simplifies the creation of annotation processors. It also contains utilities for matching `Element`s and `TypeMirror`s.
+
+### Scribe
+
+TL;DR - Remove Scribe
+
+When we first released Scribe, we believed that annotation processing was the best solution to ensure that plugin.yamls are free of errors. In hindsight, 
+this approach proved to be both cumbersome to maintain for developers to use. The poor to lukewarm reception has only further exemplified this consensus.
+Going forward, we will no longer be maintaining the Scribe project, however, it will be useable for the foreseeable future. Looking forward, we plan to develop 
+a new plugin.yaml lint replacement. To those who have been supporting the Scribe project, thank you.
+ 
 
 ## 4.8.0 - Can't hold it back anymore (13/09/2020)
 
