@@ -21,18 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+public interface Block<T extends Context<T>, U> {
 
-public final class Token {
-
-    public final Identity identity;
-    public final Set<String> aliases;
-    
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
-    }
+    void emit(T context, U value);
     
 }

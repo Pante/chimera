@@ -21,18 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import java.time.LocalDateTime;
 
-public final class Token {
-
-    public final Identity identity;
-    public final Set<String> aliases;
+public class HeaderBlock implements Block<FileContext, String> {
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    private static final String VERSION = "4.9.0-SNAPSHOT";
+    
+    @Override
+    public void emit(FileContext header, String pack) {
+        if (!pack.isEmpty()) {
+            header.line("package ", pack, ";");
+        }
+        
+        header.line("import com.karuslabs.commons.command.Execution;")
+              .line("import com.karuslabs.commons.command.tree.nodes.*;")
+              .line()
+              .line("import com.mojang.brigadier.Command;")
+              .line("import com.mojang.brigadier.suggestion.SuggestionProvider;")
+              .line("import com.mojang.brigadier.tree.CommandNode;")
+              .line()
+              .line("import java.util.*;")
+              .line("import java.util.function.Predicate;")
+              .line()
+              .line("import org.bukkit.command.CommandSender;")
+              .line()
+              .line("/**")
+              .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
+              .line(" */");
     }
-    
+
 }

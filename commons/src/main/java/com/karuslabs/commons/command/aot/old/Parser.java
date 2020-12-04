@@ -21,18 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import javax.lang.model.element.*;
 
-public final class Token {
+public interface Parser<T> {
 
-    public final Identity identity;
-    public final Set<String> aliases;
-    
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
-    }
+    void parse(Element element, T value);
     
 }

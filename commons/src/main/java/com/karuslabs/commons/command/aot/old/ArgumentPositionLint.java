@@ -21,18 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Logger;
+import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.commons.command.aot.*;
 
-public final class Token {
+public class ArgumentPositionLint implements Lint {
 
-    public final Identity identity;
-    public final Set<String> aliases;
-    
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    @Override
+    public void lint(Logger logger, Identity identifier, Mirrors.Command command) {
+        if (identifier.type == Type.ARGUMENT) {
+            logger.zone(command.site).error(identifier.name, "is at an invalid position", "command should not start with an argument");
+        }
     }
-    
+
 }

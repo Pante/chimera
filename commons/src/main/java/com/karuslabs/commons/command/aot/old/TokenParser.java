@@ -21,18 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Filter;
+import com.karuslabs.smoke.Logger;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.old.Mirrors.Command;
+import com.karuslabs.commons.command.aot.old.Lexer;
 
-public final class Token {
+import java.util.*;
+import javax.lang.model.element.*;
 
-    public final Identity identity;
-    public final Set<String> aliases;
+public abstract class TokenParser implements Parser<Map<TypeElement, Map<Identity, Command>>> {
+
+    protected final Logger logger;
+    protected final Lexer lexer;
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    public TokenParser(Logger logger, Lexer lexer) {
+        this.logger = logger;
+        this.lexer = lexer;
     }
+    
+    @Override
+    public void parse(Element element, Map<TypeElement, Map<Identity, Command>> namespaces) {
+        logger.zone(element);
+        
+        var type = element.accept(Filter.CLASS, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
+        
+        process(element, namespace);
+    }
+    
+    protected abstract void process(Element element, Map<Identity, Command> namespace);
     
 }

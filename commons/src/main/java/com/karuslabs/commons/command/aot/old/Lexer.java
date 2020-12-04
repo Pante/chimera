@@ -21,18 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Logger;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identity.Type;
 
-public final class Token {
+import java.util.*;
 
-    public final Identity identity;
-    public final Set<String> aliases;
+@FunctionalInterface
+public interface Lexer {
+
+    List<Token> lex(Logger logger, String lexeme);
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+}
+
+class Memoizer {
+    
+    private final Map<String, Identity> identifiers = new HashMap<>();
+    
+    Token token(Type type, String lexeme, String name, Set<String> aliases) {
+        var identifier = identifiers.get(lexeme);
+        if (identifier == null) {
+            identifier = new Identity(type, name, lexeme);
+            identifiers.put(lexeme, identifier);
+        }
+        
+        return new Token(identifier, aliases);
     }
     
 }

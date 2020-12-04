@@ -21,18 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Logger;
+import com.karuslabs.commons.command.aot.Identity;
+import com.karuslabs.commons.command.aot.old.Mirrors.Command;
 
-public final class Token {
+import static javax.lang.model.element.Modifier.*;
 
-    public final Identity identity;
-    public final Set<String> aliases;
+public class PublicFinalFieldLint implements Lint {
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    @Override
+    public void lint(Logger logger, Identity identifier, Command command) {
+        for (var entry : command.members.entrySet()) {
+            var modifiers = entry.getValue().site.getModifiers();
+            if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
+                logger.zone(entry.getValue().site).error("Field should be public and final");
+            }
+        }
     }
-    
+
 }

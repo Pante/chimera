@@ -21,18 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.annotations.Lazy;
 
-public final class Token {
+import javax.lang.model.element.Element;
 
-    public final Identity identity;
-    public final Set<String> aliases;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public class FileContext extends Context<FileContext> {
+
+    private @Lazy Element element;
+    private @Lazy String folder;
+    private @Lazy String file;
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    public void location(Element element, String folder, String file) {
+        this.element = element;
+        this.folder = folder;
+        this.file = file;
     }
     
+    public @Nullable Element element() {
+        return element;
+    }
+    
+    public @Nullable String folder() {
+        return folder;
+    }
+    
+    public @Nullable String file() {
+        return file;
+    }
+    
+    @Override
+    protected FileContext self() {
+        return this;
+    }
+
 }

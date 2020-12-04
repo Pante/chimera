@@ -21,18 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.commons.command.aot.old.Mirrors.Method;
 
-public final class Token {
-
-    public final Identity identity;
-    public final Set<String> aliases;
+public class LambdaBlock implements Block<LambdaContext, Method> {
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    private final PointerBlock pointer;
+    private final MethodCallBlock call;
+    
+    public LambdaBlock(PointerBlock pointer, MethodCallBlock call) {
+        this.pointer = pointer;
+        this.call = call;
     }
     
+    @Override
+    public void emit(LambdaContext lambda, Method method) {
+        // TODO generate signature
+        for (var entry : method.parameters.entrySet()) {
+            pointer.emit(lambda, entry);
+        }
+        
+        call.emit(lambda, method);
+    }
+
 }

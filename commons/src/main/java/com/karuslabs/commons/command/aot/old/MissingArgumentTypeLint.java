@@ -21,18 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Logger;
+import com.karuslabs.commons.command.aot.Identity;
+import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.commons.command.aot.old.Mirrors.*;
 
-public final class Token {
+public class MissingArgumentTypeLint implements Lint {
 
-    public final Identity identity;
-    public final Set<String> aliases;
-    
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    @Override
+    public void lint(Logger logger, Identity identifier, Command command) {
+        if (identifier.type != Type.ARGUMENT) {
+            return;
+        }
+        
+        for (var member : command.members.values()) {
+            if (member.type == Member.Type.ARGUMENT_TYPE) {
+                return;
+            }
+        }
+        
+        logger.zone(command.site).error(identifier.name, "is missing an argument type", "an ArgumentType<?> should be bound to it");
     }
-    
+
 }

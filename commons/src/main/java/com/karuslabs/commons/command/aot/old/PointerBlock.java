@@ -21,18 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import com.karuslabs.smoke.Typing;
+import com.karuslabs.commons.command.aot.old.Mirrors.Pointer;
 
-public final class Token {
+import java.util.Map;
 
-    public final Identity identity;
-    public final Set<String> aliases;
+public class PointerBlock implements Block<LambdaContext, Map.Entry<Integer, Pointer>> {
+
+    Typing typing;
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    public PointerBlock(Typing typing) {
+        this.typing = typing;
     }
     
+    @Override
+    public void emit(LambdaContext lambda, Map.Entry<Integer, Pointer> entry) {
+        var pointer = entry.getValue();
+        var variable = "pointer" + lambda.count++;
+        var name = pointer.value.identifier.name;
+        var type = typing.element(typing.box(pointer.site.asType())).getQualifiedName();
+        
+        lambda.line("var ", variable, " =  context.getArgument(", name, ", ", type, ".class);");
+        lambda.arguments.put(entry.getKey(), variable);
+    }
+
 }

@@ -21,18 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
+import java.util.*;
 
-public final class Token {
-
-    public final Identity identity;
-    public final Set<String> aliases;
+public class LambdaContext extends Context<LambdaContext> {
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    public final MethodContext enclosing;
+    public final Map<Integer, String> arguments = new HashMap<>();
+    
+    public LambdaContext(MethodContext enclosing) {
+        this.enclosing = enclosing;
     }
-    
+
+    @Override
+    protected LambdaContext self() {
+        return this;
+    }
+
 }

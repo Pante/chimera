@@ -21,18 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old;
 
-import java.util.Set;
-
-public final class Token {
-
-    public final Identity identity;
-    public final Set<String> aliases;
+public abstract class Context<Self extends Context> {
     
-    public Token(Identity identity, Set<String> aliases) {
-        this.identity = identity;
-        this.aliases = aliases;
+    // TODO: add support for indentation
+    
+    public final StringBuilder builder = new StringBuilder();;
+    public int count = 0;
+    
+    public Self line(Object element) {
+        builder.append(element).append('\n');
+        return self();
     }
+    
+    public Self line(Object... elements) {
+        for (var element : elements) {
+            builder.append(element);
+        }
+        
+        builder.append('\n');
+        return self();
+    }
+    
+    protected abstract Self self();
     
 }
