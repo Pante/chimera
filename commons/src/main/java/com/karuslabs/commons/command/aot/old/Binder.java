@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old;
 
 import com.karuslabs.smoke.Typing;
 import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identifier;
-import com.karuslabs.commons.command.aot.Mirrors.*;
-import com.karuslabs.commons.command.aot.Mirrors.Member.Type;
+import com.karuslabs.commons.command.aot.Identity;
+import com.karuslabs.commons.command.aot.old.Mirrors.*;
+import com.karuslabs.commons.command.aot.old.Mirrors.Member.Type;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.*;
@@ -42,7 +42,7 @@ import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
+public class Binder extends SimpleElementVisitor9<Member<?>, Identity> {
     
     private final Typing typing;
     private final Logger logger;
@@ -65,7 +65,7 @@ public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     }
     
     @Override
-    public @Nullable Method visitExecutable(ExecutableElement element, Identifier identifier) {
+    public @Nullable Method visitExecutable(ExecutableElement element, Identity identifier) {
         var type = infer(element.getReturnType());
         if (type == null) {
             logger.error(element.getSimpleName(), "has an invalid return type", "should return an integer, void, boolean or CompletableFuture<Suggestions>");
@@ -94,7 +94,7 @@ public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     }
     
     @Override
-    public @Nullable Field visitVariable(VariableElement element, Identifier identifier) {
+    public @Nullable Field visitVariable(VariableElement element, Identity identifier) {
         var type = type(element.asType());
         if (type == null) {
             logger.error(element.getSimpleName(), "has an invalid type", "should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
@@ -124,7 +124,7 @@ public class Binder extends SimpleElementVisitor9<Member<?>, Identifier> {
     
     
     @Override
-    public @Nullable Member<?> defaultAction(Element element, Identifier identifier) {
+    public @Nullable Member<?> defaultAction(Element element, Identity identifier) {
         logger.error(identifier.lexeme, "is used on an invalid target", "should annotate either a field or method");
         return null;
     }
