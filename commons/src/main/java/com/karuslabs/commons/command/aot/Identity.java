@@ -31,12 +31,10 @@ public final @ValueType class Identity {
     
     public final Type type;
     public final String name;
-    public final String lexeme;
     
-    public Identity(Type type, String name, String lexeme) {
+    public Identity(Type type, String name) {
         this.type = type;
         this.name = name;
-        this.lexeme = lexeme;
     }
 
     
@@ -64,7 +62,7 @@ public final @ValueType class Identity {
     
     @Override
     public String toString() {
-        return lexeme;
+        return name;
     }
     
     

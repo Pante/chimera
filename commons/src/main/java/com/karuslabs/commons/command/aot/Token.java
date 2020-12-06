@@ -28,10 +28,12 @@ import java.util.Set;
 public final class Token {
 
     public final Identity identity;
+    public final String lexeme;
     public final Set<String> aliases;
     
-    public Token(Identity identity, Set<String> aliases) {
+    public Token(Identity identity, String lexeme, Set<String> aliases) {
         this.identity = identity;
+        this.lexeme = lexeme;
         this.aliases = aliases;
     }
     
