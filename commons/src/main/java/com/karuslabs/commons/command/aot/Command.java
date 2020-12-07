@@ -23,16 +23,23 @@
  */
 package com.karuslabs.commons.command.aot;
 
-public final class Token {
+import java.util.*;
+import javax.lang.model.element.*;
 
+public final class Command {
+    
     public final Identity identity;
-    public final String lexeme;
-    public final String[] aliases;
-    
-    public Token(Identity identity, String lexeme, String... aliases) {
+    public final TypeElement site;
+    public final Set<String> aliases;
+    public final Map<Element, Binding<?>> bindings;
+    public final Map<Identity, Command> children;
+
+    public Command(Identity identity, TypeElement site, Set<String> aliases) {
         this.identity = identity;
-        this.lexeme = lexeme;
+        this.site = site;
         this.aliases = aliases;
+        bindings = new HashMap<>();
+        children = new HashMap<>();
     }
-    
+
 }

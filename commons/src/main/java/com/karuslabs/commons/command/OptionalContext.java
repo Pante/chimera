@@ -24,6 +24,7 @@
 package com.karuslabs.commons.command;
 
 import com.karuslabs.annotations.Delegate;
+import com.karuslabs.annotations.Lazy;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.*;
@@ -49,13 +50,12 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
     
     private final CommandContext<T> context;
-    private @Nullable Map<String, ParsedArgument<T, ?>> arguments;
+    private @Lazy Map<String, ParsedArgument<T, ?>> arguments = null;
     
     
     public OptionalContext(CommandContext<T> context) {
         super(null, null, null, null, null, null, null, null, null, false);
         this.context = context;
-        this.arguments = null;
     }
     
     

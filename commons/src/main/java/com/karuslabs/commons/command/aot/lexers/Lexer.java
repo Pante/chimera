@@ -21,33 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.puff.Log;
 
 import java.util.*;
+import javax.lang.model.element.Element;
 
 @FunctionalInterface
 public interface Lexer {
 
-    List<Token> lex(Logger logger, String lexeme);
+    List<Token> lex(Log log, Element element, String lexeme);
     
-}
-
-class Memoizer {
-    
-    private final Map<String, Identity> identifiers = new HashMap<>();
-    
-    Token token(Type type, String lexeme, String name, Set<String> aliases) {
-        var identifier = identifiers.get(lexeme);
-        if (identifier == null) {
-            identifier = new Identity(type, name, lexeme);
-            identifiers.put(lexeme, identifier);
+    static class Memoizer {
+        
+        private final Map<String, Identity> identities = new HashMap<>();
+        
+        Token memoize(Identity.Type type, String name, String lexeme, String... aliases) {
+            var identity = identities.get(name);
+            if (identity == null) {
+                identity = new Identity(type, name);
+                identities.put(lexeme, identity);
+            }
+            
+            return new Token(identity, lexeme, aliases);
         }
         
-        return new Token(identifier, aliases);
     }
     
 }

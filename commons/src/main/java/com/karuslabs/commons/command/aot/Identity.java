@@ -37,7 +37,6 @@ public final @ValueType class Identity {
         this.name = name;
     }
 
-    
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -62,11 +61,12 @@ public final @ValueType class Identity {
     
     @Override
     public String toString() {
-        return name;
+        return type.format(name);
     }
     
     
     public enum Type {
+        
         ARGUMENT("An", "argument"), LITERAL("A", "literal");
         
         public final String article;
@@ -75,6 +75,15 @@ public final @ValueType class Identity {
         private Type(String article, String noun) {
             this.article = article;
             this.noun = noun;
+        }
+        
+        public String format(String value) {
+            switch (this) {
+                case ARGUMENT:
+                    return "<" + value + ">";
+                default:
+                    return value;
+            }
         }
         
         @Override
