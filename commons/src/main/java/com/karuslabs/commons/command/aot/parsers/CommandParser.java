@@ -21,59 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Command;
-import com.karuslabs.commons.command.aot.old.Lexer;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.puff.*;
 
 import java.util.*;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
-import static com.karuslabs.smoke.Messages.quote;
-
-public class CommandParser extends TokenParser {
+public class CommandParser extends NamespacedParser {
 
     public CommandParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
 
     @Override
-    protected void process(Element element, Map<Identity, Mirrors.Command> namespace) {
-        var lines = element.getAnnotation(Command.class).value();
+    protected void parse(Element element, Map<Identity, Command> namespace) {
+        var lines = element.getAnnotation(com.karuslabs.commons.command.aot.annotations.Command.class).value();
         if (lines.length == 0) {
-            logger.error("@Command annotation should not be empty");
+            logger.error(element, "@Command annotation should not be empty");
             return;
         }
         
         for (var line : lines) {
             var commands = namespace;
-            
-            var tokens = lexer.lex(logger, line);
-            for (var token : tokens) {
-                var command = commands.get(token.identifier);
+            for (var token : lexer.lex(logger, element, line)) {
+                var command = commands.get(token.identity);
                 if (command == null) {
-                    command = new Mirrors.Command(token.identifier, (TypeElement) element, token.aliases);
-                    commands.put(token.identifier, command);
-                    
-                } else if (!token.aliases.isEmpty()) {
-                    mergeAliases(command, token);
+                    command = new Command(token.identity, (TypeElement) element);
                 }
                 
+                merge(element, command, token);
                 commands = command.children;
             }
         }
     }
     
-    void mergeAliases(Mirrors.Command command, Token token) {
-        var intersection = new HashSet<>(command.aliases);
-        intersection.retainAll(token.aliases);
-        if (!intersection.isEmpty()) {
-            logger.warn(quote(command.identifier.lexeme) + " contains duplicate aliases: " + quote(String.join(", ", intersection)));
+    protected void merge(Element element, Command command, Token token) {
+        if (token.aliases.length == 0) {
+            return;
         }
-
-        command.aliases.addAll(token.aliases);
+        
+        var duplicates = new HashSet<>();
+        for (var alias : token.aliases) {
+            if (!command.aliases.add(alias)) {
+                duplicates.add(alias);
+            }
+        }
+        
+        if (!duplicates.isEmpty()) {
+            logger.warn(element, token.lexeme, "contains duplicate aliases: " + Texts.and(duplicates, (value, builder) -> builder.append('"').append(value).append('"')));
+        }
+        
+        if (command.aliases.contains(command.identity.name)) {
+            logger.warn(element, token.lexeme, "contains an alias that is the same as its name");
+        }
     }
 
 }

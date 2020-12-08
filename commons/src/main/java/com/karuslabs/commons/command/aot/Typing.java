@@ -21,41 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.type.TypeMirrors;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.suggestion.*;
 
-import java.util.*;
-import javax.lang.model.element.Element;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
 
-@FunctionalInterface
-public interface Lexer {
+import org.bukkit.command.CommandSender;
 
-    List<Token> lex(Logger logger, Element element, String lexeme);
+public class Typing extends TypeMirrors {
+
+    public final TypeMirror argument;
+    public final TypeMirror completable;
+    public final TypeMirror command;
+    public final TypeMirror requirement;
+    public final TypeMirror suggestions;
+    public final TypeMirror sender; 
     
-    static class Memoizer {
-        
-        private final Map<String, Identity> identities = new HashMap<>();
-        
-        public Token argument(String name, String lexeme) {
-            return memoize(Identity.Type.ARGUMENT, name, lexeme);
-        }
-        
-        public Token literal(String name, String lexeme, String[] aliases) {
-            return memoize(Identity.Type.LITERAL, name, lexeme, aliases);
-        }
-        
-        Token memoize(Identity.Type type, String name, String lexeme, String... aliases) {
-            var identity = identities.get(name);
-            if (identity == null) {
-                identity = new Identity(type, name);
-                identities.put(name, identity);
-            }
-            
-            return new Token(identity, lexeme, aliases);
-        }
-        
+    public Typing(Elements elements, Types types) {
+        super(elements, types);
+        sender = super.type(CommandSender.class);
+        argument = super.erasure(ArgumentType.class);
+        completable = super.specialize(CompletableFuture.class, Suggestions.class);
+        command = super.specialize(Command.class, sender);
+        requirement = super.specialize(Predicate.class, sender);
+        suggestions = super.specialize(SuggestionProvider.class, sender);
     }
-    
+
 }

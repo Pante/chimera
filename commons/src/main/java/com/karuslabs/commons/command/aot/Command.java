@@ -30,16 +30,13 @@ public final class Command {
     
     public final Identity identity;
     public final TypeElement site;
-    public final Set<String> aliases;
-    public final Map<Element, Binding<?>> bindings;
-    public final Map<Identity, Command> children;
+    public final Set<String> aliases = new HashSet<>();
+    public final Map<Element, Binding<?>> bindings = new HashMap<>();
+    public final Map<Identity, Command> children = new HashMap<>();
 
-    public Command(Identity identity, TypeElement site, Set<String> aliases) {
+    public Command(Identity identity, TypeElement site) {
         this.identity = identity;
         this.site = site;
-        this.aliases = aliases;
-        bindings = new HashMap<>();
-        children = new HashMap<>();
     }
 
 }

@@ -25,6 +25,9 @@ package com.karuslabs.commons.command.aot;
 
 import java.util.*;
 import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Binding<T extends Element> {
 
@@ -65,6 +68,24 @@ public abstract class Binding<T extends Element> {
     
     public static class Field extends Binding<VariableElement> {
         
+        public static @Nullable Pattern pattern(Typing types, TypeMirror type) {
+            if (types.isSubtype(type, types.argument)) {
+                return Pattern.ARGUMENT_TYPE;
+
+            } else if (types.isSubtype(type, types.command)) {
+                return Pattern.COMMAND;
+
+            } else if (types.isSubtype(type, types.requirement)) {
+                return Pattern.REQUIREMENT;
+
+            } else if (types.isSubtype(type, types.suggestions)) {
+                return Pattern.SUGGESTION_PROVIDER;
+
+            } else {
+                return null;
+            }
+        }
+        
         public Field(Identity identity, VariableElement site, Pattern pattern) {
             super(identity, site, pattern);
         }
@@ -72,6 +93,25 @@ public abstract class Binding<T extends Element> {
     }
     
     public static class Method extends Binding<ExecutableElement> {
+        
+        public static @Nullable Pattern pattern(Typing types, TypeMirror returned) {
+            if (returned.getKind() == TypeKind.INT) {
+                return Pattern.COMMAND;
+
+            } else if (returned.getKind() == TypeKind.VOID) {
+                return Pattern.EXECUTABLE;
+
+            } else if (returned.getKind() == TypeKind.BOOLEAN) {
+                return Pattern.REQUIREMENT;
+
+            } else if (types.isSubtype(returned, types.completable)) {
+                return Pattern.SUGGESTION_PROVIDER;
+
+            } else {
+                return null;
+            }
+        }
+        
         
         public final Map<Integer, Reference> parameters = new HashMap<>();
 

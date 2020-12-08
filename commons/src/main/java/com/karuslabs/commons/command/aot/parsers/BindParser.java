@@ -21,12 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import javax.lang.model.element.*;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.puff.Logger;
 
-public interface Parser<T> {
+import java.util.Map;
+import javax.lang.model.element.Element;
 
-    void parse(Element element, T value);
-    
+public class BindParser extends NamespacedParser {
+
+    public BindParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
+    }
+
+    @Override
+    protected void parse(Element element, Map<Identity, Command> namespace) {
+    }
+
 }

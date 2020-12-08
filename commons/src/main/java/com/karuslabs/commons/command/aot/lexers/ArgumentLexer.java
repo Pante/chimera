@@ -21,45 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.puff.Logger;
 
-import java.util.*;
+import java.util.List;
+import javax.lang.model.element.Element;
 
 import static java.util.Collections.EMPTY_LIST;
 
-public class CommandLexer implements Lexer {
+public class ArgumentLexer implements Lexer {
 
-    private final Lexer argument;
-    private final Lexer literal;
-    
-    
-    public CommandLexer(Lexer argument, Lexer literal) {
-        this.argument = argument;
-        this.literal = literal;
-    }
-    
+    private final Memoizer memoizer = new Memoizer();
     
     @Override
-    public List<Token> lex(Logger logger, String line) {
-        if (line.isBlank()) {
-            logger.error("Command should not be blank");
+    public List<Token> lex(Logger logger, Element element, String lexeme) {
+        if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
+            logger.error(element, lexeme, "is an invalid argument", "should be enclosed by \"<\" and \">\"");
             return EMPTY_LIST;
         }
         
-        var tokens = new ArrayList<Token>();
-        for (var command : line.split("\\s+")) {
-            if (command.startsWith("<")) {
-                tokens.addAll(argument.lex(logger, command));
-                
-            } else {
-                tokens.addAll(literal.lex(logger, command));
-            }
+        if (lexeme.contains("|")) {
+            logger.error(element, lexeme, "contains \"|\"", "an argument should not have aliases");
+            return EMPTY_LIST;
         }
         
-        return tokens;
+        var name = lexeme.substring(1, lexeme.length() - 1);
+        if (name.isBlank()) {
+            logger.error(element, lexeme, "is blank", "an argument should not be blank");
+            return EMPTY_LIST;
+        }
+        
+        if (name.startsWith("<") || name.endsWith(">")) {
+            logger.error(element, lexeme, "contains trailing \"<\"s or \">\"s");
+        }
+        
+        return List.of(memoizer.argument(name, lexeme));
     }
-    
+
 }

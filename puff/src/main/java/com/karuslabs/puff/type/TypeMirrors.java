@@ -23,14 +23,14 @@
  */
 package com.karuslabs.puff.type;
 
-import java.util.List;
+import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public final class TypeMirrors implements Types {   
+public class TypeMirrors implements Types {   
     
     public static boolean is(TypeMirror type, Class<?> expected) {
         if (!(type instanceof DeclaredType)) {

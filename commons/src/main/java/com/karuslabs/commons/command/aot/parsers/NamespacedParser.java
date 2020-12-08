@@ -21,41 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 
-import java.util.*;
+import java.util.Map;
 import javax.lang.model.element.Element;
 
-@FunctionalInterface
-public interface Lexer {
+public abstract class NamespacedParser implements Parser<Environment> {
 
-    List<Token> lex(Logger logger, Element element, String lexeme);
+    protected final Logger logger;
+    protected final Lexer lexer;
     
-    static class Memoizer {
-        
-        private final Map<String, Identity> identities = new HashMap<>();
-        
-        public Token argument(String name, String lexeme) {
-            return memoize(Identity.Type.ARGUMENT, name, lexeme);
-        }
-        
-        public Token literal(String name, String lexeme, String[] aliases) {
-            return memoize(Identity.Type.LITERAL, name, lexeme, aliases);
-        }
-        
-        Token memoize(Identity.Type type, String name, String lexeme, String... aliases) {
-            var identity = identities.get(name);
-            if (identity == null) {
-                identity = new Identity(type, name);
-                identities.put(name, identity);
-            }
-            
-            return new Token(identity, lexeme, aliases);
-        }
-        
+    public NamespacedParser(Logger logger, Lexer lexer) {
+        this.logger = logger;
+        this.lexer = lexer;
     }
     
+    @Override
+    public void parse(Element element, Environment environment) {
+        parse(element, environment.namespace(element));
+    }
+    
+    protected abstract void parse(Element element, Map<Identity, Command> namespace);
+
 }

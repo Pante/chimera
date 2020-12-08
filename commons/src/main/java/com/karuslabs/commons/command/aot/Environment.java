@@ -21,41 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.type.Find;
 
 import java.util.*;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 
-@FunctionalInterface
-public interface Lexer {
+public class Environment {
 
-    List<Token> lex(Logger logger, Element element, String lexeme);
+    private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
     
-    static class Memoizer {
+    
+    public Map<Identity, Command> namespace(Element element) {
+        var type = element.accept(Find.TYPE, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
         
-        private final Map<String, Identity> identities = new HashMap<>();
-        
-        public Token argument(String name, String lexeme) {
-            return memoize(Identity.Type.ARGUMENT, name, lexeme);
-        }
-        
-        public Token literal(String name, String lexeme, String[] aliases) {
-            return memoize(Identity.Type.LITERAL, name, lexeme, aliases);
-        }
-        
-        Token memoize(Identity.Type type, String name, String lexeme, String... aliases) {
-            var identity = identities.get(name);
-            if (identity == null) {
-                identity = new Identity(type, name);
-                identities.put(name, identity);
-            }
-            
-            return new Token(identity, lexeme, aliases);
-        }
-        
+        return namespace;
     }
     
 }

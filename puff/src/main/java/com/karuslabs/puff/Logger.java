@@ -32,12 +32,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static com.karuslabs.puff.Texts.format;
 import static javax.tools.Diagnostic.Kind.*;
 
-public class Log {
+public class Logger {
 
     private final Messager messager;
     private boolean error;
     
-    public Log(Messager messager) {
+    public Logger(Messager messager) {
         this.messager = messager;
         this.error = false;
     }

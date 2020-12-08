@@ -21,43 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lexers;
 
-import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.Token;
+import com.karuslabs.puff.Logger;
 
 import java.util.*;
+import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.Identity.Type.ARGUMENT;
 import static java.util.Collections.EMPTY_LIST;
 
-public class ArgumentLexer implements Lexer {
+public class CommandLexer implements Lexer {
+
+    private final Lexer argument;
+    private final Lexer literal;
     
-    private final Memoizer memoizer = new Memoizer();
-    
-    @Override
-    public List<Token> lex(Logger logger, String lexeme) {
-        if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
-            logger.error(lexeme, "is an invalid argument", "should be enclosed by \"<\" and \">\"");
-            return EMPTY_LIST;
-        }
-        
-        if (lexeme.contains("|")) {
-            logger.error(lexeme, "contains \"|\"", "an argument should not have aliases");
-            return EMPTY_LIST;
-        }
-        
-        var name = lexeme.substring(1, lexeme.length() - 1);
-        if (name.isEmpty()) {
-            logger.error(lexeme, "is empty", "an argument should not be empty");
-            return EMPTY_LIST;
-        }
-        
-        if (name.startsWith("<") || name.endsWith(">")) {
-            logger.error(lexeme, "contains trailing \"<\"s or \">\"s");
-        }
-        
-        return List.of(memoizer.token(ARGUMENT, lexeme, name, Set.of()));
+    public CommandLexer(Lexer argument, Lexer literal) {
+        this.argument = argument;
+        this.literal = literal;
     }
     
+    @Override
+    public List<Token> lex(Logger logger, Element element, String line) {
+        if (line.isBlank()) {
+            logger.error(element, "Command should not be blank");
+            return EMPTY_LIST;
+        }
+        
+        var tokens = new ArrayList<Token>();
+        for (var command : line.split("\\s+")) {
+            if (command.startsWith("<")) {
+                tokens.addAll(argument.lex(logger, element, command));
+                
+            } else {
+                tokens.addAll(literal.lex(logger, element, command));
+            }
+        }
+        
+        return tokens;
+    }
+
 }

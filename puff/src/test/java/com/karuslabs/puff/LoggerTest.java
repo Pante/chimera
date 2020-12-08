@@ -41,14 +41,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
-class LogTest {
+class LoggerTest {
     
     static final Messager MESSAGER = mock(Messager.class);
-    static final Log LOG = new Log(MESSAGER);
+    static final Logger LOGGER = new Logger(MESSAGER);
     
     Element element = mock(Element.class);
     Messager messager = mock(Messager.class);
-    Log log = new Log(messager);
+    Logger logger = new Logger(messager);
     
     @ParameterizedTest
     @MethodSource("log_value_reason_resolution_parameters")
@@ -60,9 +60,9 @@ class LogTest {
     }
     
     static Stream<Arguments> log_value_reason_resolution_parameters() {
-        return Stream.of(of((Printer) LOG::error, ERROR),
-            of((Printer) LOG::warn, WARNING),
-            of((Printer) LOG::note, NOTE)
+        return Stream.of(of((Printer) LOGGER::error, ERROR),
+            of((Printer) LOGGER::warn, WARNING),
+            of((Printer) LOGGER::note, NOTE)
         );
     }
     
@@ -76,9 +76,9 @@ class LogTest {
     }
     
     static Stream<Arguments> log_value_reason_parameters() {
-        return Stream.of(of((PartialPrinter) LOG::error, ERROR),
-            of((PartialPrinter) LOG::warn, WARNING),
-            of((PartialPrinter) LOG::note, NOTE)
+        return Stream.of(of((PartialPrinter) LOGGER::error, ERROR),
+            of((PartialPrinter) LOGGER::warn, WARNING),
+            of((PartialPrinter) LOGGER::note, NOTE)
         );
     }
     
@@ -92,29 +92,29 @@ class LogTest {
     }
     
     static Stream<Arguments> log_message_parameters() {
-        return Stream.of(of((BiConsumer<Element, String>) LOG::error, ERROR),
-            of((BiConsumer<Element, String>) LOG::warn, WARNING),
-            of((BiConsumer<Element, String>) LOG::note, NOTE)
+        return Stream.of(of((BiConsumer<Element, String>) LOGGER::error, ERROR),
+            of((BiConsumer<Element, String>) LOGGER::warn, WARNING),
+            of((BiConsumer<Element, String>) LOGGER::note, NOTE)
         );
     }
     
     
     @Test
     void log_no_element() {
-        log.error(null, "message");
+        logger.error(null, "message");
         verify(messager).printMessage(ERROR, "message");
     }
     
     
     @Test
     void clear() {
-        log.error(element, "first");
-        assertTrue(log.error());
+        logger.error(element, "first");
+        assertTrue(logger.error());
         
-        log.clear();
+        logger.clear();
         
-        log.warn(element, "second");
-        assertFalse(log.error());
+        logger.warn(element, "second");
+        assertFalse(logger.error());
         verify(messager).printMessage(WARNING, "second", element);
     }
     
