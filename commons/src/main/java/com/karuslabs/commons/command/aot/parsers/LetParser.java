@@ -21,36 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.puff.type.TypeMirrors;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.suggestion.*;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Let;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.puff.Logger;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
+import java.util.Map;
+import javax.lang.model.element.Element;
 
-import org.bukkit.command.CommandSender;
+public class LetParser extends NamespacedParser {
 
-public class Typing extends TypeMirrors {
+    public LetParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
+    }
 
-    public final TypeMirror argument;
-    public final TypeMirror completable;
-    public final TypeMirror command;
-    public final TypeMirror requirement;
-    public final TypeMirror suggestions;
-    public final TypeMirror sender; 
-    
-    public Typing(Elements elements, Types types) {
-        super(elements, types);
-        sender = super.type(CommandSender.class);
-        argument = super.erasure(ArgumentType.class);
-        completable = super.specialize(CompletableFuture.class, Suggestions.class);
-        command = super.specialize(Command.class, sender);
-        requirement = super.specialize(Predicate.class, sender);
-        suggestions = super.specialize(SuggestionProvider.class, sender);
+    @Override
+    protected void parse(Element element, Map<Identity, Command> namespace) {
+        var line = element.getAnnotation(Let.class).value();
+        if (line.equals(Let.INFERRED_ARGUMENT)) {
+            line = "<" + element.getSimpleName().toString() + ">";
+        }
+        
+        var tokens = lexer.lex(logger, element, line);
+        if (tokens.isEmpty()) {
+            return;
+        }
+        
+        Command command = null;
+        for (var token : tokens) {
+            
+        }
     }
 
 }

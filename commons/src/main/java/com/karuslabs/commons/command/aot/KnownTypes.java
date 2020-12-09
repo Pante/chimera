@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2020 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.annotations;
+package com.karuslabs.commons.command.aot;
 
-import java.lang.annotation.*;
+import com.karuslabs.puff.type.TypeMirrors;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.suggestion.*;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.*;
 
-@Documented
-@Retention(SOURCE)
-@Target({FIELD, METHOD})
-public @interface Bind {
+import org.bukkit.command.CommandSender;
+
+public class KnownTypes {
+
+    public final TypeMirror argument;
+    public final TypeMirror completable;
+    public final TypeMirror command;
+    public final TypeMirror requirement;
+    public final TypeMirror suggestions;
+    public final TypeMirror sender; 
     
-    String[] pattern() default {};
-    
-    String[] value() default {};
-    
+    public KnownTypes(TypeMirrors types) {
+        sender = types.type(CommandSender.class);
+        argument = types.erasure(ArgumentType.class);
+        completable = types.specialize(CompletableFuture.class, Suggestions.class);
+        command = types.specialize(Command.class, sender);
+        requirement = types.specialize(Predicate.class, sender);
+        suggestions = types.specialize(SuggestionProvider.class, sender);
+    }
+
 }

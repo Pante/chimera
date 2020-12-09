@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.puff.type.TypeMirrors;
+
 import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -68,17 +70,17 @@ public abstract class Binding<T extends Element> {
     
     public static class Field extends Binding<VariableElement> {
         
-        public static @Nullable Pattern pattern(Typing types, TypeMirror type) {
-            if (types.isSubtype(type, types.argument)) {
+        public static @Nullable Pattern pattern(TypeMirrors util, KnownTypes types, TypeMirror type) {
+            if (util.isSubtype(type, types.argument)) {
                 return Pattern.ARGUMENT_TYPE;
 
-            } else if (types.isSubtype(type, types.command)) {
+            } else if (util.isSubtype(type, types.command)) {
                 return Pattern.COMMAND;
 
-            } else if (types.isSubtype(type, types.requirement)) {
+            } else if (util.isSubtype(type, types.requirement)) {
                 return Pattern.REQUIREMENT;
 
-            } else if (types.isSubtype(type, types.suggestions)) {
+            } else if (util.isSubtype(type, types.suggestions)) {
                 return Pattern.SUGGESTION_PROVIDER;
 
             } else {
@@ -94,7 +96,7 @@ public abstract class Binding<T extends Element> {
     
     public static class Method extends Binding<ExecutableElement> {
         
-        public static @Nullable Pattern pattern(Typing types, TypeMirror returned) {
+        public static @Nullable Pattern pattern(TypeMirrors utils, KnownTypes types, TypeMirror returned) {
             if (returned.getKind() == TypeKind.INT) {
                 return Pattern.COMMAND;
 
@@ -104,7 +106,7 @@ public abstract class Binding<T extends Element> {
             } else if (returned.getKind() == TypeKind.BOOLEAN) {
                 return Pattern.REQUIREMENT;
 
-            } else if (types.isSubtype(returned, types.completable)) {
+            } else if (utils.isSubtype(returned, types.completable)) {
                 return Pattern.SUGGESTION_PROVIDER;
 
             } else {
