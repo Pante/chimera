@@ -21,58 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.smoke.Filter;
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identity;
-import com.karuslabs.commons.command.aot.old.Mirrors.*;
-import com.karuslabs.commons.command.aot.old.Lexer;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Let;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.puff.Logger;
 
 import java.util.Map;
-import javax.lang.model.element.*;
-import com.karuslabs.commons.command.aot.annotations.Let;
+import javax.lang.model.element.Element;
 
-public class InferParser extends TokenParser {
-    
-    public InferParser(Logger logger, Lexer lexer) {
+public class LetParser extends NamespaceParser {
+
+    public LetParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
 
     @Override
-    protected void process(Element element, Map<Identity, Command> namespace) {
+    protected void parse(Element element, Map<Identity, Command> namespace) {
         var line = element.getAnnotation(Let.class).value();
         if (line.equals(Let.INFERRED_ARGUMENT)) {
             line = "<" + element.getSimpleName().toString() + ">";
         }
         
-        Command command = null;
-        
-        var tokens = lexer.lex(logger, line);
-        if (tokens.isEmpty()) {
+        var tokens = lexer.lex(logger, element, line);
+        if (tokens.size() != 1) {
             return;
         }
         
-        for (var token : lexer.lex(logger, line)) {
-            command = namespace.get(token.identifier);
-            if (command == null) {
-                logger.error(line, "does not exist");
-                return;
+        var token = tokens.get(0);
+        for (var command : namespace.values()) {
+            if (command.identity.equals(token.identity)) {
+                
             }
-            
-            namespace = command.children;
         }
-        
-        var executable = element.accept(Filter.EXECUTABLE, null);
-        var member = command.members.get(executable);
-        if (member instanceof Method) {
-            var index = executable.getParameters().indexOf(element);
-            ((Method) member).parameters.put(index, new Pointer(index, (VariableElement) element, command));
-            
-        } else {
-            logger.error(executable.getSimpleName(), "is not annotated with @Bind", "method should be annotated with @Bind");
-        }
-        
     }
-    
+
 }

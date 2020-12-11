@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.rewrite;
+package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.commons.command.aot.parsers.NamespaceParser;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.*;
 
