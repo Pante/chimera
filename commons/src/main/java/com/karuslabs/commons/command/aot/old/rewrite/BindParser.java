@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.rewrite;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.parsers.NamespaceParser;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.*;
 
@@ -36,7 +37,7 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class BindParser extends NamespacedParser {
+public class BindParser extends NamespaceParser {
 
     private final Binder namespaced;
     private final Binder pattern;

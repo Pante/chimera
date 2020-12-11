@@ -21,30 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.rewrite;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.aot.parsers.NamespaceParser;
 import com.karuslabs.puff.Logger;
 
 import java.util.Map;
 import javax.lang.model.element.Element;
 
-public abstract class NamespacedParser implements Parser<Environment> {
+public class LetParser extends NamespaceParser {
 
-    protected final Logger logger;
-    protected final Lexer lexer;
-    
-    public NamespacedParser(Logger logger, Lexer lexer) {
-        this.logger = logger;
-        this.lexer = lexer;
+    public LetParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
     }
-    
+
     @Override
-    public void parse(Element element, Environment environment) {
-        parse(element, environment.namespace(element));
+    protected void parse(Element element, Map<Identity, Command> namespace) {
+        var line = element.getAnnotation(Let.class).value();
+        if (line.equals(Let.INFERRED_ARGUMENT)) {
+            line = "<" + element.getSimpleName().toString() + ">";
+        }
+        
+        var tokens = lexer.lex(logger, element, line);
+        if (tokens.isEmpty()) {
+            return;
+        }
+        
+        Command command = null;
+        for (var token : tokens) {
+            
+        }
     }
-    
-    protected abstract void parse(Element element, Map<Identity, Command> namespace);
 
 }

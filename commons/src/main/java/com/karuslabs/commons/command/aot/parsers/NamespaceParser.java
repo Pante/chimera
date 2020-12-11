@@ -24,35 +24,27 @@
 package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 
 import java.util.Map;
 import javax.lang.model.element.Element;
 
-public class LetParser extends NamespacedParser {
+public abstract class NamespaceParser implements Parser<Environment> {
 
-    public LetParser(Logger logger, Lexer lexer) {
-        super(logger, lexer);
+    protected final Logger logger;
+    protected final Lexer lexer;
+    
+    public NamespaceParser(Logger logger, Lexer lexer) {
+        this.logger = logger;
+        this.lexer = lexer;
     }
-
+    
     @Override
-    protected void parse(Element element, Map<Identity, Command> namespace) {
-        var line = element.getAnnotation(Let.class).value();
-        if (line.equals(Let.INFERRED_ARGUMENT)) {
-            line = "<" + element.getSimpleName().toString() + ">";
-        }
-        
-        var tokens = lexer.lex(logger, element, line);
-        if (tokens.isEmpty()) {
-            return;
-        }
-        
-        Command command = null;
-        for (var token : tokens) {
-            
-        }
+    public void parse(Element element, Environment environment) {
+        parse(element, environment.namespace(element));
     }
+    
+    protected abstract void parse(Element element, Map<Identity, Command> namespace);
 
 }

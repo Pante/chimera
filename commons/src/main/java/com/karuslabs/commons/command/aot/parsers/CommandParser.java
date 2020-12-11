@@ -28,10 +28,8 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.*;
 
 import java.util.*;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-
-public class CommandParser extends NamespacedParser {
+import javax.lang.model.element.*;
+public class CommandParser extends NamespaceParser {
 
     public CommandParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
@@ -59,7 +57,7 @@ public class CommandParser extends NamespacedParser {
         }
     }
     
-    protected void merge(Element element, Command command, Token token) {
+    void merge(Element element, Command command, Token token) {
         if (token.aliases.length == 0) {
             return;
         }

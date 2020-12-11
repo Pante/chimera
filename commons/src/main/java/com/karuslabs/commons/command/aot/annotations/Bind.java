@@ -33,8 +33,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Target({FIELD, METHOD})
 public @interface Bind {
     
-    String[] pattern() default {};
-    
     String[] value() default {};
+    
+    String[] pattern() default {};
     
 }
