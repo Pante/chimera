@@ -48,7 +48,8 @@ public class BindParser extends NamespaceParser {
     }
 
     @Override
-    protected void parse(Element element, Map<Identity, Command> namespace) {
+    public void parse(Element element, Environment environment) {
+        var namespace = environment.namespace(element);
         if (namespace.isEmpty()) {
             logger.error(element.accept(Find.TYPE, null), "Class should be annotated with @Command");
             return;

@@ -26,15 +26,19 @@ package com.karuslabs.commons.command.aot;
 import java.util.*;
 import javax.lang.model.element.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public final class Command {
     
+    public final @Nullable Command parent;
     public final Identity identity;
     public final TypeElement site;
     public final Set<String> aliases = new HashSet<>();
     public final Map<Element, Binding<?>> bindings = new HashMap<>();
     public final Map<Identity, Command> children = new HashMap<>();
 
-    public Command(Identity identity, TypeElement site) {
+    public Command(Command parent, Identity identity, TypeElement site) {
+        this.parent = parent;
         this.identity = identity;
         this.site = site;
     }

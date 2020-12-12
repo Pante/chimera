@@ -29,6 +29,7 @@ import com.karuslabs.puff.*;
 
 import java.util.*;
 import javax.lang.model.element.*;
+
 public class CommandParser extends NamespaceParser {
 
     public CommandParser(Logger logger, Lexer lexer) {
@@ -36,7 +37,8 @@ public class CommandParser extends NamespaceParser {
     }
 
     @Override
-    protected void parse(Element element, Map<Identity, Command> namespace) {
+    public void parse(Element element, Environment environment) {
+        var namespace = environment.namespace(element);
         var lines = element.getAnnotation(com.karuslabs.commons.command.aot.annotations.Command.class).value();
         if (lines.length == 0) {
             logger.error(element, "@Command annotation should not be empty");
@@ -44,14 +46,19 @@ public class CommandParser extends NamespaceParser {
         }
         
         for (var line : lines) {
+            Command parent = null;
             var commands = namespace;
+            
             for (var token : lexer.lex(logger, element, line)) {
                 var command = commands.get(token.identity);
                 if (command == null) {
-                    command = new Command(token.identity, (TypeElement) element);
+                    command = new Command(parent, token.identity, (TypeElement) element);
+                    commands.put(token.identity, command);
                 }
                 
                 merge(element, command, token);
+                
+                parent = command;
                 commands = command.children;
             }
         }

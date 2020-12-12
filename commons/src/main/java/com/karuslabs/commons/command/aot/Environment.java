@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.commons.command.aot.Binding.Method;
 import com.karuslabs.puff.type.Find;
 
 import java.util.*;
@@ -30,8 +31,8 @@ import javax.lang.model.element.*;
 
 public class Environment {
 
+    public final Map<ExecutableElement, Method> methods = new HashMap<>();
     private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
-    
     
     public Map<Identity, Command> namespace(Element element) {
         var type = element.accept(Find.TYPE, null);

@@ -27,9 +27,6 @@ import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 
-import java.util.Map;
-import javax.lang.model.element.Element;
-
 public abstract class NamespaceParser implements Parser<Environment> {
 
     protected final Logger logger;
@@ -39,12 +36,5 @@ public abstract class NamespaceParser implements Parser<Environment> {
         this.logger = logger;
         this.lexer = lexer;
     }
-    
-    @Override
-    public void parse(Element element, Environment environment) {
-        parse(element, environment.namespace(element));
-    }
-    
-    protected abstract void parse(Element element, Map<Identity, Command> namespace);
 
 }

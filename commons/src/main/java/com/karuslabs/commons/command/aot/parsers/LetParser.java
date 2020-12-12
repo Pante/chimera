@@ -28,7 +28,6 @@ import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 
-import java.util.Map;
 import javax.lang.model.element.Element;
 
 public class LetParser extends NamespaceParser {
@@ -38,7 +37,7 @@ public class LetParser extends NamespaceParser {
     }
 
     @Override
-    protected void parse(Element element, Map<Identity, Command> namespace) {
+    public void parse(Element element, Environment environment) {
         var line = element.getAnnotation(Let.class).value();
         if (line.equals(Let.INFERRED_ARGUMENT)) {
             line = "<" + element.getSimpleName().toString() + ">";
