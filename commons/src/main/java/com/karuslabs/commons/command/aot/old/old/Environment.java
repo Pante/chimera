@@ -21,39 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.old;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Let;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.commons.command.aot.Command;
+import com.karuslabs.commons.command.aot.Identity;
+import com.karuslabs.puff.type.Find;
 
-import javax.lang.model.element.Element;
+import java.util.*;
+import javax.lang.model.element.*;
 
-public class LetParser extends NamespaceParser {
+public class Environment {
 
-    public LetParser(Logger logger, Lexer lexer) {
-        super(logger, lexer);
-    }
-
-    @Override
-    public void parse(Element element, Environment environment) {
-        var line = element.getAnnotation(Let.class).value();
-        if (line.equals(Let.INFERRED_ARGUMENT)) {
-            line = "<" + element.getSimpleName().toString() + ">";
-        }
+    public final Map<ExecutableElement, Command> methods = new HashMap<>();
+    private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
+    
+    public Map<Identity, Command> namespace(Element element) {
+        var type = element.accept(Find.TYPE, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
         
-        var tokens = lexer.lex(logger, element, line);
-        if (tokens.size() != 1) {
-            return;
-        }
-        
-        var token = tokens.get(0);
-        for (var command : namespace.values()) {
-            if (command.identity.equals(token.identity)) {
-                
-            }
-        }
+        return namespace;
     }
-
+    
 }

@@ -24,13 +24,13 @@
 package com.karuslabs.commons.command.aot;
 
 import com.karuslabs.puff.type.TypeMirrors;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.*;
 
 import org.bukkit.command.CommandSender;
 

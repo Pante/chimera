@@ -21,27 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.old.old;
 
-import com.karuslabs.commons.command.aot.Binding.Method;
-import com.karuslabs.puff.type.Find;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.puff.Logger;
 
-import java.util.*;
-import javax.lang.model.element.*;
+public abstract class NamespaceParser implements Parser<Environment> {
 
-public class Environment {
-
-    public final Map<ExecutableElement, Method> methods = new HashMap<>();
-    private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
+    protected final Logger logger;
+    protected final Lexer lexer;
     
-    public Map<Identity, Command> namespace(Element element) {
-        var type = element.accept(Find.TYPE, null);
-        var namespace = namespaces.get(type);
-        if (namespace == null) {
-            namespaces.put(type, namespace = new HashMap<>());
-        } 
-        
-        return namespace;
+    public NamespaceParser(Logger logger, Lexer lexer) {
+        this.logger = logger;
+        this.lexer = lexer;
     }
-    
+
 }

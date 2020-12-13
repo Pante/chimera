@@ -21,20 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.old;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.type.Find;
 
-public abstract class NamespaceParser implements Parser<Environment> {
+import javax.lang.model.element.Element;
 
-    protected final Logger logger;
-    protected final Lexer lexer;
-    
-    public NamespaceParser(Logger logger, Lexer lexer) {
-        this.logger = logger;
-        this.lexer = lexer;
+public class LetParser extends NamespaceParser {
+
+    public LetParser(Logger logger, Lexer lexer) {
+        super(logger, lexer);
+    }
+
+    @Override
+    public void parse(Element element, Environment environment) {
+        var line = element.getAnnotation(Let.class).value();
+        if (line.equals(Let.INFERRED_ARGUMENT)) {
+            line = "<" + element.getSimpleName().toString() + ">";
+        }
+        
+        var tokens = lexer.lex(logger, element, line);
+        if (tokens.size() != 1) {
+            return;
+        }
+        
+        var method = element.accept(Find.EXECUTABLE, null);
+        var command = environment.methods.get(method);
+        var argument = tokens.get(0);
+        while (command != null) {
+            if (argument.identity.equals(command.identity)) {
+                
+                
+            } else {
+                command = command.parent;
+            }
+        }
     }
 
 }

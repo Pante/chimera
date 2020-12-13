@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.old.old;
 
+import com.karuslabs.commons.command.aot.Binding;
+import com.karuslabs.commons.command.aot.Command;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
@@ -140,7 +142,7 @@ public class BindParser extends NamespaceParser {
             this.logger = logger;
         }
         
-        public void bind(Lexer lexer, Element element, Map<Identity, Command> namespace, String[] commands) {
+        public Binding bind(Lexer lexer, Element element, Map<Identity, Command> namespace, String[] commands) {
             for (var command : commands) {
                 var tokens = lexer.lex(logger, element, command);
                 if (tokens.isEmpty()) {

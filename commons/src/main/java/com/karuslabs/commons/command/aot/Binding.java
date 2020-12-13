@@ -35,15 +35,15 @@ public abstract class Binding<T extends Element> {
 
     public final Identity identity;
     public final T site;
-    public final Pattern pattern;
+    public final Match match;
     
-    public Binding(Identity identity, T site, Pattern pattern) {
+    public Binding(Identity identity, T site, Match match) {
         this.identity = identity;
         this.site = site;
-        this.pattern = pattern;
+        this.match = match;
     }
     
-    public enum Pattern {
+    public enum Match {
         
         ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
         COMMAND("A", "Command<CommandSender>", "command"),
@@ -55,7 +55,7 @@ public abstract class Binding<T extends Element> {
         public final String type;
         public final String noun;
         
-        private Pattern(String article, String type, String noun) {
+        private Match(String article, String type, String noun) {
             this.article = article;
             this.type = type;
             this.noun = noun;
@@ -70,25 +70,25 @@ public abstract class Binding<T extends Element> {
     
     public static class Field extends Binding<VariableElement> {
         
-        public static @Nullable Pattern pattern(TypeMirrors util, KnownTypes types, TypeMirror type) {
+        public static @Nullable Match pattern(TypeMirrors util, KnownTypes types, TypeMirror type) {
             if (util.isSubtype(type, types.argument)) {
-                return Pattern.ARGUMENT_TYPE;
+                return Match.ARGUMENT_TYPE;
 
             } else if (util.isSubtype(type, types.command)) {
-                return Pattern.COMMAND;
+                return Match.COMMAND;
 
             } else if (util.isSubtype(type, types.requirement)) {
-                return Pattern.REQUIREMENT;
+                return Match.REQUIREMENT;
 
             } else if (util.isSubtype(type, types.suggestions)) {
-                return Pattern.SUGGESTION_PROVIDER;
+                return Match.SUGGESTION_PROVIDER;
 
             } else {
                 return null;
             }
         }
         
-        public Field(Identity identity, VariableElement site, Pattern pattern) {
+        public Field(Identity identity, VariableElement site, Match pattern) {
             super(identity, site, pattern);
         }
         
@@ -96,18 +96,18 @@ public abstract class Binding<T extends Element> {
     
     public static class Method extends Binding<ExecutableElement> {
         
-        public static @Nullable Pattern pattern(TypeMirrors utils, KnownTypes types, TypeMirror returned) {
+        public static @Nullable Match pattern(TypeMirrors utils, KnownTypes types, TypeMirror returned) {
             if (returned.getKind() == TypeKind.INT) {
-                return Pattern.COMMAND;
+                return Match.COMMAND;
 
             } else if (returned.getKind() == TypeKind.VOID) {
-                return Pattern.EXECUTABLE;
+                return Match.EXECUTABLE;
 
             } else if (returned.getKind() == TypeKind.BOOLEAN) {
-                return Pattern.REQUIREMENT;
+                return Match.REQUIREMENT;
 
             } else if (utils.isSubtype(returned, types.completable)) {
-                return Pattern.SUGGESTION_PROVIDER;
+                return Match.SUGGESTION_PROVIDER;
 
             } else {
                 return null;
@@ -117,7 +117,7 @@ public abstract class Binding<T extends Element> {
         
         public final Map<Integer, Reference> parameters = new HashMap<>();
 
-        public Method(Identity identity, ExecutableElement site, Pattern pattern) {
+        public Method(Identity identity, ExecutableElement site, Match pattern) {
             super(identity, site, pattern);
         }
         

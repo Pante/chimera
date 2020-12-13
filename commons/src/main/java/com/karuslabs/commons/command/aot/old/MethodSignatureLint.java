@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.old;
 
+import com.karuslabs.commons.command.aot.Command;
 import com.karuslabs.smoke.Logger;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.old.Mirrors.*;
