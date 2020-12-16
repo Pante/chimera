@@ -21,19 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identity.Type;
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.puff.Logger;
 
-public class ArgumentPositionLint implements Lint {
+public class MissingArgumentTypeLint extends Lint {
+
+    public MissingArgumentTypeLint(Logger logger, Types types) {
+        super(logger, types);
+    }
 
     @Override
-    public void lint(Logger logger, Identity identifier, Mirrors.Command command) {
-        if (identifier.type == Type.ARGUMENT) {
-            logger.zone(command.site).error(identifier.name, "is at an invalid position", "command should not start with an argument");
+    public void lint(Environment environment, Command command) {
+        if (command.identity.type != Type.ARGUMENT) {
+            return;
         }
+        
+        for (var binding : command.bindings.values()) {
+            if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
+                return;
+            }
+        }
+        
+        logger.error(command.site, command.identity, "is missing an argument type", "an ArgumentType<?> should be bound to it");
     }
 
 }

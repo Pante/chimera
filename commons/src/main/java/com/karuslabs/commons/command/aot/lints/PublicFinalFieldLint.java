@@ -21,22 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identity;
-import com.karuslabs.commons.command.aot.old.Mirrors.Command;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.assertion.matches.Match;
 
+import java.util.Set;
+import javax.lang.model.element.*;
+
+import static com.karuslabs.puff.assertion.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
-public class PublicFinalFieldLint implements Lint {
+public class PublicFinalFieldLint extends Lint {
+
+    private final Match<Set<Modifier>> match = contains(PUBLIC, FINAL);
+
+    public PublicFinalFieldLint(Logger logger, Types types) {
+        super(logger, types);
+    }
     
     @Override
-    public void lint(Logger logger, Identity identifier, Command command) {
-        for (var entry : command.members.entrySet()) {
-            var modifiers = entry.getValue().site.getModifiers();
-            if (!modifiers.contains(PUBLIC) || !modifiers.contains(FINAL)) {
-                logger.zone(entry.getValue().site).error("Field should be public and final");
+    public void lint(Environment environment, Command command) {
+        for (var binding : command.bindings.values()) {
+            if (!match.test(types, binding.site)) {
+                var element = binding instanceof VariableElement ? "field should be " : "method should be ";
+                logger.error(binding.site, element + match.describe(binding.site));
             }
         }
     }

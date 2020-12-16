@@ -21,24 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.old;
+package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.Find;
 
-import javax.lang.model.element.Element;
+import java.util.*;
+import javax.lang.model.element.*;
 
-public class LetParser extends NamespaceParser {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+public class LetParser extends LexParser {
+    
     public LetParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
-
+    
     @Override
-    public void parse(Element element, Environment environment) {
+    public void parse(Environment environment, Element element) {
         var line = element.getAnnotation(Let.class).value();
         if (line.equals(Let.INFERRED_ARGUMENT)) {
             line = "<" + element.getSimpleName().toString() + ">";
@@ -49,17 +53,45 @@ public class LetParser extends NamespaceParser {
             return;
         }
         
-        var method = element.accept(Find.EXECUTABLE, null);
-        var command = environment.methods.get(method);
+        var executable = element.accept(Find.EXECUTABLE, null);
+        
         var argument = tokens.get(0);
-        while (command != null) {
-            if (argument.identity.equals(command.identity)) {
-                
+        var parameter = (VariableElement) element;
+        var index = executable.getParameters().indexOf(parameter);
+        
+        for (var command : environment.method(executable)) {
+            var method = (Method) command.bindings.get(executable);
+            var referred = find(command, argument.identity);
+            if (referred != null) {
+                method.parameter(command, new Reference(index, parameter, referred));
                 
             } else {
-                command = command.parent;
+                logger.error(element, argument.identity, "does not exist in " + path(command));
             }
         }
+    }
+    
+    @Nullable Command find(Command command, Identity identity) {
+        while (command != null) {
+            if (!command.identity.equals(identity)) {
+                command = command.parent;
+                
+            } else {
+                return command;
+            }
+        }
+        
+        return null;
+    }
+    
+    @Nullable String path(Command command) {
+        var strings = new ArrayList<String>();
+        while (command != null) {
+            strings.add(0, command.identity.toString());
+            command = command.parent;
+        }
+        
+        return Texts.quote(Texts.join(strings, Texts.STRING, " "));
     }
 
 }

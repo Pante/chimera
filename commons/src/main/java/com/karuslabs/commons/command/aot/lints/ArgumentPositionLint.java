@@ -21,14 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identity;
-import com.karuslabs.commons.command.aot.old.Mirrors.Command;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.puff.Logger;
 
-public interface Lint {
+public class ArgumentPositionLint extends Lint {
 
-    void lint(Logger logger, Identity identifier, Command command);
-    
+    public ArgumentPositionLint(Logger logger, Types types) {
+        super(logger, types);
+    }
+
+    @Override
+    public void lint(Environment environment, Command command) {
+        if (command.identity.type == Type.ARGUMENT && command.parent == null) {
+            logger.error(command.site, command.identity, "is at an invalid position", "command should not start with an argument");
+        }
+    }
+
 }

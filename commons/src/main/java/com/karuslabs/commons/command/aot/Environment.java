@@ -23,33 +23,34 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.puff.type.TypeMirrors;
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.suggestion.*;
+import com.karuslabs.puff.type.Find;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import javax.lang.model.type.TypeMirror;
+import java.util.*;
+import javax.lang.model.element.*;
 
-import org.bukkit.command.CommandSender;
+public class Environment {
 
-public class KnownTypes {
-
-    public final TypeMirror argument;
-    public final TypeMirror completable;
-    public final TypeMirror command;
-    public final TypeMirror requirement;
-    public final TypeMirror suggestions;
-    public final TypeMirror sender; 
+    private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
+    private final Map<ExecutableElement, List<Command>> methods = new HashMap<>();
     
-    public KnownTypes(TypeMirrors types) {
-        sender = types.type(CommandSender.class);
-        argument = types.erasure(ArgumentType.class);
-        completable = types.specialize(CompletableFuture.class, Suggestions.class);
-        command = types.specialize(Command.class, sender);
-        requirement = types.specialize(Predicate.class, sender);
-        suggestions = types.specialize(SuggestionProvider.class, sender);
+    public Map<Identity, Command> namespace(Element element) {
+        var type = element.accept(Find.TYPE, null);
+        var namespace = namespaces.get(type);
+        if (namespace == null) {
+            namespaces.put(type, namespace = new HashMap<>());
+        } 
+        
+        return namespace;
     }
-
+    
+    public List<Command> method(Element element) {
+        var method = element.accept(Find.EXECUTABLE, null);
+        var commands = methods.get(method);
+        if (commands == null) {
+            methods.put(method, commands = new ArrayList<>());
+        }
+        
+        return commands;
+    }
+    
 }

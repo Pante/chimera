@@ -42,5 +42,9 @@ public final class Command {
         this.identity = identity;
         this.site = site;
     }
+    
+    public void bind(Binding<?> binding) {
+        bindings.put(binding.site, binding);
+    }
 
 }

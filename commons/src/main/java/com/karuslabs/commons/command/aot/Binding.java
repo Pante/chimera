@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.puff.type.TypeMirrors;
-
 import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -33,21 +31,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Binding<T extends Element> {
 
-    public final Identity identity;
     public final T site;
-    public final Match match;
+    public final Pattern pattern;
     
-    public Binding(Identity identity, T site, Match match) {
-        this.identity = identity;
+    public Binding(T site, Pattern pattern) {
         this.site = site;
-        this.match = match;
+        this.pattern = pattern;
     }
     
-    public enum Match {
+    public enum Pattern {
         
         ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
         COMMAND("A", "Command<CommandSender>", "command"),
-        EXECUTABLE("An", "Executable<CommandSender>", "command"),
+        EXECUTION("An", "Executable<CommandSender>", "command"),
         REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
         SUGGESTION_PROVIDER("A", "SuggestionProvider<CommandSender>", "suggestions");
         
@@ -55,7 +51,7 @@ public abstract class Binding<T extends Element> {
         public final String type;
         public final String noun;
         
-        private Match(String article, String type, String noun) {
+        private Pattern(String article, String type, String noun) {
             this.article = article;
             this.type = type;
             this.noun = noun;
@@ -70,57 +66,75 @@ public abstract class Binding<T extends Element> {
     
     public static class Field extends Binding<VariableElement> {
         
-        public static @Nullable Match pattern(TypeMirrors util, KnownTypes types, TypeMirror type) {
-            if (util.isSubtype(type, types.argument)) {
-                return Match.ARGUMENT_TYPE;
+        public static @Nullable Field capture(Types types, VariableElement site) {
+            var type = site.asType();
+            if (types.isSubtype(type, types.argument)) {
+                return new Field(site, Pattern.ARGUMENT_TYPE);
 
-            } else if (util.isSubtype(type, types.command)) {
-                return Match.COMMAND;
+            } else if (types.isSubtype(type, types.execution)) {
+                // This needs to be before Pattern.COMMAND, since Execution extends Command
+                return new Field(site, Pattern.EXECUTION);
+                
+            } else if (types.isSubtype(type, types.command)) {
+                return new Field(site, Pattern.COMMAND);
 
-            } else if (util.isSubtype(type, types.requirement)) {
-                return Match.REQUIREMENT;
+            } else if (types.isSubtype(type, types.requirement)) {
+                return new Field(site, Pattern.REQUIREMENT);
 
-            } else if (util.isSubtype(type, types.suggestions)) {
-                return Match.SUGGESTION_PROVIDER;
+            } else if (types.isSubtype(type, types.suggestions)) {
+                return new Field(site, Pattern.SUGGESTION_PROVIDER);
 
             } else {
                 return null;
             }
         }
         
-        public Field(Identity identity, VariableElement site, Match pattern) {
-            super(identity, site, pattern);
+        Field(VariableElement site, Pattern pattern) {
+            super(site, pattern);
         }
         
     }
     
     public static class Method extends Binding<ExecutableElement> {
         
-        public static @Nullable Match pattern(TypeMirrors utils, KnownTypes types, TypeMirror returned) {
-            if (returned.getKind() == TypeKind.INT) {
-                return Match.COMMAND;
+        public static @Nullable Method capture(Types types, ExecutableElement site) {
+            var type = site.getReturnType();
+            if (type.getKind() == TypeKind.VOID) {
+                return new Method(site, Pattern.COMMAND);
 
-            } else if (returned.getKind() == TypeKind.VOID) {
-                return Match.EXECUTABLE;
+            } else if (type.getKind() == TypeKind.VOID) {
+                return new Method(site, Pattern.EXECUTION);
 
-            } else if (returned.getKind() == TypeKind.BOOLEAN) {
-                return Match.REQUIREMENT;
+            } else if (type.getKind() == TypeKind.BOOLEAN) {
+                return new Method(site, Pattern.REQUIREMENT);
 
-            } else if (utils.isSubtype(returned, types.completable)) {
-                return Match.SUGGESTION_PROVIDER;
+            } else if (types.isSubtype(type, types.completable)) {
+                return new Method(site, Pattern.SUGGESTION_PROVIDER);
 
             } else {
                 return null;
             }
         }
         
-        
-        public final Map<Integer, Reference> parameters = new HashMap<>();
+        private final Map<Command, Map<Integer, Reference>> parameters = new HashMap<>();
 
-        public Method(Identity identity, ExecutableElement site, Match pattern) {
-            super(identity, site, pattern);
+        Method(ExecutableElement site, Pattern pattern) {
+            super(site, pattern);
         }
         
+        public void parameter(Command command, Reference reference) {
+            parameters(command).put(reference.index, reference);
+        }
+        
+        public Map<Integer, Reference> parameters(Command command) {
+            var references = parameters.get(command);
+            if (references == null) {
+                parameters.put(command, references = new HashMap<>());
+            }
+            
+            return references;
+        }
+
     }
     
     public static class Reference {
