@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.commons.command.aot.Command;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.*;
@@ -31,14 +30,14 @@ import com.karuslabs.puff.*;
 import java.util.*;
 import javax.lang.model.element.*;
 
-public class CommandParser extends NamespaceParser {
+public class CommandParser extends LexParser {
 
     public CommandParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
 
     @Override
-    public void parse(Element element, Environment environment) {
+    public void parse(Environment environment, Element element) {
         var namespace = environment.namespace(element);
         var lines = element.getAnnotation(com.karuslabs.commons.command.aot.annotations.Command.class).value();
         if (lines.length == 0) {

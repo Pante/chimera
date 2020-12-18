@@ -23,29 +23,16 @@
  */
 package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identity.Type;
+import com.karuslabs.commons.command.aot.Types;
 import com.karuslabs.puff.Logger;
 
-public class MissingArgumentTypeLint extends Lint {
+public abstract class TypeLint extends Lint {
 
-    public MissingArgumentTypeLint(Logger logger, Types types) {
-        super(logger, types);
-    }
-
-    @Override
-    public void lint(Environment environment, Command command) {
-        if (command.identity.type != Type.ARGUMENT) {
-            return;
-        }
-        
-        for (var binding : command.bindings.values()) {
-            if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
-                return;
-            }
-        }
-        
-        logger.error(command.site, command.identity, "is missing an argument type", "an ArgumentType<?> should be bound to it");
+    protected final Types types;
+    
+    public TypeLint(Logger logger, Types types) {
+        super(logger);
+        this.types = types;
     }
 
 }

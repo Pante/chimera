@@ -21,31 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.Identity;
-import com.karuslabs.commons.command.aot.old.Mirrors.Command;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.puff.Logger;
 
-import java.util.List;
+import java.util.Map;
 
-public class TreeLint implements Lint {
+import static com.karuslabs.puff.Texts.quote;
 
-    private final List<Lint> lints;
-    
-    public TreeLint(Lint... lints) {
-        this.lints = List.of(lints);
+public class DuplicateArgumentLint extends Lint {
+
+    public DuplicateArgumentLint(Logger logger) {
+        super(logger);
+    }
+
+    @Override
+    public void lint(Environment environment, Command command) {
+        
     }
     
-    @Override
-    public void lint(Logger logger, Identity identifier, Command command) {
-        for (var lints : lints) {
-            lints.lint(logger, identifier, command);
+    void visit(Command command, Map<Identity, Command> namespace) {
+        var existing = namespace.put(command.identity, command);
+        if (existing != null) {
+            logger.error(command.site, quote(existing.path()) + " conflicts with " + quote(command.path()));
         }
         
-        for (var entry : command.children.entrySet()) {
-            lint(logger, entry.getKey(), entry.getValue());
+        for (var child : command.children.values()) {
+            visit(child, namespace);
         }
+        
+        namespace.remove(command.identity);
     }
 
 }

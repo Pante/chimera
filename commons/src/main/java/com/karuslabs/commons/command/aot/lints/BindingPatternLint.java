@@ -24,30 +24,32 @@
 package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Binding.Pattern;
 import com.karuslabs.puff.Logger;
-import com.karuslabs.puff.assertion.matches.Match;
 
-import java.util.Set;
-import javax.lang.model.element.*;
+import java.util.*;
 
-import static com.karuslabs.puff.assertion.Assertions.contains;
-import static javax.lang.model.element.Modifier.*;
+import static com.karuslabs.puff.Texts.quote;
 
-public class PublicFinalFieldLint extends Lint {
+public class BindingPatternLint extends Lint {
 
-    private final Match<Set<Modifier>> match = contains(PUBLIC, FINAL);
-
-    public PublicFinalFieldLint(Logger logger, Types types) {
-        super(logger, types);
+    public BindingPatternLint(Logger logger) {
+        super(logger);
     }
-    
+
     @Override
     public void lint(Environment environment, Command command) {
+        var bindings = new EnumMap<Pattern, Binding<?>>(Pattern.class);
+        var logged = EnumSet.noneOf(Pattern.class);
+        
         for (var binding : command.bindings.values()) {
-            if (!match.test(types, binding.site)) {
-                var element = binding instanceof VariableElement ? "field should be " : "method should be ";
-                logger.error(binding.site, element + match.describe(binding.site));
-            }
+            var existing = bindings.put(binding.pattern, binding);
+            var message = binding.pattern.article + " " + binding.pattern.type + " is already bound to " + quote(command.path());
+            
+            logger.error(binding.site, message);
+            if (logged.add(binding.pattern)) {
+                logger.error(existing.site, message);
+            } 
         }
     }
 

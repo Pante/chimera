@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.commons.command.aot.Binding.Pattern;
+
 import java.util.*;
 import javax.lang.model.element.*;
 
@@ -43,8 +45,33 @@ public final class Command {
         this.site = site;
     }
     
+    public @Nullable Binding<?> binding(Pattern pattern) {
+        for (var binding : bindings.values()) {
+            if (binding.pattern == pattern) {
+                return binding;
+            }
+        }
+        
+        return null;
+    }
+    
     public void bind(Binding<?> binding) {
         bindings.put(binding.site, binding);
+    }
+        
+    public String path() {
+        if (parent == null) {
+            return identity.toString();
+        }
+        
+        var builder = new StringBuilder();
+        var command = this;
+        while (command != null) {
+            builder.insert(0, command.identity).append(" ");
+            command = command.parent;
+        }
+
+        return builder.deleteCharAt(builder.length() - 1).toString();
     }
 
 }

@@ -29,8 +29,8 @@ import com.karuslabs.puff.Logger;
 
 public class ArgumentPositionLint extends Lint {
 
-    public ArgumentPositionLint(Logger logger, Types types) {
-        super(logger, types);
+    public ArgumentPositionLint(Logger logger) {
+        super(logger);
     }
 
     @Override

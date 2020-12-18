@@ -23,17 +23,6 @@
  */
 package com.karuslabs.commons.command.aot.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.puff.Logger;
+public class ConflictingAliasLint {
 
-public abstract class Lint {
-    
-    protected final Logger logger;
-    
-    public Lint(Logger logger) {
-        this.logger = logger;
-    }
-
-    public abstract void lint(Environment environment, Command command);
-    
 }

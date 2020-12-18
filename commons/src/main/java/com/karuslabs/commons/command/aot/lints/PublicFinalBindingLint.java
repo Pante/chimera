@@ -25,15 +25,30 @@ package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.assertion.matches.Match;
 
-public abstract class Lint {
+import java.util.Set;
+import javax.lang.model.element.*;
+
+import static com.karuslabs.puff.assertion.Assertions.contains;
+import static javax.lang.model.element.Modifier.*;
+
+public class PublicFinalBindingLint extends TypeLint {
+
+    private final Match<Set<Modifier>> match = contains(PUBLIC, FINAL);
+
+    public PublicFinalBindingLint(Logger logger, Types types) {
+        super(logger, types);
+    }
     
-    protected final Logger logger;
-    
-    public Lint(Logger logger) {
-        this.logger = logger;
+    @Override
+    public void lint(Environment environment, Command command) {
+        for (var binding : command.bindings.values()) {
+            if (!match.test(types, binding.site)) {
+                var element = binding instanceof VariableElement ? "field should be " : "method should be ";
+                logger.error(binding.site, element + match.describe(binding.site));
+            }
+        }
     }
 
-    public abstract void lint(Environment environment, Command command);
-    
 }

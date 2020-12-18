@@ -24,16 +24,36 @@
 package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identity.Type;
 import com.karuslabs.puff.Logger;
 
-public abstract class Lint {
-    
-    protected final Logger logger;
-    
-    public Lint(Logger logger) {
-        this.logger = logger;
+import static com.karuslabs.puff.Texts.quote;
+
+public class ArgumentTypeLint extends TypeLint {
+
+    public ArgumentTypeLint(Logger logger, Types types) {
+        super(logger, types);
     }
 
-    public abstract void lint(Environment environment, Command command);
-    
+    @Override
+    public void lint(Environment environment, Command command) {
+        if (command.identity.type == Type.ARGUMENT) {
+            for (var binding : command.bindings.values()) {
+                if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
+                    return;
+                }
+            }
+
+            logger.error(command.site, "No ArgumentType<?> is bound to " + quote(command.path()), "an ArgumentType<?> should be bound to it");
+            
+        } else {
+            for (var binding : command.bindings.values()) {
+                if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
+                    logger.error(command.site, "An ArgumentType<?> is bound to " + quote(command.path()), "should only be bound to an argument");
+                    return;
+                }
+            }
+        }
+    }
+
 }

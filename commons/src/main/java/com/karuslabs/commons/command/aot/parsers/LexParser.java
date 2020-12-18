@@ -21,18 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 
-public abstract class NamespaceParser implements Parser<Environment> {
+public abstract class LexParser implements Parser {
 
     protected final Logger logger;
     protected final Lexer lexer;
     
-    public NamespaceParser(Logger logger, Lexer lexer) {
+    public LexParser(Logger logger, Lexer lexer) {
         this.logger = logger;
         this.lexer = lexer;
     }

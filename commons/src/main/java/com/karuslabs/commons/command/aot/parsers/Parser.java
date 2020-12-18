@@ -21,12 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old.old;
+package com.karuslabs.commons.command.aot.parsers;
+
+import com.karuslabs.commons.command.aot.Environment;
 
 import javax.lang.model.element.Element;
 
-public interface Parser<T> {
+public interface Parser {
 
-    void parse(Element element, T value);
+    void parse(Environment environment, Element element);
     
 }

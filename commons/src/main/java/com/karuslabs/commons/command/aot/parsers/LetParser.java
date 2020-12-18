@@ -30,10 +30,11 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.Find;
 
-import java.util.*;
 import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import static com.karuslabs.puff.Texts.quote;
 
 public class LetParser extends LexParser {
     
@@ -66,7 +67,7 @@ public class LetParser extends LexParser {
                 method.parameter(command, new Reference(index, parameter, referred));
                 
             } else {
-                logger.error(element, argument.identity, "does not exist in " + path(command));
+                logger.error(element, argument.identity, "does not exist in " + quote(command.path()));
             }
         }
     }
@@ -83,15 +84,4 @@ public class LetParser extends LexParser {
         
         return null;
     }
-    
-    @Nullable String path(Command command) {
-        var strings = new ArrayList<String>();
-        while (command != null) {
-            strings.add(0, command.identity.toString());
-            command = command.parent;
-        }
-        
-        return Texts.quote(Texts.join(strings, Texts.STRING, " "));
-    }
-
 }

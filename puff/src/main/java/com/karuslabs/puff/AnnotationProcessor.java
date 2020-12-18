@@ -33,14 +33,14 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
     
     protected @Lazy Elements elements;
     protected @Lazy TypeMirrors types;
-    protected @Lazy Logger log;
+    protected @Lazy Logger logger;
     
     @Override
     public void init(ProcessingEnvironment environment) {
         super.init(environment);
         elements = environment.getElementUtils();
         types = new TypeMirrors(elements, environment.getTypeUtils());
-        log = new Logger(environment.getMessager());
+        logger = new Logger(environment.getMessager());
     }
     
 }

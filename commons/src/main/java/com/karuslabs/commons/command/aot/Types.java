@@ -38,6 +38,7 @@ import org.bukkit.command.CommandSender;
 
 public class Types extends TypeMirrors {
 
+    public final TypeMirror object;
     public final TypeMirror sender; 
     public final TypeMirror argument;
     public final TypeMirror completable;
@@ -48,6 +49,7 @@ public class Types extends TypeMirrors {
     
     public Types(Elements elements, Types types) {
         super(elements, types);
+        object = super.type(Object.class);
         sender = super.type(CommandSender.class);
         argument = super.erasure(ArgumentType.class);
         completable = super.specialize(CompletableFuture.class, Suggestions.class);

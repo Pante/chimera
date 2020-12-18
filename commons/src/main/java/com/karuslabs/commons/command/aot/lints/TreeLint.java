@@ -26,14 +26,22 @@ package com.karuslabs.commons.command.aot.lints;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.puff.Logger;
 
-public abstract class Lint {
+import java.util.List;
+
+public class TreeLint extends Lint {
+
+    private final List<Lint> lints;
     
-    protected final Logger logger;
-    
-    public Lint(Logger logger) {
-        this.logger = logger;
+    public TreeLint(Logger logger, Lint... lints) {
+        super(logger);
+        this.lints = List.of(lints);
     }
 
-    public abstract void lint(Environment environment, Command command);
-    
+    @Override
+    public void lint(Environment environment, Command command) {
+        for (var lint : lints) {
+            lint.lint(environment, command);
+        }
+    }
+
 }
