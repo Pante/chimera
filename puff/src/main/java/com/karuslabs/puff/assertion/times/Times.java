@@ -137,32 +137,32 @@ class Between<T> extends Times<T> {
 
 class Min<T> extends Times<T> {
     
-    private final int least;
+    private final int min;
     
-    Min(int least, Timeable<T> match) {
-        super(match, least + " or more " + match.conditions());
-        this.least = least;
+    Min(int min, Timeable<T> match) {
+        super(match, min + " or more " + match.conditions());
+        this.min = min;
     }
 
     @Override
     public boolean test() {
-        return current >= least;
+        return current >= min;
     }
     
 }
 
 class Max<T> extends Times<T> {
     
-    private final int most;
+    private final int max;
     
-    Max(int most, Timeable<T> match) {
-        super(match, most + " or more " + match.conditions());
-        this.most = most;
+    Max(int max, Timeable<T> match) {
+        super(match, max + " or more " + match.conditions());
+        this.max = max;
     }
 
     @Override
     public boolean test() {
-        return current <= most;
+        return current <= max;
     }
     
 }

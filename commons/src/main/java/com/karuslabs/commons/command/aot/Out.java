@@ -21,15 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.old.Mirrors.Method;
+import javax.lang.model.element.Element;
 
-import javax.lang.model.element.ExecutableElement;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public interface Signature {
+public class Out {
 
-    void lint(Logger logger, Method method, ExecutableElement executable);
+    public final @Nullable Element element;
+    public final @Nullable String folder;
+    public final @Nullable String file;
+    
+    public Out(Element element, String folder, String file) {
+        this.element = element;
+        this.folder = folder;
+        this.file = file;
+    }
 
 }

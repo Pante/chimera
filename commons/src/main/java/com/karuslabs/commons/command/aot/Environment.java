@@ -28,8 +28,11 @@ import com.karuslabs.puff.type.Find;
 import java.util.*;
 import javax.lang.model.element.*;
 
-public class Environment {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+public class Environment {
+    
+    public @Nullable Out out;
     private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
     private final Map<ExecutableElement, List<Command>> methods = new HashMap<>();
     

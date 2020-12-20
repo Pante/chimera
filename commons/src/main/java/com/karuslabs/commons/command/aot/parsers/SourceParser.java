@@ -21,20 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.old;
+package com.karuslabs.commons.command.aot.parsers;
 
-import com.karuslabs.smoke.Filter;
-import com.karuslabs.smoke.Logger;
-import com.karuslabs.commons.command.aot.old.FileContext;
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.annotations.Pack;
+import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.type.Find;
 
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.smoke.Messages.quote;
 import static com.karuslabs.commons.command.aot.annotations.Pack.RELATIVE_PACKAGE;
-import com.karuslabs.commons.command.aot.annotations.Pack;
+import static com.karuslabs.puff.Texts.quote;
 
-public class SourceParser implements Parser<FileContext> {
+public class SourceParser implements Parser {
 
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
@@ -43,35 +43,27 @@ public class SourceParser implements Parser<FileContext> {
     public SourceParser(Logger logger) {
         this.logger = logger;
     }
-    
-    
+
     @Override
-    public void parse(Element element, FileContext file) {
-        logger.zone(element);
+    public void parse(Environment environment, Element element) {
+        var source = element.getAnnotation(Pack.class).age();
         
-        var source = element.getAnnotation(Pack.class).value();
         if (RELATIVE_PACKAGE.equals(source)) {
-            file.location(element, element.accept(Filter.PACKAGE, null).getQualifiedName().toString(), "Commands");
+            environment.out = new Out(element, element.accept(Find.PACKAGE, null).getQualifiedName().toString(), "Commands");
             return;
             
         } else if (source.endsWith(".java") || source.endsWith(".class")) {
             var parts = source.split("\\.");
-            logger.error("File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
+            logger.error(element, "File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
             return;
             
         }  else if (!PACKAGE.reset(source).matches()) {
-            logger.error("Invalid package name");
+            logger.error(element, "Invalid package name");
             return;
         } 
         
         int dot = source.lastIndexOf(".");
-        if (dot != -1) {
-            file.location(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
-            
-        } else {
-            file.location(element, "", source);
-        }
-        
+        environment.out = dot == -1 ? new Out(element, "", source) : new Out(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
     }
 
 }

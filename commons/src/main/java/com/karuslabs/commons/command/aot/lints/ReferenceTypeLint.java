@@ -38,13 +38,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class ReferenceTypeLint extends TypeLint {
     
-    private final Visitor visitor;
+    private final Visitor visitor = new Visitor();
     private final Walker<TypeMirror> walker;
     private final TypeMirror argumentType;
     
     ReferenceTypeLint(Logger logger, Types types) {
         super(logger, types);
-        visitor = new Visitor(); 
         walker = Walker.ancestor(types);
         argumentType = types.type(ArgumentType.class);
     }

@@ -26,29 +26,27 @@ package com.karuslabs.commons.command.aot.lints;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.puff.Logger;
 
-import java.util.Map;
+import java.util.*;
 
 import static com.karuslabs.puff.Texts.quote;
 
 public class DuplicateArgumentLint extends Lint {
 
+    private final Map<Identity, Command> namespace = new HashMap<>();
+    
     public DuplicateArgumentLint(Logger logger) {
         super(logger);
     }
 
     @Override
     public void lint(Environment environment, Command command) {
-        
-    }
-    
-    void visit(Command command, Map<Identity, Command> namespace) {
         var existing = namespace.put(command.identity, command);
         if (existing != null) {
             logger.error(command.site, quote(existing.path()) + " conflicts with " + quote(command.path()));
         }
         
         for (var child : command.children.values()) {
-            visit(child, namespace);
+            lint(environment, child);
         }
         
         namespace.remove(command.identity);

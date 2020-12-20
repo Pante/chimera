@@ -23,6 +23,60 @@
  */
 package com.karuslabs.commons.command.aot.lints;
 
-public class ConflictingAliasLint {
+import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Identity.Type;
+
+import com.karuslabs.puff.Logger;
+
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
+
+import static com.karuslabs.commons.command.aot.lints.ConflictingAliasLint.Kind.*;
+import static com.karuslabs.puff.Texts.quote;
+
+public class ConflictingAliasLint extends Lint {
+    
+    enum Kind { ALIAS, NAME; }
+    
+    private final Map<String, Entry<Command, Kind>> names = new HashMap<>();
+    
+    public ConflictingAliasLint(Logger logger) {
+        super(logger);
+    }
+
+    @Override
+    public void lint(Environment environment, Command command) {
+        for (var child : command.children.values()) {
+            if (child.identity.type == Type.ARGUMENT) {
+                continue;
+            }
+            
+            lint(child, child.identity.name, NAME);
+            
+            for (var alias : child.aliases) {
+                lint(child, alias, ALIAS);
+            }
+        }
+        
+        names.clear();
+    }
+    
+    void lint(Command command, String name, Kind kind) {
+        var existing = names.put(name, new SimpleEntry<>(command, kind));
+        if (existing == null) {
+            return;
+        }
+        
+        if (kind == ALIAS && existing.getValue() == ALIAS) {
+            logger.error(command.site, "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with alias in " + quote(existing.getKey().path()));
+            
+        } else if (kind == ALIAS && existing.getValue() == NAME) {
+            logger.error(command.site, "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with " + quote(existing.getKey().path()));
+            
+        } else if (kind == NAME && existing.getValue() == ALIAS ){
+            logger.error(existing.getKey().site, "Alias: " + quote(name) + " in " + quote(existing.getKey().path()) + " conflicts with " + quote(command.path()));
+        }
+    }
 
 }

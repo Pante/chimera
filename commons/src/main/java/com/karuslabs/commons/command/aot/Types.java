@@ -25,8 +25,10 @@ package com.karuslabs.commons.command.aot;
 
 import com.karuslabs.commons.command.Execution;
 import com.karuslabs.puff.type.TypeMirrors;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -40,6 +42,7 @@ public class Types extends TypeMirrors {
 
     public final TypeMirror object;
     public final TypeMirror sender; 
+    public final TypeMirror context;
     public final TypeMirror argument;
     public final TypeMirror completable;
     public final TypeMirror command;
@@ -51,6 +54,7 @@ public class Types extends TypeMirrors {
         super(elements, types);
         object = super.type(Object.class);
         sender = super.type(CommandSender.class);
+        context = super.specialize(CommandContext.class, CommandSender.class);
         argument = super.erasure(ArgumentType.class);
         completable = super.specialize(CompletableFuture.class, Suggestions.class);
         command = super.specialize(Command.class, sender);

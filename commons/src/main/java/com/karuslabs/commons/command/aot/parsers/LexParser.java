@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.Environment;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.Logger;
 

@@ -39,14 +39,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class BindParser extends LexParser {
     
     private final Visitor visitor;
-    private final Binder namespaced;
-    private final Binder pattern;
+    private final Binder namespaced = new NamespaceBinder();
+    private final Binder pattern = new PatternBinder();
     
     public BindParser(Visitor visitor, Logger logger, Lexer lexer) {
         super(logger, lexer);
         this.visitor = visitor;
-        namespaced = new NamespaceBinder();
-        pattern = new PatternBinder();
     }
 
     @Override
