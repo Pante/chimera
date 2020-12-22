@@ -21,19 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.generation.chunks;
 
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.puff.generation.Source;
 
-public abstract class LexParser implements Parser {
-
-    protected final Logger logger;
-    protected final Lexer lexer;
+public interface Chunk<T> {
     
-    public LexParser(Logger logger, Lexer lexer) {
-        this.logger = logger;
-        this.lexer = lexer;
-    }
-
+    void emit(Source source, T value);
+            
 }

@@ -39,7 +39,7 @@ public abstract class Binding<T extends Element> {
         this.pattern = pattern;
     }
     
-    public enum Pattern {
+    public static enum Pattern {
         
         ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
         COMMAND("A", "Command<CommandSender>", "command"),

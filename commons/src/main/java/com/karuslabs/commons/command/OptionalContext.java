@@ -50,7 +50,7 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
     
     private final CommandContext<T> context;
-    private @Lazy Map<String, ParsedArgument<T, ?>> arguments = null;
+    private @Lazy Map<String, ParsedArgument<T, ?>> arguments;
     
     
     public OptionalContext(CommandContext<T> context) {

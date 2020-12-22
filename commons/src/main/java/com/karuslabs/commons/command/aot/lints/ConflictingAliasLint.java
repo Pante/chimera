@@ -37,7 +37,7 @@ import static com.karuslabs.puff.Texts.quote;
 
 public class ConflictingAliasLint extends Lint {
     
-    enum Kind { ALIAS, NAME; }
+    static enum Kind { ALIAS, NAME; }
     
     private final Map<String, Entry<Command, Kind>> names = new HashMap<>();
     

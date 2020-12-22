@@ -66,7 +66,7 @@ public final @ValueType class Identity {
     }
     
     
-    public enum Type {
+    public static enum Type {
         
         ARGUMENT("An", "argument"), LITERAL("A", "literal");
         
