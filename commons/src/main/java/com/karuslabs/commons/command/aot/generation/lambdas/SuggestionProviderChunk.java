@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation.chunks;
+package com.karuslabs.commons.command.aot.generation.lambdas;
 
 import com.karuslabs.commons.command.aot.Binding.Method;
 import com.karuslabs.commons.command.aot.*;
@@ -40,11 +40,14 @@ public class SuggestionProviderChunk {
     }
     
     public void emit(Source source, Command command, Method value) {
+        var commands = new HashMap<>();
         var arguments = desugar(source, value, command);
         
         source.line(Source.arguments("context", "builder"), " -> {")
               .indent()
-
+                  .use(source -> {
+                      
+                   })
                   .line("return ", "Type", ".", "method", Source.arguments(arguments), ";")
               .unindent()
               .line("};");
@@ -58,6 +61,7 @@ public class SuggestionProviderChunk {
         for (int i = 0; i < params.size(); i++) {
             var ref = refs.get(i);
             if (ref == null) {
+                params.get(0)
                 // Need to map param's type mirror to param inside lambda, then put into arguments
             } else {
                 // Need counter to bump

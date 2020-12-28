@@ -25,8 +25,19 @@ package com.karuslabs.commons.command.aot.generation.chunks;
 
 import com.karuslabs.puff.generation.Source;
 
-public interface Chunk {
-
-    void emit(Source source);
+public class MethodCall implements Chunk {
     
+    private final String source;
+    private final String name;
+    
+    public MethodCall(String source, String name) {
+        this.source = source;
+        this.name = name;
+    }
+    
+    @Override
+    public void emit(Source source) {
+        source.append(source)
+    }
+
 }
