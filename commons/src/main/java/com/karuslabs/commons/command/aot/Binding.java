@@ -81,7 +81,7 @@ public abstract class Binding<T extends Element> {
             } else if (types.isSubtype(type, types.requirement)) {
                 return new Field(site, Pattern.REQUIREMENT);
 
-            } else if (types.isSubtype(type, types.suggestions)) {
+            } else if (types.isSubtype(type, types.suggestionProvider)) {
                 return new Field(site, Pattern.SUGGESTION_PROVIDER);
 
             } else {
@@ -134,9 +134,9 @@ public abstract class Binding<T extends Element> {
             
             return references;
         }
-
-    }
-    
+        
+            }
+            
     public static class Reference {
         
         public final int index;

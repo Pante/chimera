@@ -39,9 +39,12 @@ public class Source implements CharSequence {
     private final StringBuilder builder = new StringBuilder();
     private String indentation = "";
     
-    
     public Source assign(String name, String value) {
-        builder.append(indentation).append("var ").append(name).append(" = ").append(value).append(";").append(System.lineSeparator());
+        return assign("var", name, value);
+    }
+    
+    public Source assign(String type, String name, String value) {
+        builder.append(indentation).append(type).append(" ").append(name).append(" = ").append(value).append(";").append(System.lineSeparator());
         return this;
     }
     

@@ -23,21 +23,9 @@
  */
 package com.karuslabs.commons.command.aot.generation.chunks;
 
-import com.karuslabs.puff.generation.Source;
+class Constants<T> {
 
-public class MethodCall implements Chunk {
+    static final String SOURCE = "source";
+    static final String REQUIREMENT = "REQUIREMENT";
     
-    private final String source;
-    private final String name;
-    
-    public MethodCall(String source, String name) {
-        this.source = source;
-        this.name = name;
-    }
-    
-    @Override
-    public void emit(Source source) {
-        source.append(source)
-    }
-
 }

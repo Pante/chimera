@@ -25,8 +25,32 @@ package com.karuslabs.commons.command.aot.generation.chunks;
 
 import com.karuslabs.puff.generation.Source;
 
-public interface Chunk {
+import java.time.LocalDateTime;
 
-    void emit(Source source);
+public class Header {
+
+    private static final String VERSION = "4.9.0-SNAPSHOT";
     
+    public void emit(Source source, String pack) {
+        if (!pack.isEmpty()) {
+            source.line("package ", pack, ";");
+        }
+        
+        source.line("import com.karuslabs.commons.command.Execution;")
+              .line("import com.karuslabs.commons.command.tree.nodes.*;")
+              .line()
+              .line("import com.mojang.brigadier.Command;")
+              .line("import com.mojang.brigadier.suggestion.SuggestionProvider;")
+              .line("import com.mojang.brigadier.tree.CommandNode;")
+              .line()
+              .line("import java.util.*;")
+              .line("import java.util.function.Predicate;")
+              .line()
+              .line("import org.bukkit.command.CommandSender;")
+              .line()
+              .line("/**")
+              .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
+              .line(" */");
+    }
+
 }

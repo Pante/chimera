@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot;
 
-import com.karuslabs.commons.command.Execution;
+import com.karuslabs.commons.command.*;
 import com.karuslabs.puff.type.TypeMirrors;
 
 import com.mojang.brigadier.Command;
@@ -43,24 +43,29 @@ public class Types extends TypeMirrors {
     public final TypeMirror object;
     public final TypeMirror sender; 
     public final TypeMirror context;
+    public final TypeMirror optionalContext;
     public final TypeMirror argument;
     public final TypeMirror completable;
     public final TypeMirror command;
     public final TypeMirror execution;
     public final TypeMirror requirement;
-    public final TypeMirror suggestions;
+    public final TypeMirror suggestionsBuilder;
+    public final TypeMirror suggestionProvider;
+    
     
     public Types(Elements elements, Types types) {
         super(elements, types);
         object = super.type(Object.class);
         sender = super.type(CommandSender.class);
         context = super.specialize(CommandContext.class, CommandSender.class);
+        optionalContext = super.specialize(OptionalContext.class, CommandSender.class);
         argument = super.erasure(ArgumentType.class);
         completable = super.specialize(CompletableFuture.class, Suggestions.class);
         command = super.specialize(Command.class, sender);
         execution = super.specialize(Execution.class, sender);
         requirement = super.specialize(Predicate.class, sender);
-        suggestions = super.specialize(SuggestionProvider.class, sender);
+        suggestionsBuilder = super.type(SuggestionsBuilder.class);
+        suggestionProvider = super.specialize(SuggestionProvider.class, sender);
     }
 
 }
