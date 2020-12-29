@@ -27,7 +27,6 @@ import com.karuslabs.commons.command.aot.Command;
 import com.karuslabs.puff.generation.Source;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 public abstract class CommandInstantiation {
     
@@ -40,7 +39,7 @@ public abstract class CommandInstantiation {
     }
     
     public String emit(Source source, Command command) {
-        
+        return "";
     }
     
 }
