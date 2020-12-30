@@ -37,6 +37,7 @@ public final class Command {
     public final TypeElement site;
     public final Set<String> aliases = new HashSet<>();
     public final Map<Element, Binding<?>> bindings = new HashMap<>();
+    public final Map<Pattern, Binding<?>> patterns = new HashMap<>();
     public final Map<Identity, Command> children = new HashMap<>();
 
     public Command(Command parent, Identity identity, TypeElement site) {
@@ -57,6 +58,7 @@ public final class Command {
     
     public void bind(Binding<?> binding) {
         bindings.put(binding.site, binding);
+        patterns.put(binding.pattern, binding);
     }
         
     public String path() {

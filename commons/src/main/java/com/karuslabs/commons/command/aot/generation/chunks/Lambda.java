@@ -23,8 +23,8 @@
  */
 package com.karuslabs.commons.command.aot.generation.chunks;
 
-import com.karuslabs.commons.command.aot.Binding.Method;
 import com.karuslabs.commons.command.aot.*;
+import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.puff.generation.Source;
 
 import java.util.*;
@@ -74,17 +74,22 @@ public class Lambda {
     
     public void emit(Source source, Command command, Method method) {
         var reciever = method.site.getModifiers().contains(STATIC) ? command.site.getQualifiedName() : Constants.SOURCE;
-        source.line(Source.arguments(parameters.keySet()), " -> {")
+        var references = method.parameters(command);
+        
+        if (references.isEmpty()) {
+            source.line(reciever, "::", method.site.getSimpleName());
+            
+        } else {
+            source.line(Source.arguments(parameters.keySet()), " -> {")
               .indent()
-                .line(returns ? "return " : "", reciever, ".", method.site.getSimpleName(), Source.arguments(desugar(source, command, method)), ";")
+                .line(returns ? "return " : "", reciever, ".", method.site.getSimpleName(), Source.arguments(desugar(source, command, references, method.site.getParameters())), ";")
               .unindent()
               .line("};");
+        }
     }
     
-    List<String> desugar(Source source, Command command, Method method) {
+    List<String> desugar(Source source, Command command, Map<Integer, Reference> references, List<? extends VariableElement> siteParameters) {
         var variables = new ArrayList<String>();
-        var references = method.parameters(command);
-        var siteParameters = method.site.getParameters();
         
         for (int i = 0; i < siteParameters.size(); i++) {
             var reference = references.get(i);
