@@ -2,7 +2,7 @@
 
 **Compatible Spigot versions: 1.16.4**
 
-This update adds argument type matching overhauls code generation for the command framework. The Scribe project has also been removed.
+This update adds argument type matching and overhauls code generation for the command framework. The Scribe project has also been removed.
 
 ### Annotations
 

@@ -30,6 +30,7 @@ import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.Find;
 
+import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -84,4 +85,10 @@ public class LetParser extends LexParser {
         
         return null;
     }
+    
+    @Override
+    public Class<? extends Annotation> annotation() {
+        return Let.class;
+    }
+    
 }

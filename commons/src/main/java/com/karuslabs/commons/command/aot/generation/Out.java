@@ -21,24 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.commons.command.aot.generation;
 
-import com.karuslabs.commons.command.aot.Environment;
-
-import java.lang.annotation.Annotation;
-import java.util.Set;
 import javax.lang.model.element.Element;
 
-public interface Parser {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-    default void parse(Environment environment, Set<? extends Element> elements) {
-        for (var element : elements) {
-            parse(environment, element);
-        }
+public class Out {
+
+    public final @Nullable Element element;
+    public final @Nullable String folder;
+    public final @Nullable String file;
+    
+    public Out(Element element, String folder, String file) {
+        this.element = element;
+        this.folder = folder;
+        this.file = file;
     }
-    
-    void parse(Environment environment, Element element);
-    
-    Class<? extends Annotation> annotation();
-    
+
 }

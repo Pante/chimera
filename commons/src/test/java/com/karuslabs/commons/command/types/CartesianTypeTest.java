@@ -31,7 +31,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.concurrent.ExecutionException;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;

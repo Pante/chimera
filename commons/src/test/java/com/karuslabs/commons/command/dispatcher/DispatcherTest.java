@@ -29,15 +29,15 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.*;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.*;
 
-import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R2.command.CraftCommandMap;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R2.scheduler.CraftScheduler;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R3.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftScheduler;
 
 import org.junit.jupiter.api.*;
 

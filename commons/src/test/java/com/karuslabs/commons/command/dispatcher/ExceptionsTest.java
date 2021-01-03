@@ -28,13 +28,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.stream.Stream;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 
 import org.bukkit.command.*;
 
-import org.bukkit.craftbukkit.v1_16_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R2.command.*;
-import org.bukkit.craftbukkit.v1_16_R2.entity.*;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_16_R3.command.*;
+import org.bukkit.craftbukkit.v1_16_R3.entity.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

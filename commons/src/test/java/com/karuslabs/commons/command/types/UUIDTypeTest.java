@@ -28,7 +28,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_16_R2.ArgumentUUID;
+import net.minecraft.server.v1_16_R3.ArgumentUUID;
 
 import org.junit.jupiter.api.*;
 

@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.aot;
 
+import com.karuslabs.commons.command.aot.generation.Out;
 import com.karuslabs.puff.type.Find;
 
 import java.util.*;
@@ -32,9 +33,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Environment {
     
+    public final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
+    public final Map<ExecutableElement, List<Command>> methods = new HashMap<>();
     public @Nullable Out out;
-    private final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
-    private final Map<ExecutableElement, List<Command>> methods = new HashMap<>();
     
     public Map<Identity, Command> namespace(Element element) {
         var type = element.accept(Find.TYPE, null);

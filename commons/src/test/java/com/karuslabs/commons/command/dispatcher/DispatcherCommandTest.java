@@ -30,10 +30,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R3.*;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;

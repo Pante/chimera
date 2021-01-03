@@ -28,6 +28,24 @@ import com.karuslabs.puff.Logger;
 
 public abstract class Lint {
     
+    public static void visit(Environment environment, Lint... lints) {
+        for (var lint : lints) {
+            for (var namespace : environment.namespaces.values()) {
+                for (var command : namespace.values()) {
+                    lint(environment, lint, command);
+                }
+            }
+        }
+    }
+    
+    static void lint(Environment environment, Lint lint, Command command) {
+        lint.lint(environment, command);
+        for (var child : command.children.values()) {
+            lint(environment, lint, child);
+        }
+    }
+    
+    
     protected final Logger logger;
     
     public Lint(Logger logger) {

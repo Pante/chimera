@@ -27,12 +27,17 @@ import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
+import com.karuslabs.commons.command.dispatcher.Dispatcher;
+import com.karuslabs.commons.command.tree.nodes.Literal;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.Find;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.util.SimpleElementVisitor9;
+
+import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -70,6 +75,11 @@ public class BindParser extends LexParser {
         
         namespaced.bind(environment, binding, namespaces);
         pattern.bind(environment, binding, patterns);
+    }
+    
+    @Override
+    public Class<? extends Annotation> annotation() {
+        return Bind.class;
     }
     
     abstract class Binder {
@@ -179,6 +189,14 @@ public class BindParser extends LexParser {
             return null;
         }
         
+    }
+    
+    void test() {
+        Dispatcher dispatcher = Dispatcher.of(null);
+        Literal<CommandSender> literal = Literal.of("name").build();
+        
+        
+        dispatcher.getRoot().addChild(literal);
     }
 
 }

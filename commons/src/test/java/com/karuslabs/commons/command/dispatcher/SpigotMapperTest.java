@@ -36,7 +36,7 @@ import com.mojang.brigadier.suggestion.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraft.server.v1_16_R2.CommandListenerWrapper;
+import net.minecraft.server.v1_16_R3.CommandListenerWrapper;
 
 import org.bukkit.command.CommandSender;
 

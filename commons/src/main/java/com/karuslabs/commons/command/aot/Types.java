@@ -53,7 +53,7 @@ public class Types extends TypeMirrors {
     public final TypeMirror suggestionProvider;
     
     
-    public Types(Elements elements, Types types) {
+    public Types(Elements elements, TypeMirrors types) {
         super(elements, types);
         object = super.type(Object.class);
         sender = super.type(CommandSender.class);

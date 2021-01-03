@@ -42,7 +42,7 @@ public class ReferenceTypeLint extends TypeLint {
     private final Walker<TypeMirror> walker;
     private final TypeMirror argumentType;
     
-    ReferenceTypeLint(Logger logger, Types types) {
+    public ReferenceTypeLint(Logger logger, Types types) {
         super(logger, types);
         walker = Walker.ancestor(types);
         argumentType = types.type(ArgumentType.class);

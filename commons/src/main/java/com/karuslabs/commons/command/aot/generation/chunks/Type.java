@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot;
+package com.karuslabs.commons.command.aot.generation.chunks;
 
-import javax.lang.model.element.Element;
+import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.puff.generation.Source;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public class Out {
-
-    public final @Nullable Element element;
-    public final @Nullable String folder;
-    public final @Nullable String file;
+public class Type {
     
-    public Out(Element element, String folder, String file) {
-        this.element = element;
-        this.folder = folder;
-        this.file = file;
+    private final MethodBody method;
+    
+    public Type(MethodBody method) {
+        this.method = method;
     }
-
+    
+    public void emit(Source source, Environment environment) {
+        source.line("public class Commands {")
+              .indent()
+                .line("private static final Predicate<CommandSender> REQUIREMENT = s -> true;")
+                .line();
+                 for (var namespace : environment.namespaces.entrySet()) {
+                     method.emit(source, namespace.getKey(), namespace.getValue().values());
+                 }
+        source.unindent()
+              .line("}");
+    }
+    
 }

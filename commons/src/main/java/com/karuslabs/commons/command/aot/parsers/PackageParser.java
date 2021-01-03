@@ -23,25 +23,43 @@
  */
 package com.karuslabs.commons.command.aot.parsers;
 
+import com.karuslabs.commons.command.aot.generation.Out;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Pack;
 import com.karuslabs.puff.Logger;
 import com.karuslabs.puff.type.Find;
 
+import java.lang.annotation.Annotation;
+import java.util.Set;
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import static com.karuslabs.commons.command.aot.annotations.Pack.RELATIVE_PACKAGE;
 import static com.karuslabs.puff.Texts.quote;
 
-public class SourceParser implements Parser {
+public class PackageParser implements Parser {
 
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
     
     private final Logger logger;
     
-    public SourceParser(Logger logger) {
+    public PackageParser(Logger logger) {
         this.logger = logger;
+    }
+    
+    @Override
+    public void parse(Environment environment, Set<? extends Element> elements) {
+        if (elements.size() == 1) {
+            parse(environment, elements.toArray(new Element[0])[0]);
+            
+        } else if (elements.isEmpty()) {
+            logger.error(null, "Project does not contain a @Source annotation, should contain one @Source annotation");
+            
+        } else if (elements.size() > 1) {
+            for (var element : elements) {
+                logger.error(element, "Project contains " + elements.size() + " @Source annotations, should contain one @Source annotation");
+            }
+        }
     }
 
     @Override
@@ -64,6 +82,11 @@ public class SourceParser implements Parser {
         
         int dot = source.lastIndexOf(".");
         environment.out = dot == -1 ? new Out(element, "", source) : new Out(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
+    }
+
+    @Override
+    public Class<? extends Annotation> annotation() {
+        return Pack.class;
     }
 
 }

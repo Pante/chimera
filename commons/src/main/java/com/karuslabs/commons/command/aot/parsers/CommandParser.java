@@ -26,6 +26,7 @@ package com.karuslabs.commons.command.aot.parsers;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.puff.*;
+import java.lang.annotation.Annotation;
 
 import java.util.*;
 import javax.lang.model.element.*;
@@ -83,6 +84,11 @@ public class CommandParser extends LexParser {
         if (command.aliases.contains(command.identity.name)) {
             logger.warn(element, token.lexeme, "contains an alias that is the same as its name");
         }
+    }
+    
+    @Override
+    public Class<? extends Annotation> annotation() {
+        return com.karuslabs.commons.command.aot.annotations.Command.class;
     }
 
 }
