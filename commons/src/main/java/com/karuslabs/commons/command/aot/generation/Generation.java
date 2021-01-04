@@ -50,10 +50,11 @@ public class Generation {
     
     public void generate(Environment environment) {
         var out = environment.out;
-        var pack = out.folder.isEmpty() ? out.file : out.folder + "." + out.file;
+        var pack = out.folder.isEmpty() ? "" : out.folder;
+        var file = pack.isEmpty() ? out.file : pack + "." + out.file;
         var elements = environment.namespaces.keySet().toArray(new Element[0]);
         
-        try (var writer = filer.createSourceFile(pack, elements).openWriter()) {
+        try (var writer = filer.createSourceFile(file, elements).openWriter()) {
             var source = new Source();
             
             header.emit(source, pack);
@@ -63,10 +64,10 @@ public class Generation {
             writer.write(source.toString());
             
         } catch (FilerException ignored) {
-            logger.error(out.element, "\"" + pack + "\" already exists");
+            logger.error(out.element, "\"" + file + "\" already exists");
             
         } catch (IOException ignored) {
-            logger.error(out.element, "Failed to create file: \"" + pack + "\"");
+            logger.error(out.element, "Failed to create file: \"" + file + "\"");
         }
     }
     

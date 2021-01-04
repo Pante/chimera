@@ -39,6 +39,7 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
+
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
 @AutoService(javax.annotation.processing.Processor.class)
@@ -75,16 +76,16 @@ public class Processor extends AnnotationProcessor {
     
     void lints() {
         lints = new Lint[] {
-            new ArgumentPositionLint(logger),
-            new ConflictingAliasLint(logger),
-            new DuplicateArgumentLint(logger),
-            new ReferenceTypeLint(logger, types),
-            new TreeLint(logger,
-                new ArgumentTypeLint(logger, types),
-                new BindingPatternLint(logger),
-                new MethodSignatureLint(logger, types),
-                new PublicFinalBindingLint(logger, types)
-            ),
+//            new ArgumentPositionLint(logger),
+//            new ConflictingAliasLint(logger),
+//            new DuplicateArgumentLint(logger),
+//            new ReferenceTypeLint(logger, types),
+//            new TreeLint(logger,
+//                new ArgumentTypeLint(logger, types),
+//                new BindingPatternLint(logger),
+//                new MethodSignatureLint(logger, types),
+//                new PublicFinalBindingLint(logger, types)
+//            ),
         };
     }
     
@@ -124,6 +125,7 @@ public class Processor extends AnnotationProcessor {
             generation.generate(environment);
         }
         
+        logger.clear();
         environment = null;
         processed = true;
         

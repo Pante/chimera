@@ -53,11 +53,11 @@ public class PackageParser implements Parser {
             parse(environment, elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
-            logger.error(null, "Project does not contain a @Source annotation, should contain one @Source annotation");
+            logger.error(null, "Project does not contain a @Pack annotation, should contain one @Source annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {
-                logger.error(element, "Project contains " + elements.size() + " @Source annotations, should contain one @Source annotation");
+                logger.error(element, "Project contains " + elements.size() + " @Pack annotations, should contain one @Source annotation");
             }
         }
     }

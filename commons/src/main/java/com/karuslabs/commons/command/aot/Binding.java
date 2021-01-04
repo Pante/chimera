@@ -41,17 +41,19 @@ public abstract class Binding<T extends Element> {
     
     public static enum Pattern {
         
-        ARGUMENT_TYPE("An", "ArgumentType<?>", "type"),
-        COMMAND("A", "Command<CommandSender>", "command"),
-        EXECUTION("An", "Executable<CommandSender>", "command"),
-        REQUIREMENT("A", "Predicate<CommandSender>", "requirement"),
-        SUGGESTION_PROVIDER("A", "SuggestionProvider<CommandSender>", "suggestions");
+        ARGUMENT_TYPE(Group.ARGUMENT_TYPE, "An", "ArgumentType<?>", "type"),
+        COMMAND(Group.COMMAND, "A", "Command<CommandSender>", "command"),
+        EXECUTION(Group.COMMAND, "An", "Executable<CommandSender>", "command"),
+        REQUIREMENT(Group.REQUIREMENT, "A", "Predicate<CommandSender>", "requirement"),
+        SUGGESTION_PROVIDER(Group.SUGGESTION_PROVIDER, "A", "SuggestionProvider<CommandSender>", "suggestions");
         
+        public final Group group; 
         public final String article;
         public final String type;
         public final String noun;
         
-        private Pattern(String article, String type, String noun) {
+        private Pattern(Group group, String article, String type, String noun) {
+            this.group = group;
             this.article = article;
             this.type = type;
             this.noun = noun;
@@ -60,6 +62,10 @@ public abstract class Binding<T extends Element> {
         @Override
         public String toString() {
             return type;
+        }
+        
+        public static enum Group {
+            ARGUMENT_TYPE, COMMAND, REQUIREMENT, SUGGESTION_PROVIDER;
         }
         
     }
@@ -99,7 +105,7 @@ public abstract class Binding<T extends Element> {
         
         public static @Nullable Method capture(Types types, ExecutableElement site) {
             var type = site.getReturnType();
-            if (type.getKind() == TypeKind.VOID) {
+            if (type.getKind() == TypeKind.INT) {
                 return new Method(site, Pattern.COMMAND);
 
             } else if (type.getKind() == TypeKind.VOID) {

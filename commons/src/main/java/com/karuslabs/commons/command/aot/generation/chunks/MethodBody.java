@@ -45,7 +45,8 @@ public class MethodBody {
                      var name = visit(source, command);
                      source.line("commands.put(", name, ".getName(), ", name, ");");
                  }
-        source.unindent()
+          source.line("return commands;")
+              .unindent()
               .line("}");
     }
     

@@ -25,13 +25,14 @@ package com.karuslabs.commons.command.aot.generation.chunks;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
+import com.karuslabs.commons.command.aot.Binding.Pattern.Group;
 import com.karuslabs.puff.generation.Source;
 
-import java.util.Map;
+import java.util.*;
 
-import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
-import static com.karuslabs.commons.command.aot.Binding.Pattern.*;
+import static com.karuslabs.commons.command.aot.Binding.Pattern.Group.*;
 import static com.karuslabs.commons.command.aot.generation.chunks.Constants.*;
 import static com.karuslabs.puff.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
@@ -65,11 +66,11 @@ public class CommandInstantiation {
     void argument(Source source, Command command, String name) {
         source.line("var ", name, " = new Argument<>(")
               .indent()
-                .line(StringEscapeUtils.escapeJava(command.identity.name));
-                parameter(source, command, ARGUMENT_TYPE, NULL);
-                parameter(source, command, COMMAND, NULL);
-                parameter(source, command, Pattern.REQUIREMENT, Constants.REQUIREMENT);
-                parameter(source, command, SUGGESTION_PROVIDER, NULL);
+                .line(quote(StringEscapeUtils.escapeJava(command.identity.name)), ",");
+                parameter(source, command, ARGUMENT_TYPE, NULL, ",");
+                parameter(source, command, COMMAND, NULL, ",");
+                parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, ",");
+                parameter(source, command, SUGGESTION_PROVIDER, NULL, "");
         source.unindent()
               .line(");");
     }
@@ -77,9 +78,9 @@ public class CommandInstantiation {
     void literal(Source source, Command command, String name) {
         source.line("var ", name, " = new Literal<>(")
               .indent()
-                .line(StringEscapeUtils.escapeJava(command.identity.name));
-                 parameter(source, command, COMMAND, NULL);
-                 parameter(source, command, Pattern.REQUIREMENT, Constants.REQUIREMENT);
+                .line(quote(StringEscapeUtils.escapeJava(command.identity.name)), ",");
+                 parameter(source, command, COMMAND, NULL, ",");
+                 parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, "");
         source.unindent()
               .line(");");
         
@@ -88,18 +89,19 @@ public class CommandInstantiation {
         }
     }
     
-    void parameter(Source source, Command command, Pattern pattern, String defaultValue) {
-        var binding = command.patterns.get(pattern);
+    void parameter(Source source, Command command, Pattern.Group group, String defaultValue, String separator) {
+        var binding = command.groups.get(group);
         if (binding == null) {
-            source.line(defaultValue);
+            source.line(defaultValue, separator);
+            return;
         }
 
         var reciever = binding.site.getModifiers().contains(STATIC) ? command.site.getQualifiedName() : SOURCE;
         if (binding instanceof Field) {
-            source.line(reciever, ".", ((Field) binding).site.getSimpleName());
+            source.line(reciever, ".", ((Field) binding).site.getSimpleName(), separator);
             
         } else if (binding instanceof Method) {
-            lambdas.get(pattern).emit(source, command, (Method) binding);
+            lambdas.get(binding.pattern).emit(source, command, (Method) binding, separator);
         }
     }
     

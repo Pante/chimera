@@ -23,6 +23,8 @@
  */
 package com.karuslabs.puff.generation;
 
+import java.util.Collection;
+
 public class Source implements CharSequence {
     
     public static String arguments(Object... parameters) {
@@ -35,6 +37,22 @@ public class Source implements CharSequence {
         }
         return builder.append(')').toString();
     }
+    
+    public static String arguments(Collection<?> parameters) {
+        var builder = new StringBuilder().append('(');
+        int i = 0;
+        for (var parameter : parameters) {
+            builder.append(parameter);
+            if (i < parameters.size() - 1) {
+                builder.append(", ");
+            }
+            
+            i++;
+        }
+        
+        return builder.append(')').toString();
+    }
+    
     
     private final StringBuilder builder = new StringBuilder();
     private String indentation = "";

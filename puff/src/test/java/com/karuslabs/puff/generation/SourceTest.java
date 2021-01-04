@@ -23,6 +23,8 @@
  */
 package com.karuslabs.puff.generation;
 
+import java.util.List;
+
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,8 +35,13 @@ class SourceTest {
     
     
     @Test
-    void arguments() {
+    void arguments_array() {
         assertEquals("(1, 2, 3, 4)", Source.arguments(1, "2", 3, "4"));
+    }
+    
+    @Test
+    void arguments_collection() {
+        assertEquals("(1, 2, 3, 4)", Source.arguments(List.of(1, 2, 3, 4)));
     }
     
     

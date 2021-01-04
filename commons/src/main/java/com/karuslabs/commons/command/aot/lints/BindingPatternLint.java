@@ -39,15 +39,19 @@ public class BindingPatternLint extends Lint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        var bindings = new EnumMap<Pattern, Binding<?>>(Pattern.class);
-        var logged = EnumSet.noneOf(Pattern.class);
+        var bindings = new EnumMap<Pattern.Group, Binding<?>>(Pattern.Group.class);
+        var logged = EnumSet.noneOf(Pattern.Group.class);
         
         for (var binding : command.bindings.values()) {
-            var existing = bindings.put(binding.pattern, binding);
+            var existing = bindings.put(binding.pattern.group, binding);
+            if (existing == null) {
+                continue;
+            }
+            
             var message = binding.pattern.article + " " + binding.pattern.type + " is already bound to " + quote(command.path());
             
             logger.error(binding.site, message);
-            if (logged.add(binding.pattern)) {
+            if (logged.add(binding.pattern.group)) {
                 logger.error(existing.site, message);
             } 
         }

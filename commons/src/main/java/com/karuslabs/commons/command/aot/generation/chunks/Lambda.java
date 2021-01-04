@@ -31,6 +31,7 @@ import java.util.*;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
+import static com.karuslabs.puff.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class Lambda {
@@ -72,19 +73,19 @@ public class Lambda {
         this.returns = returns;
     }
     
-    public void emit(Source source, Command command, Method method) {
+    public void emit(Source source, Command command, Method method, String terminator) {
         var reciever = method.site.getModifiers().contains(STATIC) ? command.site.getQualifiedName() : Constants.SOURCE;
         var references = method.parameters(command);
         
         if (references.isEmpty()) {
-            source.line(reciever, "::", method.site.getSimpleName());
+            source.line(reciever, "::", method.site.getSimpleName(), terminator);
             
         } else {
             source.line(Source.arguments(parameters.keySet()), " -> {")
               .indent()
                 .line(returns ? "return " : "", reciever, ".", method.site.getSimpleName(), Source.arguments(desugar(source, command, references, method.site.getParameters())), ";")
               .unindent()
-              .line("};");
+              .line("}", terminator);
         }
     }
     
@@ -100,7 +101,7 @@ public class Lambda {
                 var name = reference.value.identity.name + counter[0]++;
                 
                 variables.add(name);
-                source.assign(name, "context.getArgument" + Source.arguments(reference.value.identity.name, reference.site.asType() + ".class"));
+                source.assign(name, "context.getArgument" + Source.arguments(quote(reference.value.identity.name), reference.site.asType() + ".class"));
             }
         }
         
