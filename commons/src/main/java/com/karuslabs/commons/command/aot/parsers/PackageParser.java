@@ -53,11 +53,11 @@ public class PackageParser implements Parser {
             parse(environment, elements.toArray(new Element[0])[0]);
             
         } else if (elements.isEmpty()) {
-            logger.error(null, "Project does not contain a @Pack annotation, should contain one @Source annotation");
+            logger.error(null, "Project does not contain a @Pack annotation, should contain a @Pack annotation");
             
         } else if (elements.size() > 1) {
             for (var element : elements) {
-                logger.error(element, "Project contains " + elements.size() + " @Pack annotations, should contain one @Source annotation");
+                logger.error(element, "Project contains " + elements.size() + " @Pack annotations, should contain one @Pack annotation");
             }
         }
     }
@@ -72,7 +72,7 @@ public class PackageParser implements Parser {
             
         } else if (source.endsWith(".java") || source.endsWith(".class")) {
             var parts = source.split("\\.");
-            logger.error(element, "File ends with " + quote("." + parts[parts.length - 1])+ ", should not end with file extension");
+            logger.error(element, "Package should not end with " + quote("." + parts[parts.length - 1])+ "");
             return;
             
         }  else if (!PACKAGE.reset(source).matches()) {

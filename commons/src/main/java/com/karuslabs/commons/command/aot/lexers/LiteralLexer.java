@@ -50,7 +50,7 @@ public abstract class LiteralLexer implements Lexer {
     @Override
     public List<Token> lex(Logger logger, Element element, String lexeme) {
         if (lexeme.contains("<") || lexeme.contains(">")) {
-            logger.error(element, lexeme, "contains \"<\"s and \">\"s", "a literal should not contain \"<\"s and \">\"s");
+            logger.error(element, lexeme, "contains '<' and/oe '>'", "a literal should not contain '<' and '>'");
             return EMPTY_LIST;
         }
         

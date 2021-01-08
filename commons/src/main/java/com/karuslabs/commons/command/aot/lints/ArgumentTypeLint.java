@@ -44,12 +44,12 @@ public class ArgumentTypeLint extends TypeLint {
                 }
             }
 
-            logger.error(command.site, "No ArgumentType<T> is bound to " + quote(command.path()) + ", an ArgumentType<T> should be bound to it");
+            logger.error(command.site, "No ArgumentType<T> is bound to " + quote(command.path()));
             
         } else {
             for (var binding : command.bindings.values()) {
                 if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
-                    logger.error(binding.site, "ArgumentType<T> is bound to " + quote(command.path()) + ", should only be bound to an argument");
+                    logger.error(binding.site, "ArgumentType<T> should only be bound to an argument");
                     return;
                 }
             }

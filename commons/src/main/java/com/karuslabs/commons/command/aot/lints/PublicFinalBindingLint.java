@@ -41,6 +41,7 @@ public class PublicFinalBindingLint extends TypeLint {
         super(logger, types);
     }
     
+    // incorrect
     @Override
     public void lint(Environment environment, Command command) {
         for (var binding : command.bindings.values()) {

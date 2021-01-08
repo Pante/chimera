@@ -30,11 +30,12 @@ import java.util.*;
 
 import static com.karuslabs.puff.Texts.quote;
 
-public class DuplicateArgumentLint extends Lint {
+// Does not work
+public class DuplicateCommandLint extends Lint {
 
     private final Map<Identity, Command> namespace = new HashMap<>();
     
-    public DuplicateArgumentLint(Logger logger) {
+    public DuplicateCommandLint(Logger logger) {
         super(logger);
     }
 

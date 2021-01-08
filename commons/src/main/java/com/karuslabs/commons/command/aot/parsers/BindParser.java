@@ -27,8 +27,6 @@ import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.commons.command.dispatcher.Dispatcher;
-import com.karuslabs.commons.command.tree.nodes.Literal;
 import com.karuslabs.puff.*;
 import com.karuslabs.puff.type.Find;
 
@@ -36,8 +34,6 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.util.SimpleElementVisitor9;
-
-import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -81,6 +77,7 @@ public class BindParser extends LexParser {
     public Class<? extends Annotation> annotation() {
         return Bind.class;
     }
+    
     
     abstract class Binder {
         void bind(Environment environment, Binding<?> binding, String[] commands) {
@@ -134,7 +131,7 @@ public class BindParser extends LexParser {
         
         void match(Environment environment, Map<Identity, Command> commands, List<Token> tokens, int index, Binding<?> binding) {
             for (var command : commands.values()) {
-                if (!matches.contains(command) && command.identity.equals(tokens.get(index))) {
+                if (!matches.contains(command) && command.identity.equals(tokens.get(index).identity)) {
                     if (index < tokens.size() - 1) {
                         match(environment, command.children, tokens, index + 1, binding);
                         
@@ -169,7 +166,7 @@ public class BindParser extends LexParser {
         public @Nullable Method visitExecutable(ExecutableElement element, Logger logger) {
             var method = Method.capture(types, element);
             if (method == null) {
-                logger.error(element, element.getSimpleName(), "has an invalid return type", "should return an int, void, boolean or CompletableFuture<Suggestions>");
+                logger.error(element, "Method: " + element.getSimpleName() + " returns an invalid type, should be an int, void, boolean or CompletableFuture<Suggestions>");
             }
             return method;
         }
@@ -178,25 +175,17 @@ public class BindParser extends LexParser {
         public @Nullable Field visitVariable(VariableElement element, Logger logger) {
             var field = Field.capture(types, element);
             if (field == null) {
-                logger.error(element, element.getSimpleName(), "has an invalid type", "should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
+                logger.error(element, "Method: " + element.getSimpleName() + " returns an invalid type, should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
             }
             return field;
         }
         
         @Override
         public @Nullable Binding<?> defaultAction(Element element, Logger logger) {
-            logger.error(element, "@Bind is used on an invalid target", "should annotate either a field or method");
+            logger.error(element, "@Bind is used on an invalid target, should annotate a field or method");
             return null;
         }
         
-    }
-    
-    void test() {
-        Dispatcher dispatcher = Dispatcher.of(null);
-        Literal<CommandSender> literal = Literal.of("name").build();
-        
-        
-        dispatcher.getRoot().addChild(literal);
     }
 
 }

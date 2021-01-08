@@ -38,23 +38,23 @@ public class ArgumentLexer implements Lexer {
     @Override
     public List<Token> lex(Logger logger, Element element, String lexeme) {
         if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
-            logger.error(element, lexeme, "is an invalid argument", "should be enclosed by \"<\" and \">\"");
+            logger.error(element, lexeme, "is not an argument", "should be surrounded by '<' and '>'");
             return EMPTY_LIST;
         }
         
         if (lexeme.contains("|")) {
-            logger.error(element, lexeme, "contains \"|\"", "an argument should not have aliases");
+            logger.error(element, lexeme, "contains '|'", "argument should not contain aliases");
             return EMPTY_LIST;
         }
         
         var name = lexeme.substring(1, lexeme.length() - 1);
         if (name.isBlank()) {
-            logger.error(element, lexeme, "is blank", "an argument should not be blank");
+            logger.error(element, lexeme, "should not be blank");
             return EMPTY_LIST;
         }
         
         if (name.startsWith("<") || name.endsWith(">")) {
-            logger.error(element, lexeme, "contains trailing \"<\"s or \">\"s");
+            logger.error(element, lexeme, "contains unnecessary '<' and/or '>'");
         }
         
         return List.of(memoizer.argument(name, lexeme));
