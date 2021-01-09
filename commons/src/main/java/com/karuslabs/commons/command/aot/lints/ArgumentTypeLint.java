@@ -25,9 +25,9 @@ package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Identity.Type;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.Satisfactory.Logger;
 
-import static com.karuslabs.puff.Texts.quote;
+import static com.karuslabs.Satisfactory.Texts.quote;
 
 public class ArgumentTypeLint extends TypeLint {
 

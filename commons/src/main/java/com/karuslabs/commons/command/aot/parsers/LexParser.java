@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.Satisfactory.Logger;
 
 public abstract class LexParser implements Parser {
 

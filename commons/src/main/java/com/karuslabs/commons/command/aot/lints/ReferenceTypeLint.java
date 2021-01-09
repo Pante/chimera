@@ -25,8 +25,8 @@ package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
-import com.karuslabs.puff.*;
-import com.karuslabs.puff.type.Walker;
+import com.karuslabs.Satisfactory.*;
+import com.karuslabs.Satisfactory.type.Walker;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 

@@ -29,8 +29,8 @@ import com.karuslabs.commons.command.aot.annotations.Bind;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
 import com.karuslabs.commons.command.dispatcher.Dispatcher;
 import com.karuslabs.commons.command.tree.nodes.Literal;
-import com.karuslabs.puff.*;
-import com.karuslabs.puff.type.Find;
+import com.karuslabs.Satisfactory.*;
+import com.karuslabs.Satisfactory.type.Find;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

@@ -6,11 +6,11 @@ This update adds argument type matching and overhauls code generation for the co
 
 ### Annotations
 
-Annotation processing related packages have been moved to new project, Puff.
+Annotation processing related packages have been moved to new project, Satisfactory.
 
 - Add `@Lazy`
 - Add `@Monad`
-- Remove `com.karuslabs.annotations.processor` - package has been moved to Puff, a new annotation processing project.
+- Remove `com.karuslabs.annotations.processor` - package has been moved to Satisfactory, a new annotation processing project.
 
 ### Commons
 
@@ -63,9 +63,9 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps
 - Remove `PotionBuilder.of(Material)` replaced with equivalent methods for different potion types
 
-### Puff
+### Satisfactory
 
-Puff is a library that simplifies the creation of annotation processors. It also contains utilities for matching `Element`s and `TypeMirror`s.
+Satisfactory is a library that simplifies the creation of annotation processors. It also contains utilities for matching `Element`s and `TypeMirror`s.
 
 ### Scribe
 

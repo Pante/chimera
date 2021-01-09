@@ -24,7 +24,7 @@
         
         <dependency>
             <groupId>com.karuslabs</groupId>
-            <artifactId>puff</artifactId>
+            <artifactId>satisfactory</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>

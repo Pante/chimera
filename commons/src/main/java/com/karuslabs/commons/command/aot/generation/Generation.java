@@ -25,8 +25,8 @@ package com.karuslabs.commons.command.aot.generation;
 
 import com.karuslabs.commons.command.aot.Environment;
 import com.karuslabs.commons.command.aot.generation.chunks.*;
-import com.karuslabs.puff.Logger;
-import com.karuslabs.puff.generation.Source;
+import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.Satisfactory.generation.Source;
 
 import java.io.IOException;
 import javax.annotation.processing.*;

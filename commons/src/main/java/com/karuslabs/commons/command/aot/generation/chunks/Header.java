@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.aot.generation.chunks;
 
-import com.karuslabs.puff.generation.Source;
+import com.karuslabs.Satisfactory.generation.Source;
 
 import java.time.LocalDateTime;
 

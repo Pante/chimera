@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Identity.Type;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.Satisfactory.Logger;
 
 public class ArgumentPositionLint extends Lint {
 

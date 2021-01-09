@@ -24,13 +24,13 @@
 package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.puff.Logger;
-import com.karuslabs.puff.assertion.matches.Match;
+import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.Satisfactory.assertion.matches.Match;
 
 import java.util.Set;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.puff.assertion.Assertions.contains;
+import static com.karuslabs.Satisfactory.assertion.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
 public class PublicFinalBindingLint extends TypeLint {

@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot.lints;
 
 import com.karuslabs.commons.command.aot.Types;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.Satisfactory.Logger;
 
 public abstract class TypeLint extends Lint {
 

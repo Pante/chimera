@@ -26,7 +26,7 @@ package com.karuslabs.commons.command.aot.generation.chunks;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.Binding.Pattern.Group;
-import com.karuslabs.puff.generation.Source;
+import com.karuslabs.Satisfactory.generation.Source;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import static com.karuslabs.commons.command.aot.Binding.Pattern.Group.*;
 import static com.karuslabs.commons.command.aot.generation.chunks.Constants.*;
-import static com.karuslabs.puff.Texts.quote;
+import static com.karuslabs.Satisfactory.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class CommandInstantiation {

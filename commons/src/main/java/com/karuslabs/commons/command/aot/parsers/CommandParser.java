@@ -25,7 +25,7 @@ package com.karuslabs.commons.command.aot.parsers;
 
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.*;
+import com.karuslabs.Satisfactory.*;
 import java.lang.annotation.Annotation;
 
 import java.util.*;

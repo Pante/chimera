@@ -26,8 +26,8 @@ package com.karuslabs.commons.command.aot.parsers;
 import com.karuslabs.commons.command.aot.generation.Out;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Pack;
-import com.karuslabs.puff.Logger;
-import com.karuslabs.puff.type.Find;
+import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.Satisfactory.type.Find;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import static com.karuslabs.commons.command.aot.annotations.Pack.RELATIVE_PACKAGE;
-import static com.karuslabs.puff.Texts.quote;
+import static com.karuslabs.Satisfactory.Texts.quote;
 
 public class PackageParser implements Parser {
 

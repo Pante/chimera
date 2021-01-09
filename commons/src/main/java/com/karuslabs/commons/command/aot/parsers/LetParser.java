@@ -27,15 +27,15 @@ import com.karuslabs.commons.command.aot.Binding.*;
 import com.karuslabs.commons.command.aot.*;
 import com.karuslabs.commons.command.aot.annotations.Let;
 import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.puff.*;
-import com.karuslabs.puff.type.Find;
+import com.karuslabs.Satisfactory.*;
+import com.karuslabs.Satisfactory.type.Find;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.puff.Texts.quote;
+import static com.karuslabs.Satisfactory.Texts.quote;
 
 public class LetParser extends LexParser {
     

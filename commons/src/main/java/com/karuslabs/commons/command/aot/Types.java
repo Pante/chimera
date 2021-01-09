@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot;
 
 import com.karuslabs.commons.command.*;
-import com.karuslabs.puff.type.TypeMirrors;
+import com.karuslabs.Satisfactory.type.TypeMirrors;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;

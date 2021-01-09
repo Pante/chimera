@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot.lexers;
 
 import com.karuslabs.commons.command.aot.Token;
-import com.karuslabs.puff.Logger;
+import com.karuslabs.Satisfactory.Logger;
 
 import java.util.*;
 import javax.lang.model.element.Element;

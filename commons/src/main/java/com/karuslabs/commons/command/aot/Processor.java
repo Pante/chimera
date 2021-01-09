@@ -33,7 +33,7 @@ import com.karuslabs.commons.command.aot.lexers.*;
 import com.karuslabs.commons.command.aot.lexers.Lexer.Memoizer;
 import com.karuslabs.commons.command.aot.lints.*;
 import com.karuslabs.commons.command.aot.parsers.*;
-import com.karuslabs.puff.AnnotationProcessor;
+import com.karuslabs.Satisfactory.AnnotationProcessor;
 
 import java.util.*;
 import javax.annotation.processing.*;

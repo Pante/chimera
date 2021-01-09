@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot;
 
 import com.karuslabs.commons.command.aot.generation.Out;
-import com.karuslabs.puff.type.Find;
+import com.karuslabs.Satisfactory.type.Find;
 
 import java.util.*;
 import javax.lang.model.element.*;

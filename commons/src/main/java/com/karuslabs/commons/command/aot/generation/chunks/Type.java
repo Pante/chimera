@@ -24,7 +24,7 @@
 package com.karuslabs.commons.command.aot.generation.chunks;
 
 import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.puff.generation.Source;
+import com.karuslabs.Satisfactory.generation.Source;
 
 public class Type {
     

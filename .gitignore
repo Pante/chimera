@@ -59,7 +59,8 @@ Temporary Items
 /scribe/maven-plugin/target/
 /scribe/gradle-plugin/target/
 /scribe/standalone/target/
-/puff/target/
-/Puffy/target/
+/Satisfactory/target/
+/Satisfactoryy/target/
 
 *.iml
+/satisfactory/target/
