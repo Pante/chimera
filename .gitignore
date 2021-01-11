@@ -53,13 +53,6 @@ Temporary Items
 /commons/target/
 /annotations/target/
 /commons/nbproject/
-/scribe/target/
-/scribe/annotations/target/
-/scribe/core/target/
-/scribe/maven-plugin/target/
-/scribe/gradle-plugin/target/
-/scribe/standalone/target/
-/puff/target/
-/Puffy/target/
 
 *.iml
+/typist/target/

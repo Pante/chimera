@@ -18,11 +18,10 @@
         <release>11</release>
     </properties>
 
-
     <modules>
         <module>annotations</module>
         <module>commons</module>
-        <module>puff</module>
+        <module>typist</module>
     </modules>
           
           
@@ -40,6 +39,16 @@
     
     
     <repositories>     
+        <repository>
+            <id>elementary-releases</id>
+            <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
+        </repository>
+        
+        <repository>
+            <id>elementary-snapshots</id>
+            <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
+        </repository>
+        
         <repository>
             <id>noti-spigot-mirror</id>
             <url>https://repo.karuslabs.com/repository/spigot/</url>
@@ -61,7 +70,7 @@
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.8.0</version>
+            <version>3.9.0</version>
             <scope>compile</scope>
         </dependency>
         
@@ -96,14 +105,14 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.6.28</version>
+            <version>3.7.0</version>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.6.28</version>
+            <version>3.7.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

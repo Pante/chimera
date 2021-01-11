@@ -6,17 +6,17 @@ This update adds argument type matching and overhauls code generation for the co
 
 ### Annotations
 
-Annotation processing related packages have been moved to new project, Puff.
+Annotation processing related packages have been moved to new project, Satisfactory.
 
 - Add `@Lazy`
 - Add `@Monad`
-- Remove `com.karuslabs.annotations.processor` - package has been moved to Puff, a new annotation processing project.
+- Remove `com.karuslabs.annotations.processor` - package has been moved to Satisfactory, a new annotation processing project.
 
 ### Commons
 
 We went full capitalist and privatized (and finalized) several package private fields and methods. `ItemStack` builders
-also received an styling update and safety improvements. More importantly, Chimera command code generation has been rewritten
-to support inferred parameters for methods annotated with `@Bind`.
+also received an styling update and safety improvements. More importantly, Chimera command code generation has been moved to it's own project, 
+Typist.
 
 - Add `@Let`
 - Add `BlockDataBuilder`
@@ -47,6 +47,7 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Add `PotionBuilder.potion()`
 - Add `PotionBuilder.splash()`
 - Change `@Source` to `@Pack`
+- Change classes from 
 - Change classes in `com.karuslabs.commons.item.builders` to be final
 - Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
 - Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`
@@ -55,17 +56,17 @@ to support inferred parameters for methods annotated with `@Bind`.
 - Change `KnowledgeBookBuilder.of(Material)` to `KnowledgeBookBuilder.of()` - only knowledge books contain a `KnowledgeBookMeta`
 - Change `SkullBuilder` to `HeadBuilder`
 - Change `TropicalFishBucketBuilder.of(Material)` to `TropicalFishBucketBuilder.of()` - only tropical fish buckets contain a `TropicalFishBucketMeta`
-- Fix Chimera command generation not checking if predicate methods annotated with `@Bind` throw exceptions
 - Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
-- Remove `com.karuslabs.commons.command.aot.resolvers`
+- Remove `com.karuslabs.commons.command.aot.*`
 - Remove methods prefixed with `as` in `com.karuslabs.commons.item.ItemBuilder` - replaced with equivalent methods without prefixes
 - Remove `LeatherArmourBuilder.of(Material)` - replaced with equivalent methods for specific leather armour items
 - Remove `MapBuilder.of(Material)` - replaced with equivalent methods for empty and filled maps
 - Remove `PotionBuilder.of(Material)` replaced with equivalent methods for different potion types
 
-### Puff
+## Typist
 
-Puff is a library that simplifies the creation of annotation processors. It also contains utilities for matching `Element`s and `TypeMirror`s.
+Command code generation has been rewritten to support inferred parameters for methods annotated with `@Bind`.
+This project was originally part of commons but has since been moved into Typist since this release.
 
 ### Scribe
 
