@@ -21,19 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identity.Type;
-
-import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Identity.Type;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
-import static com.karuslabs.commons.command.aot.lints.ConflictingAliasLint.Kind.*;
-import static com.karuslabs.Satisfactory.Texts.quote;
+import static com.karuslabs.typist.lints.ConflictingAliasLint.Kind.*;
+import static com.karuslabs.satisfactory.Texts.quote;
 
 public class ConflictingAliasLint extends Lint {
     

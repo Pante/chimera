@@ -21,20 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation.chunks;
+package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Binding.*;
-import com.karuslabs.commons.command.aot.Binding.Pattern.Group;
-import com.karuslabs.Satisfactory.generation.Source;
+import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.typist.Command;
+import com.karuslabs.typist.Binding.*;
+import com.karuslabs.typist.Binding.Pattern.Group;
 
 import java.util.*;
 
 import org.apache.commons.text.StringEscapeUtils;
 
-import static com.karuslabs.commons.command.aot.Binding.Pattern.Group.*;
-import static com.karuslabs.commons.command.aot.generation.chunks.Constants.*;
-import static com.karuslabs.Satisfactory.Texts.quote;
+import static com.karuslabs.typist.Binding.Pattern.Group.*;
+import static com.karuslabs.typist.generation.chunks.Constants.*;
+import static com.karuslabs.satisfactory.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class CommandInstantiation {

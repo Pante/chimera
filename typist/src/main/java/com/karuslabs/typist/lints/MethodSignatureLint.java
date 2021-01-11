@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Binding.Pattern;
-import com.karuslabs.commons.command.aot.annotations.Let;
-import com.karuslabs.Satisfactory.Logger;
-import com.karuslabs.Satisfactory.assertion.Method;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.satisfactory.assertion.Method;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Binding.Pattern;
+import com.karuslabs.commons.command.annotations.Let;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.*;
 
-import static com.karuslabs.commons.command.aot.Binding.Pattern.*;
-import static com.karuslabs.Satisfactory.assertion.Assertions.*;
+import static com.karuslabs.typist.Binding.Pattern.*;
+import static com.karuslabs.satisfactory.assertion.Assertions.*;
 
 public class MethodSignatureLint extends TypeLint {
 

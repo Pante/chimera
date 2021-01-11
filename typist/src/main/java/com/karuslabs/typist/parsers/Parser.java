@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.Environment;
+import com.karuslabs.typist.Environment;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

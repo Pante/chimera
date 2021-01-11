@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.generation.Out;
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Pack;
-import com.karuslabs.Satisfactory.Logger;
-import com.karuslabs.Satisfactory.type.Find;
+import com.karuslabs.commons.command.annotations.Pack;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.typist.Environment;
+import com.karuslabs.typist.generation.Out;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.aot.annotations.Pack.RELATIVE_PACKAGE;
-import static com.karuslabs.Satisfactory.Texts.quote;
+import static com.karuslabs.commons.command.annotations.Pack.RELATIVE_PACKAGE;
+import static com.karuslabs.satisfactory.Texts.quote;
 
 public class PackageParser implements Parser {
 

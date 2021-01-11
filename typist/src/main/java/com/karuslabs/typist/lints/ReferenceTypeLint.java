@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Binding.*;
-import com.karuslabs.Satisfactory.*;
-import com.karuslabs.Satisfactory.type.Walker;
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.type.Walker;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Binding.*;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 

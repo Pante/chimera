@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.typist.lexers.Lexer;
 
 public abstract class LexParser implements Parser {
 

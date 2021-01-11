@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Identity.Type;
-import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Identity.Type;
 
-import static com.karuslabs.Satisfactory.Texts.quote;
+import static com.karuslabs.satisfactory.Texts.quote;
 
 public class ArgumentTypeLint extends TypeLint {
 

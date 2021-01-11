@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.Satisfactory.*;
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.lexers.Lexer;
+
 import java.lang.annotation.Annotation;
-
 import java.util.*;
 import javax.lang.model.element.*;
 
@@ -40,7 +40,7 @@ public class CommandParser extends LexParser {
     @Override
     public void parse(Environment environment, Element element) {
         var namespace = environment.namespace(element);
-        var lines = element.getAnnotation(com.karuslabs.commons.command.aot.annotations.Command.class).value();
+        var lines = element.getAnnotation(com.karuslabs.commons.command.annotations.Command.class).value();
         if (lines.length == 0) {
             logger.error(element, "@Command annotation should not be empty");
             return;
@@ -88,7 +88,7 @@ public class CommandParser extends LexParser {
     
     @Override
     public Class<? extends Annotation> annotation() {
-        return com.karuslabs.commons.command.aot.annotations.Command.class;
+        return com.karuslabs.commons.command.annotations.Command.class;
     }
 
 }

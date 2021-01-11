@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lexers;
+package com.karuslabs.typist.lexers;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.Satisfactory.Logger;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.typist.*;
 
 import java.util.*;
 import javax.lang.model.element.Element;

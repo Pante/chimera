@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.lints;
+package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.Satisfactory.Logger;
-import com.karuslabs.Satisfactory.assertion.matches.Match;
+import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.satisfactory.assertion.matches.Match;
+import com.karuslabs.typist.*;
 
 import java.util.Set;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.Satisfactory.assertion.Assertions.contains;
+import static com.karuslabs.satisfactory.assertion.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
 public class PublicFinalBindingLint extends TypeLint {

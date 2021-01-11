@@ -21,16 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.Binding.*;
-import com.karuslabs.commons.command.aot.annotations.Bind;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.commons.command.dispatcher.Dispatcher;
-import com.karuslabs.commons.command.tree.nodes.Literal;
-import com.karuslabs.Satisfactory.*;
-import com.karuslabs.Satisfactory.type.Find;
+import com.karuslabs.commons.command.annotations.Bind;
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Binding.*;
+import com.karuslabs.typist.lexers.Lexer;
 
 import java.lang.annotation.Annotation;
 import java.util.*;

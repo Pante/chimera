@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.parsers;
+package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.aot.Binding.*;
-import com.karuslabs.commons.command.aot.*;
-import com.karuslabs.commons.command.aot.annotations.Let;
-import com.karuslabs.commons.command.aot.lexers.Lexer;
-import com.karuslabs.Satisfactory.*;
-import com.karuslabs.Satisfactory.type.Find;
+import com.karuslabs.commons.command.annotations.Let;
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.typist.*;
+import com.karuslabs.typist.Binding.*;
+import com.karuslabs.typist.lexers.Lexer;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.Satisfactory.Texts.quote;
+import static com.karuslabs.satisfactory.Texts.quote;
 
 public class LetParser extends LexParser {
     

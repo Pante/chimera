@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.aot.generation.chunks;
+package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.commons.command.aot.Environment;
-import com.karuslabs.Satisfactory.generation.Source;
+import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.typist.Environment;
 
 public class Type {
     
