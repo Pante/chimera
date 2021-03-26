@@ -23,9 +23,10 @@
  */
 package com.karuslabs.typist.parsers;
 
+import com.karuslabs.elementary.processor.Texts;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.commons.command.annotations.Bind;
-import com.karuslabs.satisfactory.*;
-import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.elementary.processor.type.Find;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
 import com.karuslabs.typist.lexers.Lexer;

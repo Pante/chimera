@@ -23,8 +23,8 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
-import com.karuslabs.satisfactory.assertion.Method;
+import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.old.Method;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.Pattern;
 import com.karuslabs.commons.command.annotations.Let;
@@ -35,7 +35,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.*;
 
 import static com.karuslabs.typist.Binding.Pattern.*;
-import static com.karuslabs.satisfactory.assertion.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 
 public class MethodSignatureLint extends TypeLint {
 
@@ -50,10 +50,24 @@ public class MethodSignatureLint extends TypeLint {
             min(0, subtype(RuntimeException.class))
         );
         
+        // Rename match to equal
+        // No more builders, use vararg builder with type inference
+        
+        method(
+            annotations(contains(no)),
+            equal(PUBLIC, FINAL),
+            supertype(),
+            parameters(equal(
+                times(1, variable(type(types.cotext))),
+                min(0, variable(annotations(contains(no(Let.class))))))
+            )),
+            exceptions,
+        ).or("Method signature ");
         methods.put(COMMAND, method().parameters(match(
                 exactly(1, variable().type(supertype(types.context))), 
                 annotated
             )).exceptions(exceptions).condition(
+                "Method signature should match T1 method(CommandContext<CommandSender>, !(@Let T1)...) throws CommandSyntaxException"
                 "Parameters should contain 1 CommandContext<CommandSender>. Other parameters should be annotated with @Let.\n" +
                 "In addition, method should only throw a CommandSyntaxException."
             ).get()

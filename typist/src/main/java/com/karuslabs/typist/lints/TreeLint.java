@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.*;
 
 import java.util.List;

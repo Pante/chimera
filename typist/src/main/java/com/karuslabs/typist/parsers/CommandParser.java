@@ -23,7 +23,8 @@
  */
 package com.karuslabs.typist.parsers;
 
-import com.karuslabs.satisfactory.*;
+import com.karuslabs.elementary.processor.Texts;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.lexers.Lexer;
 

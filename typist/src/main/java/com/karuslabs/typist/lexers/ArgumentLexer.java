@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lexers;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.Token;
 
 import java.util.List;

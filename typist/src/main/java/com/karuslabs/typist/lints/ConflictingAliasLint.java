@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Identity.Type;
 
@@ -32,7 +32,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 
 import static com.karuslabs.typist.lints.ConflictingAliasLint.Kind.*;
-import static com.karuslabs.satisfactory.Texts.quote;
+import static com.karuslabs.elementary.processor.Texts.quote;
 
 public class ConflictingAliasLint extends Lint {
     

@@ -26,7 +26,7 @@ package com.karuslabs.typist;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.Lazy;
-import com.karuslabs.satisfactory.AnnotationProcessor;
+import com.karuslabs.elementary.processor.AnnotationProcessor;
 import com.karuslabs.typist.Binding.Pattern;
 import com.karuslabs.typist.generation.Generation;
 import com.karuslabs.typist.generation.chunks.*;

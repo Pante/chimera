@@ -23,14 +23,14 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
-import com.karuslabs.satisfactory.assertion.matches.Match;
+import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.old.Match;
 import com.karuslabs.typist.*;
 
 import java.util.Set;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.satisfactory.assertion.Assertions.contains;
+import static com.karuslabs.old.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
 public class PublicFinalBindingLint extends TypeLint {

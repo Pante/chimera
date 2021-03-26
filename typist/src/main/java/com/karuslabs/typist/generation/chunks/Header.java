@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.elementary.processor.Source;
 
 import java.time.LocalDateTime;
 

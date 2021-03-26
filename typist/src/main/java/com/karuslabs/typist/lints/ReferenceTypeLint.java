@@ -23,8 +23,9 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.*;
-import com.karuslabs.satisfactory.type.Walker;
+import com.karuslabs.elementary.processor.Texts;
+import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.elementary.processor.type.Walker;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
 

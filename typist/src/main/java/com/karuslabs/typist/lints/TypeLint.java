@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.Types;
 
 public abstract class TypeLint extends Lint {

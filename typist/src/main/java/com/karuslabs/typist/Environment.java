@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist;
 
-import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.elementary.processor.type.Find;
 import com.karuslabs.typist.generation.Out;
 
 import java.util.*;

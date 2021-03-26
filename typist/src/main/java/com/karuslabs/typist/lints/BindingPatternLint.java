@@ -23,13 +23,13 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.Pattern;
 
 import java.util.*;
 
-import static com.karuslabs.satisfactory.Texts.quote;
+import static com.karuslabs.elementary.processor.Texts.quote;
 
 public class BindingPatternLint extends Lint {
 

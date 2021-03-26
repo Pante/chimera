@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
 
@@ -31,7 +31,7 @@ import java.util.*;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
-import static com.karuslabs.satisfactory.Texts.quote;
+import static com.karuslabs.elementary.processor.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class Lambda {

@@ -24,7 +24,7 @@
 package com.karuslabs.typist.lints;
 
 import com.karuslabs.typist.*;
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 
 public abstract class Lint {
     

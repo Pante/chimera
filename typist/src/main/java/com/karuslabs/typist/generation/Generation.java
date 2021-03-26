@@ -23,8 +23,8 @@
  */
 package com.karuslabs.typist.generation;
 
-import com.karuslabs.satisfactory.Logger;
-import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.typist.generation.chunks.*;
 

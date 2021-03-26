@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.parsers;
 
-import com.karuslabs.satisfactory.Logger;
+import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.lexers.Lexer;
 
 public abstract class LexParser implements Parser {

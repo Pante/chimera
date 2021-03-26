@@ -24,7 +24,7 @@
 package com.karuslabs.typist;
 
 import com.karuslabs.commons.command.*;
-import com.karuslabs.satisfactory.type.TypeMirrors;
+import com.karuslabs.elementary.processor.type.TypeMirrors;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -67,5 +67,7 @@ public class Types extends TypeMirrors {
         suggestionsBuilder = super.type(SuggestionsBuilder.class);
         suggestionProvider = super.specialize(SuggestionProvider.class, sender);
     }
+    
+    Type(T.class, (CommandSender.class))
 
 }

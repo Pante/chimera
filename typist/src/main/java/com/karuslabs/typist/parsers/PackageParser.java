@@ -24,8 +24,8 @@
 package com.karuslabs.typist.parsers;
 
 import com.karuslabs.commons.command.annotations.Pack;
-import com.karuslabs.satisfactory.Logger;
-import com.karuslabs.satisfactory.type.Find;
+import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.elementary.processor.type.Find;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.typist.generation.Out;
 
@@ -35,7 +35,7 @@ import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import static com.karuslabs.commons.command.annotations.Pack.RELATIVE_PACKAGE;
-import static com.karuslabs.satisfactory.Texts.quote;
+import static com.karuslabs.elementary.processor.Texts.quote;
 
 public class PackageParser implements Parser {
 

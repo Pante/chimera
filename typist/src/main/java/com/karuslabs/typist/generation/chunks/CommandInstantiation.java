@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.satisfactory.generation.Source;
+import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.Command;
 import com.karuslabs.typist.Binding.*;
 import com.karuslabs.typist.Binding.Pattern.Group;
@@ -34,7 +34,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import static com.karuslabs.typist.Binding.Pattern.Group.*;
 import static com.karuslabs.typist.generation.chunks.Constants.*;
-import static com.karuslabs.satisfactory.Texts.quote;
+import static com.karuslabs.elementary.processor.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
 public class CommandInstantiation {
