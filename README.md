@@ -2,8 +2,6 @@
   <img src = "https://i.imgur.com/iHgSlXk.png">
 </p>
 
-**Chimera is temporarily on "hiatus" until I finish working on [elementary](https://github.com/Pante/elementary), an annotation processing test tool. Why? When working on the new (and complex) annotation processor for chimera, it became apparent that the existing tools for testing annotation processors was insufficent. I decided I needed to create my own tools in order to properly test the annotation processor. Frankly, I rather delay releasing a project if it means I have to release code that hasn't been sufficently tested as it will be a diservice to those who use the library.**
-
 Karus Labs' mono-repository for spigot libraries & tools. 
 * Allows Brigadier command framework usage in Spigot plugins
 * Code-generation driven command framework 

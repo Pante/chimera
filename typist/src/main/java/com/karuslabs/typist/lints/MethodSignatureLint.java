@@ -34,9 +34,12 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.*;
 
+<<<<<<< Updated upstream
 import static com.karuslabs.typist.Binding.Pattern.*;
 import static com.karuslabs.old.Assertions.*;
 
+=======
+>>>>>>> Stashed changes
 public class MethodSignatureLint extends TypeLint {
 
     private final Map<Pattern, Method> methods = new EnumMap<>(Pattern.class);
@@ -55,10 +58,10 @@ public class MethodSignatureLint extends TypeLint {
         
         method(
             annotations(contains(no)),
-            equal(PUBLIC, FINAL),
+            modifiers(equal(PUBLIC, FINAL)),
             supertype(),
             parameters(equal(
-                times(1, variable(type(types.cotext))),
+                range(1, 3, variable(type(types.cotext))),
                 min(0, variable(annotations(contains(no(Let.class))))))
             )),
             exceptions,
@@ -88,6 +91,8 @@ public class MethodSignatureLint extends TypeLint {
             .exceptions(match(no(subtype(Exception.class))))
             .condition("Method should match Predicate<CommandSender>").get()
         );
+        
+
         
         methods.put(SUGGESTION_PROVIDER, method().parameters(match(
                 exactly(1, variable().type(supertype(types.context))),
