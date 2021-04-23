@@ -23,12 +23,12 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 
 import java.util.*;
 
-import static com.karuslabs.elementary.processor.Texts.quote;
+import static com.karuslabs.utilitary.Texts.quote;
 
 // Does not work
 public class DuplicateCommandLint extends Lint {

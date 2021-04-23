@@ -23,19 +23,19 @@
  */
 package com.karuslabs.typist.parsers;
 
-import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.commons.command.annotations.Let;
-import com.karuslabs.elementary.processor.type.Find;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
 import com.karuslabs.typist.lexers.Lexer;
+import com.karuslabs.utilitary.Logger;
+import com.karuslabs.utilitary.type.Find;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.elementary.processor.Texts.quote;
+import static com.karuslabs.utilitary.Texts.quote;
 
 public class LetParser extends LexParser {
     

@@ -27,6 +27,9 @@ import java.lang.annotation.*;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Documents that the annotated target is immutable.
+ */
 @Documented
 @Retention(SOURCE)
 public @interface Immutable {

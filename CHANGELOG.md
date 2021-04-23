@@ -3,13 +3,15 @@
 **Compatible Spigot versions: 1.16.4**
 
 This update adds argument type matching and overhauls code generation for the command framework. The Scribe project has also been removed.
+Underneath the hood, we have streamlined the project's infrastructure and documentation. Documentation is now applied on the master branch
+and the staging branch has been removed.
 
 ### Annotations
 
 Annotation processing related packages have been moved to new project, Satisfactory.
 
 - Add `@Lazy`
-- Add `@Monad`
+- Remove `@ValueType` - redundant due to the introduction of records in JDK 16
 - Remove `com.karuslabs.annotations.processor` - package has been moved to Satisfactory, a new annotation processing project.
 
 ### Commons

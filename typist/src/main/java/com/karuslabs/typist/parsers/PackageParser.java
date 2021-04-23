@@ -24,10 +24,10 @@
 package com.karuslabs.typist.parsers;
 
 import com.karuslabs.commons.command.annotations.Pack;
-import com.karuslabs.elementary.processor.Logger;
-import com.karuslabs.elementary.processor.type.Find;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.typist.generation.Out;
+import com.karuslabs.utilitary.Logger;
+import com.karuslabs.utilitary.type.Find;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -35,7 +35,7 @@ import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import static com.karuslabs.commons.command.annotations.Pack.RELATIVE_PACKAGE;
-import static com.karuslabs.elementary.processor.Texts.quote;
+import static com.karuslabs.utilitary.Texts.quote;
 
 public class PackageParser implements Parser {
 

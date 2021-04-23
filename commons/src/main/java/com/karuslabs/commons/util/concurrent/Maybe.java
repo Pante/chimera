@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public final @Monad class Maybe<T> extends FutureTask<T> {
+public final class Maybe<T> extends FutureTask<T> {
     
     private static final Callable<?> CALLABLE = () -> null;
     

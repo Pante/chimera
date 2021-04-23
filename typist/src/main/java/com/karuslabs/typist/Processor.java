@@ -26,7 +26,6 @@ package com.karuslabs.typist;
 import com.google.auto.service.AutoService;
 
 import com.karuslabs.annotations.Lazy;
-import com.karuslabs.elementary.processor.AnnotationProcessor;
 import com.karuslabs.typist.Binding.Pattern;
 import com.karuslabs.typist.generation.Generation;
 import com.karuslabs.typist.generation.chunks.*;
@@ -34,11 +33,11 @@ import com.karuslabs.typist.lexers.*;
 import com.karuslabs.typist.lexers.Lexer.Memoizer;
 import com.karuslabs.typist.lints.*;
 import com.karuslabs.typist.parsers.*;
+import com.karuslabs.utilitary.AnnotationProcessor;
 
 import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-
 
 import static javax.lang.model.SourceVersion.RELEASE_11;
 

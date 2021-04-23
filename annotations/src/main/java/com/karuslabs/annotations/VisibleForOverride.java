@@ -28,6 +28,9 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Documents that the annotated method is visible for subclasses to override.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(METHOD)

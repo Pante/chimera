@@ -27,7 +27,11 @@ import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
-   
+
+/**
+ * Documents that the annotated field is lazily initialised and may not be available
+ * immediately after it's containing class was constructed.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)

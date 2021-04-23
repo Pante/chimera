@@ -28,6 +28,9 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Documents that the annotated target delegates execution to an underlying type.
+ */
 @Documented
 @Retention(SOURCE)
 @Target({TYPE, METHOD})

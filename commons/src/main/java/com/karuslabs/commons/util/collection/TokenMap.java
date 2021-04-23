@@ -102,7 +102,7 @@ public interface TokenMap<N, T> {
         return new Key<>(name, type);
     }
     
-    public final @ValueType class Key<N, T> {
+    public final class Key<N, T> {
 
         private N name;
         private Class<? extends T> type;

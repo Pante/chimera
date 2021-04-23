@@ -28,9 +28,12 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Documents that the annotated target is a blocking operation.
+ */
 @Documented
 @Retention(SOURCE)
-@Target({TYPE, METHOD, CONSTRUCTOR})
+@Target({METHOD, CONSTRUCTOR})
 public @interface Blocking {
     
 }

@@ -23,8 +23,8 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.Environment;
+import com.karuslabs.utilitary.Source;
 
 public class Type {
     

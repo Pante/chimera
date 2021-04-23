@@ -23,86 +23,57 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.elementary.processor.Logger;
-import com.karuslabs.old.Method;
+import com.karuslabs.commons.command.annotations.Let;
+import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.Pattern;
-import com.karuslabs.commons.command.annotations.Let;
+import com.karuslabs.satisfactory.Method;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.*;
+import javax.lang.model.element.ExecutableElement;
 
-<<<<<<< Updated upstream
+import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.satisfactory.sequence.Sequences.*;
 import static com.karuslabs.typist.Binding.Pattern.*;
-import static com.karuslabs.old.Assertions.*;
 
-=======
->>>>>>> Stashed changes
 public class MethodSignatureLint extends TypeLint {
 
     private final Map<Pattern, Method> methods = new EnumMap<>(Pattern.class);
     
     public MethodSignatureLint(Logger logger, Types types) {
         super(logger, types);
-        
-        var annotated = min(0, variable().annotations(contains(Let.class)));
-        var exceptions = match(
+    
+        var exceptions = equal(
             max(1, subtype(CommandSyntaxException.class)),
             min(0, subtype(RuntimeException.class))
         );
         
-        // Rename match to equal
-        // No more builders, use vararg builder with type inference
+        methods.put(COMMAND, method(parameters(equal(
+                times(1, variable(supertype(types.context))),
+                min(0, variable(annotations(contains(Let.class))))
+            )), exceptions
+        ).or("Method signature should match \"method(CommandContext<CommandSender>, @Let T...) throws CommandSyntaxException\""));
         
-        method(
-            annotations(contains(no)),
-            modifiers(equal(PUBLIC, FINAL)),
-            supertype(),
-            parameters(equal(
-                range(1, 3, variable(type(types.cotext))),
-                min(0, variable(annotations(contains(no(Let.class))))))
-            )),
-            exceptions,
-        ).or("Method signature ");
-        methods.put(COMMAND, method().parameters(match(
-                exactly(1, variable().type(supertype(types.context))), 
-                annotated
-            )).exceptions(exceptions).condition(
-                "Method signature should match T1 method(CommandContext<CommandSender>, !(@Let T1)...) throws CommandSyntaxException"
-                "Parameters should contain 1 CommandContext<CommandSender>. Other parameters should be annotated with @Let.\n" +
-                "In addition, method should only throw a CommandSyntaxException."
-            ).get()
-        );
+        methods.put(EXECUTION, method(parameters(equal(
+                times(1, variable(supertype(types.context))),
+                times(1, variable(supertype(types.sender), annotations(contains(no(Let.class))))),
+                min(0, variable(annotations(contains(Let.class))))
+            )), exceptions
+        ).or("Method signature should match \"method(CommandContext<CommandSender>, CommandSender, @Let T...\""));
         
-        methods.put(EXECUTION, method().parameters(match(
-                exactly(1, variable().type(supertype(types.context))),
-                exactly(1, variable().type(supertype(types.sender)).annotations(not(contains(Let.class)))),
-                annotated
-            )).exceptions(exceptions).condition(
-                "Parameters should contain 1 CommandContext<CommandSender> and 1 CommandSender. Other parameters should be annotated with @Let.\n" +
-                "In addition, method should only throw a CommandSyntaxException."
-            ).get()
-        );
+        methods.put(REQUIREMENT, method(
+            parameters(equal(times(1, variable(supertype(types.sender))))),
+            exceptions(equal(not(subtype(Throwable.class))))
+        ).or("Method signature should match Predicate<CommandSender"));
         
-        methods.put(REQUIREMENT, method()
-            .parameters(match(exactly(1, variable().type(supertype(types.sender)))))
-            .exceptions(match(no(subtype(Exception.class))))
-            .condition("Method should match Predicate<CommandSender>").get()
-        );
-        
-
-        
-        methods.put(SUGGESTION_PROVIDER, method().parameters(match(
-                exactly(1, variable().type(supertype(types.context))),
-                exactly(1, variable().type(supertype(SuggestionsBuilder.class)).annotations(not(contains(Let.class)))),
-                annotated
-           )).exceptions(exceptions).condition(
-                "Parameters should contain 1 CommandContext<CommandSender> and 1 SuggestionsBuilder. Other parameters should be annotated with @Let.\n" +
-                "In addition, method should only throw a CommandSyntaxException."
-           ).get()
-        );
+        methods.put(SUGGESTION_PROVIDER, method(parameters(equal(
+                times(1, variable(supertype(types.context))),
+                times(1, variable(supertype(SuggestionsBuilder.class), annotations(contains(no((Let.class))))))
+            )), exceptions
+        ).or("Method signature should match \"method(CommandContext<CommandSender>, SuggestionBuilder, @Let T...\""));
     }
 
     @Override
@@ -113,7 +84,7 @@ public class MethodSignatureLint extends TypeLint {
             }
             
             var method = methods.get(binding.pattern);
-            if (!method.test(types, binding.site)) {
+            if (!method.test(types, (ExecutableElement) binding.site)) {
                 logger.error(binding.site, method.condition());
             }
         }

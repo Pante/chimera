@@ -27,12 +27,10 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-
 @FunctionalInterface
 public interface Execution<T> extends Command<T> {
     
     void execute(T source, OptionalContext<T> context) throws CommandSyntaxException;
-    
     
     @Override
     default int run(CommandContext<T> context) throws CommandSyntaxException {

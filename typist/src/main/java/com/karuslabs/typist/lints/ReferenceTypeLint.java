@@ -23,11 +23,11 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.elementary.processor.Texts;
-import com.karuslabs.elementary.processor.Logger;
-import com.karuslabs.elementary.processor.type.Walker;
+import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
+import com.karuslabs.utilitary.*;
+import com.karuslabs.utilitary.type.Walker;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 

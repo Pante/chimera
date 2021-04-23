@@ -24,11 +24,9 @@
  */
 package com.karuslabs.typist;
 
-import com.karuslabs.annotations.ValueType;
-
 import java.util.*;
 
-public final @ValueType class Identity {
+public final class Identity {
     
     public final Type type;
     public final String name;

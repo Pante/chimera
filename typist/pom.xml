@@ -36,6 +36,13 @@
         </dependency>
         
         <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>utilitary</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.9</version>
@@ -61,6 +68,13 @@
             <artifactId>brigadier</artifactId>
             <version>1.0.17</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>elementary</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     

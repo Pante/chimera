@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.elementary.processor.Logger;
+import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Identity.Type;
 

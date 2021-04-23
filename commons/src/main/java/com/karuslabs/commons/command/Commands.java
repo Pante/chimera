@@ -65,7 +65,6 @@ public @Static class Commands {
         var children = (Map<String, CommandNode<T>>) CHILDREN.get(command);
         var literals = (Map<String, ?>) LITERALS.get(command);
         var arguments = (Map<String, ?>) ARGUMENTS.get(command);
-
         
         var removed = children.remove(child);
         literals.remove(child);

@@ -23,8 +23,8 @@
  */
 package com.karuslabs.typist.lexers;
 
-import com.karuslabs.elementary.processor.Logger;
 import com.karuslabs.typist.*;
+import com.karuslabs.utilitary.Logger;
 
 import java.util.*;
 import javax.lang.model.element.Element;

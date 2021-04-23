@@ -23,31 +23,30 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.elementary.processor.Logger;
-import com.karuslabs.old.Match;
+import com.karuslabs.utilitary.Logger;
+import com.karuslabs.satisfactory.Assertion;
 import com.karuslabs.typist.*;
 
 import java.util.Set;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.old.Assertions.contains;
+import static com.karuslabs.satisfactory.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
 public class PublicFinalBindingLint extends TypeLint {
 
-    private final Match<Set<Modifier>> match = contains(PUBLIC, FINAL);
+    private final Assertion<Set<Modifier>> assertion = contains(PUBLIC, FINAL);
 
     public PublicFinalBindingLint(Logger logger, Types types) {
         super(logger, types);
     }
     
-    // incorrect
     @Override
     public void lint(Environment environment, Command command) {
         for (var binding : command.bindings.values()) {
-            if (!match.test(types, binding.site)) {
-                var element = binding instanceof VariableElement ? "field should be " : "method should be ";
-                logger.error(binding.site, element + match.describe(binding.site));
+            if (!assertion.test(types, binding.site.getModifiers())) {
+                var prefix = binding instanceof VariableElement ? "field should be " : "method should be ";
+                logger.error(binding.site, prefix + assertion.condition());
             }
         }
     }

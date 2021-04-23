@@ -23,8 +23,6 @@
  */
 package com.karuslabs.commons.util;
 
-import com.karuslabs.annotations.Monad;
-
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.*;
@@ -33,7 +31,7 @@ import java.util.stream.Stream;
 import static com.karuslabs.commons.util.WeakValue.EMPTY;
 import static java.util.stream.Stream.ofNullable;
 
-public @Monad interface Weak<T> {
+public interface Weak<T> {
     
     static <T> Weak<T> of(T value) {
         return new WeakValue<>(value);
@@ -74,7 +72,7 @@ public @Monad interface Weak<T> {
     
 }
 
-final @Monad class WeakValue<T> extends WeakReference<T> implements Weak<T> {
+final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     static final Weak<?> EMPTY = new WeakValue<>(null);
     

@@ -23,8 +23,8 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.Command;
+import com.karuslabs.utilitary.Source;
 
 import java.util.*;
 import javax.lang.model.element.TypeElement;

@@ -23,6 +23,8 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.annotations.Ignored;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.*;
 
@@ -35,9 +37,8 @@ public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender
     
     BIOMES, ENTITIES, RECIPES, SOUNDS;
     
-    
     @Override
-    public CompletableFuture<Suggestions> getSuggestions(CommandContext<CommandSender> context, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> getSuggestions(@Ignored CommandContext<CommandSender> context, SuggestionsBuilder builder) {
         return builder.buildFuture();
     }
     

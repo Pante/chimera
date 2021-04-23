@@ -10,7 +10,6 @@
     <name>Chimera</name>
     <description>Mono-repository for Spigot libararies and tools</description>
     
-    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -25,7 +24,6 @@
         <module>commons</module>
         <module>typist</module>
     </modules>
-          
           
     <distributionManagement>
         <repository>

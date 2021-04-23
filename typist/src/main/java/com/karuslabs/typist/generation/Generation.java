@@ -23,10 +23,9 @@
  */
 package com.karuslabs.typist.generation;
 
-import com.karuslabs.elementary.processor.Logger;
-import com.karuslabs.elementary.processor.Source;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.typist.generation.chunks.*;
+import com.karuslabs.utilitary.*;
 
 import java.io.IOException;
 import javax.annotation.processing.*;
