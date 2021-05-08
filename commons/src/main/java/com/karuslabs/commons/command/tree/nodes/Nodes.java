@@ -32,20 +32,47 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.function.Consumer;
 
-
+/**
+ * Utility classes and methods that manipulate {@code CommandNodes}.
+ */
 public @Static class Nodes {
 
+    /**
+     * A builder for {@code CommandNode}s.
+     * 
+     * @param <T> the type of the source
+     * @param <B> this
+     */
     public static abstract class Builder<T, B extends Builder<T, B>> extends ArgumentBuilder<T, B> {
     
+        /**
+         * Sets the command to be executed.
+         * 
+         * @param command the command to be executed
+         * @return this
+         */
         public B executes(Execution<T> command) {
             return executes((Command<T>) command);
         }
 
-
+        /**
+         * Adds an optional child built using the given builder. Children of the
+         * optional child are also added to this builder.
+         * 
+         * @param builder the builder which is to build the optional child
+         * @return {@code this}
+         */
         public B optionally(ArgumentBuilder<T, ?> builder) {
             return optionally(builder.build());
         }
 
+        /**
+         * Adds an optional child. Children of the optional child are also added 
+         * to this builder.
+         * 
+         * @param node the optional child
+         * @return {@code this}
+         */
         public B optionally(CommandNode<T> node) {
             then(node);
             for (var child : node.getChildren()) {
@@ -57,7 +84,21 @@ public @Static class Nodes {
 
     }
     
-    
+    /**
+     * Adds the child to the node. If present, the existing child and its aliases 
+     * will be replaced and discarded respectively without merging with the given
+     * child.
+     * 
+     * Since this method is called from an overridden {@code CommandNode.addChild(CommandNode)},
+     * it cannot call {@code CommandNode.addChild(CommandNode)} as it will cause a
+     * stack overflow. Hence, {@code addition} is used to call {@code super.addChild(CommandNode<T>)}.
+     * 
+     * @param <Node> the type of the node
+     * @param <T> the type of the source
+     * @param node the node to which {@code child} is added
+     * @param child the child
+     * @param addition the consumer
+     */
     static <Node extends CommandNode<T> & Mutable<T>, T> void addChild(Node node, CommandNode<T> child, Consumer<CommandNode<T>> addition) {
         var current = node.getChild(child.getName());
         if (current != null) {

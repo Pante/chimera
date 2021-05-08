@@ -37,15 +37,24 @@ import org.bukkit.craftbukkit.v1_16_R3.command.CraftCommandMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
+/**
+ * A {@code PlatformMap} that wraps and registers {@code LiteralCommandNode}s
+ * to Spigot's {@code CommandMap}.
+ */
 class SpigotMap implements PlatformMap {
     
-    String prefix;
-    Plugin plugin;
-    CraftCommandMap map;
+    private final String prefix;
+    private final Plugin plugin;
+    private final CraftCommandMap map;
     @Nullable CommandDispatcher<CommandSender> dispatcher;
     
-    
+    /**
+     * Creates a {@code SpigotMap} with the given parameters.
+     * 
+     * @param prefix the prefix
+     * @param plugin the owning plugin
+     * @param map the map to which commands are registered
+     */
     SpigotMap(String prefix, Plugin plugin, CraftCommandMap map) {
         this.prefix = prefix;
         this.plugin = plugin;
@@ -64,6 +73,23 @@ class SpigotMap implements PlatformMap {
         var wrapped = wrap(command);
         map.register(prefix, wrapped);
         return wrapped;
+    }
+    
+    /**
+     * Creates a {@code DispatcherCommand} that represents the given command.
+     * 
+     * @param command the command
+     * @return a {@code DispatcherCommand} that represents {@code command}
+     */
+    DispatcherCommand wrap(LiteralCommandNode<CommandSender> command) {
+        var aliases = new ArrayList<String>();
+        if (command instanceof Aliasable<?>) {
+            for (var alias : ((Aliasable<?>) command).aliases()) {
+                aliases.add(alias.getName());
+            }
+        }
+        
+        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
     }
     
     
@@ -86,18 +112,6 @@ class SpigotMap implements PlatformMap {
         command.unregister(map);
         
         return (DispatcherCommand) command;
-    }
-    
-    
-    DispatcherCommand wrap(LiteralCommandNode<CommandSender> command) {
-        var aliases = new ArrayList<String>();
-        if (command instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<?>) command).aliases()) {
-                aliases.add(alias.getName());
-            }
-        }
-        
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
     }
     
 }

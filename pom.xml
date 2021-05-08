@@ -82,13 +82,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.7.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.7.1</version>
@@ -131,9 +124,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
-                <configuration>
-                    <trimStackTrace>false</trimStackTrace>
-                </configuration>
             </plugin>
             
             <plugin>
@@ -183,6 +173,10 @@
                     <additionalOptions>-html5</additionalOptions>
                     <links>
                         <link>https://checkerframework.org/api/</link>
+                        <link>https://junit.org/junit5/docs/current/api/</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/annotations/apidocs</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/commons/apidocs</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/typist/apidocs</link>
                     </links>
                 </configuration>
                 <executions> 
@@ -216,7 +210,7 @@
                 <configuration>
                     <generateProjectInfo>false</generateProjectInfo>
                     <generateReports>false</generateReports>
-                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</stagingSiteURL>
+                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/elementary/${project.version}/</stagingSiteURL>
                 </configuration>
                 <dependencies>
                     <dependency>

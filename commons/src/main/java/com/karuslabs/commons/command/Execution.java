@@ -23,17 +23,38 @@
  */
 package com.karuslabs.commons.command;
 
+import com.karuslabs.annotations.Delegate;
+
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+/**
+ * A {@code Command} that supports optional arguments.
+ * 
+ * @param <T> the type of the source
+ */
 @FunctionalInterface
 public interface Execution<T> extends Command<T> {
     
+    /**
+     * Runs this {@code Execution} in the given {@code context}.
+     * 
+     * @param source the source
+     * @param context the context
+     * @throws CommandSyntaxException if this {@code Execution} could not be executed
+     */
     void execute(T source, OptionalContext<T> context) throws CommandSyntaxException;
     
+    /**
+     * Delegates execution to {@link #execute(Object, OptionalContext)}.
+     * 
+     * @param context the context
+     * @return {@link SINGLE_SUCCESS}
+     * @throws CommandSyntaxException if this {@code Execution} could not be executed
+     */
     @Override
-    default int run(CommandContext<T> context) throws CommandSyntaxException {
+    @Delegate default int run(CommandContext<T> context) throws CommandSyntaxException {
         execute(context.getSource(), new OptionalContext<>(context));
         return SINGLE_SUCCESS;
     }

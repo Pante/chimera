@@ -30,6 +30,21 @@ import java.util.function.Function;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code Trie} that associates a value with a string. The average time complexity 
+ * for look-up is {@code O(m)} where {@code m} is the length of the string to which 
+ * a value is mapped.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * An entry is created for each character in a string. It contains an array and 
+ * map of children entries, both of which are lazily initialised. Visible ASCII 
+ * characters are used as an index in the array of children entries while other 
+ * characters are used as a key in the map of children entries. Entries are traversed
+ * based on the next character of a string. This makes the time complexity of look-up 
+ * and other operations relative to the length of the string.
+ * 
+ * @param <V> the type of the values
+ */
 public class Trie<V> extends AbstractMap<String, V> {
     
     private final TrieEntry<V> root;
@@ -39,26 +54,60 @@ public class Trie<V> extends AbstractMap<String, V> {
     @Lazy KeySet keys;
     @Lazy ValueCollection values;
     
+    /**
+     * Creates a {@code Trie}.
+     */
     public Trie() {
         root = new TrieEntry<>((char) 0, null);
         size = 0;
         modifications = 0;
     }
     
-    
+    /**
+     * Returns the entries whose keys start with the given prefix.
+     * 
+     * @param prefix the prefix
+     * @return the entries whose keys start with the given prefix, or an empty set 
+     *         if this trie contains no entries that start with the given prefix
+     */
     public Set<Entry<String, V>> prefixEntries(String prefix) {
         return prefixed(prefix, entry -> entry, new HashSet<>());
     }
     
+    /**
+     * Returns the keys that start with the given prefix.
+     * 
+     * @param prefix the prefix
+     * @return the keys that start with the given prefix, or an empty set if this 
+     *         trie contains no keys that start with the given prefix
+     */
     public Set<String> prefixedKeys(String prefix) {
         return prefixed(prefix, entry -> entry.getKey(), new HashSet<>());
     }
     
+    /**
+     * Returns the values whose associated keys start with the given prefix.
+     * 
+     * @param prefix the prefix
+     * @return the values whose associated keys start with the given prefix, or
+     *         an empty collection if this trie contains no keys that start with
+     *         the given prefix
+     */
     public Collection<V> prefixedValues(String prefix) {
         return prefixed(prefix, entry -> entry.getValue(), new ArrayList<>());
     }
     
-    
+    /**
+     * Recursively maps the entries whose keys start with the prefix to the {@code collection}
+     * using the {@code mapper}.
+     * 
+     * @param <C> the type the collection
+     * @param <T> the type of the mapped elements
+     * @param prefix the prefix
+     * @param mapper the mapper
+     * @param collection the collection
+     * @return the collection of mapped elements
+     */
     <C extends Collection<T>, T> C prefixed(String prefix, Function<Entry<String, V>, T> mapper, C collection) {
         var entry = root;
         for (var character : prefix.toCharArray()) {
@@ -72,6 +121,15 @@ public class Trie<V> extends AbstractMap<String, V> {
         return collection;
     }
     
+    /**
+     * Recursively maps the entries to {@code leaves} using the given {@code mapper}.
+     * 
+     * @param <C> the type of the collection
+     * @param <T> the type of the mapped elements
+     * @param entry the current entry
+     * @param mapper the mapping function
+     * @param leaves the collection
+     */
     private <C extends Collection<T>, T> void map(TrieEntry<V> entry, Function<Entry<String, V>, T> mapper, C leaves) {
         if (entry.key != null) {
             leaves.add(mapper.apply(entry));
@@ -98,6 +156,13 @@ public class Trie<V> extends AbstractMap<String, V> {
         return contains(root, value);
     }
     
+    /**
+     * Recursively checks if the given entry or its children contains {@code value}.
+     * 
+     * @param entry the current entry
+     * @param value the value
+     * @return {@code true} if the {@code value} is present; else {@code false}
+     */
     private boolean contains(TrieEntry<V> entry, Object value) {
         if (entry.key != null && Objects.equals(entry.value, value)) {
             return true;

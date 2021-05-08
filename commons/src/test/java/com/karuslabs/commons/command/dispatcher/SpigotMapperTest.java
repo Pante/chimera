@@ -72,7 +72,7 @@ class SpigotMapperTest {
     
     @Test
     void requirement() {
-        assertSame(SpigotMapper.TRUE, mapper.requirement(Literal.of("a").requires(null).build()));
+        assertTrue(mapper.requirement(Literal.of("a").requires(null).build()).test(null));
         
         Predicate<CommandSender> predicate = mock(Predicate.class);
         mapper.requirement(Literal.of("a").requires(predicate).build()).test(listener);

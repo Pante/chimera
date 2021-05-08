@@ -34,10 +34,20 @@ import java.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
+/**
+ * A {@code CommandContext} that supports optional arguments. All operations are 
+ * forwarded to an underlying {@code CommandContext}.
+ * <br><br>
+ * <b>Implementation details: </b><br>
+ * {@code VarHandle}s are used to manipulate the arguments of a {@code CommandContext}.
+ * An {@code ExceptionInInitializerError} will be thrown if strong module encapsulation 
+ * is enabled.
+ * 
+ * @param <T> the type of the source
+ */
 public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
-    static final VarHandle ARGUMENTS;
+    private static final VarHandle ARGUMENTS;
     static {
         try {
             ARGUMENTS = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup())
@@ -48,33 +58,47 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
         }
     }
     
-    
     private final CommandContext<T> context;
     private @Lazy Map<String, ParsedArgument<T, ?>> arguments;
     
-    
+    /**
+     * Creates an {@code OptionalContext} with the given underlying {@code CommandContext}.
+     * 
+     * @param context the underlying context to which operations are forwarded
+     */
     public OptionalContext(CommandContext<T> context) {
         super(null, null, null, null, null, null, null, null, null, false);
         this.context = context;
     }
     
-    
+    /**
+     * Returns an argument with the given name and type if present.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name of the argument
+     * @param type the the type of the argument
+     * @return the argument if present; otherwise {@code null}
+     */
     public <V> @Nullable V getOptionalArgument(String name, Class<V> type) {
         return getOptionalArgument(name, type, null);
     }
     
+    /**
+     * Returns an argument with the given name and type, or {@code value} if the 
+     * argument does not exist.
+     * 
+     * @param <V> the type of the argument
+     * @param name the name of the argument
+     * @param type the type of the argument
+     * @param value the default value
+     * @return an argument if present; otherwise {@code value}
+     */
     public <V> V getOptionalArgument(String name, Class<V> type, V value) {
         if (arguments == null) {
             arguments = (Map<String, ParsedArgument<T, ?>>) ARGUMENTS.get(context);
         }  
         
-        var argument = arguments.get(name);
-        if (argument != null) {
-            return getArgument(name, type);
-            
-        } else {
-            return value;
-        }
+        return arguments.get(name) == null ? value : getArgument(name, type);
     }
     
     

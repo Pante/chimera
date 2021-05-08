@@ -35,9 +35,23 @@ import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
+/**
+ * A {@code LiteralCommandNode} that provides additional convenience methods and 
+ * support for aliases.
+ * 
+ * @param <T> the type of the source
+ */
 public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
     
+    /**
+     * Creates an alias command by the given alias and adds it to {@code command}
+     * if {@code command} is an {@code Aliasable}.
+     * 
+     * @param <T> the type of the source
+     * @param command the command
+     * @param alias the alias
+     * @return the alias command
+     */
     public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
         var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
  
@@ -52,40 +66,88 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         return literal;
     }
     
+    /**
+     * Creates a {@code Literal} builder with the given name.
+     * 
+     * @param <T> the type of the source
+     * @param name the name
+     * @return a {@code Builder}
+     */
     public static <T> Builder<T> builder(String name) {
         return new Builder<>(name);
     }
     
+    /**
+     * Creates a {@code Literal} builder with {@code CommandSender} as the source
+     * type and the given name.
+     * 
+     * @param name the name
+     * @return a {@code Builder}
+     */
     public static Builder<CommandSender> of(String name) {
         return new Builder<>(name);
     }
     
     
+    private final Consumer<CommandNode<T>> addition;
+    private final List<LiteralCommandNode<T>> aliases;
+    private final boolean alias;
     private CommandNode<T> destination;
-    private Consumer<CommandNode<T>> addition;
-    private List<LiteralCommandNode<T>> aliases;
-    private boolean alias;
     
-    
+    /**
+     * Creates a {@code Literal} with the given arguments.
+     * 
+     * @param name the name of the command
+     * @param command the command to be executed
+     * @param requirement the requirement
+     */
     public Literal(String name, Command<T> command, Predicate<T> requirement) {
         this(name, command, requirement, null, null, false);
     }
     
+    /**
+     * Creates a {@code Literal} with the given arguments.
+     * 
+     * @param name the name of the command
+     * @param execution the execution to be executed
+     * @param requirement the requirement
+     */
     public Literal(String name, Execution<T> execution, Predicate<T> requirement) {
         this(name, execution, requirement, null, null, false);
     }
     
-    
+    /**
+     * Creates a {@code Literal} with the given arguments.
+     * 
+     * @param name the name of the command
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param destination the destination to which this literal is redirected
+     * @param modifier the redirection modifier
+     * @param fork the fork
+     */
     public Literal(String name, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         this(name, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
     }
     
+    /**
+     * Creates a {@code Literal} with the given arguments.
+     * 
+     * @param name the name of the command
+     * @param aliases the aliases of this literal
+     * @param alias {@code true} if this {@code Literal} is an alias
+     * @param command the command to be executed
+     * @param requirement the requirement
+     * @param destination the destination to which this literal is redirected
+     * @param modifier the redirection modifier
+     * @param fork the fork
+     */
     public Literal(String name, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
-        this.destination = destination;
         this.addition = super::addChild;
         this.aliases = aliases;
         this.alias = alias;
+        this.destination = destination;
     }
     
     
@@ -145,25 +207,45 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         }
     }
 
-    
+    /**
+     * A {@code Literal} builder.
+     * 
+     * @param <T> the type of the source
+     */
     public static class Builder<T> extends Nodes.Builder<T, Builder<T>> {
         
         String name;
         List<String> aliases;
         
-        
+        /**
+         * Creates a {@code Builder} with the given name.
+         * 
+         * @see #builder(String) 
+         * @see #of(String) 
+         * 
+         * @param name the name
+         */
         protected Builder(String name) {
             this.name = name;
             this.aliases = new ArrayList<>(0);
         }
         
-        
+        /**
+         * Adds the given aliases.
+         * 
+         * @param aliases the aliases
+         * @return {@code this}
+         */
         public Builder<T> alias(String... aliases) {
             Collections.addAll(this.aliases, aliases);
             return this;
         }
-
         
+        /**
+         * Builds the {@code Literal}.
+         * 
+         * @return the {@code Literal}
+         */
         @Override
         public Literal<T> build() {
             var literal = new Literal<>(name, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
@@ -177,8 +259,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
 
             return literal;
         }
-        
-        
+                
         @Override
         protected Builder<T> getThis() {
             return this;

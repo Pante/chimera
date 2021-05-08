@@ -21,49 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.item.builders;
+package com.karuslabs.typist.annotations;
 
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.meta.*;
+import java.lang.annotation.*;
 
-/**
- * A {@code BlockData} builder.
- */
-public final class BlockDataBuilder extends Builder<BlockDataMeta, BlockDataBuilder> {
-    
-    /**
-     * Creates a {@code BlockDataBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code BlockDataBuilder}
-     */
-    public static BlockDataBuilder of(Material material) {
-        return new BlockDataBuilder(material);
-    }
-    
-    BlockDataBuilder(Material material) {
-        super(material);
-    }
-    
-    BlockDataBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
-    
-    /**
-     * Sets the {@code BlockData}.
-     * 
-     * @param data the {@code BlockData}
-     * @return {2code this}
-     */
-    public BlockDataBuilder data(BlockData data) {
-        meta.setBlockData(data);
-        return this;
-    }
-    
-    @Override
-    BlockDataBuilder self() {
-        return this;
-    }
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+@Documented
+@Retention(SOURCE)
+@Target(PARAMETER)
+public @interface Let {
+
+    public static String INFERRED_ARGUMENT = "${inferred argument}";
+    
+    String value() default INFERRED_ARGUMENT;
+    
 }

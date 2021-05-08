@@ -33,18 +33,26 @@ import java.util.*;
 
 import org.bukkit.command.*;
 
-
+/**
+ * A {@code RootCommandNode} that facilities the wrapping and registration of a 
+ * {@code CommandNode} to a {@code CommandMap}.
+ */
 public class Root extends RootCommandNode<CommandSender> implements Mutable<CommandSender> {
     
-    private String prefix;
-    private PlatformMap map;
+    private final String prefix;
+    private final PlatformMap map;
     
-    
+    /**
+     * Creates a {@code Root} with the name of the given plugin as a fallback prefix
+     * and {@code PlatformMap}.
+     * 
+     * @param prefix the fallback prefix
+     * @param map the {@code PlatformMap}
+     */
     public Root(String prefix, PlatformMap map) {
         this.prefix = prefix;
         this.map = map;
     }
-    
     
     @Override
     public void addChild(CommandNode<CommandSender> command) {
@@ -82,18 +90,31 @@ public class Root extends RootCommandNode<CommandSender> implements Mutable<Comm
         return Commands.remove(this, child);
     }
 
-    
+    /**
+     * Does nothing.
+     * 
+     * @param command ignored
+     */
     @Override
     public void setCommand(@Ignored com.mojang.brigadier.Command<CommandSender> command) {
         // Does nothing
     }
 
+    /**
+     * Does nothing.
+     * 
+     * @param destination ignored
+     */
     @Override
     public void setRedirect(@Ignored CommandNode<CommandSender> destination) {
         // Does nothing
     }
     
-    
+    /**
+     * Returns the {@code PlatformMap}.
+     * 
+     * @return the {@code PlatformMap} 
+     */
     public PlatformMap map() {
         return map;
     }

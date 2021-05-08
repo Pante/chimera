@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.annotations.Pack;
+import com.karuslabs.typist.annotations.Pack;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.typist.generation.Out;
 import com.karuslabs.utilitary.Logger;
@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.regex.*;
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.commons.command.annotations.Pack.RELATIVE_PACKAGE;
+import static com.karuslabs.typist.annotations.Pack.RELATIVE_PACKAGE;
 import static com.karuslabs.utilitary.Texts.quote;
 
 public class PackageParser implements Parser {

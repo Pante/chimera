@@ -26,8 +26,16 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
+/**
+ * A firework effect builder.
+ */
 public final class FireworkEffectBuilder extends Builder<FireworkEffectMeta, FireworkEffectBuilder> {
     
+    /**
+     * Creates a {@code FireworkEffectBuilder}.
+     * 
+     * @return a {@code FireworkEffectBuilder}
+     */
     public static FireworkEffectBuilder of() {
         return new FireworkEffectBuilder();
     }
@@ -40,6 +48,12 @@ public final class FireworkEffectBuilder extends Builder<FireworkEffectMeta, Fir
         super(source);
     }
     
+    /**
+     * Sets the main {@code FireworkEffect}.
+     * 
+     * @param effect the main effect
+     * @return {@code this}
+     */
     public FireworkEffectBuilder effect(FireworkEffect effect) {
         meta.setEffect(effect);
         return this;

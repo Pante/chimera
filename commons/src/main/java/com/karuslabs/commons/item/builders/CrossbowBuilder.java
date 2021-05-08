@@ -29,8 +29,16 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
+/**
+ * A crossbow builder.
+ */
 public final class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder> {
         
+    /**
+     * Creates a {@code CrossbowBuilder}.
+     * 
+     * @return a {@code CrossbowBuilder}
+     */
     public static CrossbowBuilder of() {
         return new CrossbowBuilder();
     }
@@ -43,11 +51,22 @@ public final class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder
         super(source);
     }
     
-    
+    /**
+     * Adds the projectiles.
+     * 
+     * @param projectiles the projectiles.
+     * @return {@code this}
+     */
     public CrossbowBuilder projectiles(Collection<ItemStack> projectiles) {
         return projectiles(projectiles.toArray(new ItemStack[0]));
     }
     
+    /**
+     * Sets the projectiles.
+     * 
+     * @param projectiles the projectiles.
+     * @return {@code this}
+     */
     public CrossbowBuilder projectiles(ItemStack... projectiles) {
         for (var projectile : projectiles) {
             meta.addChargedProjectile(projectile);
@@ -55,7 +74,6 @@ public final class CrossbowBuilder extends Builder<CrossbowMeta, CrossbowBuilder
         
         return this;
     }
-    
 
     @Override
     CrossbowBuilder self() {

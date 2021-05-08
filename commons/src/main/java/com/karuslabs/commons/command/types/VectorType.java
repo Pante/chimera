@@ -30,22 +30,35 @@ import java.util.List;
 
 import org.bukkit.util.Vector;
 
-
+/**
+ * A {@code Vector} type.
+ * 
+ * @see PointType
+ */
 public abstract class VectorType extends DynamicExampleType<Vector> {
     
+    /**
+     * A 2D {@code Vector} type.
+     */
     public static final VectorType FLAT = new Vector2DType();
+    /**
+     * A 3D {@code Vector} type.
+     */
     public static final VectorType CUBIC = new Vector3DType();
-    
     
     private final boolean cubic;
     
-    
+    /**
+     * Creates a {@code VectorType} with the given parameter.
+     * 
+     * @param examples the examples
+     * @param cubic {@code true} if this type is 3D, otherwise {@code false}
+     */
     VectorType(List<String> examples, boolean cubic) {
         super(examples);
         this.cubic = cubic;
     }
-    
-    
+
     @Override
     public Vector parse(StringReader reader) throws CommandSyntaxException {
         var vector = new Vector();
@@ -66,7 +79,9 @@ public abstract class VectorType extends DynamicExampleType<Vector> {
 
 }
 
-
+/**
+ * A 2D {@code Vector} type.
+ */
 class Vector2DType extends VectorType implements Cartesian2DType<Vector> {
 
     Vector2DType() {
@@ -75,7 +90,9 @@ class Vector2DType extends VectorType implements Cartesian2DType<Vector> {
     
 }
 
-
+/**
+ * A 3D {@code Vector} type.
+ */
 class Vector3DType extends VectorType implements Cartesian3DType<Vector> {
 
     Vector3DType() {

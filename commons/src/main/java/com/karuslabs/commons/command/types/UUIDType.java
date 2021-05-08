@@ -31,20 +31,16 @@ import java.util.UUID;
 
 import net.minecraft.server.v1_16_R3.ArgumentUUID;
 
-
-public final class UUIDType implements Type<UUID> {
+/**
+ * A {@code UUID} type.
+ */
+public class UUIDType implements Type<UUID> {
     
+    /**
+     * A {@code UUIDType}.
+     */
+    public static final UUIDType TYPE = new UUIDType();
     private static final ArgumentUUID UUID = new ArgumentUUID();
-    private static final UUIDType TYPE = new UUIDType();
-    
-    
-    public static UUIDType of() {
-        return TYPE;
-    }
-    
-    
-    private UUIDType() {}
-    
     
     @Override
     public UUID parse(StringReader reader) throws CommandSyntaxException {

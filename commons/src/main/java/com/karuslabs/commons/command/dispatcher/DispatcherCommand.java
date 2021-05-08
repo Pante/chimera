@@ -32,20 +32,41 @@ import java.util.List;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
-
+/**
+ * A {@link Command} that forwards execution to an underlying {@code CommandDispatcher}.
+ * <br><br>
+ * <b>Note:</b><br>
+ * This class was adapted from Spigot's {@code VanillaCommand}.
+ */
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     
-    Plugin plugin;
-    CommandDispatcher<CommandSender> dispatcher;
+    private final Plugin plugin;
+    final CommandDispatcher<CommandSender> dispatcher;
     
-    
+    /**
+     * Creates a {@code DispatcherCommand} with the given arguments.
+     * 
+     * @param name the name of this command
+     * @param plugin the owning plugin
+     * @param dispatcher the underlying dispatcher to which execution is forwarded
+     * @param usage the example usage for this command
+     * @param aliases the aliases
+     */
     public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage, List<String> aliases) {
         super(name, "", usage, aliases);
         this.plugin = plugin;
         this.dispatcher = dispatcher;
     }
     
-    
+     /**
+     * Forwards execution with the rejoined label and arguments to the underlying 
+     * {@code CommandDisaptcher} if the {@code sender} has sufficient permission.
+     * 
+     * @param sender the sender
+     * @param label the label
+     * @param arguments the arguments
+     * @return {@code true}
+     */
     @Override
     public boolean execute(CommandSender sender, String label, String... arguments) {
         if (!testPermission(sender)) {
@@ -79,7 +100,11 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
         return command;
     }
     
-
+    /**
+     * Returns the owning plugin.
+     * 
+     * @return the owning plugin
+     */
     @Override
     public Plugin getPlugin() {
         return plugin;

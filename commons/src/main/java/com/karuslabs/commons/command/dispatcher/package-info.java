@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.commons.command.annotations;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
-@Documented
-@Retention(SOURCE)
-@Target(PARAMETER)
-public @interface Let {
-
-    public static String INFERRED_ARGUMENT = "${inferred argument}";
-    
-    String value() default INFERRED_ARGUMENT;
-    
-}
+/**
+ * Classes that handles dispatching of commands.
+ */
+package com.karuslabs.commons.command.dispatcher;

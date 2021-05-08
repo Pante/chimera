@@ -37,11 +37,15 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.CommandMinecart;
 
-
-@Static class Exceptions {
-    
-    private static final Object[] EMPTY = new Object[0];
-    
+/**
+ * Utility methods that handle exceptions which occur when parsing and executing commands.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * This class was adapted from Spigot's {@code CommandDispatcher}. To be honest, 
+ * I copied the methods from Spigot and I have absolutely no clue what the methods 
+ * do. 
+ */
+@Static class Exceptions {    
     
     // Source: net.minecraft.server.CommandDispatcher #line: 188
     static void report(CommandSender sender, CommandSyntaxException exception) {

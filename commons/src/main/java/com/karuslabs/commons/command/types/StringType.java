@@ -25,15 +25,26 @@ package com.karuslabs.commons.command.types;
 
 import com.mojang.brigadier.arguments.*;
 
-
+/**
+ * A string type is mapped to a {@code StringArgumentType}.
+ * 
+ * @param <T> the type of the argument
+ */
 @FunctionalInterface
 public interface StringType<T> extends Type<T> {
     
+    /**
+     * A {code StringArgumentType} to which this {@code Type} is mapped.
+     */
     public static final StringArgumentType STRING = StringArgumentType.string();
     
-    
+    /**
+     * Returns a {@code StringArgumentType}.
+     * 
+     * @return a {@code StringArgumentType}
+     */
     @Override
-    public default StringArgumentType mapped() {
+    default StringArgumentType mapped() {
         return STRING;
     }
     

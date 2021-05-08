@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.parsers;
 
-import com.karuslabs.commons.command.annotations.Bind;
+import com.karuslabs.typist.annotations.Bind;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.*;
 import com.karuslabs.typist.lexers.Lexer;

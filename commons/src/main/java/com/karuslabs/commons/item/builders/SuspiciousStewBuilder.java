@@ -27,8 +27,16 @@ import org.bukkit.Material;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 
+/**
+ * A builder for suspicious stews.
+ */
 public final class SuspiciousStewBuilder extends Builder<SuspiciousStewMeta, SuspiciousStewBuilder> {
     
+    /**
+     * Creates a {@code SuspiciousStewBuilder}.
+     * 
+     * @return a {@code SuspiciousStewBuilder}
+     */
     public static SuspiciousStewBuilder of() {
         return new SuspiciousStewBuilder();
     }
@@ -41,12 +49,17 @@ public final class SuspiciousStewBuilder extends Builder<SuspiciousStewMeta, Sus
         super(source);
     }
     
-    
+    /**
+     * Adds the given effect.
+     * 
+     * @param effect the effect
+     * @param overwrite {@code true} to override an effect if present; else {@code false}
+     * @return {@code this}
+     */
     public SuspiciousStewBuilder effect(PotionEffect effect, boolean overwrite) {
         meta.addCustomEffect(effect, overwrite);
         return this;
     }
-    
 
     @Override
     SuspiciousStewBuilder self() {

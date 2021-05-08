@@ -23,9 +23,8 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.tree.nodes.Root;
 import com.karuslabs.commons.command.tree.TreeWalker;
-import com.karuslabs.commons.command.tree.nodes.Literal;
+import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
@@ -43,15 +42,33 @@ import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
-
+/**
+ * A {@code CommandDispatcher} that facilities the registration of commands between 
+ * a Spigot plugin and the server.
+ * <br><br>
+ * This dispatcher will <b>not</b> automatically synchronize newly registered commands 
+ * except when the server is started or reloaded to minimize unnecessary synchronizations. 
+ * All otherwise registered commands must be manually synchronized via {@link #update()}.
+ * <br><br>
+ * <b>Implementation details:</b><br>
+ * This dispatcher holds a reference to the internal dispatcher of the server. The 
+ * internal dispatcher is flushed after all plugins are enabled when the server 
+ * is either started or reloaded. In both cases, this dispatcher and the internal 
+ * dispatcher are synchronized automatically.
+ */
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
-    private MinecraftServer server;
-    private Root root;
     CommandDispatcher<CommandListenerWrapper> dispatcher;
-    TreeWalker<CommandSender, CommandListenerWrapper> walker;
-
+    private final MinecraftServer server;
+    private final Root root;
+    private final TreeWalker<CommandSender, CommandListenerWrapper> walker;
     
+    /**
+     * Creates a {@code Dispatcher} for the given plugin.
+     * 
+     * @param plugin the plugin
+     * @return a {@code Dispatcher}
+     */
     public static Dispatcher of(Plugin plugin) {
         var prefix = plugin.getName().toLowerCase();
         var server = ((CraftServer) plugin.getServer());
@@ -66,8 +83,15 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         return dispatcher;
     }
     
-    
-    protected Dispatcher(Server server, Root root) {
+    /**
+     * Creates a {@code Dispatcher} with the given arguments.
+     * 
+     * @see #of(Plugin) 
+     * 
+     * @param server the server
+     * @param root the root node of this dispatcher
+     */
+    Dispatcher(Server server, Root root) {
         super(root);
         this.root = root;
         this.server = ((CraftServer) server).getServer();
@@ -75,21 +99,32 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         this.walker = new TreeWalker<>(new SpigotMapper(this));
     }
     
-    
-    public void register(Map<String, CommandNode<CommandSender>> commands) {
+    /**
+     * Registers the given commands.
+     * 
+     * @param commands the commands
+     */
+    public void register(Map<String, ? extends CommandNode<CommandSender>> commands) {
         for (var command : commands.values()) {
             getRoot().addChild(command);
         }
     }
     
-    
+    /**
+     * Registers the command built using the given {@code builder}.
+     * 
+     * @param command the builder used to build the command to be registered
+     * @return the built command that was registered
+     */
     public Literal<CommandSender> register(Literal.Builder<CommandSender> command) {
         var literal = command.build();
         getRoot().addChild(literal);
         return literal;
     }
       
-    
+    /**
+     * Synchronizes this dispatcher with the server and clients.
+     */
     public void update() {
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
         for (var player : server.server.getOnlinePlayers()) {
@@ -97,16 +132,20 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         }
     }
     
-    
+    /**
+     * Synchronizes this dispatcher with the server when the server is started or
+     * reloaded.
+     * 
+     * @param event the event that denotes the starting and reloading of the server
+     */
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.getCommandDispatcher().a();
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
     
-    
     @Override
-    public Root getRoot()  {
+    public Root getRoot() {
         return root;
     }
     

@@ -30,11 +30,23 @@ import java.util.concurrent.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A cancellable result of an asynchronous computation with additional retrieval 
+ * methods.
+ * 
+ * @param <T> the type of the result
+ */
 public final class Maybe<T> extends FutureTask<T> {
     
     private static final Callable<?> CALLABLE = () -> null;
     
-    
+    /**
+     * Creates a completed {@code Maybe} that immediately returns the given value.
+     * 
+     * @param <T> the type of the result
+     * @param value the result.
+     * @return a completed {@code Maybe} with the given result
+     */
     public static <T> Maybe<T> value(T value) {
         var maybe =  new Maybe(CALLABLE);
         maybe.set(value);
@@ -42,16 +54,32 @@ public final class Maybe<T> extends FutureTask<T> {
         return maybe;
     }
     
-    
+    /**
+     * Creates a {@code Maybe} that will, upon running execute the given callable.
+     * 
+     * @param callable the callable task
+     */
     public Maybe(Callable<T> callable) {
         super(callable);
     }
 
+    /**
+     * Creates a {@code Maybe} that will, upon running, execute the given runnable,
+     * and result on successful completion.
+     * 
+     * @param runnable the runnable task
+     * @param result the result to return on successful completion.
+     */
     public Maybe(Runnable runnable, T result) {
         super(runnable, result);
     }
     
-    
+    /**
+     * Waits if necessary for the computation to complete, and then retrieves its
+     * result.
+     * 
+     * @return the computed result, or an empty {@code Optional} if an exception was thrown
+     */
     @Blocking
     public Optional<T> some() {
         try {
@@ -62,6 +90,15 @@ public final class Maybe<T> extends FutureTask<T> {
         }
     }
     
+    /**
+     * Waits if necessary for at most the given time for the computation to complete, 
+     * and then retrieves its result, if available.
+     * 
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result, or an empty {@code Optional} if an exception 
+     *         was thrown
+     */
     @Blocking
     public Optional<T> some(long timeout, TimeUnit unit) {
         try {
@@ -72,7 +109,12 @@ public final class Maybe<T> extends FutureTask<T> {
         }
     }
     
-    
+    /**
+     * Waits if necessary for the computation to complete, and then retrieves its
+     * result.
+     * 
+     * @return the computed result, or {@code null} if an exception was thrown
+     */
     @Blocking
     public @Nullable T value() {
         try {
@@ -83,6 +125,14 @@ public final class Maybe<T> extends FutureTask<T> {
         }
     }
     
+    /**
+     * Waits if necessary for at most the given time for the computation to complete, 
+     * and then retrieves its result, if available.
+     *
+     * @param timeout the maximum time to wait
+     * @param unit the time unit of the timeout argument
+     * @return the computed result, or {@code null} if an exception was thrown
+     */
     @Blocking
     public @Nullable T value(long timeout, TimeUnit unit) {
         try {

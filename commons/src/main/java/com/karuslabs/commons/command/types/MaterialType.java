@@ -36,16 +36,15 @@ import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
 
-
+/**
+ * A {@code Material} type. <b>Legacy materials are not supported</b>.
+ */
 public class MaterialType implements WordType<Material> {
     
-    static final Trie<Material> MATERIALS;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
-    static final List<String> EXAMPLES = List.of("flint_and_steel", "tnt");
-    
+    private static final Trie<Material> MATERIALS = new Trie<>();
+    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(material -> new LiteralMessage("Unknown material: " + material));
+    private static final List<String> EXAMPLES = List.of("flint_and_steel", "tnt");
     static {
-        MATERIALS = new Trie<>();
-        
         var warn = true;
         for (var material : Material.values()) {
             if (!material.isLegacy()) {
@@ -58,7 +57,13 @@ public class MaterialType implements WordType<Material> {
         }
     }
     
-    
+    /**
+     * Returns a material which key matches the string returned by the given {@code StringReader}.
+     * 
+     * @param reader the reader
+     * @return a material with the given key
+     * @throws CommandSyntaxException if a material with the given key does not exist
+     */
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString().toLowerCase();
@@ -70,7 +75,15 @@ public class MaterialType implements WordType<Material> {
         
         return material;
     }
-
+    
+    /**
+     * Returns the materials that start with the remaining input of the given {@code SuggesitonBuilder}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the material keys that start with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var material : MATERIALS.prefixedKeys(builder.getRemaining())) {

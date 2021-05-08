@@ -23,7 +23,7 @@
  */
 package com.karuslabs.typist.lints;
 
-import com.karuslabs.commons.command.annotations.Let;
+import com.karuslabs.typist.annotations.Let;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 import com.karuslabs.typist.Binding.Pattern;

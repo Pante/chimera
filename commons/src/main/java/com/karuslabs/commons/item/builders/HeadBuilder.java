@@ -34,12 +34,25 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
+/**
+ * A player head builder.
+ */
 public final class HeadBuilder extends Builder<SkullMeta, HeadBuilder> {
     
+    /**
+     * Creates a {@code HeadBuilder} for player heads.
+     * 
+     * @return a {@code HeadBuilder}
+     */
     public static HeadBuilder head() {
         return new HeadBuilder(Material.PLAYER_HEAD);
     }
     
+    /**
+     * Creates a {@code HeadBuilder} for player heads mounted on a block.
+     * 
+     * @return a {@code HeadBuilder}
+     */
     public static HeadBuilder wall() {
         return new HeadBuilder(Material.PLAYER_WALL_HEAD);
     }
@@ -52,20 +65,36 @@ public final class HeadBuilder extends Builder<SkullMeta, HeadBuilder> {
         super(source);
     }
     
-    
+    /**
+     * Sets the head.
+     * 
+     * @param head the head
+     * @return {@code this}
+     */
     public HeadBuilder head(Head head) {
         return head(head.id);
     }
     
+    /**
+     * Sets the UUID.
+     * 
+     * @param id the UUID of a player
+     * @return {@code this}
+     */
     public HeadBuilder head(UUID id) {
         return head(getOfflinePlayer(id));
     }
     
+    /**
+     * Sets the owning player.
+     * 
+     * @param player the player
+     * @return {@code this}
+     */
     public HeadBuilder head(@Nullable OfflinePlayer player) {
         meta.setOwningPlayer(player);
         return this;
     }
-    
     
     @Override
     HeadBuilder self() {

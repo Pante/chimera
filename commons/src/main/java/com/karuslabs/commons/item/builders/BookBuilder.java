@@ -31,8 +31,16 @@ import org.bukkit.inventory.meta.BookMeta.Generation;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A book builder.
+ */
 public final class BookBuilder extends Builder<BookMeta, BookBuilder> {
     
+    /**
+     * Creates a {@code BookBuilder}.
+     * 
+     * @return a {@code BookBuilder}
+     */
     public static BookBuilder of() {
         return new BookBuilder();
     }
@@ -45,34 +53,60 @@ public final class BookBuilder extends Builder<BookMeta, BookBuilder> {
         super(source);
     }
     
-    
+    /**
+     * Sets the author.
+     * 
+     * @param name the author
+     * @return {@code this}
+     */
     public BookBuilder author(@Nullable String name) {
         meta.setAuthor(name);
         return this;
     }
     
+    /**
+     * Sets the generation.
+     * 
+     * @param generation the generation
+     * @return {@code this}
+     */
     public BookBuilder generation(@Nullable Generation generation) {
         meta.setGeneration(generation);
         return this;
     }
     
-    
+    /**
+     * Adds the given pages.
+     * 
+     * @param pages the pages
+     * @return {@code this}
+     */
     public BookBuilder pages(Collection<String> pages) {
         return pages(pages.toArray(new String[0]));
     }
     
+    /**
+     * Adds the given pages.
+     * 
+     * @param pages the pages
+     * @return {@code this}
+     */
     public BookBuilder pages(String... pages) {
         meta.addPage(pages);
         return this;
     }
     
-    
+    /**
+     * Sets the title.
+     * 
+     * @param title the title
+     * @return {@code this}
+     */
     public BookBuilder title(@Nullable String title) {
         meta.setTitle(title);
         return this;
     }
     
-
     @Override
     BookBuilder self() {
         return this;

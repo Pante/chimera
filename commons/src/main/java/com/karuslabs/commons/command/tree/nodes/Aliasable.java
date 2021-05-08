@@ -27,11 +27,25 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import java.util.List;
 
-
+/**
+ * A node that has aliases and may itself be an alias.
+ * 
+ * @param <T> the type of the source
+ */
 public interface Aliasable<T> {
     
-    public List<LiteralCommandNode<T>> aliases();
+    /**
+     * Returns the aliases of this node.
+     * 
+     * @return the aliases of this node
+     */
+    List<LiteralCommandNode<T>> aliases();
     
-    public boolean isAlias();
+    /**
+     * Returns whether this node is an alias.
+     * 
+     * @return {@code true} if this node is an alias; otherwise {@code false}
+     */
+    boolean isAlias();
     
 }

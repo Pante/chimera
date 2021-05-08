@@ -26,8 +26,16 @@ package com.karuslabs.commons.item.builders;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
 
+/**
+ * A compass builder.
+ */
 public final class CompassBuilder extends Builder<CompassMeta, CompassBuilder> {
     
+    /**
+     * Creates a {@code CompassBuilder}.
+     * 
+     * @return a {@code CompassBuilder}
+     */
     public static CompassBuilder of() {
         return new CompassBuilder();
     }
@@ -40,11 +48,23 @@ public final class CompassBuilder extends Builder<CompassMeta, CompassBuilder> {
         super(source);
     }
     
+    /**
+     * Sets the lodestone.
+     * 
+     * @param lodestone the location of the lodestone
+     * @return {@code this}
+     */
     public CompassBuilder lodestone(Location lodestone) {
         meta.setLodestone(lodestone);
         return this;
     }
     
+    /**
+     * Sets whether to track a lodestone.
+     * 
+     * @param tracked {@code true} if the compass should track a lodestone; else {@code false}
+     * @return {@code this}
+     */
     public CompassBuilder track(boolean tracked) {
         meta.setLodestoneTracked(tracked);
         return this;

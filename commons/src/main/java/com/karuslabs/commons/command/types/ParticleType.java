@@ -35,21 +35,27 @@ import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Particle;
 
-
+/**
+ * A {@code Particle} type.
+ */
 public class ParticleType implements WordType<Particle> {
 
-    static final Trie<Particle> PARTICLES;
-    static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
-    static final List<String> EXAMPLES = List.of("barrier", "bubble_column_up");
-    
+    private static final Trie<Particle> PARTICLES = new Trie<>();
+    private static final DynamicCommandExceptionType EXCEPTION = new DynamicCommandExceptionType(particle -> new LiteralMessage("Unknown particle: " + particle));
+    private static final List<String> EXAMPLES = List.of("barrier", "bubble_column_up");
     static {
-        PARTICLES = new Trie<>();
         for (var particle : Particle.values()) {
             PARTICLES.put(particle.toString().toLowerCase(), particle);
         }
     }
     
-    
+    /**
+     * Returns a particle which name matches the string returned by the given {@code StringReader}.
+     * 
+     * @param reader the reader
+     * @return a particle with the given name
+     * @throws CommandSyntaxException if a particle with the given name does not exist
+     */
     @Override
     public Particle parse(StringReader reader) throws CommandSyntaxException {
         var name = reader.readUnquotedString().toLowerCase();
@@ -62,6 +68,14 @@ public class ParticleType implements WordType<Particle> {
         return particles;
     }
 
+    /**
+     * Returns the particles that start with the remaining input of the given {@code SuggesitonBuilder}.
+     * 
+     * @param <S> the type of the source
+     * @param context the context
+     * @param builder the builder
+     * @return the particle names that start with the remaining input
+     */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
         for (var particles : PARTICLES.prefixedKeys(builder.getRemaining())) {

@@ -28,21 +28,43 @@ import org.bukkit.inventory.meta.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-
+/**
+ * A leather armour builder.
+ */
 public final class LeatherArmourBuilder extends Builder<LeatherArmorMeta, LeatherArmourBuilder> {
     
+    /**
+     * Creates a {@code LeatherArmourBuilder} for a helmet.
+     * 
+     * @return a {@code LeatherArmourBuilder}
+     */
     public static LeatherArmourBuilder helmet() {
         return new LeatherArmourBuilder(Material.LEATHER_HELMET);
     }
     
+    /**
+     * Creates a {@code LeatherArmourBuilder} for a chestplate.
+     * 
+     * @return a {@code LeatherArmourBuilder}
+     */
     public static LeatherArmourBuilder chestplate() {
         return new LeatherArmourBuilder(Material.LEATHER_CHESTPLATE);
     }
     
+    /**
+     * Creates a {@code LeatherArmourBuilder} for a pair of leggings.
+     * 
+     * @return a {@code LeatherArmourBuilder}
+     */
     public static LeatherArmourBuilder leggings() {
         return new LeatherArmourBuilder(Material.LEATHER_LEGGINGS);
     }
     
+    /**
+     * Creates a {@code LeatherArmourBuilder} for a pair of boots.
+     * 
+     * @return a {@code LeatherArmourBuilder}
+     */
     public static LeatherArmourBuilder boots() {
         return new LeatherArmourBuilder(Material.LEATHER_BOOTS);
     }
@@ -55,12 +77,16 @@ public final class LeatherArmourBuilder extends Builder<LeatherArmorMeta, Leathe
         super(source);
     }
     
-    
+    /**
+     * Sets the colour.
+     * 
+     * @param colour the colour
+     * @return {@code this}
+     */
     public LeatherArmourBuilder colour(@Nullable Color colour) {
         meta.setColor(colour);
         return this;
     }
-    
     
     @Override
     LeatherArmourBuilder self() {

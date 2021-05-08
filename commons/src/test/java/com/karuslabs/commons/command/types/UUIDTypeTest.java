@@ -41,12 +41,12 @@ class UUIDTypeTest {
     void parse() throws CommandSyntaxException {
         var id = UUID.randomUUID();
         
-        assertEquals(id, UUIDType.of().parse(new StringReader(id.toString())));
+        assertEquals(id, UUIDType.TYPE.parse(new StringReader(id.toString())));
     }
     
     @Test
     void mapped() {
-        assertEquals(ArgumentUUID.class, UUIDType.of().mapped().getClass());
+        assertEquals(ArgumentUUID.class, UUIDType.TYPE.mapped().getClass());
     }
 
 } 

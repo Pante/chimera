@@ -32,7 +32,13 @@ import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.command.CommandSender;
 
-
+/**
+ * A {@code SuggestionProvider} where suggestions are provided by the client.
+ * <br><br>
+ * <b>Implementation details: </b><br>
+ * Since suggestions are provided by the client, a {@code ClientSuggestionProvider}
+ * will always provide no suggestions.
+ */
 public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
     
     BIOMES, ENTITIES, RECIPES, SOUNDS;

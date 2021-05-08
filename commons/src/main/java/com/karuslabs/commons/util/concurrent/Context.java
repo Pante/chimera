@@ -23,12 +23,26 @@
  */
 package com.karuslabs.commons.util.concurrent;
 
+/**
+ * The context in which a scheduled, repeating task is executed.
+ */
 public interface Context {
 
-    public static final long INFINITE = -1;
+    /**
+     * Denotes that a repeating task is executed an infinite number of times.
+     */
+    static final long INFINITE = -1;
     
+    /**
+     * Cancels subsequent execution.
+     */
     void cancel();
     
+    /**
+     * The remaining number of times the task is to be executed.
+     * 
+     * @return the remaining number of times
+     */
     long times();
     
 }
