@@ -176,12 +176,12 @@ public final class Point extends Location {
     /**
      * Returns whether the coordinate for the given axis is absolute or relative.
      * 
+     * @param axis the axis
+     * @return {@code true} if the coordinate for the given axis is relative
+     * 
      * @see #X
      * @see #Y
      * @see #Z
-     * 
-     * @param axis the axis
-     * @return {@code true} if the coordinate for the given axis is relative
      */
     public boolean relative(Axis axis) {
         return relative[axis.index];
@@ -190,13 +190,13 @@ public final class Point extends Location {
     /**
      * Sets the relativity of the coordinate for the given axis.
      * 
-     * @see #X
-     * @see #Y
-     * @see #Z
-     * 
      * @param axis the axis
      * @param relative {@code true} if the coordinate for the axis is relative
      * @return {@code this}
+     * 
+     * @see #X
+     * @see #Y
+     * @see #Z
      */
     public Point relative(Axis axis, boolean relative) {
         this.relative[axis.index] = relative;

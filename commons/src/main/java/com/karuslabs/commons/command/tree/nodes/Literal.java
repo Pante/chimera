@@ -220,10 +220,10 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         /**
          * Creates a {@code Builder} with the given name.
          * 
+         * @param name the name
+         * 
          * @see #builder(String) 
          * @see #of(String) 
-         * 
-         * @param name the name
          */
         protected Builder(String name) {
             this.name = name;

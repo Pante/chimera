@@ -94,7 +94,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     }
 
     /**
-     * Wraps a source of suggestions provided by the given command in a {@code SuggestionProvider
+     * Wraps a source of suggestions provided by the given command in a {@code SuggestionProvider}
      * that transforms a {@code CommandListenerWrapper} into a {@code CommandSender}.
      * 
      * A client-side {@code SuggestionProvider} is returned if the {@code SuggestionProvider}

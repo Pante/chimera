@@ -161,11 +161,11 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
         /**
          * Creates a {@code Builder} with the given name and type.
          * 
-         * @see #builder(String, ArgumentType) 
-         * @see #of(String, ArgumentType) 
-         * 
          * @param name the name
          * @param type the type
+         * 
+         * @see #builder(String, ArgumentType) 
+         * @see #of(String, ArgumentType) 
          */
         protected Builder(String name, ArgumentType<V> type) {
             this.name = name;

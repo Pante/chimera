@@ -86,10 +86,10 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     /**
      * Creates a {@code Dispatcher} with the given arguments.
      * 
-     * @see #of(Plugin) 
-     * 
      * @param server the server
      * @param root the root node of this dispatcher
+     * 
+     * @see #of(Plugin) 
      */
     Dispatcher(Server server, Root root) {
         super(root);
