@@ -30,7 +30,7 @@ import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public final class Command {
+public class Command {
     
     public final @Nullable Command parent;
     public final Identity identity;

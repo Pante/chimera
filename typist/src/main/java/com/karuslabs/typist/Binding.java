@@ -29,27 +29,76 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A Java language construct which represents a part of a {@code Command}. A
+ * {@code Binding} may be simultaneously bound to several {@code Command}s.
+ * 
+ * @param <T> the type of the Java language construct that this {@code Binding}
+ *            represents
+ */
 public abstract class Binding<T extends Element> {
-
+    
+    /**
+     * The site of the Java language construct that this binding represents.
+     */
     public final T site;
+    /**
+     * The part of a {@code Command} that this {@code Binding} represents.
+     */
     public final Pattern pattern;
     
+    /**
+     * Creates a {@code Binding} with the given arguments.
+     * 
+     * @param site the site of this binding
+     * @param pattern the part of a command that this binding represents
+     */
     public Binding(T site, Pattern pattern) {
         this.site = site;
         this.pattern = pattern;
     }
     
+    /**
+     * The parts of a {@code Command} to which can be bound.
+     */
     public static enum Pattern {
         
+        /**
+         * An {@code ArgumentType<?>}.
+         */
         ARGUMENT_TYPE(Group.ARGUMENT_TYPE, "An", "ArgumentType<?>", "type"),
+        /**
+         * A {@code Command<CommandSender>}.
+         */
         COMMAND(Group.COMMAND, "A", "Command<CommandSender>", "command"),
-        EXECUTION(Group.COMMAND, "An", "Executable<CommandSender>", "command"),
+        /**
+         * An {@code Execution<CommandSender}.
+         */
+        EXECUTION(Group.COMMAND, "An", "Execution<CommandSender>", "command"),
+        /**
+         * A {@code Predicate<CommandSender}.
+         */
         REQUIREMENT(Group.REQUIREMENT, "A", "Predicate<CommandSender>", "requirement"),
+        /**
+         * A {@code SuggestionProvider<CommandSender>}.
+         */
         SUGGESTION_PROVIDER(Group.SUGGESTION_PROVIDER, "A", "SuggestionProvider<CommandSender>", "suggestions");
         
+        /**
+         * The group.
+         */
         public final Group group; 
+        /**
+         * The article used to describe this pattern.
+         */
         public final String article;
+        /**
+         * The actual specialized type that this pattern represents.
+         */
         public final String type;
+        /**
+         * The noun used to describe this pattern.
+         */
         public final String noun;
         
         private Pattern(Group group, String article, String type, String noun) {
@@ -64,14 +113,29 @@ public abstract class Binding<T extends Element> {
             return type;
         }
         
+        /**
+         * A group which a {@code Pattern} is part of.
+         */
         public static enum Group {
             ARGUMENT_TYPE, COMMAND, REQUIREMENT, SUGGESTION_PROVIDER;
         }
         
     }
     
+    /**
+     * A Java field that represents a part of a {@code Command}.
+     */
     public static class Field extends Binding<VariableElement> {
         
+        /**
+         * Creates a {@code Field} which represented part is inferred from the given
+         * {@code VariableElement}.
+         * 
+         * @param types the types
+         * @param site the site
+         * @return a {@code Field} which represented part is inferred, or {@code null}
+         *         if the represented part cannot be inferred
+         */
         public static @Nullable Field capture(Types types, VariableElement site) {
             var type = site.asType();
             if (types.isSubtype(type, types.argument)) {
@@ -101,8 +165,21 @@ public abstract class Binding<T extends Element> {
         
     }
     
+    /**
+     * A Java method that represents a part of a {@code Command}. A method's parameters
+     * may contain a reference to another {@code Command}.
+     */
     public static class Method extends Binding<ExecutableElement> {
         
+        /**
+         * Creates a {@code Method} which represented part is inferred from the given
+         * {@code ExecutableElement}.
+         * 
+         * @param types the types
+         * @param site the site
+         * @return a {@code Method} which represented part is inferred, or {@code null}
+         *         if the represented part cannot be inferred
+         */
         public static @Nullable Method capture(Types types, ExecutableElement site) {
             var type = site.getReturnType();
             if (type.getKind() == TypeKind.INT) {
@@ -128,10 +205,22 @@ public abstract class Binding<T extends Element> {
             super(site, pattern);
         }
         
+        /**
+         * Adds a reference to the given command.
+         * 
+         * @param command a command
+         * @param reference a reference to the command
+         */
         public void parameter(Command command, Reference reference) {
             parameters(command).put(reference.index, reference);
         }
         
+        /**
+         * Returns the parameters that are references to the given command.
+         * 
+         * @param command the command
+         * @return the parameters that reference the given command
+         */
         public Map<Integer, Reference> parameters(Command command) {
             var references = parameters.get(command);
             if (references == null) {
@@ -141,14 +230,33 @@ public abstract class Binding<T extends Element> {
             return references;
         }
         
-            }
-            
+    }
+    
+    /**
+     * Represents a method parameter that is a reference to a command.
+     */
     public static class Reference {
         
+        /**
+         * The parameter's index.
+         */
         public final int index;
+        /**
+         * The method parameter.
+         */
         public final VariableElement site;
+        /**
+         * The referenced command.
+         */
         public final Command value;
         
+        /**
+         * Creates a {@code Reference} with the given arguments.
+         * 
+         * @param index the parameter's index
+         * @param site the method parameter
+         * @param value the referenced command
+         */
         public Reference(int index, VariableElement site, Command value) {
             this.index = index;
             this.site = site;
