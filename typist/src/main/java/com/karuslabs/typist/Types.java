@@ -38,6 +38,9 @@ import javax.lang.model.util.*;
 
 import org.bukkit.command.CommandSender;
 
+/**
+ * A {@code TypeMirrors} that contains commonly used types.
+ */
 public class Types extends TypeMirrors {
 
     public final TypeMirror object;
@@ -53,6 +56,12 @@ public class Types extends TypeMirrors {
     public final TypeMirror suggestionProvider;
     
     
+   /**
+    * Creates a {@code Types} with the given arguments.
+    * 
+    * @param elements the elements
+    * @param types the types
+    */
     public Types(Elements elements, TypeMirrors types) {
         super(elements, types);
         object = super.type(Object.class);

@@ -26,11 +26,26 @@ package com.karuslabs.typist;
 
 import java.util.*;
 
+/**
+ * Represents the identity of a command.
+ */
 public final class Identity {
     
+    /**
+     * The command's type.
+     */
     public final Type type;
+    /**
+     * The command's name.
+     */
     public final String name;
     
+    /**
+     * Creates an identity with the givne type and name.
+     * 
+     * @param type the type
+     * @param name the name
+     */
     public Identity(Type type, String name) {
         this.type = type;
         this.name = name;
@@ -63,12 +78,20 @@ public final class Identity {
         return type.format(name);
     }
     
-    
+    /**
+     * Represents the type of a command.
+     */
     public static enum Type {
         
         ARGUMENT("An", "argument"), LITERAL("A", "literal");
         
+        /**
+         * The article used to describe this type.
+         */
         public final String article;
+        /**
+         * The noun used to describe this pattern.
+         */
         public final String noun;
         
         private Type(String article, String noun) {
@@ -76,6 +99,12 @@ public final class Identity {
             this.noun = noun;
         }
         
+        /**
+         * Formats the given value.
+         * 
+         * @param value the value to be formatted
+         * @return the formatted value
+         */
         public String format(String value) {
             switch (this) {
                 case ARGUMENT:

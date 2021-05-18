@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.typist;
 
 /**
- *Represents a token from parsing a string.
+ * Classes used in the generation of Brigadier command initialization code in Java
+ * from annotations in {@link com.karuslabs.typist.annotations}.
  */
-public final class Token {
-
-    public final Identity identity;
-    public final String lexeme;
-    public final String[] aliases;
-    
-    /**
-     * Creates a {@code Token} with the given arguments.
-     * 
-     * @param identity the identity
-     * @param lexeme the lexeme
-     * @param aliases the aliases
-     */
-    public Token(Identity identity, String lexeme, String... aliases) {
-        this.identity = identity;
-        this.lexeme = lexeme;
-        this.aliases = aliases;
-    }
-    
-}
+package com.karuslabs.typist;

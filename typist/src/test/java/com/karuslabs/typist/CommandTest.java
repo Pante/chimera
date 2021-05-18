@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,35 @@
  */
 package com.karuslabs.typist;
 
-/**
- *Represents a token from parsing a string.
- */
-public final class Token {
+import com.karuslabs.typist.Binding.Field;
 
-    public final Identity identity;
-    public final String lexeme;
-    public final String[] aliases;
+import org.junit.jupiter.api.*;
+
+import static com.karuslabs.typist.Binding.Pattern.EXECUTION;
+import static com.karuslabs.typist.Identity.Type.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CommandTest {
+
+    Command tell = new Command(null, new Identity(LITERAL, "tell"), null);
+    Command players = new Command(tell, new Identity(ARGUMENT, "players"), null);
+    Command message = new Command(players, new Identity(ARGUMENT, "message"), null);
+    Field field = new Field(null, EXECUTION);
     
-    /**
-     * Creates a {@code Token} with the given arguments.
-     * 
-     * @param identity the identity
-     * @param lexeme the lexeme
-     * @param aliases the aliases
-     */
-    public Token(Identity identity, String lexeme, String... aliases) {
-        this.identity = identity;
-        this.lexeme = lexeme;
-        this.aliases = aliases;
+    @Test
+    void binding() {
+        players.bind(field);
+        
+        assertEquals(field, players.binding(EXECUTION));
+        assertEquals(field, players.groups.get(EXECUTION.group));
+        
+        assertNull(message.binding(EXECUTION));
+    }
+    
+    @Test
+    void path() {
+        assertEquals("tell <players>", players.path());
+        assertEquals("tell <players> <message>", message.path());
     }
     
 }

@@ -41,6 +41,10 @@ import javax.lang.model.element.*;
 
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
+/**
+ * An annotation processor that generates Brigadier command initialization code
+ * in Java from annotations in {@link com.karuslabs.typist.annotations}.
+ */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(RELEASE_11)
 @SupportedAnnotationTypes("com.karuslabs.typist.annotations.*")
@@ -89,7 +93,7 @@ public class Processor extends AnnotationProcessor {
     }
     
     void generation(ProcessingEnvironment environment) {
-        var counter = new int[] {0};
+        var counter = new int[] {0}; // we use an array instead of int to simulate a ref value
         generation = new Generation(logger, environment.getFiler(),
             new Header(),
             new Type(

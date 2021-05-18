@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,35 @@
  */
 package com.karuslabs.typist;
 
-/**
- *Represents a token from parsing a string.
- */
-public final class Token {
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
 
-    public final Identity identity;
-    public final String lexeme;
-    public final String[] aliases;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(ToolsExtension.class)
+@Introspect
+class EnvironmentTest {
     
-    /**
-     * Creates a {@code Token} with the given arguments.
-     * 
-     * @param identity the identity
-     * @param lexeme the lexeme
-     * @param aliases the aliases
-     */
-    public Token(Identity identity, String lexeme, String... aliases) {
-        this.identity = identity;
-        this.lexeme = lexeme;
-        this.aliases = aliases;
+    Environment environment = new Environment();
+    Cases cases = Tools.cases();
+    
+    @Test
+    void namespace() {
+        assertSame(environment.namespace(cases.one("Enclosing")), environment.namespace(cases.one("field")));
     }
+    
+    @Test
+    void method() {
+        assertSame(environment.method(cases.one("method")), environment.method(cases.one("parameter")));
+    }
+
+    @Case static class Enclosing {
+        @Case String field;
+    }
+    
+    @Case void method(@Case String parameter) { }
     
 }

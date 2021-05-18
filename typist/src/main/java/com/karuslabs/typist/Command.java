@@ -30,22 +30,60 @@ import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * An intermediate representation of a command in a tree of commands,  i.e. {@code <player>} 
+ * in {@code /tell <player>}.
+ */
 public class Command {
     
+    /**
+     * This command's parent.
+     */
     public final @Nullable Command parent;
+    /**
+     * The identity of this command.
+     */
     public final Identity identity;
+    /**
+     * The type at which this command was declared.
+     */
     public final TypeElement site;
+    /**
+     * The aliases for this command.
+     */
     public final Set<String> aliases = new HashSet<>();
+    /**
+     * The bindings for this command.
+     */
     public final Map<Element, Binding<?>> bindings = new HashMap<>();
+    /**
+     * The binding groups for this command.
+     */
     public final Map<Pattern.Group, Binding<?>> groups = new HashMap<>();
+    /**
+     * The children of this command.
+     */
     public final Map<Identity, Command> children = new HashMap<>();
 
+    /**
+     * Creates a command with the given arguments.
+     * 
+     * @param parent the parent of this command
+     * @param identity this command's identity
+     * @param site the declaration site of this command
+     */
     public Command(Command parent, Identity identity, TypeElement site) {
         this.parent = parent;
         this.identity = identity;
         this.site = site;
     }
     
+    /**
+     * Returns a binding for the part of a command which the given pattern represents.
+     * 
+     * @param pattern the pattern
+     * @return the binding, or {@code null} if no such binding exists
+     */
     public @Nullable Binding<?> binding(Pattern pattern) {
         for (var binding : bindings.values()) {
             if (binding.pattern == pattern) {
@@ -56,11 +94,21 @@ public class Command {
         return null;
     }
     
+    /**
+     * Binds the given bindings to this command.
+     * 
+     * @param binding a binding
+     */
     public void bind(Binding<?> binding) {
         bindings.put(binding.site, binding);
         groups.put(binding.pattern.group, binding);
     }
-        
+    
+    /**
+     * Returns a path from the root command to this command.
+     * 
+     * @return a path
+     */
     public String path() {
         if (parent == null) {
             return identity.toString();

@@ -31,12 +31,30 @@ import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * The environment that stores bindings during annotation processing.
+ */
 public class Environment {
     
+    /**
+     * The namespaces. Each type represents a namespace.
+     */
     public final Map<TypeElement, Map<Identity, Command>> namespaces = new HashMap<>();
+    /**
+     * The methods and commands to which a method is bound.
+     */
     public final Map<ExecutableElement, List<Command>> methods = new HashMap<>();
+    /**
+     * The output location.
+     */
     public @Nullable Out out;
     
+    /**
+     * Returns the commands declared in the namespace of the given element.
+     * 
+     * @param element the element
+     * @return the commands declared in the same namespace as the given element
+     */
     public Map<Identity, Command> namespace(Element element) {
         var type = element.accept(Find.TYPE, null);
         var namespace = namespaces.get(type);
@@ -47,6 +65,12 @@ public class Environment {
         return namespace;
     }
     
+    /**
+     * Returns the commands to which the enclosing method of the given element is bound.
+     * 
+     * @param element the element
+     * @return the commands
+     */
     public List<Command> method(Element element) {
         var method = element.accept(Find.EXECUTABLE, null);
         var commands = methods.get(method);
