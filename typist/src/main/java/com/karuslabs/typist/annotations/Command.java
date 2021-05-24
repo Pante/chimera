@@ -28,11 +28,21 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Declares commands in the scope of the annotated type. Commands should be unique 
+ * in the scope that they are declared in. A command should match {@code literal ( argument|literal)*}. 
+ * In which, an argument should match {@code <name>} while a literal should match {@code name(|alias)*}.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(TYPE)
 public @interface Command {
 
+    /**
+     * The commands.
+     * 
+     * @return the commands
+     */
     String[] value();
     
 }

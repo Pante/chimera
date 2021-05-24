@@ -64,24 +64,24 @@ public class PackageParser implements Parser {
 
     @Override
     public void parse(Environment environment, Element element) {
-        var source = element.getAnnotation(Pack.class).age();
+        var pack = element.getAnnotation(Pack.class).age();
         
-        if (RELATIVE_PACKAGE.equals(source)) {
+        if (RELATIVE_PACKAGE.equals(pack)) {
             environment.out = new Out(element, element.accept(Find.PACKAGE, null).getQualifiedName().toString(), "Commands");
             return;
             
-        } else if (source.endsWith(".java") || source.endsWith(".class")) {
-            var parts = source.split("\\.");
+        } else if (pack.endsWith(".java") || pack.endsWith(".class")) {
+            var parts = pack.split("\\.");
             logger.error(element, "Package should not end with " + quote("." + parts[parts.length - 1])+ "");
             return;
             
-        }  else if (!PACKAGE.reset(source).matches()) {
+        }  else if (!PACKAGE.reset(pack).matches()) {
             logger.error(element, "Invalid package name");
             return;
         } 
         
-        int dot = source.lastIndexOf(".");
-        environment.out = dot == -1 ? new Out(element, "", source) : new Out(element, source.substring(0, dot), source.substring(dot + 1, source.length()));
+        int dot = pack.lastIndexOf(".");
+        environment.out = dot == -1 ? new Out(element, "", pack) : new Out(element, pack.substring(0, dot), pack.substring(dot + 1, pack.length()));
     }
 
     @Override

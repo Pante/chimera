@@ -28,13 +28,37 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * Binds the annotated fields and methods to the given commands. The part of command
+ * to which the annotated field or method is bound is inferred using its signature.
+ * <br><br>
+ * The annotated target may be bound to multiple commands and commands that matches 
+ * a given pattern. A pattern is defined as a sequence of arguments and literals.
+ * <br><br>
+ * For example, given the following commands, {@code "tell <player> <message>", "broadcast <message> <location>"}
+ * a binding pattern of {@code <message>} will be applied to the {@code <message>} arguments
+ * in the both commands.
+ * <br><br>
+ * A command should match {@code literal ( argument|literal)*}. In which, an argument 
+ * should match {@code <name>} while a literal should match {@code name(|alias)*}.
+ */
 @Documented
 @Retention(SOURCE)
 @Target({FIELD, METHOD})
 public @interface Bind {
     
+    /**
+     * The commands to which this annotated target should be bound.
+     * 
+     * @return the commands
+     */
     String[] value() default {};
     
+    /**
+     * The patterns that commands to which this annotation target is bound should match.
+     * 
+     * @return the patterns
+     */
     String[] pattern() default {};
     
 }

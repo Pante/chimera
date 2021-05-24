@@ -42,8 +42,8 @@ import javax.lang.model.element.*;
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
 /**
- * An annotation processor that generates Brigadier command initialization code
- * in Java from annotations in {@link com.karuslabs.typist.annotations}.
+ * An annotation processor that generates Java code which initializes Brigadier commands
+ * from annotations in {@link com.karuslabs.typist.annotations}.
  */
 @AutoService(javax.annotation.processing.Processor.class)
 @SupportedSourceVersion(RELEASE_11)
