@@ -34,6 +34,4 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target({TYPE_PARAMETER, PARAMETER})
-public @interface Ignored {
-    
-}
+public @interface Ignored { }

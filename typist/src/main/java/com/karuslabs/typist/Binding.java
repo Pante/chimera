@@ -36,27 +36,21 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <T> the type of the Java language construct that this {@code Binding}
  *            represents
  */
-public abstract class Binding<T extends Element> {
+public interface Binding<T extends Element> {
     
     /**
      * The site of the Java language construct that this binding represents.
+     * 
+     * @return the site
      */
-    public final T site;
-    /**
-     * The part of a {@code Command} that this {@code Binding} represents.
-     */
-    public final Pattern pattern;
+    public T site();
     
     /**
-     * Creates a {@code Binding} with the given arguments.
+     * The part of a {@code Command} that this {@code Binding} represents.
      * 
-     * @param site the site of this binding
-     * @param pattern the part of a command that this binding represents
+     * @return the pattern
      */
-    public Binding(T site, Pattern pattern) {
-        this.site = site;
-        this.pattern = pattern;
-    }
+    public Pattern pattern();
     
     /**
      * The parts of a {@code Command} to which can be bound.
@@ -125,7 +119,7 @@ public abstract class Binding<T extends Element> {
     /**
      * A Java field that represents a part of a {@code Command}.
      */
-    public static class Field extends Binding<VariableElement> {
+    public static record Field(VariableElement site, Pattern pattern) implements Binding<VariableElement> {
         
         /**
          * Creates a {@code Field} which represented part is inferred from the given
@@ -159,17 +153,13 @@ public abstract class Binding<T extends Element> {
             }
         }
         
-        Field(VariableElement site, Pattern pattern) {
-            super(site, pattern);
-        }
-        
     }
     
     /**
      * A Java method that represents a part of a {@code Command}. A method's parameters
      * may contain a reference to another {@code Command}.
      */
-    public static class Method extends Binding<ExecutableElement> {
+    public static record Method(ExecutableElement site, Pattern pattern, Map<Command, Map<Integer, Reference>> parameters) implements Binding<ExecutableElement> {
         
         /**
          * Creates a {@code Method} which represented part is inferred from the given
@@ -199,10 +189,8 @@ public abstract class Binding<T extends Element> {
             }
         }
         
-        private final Map<Command, Map<Integer, Reference>> parameters = new HashMap<>();
-
         Method(ExecutableElement site, Pattern pattern) {
-            super(site, pattern);
+            this(site, pattern, new HashMap<>());
         }
         
         /**
@@ -235,34 +223,6 @@ public abstract class Binding<T extends Element> {
     /**
      * Represents a method parameter that is a reference to a command.
      */
-    public static class Reference {
-        
-        /**
-         * The parameter's index.
-         */
-        public final int index;
-        /**
-         * The method parameter.
-         */
-        public final VariableElement site;
-        /**
-         * The referenced command.
-         */
-        public final Command value;
-        
-        /**
-         * Creates a {@code Reference} with the given arguments.
-         * 
-         * @param index the parameter's index
-         * @param site the method parameter
-         * @param value the referenced command
-         */
-        public Reference(int index, VariableElement site, Command value) {
-            this.index = index;
-            this.site = site;
-            this.value = value;
-        }
-        
-    }
+    public static record Reference(int index, VariableElement site, Command value) {}
     
 }

@@ -322,15 +322,7 @@ final class WeakValue<T> extends WeakReference<T> implements Weak<T> {
     
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof Weak<?>)) {
-            return false;
-        }
-
-        return Objects.equals(get(), ((Weak<?>) other).or(null));
+        return this == other || other instanceof Weak weak && Objects.equals(get(), weak.or(null));
     }
     
     @Override

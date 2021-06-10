@@ -51,38 +51,38 @@ public class CommandParser extends LexParser {
             var commands = namespace;
             
             for (var token : lexer.lex(logger, element, line)) {
-                var command = commands.get(token.identity);
+                var command = commands.get(token.identity());
                 if (command == null) {
-                    command = new Command(parent, token.identity, (TypeElement) element);
-                    commands.put(token.identity, command);
+                    command = new Command(parent, token.identity(), (TypeElement) element);
+                    commands.put(token.identity(), command);
                 }
                 
                 merge(element, command, token);
                 
                 parent = command;
-                commands = command.children;
+                commands = command.children();
             }
         }
     }
     
     void merge(Element element, Command command, Token token) {
-        if (token.aliases.length == 0) {
+        if (token.aliases().length == 0) {
             return;
         }
         
         var duplicates = new HashSet<>();
-        for (var alias : token.aliases) {
-            if (!command.aliases.add(alias)) {
+        for (var alias : token.aliases()) {
+            if (!command.aliases().add(alias)) {
                 duplicates.add(alias);
             }
         }
         
         if (!duplicates.isEmpty()) {
-            logger.warn(element, token.lexeme, "contains duplicate aliases: " + Texts.and(duplicates, (value, builder) -> builder.append('"').append(value).append('"')));
+            logger.warn(element, token.lexeme(), "contains duplicate aliases: " + Texts.and(duplicates, (value, builder) -> builder.append('"').append(value).append('"')));
         }
         
-        if (command.aliases.contains(command.identity.name)) {
-            logger.warn(element, token.lexeme, "contains an alias that is the same as its name");
+        if (command.aliases().contains(command.identity().name())) {
+            logger.warn(element, token.lexeme(), "contains an alias that is the same as its name");
         }
     }
     

@@ -43,10 +43,10 @@ public class PublicFinalBindingLint extends TypeLint {
     
     @Override
     public void lint(Environment environment, Command command) {
-        for (var binding : command.bindings.values()) {
-            if (!assertion.test(types, binding.site.getModifiers())) {
+        for (var binding : command.bindings().values()) {
+            if (!assertion.test(types, binding.site().getModifiers())) {
                 var prefix = binding instanceof VariableElement ? "field should be " : "method should be ";
-                logger.error(binding.site, prefix + assertion.condition());
+                logger.error(binding.site(), prefix + assertion.condition());
             }
         }
     }

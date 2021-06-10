@@ -193,16 +193,7 @@ final class TrieEntry<T> implements Entry<String, T> {
 
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        
-        if (!(other instanceof TrieEntry)) {
-            return false;
-        }
-        
-        var entry = (TrieEntry<?>) other;
-        return Objects.equals(key, entry.getKey()) && Objects.equals(value, entry.getValue());
+        return this == other || other instanceof TrieEntry entry && Objects.equals(key, entry.getKey()) && Objects.equals(value, entry.getValue());
     }
 
     

@@ -24,25 +24,6 @@
 package com.karuslabs.typist;
 
 /**
- *Represents a token from parsing a string.
+ * Represents a token from parsing a string.
  */
-public final class Token {
-
-    public final Identity identity;
-    public final String lexeme;
-    public final String[] aliases;
-    
-    /**
-     * Creates a {@code Token} with the given arguments.
-     * 
-     * @param identity the identity
-     * @param lexeme the lexeme
-     * @param aliases the aliases
-     */
-    public Token(Identity identity, String lexeme, String... aliases) {
-        this.identity = identity;
-        this.lexeme = lexeme;
-        this.aliases = aliases;
-    }
-    
-}
+public record Token(Identity identity, String lexeme, String[] aliases) {}

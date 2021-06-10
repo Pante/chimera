@@ -31,26 +31,12 @@ import java.io.IOException;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 
-public class Generation {
-
-    private final Logger logger;
-    private final Filer filer;
-    private final Header header;
-    private final Type type;
-    private final int[] counter;
-    
-    public Generation(Logger logger, Filer filer, Header header, Type type, int[] counter) {
-        this.logger = logger;
-        this.filer = filer;
-        this.header = header;
-        this.type = type;
-        this.counter = counter;
-    }
+public record Generation(Logger logger, Filer filer, Header header, Type type, int[] counter) {
     
     public void generate(Environment environment) {
         var out = environment.out;
-        var pack = out.folder.isEmpty() ? "" : out.folder;
-        var file = pack.isEmpty() ? out.file : pack + "." + out.file;
+        var pack = out.folder().isEmpty() ? "" : out.folder();
+        var file = pack.isEmpty() ? out.file() : pack + "." + out.file();
         var elements = environment.namespaces.keySet().toArray(new Element[0]);
         
         try (var writer = filer.createSourceFile(file, elements).openWriter()) {
@@ -63,10 +49,10 @@ public class Generation {
             writer.write(source.toString());
             
         } catch (FilerException ignored) {
-            logger.error(out.element, "\"" + file + "\" already exists");
+            logger.error(out.element(), "\"" + file + "\" already exists");
             
         } catch (IOException ignored) {
-            logger.error(out.element, "Failed to create file: \"" + file + "\"");
+            logger.error(out.element(), "Failed to create file: \"" + file + "\"");
         }
     }
     

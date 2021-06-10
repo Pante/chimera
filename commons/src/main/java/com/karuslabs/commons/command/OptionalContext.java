@@ -160,14 +160,7 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
     @Override
     public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-            
-        } else  if (!(other instanceof OptionalContext)) {
-            return false;
-        }
-
-        return context.equals(((OptionalContext) other).context);
+        return this == other && other instanceof OptionalContext optional && context.equals(optional.context);
     }
 
     @Override

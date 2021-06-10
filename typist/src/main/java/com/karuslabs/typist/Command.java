@@ -34,36 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * An intermediate representation of a command in a tree of commands,  i.e. {@code <player>} 
  * in {@code /tell <player>}.
  */
-public class Command {
-    
-    /**
-     * This command's parent.
-     */
-    public final @Nullable Command parent;
-    /**
-     * The identity of this command.
-     */
-    public final Identity identity;
-    /**
-     * The type at which this command was declared.
-     */
-    public final TypeElement site;
-    /**
-     * The aliases for this command.
-     */
-    public final Set<String> aliases = new HashSet<>();
-    /**
-     * The bindings for this command.
-     */
-    public final Map<Element, Binding<?>> bindings = new HashMap<>();
-    /**
-     * The binding groups for this command.
-     */
-    public final Map<Pattern.Group, Binding<?>> groups = new HashMap<>();
-    /**
-     * The children of this command.
-     */
-    public final Map<Identity, Command> children = new HashMap<>();
+public record Command(@Nullable Command parent, Identity identity, TypeElement site, Set<String> aliases, Map<Element, Binding<?>> bindings, Map<Pattern.Group, Binding<?>> groups, Map<Identity, Command> children) {
 
     /**
      * Creates a command with the given arguments.
@@ -72,10 +43,8 @@ public class Command {
      * @param identity this command's identity
      * @param site the declaration site of this command
      */
-    public Command(Command parent, Identity identity, TypeElement site) {
-        this.parent = parent;
-        this.identity = identity;
-        this.site = site;
+    public Command(@Nullable Command parent, Identity identity, TypeElement site) {
+        this(parent, identity, site, new HashSet<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
     }
     
     /**
@@ -86,7 +55,7 @@ public class Command {
      */
     public @Nullable Binding<?> binding(Pattern pattern) {
         for (var binding : bindings.values()) {
-            if (binding.pattern == pattern) {
+            if (binding.pattern() == pattern) {
                 return binding;
             }
         }
@@ -100,8 +69,8 @@ public class Command {
      * @param binding a binding
      */
     public void bind(Binding<?> binding) {
-        bindings.put(binding.site, binding);
-        groups.put(binding.pattern.group, binding);
+        bindings.put(binding.site(), binding);
+        groups.put(binding.pattern().group, binding);
     }
     
     /**

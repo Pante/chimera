@@ -27,9 +27,9 @@ import com.karuslabs.utilitary.Source;
 
 import java.time.LocalDateTime;
 
-public class Header {
+import static com.karuslabs.typist.generation.chunks.Constants.VERSION;
 
-    private static final String VERSION = "4.9.0-SNAPSHOT";
+public record Header() {
     
     public void emit(Source source, String pack) {
         if (!pack.isEmpty()) {

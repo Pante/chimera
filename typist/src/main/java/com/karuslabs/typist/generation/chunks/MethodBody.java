@@ -29,13 +29,7 @@ import com.karuslabs.utilitary.Source;
 import java.util.*;
 import javax.lang.model.element.TypeElement;
 
-public class MethodBody {
-    
-    private final CommandInstantiation instantiation;
-    
-    public MethodBody(CommandInstantiation instantiation) {
-        this.instantiation = instantiation;
-    }
+public record MethodBody(CommandInstantiation instantiation) {
     
     public void emit(Source source, TypeElement site, Collection<Command> commands) {
         source.line("public static Map<String, CommandNode<CommandSender>> of(", site.getQualifiedName(), " source) {")
@@ -53,7 +47,7 @@ public class MethodBody {
     
     String visit(Source source, Command command) {
         var children = new ArrayList<String>();
-        for (var child : command.children.values()) {
+        for (var child : command.children().values()) {
             children.add(visit(source, child));
             source.line();
         }

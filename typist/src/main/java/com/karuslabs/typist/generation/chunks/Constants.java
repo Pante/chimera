@@ -25,6 +25,7 @@ package com.karuslabs.typist.generation.chunks;
 
 class Constants<T> {
 
+    static final String VERSION = "5.0.0-SNAPSHOT";
     static final String SOURCE = "source";
     static final String REQUIREMENT = "REQUIREMENT";
     static final String NULL = "null";

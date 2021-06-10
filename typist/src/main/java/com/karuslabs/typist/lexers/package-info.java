@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.annotations;
-
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * Documents that the annotated method is visible for subclasses to override.
+ * Contains lexers that transform string representations of commands into sequences
+ * of tokens.
  */
-@Documented
-@Retention(SOURCE)
-@Target(METHOD)
-public @interface VisibleForOverride { }
+package com.karuslabs.typist.lexers;

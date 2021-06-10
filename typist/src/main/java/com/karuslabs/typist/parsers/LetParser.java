@@ -62,21 +62,21 @@ public class LetParser extends LexParser {
         var index = executable.getParameters().indexOf(parameter);
         
         for (var command : environment.method(executable)) {
-            var method = (Method) command.bindings.get(executable);
-            var referred = find(command, argument.identity);
+            var method = (Method) command.bindings().get(executable);
+            var referred = find(command, argument.identity());
             if (referred != null) {
                 method.parameter(command, new Reference(index, parameter, referred));
                 
             } else {
-                logger.error(element, argument.identity, "does not exist in " + quote(command.path()));
+                logger.error(element, argument.identity(), "does not exist in " + quote(command.path()));
             }
         }
     }
     
     @Nullable Command find(Command command, Identity identity) {
         while (command != null) {
-            if (!command.identity.equals(identity)) {
-                command = command.parent;
+            if (!command.identity().equals(identity)) {
+                command = command.parent();
                 
             } else {
                 return command;

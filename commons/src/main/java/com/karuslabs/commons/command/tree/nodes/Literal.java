@@ -59,8 +59,8 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
             literal.addChild(child);
         }
         
-        if (command instanceof Aliasable<?>) {
-            ((Aliasable<T>) command).aliases().add(literal);
+        if (command instanceof Aliasable aliasable) {
+            aliasable.aliases().add(literal);
         }
         
         return literal;
@@ -201,8 +201,8 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     public void setRedirect(CommandNode<T> destination) {
         this.destination = destination;
         for (var alias : aliases) {
-            if (alias instanceof Mutable<?>) {
-                (((Mutable<T>) alias)).setRedirect(destination);
+            if (alias instanceof Mutable mutable) {
+                mutable.setRedirect(destination);
             }
         }
     }

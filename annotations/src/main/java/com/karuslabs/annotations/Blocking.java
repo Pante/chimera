@@ -34,6 +34,4 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target({METHOD, CONSTRUCTOR})
-public @interface Blocking {
-    
-}
+public @interface Blocking { }

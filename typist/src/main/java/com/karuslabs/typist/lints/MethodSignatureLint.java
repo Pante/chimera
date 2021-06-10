@@ -78,14 +78,14 @@ public class MethodSignatureLint extends TypeLint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        for (var binding : command.bindings.values()) {
+        for (var binding : command.bindings().values()) {
             if (!(binding instanceof Binding.Method)) {
                 continue;
             }
             
-            var method = methods.get(binding.pattern);
-            if (!method.test(types, (ExecutableElement) binding.site)) {
-                logger.error(binding.site, method.condition());
+            var method = methods.get(binding.pattern());
+            if (!method.test(types, (ExecutableElement) binding.site())) {
+                logger.error(binding.site(), method.condition());
             }
         }
     }

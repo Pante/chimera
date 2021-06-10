@@ -26,13 +26,7 @@ package com.karuslabs.typist.generation.chunks;
 import com.karuslabs.typist.Environment;
 import com.karuslabs.utilitary.Source;
 
-public class Type {
-    
-    private final MethodBody method;
-    
-    public Type(MethodBody method) {
-        this.method = method;
-    }
+public record Type(MethodBody method) {
     
     public void emit(Source source, Environment environment) {
         source.line("public class Commands {")

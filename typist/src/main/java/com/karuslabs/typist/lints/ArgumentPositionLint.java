@@ -35,8 +35,8 @@ public class ArgumentPositionLint extends Lint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        if (command.identity.type == Type.ARGUMENT && command.parent == null) {
-            logger.error(command.site, command.identity, "is at an invalid position", "command should not start with an argument");
+        if (command.identity().type() == Type.ARGUMENT && command.parent() == null) {
+            logger.error(command.site(), command.identity(), "is at an invalid position", "command should not start with an argument");
         }
     }
 

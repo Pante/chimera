@@ -31,10 +31,23 @@ import javax.lang.model.element.Element;
 
 import static java.util.Collections.EMPTY_LIST;
 
+/**
+ * A {@code Lexer} that transforms a string representation of an argument into a
+ * single argument {@code Token}. An argument should match {@code <name>}.
+ */
 public class ArgumentLexer implements Lexer {
 
     private final Memoizer memoizer = new Memoizer();
     
+    /**
+     * Transforms the given lexeme into a single argument {@code Token}; an empty
+     * sequence is returned if the lexeme is invalid.
+     * 
+     * @param logger the logger used to report errors
+     * @param element the element on which the lexeme declared
+     * @param lexeme the lexeme
+     * @return a single argument {@code Token}
+     */
     @Override
     public List<Token> lex(Logger logger, Element element, String lexeme) {
         if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
@@ -55,6 +68,7 @@ public class ArgumentLexer implements Lexer {
         
         if (name.startsWith("<") || name.endsWith(">")) {
             logger.error(element, lexeme, "contains unnecessary '<' and/or '>'");
+            return EMPTY_LIST;
         }
         
         return List.of(memoizer.argument(name, lexeme));

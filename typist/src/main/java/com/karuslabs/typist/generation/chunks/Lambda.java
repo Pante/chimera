@@ -34,7 +34,7 @@ import javax.lang.model.type.TypeMirror;
 import static com.karuslabs.utilitary.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
-public class Lambda {
+public record Lambda(Types types, int[] counter, Map<String, TypeMirror> parameters, boolean returns) {
     
     public static Lambda command(Types types, int[] counter) {
         return new Lambda(types, counter, Map.of("context", types.context), true);
@@ -61,29 +61,17 @@ public class Lambda {
     }
     
     
-    private final Types types;
-    private final int[] counter;
-    private final Map<String, TypeMirror> parameters;
-    private final boolean returns;
-    
-    Lambda(Types types, int[] counter, Map<String, TypeMirror> parameters, boolean returns) {
-        this.types = types;
-        this.counter = counter;
-        this.parameters = parameters;
-        this.returns = returns;
-    }
-    
     public void emit(Source source, Command command, Method method, String terminator) {
-        var reciever = method.site.getModifiers().contains(STATIC) ? command.site.getQualifiedName() : Constants.SOURCE;
+        var reciever = method.site().getModifiers().contains(STATIC) ? command.site().getQualifiedName() : Constants.SOURCE;
         var references = method.parameters(command);
         
         if (references.isEmpty()) {
-            source.line(reciever, "::", method.site.getSimpleName(), terminator);
+            source.line(reciever, "::", method.site().getSimpleName(), terminator);
             
         } else {
             source.line(Source.arguments(parameters.keySet()), " -> {")
               .indent()
-                .line(returns ? "return " : "", reciever, ".", method.site.getSimpleName(), Source.arguments(desugar(source, command, references, method.site.getParameters())), ";")
+                .line(returns ? "return " : "", reciever, ".", method.site().getSimpleName(), Source.arguments(desugar(source, command, references, method.site().getParameters())), ";")
               .unindent()
               .line("}", terminator);
         }
@@ -98,10 +86,10 @@ public class Lambda {
                 variables.add(match(siteParameters.get(i)));
                         
             } else {
-                var name = reference.value.identity.name + counter[0]++;
+                var name = reference.value().identity().name() + counter[0]++;
                 
                 variables.add(name);
-                source.assign(name, "context.getArgument" + Source.arguments(quote(reference.value.identity.name), reference.site.asType() + ".class"));
+                source.assign(name, "context.getArgument" + Source.arguments(quote(reference.value().identity().name()), reference.site().asType() + ".class"));
             }
         }
         

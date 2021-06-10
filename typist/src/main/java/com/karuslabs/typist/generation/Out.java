@@ -27,16 +27,4 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class Out {
-
-    public final @Nullable Element element;
-    public final @Nullable String folder;
-    public final @Nullable String file;
-    
-    public Out(Element element, String folder, String file) {
-        this.element = element;
-        this.folder = folder;
-        this.file = file;
-    }
-
-}
+public record Out(@Nullable Element element, @Nullable String folder, @Nullable String file) {}

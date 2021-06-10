@@ -92,8 +92,8 @@ public @Static class Commands {
         literals.remove(child);
         arguments.remove(child);
         
-        if (removed instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<?>) removed).aliases()) {
+        if (removed instanceof Aliasable<?> aliasable) {
+            for (var alias : aliasable.aliases()) {
                 var name = alias.getName();
                 children.remove(name);
                 literals.remove(name);

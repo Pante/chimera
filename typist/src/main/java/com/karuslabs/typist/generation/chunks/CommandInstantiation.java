@@ -37,36 +37,22 @@ import static com.karuslabs.typist.generation.chunks.Constants.*;
 import static com.karuslabs.utilitary.Texts.quote;
 import static javax.lang.model.element.Modifier.STATIC;
 
-public class CommandInstantiation {
-    
-    private final Map<Pattern, Lambda> lambdas;
-    private final int[] counter;
-    
-    public CommandInstantiation(Map<Pattern, Lambda> lambdas, int[] counter) {
-        this.lambdas = lambdas;
-        this.counter = counter;
-    }
-    
+public record CommandInstantiation(Map<Pattern, Lambda> lambdas, int[] counter) {
+
     public String emit(Source source, Command command) {
         var name = "command" + counter[0]++;
-        switch (command.identity.type) {
-            case ARGUMENT:
-                argument(source, command, name);
-                return name;
-                
-            case LITERAL:
-                literal(source, command, name);
-                return name;
-                
-            default:
-                throw new UnsupportedOperationException("Unsupported command type: " + command.identity.type);
+        switch (command.identity().type()) {
+            case ARGUMENT -> argument(source, command, name);   
+            case LITERAL -> literal(source, command, name);
         }
+        
+        return name;
     }
     
     void argument(Source source, Command command, String name) {
         source.line("var ", name, " = new Argument<>(")
               .indent()
-                .line(quote(StringEscapeUtils.escapeJava(command.identity.name)), ",");
+               .line(quote(StringEscapeUtils.escapeJava(command.identity().name())), ",");
                 parameter(source, command, ARGUMENT_TYPE, NULL, ",");
                 parameter(source, command, COMMAND, NULL, ",");
                 parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, ",");
@@ -78,30 +64,30 @@ public class CommandInstantiation {
     void literal(Source source, Command command, String name) {
         source.line("var ", name, " = new Literal<>(")
               .indent()
-                .line(quote(StringEscapeUtils.escapeJava(command.identity.name)), ",");
+                .line(quote(StringEscapeUtils.escapeJava(command.identity().name())), ",");
                  parameter(source, command, COMMAND, NULL, ",");
                  parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, "");
         source.unindent()
               .line(");");
         
-        for (var alias : command.aliases) {
+        for (var alias : command.aliases()) {
             source.line("Literal.alias", Source.arguments(name, quote(StringEscapeUtils.escapeJava(alias))), ";");
         }
     }
     
     void parameter(Source source, Command command, Pattern.Group group, String defaultValue, String separator) {
-        var binding = command.groups.get(group);
+        var binding = command.groups().get(group);
         if (binding == null) {
             source.line(defaultValue, separator);
             return;
         }
 
-        var reciever = binding.site.getModifiers().contains(STATIC) ? command.site.getQualifiedName() : SOURCE;
-        if (binding instanceof Field) {
-            source.line(reciever, ".", ((Field) binding).site.getSimpleName(), separator);
+        var reciever = binding.site().getModifiers().contains(STATIC) ? command.site().getQualifiedName() : SOURCE;
+        if (binding instanceof Field field) {
+            source.line(reciever, ".", field.site().getSimpleName(), separator);
             
-        } else if (binding instanceof Method) {
-            lambdas.get(binding.pattern).emit(source, command, (Method) binding, separator);
+        } else if (binding instanceof Method method) {
+            lambdas.get(binding.pattern()).emit(source, command, method, separator);
         }
     }
     

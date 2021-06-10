@@ -77,7 +77,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
     @Override
     protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
         var type = command.getType();
-        return type instanceof Type<?> ? ((Type<?>) type).mapped() : type;
+        return type instanceof Type<?> mappable ? mappable.mapped() : type;
     }
     
     /**
@@ -115,11 +115,8 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
         var type = command.getType();
         var suggestor = command.getCustomSuggestions();
         
-        if (!(type instanceof Type<?>) && suggestor == null) {
-            return null;
-            
-        } else if (suggestor == null) {
-            return reparse((Type<?>) type);
+        if (suggestor == null) {
+            return type instanceof Type<?> mappable ? reparse(mappable) : null;
         }
         
         var client = CLIENT_SIDE.get(suggestor);

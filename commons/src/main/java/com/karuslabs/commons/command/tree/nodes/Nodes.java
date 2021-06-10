@@ -109,8 +109,8 @@ public @Static class Nodes {
             }
         }
         
-        if (current instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<T>) current).aliases()) {
+        if (current instanceof Aliasable<?> aliasable) {
+            for (var alias : aliasable.aliases()) {
                 node.removeChild(alias.getName());
             }
         }

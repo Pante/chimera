@@ -41,16 +41,16 @@ public class DuplicateCommandLint extends Lint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        var existing = namespace.put(command.identity, command);
+        var existing = namespace.put(command.identity(), command);
         if (existing != null) {
-            logger.error(command.site, quote(existing.path()) + " conflicts with " + quote(command.path()));
+            logger.error(command.site(), quote(existing.path()) + " conflicts with " + quote(command.path()));
         }
         
-        for (var child : command.children.values()) {
+        for (var child : command.children().values()) {
             lint(environment, child);
         }
         
-        namespace.remove(command.identity);
+        namespace.remove(command.identity());
     }
 
 }

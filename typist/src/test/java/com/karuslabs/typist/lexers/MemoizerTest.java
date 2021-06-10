@@ -21,37 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.typist;
+package com.karuslabs.typist.lexers;
 
-import com.karuslabs.typist.Binding.Field;
+import com.karuslabs.typist.lexers.Lexer.Memoizer;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.typist.Binding.Pattern.EXECUTION;
 import static com.karuslabs.typist.Identity.Type.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommandTest {
+class MemoizerTest { 
 
-    Command tell = new Command(null, new Identity(LITERAL, "tell"), null);
-    Command players = new Command(tell, new Identity(ARGUMENT, "players"), null);
-    Command message = new Command(players, new Identity(ARGUMENT, "message"), null);
-    Field field = new Field(null, EXECUTION);
+    Memoizer memoizer = new Memoizer();
     
     @Test
-    void binding() {
-        players.bind(field);
-        
-        assertEquals(field, players.binding(EXECUTION));
-        assertEquals(field, players.groups().get(EXECUTION.group));
-        
-        assertNull(message.binding(EXECUTION));
+    void argument() {
+        var token = memoizer.argument("something", "<something>");
+        assertEquals(0, token.aliases().length);
+        assertEquals("something", token.identity().name());
+        assertEquals(ARGUMENT, token.identity().type());
+        assertEquals("<something>", token.lexeme());
     }
     
     @Test
-    void path() {
-        assertEquals("tell <players>", players.path());
-        assertEquals("tell <players> <message>", message.path());
+    void literal() {
+        var token = memoizer.literal("something", "something|a", new String[] {"a"});
+        assertArrayEquals(new String[] {"a"}, token.aliases());
+        assertEquals("something", token.identity().name());
+        assertEquals(LITERAL, token.identity().type());
+        assertEquals("something|a", token.lexeme());
+    }
+    
+    @Test
+    void memoize() {
+        var a = memoizer.argument("1", "2");
+        var b = memoizer.argument("1", "2");
+        
+        assertSame(a.identity(), b.identity());
     }
     
 }

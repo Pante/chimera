@@ -115,6 +115,7 @@ public class PlayersType implements StringType<List<Player>> {
      * Returns the names of online players and tags that start with the given input.
      * 
      * @param <S> the type of the source
+     * @param source the source
      * @param context the context
      * @param builder the builder
      * @return the names of online players and tags that start with the remaining 
@@ -127,7 +128,7 @@ public class PlayersType implements StringType<List<Player>> {
             builder.suggest("@a", ALL);
         }
         
-        var sender = source instanceof Player ? (Player) source : null;
+        var sender = source instanceof Player player? player : null;
         var enclosed = remaining.startsWith("\"");
         remaining = remaining.replace("\"", "");
         

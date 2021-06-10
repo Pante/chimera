@@ -24,54 +24,10 @@
  */
 package com.karuslabs.typist;
 
-import java.util.*;
-
 /**
  * Represents the identity of a command.
  */
-public final class Identity {
-    
-    /**
-     * The command's type.
-     */
-    public final Type type;
-    /**
-     * The command's name.
-     */
-    public final String name;
-    
-    /**
-     * Creates an identity with the givne type and name.
-     * 
-     * @param type the type
-     * @param name the name
-     */
-    public Identity(Type type, String name) {
-        this.type = type;
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        
-        if (!(other instanceof Identity)) {
-            return false;
-        } 
-        
-        var identity = (Identity) other;
-        return type == identity.type && name.equals(identity.name);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.type);
-        hash = 59 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
+public record Identity(Type type, String name) {
     
     @Override
     public String toString() {
@@ -106,12 +62,10 @@ public final class Identity {
          * @return the formatted value
          */
         public String format(String value) {
-            switch (this) {
-                case ARGUMENT:
-                    return "<" + value + ">";
-                default:
-                    return value;
-            }
+            return switch (this) {
+                case ARGUMENT -> "<" + value + ">";
+                case LITERAL -> value;
+            };
         }
         
         @Override

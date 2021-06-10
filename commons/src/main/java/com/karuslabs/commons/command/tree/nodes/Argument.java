@@ -154,8 +154,8 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
      */
     public static class Builder<T, V> extends Nodes.Builder<T, Builder<T, V>> {
         
-        private String name;
-        private ArgumentType<V> type;
+        private final String name;
+        private final ArgumentType<V> type;
         private @Nullable SuggestionProvider<T> suggestions;
         
         /**

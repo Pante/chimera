@@ -149,12 +149,10 @@ class Point3DType extends PointType implements Cartesian3DType<Point> {
         }
         
         var prefix = builder.getRemaining().charAt(0) == '^' ? '^' : '~';
-        if (parts.length == 1) {
-            builder.suggest(parts[0] + " " + prefix)
-                   .suggest(parts[0] + " " + prefix + " " + prefix);
-            
-        } else if (parts.length == 2) {
-            builder.suggest(parts[0] + " " + parts[1] + " " + prefix);
+        switch (parts.length) {
+            case 1 -> builder.suggest(parts[0] + " " + prefix)
+                             .suggest(parts[0] + " " + prefix + " " + prefix);
+            case 2 -> builder.suggest(parts[0] + " " + parts[1] + " " + prefix);
         }
     }
 

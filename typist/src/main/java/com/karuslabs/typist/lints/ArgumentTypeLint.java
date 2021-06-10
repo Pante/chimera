@@ -37,19 +37,19 @@ public class ArgumentTypeLint extends TypeLint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        if (command.identity.type == Type.ARGUMENT) {
-            for (var binding : command.bindings.values()) {
-                if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
+        if (command.identity().type() == Type.ARGUMENT) {
+            for (var binding : command.bindings().values()) {
+                if (binding.pattern() == Binding.Pattern.ARGUMENT_TYPE) {
                     return;
                 }
             }
 
-            logger.error(command.site, "No ArgumentType<T> is bound to " + quote(command.path()));
+            logger.error(command.site(), "No ArgumentType<T> is bound to " + quote(command.path()));
             
         } else {
-            for (var binding : command.bindings.values()) {
-                if (binding.pattern == Binding.Pattern.ARGUMENT_TYPE) {
-                    logger.error(binding.site, "ArgumentType<T> should only be bound to an argument");
+            for (var binding : command.bindings().values()) {
+                if (binding.pattern() == Binding.Pattern.ARGUMENT_TYPE) {
+                    logger.error(binding.site(), "ArgumentType<T> should only be bound to an argument");
                     return;
                 }
             }

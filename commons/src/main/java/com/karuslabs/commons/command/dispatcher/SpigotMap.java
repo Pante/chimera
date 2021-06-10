@@ -83,8 +83,8 @@ class SpigotMap implements PlatformMap {
      */
     DispatcherCommand wrap(LiteralCommandNode<CommandSender> command) {
         var aliases = new ArrayList<String>();
-        if (command instanceof Aliasable<?>) {
-            for (var alias : ((Aliasable<?>) command).aliases()) {
+        if (command instanceof Aliasable<?> aliasable) {
+            for (var alias : aliasable.aliases()) {
                 aliases.add(alias.getName());
             }
         }
@@ -97,21 +97,21 @@ class SpigotMap implements PlatformMap {
     public @Nullable DispatcherCommand unregister(String name) {
         var commands = map.getKnownCommands();
         var command = commands.get(name);
-        if (!(command instanceof DispatcherCommand)) {
+        if (!(command instanceof DispatcherCommand wrapped)) {
             return null;
         }
         
-        commands.remove(name, command);
-        commands.remove(prefix + ":" + name, command);
+        commands.remove(name, wrapped);
+        commands.remove(prefix + ":" + name, wrapped);
         
         for (var alias : command.getAliases()) {
-            commands.remove(alias, command);
-            commands.remove(prefix + ":" + alias, command);
+            commands.remove(alias, wrapped);
+            commands.remove(prefix + ":" + alias, wrapped);
         }
         
-        command.unregister(map);
+        wrapped.unregister(map);
         
-        return (DispatcherCommand) command;
+        return wrapped;
     }
     
 }

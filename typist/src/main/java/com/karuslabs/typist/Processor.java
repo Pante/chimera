@@ -39,14 +39,14 @@ import java.util.*;
 import javax.annotation.processing.*;
 import javax.lang.model.element.*;
 
-import static javax.lang.model.SourceVersion.RELEASE_11;
+import static javax.lang.model.SourceVersion.RELEASE_16;
 
 /**
  * An annotation processor that generates Java code which initializes Brigadier commands
  * from annotations in {@link com.karuslabs.typist.annotations}.
  */
 @AutoService(javax.annotation.processing.Processor.class)
-@SupportedSourceVersion(RELEASE_11)
+@SupportedSourceVersion(RELEASE_16)
 @SupportedAnnotationTypes("com.karuslabs.typist.annotations.*")
 public class Processor extends AnnotationProcessor {
     

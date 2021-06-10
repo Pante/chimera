@@ -81,9 +81,9 @@ public class BindParser extends LexParser {
     
     abstract class Binder {
         void bind(Environment environment, Binding<?> binding, String[] commands) {
-            var namespace = environment.namespace(binding.site);
+            var namespace = environment.namespace(binding.site());
             for (var command : commands) {
-                var tokens = lexer.lex(logger, binding.site, command);
+                var tokens = lexer.lex(logger, binding.site(), command);
                 if (tokens.isEmpty()) {
                     continue;
                 }
@@ -100,17 +100,17 @@ public class BindParser extends LexParser {
         void bind(Environment environment, Map<Identity, Command> commands, List<Token> tokens, Binding<?> binding) {
             Command command = null;
             for (var token : tokens) {
-                command = commands.get(token.identity);
+                command = commands.get(token.identity());
                 if (command == null) {
-                    logger.error(binding.site, Texts.join(tokens, (t, builder) -> builder.append(t.identity), " "), " does not exist");
+                    logger.error(binding.site(), Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " "), " does not exist");
                     return;
                 }
                 
-                commands = command.children;
+                commands = command.children();
             }
             
             command.bind(binding);
-            environment.method(binding.site).add(command);
+            environment.method(binding.site()).add(command);
         } 
     }
     
@@ -122,7 +122,7 @@ public class BindParser extends LexParser {
         void bind(Environment environment, Map<Identity, Command> commands, List<Token> tokens, Binding<?> binding) {
             match(environment, commands, tokens, 0, binding);
             if (matches.isEmpty()) {
-                logger.error(binding.site, "Pattern: " + Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity), " ")), "does not exist");
+                logger.error(binding.site(), "Pattern: " + Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " ")), "does not exist");
                 
             } else {
                 matches.clear();
@@ -131,24 +131,24 @@ public class BindParser extends LexParser {
         
         void match(Environment environment, Map<Identity, Command> commands, List<Token> tokens, int index, Binding<?> binding) {
             for (var command : commands.values()) {
-                if (!matches.contains(command) && command.identity.equals(tokens.get(index).identity)) {
+                if (!matches.contains(command) && command.identity().equals(tokens.get(index).identity())) {
                     if (index < tokens.size() - 1) {
-                        match(environment, command.children, tokens, index + 1, binding);
+                        match(environment, command.children(), tokens, index + 1, binding);
                         
                     } else {
                         command.bind(binding);
-                        environment.method(binding.site).add(command);
+                        environment.method(binding.site()).add(command);
                         
                         var match = command;
                         for (int i = 0; i < tokens.size(); i++) {
                             matches.add(match);
-                            match = match.parent;
+                            match = match.parent();
                         }
                     }
                 }
                 
                 // Cannot be re-ordered since we rely on matching a sequence first
-                match(environment, command.children, tokens, 0, binding);
+                match(environment, command.children(), tokens, 0, binding);
             }
         }
     }

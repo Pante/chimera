@@ -1,10 +1,10 @@
-## 4.9.0 - Next release
+## 5.0.0 - Next release
 
-**Compatible Spigot versions: 1.16.4**
+**Compatible Spigot versions: 1.17.0**
 
 This update adds argument type matching and overhauls code generation for the command framework. The Scribe project has also been removed.
 Underneath the hood, we have streamlined the project's infrastructure and documentation. Documentation is now applied on the master branch
-and the staging branch has been removed.
+and the staging branch has been removed. The minimum Java version has also been bumped to Java 16
 
 ### Annotations
 

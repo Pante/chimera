@@ -31,22 +31,56 @@ import javax.lang.model.element.Element;
 
 import static java.util.Collections.EMPTY_LIST;
 
+/**
+ * A {@code Lexer} that transforms a string representation of a literal into a 
+ * single literal token. Literals should match {@code name(|alias)*}; depending on
+ * the implementation, a {@code LiteralLexer} may not accept literals with aliases.
+ */
 public abstract class LiteralLexer implements Lexer {
     
+    /**
+     * Creates a {@code LiteralLexer} that accepts literals with aliases.
+     * 
+     * @param memoizer the memoizer used to cache a token's identity.
+     * @return a {@code LiteralLexer}
+     */
     public static LiteralLexer aliasable(Memoizer memoizer) {
         return new AliasableLiteralLexer(memoizer);
     }
     
+    /**
+     * Creates a {@code LiteralLexer} that does not accept literal with aliases.
+     * 
+     * @param memoizer the memoizer used to cache a token's identity.
+     * @return a {@code LiteralLexer}
+     */
     public static LiteralLexer single(Memoizer memoizer) {
         return new SingleLiteralLexer(memoizer);
     }
     
+    /**
+     * The memoizer used to cache a token's identity.
+     */
     protected final Memoizer memoizer;
     
+    /**
+     * Creates a {@code LiteralLexer} with the given memoizer.
+     * 
+     * @param memoizer the memoizer used to cache a token's identity
+     */
     public LiteralLexer(Memoizer memoizer) {
         this.memoizer = memoizer;
     }
     
+    /**
+     * Transforms the given lexeme into a single literal {@code Token}; an empty
+     * sequence is returned if the lexeme is invalid.
+     * 
+     * @param logger the logger used to report errors
+     * @param element the element on which the lexeme declared
+     * @param lexeme the lexeme
+     * @return a single argument {@code Token}
+     */
     @Override
     public List<Token> lex(Logger logger, Element element, String lexeme) {
         if (lexeme.contains("<") || lexeme.contains(">")) {

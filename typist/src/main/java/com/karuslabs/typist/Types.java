@@ -54,8 +54,7 @@ public class Types extends TypeMirrors {
     public final TypeMirror requirement;
     public final TypeMirror suggestionsBuilder;
     public final TypeMirror suggestionProvider;
-    
-    
+
    /**
     * Creates a {@code Types} with the given arguments.
     * 

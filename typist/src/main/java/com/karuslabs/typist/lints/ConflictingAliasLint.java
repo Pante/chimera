@@ -46,14 +46,14 @@ public class ConflictingAliasLint extends Lint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        for (var child : command.children.values()) {
-            if (child.identity.type == Type.ARGUMENT) {
+        for (var child : command.children().values()) {
+            if (child.identity().type() == Type.ARGUMENT) {
                 continue;
             }
             
-            lint(child, child.identity.name, NAME);
+            lint(child, child.identity().name(), NAME);
             
-            for (var alias : child.aliases) {
+            for (var alias : child.aliases()) {
                 lint(child, alias, ALIAS);
             }
         }
@@ -68,13 +68,13 @@ public class ConflictingAliasLint extends Lint {
         }
         
         if (kind == ALIAS && existing.getValue() == ALIAS) {
-            logger.error(command.site, "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with alias in " + quote(existing.getKey().path()));
+            logger.error(command.site(), "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with alias in " + quote(existing.getKey().path()));
             
         } else if (kind == ALIAS && existing.getValue() == NAME) {
-            logger.error(command.site, "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with " + quote(existing.getKey().path()));
+            logger.error(command.site(), "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with " + quote(existing.getKey().path()));
             
         } else if (kind == NAME && existing.getValue() == ALIAS ){
-            logger.error(existing.getKey().site, "Alias: " + quote(name) + " in " + quote(existing.getKey().path()) + " conflicts with " + quote(command.path()));
+            logger.error(existing.getKey().site(), "Alias: " + quote(name) + " in " + quote(existing.getKey().path()) + " conflicts with " + quote(command.path()));
         }
     }
 

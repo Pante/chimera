@@ -51,9 +51,9 @@ public class ReferenceTypeLint extends TypeLint {
 
     @Override
     public void lint(Environment environment, Command command) {
-        for (var binding : command.bindings.values()) {
-            if (binding instanceof Method) {
-                for (var reference : ((Method) binding).parameters(command).values()) {
+        for (var binding : command.bindings().values()) {
+            if (binding instanceof Method method) {
+                for (var reference : method.parameters(command).values()) {
                     lint(environment, command, reference);
                 }
             }
@@ -66,16 +66,16 @@ public class ReferenceTypeLint extends TypeLint {
             return;
         }
         
-        var ancestor = (DeclaredType) argument.site.asType().accept(walker, argumentType);
+        var ancestor = (DeclaredType) argument.site().asType().accept(walker, argumentType);
         var arguments = ancestor.getTypeArguments();
         if (arguments.isEmpty()) {
-            logger.warn(reference.site, "Parameter refers to an argument with a raw ArgumentType");
+            logger.warn(reference.site(), "Parameter refers to an argument with a raw ArgumentType");
             return;
         }
         
-        var error = arguments.get(0).accept(visitor, reference.site.asType());
+        var error = arguments.get(0).accept(visitor, reference.site().asType());
         if (error != null) {
-            logger.error(reference.site, "Parameter should be a supertype of " + error);
+            logger.error(reference.site(), "Parameter should be a supertype of " + error);
         }
     }
     

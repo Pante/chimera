@@ -4,7 +4,7 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>4.9.0-SNAPSHOT</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-        <release>11</release>
+        <release>16</release>
         
         <repository-head>nightly</repository-head>
     </properties>
@@ -43,7 +43,14 @@
     </distributionManagement>
     
     
-    <repositories>     
+    <pluginRepositories>
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <url>https://repository.apache.org/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
+    <repositories>
         <repository>
             <id>elementary-releases</id>
             <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
@@ -210,7 +217,7 @@
                 <configuration>
                     <generateProjectInfo>false</generateProjectInfo>
                     <generateReports>false</generateReports>
-                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/elementary/${project.version}/</stagingSiteURL>
+                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/chimera/${project.version}/</stagingSiteURL>
                 </configuration>
                 <dependencies>
                     <dependency>

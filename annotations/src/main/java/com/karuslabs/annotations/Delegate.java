@@ -34,6 +34,4 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target({TYPE, METHOD})
-public @interface Delegate {
-
-}
+public @interface Delegate { }

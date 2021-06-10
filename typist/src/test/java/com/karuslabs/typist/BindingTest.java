@@ -87,8 +87,8 @@ class FieldTest {
     void capture(String label, Pattern pattern) {
         var field = Field.capture(types, (VariableElement) cases.one(label));
         
-        assertEquals(cases.one(label), field.site);
-        assertEquals(pattern, field.pattern);
+        assertEquals(cases.one(label), field.site());
+        assertEquals(pattern, field.pattern());
     }
     
     @Case ArgumentType<String> argument;
@@ -130,8 +130,8 @@ class MethodTest {
     void capture(String label, Pattern pattern) {
         var method = Method.capture(types, (ExecutableElement) cases.one(label));
         
-        assertEquals(cases.one(label), method.site);
-        assertEquals(pattern, method.pattern);
+        assertEquals(cases.one(label), method.site());
+        assertEquals(pattern, method.pattern());
     }
     
     @Case int command_method() { return 0; }

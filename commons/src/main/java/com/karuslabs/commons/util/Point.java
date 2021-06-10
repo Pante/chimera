@@ -157,17 +157,9 @@ public final class Point extends Location {
      */
     public Point set(Axis axis, double value) {
         switch (axis) {
-            case X:
-                setX(value);
-                break;
-               
-            case Y:
-                setY(value);
-                break;
-                
-            case Z:
-                setZ(value);
-                break;
+            case X -> setX(value);
+            case Y -> setY(value);
+            case Z -> setZ(value);
         }
         
         return this;
@@ -224,24 +216,17 @@ public final class Point extends Location {
     }
     
     @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        
-        if (!(object instanceof Point)) {
-            return false;
-        }
-        
-        var other = (Point) object;
-        return Objects.equals(getWorld(), other.getWorld())
-            && Math.abs(getX() - other.getX()) < EPSILON
-            && Math.abs(getY() - other.getY()) < EPSILON
-            && Math.abs(getZ() - other.getZ()) < EPSILON
-            && Math.abs(getYaw() - other.getYaw()) < EPSILON
-            && Math.abs(getPitch() - other.getPitch()) < EPSILON
-            && rotation == other.rotation 
-            && Arrays.equals(relative, other.relative);
+    public boolean equals(Object other) {
+        return this == other
+            || other instanceof Point point
+            && Objects.equals(getWorld(), point.getWorld())
+            && Math.abs(getX() - point.getX()) < EPSILON
+            && Math.abs(getY() - point.getY()) < EPSILON
+            && Math.abs(getZ() - point.getZ()) < EPSILON
+            && Math.abs(getYaw() - point.getYaw()) < EPSILON
+            && Math.abs(getPitch() - point.getPitch()) < EPSILON
+            && rotation == point.rotation 
+            && Arrays.equals(relative, point.relative);
     }
 
     @Override

@@ -40,7 +40,7 @@ public abstract class Lint {
     
     static void lint(Environment environment, Lint lint, Command command) {
         lint.lint(environment, command);
-        for (var child : command.children.values()) {
+        for (var child : command.children().values()) {
             lint(environment, lint, child);
         }
     }

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.9.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>typist</artifactId>
@@ -89,7 +89,7 @@
                         <path>
                             <groupId>com.google.auto.service</groupId>
                             <artifactId>auto-service</artifactId>
-                            <version>1.0-rc6</version>
+                            <version>1.0</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -120,9 +120,9 @@
                 </executions>
             </plugin>
             
-            <plugin>
+<!--            <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
@@ -137,7 +137,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>

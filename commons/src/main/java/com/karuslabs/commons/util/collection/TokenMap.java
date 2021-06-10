@@ -281,16 +281,7 @@ public interface TokenMap<N, T> {
         
         @Override
         public boolean equals(Object other) {
-            if (this == other) {
-                return true;
-            } 
-            
-            if (!(other instanceof Key<?, ?>) || hashCode() != other.hashCode()) {
-                return false;
-            }
-            
-            var key = (Key<?, ?>) other;
-            return type == key.type && Objects.equals(name, key.name);
+            return this == other || other instanceof Key key && type == key.type && Objects.equals(name, key.name);
         }
         
         @Override

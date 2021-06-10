@@ -125,14 +125,14 @@ public class Scheduler extends ScheduledThreadPoolExecutor {
      * Sets the context of the given runnable if it is a {@code RunnableContext}.
      * 
      * @param <V> the type of the result
-     * @param runnable the submitted runnable
+     * @param task the submitted task
      * @param future the future created to execute the given runnable
      * @return a task that execute the given runnable
      */
     @Override
-    protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> future) {
-        if (runnable instanceof RunnableContext) {
-            ((RunnableContext) runnable).future = future;
+    protected <V> RunnableScheduledFuture<V> decorateTask(Runnable task, RunnableScheduledFuture<V> future) {
+        if (task instanceof RunnableContext runnable) {
+            runnable.future = future;
         }
         
         return future;

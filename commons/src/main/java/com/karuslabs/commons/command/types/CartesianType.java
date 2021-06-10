@@ -59,8 +59,8 @@ interface CartesianType<T> extends Type<T> {
         var remaining = builder.getRemaining();
         var parts = remaining.isBlank() ? EMPTY : remaining.split(" ");
         
-        if (source instanceof Player) {
-            var block = ((Player) source).getTargetBlockExact(5);
+        if (source instanceof Player player) {
+            var block = player.getTargetBlockExact(5);
             if (block != null) {
                 suggest(builder, parts, block.getLocation());
             }
@@ -109,16 +109,8 @@ interface Cartesian2DType<T> extends CartesianType<T> {
     @Override
     default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {
         switch (parts.length) {
-            case 0:
-                builder.suggest(String.valueOf(location.getX()));
-                builder.suggest(location.getX() + " " + location.getZ());
-                break;
-                
-            case 1:
-                builder.suggest(parts[0] + " " + location.getZ());
-                break;
-                
-            default: // Does nothing
+            case 0 -> builder.suggest(String.valueOf(location.getX())).suggest(location.getX() + " " + location.getZ());
+            case 1 -> builder.suggest(parts[0] + " " + location.getZ());
         }
     }
 
@@ -141,22 +133,12 @@ interface Cartesian3DType<T> extends CartesianType<T> {
     @Override
     default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {
         switch (parts.length) {
-            case 0:
-                builder.suggest(String.valueOf(location.getX()));
-                builder.suggest(location.getX() + " " + location.getY());
-                builder.suggest(location.getX() + " " + location.getY() + " " + location.getZ());
-                break;
-        
-            case 1:
-                builder.suggest(parts[0] + " " + location.getY());
-                builder.suggest(parts[0] + " " + location.getY() + " " + location.getZ());
-                break;
-            
-            case 2:
-                builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
-                break;
-                
-            default: // Does nothing
+            case 0 -> builder.suggest(String.valueOf(location.getX()))
+                             .suggest(location.getX() + " " + location.getY())
+                             .suggest(location.getX() + " " + location.getY() + " " + location.getZ());
+            case 1 -> builder.suggest(parts[0] + " " + location.getY())
+                             .suggest(parts[0] + " " + location.getY() + " " + location.getZ());
+            case 2 -> builder.suggest(parts[0] + " " + parts[1] + " " + location.getZ());
         }
     }
     

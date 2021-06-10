@@ -108,15 +108,16 @@ import org.bukkit.entity.minecart.CommandMinecart;
     
     
     // Source: package org.bukkit.craftbukkit.command.VanillaCommandWrapper#getListener(CommandSender)
+    // We wrote it slightly to check agaisnt NMS types rather than Spigot types to make it safer.
     static CommandListenerWrapper from(CommandSender sender) {
-        if (sender instanceof Player) {
-            return ((CraftPlayer) sender).getHandle().getCommandListener();
+        if (sender instanceof CraftPlayer player) {
+            return player.getHandle().getCommandListener();
             
-        } else if (sender instanceof BlockCommandSender) {
-            return ((CraftBlockCommandSender) sender).getWrapper();
+        } else if (sender instanceof CraftBlockCommandSender block) {
+            return block.getWrapper();
             
-        } else if (sender instanceof CommandMinecart) {
-            return ((EntityMinecartCommandBlock) ((CraftMinecartCommand) sender).getHandle()).getCommandBlock().getWrapper();
+        } else if (sender instanceof CraftMinecartCommand minecart) {
+            return ((EntityMinecartCommandBlock) minecart.getHandle()).getCommandBlock().getWrapper();
             
         } else if (sender instanceof RemoteConsoleCommandSender) {
             return ((DedicatedServer) MinecraftServer.getServer()).remoteControlCommandListener.getWrapper();
@@ -124,8 +125,8 @@ import org.bukkit.entity.minecart.CommandMinecart;
         } else if (sender instanceof ConsoleCommandSender) {
             return ((CraftServer) sender.getServer()).getServer().getServerCommandListener();
             
-        } else if (sender instanceof ProxiedCommandSender) {
-            return ((ProxiedNativeCommandSender) sender).getHandle();
+        } else if (sender instanceof ProxiedNativeCommandSender proxied) {
+            return proxied.getHandle();
             
         } else {
             throw new IllegalArgumentException("Cannot make " + sender + " a vanilla command listener");

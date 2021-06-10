@@ -35,6 +35,4 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)
-public @interface Lazy {
-
-}
+public @interface Lazy { }

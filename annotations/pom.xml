@@ -4,20 +4,20 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>chimera</artifactId>
-        <version>4.9.0-SNAPSHOT</version>
+        <version>5.0.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>annotations</artifactId>
     <packaging>jar</packaging>
     
     <name>Annotations</name>
-    <description>Commonly used annotations</description>
+    <description>Frequently used annotations</description>
     
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
                     <shadedArtifactAttached>true</shadedArtifactAttached>
