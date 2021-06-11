@@ -68,7 +68,7 @@ public class Processor extends AnnotationProcessor {
     
     void parsers() {
         var memoizer = new Memoizer();
-        var argumentLexer = new ArgumentLexer();
+        var argumentLexer = new ArgumentLexer(memoizer);
         parsers = new Parser[] {
             new CommandParser(logger, new CommandLexer(argumentLexer, LiteralLexer.aliasable(memoizer))),
             new BindParser(new BindParser.Visitor(types), logger, new CommandLexer(argumentLexer, LiteralLexer.single(memoizer))),

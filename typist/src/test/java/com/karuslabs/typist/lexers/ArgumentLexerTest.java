@@ -23,6 +23,7 @@
  */
 package com.karuslabs.typist.lexers;
 
+import com.karuslabs.typist.lexers.Lexer.Memoizer;
 import com.karuslabs.utilitary.Logger;
 
 import java.util.stream.Stream;
@@ -39,7 +40,7 @@ import static org.mockito.Mockito.*;
 
 class ArgumentLexerTest {
     
-    ArgumentLexer lexer = new ArgumentLexer();
+    ArgumentLexer lexer = new ArgumentLexer(new Memoizer());
     Logger logger = mock(Logger.class);
     Element element = mock(Element.class);
     

@@ -31,16 +31,35 @@ import javax.lang.model.element.Element;
 
 import static java.util.Collections.EMPTY_LIST;
 
+/**
+ * A {@code Lexer} that transforms a string representation of arguments and literals
+ * into a sequence of argument and literal tokens.
+ */
 public class CommandLexer implements Lexer {
 
     private final Lexer argument;
     private final Lexer literal;
     
+    /**
+     * Creates a {@code CommandLexer} with the given argument and literal lexers.
+     * 
+     * @param argument the argument lexer
+     * @param literal the literal lexer
+     */
     public CommandLexer(Lexer argument, Lexer literal) {
         this.argument = argument;
         this.literal = literal;
     }
     
+    /**
+     * Transforms the given lexeme into a sequence of argument and literal {@code Token}s;
+     * invalid lexemes are discarded from the returned sequence.
+     * 
+     * @param logger the logger used to report errors
+     * @param element the element on which the lexeme declared
+     * @param line the lexeme
+     * @return a single argument {@code Token}
+     */
     @Override
     public List<Token> lex(Logger logger, Element element, String line) {
         if (line.isBlank()) {
