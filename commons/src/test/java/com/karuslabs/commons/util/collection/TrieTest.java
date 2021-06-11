@@ -145,7 +145,7 @@ class TrieTest {
     
     @Test
     void put_replacement() {
-        trie = new Trie<String>();
+        trie = new Trie<>();
         assertTrue(trie.isEmpty());
         
         assertNull(trie.put("a", "old"));

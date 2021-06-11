@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>annotations</artifactId>
   <name>Annotations</name>
-  <description>Commonly used annotations</description>
+  <description>Frequently used annotations</description>
   <build>
     <plugins>
       <plugin>
@@ -80,7 +80,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.10.0</version>
+      <version>3.11.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -100,7 +100,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>3.10.0</version>
+      <version>3.11.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

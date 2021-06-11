@@ -23,8 +23,7 @@
  */
 package com.karuslabs.commons.command;
 
-import com.karuslabs.annotations.Delegate;
-import com.karuslabs.annotations.Lazy;
+import com.karuslabs.annotations.*;
 
 import com.mojang.brigadier.*;
 import com.mojang.brigadier.context.*;
@@ -160,7 +159,7 @@ public @Delegate class OptionalContext<T> extends CommandContext<T> {
     
     @Override
     public boolean equals(Object other) {
-        return this == other && other instanceof OptionalContext optional && context.equals(optional.context);
+        return this == other || other instanceof OptionalContext optional && context.equals(optional.context);
     }
 
     @Override

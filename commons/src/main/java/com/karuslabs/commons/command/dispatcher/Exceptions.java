@@ -34,8 +34,6 @@ import org.bukkit.craftbukkit.v1_16_R3.command.*;
 import org.bukkit.craftbukkit.v1_16_R3.entity.*;
 
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.minecart.CommandMinecart;
 
 /**
  * Utility methods that handle exceptions which occur when parsing and executing commands.

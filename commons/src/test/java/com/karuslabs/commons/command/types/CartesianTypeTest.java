@@ -94,15 +94,15 @@ class CartesianDimensionalTypeTest {
     Location location = new Location(null, 1, 2, 3);
     SuggestionsBuilder builder = mock(SuggestionsBuilder.class);
     
-    
+    @BeforeEach
+    void before() {
+        when(builder.suggest(any(String.class))).thenReturn(builder);
+    }
     
     @Nested class Cartesian2DTest {
 
-        Cartesian2DType<String> type = new Cartesian2DType<>() {
-            @Override
-            public String parse(StringReader reader) throws CommandSyntaxException {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+        Cartesian2DType<String> type = reader -> {
+            throw new UnsupportedOperationException("Not supported yet.");
         };
 
         @Test
@@ -134,11 +134,8 @@ class CartesianDimensionalTypeTest {
     
     @Nested class Cartesian3DTest {
     
-        Cartesian3DType<String> type = new Cartesian3DType<>() {
-            @Override
-            public String parse(StringReader reader) throws CommandSyntaxException {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+        Cartesian3DType<String> type = reader -> {
+            throw new UnsupportedOperationException("Not supported yet.");
         };
 
 

@@ -36,28 +36,29 @@ import static org.mockito.Mockito.*;
 class CommandLexerTest {
 
     Memoizer memoizer = new Memoizer();
-    CommandLexer lexer = new CommandLexer(new ArgumentLexer(memoizer), LiteralLexer.single(memoizer));
+    CommandLexer lexer = new CommandLexer(new ArgumentLexer(memoizer), LiteralLexer.aliasable(memoizer));
     Logger logger = mock(Logger.class);
     Element element = mock(Element.class);
     
     @Test
     void lex() {
         var tokens = lexer.lex(logger, element, "a|b <c>");
-        var literal = tokens.get(0);
-        var argument = tokens.get(1);
         
         verifyNoInteractions(logger);
+        
+        var literal = tokens.get(0);
+        var argument = tokens.get(1);
         
         assertEquals(2, tokens.size());
         assertEquals("a", literal.identity().name());
         assertEquals(LITERAL, literal.identity().type());
-        assertEquals(new String[] {"b"}, literal.aliases());
+        assertArrayEquals(new String[] {"b"}, literal.aliases());
         assertEquals("a|b", literal.lexeme());
         
-        assertEquals("c", literal.identity().name());
-        assertEquals(ARGUMENT, literal.identity().type());
-        assertEquals(0, literal.aliases().length);
-        assertEquals("<c>", literal.lexeme());
+        assertEquals("c", argument.identity().name());
+        assertEquals(ARGUMENT, argument.identity().type());
+        assertEquals(0, argument.aliases().length);
+        assertEquals("<c>", argument.lexeme());
     }
     
     @Test
