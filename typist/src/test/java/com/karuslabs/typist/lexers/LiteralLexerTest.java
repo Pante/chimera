@@ -82,6 +82,13 @@ class AliasableLexerTest {
         assertArrayEquals(new String[] {"b", "c"}, literal.aliases());
     }
     
+    @Test
+    void lex_name_alias_clash() {
+        assertEquals(0, lexer.lex(logger, element, "a|a").size());
+        
+        verify(logger).error(element, "a|a", "contains an alias that is the same as its name");
+    }
+    
     @ParameterizedTest
     @MethodSource("lex_error_parameters")
     void lex_error(String lexeme, String reason, String resolution) {

@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 class CommandLexerTest {
 
     Memoizer memoizer = new Memoizer();
-    CommandLexer lexer = new CommandLexer(new ArgumentLexer(memoizer), LiteralLexer.aliasable(memoizer));
+    CommandLexer lexer = new CommandLexer(new ArgumentLexer(), LiteralLexer.aliasable(memoizer));
     Logger logger = mock(Logger.class);
     Element element = mock(Element.class);
     

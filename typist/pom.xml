@@ -93,6 +93,20 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>test-compile</id>
+                        <configuration>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>x.y.z</groupId>
+                                    <artifactId>foo-annotations-processor</artifactId>
+                                    <version>a.b.c</version>
+                                </path>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             
             <plugin>

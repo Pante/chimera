@@ -115,6 +115,11 @@ class AliasableLiteralLexer extends LiteralLexer {
                 logger.error(element, lexeme, "contains a blank alias", "should not be blank");
                 return EMPTY_LIST;
             }
+            
+            if (name.equals(alias)) {
+                logger.error(element, lexeme, "contains an alias that is the same as its name");
+                return EMPTY_LIST;
+            }
         }
         
         return List.of(memoizer.literal(name, lexeme, aliases));

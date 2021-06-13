@@ -37,11 +37,7 @@ import static java.util.Collections.EMPTY_LIST;
  */
 public class ArgumentLexer implements Lexer {
 
-    private final Memoizer memoizer;
-    
-    public ArgumentLexer(Memoizer memoizer) {
-        this.memoizer = memoizer;
-    }
+    private final Memoizer memoizer = new Memoizer();
     
     /**
      * Transforms the given lexeme into a single argument {@code Token}; an empty
