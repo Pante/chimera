@@ -31,12 +31,29 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.lang.model.element.*;
 
+/**
+ * A {@code Parser} that transforms commands declared in a {@code @Command} annotation
+ * into an AST representation of the commands.
+ */
 public class CommandParser extends LexParser {
 
+    /**
+     * Creates a {@code CommandParser} with the given logger and lexer.
+     * 
+     * @param logger the logger
+     * @param lexer the lexer
+     */
     public CommandParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
-
+    
+    /**
+     * Parses the commands declared in a {@code @Command} annotation on the given
+     * element and stores an AST representation of the commands in the given environment.
+     * 
+     * @param environment the environment
+     * @param element the annotated element
+     */
     @Override
     public void parse(Environment environment, Element element) {
         var namespace = environment.namespace(element);
@@ -56,6 +73,8 @@ public class CommandParser extends LexParser {
                     command = new Command(parent, token.identity(), (TypeElement) element);
                     commands.put(token.identity(), command);
                 }
+                
+                Collections.addAll(command.aliases(), token.aliases());
                 
                 parent = command;
                 commands = command.children();

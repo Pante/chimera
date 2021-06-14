@@ -92,5 +92,31 @@ public record Command(@Nullable Command parent, Identity identity, TypeElement s
 
         return builder.deleteCharAt(builder.length() - 1).toString();
     }
+    
+    
+    @Override
+    public boolean equals(Object other) {
+        return this == other || other instanceof Command command
+            && identity.equals(command.identity)
+            && site.equals(command.site)
+            && aliases.equals(command.aliases)
+            && bindings.equals(command.bindings)
+            && children.equals(command.children);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(identity, site, aliases, bindings, children);
+    }
+    
+    @Override
+    public String toString() {
+        return "{ identity: " + identity
+             + ", site: " + site
+             + ", aliases: " + aliases
+             + ", bindings: " + bindings
+             + ", children: " + children
+             + "}";
+    }
 
 }

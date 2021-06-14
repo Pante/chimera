@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,40 +25,26 @@ package com.karuslabs.typist.parsers;
 
 import com.karuslabs.typist.Environment;
 
-import java.lang.annotation.Annotation;
 import java.util.Set;
 import javax.lang.model.element.Element;
 
-/**
- * A parser that parses annotations on an element.
- */
-public interface Parser {
+import org.junit.jupiter.api.*;
+
+import static org.mockito.Mockito.*;
+
+class ParserTest {
     
-    /**
-     * Parses the given annotated elements.
-     * 
-     * @param environment the environment
-     * @param elements the annotated elements
-     */
-    default void parse(Environment environment, Set<? extends Element> elements) {
-        for (var element : elements) {
-            parse(environment, element);
-        }
+    Parser parser = spy(Parser.class);
+    Environment environment = new Environment();
+    Element first = mock(Element.class);
+    Element second = mock(Element.class);
+    
+    @Test
+    void parse_elements() {
+        parser.parse(environment, Set.of(first, second));
+        
+        verify(parser).parse(environment, first);
+        verify(parser).parse(environment, second);
     }
-    
-    /**
-     * Parses the given annotated element.
-     * 
-     * @param environment the environment
-     * @param element the annotated element
-     */
-    void parse(Environment environment, Element element);
-    
-    /**
-     * Returns the annotation that this parser supports.
-     * 
-     * @return the supported annotation
-     */
-    Class<? extends Annotation> annotation();
-    
+
 }

@@ -54,4 +54,23 @@ class CommandTest {
         assertEquals("tell <players> <message>", message.path());
     }
     
+    @Test
+    void hashCode_() {
+        var command = new Command(null, new Identity(LITERAL, "tell"), null);
+        assertEquals(command.hashCode(), command.hashCode());
+    }
+    
+    @Test
+    void toString_() {
+        tell.children().put(players.identity(), players);
+        players.children().put(message.identity(), message);
+        
+        assertEquals("""
+        { identity: tell, site: null, aliases: [], bindings: {}, \
+        children: {<players>={ identity: <players>, site: null, aliases: [], \
+        bindings: {}, children: {<message>={ identity: <message>, site: null, \
+        aliases: [], bindings: {}, children: {}}}}}}
+        """.stripTrailing(), tell.toString());
+    }
+    
 }

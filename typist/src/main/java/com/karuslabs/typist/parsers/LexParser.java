@@ -26,11 +26,26 @@ package com.karuslabs.typist.parsers;
 import com.karuslabs.typist.lexers.Lexer;
 import com.karuslabs.utilitary.Logger;
 
+/**
+ * A parser that transforms literal and argument tokens produced by a lexer.
+ */
 public abstract class LexParser implements Parser {
-
+    
+    /**
+     * The logger used to report errors and warnings.
+     */
     protected final Logger logger;
+    /**
+     * The lexer that produces literal and argument tokens.
+     */
     protected final Lexer lexer;
     
+    /**
+     * Creates a {@code LexParser} with the given logger and lexer.
+     * 
+     * @param logger the logger used to report errors and warnings
+     * @param lexer the lexer that produces literal and argument tokens
+     */
     public LexParser(Logger logger, Lexer lexer) {
         this.logger = logger;
         this.lexer = lexer;
