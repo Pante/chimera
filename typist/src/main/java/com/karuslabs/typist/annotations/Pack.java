@@ -29,7 +29,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * Denotes the package in which the Java source file is generated. By default, 
+ * Denotes the package and name of the Java source file is generated. By default, 
  * should no value be specified, the package is inferred to be the annotated type's.
  * The generated Java source file is always named {@code Commands.java}.
  */
@@ -43,6 +43,10 @@ public @interface Pack {
      * should be the same as the annotated type's.
      */
     static final String RELATIVE_PACKAGE = "${relative}";
+    /**
+     * The default name of the generated Java source file if unspecified.
+     */
+    static final String FILE_NAME = "Commands";
     
     /**
      * The package in which a Java source file is generated.
@@ -50,5 +54,12 @@ public @interface Pack {
      * @return the package
      */
     String age() default RELATIVE_PACKAGE;
+    
+    /**
+     * The name of the generated Java source file.
+     * 
+     * @return the name
+     */
+    String file() default FILE_NAME;
 
 }

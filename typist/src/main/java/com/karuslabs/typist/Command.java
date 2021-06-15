@@ -100,13 +100,12 @@ public record Command(@Nullable Command parent, Identity identity, TypeElement s
             && identity.equals(command.identity)
             && site.equals(command.site)
             && aliases.equals(command.aliases)
-            && bindings.equals(command.bindings)
             && children.equals(command.children);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(identity, site, aliases, bindings, children);
+        return Objects.hash(identity, site, aliases, children);
     }
     
     @Override
@@ -114,7 +113,6 @@ public record Command(@Nullable Command parent, Identity identity, TypeElement s
         return "{ identity: " + identity
              + ", site: " + site
              + ", aliases: " + aliases
-             + ", bindings: " + bindings
              + ", children: " + children
              + "}";
     }

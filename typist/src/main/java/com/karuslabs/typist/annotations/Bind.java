@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * Binds the annotated fields and methods to the given commands. The part of command
- * to which the annotated field or method is bound is inferred using its signature.
+ * to which the annotated field or method, is bound is inferred using its signature.
  * <br><br>
  * The annotated target may be bound to multiple commands and commands that matches 
  * a given pattern. A pattern is defined as a sequence of arguments and literals.

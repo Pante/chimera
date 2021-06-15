@@ -37,12 +37,36 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.utilitary.Texts.quote;
 
+/**
+ * A {@code Parser} that resolves the reference between a method parameter annotated
+ * with {@code @Let} and an argument. The argument must be an ancestor of the command(s)
+ * to which the enclosing method is bound. If no argument name is given, it is assumed
+ * to be the annotated method parameter's name.
+ */
 public class LetParser extends LexParser {
     
+    /**
+     * Creates a {@code LetParser} with the given logger and lexer.
+     * 
+     * @param logger the logger
+     * @param lexer the lexer
+     */
     public LetParser(Logger logger, Lexer lexer) {
         super(logger, lexer);
     }
     
+    /**
+     * Resolves the reference between a method parameter annotated with {@code @Let} 
+     * and an argument. The resultant reference is then stored in the enclosing
+     * method binding.
+     * 
+     * The argument must be an ancestor of the command(s) to which the enclosing 
+     * method is bound. If no argument name is given, it is assumed to be the given 
+     * element's name.
+     * 
+     * @param environment the environment
+     * @param element the annotated element
+     */
     @Override
     public void parse(Environment environment, Element element) {
         var line = element.getAnnotation(Let.class).value();
@@ -73,6 +97,13 @@ public class LetParser extends LexParser {
         }
     }
     
+    /**
+     * Returns an ancestor of the given command that matches the identity.
+     * 
+     * @param command the command
+     * @param identity the identity
+     * @return an ancestor of the given command that matches the identity; otherwise {@code null}
+     */
     @Nullable Command find(Command command, Identity identity) {
         while (command != null) {
             if (!command.identity().equals(identity)) {

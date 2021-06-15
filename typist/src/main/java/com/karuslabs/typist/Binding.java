@@ -223,6 +223,25 @@ public interface Binding<T extends Element> {
     /**
      * Represents a method parameter that is a reference to a command.
      */
-    public static record Reference(int index, VariableElement site, Command value) {}
+    public static record Reference(int index, VariableElement site, Command value) {
+        // TODO: Test
+        @Override
+        public boolean equals(Object other) {
+            return this == other || other instanceof Reference ref 
+                && index == ref.index
+                && site == ref.site
+                && value.identity() == ref.value.identity();
+        }
+        
+        @Override
+        public int hashCode() {
+            return Objects.hash(index, site, value.identity());
+        }
+        
+        @Override
+        public String toString() {
+            return "{ index: " + index + ", site: " + site + ", value: " + value.identity() + "}";
+        }
+    }
     
 }

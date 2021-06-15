@@ -35,18 +35,38 @@ import java.util.regex.*;
 import javax.lang.model.element.Element;
 
 import static com.karuslabs.typist.annotations.Pack.RELATIVE_PACKAGE;
-import static com.karuslabs.utilitary.Texts.quote;
 
+/**
+ * A {@code Parser} that parses a package and name from a {@code @Pack} annotation 
+ * on an element. The package and name is stored for the subsequent generation of
+ * a Java source file.
+ */
 public class PackageParser implements Parser {
 
     static final Matcher PACKAGE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])(\\.(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$]))*").matcher("");
+    static final Matcher FILE = Pattern.compile("(([a-zA-Z$_][a-zA-Z\\d$_]+)|[a-zA-Z$])").matcher("");
     
     private final Logger logger;
     
+    /**
+     * Creates a {@code PackageParser} with the given logger.
+     * 
+     * @param logger the logger
+     */
     public PackageParser(Logger logger) {
         this.logger = logger;
     }
     
+    /**
+     * Parses the package and name of the Java source file to be generated, from 
+     * a {@code @Pack} annotation on an element. The package and name is stored in 
+     * the given environment for the subsequent generation of a Java source file. 
+     * An error is reported if the given elements does not contain exactly 1 {@code @Pack} 
+     * annotation.
+     * 
+     * @param environment the environment
+     * @param elements the annotated elements
+     */
     @Override
     public void parse(Environment environment, Set<? extends Element> elements) {
         if (elements.size() == 1) {
@@ -62,26 +82,32 @@ public class PackageParser implements Parser {
         }
     }
 
+    /**
+     * Parses the package and name of the Java source file to be generated, from 
+     * a {@code @Pack} annotation on an element. The package and name is stored in 
+     * the given environment for the subsequent generation of a Java source file.
+     * An error is reported if the package or name is invalid.
+     * 
+     * @param environment the environment
+     * @param element the annotated element
+     */
     @Override
     public void parse(Environment environment, Element element) {
-        var pack = element.getAnnotation(Pack.class).age();
-        
-        if (RELATIVE_PACKAGE.equals(pack)) {
-            environment.out = new Out(element, element.accept(Find.PACKAGE, null).getQualifiedName().toString(), "Commands");
-            return;
-            
-        } else if (pack.endsWith(".java") || pack.endsWith(".class")) {
-            var parts = pack.split("\\.");
-            logger.error(element, "Package should not end with " + quote("." + parts[parts.length - 1])+ "");
-            return;
-            
-        }  else if (!PACKAGE.reset(pack).matches()) {
+        var pack = element.getAnnotation(Pack.class);
+        if (!RELATIVE_PACKAGE.equals(pack.age()) && !PACKAGE.reset(pack.age()).matches()) {
             logger.error(element, "Invalid package name");
-            return;
-        } 
+        }
         
-        int dot = pack.lastIndexOf(".");
-        environment.out = dot == -1 ? new Out(element, "", pack) : new Out(element, pack.substring(0, dot), pack.substring(dot + 1, pack.length()));
+        if (!FILE.reset(pack.file()).matches()) {
+            logger.error(element, "Invalid file name");
+        }
+        
+        if (logger.error()) {
+            return;
+        }
+        
+        var name = RELATIVE_PACKAGE.equals(pack.age()) ? element.accept(Find.PACKAGE, null).getQualifiedName().toString() : pack.age();
+        environment.out = new Out(element, name, pack.file());
     }
 
     @Override

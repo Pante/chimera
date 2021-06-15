@@ -66,10 +66,10 @@ class CommandTest {
         players.children().put(message.identity(), message);
         
         assertEquals("""
-        { identity: tell, site: null, aliases: [], bindings: {}, \
+        { identity: tell, site: null, aliases: [], \
         children: {<players>={ identity: <players>, site: null, aliases: [], \
-        bindings: {}, children: {<message>={ identity: <message>, site: null, \
-        aliases: [], bindings: {}, children: {}}}}}}
+        children: {<message>={ identity: <message>, site: null, \
+        aliases: [], children: {}}}}}}
         """.stripTrailing(), tell.toString());
     }
     
