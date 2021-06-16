@@ -31,9 +31,18 @@ import java.util.*;
 
 import static com.karuslabs.utilitary.Texts.quote;
 
-public class BindingPatternLint extends Lint {
+/**
+ * A {@code Lint} which verifies that commands contain only a single binding of each
+ * type.
+ */
+public class DuplicateBindingLint extends Lint {
 
-    public BindingPatternLint(Logger logger) {
+    /**
+     * Creates a {@code DuplicateBindingLint} with the given logger.
+     * 
+     * @param logger the logger used to report errors
+     */
+    public DuplicateBindingLint(Logger logger) {
         super(logger);
     }
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,27 @@
  */
 package com.karuslabs.typist.lints;
 
+import com.karuslabs.typist.Command;
+import com.karuslabs.typist.Environment;
 import com.karuslabs.utilitary.Logger;
-import com.karuslabs.typist.*;
-import com.karuslabs.typist.Identity.Type;
 
-/**
- * A {@code Lint} which verifies that a sequence of commands does not start with
- * an argument.
- */
-public class ArgumentPositionLint extends Lint {
+import org.junit.jupiter.api.*;
 
-    /**
-     * Creates an {@code ArgumentPositionLint} with the given logger.
-     * 
-     * @param logger the logger used to report errors
-     */
-    public ArgumentPositionLint(Logger logger) {
-        super(logger);
+import static org.mockito.Mockito.*;
+
+class TreeLintTest {
+    
+    Logger logger = mock(Logger.class);
+    Lint delegate = mock(Lint.class);
+    TreeLint lint = new TreeLint(logger, delegate);
+    Environment environment = new Environment();
+    Command command = mock(Command.class);
+    
+    @Test
+    void lint() {
+        lint.lint(environment, command);
+        
+        verify(delegate).lint(environment, command);
     }
 
-    @Override
-    public void lint(Environment environment, Command command) {
-        if (command.identity().type() == Type.ARGUMENT && command.parent() == null) {
-            logger.error(command.site(), command.identity(), "is at an invalid position", "command should not start with an argument");
-        }
-    }
-
-}
+} 

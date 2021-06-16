@@ -46,6 +46,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
 import static com.karuslabs.typist.Binding.Pattern.*;
+import static com.karuslabs.typist.Identity.Type.ARGUMENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.mock;
@@ -119,11 +120,14 @@ class FieldTest {
 
 @ExtendWith(ToolsExtension.class)
 @Introspect("BindingTest")
+@Case("class")
 class MethodTest {
     
     Types types = new Types(Tools.elements(), Tools.typeMirrors());
     Cases cases = Tools.cases();
     Method method = Method.capture(types, (ExecutableElement) cases.one("command_method"));
+    Reference first = new Reference(0, (VariableElement) cases.one("thing"), new Command(null, new Identity(ARGUMENT, "a"), (TypeElement) cases.one("class")));
+    Reference second = new Reference(0, (VariableElement) cases.one("thing"), new Command(null, new Identity(ARGUMENT, "a"), (TypeElement) cases.one("class")));
     
     @ParameterizedTest
     @MethodSource("capture_parameters")
@@ -165,6 +169,16 @@ class MethodTest {
         assertEquals(Map.of(0, reference), method.parameters(command));
     }
     
-    @Case String thing;
+    @Case("thing") String thing;
+    
+    @Test
+    void hashCode_() {
+        assertEquals(first.hashCode(), second.hashCode());
+    }
+    
+    @Test
+    void toString_() {
+        assertEquals(first.toString(), second.toString());
+    }
     
 }

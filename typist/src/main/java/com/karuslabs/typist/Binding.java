@@ -224,7 +224,6 @@ public interface Binding<T extends Element> {
      * Represents a method parameter that is a reference to a command.
      */
     public static record Reference(int index, VariableElement site, Command value) {
-        // TODO: Test
         @Override
         public boolean equals(Object other) {
             return this == other || other instanceof Reference ref 

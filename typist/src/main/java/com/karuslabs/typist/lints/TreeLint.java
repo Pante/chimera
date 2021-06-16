@@ -26,15 +26,23 @@ package com.karuslabs.typist.lints;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.typist.*;
 
-import java.util.List;
-
+/**
+ * A lint that contains other lints which analyze individual commands in the AST
+ * for commands.
+ */
 public class TreeLint extends Lint {
 
-    private final List<Lint> lints;
+    private final Lint[] lints;
     
+    /**
+     * Creates a {@code TreeLint} with the given logger and lints.
+     * 
+     * @param logger the logger used to report errors
+     * @param lints the lints
+     */
     public TreeLint(Logger logger, Lint... lints) {
         super(logger);
-        this.lints = List.of(lints);
+        this.lints = lints;
     }
 
     @Override

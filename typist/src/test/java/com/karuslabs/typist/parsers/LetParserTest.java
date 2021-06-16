@@ -51,19 +51,19 @@ import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.typist.annotations.*;
 
 @Case("class")
-@Command("a <b> c")
+@Command("a <b> <c>")
 class Cases {
                                                     
-    @Bind(pattern = "c")
-    void explicit(@Case("explicit") @Let("<b>") String value) {}
+    @Bind(pattern = "<c>")
+    void explicit(@Case("explicit") @Let("<c>") String value) {}
     
-    @Bind(pattern = "c")
-    void implicit(@Case("implicit") @Let String b) {}
+    @Bind(pattern = "<c>")
+    void implicit(@Case("implicit") @Let String c) {}
     
-    @Bind(pattern = "c")
+    @Bind(pattern = "<c>")
     void invalid(@Case("invalid") @Let String d) {}
                                                               
-    @Bind(pattern = "c")
+    @Bind(pattern = "<c>")
     void empty(@Case("empty") @Let("a") String d) {}
 
 }
@@ -96,7 +96,7 @@ class LetParserTest {
         var command = environment.method(method).get(0);
         var binding = (Method) command.bindings().get(method);
         
-        assertEquals(command.parent(), binding.parameters(command).get(0).value());
+        assertEquals(command, binding.parameters(command).get(0).value());
     }
     
     @Test
@@ -110,7 +110,7 @@ class LetParserTest {
         var binding = (Method) environment.method(method).get(0).bindings().get(method);
         
         assertTrue(binding.parameters().isEmpty());
-        verify(logger).error(parameter, new Identity(ARGUMENT, "d"), "does not exist in \"a <b> c\"");
+        verify(logger).error(parameter, new Identity(ARGUMENT, "d"), "does not exist in \"a <b> <c>\"");
     }
     
     @Test

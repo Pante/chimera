@@ -26,10 +26,22 @@ package com.karuslabs.typist.lints;
 import com.karuslabs.typist.Types;
 import com.karuslabs.utilitary.Logger;
 
+/**
+ * A {@code Lint} that analyzes the {@code Element} sites of commands. 
+ */
 public abstract class TypeLint extends Lint {
 
+    /**
+     * The types.
+     */
     protected final Types types;
     
+    /**
+     * Creates a {@code TypeLint} with the given logger and types.
+     * 
+     * @param logger the logger
+     * @param types the types
+     */
     public TypeLint(Logger logger, Types types) {
         super(logger);
         this.types = types;

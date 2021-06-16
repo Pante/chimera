@@ -29,10 +29,20 @@ import com.karuslabs.typist.Identity.Type;
 
 import static com.karuslabs.utilitary.Texts.quote;
 
-public class ArgumentTypeLint extends TypeLint {
+/**
+ * A {@code Lint} that verifies that fields and methods annotated with {@code @Bind}
+ * are only bound to arguments. Conversely, the lint also verifies that an argument
+ * has an annotated field or method that is bound to it.
+ */
+public class ArgumentTypeLint extends Lint {
 
-    public ArgumentTypeLint(Logger logger, Types types) {
-        super(logger, types);
+    /**
+     * Creates an {@code ArgumentTypeLint} with the given logger.
+     * 
+     * @param logger the logger used to report errors
+     */
+    public ArgumentTypeLint(Logger logger) {
+        super(logger);
     }
 
     @Override

@@ -26,32 +26,62 @@ package com.karuslabs.typist.lints;
 import com.karuslabs.typist.*;
 import com.karuslabs.utilitary.Logger;
 
+/**
+ * A {@code Lint} analyzes the abstract syntax tree (AST) of commands in an
+ * environment.
+ */
 public abstract class Lint {
     
-    public static void visit(Environment environment, Lint... lints) {
+    /**
+     * Analyzes the given environment using the given lints.
+     * 
+     * @param environment the environment to be analyzed
+     * @param lints the lints used to analyze the given environment
+     */
+    public static void lint(Environment environment, Lint... lints) {
         for (var lint : lints) {
             for (var namespace : environment.namespaces.values()) {
                 for (var command : namespace.values()) {
-                    lint(environment, lint, command);
+                    Lint.lint(environment, lint, command);
                 }
             }
         }
     }
     
+    /**
+     * Analyzes the given command using the given lint.
+     * 
+     * @param environment the environment
+     * @param lint the lint used to analyze the given environment
+     * @param command the command to be analyzed
+     */
     static void lint(Environment environment, Lint lint, Command command) {
         lint.lint(environment, command);
         for (var child : command.children().values()) {
-            lint(environment, lint, child);
+            Lint.lint(environment, lint, child);
         }
     }
     
-    
+    /**
+     * The logger used to report errors.
+     */
     protected final Logger logger;
     
+    /**
+     * Creates a {@code Lint} with the given logger.
+     * 
+     * @param logger the logger
+     */
     public Lint(Logger logger) {
         this.logger = logger;
     }
-
+    
+    /**
+     * Lints the given command.
+     * 
+     * @param environment the environment
+     * @param command the command to be linted
+     */
     public abstract void lint(Environment environment, Command command);
     
 }

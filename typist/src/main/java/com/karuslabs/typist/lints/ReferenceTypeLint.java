@@ -37,6 +37,7 @@ import javax.lang.model.util.SimpleTypeVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+// TODO: Bug: Parameters that reference same node as binded method fails
 public class ReferenceTypeLint extends TypeLint {
     
     private final Visitor visitor = new Visitor();

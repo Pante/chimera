@@ -85,8 +85,8 @@ public class Processor extends AnnotationProcessor {
             new DuplicateCommandLint(logger),
             new ReferenceTypeLint(logger, types),
             new TreeLint(logger,
-                new ArgumentTypeLint(logger, types),
-                new BindingPatternLint(logger),
+                new ArgumentTypeLint(logger),
+                new DuplicateBindingLint(logger),
                 new MethodSignatureLint(logger, types),
                 new PublicFinalBindingLint(logger, types)
             ),
@@ -123,7 +123,7 @@ public class Processor extends AnnotationProcessor {
             parser.parse(environment, round.getElementsAnnotatedWith(parser.annotation()));
         }
         
-        Lint.visit(environment, lints);
+        Lint.lint(environment, lints);
         
         if (!logger.error()) {
             generation.generate(environment);
