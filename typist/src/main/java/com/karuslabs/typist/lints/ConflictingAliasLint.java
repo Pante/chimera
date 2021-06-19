@@ -34,12 +34,21 @@ import java.util.Map.Entry;
 import static com.karuslabs.typist.lints.ConflictingAliasLint.Kind.*;
 import static com.karuslabs.utilitary.Texts.quote;
 
+/**
+ * A {@code Lint} which verifies that no conflicts between aliases and names of
+ * literals exist.
+ */
 public class ConflictingAliasLint extends Lint {
     
     static enum Kind { ALIAS, NAME; }
     
     private final Map<String, Entry<Command, Kind>> names = new HashMap<>();
     
+    /**
+     * Creates a {@code ConflictingAliasLint} with the given logger.
+     * 
+     * @param logger the logger used to report errors
+     */
     public ConflictingAliasLint(Logger logger) {
         super(logger);
     }
@@ -68,13 +77,13 @@ public class ConflictingAliasLint extends Lint {
         }
         
         if (kind == ALIAS && existing.getValue() == ALIAS) {
-            logger.error(command.site(), "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with alias in " + quote(existing.getKey().path()));
+            logger.error(command.site(), "Alias: " + quote(name) + " of " + quote(command.path()  + "|" + name) + " conflicts with alias of " + quote(existing.getKey().path() + "|" + name));
             
         } else if (kind == ALIAS && existing.getValue() == NAME) {
-            logger.error(command.site(), "Alias: " + quote(name) + " in " + quote(command.path()) + " conflicts with " + quote(existing.getKey().path()));
+            logger.error(command.site(), "Alias: " + quote(name) + " of " + quote(command.path()  + "|" + name) + " conflicts with " + quote(existing.getKey().path()));
             
         } else if (kind == NAME && existing.getValue() == ALIAS ){
-            logger.error(existing.getKey().site(), "Alias: " + quote(name) + " in " + quote(existing.getKey().path()) + " conflicts with " + quote(command.path()));
+            logger.error(existing.getKey().site(), "Alias: " + quote(name) + " of " + quote(existing.getKey().path()  + "|" + name) + " conflicts with " + quote(command.path()));
         }
     }
 
