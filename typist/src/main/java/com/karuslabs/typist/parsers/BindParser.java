@@ -267,7 +267,7 @@ public class BindParser extends LexParser {
         public @Nullable Field visitVariable(VariableElement element, Logger logger) {
             var field = Field.capture(types, element);
             if (field == null) {
-                logger.error(element, "Field: " + element.getSimpleName() + " has an invalid type, should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
+                logger.error(element, "Field: " + element.getSimpleName() + " has an invalid type, should be an ArgumentType<?>, Command<CommandSender>, Exeuction<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
             }
             return field;
         }

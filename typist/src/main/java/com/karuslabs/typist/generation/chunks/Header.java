@@ -36,21 +36,23 @@ public record Header() {
             source.line("package ", pack, ";");
         }
         
-        source.line("import com.karuslabs.commons.command.Execution;")
-              .line("import com.karuslabs.commons.command.tree.nodes.*;")
-              .line()
-              .line("import com.mojang.brigadier.Command;")
-              .line("import com.mojang.brigadier.suggestion.SuggestionProvider;")
-              .line("import com.mojang.brigadier.tree.CommandNode;")
-              .line()
-              .line("import java.util.*;")
-              .line("import java.util.function.Predicate;")
-              .line()
-              .line("import org.bukkit.command.CommandSender;")
-              .line()
-              .line("/**")
-              .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
-              .line(" */");
+        source.line("""
+               import com.karuslabs.commons.command.Execution;
+               import com.karuslabs.commons.command.tree.nodes.*;
+
+               import com.mojang.brigadier.Command;
+               import com.mojang.brigadier.suggestion.SuggestionProvider;
+               import com.mojang.brigadier.tree.CommandNode;
+
+               import java.util.*;
+               import java.util.function.Predicate;
+
+               import org.bukkit.command.CommandSender;
+
+               /**
+               """)
+        .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
+        .line(" */");
     }
 
 }

@@ -95,6 +95,10 @@ class Cases {
     @Case("empty")
     @Bind({})
     void empty() {}
+                                                              
+    @Case("empty_name")
+    @Bind("")
+    void empty_name() {}
 
 }
 
@@ -183,7 +187,7 @@ class BindParserTest {
         
         parser.parse(environment, element);
         
-        verify(logger).error(element, "Field: invalid_field has an invalid type, should be an ArgumentType<?>, Command<CommandSender>, Predicate<CommandSender>, SuggestionProvider<CommandSender>");
+        verify(logger).error(element, "Field: invalid_field has an invalid type, should be an ArgumentType<?>, Command<CommandSender>, Exeuction<CommandSender>, Predicate<CommandSender> or SuggestionProvider<CommandSender>");
         verify(environment, never()).method(any());
     }
     
@@ -194,6 +198,16 @@ class BindParserTest {
         parser.parse(environment, element);
         
         verify(logger).error(element, "@Bind should not be empty");
+        verify(environment, never()).method(any());
+    }
+    
+    @Test
+    void parse_empty_name() {
+        var element = cases.one("empty_name");
+        
+        parser.parse(environment, element);
+        
+        verify(logger).error(element, "Command should not be blank");
         verify(environment, never()).method(any());
     }
     

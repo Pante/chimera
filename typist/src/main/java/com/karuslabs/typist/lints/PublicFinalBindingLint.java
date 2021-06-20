@@ -33,10 +33,20 @@ import javax.lang.model.element.*;
 import static com.karuslabs.satisfactory.Assertions.contains;
 import static javax.lang.model.element.Modifier.*;
 
+/**
+ * A {@code Lint} which verifies that all fields and methods annotated with {@code Bind}
+ * are public and final.
+ */
 public class PublicFinalBindingLint extends TypeLint {
 
     private final Assertion<Set<Modifier>> assertion = contains(PUBLIC, FINAL);
 
+    /**
+     * Creates a {@code PublicFinalBindingLint} with the given logger and types.
+     * 
+     * @param logger the logger used to report errors
+     * @param types the types used in the assertion
+     */
     public PublicFinalBindingLint(Logger logger, Types types) {
         super(logger, types);
     }
@@ -44,9 +54,10 @@ public class PublicFinalBindingLint extends TypeLint {
     @Override
     public void lint(Environment environment, Command command) {
         for (var binding : command.bindings().values()) {
-            if (!assertion.test(types, binding.site().getModifiers())) {
-                var message = binding instanceof VariableElement ? "field should be public final" : "method should be public final";
-                logger.error(binding.site(), message);
+            var site = binding.site();
+            if (!assertion.test(types, site.getModifiers())) {
+                var message = site instanceof VariableElement ? "Field should be public and final" : "Method should be public and final";
+                logger.error(site, message);
             }
         }
     }

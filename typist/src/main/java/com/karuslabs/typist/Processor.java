@@ -82,7 +82,6 @@ public class Processor extends AnnotationProcessor {
         lints = new Lint[] {
             new ArgumentPositionLint(logger),
             new ConflictingAliasLint(logger),
-            new DuplicateCommandLint(logger),
             new ReferenceTypeLint(logger, types),
             new TreeLint(logger,
                 new ArgumentTypeLint(logger),

@@ -50,6 +50,7 @@ class CommandTest {
     
     @Test
     void path() {
+        assertEquals("tell", tell.path());
         assertEquals("tell <players>", players.path());
         assertEquals("tell <players> <message>", message.path());
     }

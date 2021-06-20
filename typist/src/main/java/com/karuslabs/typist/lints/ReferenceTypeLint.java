@@ -37,16 +37,25 @@ import javax.lang.model.util.SimpleTypeVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-// TODO: Bug: Parameters that reference same node as binded method fails
+/**
+ * A {@code Lint} which verifies that the type of a method parameter annotated with
+ * {@code @Bind} is the same as the referenced argument's bound {@code ArgumentType}.
+ */
 public class ReferenceTypeLint extends TypeLint {
     
     private final Visitor visitor = new Visitor();
     private final Walker<TypeMirror> walker;
     private final TypeMirror argumentType;
     
+    /**
+     * Creates a {@code ReferenceTypeLint} with the given logger and types.
+     * 
+     * @param logger the logger used to report errors
+     * @param types the types used to assert types
+     */
     public ReferenceTypeLint(Logger logger, Types types) {
         super(logger, types);
-        walker = Walker.ancestor(types);
+        walker = Walker.erasuredAncestor(types);
         argumentType = types.type(ArgumentType.class);
     }
 
@@ -61,25 +70,39 @@ public class ReferenceTypeLint extends TypeLint {
         }
     }
     
+    /**
+     * Verifies if the type parameter of the given command's {@code ArgumentType}
+     * can be assigned to the given reference's type.
+     * 
+     * @param environment the environment
+     * @param command the command
+     * @param reference the reference
+     */
     void lint(Environment environment, Command command, Reference reference) {
         var argument = command.binding(Pattern.ARGUMENT_TYPE);
         if (argument == null) {
             return;
         }
         
+        // TODO: Support intersection types & generic class parameters
         var ancestor = (DeclaredType) argument.site().asType().accept(walker, argumentType);
         var arguments = ancestor.getTypeArguments();
         if (arguments.isEmpty()) {
-            logger.warn(reference.site(), "Parameter refers to an argument with a raw ArgumentType");
+            logger.warn(reference.site(), "Parameter references an argument with a raw ArgumentType");
             return;
         }
         
         var error = arguments.get(0).accept(visitor, reference.site().asType());
         if (error != null) {
-            logger.error(reference.site(), "Parameter should be a supertype of " + error);
+            var type = error.equals("Object") ?  "an Object" : "a supertype of " + error;
+            logger.error(reference.site(), "Parameter should be " + type);
         }
     }
     
+    /**
+     * A {@code Visitor} that recursively returns a string representation of the
+     * visited type if it cannot be assigned to a given method parameter's type.
+     */
     class Visitor extends SimpleTypeVisitor9<String, TypeMirror> {
         
         @Override
@@ -113,7 +136,7 @@ public class ReferenceTypeLint extends TypeLint {
         
         @Override
         public @Nullable String visitDeclared(DeclaredType type, TypeMirror parameter) {
-            return types.isSubtype(type, parameter) ? null : type.asElement().getSimpleName().toString();
+            return types.isAssignable(type, parameter) ? null : type.asElement().getSimpleName().toString();
         }
         
     }

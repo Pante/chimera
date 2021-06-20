@@ -39,6 +39,10 @@ import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 import static com.karuslabs.typist.Binding.Pattern.*;
 
+/**
+ * A {@code Lint} which verifies that the signature of methods annotated with {@code @Bind}
+ * are valid.
+ */
 public class MethodSignatureLint extends TypeLint {
 
     private final Map<Pattern, Method> methods = new EnumMap<>(Pattern.class);
@@ -52,28 +56,28 @@ public class MethodSignatureLint extends TypeLint {
         );
         
         methods.put(COMMAND, method(parameters(equal(
-                times(1, variable(supertype(types.context))),
+                times(1, variable(type(types.context))),
                 min(0, variable(annotations(contains(Let.class))))
             )), exceptions
-        ).or("Method signature should match \"method(CommandContext<CommandSender>, @Let T...) throws CommandSyntaxException\""));
+        ).or("Method signature should match \"int method(CommandContext<CommandSender>, @Let T...) throws CommandSyntaxException\""));
         
         methods.put(EXECUTION, method(parameters(equal(
-                times(1, variable(supertype(types.context))),
-                times(1, variable(supertype(types.sender), annotations(contains(no(Let.class))))),
+                times(1, variable(type(types.context).or(type(types.optionalContext)))),
+                times(1, variable(type(types.sender), annotations(contains(no(Let.class))))),
                 min(0, variable(annotations(contains(Let.class))))
             )), exceptions
-        ).or("Method signature should match \"method(CommandContext<CommandSender>, CommandSender, @Let T...\""));
+        ).or("Method signature should match \"void method(CommandContext<CommandSender>, CommandSender, @Let T...) throws CommandSyntaxException\""));
         
         methods.put(REQUIREMENT, method(
-            parameters(equal(times(1, variable(supertype(types.sender))))),
-            exceptions(equal(not(subtype(Throwable.class))))
-        ).or("Method signature should match Predicate<CommandSender"));
+            parameters(equal(times(1, variable(type(types.sender))))),
+            exceptions(each(subtype(RuntimeException.class)))
+        ).or("Method signature should match Predicate<CommandSender>"));
         
         methods.put(SUGGESTION_PROVIDER, method(parameters(equal(
-                times(1, variable(supertype(types.context))),
-                times(1, variable(supertype(SuggestionsBuilder.class), annotations(contains(no((Let.class))))))
+                times(1, variable(type(types.context))),
+                times(1, variable(type(SuggestionsBuilder.class), annotations(contains(no((Let.class))))))
             )), exceptions
-        ).or("Method signature should match \"method(CommandContext<CommandSender>, SuggestionBuilder, @Let T...\""));
+        ).or("Method signature should match \"CompletableFuture<Suggestions> method(CommandContext<CommandSender>, SuggestionBuilder, @Let T...) throws CommandSyntaxException\""));
     }
 
     @Override
@@ -82,7 +86,7 @@ public class MethodSignatureLint extends TypeLint {
             if (!(binding instanceof Binding.Method)) {
                 continue;
             }
-            
+
             var method = methods.get(binding.pattern());
             if (!method.test(types, (ExecutableElement) binding.site())) {
                 logger.error(binding.site(), method.condition());
