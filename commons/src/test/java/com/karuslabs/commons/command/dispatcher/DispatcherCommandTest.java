@@ -30,7 +30,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.*;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
@@ -77,6 +78,16 @@ class DispatcherCommandTest {
         
         assertEquals("/command a b", reader.getString());
         assertEquals("command a b", reader.getRemaining());
+    }
+    
+    
+    @Test
+    void execute_CommandRuntimeException() throws CommandSyntaxException {
+        doReturn(true).when(command).testPermission(sender);
+        doThrow(new CommandRuntimeException(new TextComponent("message"))).when(dispatcher).execute(any(StringReader.class), any(CommandSender.class));
+        
+        assertTrue(command.execute(sender, "command", "a", "b"));
+        verify(stack, times(1)).sendFailure(any());
     }
     
     

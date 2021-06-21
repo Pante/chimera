@@ -46,8 +46,6 @@ package com.karuslabs.typist.lexers;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.typist.lexers;
-
 import com.karuslabs.typist.Token;
 import com.karuslabs.utilitary.Logger;
 
