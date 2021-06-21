@@ -52,12 +52,15 @@ import org.bukkit.command.*;
  */
 @Static class Exceptions {
 
-    static final Logger LOGGER;
-    static {
+    static final Logger LOGGER = logger();
+    static Logger logger() {
         try {
             var type = MethodHandles.privateLookupIn(Commands.class, MethodHandles.lookup());
-            LOGGER = (Logger) type.findStaticVarHandle(Commands.class, "LOGGER", Logger.class).get();
-            
+            try {
+                return (Logger) type.findStaticVarHandle(Commands.class, "f", Logger.class).get();  
+            } catch (ReflectiveOperationException e) {
+                return (Logger) type.findStaticVarHandle(Commands.class, "LOGGER", Logger.class).get();
+            }
         } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }
