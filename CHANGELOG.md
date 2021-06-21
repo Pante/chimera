@@ -22,11 +22,13 @@ Typist.
 
 - Add `@Let`
 - Add `BlockDataBuilder`
+- Add `BundleBuilder`
 - Add `CompassBuilder`
 - Add `ItemBuilder.banner()`
 - Add `ItemBuilder.blockData()`
 - Add `ItemBuilder.blockState()`
 - Add `ItemBuilder.book()`
+- Add `ItemBuilder.bundle()`
 - Add `ItemBuilder.compass()`
 - Add `ItemBuilder.crossbow()`
 - Add `ItemBuilder.enchantmentStorage()`
@@ -49,7 +51,6 @@ Typist.
 - Add `PotionBuilder.potion()`
 - Add `PotionBuilder.splash()`
 - Change `@Source` to `@Pack`
-- Change classes from 
 - Change classes in `com.karuslabs.commons.item.builders` to be final
 - Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
 - Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`

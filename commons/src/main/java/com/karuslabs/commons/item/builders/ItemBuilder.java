@@ -82,6 +82,15 @@ public final class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     /**
+     * Creates a {@code BundleBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code BundleBuilder}
+     */
+    public BundleBuilder bundle() {
+        return new BundleBuilder(this);
+    }
+    
+    /**
      * Creates a {@code CompassBuilder} for this {@code ItemStack}.
      * 
      * @return a {@code CompassBuilder}

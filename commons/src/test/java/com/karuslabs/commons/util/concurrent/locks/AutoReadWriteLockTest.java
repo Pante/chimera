@@ -113,4 +113,11 @@ class AutoReadWriteLockTest {
         verify(writer).isHeldByCurrentThread();
     }
     
+    @Test
+    void acquire() {
+        var lock = new AutoReadWriteLock();
+        assertNotNull(lock.readLock());
+        assertNotNull(lock.writeLock());
+    }
+    
 }

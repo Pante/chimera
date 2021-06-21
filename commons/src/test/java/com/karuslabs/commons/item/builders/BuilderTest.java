@@ -26,6 +26,8 @@ package com.karuslabs.commons.item.builders;
 import com.karuslabs.commons.MockBukkit;
 
 import java.util.*;
+import org.bukkit.attribute.*;
+import org.bukkit.attribute.AttributeModifier.Operation;
 
 import org.bukkit.inventory.meta.*;
 
@@ -56,8 +58,10 @@ class BuilderTest {
     
     @Test
     void build() {
+        var modifier = new AttributeModifier("modifier", 1.0, Operation.ADD_NUMBER);
         var item = builder.amount(10).model(3).damage(20)
                .display("display name").localised("localised name")
+               .attribute(Attribute.GENERIC_LUCK, modifier)
                .enchantment(CHANNELING, 1).flags(Set.of(HIDE_DESTROYS))
                .unbreakable(true).build();
         
@@ -67,6 +71,7 @@ class BuilderTest {
         verify((Damageable) meta).setDamage(20);
         verify(meta).setDisplayName("display name");
         verify(meta).setLocalizedName("localised name");
+        verify(meta).addAttributeModifier(Attribute.GENERIC_LUCK, modifier);
         verify(meta).addEnchant(CHANNELING, 1, true);
         verify(meta).addItemFlags(HIDE_DESTROYS);
         verify(meta).setCustomModelData(3);

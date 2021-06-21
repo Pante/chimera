@@ -60,6 +60,7 @@ class ItemBuilderTest {
             of(BlockDataMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::blockData, BlockDataBuilder.class),
             of(BlockStateMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::blockState, BlockStateBuilder.class),
             of(BookMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::book, BookBuilder.class),
+            of(BundleMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::bundle, BundleBuilder.class),
             of(CompassMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::compass, CompassBuilder.class),
             of(CrossbowMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::crossbow, CrossbowBuilder.class),
             of(EnchantmentStorageMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::enchantmentStorage, EnchantmentStorageBuilder.class),
