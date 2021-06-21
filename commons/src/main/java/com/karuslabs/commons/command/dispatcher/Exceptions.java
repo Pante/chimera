@@ -26,12 +26,20 @@ package com.karuslabs.commons.command.dispatcher;
 import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.lang.invoke.MethodHandles;
+import net.minecraft.*;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.*;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.world.entity.vehicle.*;
 
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.command.*;
-import org.bukkit.craftbukkit.v1_16_R3.entity.*;
+import org.apache.logging.log4j.Logger;
+
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.command.*;
+import org.bukkit.craftbukkit.v1_17_R1.entity.*;
 
 import org.bukkit.command.*;
 
@@ -39,89 +47,109 @@ import org.bukkit.command.*;
  * Utility methods that handle exceptions which occur when parsing and executing commands.
  * <br><br>
  * <b>Implementation details:</b><br>
- * This class was adapted from Spigot's {@code CommandDispatcher}. To be honest, 
- * I copied the methods from Spigot and I have absolutely no clue what the methods 
- * do. 
+ * This class was adapted from Spigot's {@code CommandDispatcher}. Each method report 
+ * method represents a catch clause handling a specific exception.
  */
-@Static class Exceptions {    
+@Static class Exceptions {
+
+    static final Logger LOGGER;
+    static {
+        try {
+            var type = MethodHandles.privateLookupIn(Commands.class, MethodHandles.lookup());
+            LOGGER = (Logger) type.findStaticVarHandle(Commands.class, "LOGGER", Logger.class).get();
+            
+        } catch (ReflectiveOperationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 188
+    
+    // TODO: Call in dispatcher command
+    // Source: net.minecraft.commands.CommandDispatcher #line: 276
+    static void report(CommandSender sender, CommandRuntimeException exception) {
+        from(sender).sendFailure(exception.getComponent());
+    }
+    
+    // Source: net.minecraft.commands.CommandDispatcher #line: 280
     static void report(CommandSender sender, CommandSyntaxException exception) {
-        var listener = from(sender);
+        var stack = from(sender);
         
-        listener.sendFailureMessage(ChatComponentUtils.a(exception.getRawMessage()));
+        stack.sendFailure(ComponentUtils.fromMessage(exception.getRawMessage()));
         
         var input = exception.getInput();
         if (input != null && exception.getCursor() >= 0) {
             var index = Math.min(input.length(), exception.getCursor());
 
-            var text = (new ChatComponentText("")).a(EnumChatFormat.GRAY).format(modifier -> 
-                modifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, input))
+            var text = new TextComponent("").withStyle(ChatFormatting.GRAY).withStyle(style -> 
+                style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, input))
             );
             
             if (index > 10) {
-                text.c("...");
+                text.append("...");
             }
 
-            text.c(input.substring(Math.max(0, index - 10), index));
+            text.append(input.substring(Math.max(0, index - 10), index));
             
             if (index < input.length()) {
-                var error = new ChatComponentText(input.substring(index)).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
-                text.addSibling(error);
+                var error = new TextComponent(input.substring(index)).withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.UNDERLINE});
+                text.append(error);
             }
             
-            var context = new ChatMessage("command.context.here").a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC});
-            text.addSibling(context);
+            var context = new TranslatableComponent("command.context.here").withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.ITALIC});
+            text.append(context);
             
-            listener.sendFailureMessage(text);
+            stack.sendFailure(text);
         }
     }
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 213
-    static void report(CommandSender sender, Exception exception) {
-        var listener = from(sender);
+    // Source: net.minecraft.server.CommandDispatcher #line: 305
+    static void report(CommandSender sender, String command, Exception exception) {
+        var stack = from(sender);
         
         var message = exception.getMessage();
-        var details = new ChatComponentText(message == null ? exception.getClass().getName() : message);        
+        var details = new TextComponent(message == null ? exception.getClass().getName() : message);        
         
-        // We send the stacktrace regardless of whether debug is enabled since we
-        // cannot access the CommandDispatcher's logger.
-        var stacktrace = exception.getStackTrace();
-        for (int i = 0; i < Math.min(stacktrace.length, 3); i++) {
-            var element = stacktrace[i];
-            details.c("\n\n").c(element.getMethodName()).c("\n ").c(element.getFileName()).c(":").c(String.valueOf(element.getLineNumber()));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.error("Command exception: {}", command, exception);
+            var stacktrace = exception.getStackTrace();
+
+            for (int i = 0; i < Math.min(stacktrace.length, 3); ++i) {
+                details.append("\n\n").append(stacktrace[i].getMethodName())
+                       .append("\n ").append(stacktrace[i].getFileName()).append(":").append(String.valueOf(stacktrace[i].getLineNumber()));
+            }
         }
-                
-        var failure = new ChatMessage("command.failed").format(modifier -> 
-            modifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, details))
-        );
-        listener.sendFailureMessage(failure);
-        
-        if (SharedConstants.d) {
-            listener.sendFailureMessage(new ChatComponentText(SystemUtils.d(exception)));
-            // We do not log the error since we cannot access the logger
+
+        stack.sendFailure((new TranslatableComponent("command.failed")).withStyle(style -> 
+            style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, details))
+        ));
+
+        if (SharedConstants.IS_RUNNING_IN_IDE) {
+            stack.sendFailure(new TextComponent(Util.describeError(exception)));
+            LOGGER.error("'{}' threw an exception", command, exception);
         }
     }
+    
+    
     
     
     // Source: package org.bukkit.craftbukkit.command.VanillaCommandWrapper#getListener(CommandSender)
     // We wrote it slightly to check agaisnt NMS types rather than Spigot types to make it safer.
-    static CommandListenerWrapper from(CommandSender sender) {
+    static CommandSourceStack from(CommandSender sender) {
         if (sender instanceof CraftPlayer player) {
-            return player.getHandle().getCommandListener();
+            return player.getHandle().createCommandSourceStack();
             
         } else if (sender instanceof CraftBlockCommandSender block) {
             return block.getWrapper();
             
         } else if (sender instanceof CraftMinecartCommand minecart) {
-            return ((EntityMinecartCommandBlock) minecart.getHandle()).getCommandBlock().getWrapper();
+            return ((MinecartCommandBlock) minecart.getHandle()).getCommandBlock().createCommandSourceStack();
             
         } else if (sender instanceof RemoteConsoleCommandSender) {
-            return ((DedicatedServer) MinecraftServer.getServer()).remoteControlCommandListener.getWrapper();
+            return ((DedicatedServer) MinecraftServer.getServer()).rconConsoleSource.createCommandSourceStack();
             
         } else if (sender instanceof ConsoleCommandSender) {
-            return ((CraftServer) sender.getServer()).getServer().getServerCommandListener();
+            return ((CraftServer) sender.getServer()).getServer().createCommandSourceStack();
             
         } else if (sender instanceof ProxiedNativeCommandSender proxied) {
             return proxied.getHandle();

@@ -28,7 +28,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_16_R3.ArgumentUUID;
+import net.minecraft.commands.arguments.UuidArgument;
 
 import org.junit.jupiter.api.*;
 
@@ -46,7 +46,7 @@ class UUIDTypeTest {
     
     @Test
     void mapped() {
-        assertEquals(ArgumentUUID.class, UUIDType.TYPE.mapped().getClass());
+        assertEquals(UuidArgument.class, UUIDType.TYPE.mapped().getClass());
     }
 
 } 

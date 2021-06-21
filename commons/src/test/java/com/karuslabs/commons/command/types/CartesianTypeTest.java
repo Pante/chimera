@@ -31,7 +31,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import java.util.concurrent.ExecutionException;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.arguments.coordinates.*;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -126,7 +126,7 @@ class CartesianDimensionalTypeTest {
 
         @Test
         void mapped() {
-            assertEquals(ArgumentVec2.class, type.mapped().getClass());
+            assertEquals(Vec2Argument.class, type.mapped().getClass());
         }
     
     }
@@ -170,7 +170,7 @@ class CartesianDimensionalTypeTest {
 
         @Test
         void mapped() {
-            assertEquals(ArgumentVec3.class, type.mapped().getClass());
+            assertEquals(Vec3Argument.class, type.mapped().getClass());
         }
     
     }

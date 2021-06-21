@@ -28,44 +28,54 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.stream.Stream;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.*;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.*;
+import net.minecraft.world.entity.vehicle.MinecartCommandBlock;
+import net.minecraft.world.level.BaseCommandBlock;
 
 import org.bukkit.command.*;
 
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.command.*;
-import org.bukkit.craftbukkit.v1_16_R3.entity.*;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.command.*;
+import org.bukkit.craftbukkit.v1_17_R1.entity.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 class ExceptionsTest {
     
-    static final CommandListenerWrapper LISTENER = mock(CommandListenerWrapper.class);
+    static final CommandSourceStack LISTENER = mock(CommandSourceStack.class);
     
-    CommandListenerWrapper listener = mock(CommandListenerWrapper.class);
-    EntityPlayer player = when(mock(EntityPlayer.class).getCommandListener()).thenReturn(listener).getMock();
+    CommandSourceStack stack = mock(CommandSourceStack.class);
+    ServerPlayer player = when(mock(ServerPlayer.class).createCommandSourceStack()).thenReturn(stack).getMock();
     CommandSender sender = when(mock(CraftPlayer.class).getHandle()).thenReturn(player).getMock();
+    
+    @Test
+    void report_command_runtime_exception() {
+        Exceptions.report(sender, new CommandRuntimeException(new TextComponent("message")));
+        
+        verify(stack, times(1)).sendFailure(any(TextComponent.class));
+    }
     
     
     @Test
     void report_command_syntax_exception() {
         Exceptions.report(sender, new CommandSyntaxException(null, new LiteralMessage("test"), "abc", 1));
         
-        verify(listener, times(2)).sendFailureMessage(any(ChatComponentText.class));
+        verify(stack, times(2)).sendFailure(any(TextComponent.class));
     }
     
     
     @Test
     void report_exception() {
-        Exceptions.report(sender, new IllegalArgumentException());
-        verify(listener).sendFailureMessage(any(ChatMessage.class));
+        Exceptions.report(sender, "/command", new IllegalArgumentException());
+        verify(stack).sendFailure(any(TranslatableComponent.class));
     }
     
     
@@ -76,11 +86,11 @@ class ExceptionsTest {
     }
     
     static Stream<CommandSender> senders() {
-        EntityPlayer player = when(mock(EntityPlayer.class).getCommandListener()).thenReturn(LISTENER).getMock();
-        CommandBlockListenerAbstract commandblock = when(mock(CommandBlockListenerAbstract.class).getWrapper()).thenReturn(LISTENER).getMock();
-        EntityMinecartCommandBlock minecart = when(mock(EntityMinecartCommandBlock.class).getCommandBlock()).thenReturn(commandblock).getMock();
+        ServerPlayer player = when(mock(ServerPlayer.class).createCommandSourceStack()).thenReturn(LISTENER).getMock();
+        BaseCommandBlock commandblock = when(mock(BaseCommandBlock.class).createCommandSourceStack()).thenReturn(LISTENER).getMock();
+        MinecartCommandBlock minecart = when(mock(MinecartCommandBlock.class).getCommandBlock()).thenReturn(commandblock).getMock();
         
-        DedicatedServer server = when(mock(DedicatedServer.class).getServerCommandListener()).thenReturn(LISTENER).getMock();
+        DedicatedServer server = when(mock(DedicatedServer.class).createCommandSourceStack()).thenReturn(LISTENER).getMock();
         CraftServer craftserver = when(mock(CraftServer.class).getServer()).thenReturn(server).getMock();
         
         return Stream.of(

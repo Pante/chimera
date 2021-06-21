@@ -25,6 +25,7 @@ package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.Mapper;
+import com.karuslabs.commons.command.types.Type;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -34,25 +35,25 @@ import com.mojang.brigadier.tree.*;
 import java.util.*;
 import java.util.function.Predicate;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.*;
+import net.minecraft.commands.synchronization.*;
 
 import org.bukkit.command.CommandSender;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import com.karuslabs.commons.command.types.Type;
 
 /**
  * A mapper that maps the commands in a {@link Dispatcher} to the internal dispatcher 
  * of the server.
  */
-class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
-    
-    static final Map<ClientSuggestionProvider, SuggestionProvider<CommandListenerWrapper>> CLIENT_SIDE = new EnumMap<>(ClientSuggestionProvider.class);
+class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
+
+    static final Map<ClientSuggestionProvider, SuggestionProvider<CommandSourceStack>> CLIENT_SIDE = new EnumMap<>(ClientSuggestionProvider.class);
     static {
-        CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, CompletionProviders.b);
-        CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, CompletionProviders.c);
-        CLIENT_SIDE.put(ClientSuggestionProvider.BIOMES, CompletionProviders.d);
-        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, CompletionProviders.e);
+        CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, SuggestionProviders.ALL_RECIPES);
+        CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, SuggestionProviders.AVAILABLE_SOUNDS);
+        CLIENT_SIDE.put(ClientSuggestionProvider.BIOMES, SuggestionProviders.AVAILABLE_BIOMES);
+        CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, SuggestionProviders.SUMMONABLE_ENTITIES);
     }
     
     private final CommandDispatcher<CommandSender> dispatcher;
@@ -88,9 +89,9 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @return the wrapped requirement
      */
     @Override
-    protected Predicate<CommandListenerWrapper> requirement(CommandNode<CommandSender> command) {
+    protected Predicate<CommandSourceStack> requirement(CommandNode<CommandSender> command) {
         var requirement = command.getRequirement();
-        return requirement == null ? (Predicate<CommandListenerWrapper>) TRUE : listener -> requirement.test(listener.getBukkitSender());
+        return requirement == null ? (Predicate<CommandSourceStack>) TRUE : stack -> requirement.test(stack.getBukkitSender());
     }
 
     /**
@@ -111,7 +112,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @return a {@code SuggestionProvider}, or {@code null} if no source was provided
      */
     @Override
-    protected @Nullable SuggestionProvider<CommandListenerWrapper> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
+    protected @Nullable SuggestionProvider<CommandSourceStack> suggestions(ArgumentCommandNode<CommandSender, ?> command) {
         var type = command.getType();
         var suggestor = command.getCustomSuggestions();
         
@@ -135,7 +136,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @param type the type
      * @return a {@code SuggestionProvider}
      */
-    SuggestionProvider<CommandListenerWrapper> reparse(Type<?> type) {
+    SuggestionProvider<CommandSourceStack> reparse(Type<?> type) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             
@@ -154,7 +155,7 @@ class SpigotMapper extends Mapper<CommandSender, CommandListenerWrapper> {
      * @param suggestor the {@code SuggestionProvider}
      * @return the {@code SuggestionProvider}
      */
-    SuggestionProvider<CommandListenerWrapper> reparse(SuggestionProvider<CommandSender> suggestor) {
+    SuggestionProvider<CommandSourceStack> reparse(SuggestionProvider<CommandSender> suggestor) {
         return (context, suggestions) -> {
             var sender = context.getSource().getBukkitSender();
             

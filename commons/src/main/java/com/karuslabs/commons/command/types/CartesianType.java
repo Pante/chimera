@@ -29,7 +29,7 @@ import com.mojang.brigadier.suggestion.*;
 
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.arguments.coordinates.*;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -104,7 +104,7 @@ interface CartesianType<T> extends Type<T> {
  */
 interface Cartesian2DType<T> extends CartesianType<T> {
     
-    static final ArgumentVec2 VECTOR_2D = new ArgumentVec2(true);
+    static final Vec2Argument VECTOR_2D = new Vec2Argument(true);
     
     @Override
     default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {
@@ -128,7 +128,7 @@ interface Cartesian2DType<T> extends CartesianType<T> {
  */
 interface Cartesian3DType<T> extends CartesianType<T> {
     
-    static final ArgumentVec3 VECTOR_3D = new ArgumentVec3(false);
+    static final Vec3Argument VECTOR_3D = new Vec3Argument(false);
     
     @Override
     default void suggest(SuggestionsBuilder builder, String[] parts, Location location) {

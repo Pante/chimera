@@ -30,10 +30,12 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.plugin.Plugin;
 
 import org.junit.jupiter.api.Test;
@@ -45,8 +47,8 @@ import static org.mockito.Mockito.*;
 
 class DispatcherCommandTest {
     
-    CommandListenerWrapper listener = mock(CommandListenerWrapper.class);
-    EntityPlayer player = when(mock(EntityPlayer.class).getCommandListener()).thenReturn(listener).getMock();
+    CommandSourceStack stack = mock(CommandSourceStack.class);
+    ServerPlayer player = when(mock(ServerPlayer.class).createCommandSourceStack()).thenReturn(stack).getMock();
     CommandSender sender = when(mock(CraftPlayer.class).getHandle()).thenReturn(player).getMock();
     
     Plugin plugin = mock(Plugin.class);
@@ -84,7 +86,7 @@ class DispatcherCommandTest {
         doThrow(new CommandSyntaxException(null, new LiteralMessage("message"), "abc", 2)).when(dispatcher).execute(any(StringReader.class), any(CommandSender.class));
         
         assertTrue(command.execute(sender, "command", "a", "b"));
-        verify(listener, times(2)).sendFailureMessage(any());
+        verify(stack, times(2)).sendFailure(any());
     }
     
     
@@ -94,7 +96,7 @@ class DispatcherCommandTest {
         doThrow(RuntimeException.class).when(dispatcher).execute(any(StringReader.class), any(CommandSender.class));
         
         assertTrue(command.execute(sender, "command", "a", "b"));
-        verify(listener, times(1)).sendFailureMessage(any());
+        verify(stack, times(1)).sendFailure(any());
     }
     
     

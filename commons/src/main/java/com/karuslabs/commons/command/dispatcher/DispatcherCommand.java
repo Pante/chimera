@@ -29,6 +29,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
+import net.minecraft.commands.CommandRuntimeException;
+
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
@@ -73,7 +75,8 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
             return true;
         }
         
-        var reader = new StringReader(join(label, arguments));
+        var command = join(label, arguments);
+        var reader = new StringReader(command);
         if (reader.canRead() && reader.peek() == '/') {
             reader.skip();
         }
@@ -81,11 +84,14 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
         try {
             dispatcher.execute(reader, sender);
             
+        } catch (CommandRuntimeException e) {
+            Exceptions.report(sender, e);
+            
         } catch (CommandSyntaxException e) {
             Exceptions.report(sender, e);
             
         } catch (Exception e) {
-            Exceptions.report(sender, e);
+            Exceptions.report(sender, command, e);
         }
         
         return true;

@@ -25,20 +25,21 @@ package com.karuslabs.commons.command.dispatcher;
 
 import com.karuslabs.commons.command.tree.nodes.*;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.*;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.*;
+import net.minecraft.server.dedicated.DedicatedServer;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.*;
 
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.command.CraftCommandMap;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_16_R3.scheduler.CraftScheduler;
-
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.scheduler.CraftScheduler;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,8 +55,8 @@ class DispatcherTest {
     CraftCommandMap map = when(mock(CraftCommandMap.class).register(any(String.class), any())).thenReturn(true).getMock();
     CraftScheduler scheduler = mock(CraftScheduler.class);
     PluginManager manager = mock(PluginManager.class);
-    com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> internal = new com.mojang.brigadier.CommandDispatcher();
-    CommandDispatcher wrapper = when(mock(CommandDispatcher.class).a()).thenReturn(internal).getMock();
+    CommandDispatcher<CommandSourceStack> internal = new com.mojang.brigadier.CommandDispatcher();
+    Commands commands = when(mock(Commands.class).getDispatcher()).thenReturn(internal).getMock();
     
     
     @BeforeEach
@@ -67,7 +68,7 @@ class DispatcherTest {
         when(craftserver.getPluginManager()).thenReturn(manager);
         
         server.server = craftserver;
-        when(server.getCommandDispatcher()).thenReturn(wrapper);
+        when(server.getCommands()).thenReturn(commands);
         
         dispatcher = spy(Dispatcher.of(plugin));
     }

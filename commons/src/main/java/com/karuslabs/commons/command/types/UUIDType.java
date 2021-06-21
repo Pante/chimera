@@ -29,7 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import java.util.UUID;
 
-import net.minecraft.server.v1_16_R3.ArgumentUUID;
+import net.minecraft.commands.arguments.UuidArgument;
 
 /**
  * A {@code UUID} type.
@@ -40,7 +40,7 @@ public class UUIDType implements Type<UUID> {
      * A {@code UUIDType}.
      */
     public static final UUIDType TYPE = new UUIDType();
-    private static final ArgumentUUID UUID = new ArgumentUUID();
+    private static final UuidArgument UUID = new UuidArgument();
     
     @Override
     public UUID parse(StringReader reader) throws CommandSyntaxException {

@@ -27,7 +27,7 @@ If applicable, add screenshots to help explain your problem.
  - Java Version [e.g. 11, 15]
  - Platform [e.g. Bukkit, PaperSpigot, Spigot]
  - Platform Version [e.g. 1.14, 1.5.2]
-- Chimera Version [e.g. 4.5.0, 4.6.0]
+ - Chimera Version [e.g. 4.5.0, 4.6.0]
 
 **Additional context**
 Add any other context about the problem here.

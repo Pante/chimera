@@ -31,10 +31,11 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import java.util.Map;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.commands.*;
+import net.minecraft.server.MinecraftServer;
 
-import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_16_R3.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -58,10 +59,10 @@ import org.bukkit.plugin.Plugin;
  */
 public class Dispatcher extends CommandDispatcher<CommandSender> implements Listener {    
     
-    CommandDispatcher<CommandListenerWrapper> dispatcher;
+    CommandDispatcher<CommandSourceStack> dispatcher;
     private final MinecraftServer server;
     private final Root root;
-    private final TreeWalker<CommandSender, CommandListenerWrapper> walker;
+    private final TreeWalker<CommandSender, CommandSourceStack> walker;
     
     /**
      * Creates a {@code Dispatcher} for the given plugin.
@@ -95,7 +96,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
         super(root);
         this.root = root;
         this.server = ((CraftServer) server).getServer();
-        this.dispatcher = this.server.getCommandDispatcher().a();
+        this.dispatcher = this.server.getCommands().getDispatcher();
         this.walker = new TreeWalker<>(new SpigotMapper(this));
     }
     
@@ -140,7 +141,7 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
      */
     @EventHandler
     protected void update(ServerLoadEvent event) {
-        dispatcher = server.getCommandDispatcher().a();
+        dispatcher = server.getCommands().getDispatcher();
         walker.prune(dispatcher.getRoot(), getRoot().getChildren());
     }
     
