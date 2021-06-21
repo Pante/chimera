@@ -26,7 +26,6 @@ package com.karuslabs.commons.command.dispatcher;
 import com.karuslabs.annotations.Static;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.lang.invoke.MethodHandles;
 import net.minecraft.*;
 
 import net.minecraft.commands.*;
@@ -36,6 +35,7 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.world.entity.vehicle.*;
 
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.command.*;
@@ -52,17 +52,7 @@ import org.bukkit.command.*;
  */
 @Static class Exceptions {
 
-    static final Logger LOGGER;
-    static {
-        try {
-            var type = MethodHandles.privateLookupIn(Commands.class, MethodHandles.lookup());
-            LOGGER = (Logger) type.findStaticVarHandle(Commands.class, "LOGGER", Logger.class).get();
-            
-        } catch (ReflectiveOperationException e) {
-            throw new ExceptionInInitializerError(e);
-        }
-    }
-    
+    static final Logger LOGGER = LogManager.getLogger(Commands.class);
     
     // TODO: Call in dispatcher command
     // Source: net.minecraft.commands.CommandDispatcher #line: 276
