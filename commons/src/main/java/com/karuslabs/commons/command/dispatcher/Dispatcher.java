@@ -43,6 +43,8 @@ import org.bukkit.event.*;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.Plugin;
 
+import static org.bukkit.event.server.ServerLoadEvent.LoadType.STARTUP;
+
 /**
  * A {@code CommandDispatcher} that facilities the registration of commands between 
  * a Spigot plugin and the server.
@@ -134,15 +136,23 @@ public class Dispatcher extends CommandDispatcher<CommandSender> implements List
     }
     
     /**
-     * Synchronizes this dispatcher with the server when the server is started or
-     * reloaded.
+     * Synchronizes this dispatcher with the server when the server is reloaded or
+     * restarted. The changes to the server are then sent to all clients if the 
+     * server was reloaded.
      * 
      * @param event the event that denotes the starting and reloading of the server
      */
     @EventHandler
     protected void update(ServerLoadEvent event) {
         dispatcher = server.getCommands().getDispatcher();
-        walker.prune(dispatcher.getRoot(), getRoot().getChildren());
+        if (event.getType() == STARTUP) {
+            // We don't have to manually send the changes since the startup event
+            // is fired before connections to the server are allowed.
+            walker.prune(dispatcher.getRoot(), getRoot().getChildren());
+            
+        } else {
+            update();
+        }
     }
     
     @Override

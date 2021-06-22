@@ -54,7 +54,6 @@ import org.bukkit.command.*;
 
     static final Logger LOGGER = LogManager.getLogger(Commands.class);
     
-    // TODO: Call in dispatcher command
     // Source: net.minecraft.commands.CommandDispatcher #line: 276
     static void report(CommandSender sender, CommandRuntimeException exception) {
         from(sender).sendFailure(exception.getComponent());
@@ -74,11 +73,11 @@ import org.bukkit.command.*;
                 style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, input))
             );
             
-            if (index > 10) {
+            if (index > 20) {
                 text.append("...");
             }
 
-            text.append(input.substring(Math.max(0, index - 10), index));
+            text.append(input.substring(Math.max(0, index - 20), index));
             
             if (index < input.length()) {
                 var error = new TextComponent(input.substring(index)).withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.UNDERLINE});

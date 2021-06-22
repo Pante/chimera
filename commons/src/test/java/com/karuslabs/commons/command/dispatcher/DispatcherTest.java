@@ -40,7 +40,11 @@ import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_17_R1.scheduler.CraftScheduler;
+import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.event.server.ServerLoadEvent.LoadType;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -118,15 +122,21 @@ class DispatcherTest {
     }
     
     
-    @Test
-    void update_server_reload() {
+    @ParameterizedTest
+    @CsvSource({"STARTUP, 0", "RELOAD, 1"})
+    void update_server_event(LoadType type, int times) {
+        var player = mock(CraftPlayer.class);
+        when(craftserver.getOnlinePlayers()).thenReturn(List.of(player));
+        
         dispatcher.getRoot().addChild(Literal.of("a").build());
         dispatcher.dispatcher = null;
         
-        dispatcher.update(null);
+        dispatcher.update(new ServerLoadEvent(type));
         
         assertNotNull(dispatcher.dispatcher.getRoot().getChild("a"));
         assertSame(internal, dispatcher.dispatcher);
+        
+        verify(player, times(times)).updateCommands();
     }
     
 } 
