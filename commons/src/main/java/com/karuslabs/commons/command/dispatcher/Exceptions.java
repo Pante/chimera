@@ -87,11 +87,11 @@ import org.bukkit.command.*;
                 style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, input))
             );
             
-            if (index > 10) {
+            if (index > 20) {
                 text.append("...");
             }
 
-            text.append(input.substring(Math.max(0, index - 10), index));
+            text.append(input.substring(Math.max(0, index - 20), index));
             
             if (index < input.length()) {
                 var error = new TextComponent(input.substring(index)).withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.UNDERLINE});

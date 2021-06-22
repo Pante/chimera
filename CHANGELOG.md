@@ -4,7 +4,7 @@
 
 This update adds argument type matching and overhauls code generation for the command framework. The Scribe project has also been removed.
 Underneath the hood, we have streamlined the project's infrastructure and documentation. Documentation is now applied on the master branch
-and the staging branch has been removed. The minimum Java version has also been bumped to Java 16
+and the staging branch has been removed. The minimum Java version has also been bumped to Java 16.
 
 ### Annotations
 
@@ -59,7 +59,9 @@ Typist.
 - Change `KnowledgeBookBuilder.of(Material)` to `KnowledgeBookBuilder.of()` - only knowledge books contain a `KnowledgeBookMeta`
 - Change `SkullBuilder` to `HeadBuilder`
 - Change `TropicalFishBucketBuilder.of(Material)` to `TropicalFishBucketBuilder.of()` - only tropical fish buckets contain a `TropicalFishBucketMeta`
+- Change the length at which a displayed command is trimmed when an error occurs from 10 to 20
 - Fix incorrect capitalization of names in `com.karuslabs.commons.item.Head`
+- Fix commands not being sent to players after server reload - see #292
 - Remove `com.karuslabs.commons.command.aot.*`
 - Remove methods prefixed with `as` in `com.karuslabs.commons.item.ItemBuilder` - replaced with equivalent methods without prefixes
 - Remove `LeatherArmourBuilder.of(Material)` - replaced with equivalent methods for specific leather armour items
