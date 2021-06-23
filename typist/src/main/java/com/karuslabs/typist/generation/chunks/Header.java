@@ -29,14 +29,23 @@ import java.time.LocalDateTime;
 
 import static com.karuslabs.typist.generation.chunks.Constants.VERSION;
 
+/**
+ * A generator that emits a header for a source file.
+ */
 public record Header() {
     
+    /**
+     * Generates a header for a source file.
+     * 
+     * @param source the resultant source
+     * @param pack the package, or empty if the default package
+     */
     public void emit(Source source, String pack) {
         if (!pack.isEmpty()) {
-            source.line("package ", pack, ";");
+            source.line("package ", pack, ";").line();
         }
         
-        source.line("""
+        source.append("""
                import com.karuslabs.commons.command.Execution;
                import com.karuslabs.commons.command.tree.nodes.*;
 
@@ -50,9 +59,9 @@ public record Header() {
                import org.bukkit.command.CommandSender;
 
                /**
-               """)
-        .line(" * This file was generated at ", LocalDateTime.now(), " using Chimera ", VERSION)
-        .line(" */");
+                * This file was generated at %s using Chimera %s
+                */
+               """.formatted(LocalDateTime.now(), VERSION));
     }
 
 }
