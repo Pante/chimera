@@ -54,6 +54,7 @@ public record CommandInstantiation(Map<Pattern, Lambda> lambdas, int[] counter) 
               .indent()
                .line(quote(StringEscapeUtils.escapeJava(command.identity().name())), ",");
                 parameter(source, command, ARGUMENT_TYPE, NULL, ",");
+         source.line("\"\",");
                 parameter(source, command, COMMAND, NULL, ",");
                 parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, ",");
                 parameter(source, command, SUGGESTION_PROVIDER, NULL, "");
@@ -64,7 +65,8 @@ public record CommandInstantiation(Map<Pattern, Lambda> lambdas, int[] counter) 
     void literal(Source source, Command command, String name) {
         source.line("var ", name, " = new Literal<>(")
               .indent()
-                .line(quote(StringEscapeUtils.escapeJava(command.identity().name())), ",");
+                .line(quote(StringEscapeUtils.escapeJava(command.identity().name())), ",")
+                .line("\"\",");
                  parameter(source, command, COMMAND, NULL, ",");
                  parameter(source, command, Group.REQUIREMENT, Constants.REQUIREMENT, "");
         source.unindent()

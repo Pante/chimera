@@ -102,7 +102,8 @@ public class Mapper<T, R> {
     @VisibleForOverride
     protected CommandNode<R> argument(CommandNode<T> command) {
         var parameter = (ArgumentCommandNode<T, ?>) command;
-        return new Argument<>(parameter.getName(), type(parameter), execution(parameter), requirement(parameter), suggestions(parameter));
+        var description = parameter instanceof Describable describable ? describable.description() : command.getUsageText();
+        return new Argument<>(parameter.getName(), type(parameter), description, execution(parameter), requirement(parameter), suggestions(parameter));
     }
 
     /**
@@ -122,7 +123,8 @@ public class Mapper<T, R> {
      */
     @VisibleForOverride
     protected CommandNode<R> literal(CommandNode<T> command) {
-        return new Literal<>(command.getName(), execution(command), requirement(command));
+        var description = command instanceof Describable describable ? describable.description() : command.getUsageText();
+        return new Literal<>(command.getName(), description, execution(command), requirement(command));
     }
 
     /**

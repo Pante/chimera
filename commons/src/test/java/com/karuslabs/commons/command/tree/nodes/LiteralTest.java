@@ -46,8 +46,8 @@ class LiteralTest {
     
     @Test
     void constructors() {
-        var a = new Literal<>("name", (context) -> 1, null);
-        var b = new Literal<>("name", (source, context) -> {}, null);
+        var a = new Literal<>("name", "desc", (context) -> 1, null);
+        var b = new Literal<>("name", "desc", (source, context) -> {}, null);
     }
     
     

@@ -54,7 +54,7 @@ class DispatcherCommandTest {
     
     Plugin plugin = mock(Plugin.class);
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
-    DispatcherCommand command = spy(new DispatcherCommand("name", plugin, dispatcher, "", List.of()));
+    DispatcherCommand command = spy(new DispatcherCommand("name", plugin, "desc", dispatcher, "", List.of()));
     
     
     @Test
@@ -108,6 +108,12 @@ class DispatcherCommandTest {
         
         assertTrue(command.execute(sender, "command", "a", "b"));
         verify(stack, times(1)).sendFailure(any());
+    }
+    
+    
+    @Test
+    void getDescription() {
+        assertEquals("desc", command.getDescription());
     }
     
     

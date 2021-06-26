@@ -23,7 +23,7 @@
  */
 package com.karuslabs.commons.command.dispatcher;
 
-import com.karuslabs.commons.command.tree.nodes.Aliasable;
+import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -89,7 +89,8 @@ class SpigotMap implements PlatformMap {
             }
         }
         
-        return new DispatcherCommand(command.getName(), plugin, dispatcher, command.getUsageText(), aliases);
+        var description = command instanceof Describable describable ? describable.description() : command.getUsageText();
+        return new DispatcherCommand(command.getName(), plugin, description, dispatcher, command.getUsageText(), aliases);
     }
     
     

@@ -50,7 +50,7 @@ class RootTest {
     
     @Test
     void addChild() {
-        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, "", null, null, List.of("a1")));
         
         root.addChild(literal);
         
@@ -63,7 +63,7 @@ class RootTest {
     
     @Test
     void addChild_bukkit_contains_name() {
-        var command = new DispatcherCommand("a", null, null, null, List.of("a1"));
+        var command = new DispatcherCommand("a", null, "", null, null, List.of("a1"));
         command.setLabel("label");
         
         when(map.register(literal)).thenReturn(command);
@@ -79,7 +79,7 @@ class RootTest {
     
     @Test
     void addChild_bukkit_contains_alias() {
-        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of()));
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, "", null, null, List.of()));
         
         root.addChild(literal);
         
@@ -100,7 +100,7 @@ class RootTest {
     
     @Test
     void addChild_duplicate_throws_exception() {
-        when(map.register(any())).thenReturn(new DispatcherCommand("", null, null, null, List.of("")));
+        when(map.register(any())).thenReturn(new DispatcherCommand("", null, "", null, null, List.of("")));
         
         root.addChild(Literal.of("a").build());
         
@@ -125,7 +125,7 @@ class RootTest {
     
     @Test
     void removeChild() {
-        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, null, null, List.of("a1")));
+        when(map.register(literal)).thenReturn(new DispatcherCommand("a", null, "", null, null, List.of("a1")));
         
         root.addChild(literal);
         

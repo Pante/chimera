@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR Describable PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -23,29 +23,16 @@
  */
 package com.karuslabs.commons.command.tree.nodes;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
-
-import java.util.List;
-
 /**
- * A node that has aliases and may itself be an alias.
- * 
- * @param <T> the type of the source
+ * A node that contains a description.
  */
-public interface Aliasable<T> {
-    
+public interface Describable {
+        
     /**
-     * Returns the aliases of this node.
+     * Returns a description of this node.
      * 
-     * @return the aliases of this node
+     * @return a description
      */
-    List<LiteralCommandNode<T>> aliases();
+    public String description();
     
-    /**
-     * Returns whether this node is an alias.
-     * 
-     * @return {@code true} if this node is an alias; otherwise {@code false}
-     */
-    boolean isAlias();
-
 }

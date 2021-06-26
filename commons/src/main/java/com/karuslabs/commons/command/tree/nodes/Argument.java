@@ -42,7 +42,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <T> the type of the source
  * @param <V> the type of the argument
  */
-public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable<T> {
+public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Describable, Mutable<T> {
     
     /**
      * Creates an {@code Argument} builder with the given name and type.
@@ -71,6 +71,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
     }
     
     private final Consumer<CommandNode<T>> addition;
+    private final String description;
     private CommandNode<T> destination;
     
     /**
@@ -78,32 +79,35 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
      * 
      * @param name the name of the argument
      * @param type the type of the argument
+     * @param description the description of this argument
      * @param command the command to be executed
      * @param requirement the requirement
      * @param suggestions the {@code SuggestionProvider}
      */
-    public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
-        this(name, type, command, requirement, null, null, false, suggestions);
+    public Argument(String name, ArgumentType<V> type, String description, Command<T> command, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
+        this(name, type, description, command, requirement, null, null, false, suggestions);
     }
     
     /**
      * Creates an {@code Argument} with the given arguments.
      * 
-     * @param name the name of the argument
-     * @param type the type of the argument
+     * @param name the name of this argument
+     * @param type the type of this argument
+     * @param description the description for this argument
      * @param execution the execution to be executed
      * @param requirement the requirement
      * @param suggestions the {@code SuggestionProvider}
      */
-    public Argument(String name, ArgumentType<V> type, Execution<T> execution, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
-        this(name, type, execution, requirement, null, null, false, suggestions);
+    public Argument(String name, ArgumentType<V> type, String description, Execution<T> execution, Predicate<T> requirement, SuggestionProvider<T> suggestions) {
+        this(name, type, description, execution, requirement, null, null, false, suggestions);
     }
     
     /**
      * Creates an {@code Argument} with the given arguments.
      * 
-     * @param name the name of the argument
-     * @param type the type of the argument
+     * @param name the name of this argument
+     * @param type the type of this argument
+     * @param description the description for this argument
      * @param command the command to be executed
      * @param requirement the requirement
      * @param destination the destination to which this argument is redirected
@@ -111,10 +115,17 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
      * @param fork the fork
      * @param suggestions the {@code SuggestionProvider}
      */
-    public Argument(String name, ArgumentType<V> type, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
+    public Argument(String name, ArgumentType<V> type, String description, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork, SuggestionProvider<T> suggestions) {
         super(name, type, command, requirement, destination, modifier, fork, suggestions);
         this.destination = destination;
+        this.description = description;
         this.addition = super::addChild;
+    }
+    
+    
+    @Override
+    public String description() {
+        return description;
     }
     
     
@@ -190,7 +201,7 @@ public class Argument<T, V> extends ArgumentCommandNode<T, V> implements Mutable
          */
         @Override
         public Argument<T, V> build() {
-            var parameter = new Argument<>(name, type, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
+            var parameter = new Argument<>(name, type, description, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), suggestions);
             for (var child : getArguments()) {
                 parameter.addChild(child);
             }

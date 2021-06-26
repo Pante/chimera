@@ -40,14 +40,14 @@ class MapperTest {
     
     Mapper<String, String> mapper = new Mapper<>();
     
-    
     @Test
     void map_argument() {
-        var unmapped = Argument.<String, String>builder("b", StringArgumentType.word()).build();
-        var argument = (ArgumentCommandNode<String, String>) mapper.map(unmapped);
+        var unmapped = Argument.<String, String>builder("b", StringArgumentType.word()).description("desc").build();
+        var argument = (Argument<String, String>) mapper.map(unmapped);
         
         assertEquals("b", argument.getName());
         assertSame(unmapped.getType(), argument.getType());
+        assertEquals("desc", argument.description());
         assertSame(Mapper.NONE, argument.getCommand());
         assertSame(Mapper.TRUE, argument.getRequirement());
         assertNull(argument.getCustomSuggestions());
@@ -56,10 +56,10 @@ class MapperTest {
     
     @Test
     void map_literal() {
-        var literal = mapper.map(Literal.<String>builder("a").build());
+        var literal = (Literal<String>) mapper.map(Literal.<String>builder("a").description("desc").build());
         
-        assertTrue(literal instanceof LiteralCommandNode<?>);
         assertEquals("a", literal.getName());
+        assertEquals("desc", literal.description());
         assertSame(Mapper.NONE, literal.getCommand());
         assertSame(Mapper.TRUE, literal.getRequirement());
     }

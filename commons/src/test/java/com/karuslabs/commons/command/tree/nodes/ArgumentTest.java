@@ -46,14 +46,16 @@ class ArgumentTest {
     
     @Test
     void constructors() {
-        var command = new Argument<>("name", StringArgumentType.string(), (context) -> 1, null, null);
-        var execution = new Argument<>("name", StringArgumentType.string(), (source, context) -> {}, null, null);
+        var command = new Argument<>("name", StringArgumentType.string(), "desc", (context) -> 1, null, null);
+        var execution = new Argument<>("name", StringArgumentType.string(), "desc", (source, context) -> {}, null, null);
         
         assertEquals("name", command.getName());
         assertEquals(StringArgumentType.string().getClass(), command.getType().getClass());
+        assertEquals("desc", command.description());
         
         assertEquals("name", execution.getName());
         assertEquals(StringArgumentType.string().getClass(), execution.getType().getClass());
+        assertEquals("desc", command.description());
     }
     
     

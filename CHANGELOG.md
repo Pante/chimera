@@ -24,6 +24,8 @@ Typist.
 - Add `BlockDataBuilder`
 - Add `BundleBuilder`
 - Add `CompassBuilder`
+- Add `Describable`
+- Add `Argument.Builder.description(String)`
 - Add `ItemBuilder.banner()`
 - Add `ItemBuilder.blockData()`
 - Add `ItemBuilder.blockState()`
@@ -45,6 +47,7 @@ Typist.
 - Add `LeatherArmourBuilder.chestplate()`
 - Add `LeatherArmourBuilder.leggings()`
 - Add `LeatherArmourBuilder.boots()`
+- Add `Literal.Builder.description(String)`
 - Add `MapBuilder.empty()`
 - Add `MapBuilder.filled()`
 - Add `PotionBuilder.lingering()`
@@ -52,11 +55,14 @@ Typist.
 - Add `PotionBuilder.splash()`
 - Change `@Source` to `@Pack`
 - Change classes in `com.karuslabs.commons.item.builders` to be final
+- Change `Argument`'s constructors to accept a description
 - Change `BookBuilder.of(Material)` to `BookBuilder.of()` - only books contain a `BookMeta`
+- Change `DispatcherCommand`'s constructor to accept a description
 - Change `EnchantmentStorageBuilder.of(Material)` to `EnchantmentStorageBuilder.of()` - only enchantment books contain a `EnchantmentStorageMeta`
 - Change `FireworkBuilder.of(Material)` to `FireworkBuilder.of()` - only firework rockets contain a `FireworkMeta`
 - Change `FireworkEffectBuilder.of(Material)` to `FireworkBuilder.of()` - only firework stars contain a `FireworkEffectMeta`
 - Change `KnowledgeBookBuilder.of(Material)` to `KnowledgeBookBuilder.of()` - only knowledge books contain a `KnowledgeBookMeta`
+- Change `Literal`'s constructors to accept a description
 - Change `SkullBuilder` to `HeadBuilder`
 - Change `TropicalFishBucketBuilder.of(Material)` to `TropicalFishBucketBuilder.of()` - only tropical fish buckets contain a `TropicalFishBucketMeta`
 - Change the length at which a displayed command is trimmed when an error occurs from 10 to 20

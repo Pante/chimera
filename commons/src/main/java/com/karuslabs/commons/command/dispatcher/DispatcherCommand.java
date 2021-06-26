@@ -50,12 +50,13 @@ public class DispatcherCommand extends Command implements PluginIdentifiableComm
      * 
      * @param name the name of this command
      * @param plugin the owning plugin
+     * @param description the description  for this command
      * @param dispatcher the underlying dispatcher to which execution is forwarded
      * @param usage the example usage for this command
      * @param aliases the aliases
      */
-    public DispatcherCommand(String name, Plugin plugin, CommandDispatcher<CommandSender> dispatcher, String usage, List<String> aliases) {
-        super(name, "", usage, aliases);
+    public DispatcherCommand(String name, Plugin plugin, String description, CommandDispatcher<CommandSender> dispatcher, String usage, List<String> aliases) {
+        super(name, description, usage, aliases);
         this.plugin = plugin;
         this.dispatcher = dispatcher;
     }

@@ -41,7 +41,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * 
  * @param <T> the type of the source
  */
-public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Mutable<T> {
+public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, Describable, Mutable<T> {
     
     /**
      * Creates an alias command by the given alias and adds it to {@code command}
@@ -53,7 +53,8 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
      * @return the alias command
      */
     public static <T> Literal<T> alias(LiteralCommandNode<T> command, String alias) {
-        var literal = new Literal<>(alias, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
+        var description = command instanceof Describable describable ? describable.description() : command.getUsageText();
+        var literal = new Literal<>(alias, description, new ArrayList<>(0), true, command.getCommand(), command.getRequirement(), command.getRedirect(), command.getRedirectModifier(), command.isFork());
  
         for (var child : command.getChildren()) {
             literal.addChild(child);
@@ -90,6 +91,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     
     
     private final Consumer<CommandNode<T>> addition;
+    private final String description;
     private final List<LiteralCommandNode<T>> aliases;
     private final boolean alias;
     private CommandNode<T> destination;
@@ -97,43 +99,47 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
     /**
      * Creates a {@code Literal} with the given arguments.
      * 
-     * @param name the name of the command
+     * @param name the name of this literal
+     * @param description the description for this literal
      * @param command the command to be executed
      * @param requirement the requirement
      */
-    public Literal(String name, Command<T> command, Predicate<T> requirement) {
-        this(name, command, requirement, null, null, false);
+    public Literal(String name, String description, Command<T> command, Predicate<T> requirement) {
+        this(name, description, command, requirement, null, null, false);
     }
     
     /**
      * Creates a {@code Literal} with the given arguments.
      * 
-     * @param name the name of the command
+     * @param name the name of this literal
+     * @param description the description for this literal
      * @param execution the execution to be executed
      * @param requirement the requirement
      */
-    public Literal(String name, Execution<T> execution, Predicate<T> requirement) {
-        this(name, execution, requirement, null, null, false);
+    public Literal(String name, String description, Execution<T> execution, Predicate<T> requirement) {
+        this(name, description, execution, requirement, null, null, false);
     }
     
     /**
      * Creates a {@code Literal} with the given arguments.
      * 
-     * @param name the name of the command
+     * @param name the name of this literal
+     * @param description the description for this literal
      * @param command the command to be executed
      * @param requirement the requirement
      * @param destination the destination to which this literal is redirected
      * @param modifier the redirection modifier
      * @param fork the fork
      */
-    public Literal(String name, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
-        this(name, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
+    public Literal(String name, String description, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+        this(name, description, new ArrayList<>(0), false, command, requirement, destination, modifier, fork);
     }
     
     /**
      * Creates a {@code Literal} with the given arguments.
      * 
      * @param name the name of the command
+     * @param description the description for this literal
      * @param aliases the aliases of this literal
      * @param alias {@code true} if this {@code Literal} is an alias
      * @param command the command to be executed
@@ -142,9 +148,10 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
      * @param modifier the redirection modifier
      * @param fork the fork
      */
-    public Literal(String name, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
+    public Literal(String name, String description, List<LiteralCommandNode<T>> aliases, boolean alias, Command<T> command, Predicate<T> requirement, @Nullable CommandNode<T> destination, RedirectModifier<T> modifier, boolean fork) {
         super(name, command, requirement, destination, modifier, fork);
         this.addition = super::addChild;
+        this.description = description;
         this.aliases = aliases;
         this.alias = alias;
         this.destination = destination;
@@ -169,6 +176,11 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
         }
         
         return removed;
+    }
+    
+    @Override
+    public String description() {
+        return description;
     }
     
     
@@ -248,7 +260,7 @@ public class Literal<T> extends LiteralCommandNode<T> implements Aliasable<T>, M
          */
         @Override
         public Literal<T> build() {
-            var literal = new Literal<>(name, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
+            var literal = new Literal<>(name, description, getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork());
             for (var child : getArguments()) {
                 literal.addChild(child);
             }

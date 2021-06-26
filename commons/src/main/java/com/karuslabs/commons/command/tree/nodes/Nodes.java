@@ -45,11 +45,24 @@ public @Static class Nodes {
      */
     public static abstract class Builder<T, B extends Builder<T, B>> extends ArgumentBuilder<T, B> {
     
+        protected String description = "";
+        
+        /**
+         * Sets the description.
+         * 
+         * @param description the description
+         * @return {@code this}
+         */
+        public B description(String description) {
+            this.description = description;
+            return getThis();
+        }
+        
         /**
          * Sets the command to be executed.
          * 
          * @param command the command to be executed
-         * @return this
+         * @return {@code this}
          */
         public B executes(Execution<T> command) {
             return executes((Command<T>) command);

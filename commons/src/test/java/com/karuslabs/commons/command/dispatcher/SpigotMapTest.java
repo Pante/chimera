@@ -52,8 +52,8 @@ class SpigotMapTest {
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
     SpigotMap map;
     
-    Literal<CommandSender> literal = Literal.of("literal").alias("l").build();
-    LiteralCommandNode<CommandSender> node = mock(LiteralCommandNode.class);
+    Literal<CommandSender> literal = Literal.of("literal").alias("l").description("desc").build();
+    LiteralCommandNode<CommandSender> node = when(mock(LiteralCommandNode.class).getUsageText()).thenReturn("usage").getMock();
     
     
     @BeforeEach
@@ -115,10 +115,11 @@ class SpigotMapTest {
     
 
     @Test
-    void wrap_aliasable() {
+    void wrap_literal() {
         var command = map.wrap(literal);
         
         assertEquals("literal", command.getName());
+        assertEquals("desc", command.getDescription());
         assertEquals("literal", command.getUsage());
         assertEquals(plugin, command.getPlugin());
         assertEquals(dispatcher, command.dispatcher);
@@ -127,15 +128,15 @@ class SpigotMapTest {
     
     
     @Test
-    void wrap_non_aliasable() {
+    void wrap_non_literal() {
         var command = map.wrap(node);
         
         assertEquals(null, command.getName());
-        assertEquals("/null", command.getUsage());
+        assertEquals("usage", command.getDescription());
+        assertEquals("usage", command.getUsage());
         assertEquals(plugin, command.getPlugin());
         assertEquals(dispatcher, command.dispatcher);
         assertEquals(List.of(), command.getAliases());
-        
     }
 
 } 
