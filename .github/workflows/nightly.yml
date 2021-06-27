@@ -16,7 +16,7 @@ jobs:
   nightly:
     runs-on: ubuntu-20.04
     steps:
-      - uses: styfle/cancel-workflow-action@0.4.1
+      - uses: styfle/cancel-workflow-action@0.9.0
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v2
