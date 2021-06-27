@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
           java-version: 16
       - run: mvn deploy site site:stage-deploy site-deploy -Drepository-head=latest --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
