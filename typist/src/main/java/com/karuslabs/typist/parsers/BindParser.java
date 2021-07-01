@@ -143,7 +143,7 @@ public class BindParser extends LexParser {
             for (var token : tokens) {
                 command = commands.get(token.identity());
                 if (command == null) {
-                    logger.error(binding.site(), Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " ")), "does not exist");
+                    logger.error(binding.site(), Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " ")) + " does not exist");
                     return;
                 }
                 
@@ -169,7 +169,7 @@ public class BindParser extends LexParser {
         void bind(Environment environment, Map<Identity, Command> commands, List<Token> tokens, Binding<?> binding) {
             match(environment, commands, tokens, 0, binding);
             if (matches.isEmpty()) {
-                logger.error(binding.site(), "Pattern: " + Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " ")), "does not exist");
+                logger.error(binding.site(), "Pattern: " + Texts.quote(Texts.join(tokens, (t, builder) -> builder.append(t.identity()), " ")) + " does not exist");
                 
             } else {
                 matches.clear();

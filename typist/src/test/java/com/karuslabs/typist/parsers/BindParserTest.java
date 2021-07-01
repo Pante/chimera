@@ -139,7 +139,7 @@ class BindParserTest {
         
         parser.parse(environment, element);
         
-        verify(logger).error(element, "\"<b> c\"", "does not exist");
+        verify(logger).error(element, "\"<b> c\" does not exist");
         verify(environment, never()).method(any());
     }
     
@@ -167,7 +167,7 @@ class BindParserTest {
         
         parser.parse(environment, element);
         
-        verify(logger).error(element, "Pattern: \"a <b> c\"", "does not exist");
+        verify(logger).error(element, "Pattern: \"a <b> c\" does not exist");
         verify(environment, never()).method(any());
     }
     

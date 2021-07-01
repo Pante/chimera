@@ -55,6 +55,7 @@ public class PublicFinalBindingLint extends TypeLint {
     public void lint(Environment environment, Command command) {
         for (var binding : command.bindings().values()) {
             var site = binding.site();
+            // TODO: Relax restriction on methods, final seems unnecessary
             if (!assertion.test(types, site.getModifiers())) {
                 var message = site instanceof VariableElement ? "Field should be public and final" : "Method should be public and final";
                 logger.error(site, message);

@@ -23,7 +23,9 @@
  */
 package com.karuslabs.typist.generation.chunks;
 
-class Constants<T> {
+import com.karuslabs.annotations.Static;
+
+@Static interface Constants<T> {
 
     static final String VERSION = "5.0.0-SNAPSHOT";
     static final String SOURCE = "source";

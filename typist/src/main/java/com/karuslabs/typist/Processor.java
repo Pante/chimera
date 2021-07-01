@@ -101,8 +101,8 @@ public class Processor extends AnnotationProcessor {
                     new CommandInstantiation(Map.of(
                         Pattern.COMMAND, Lambda.command(types, counter),
                         Pattern.EXECUTION, Lambda.execution(types, counter),
-                        Pattern.REQUIREMENT, Lambda.requirement(types, counter),
-                        Pattern.SUGGESTION_PROVIDER, Lambda.suggestionProvider(types, counter)
+                        Pattern.REQUIREMENT, Lambda.METHOD_REFERENCE,
+                        Pattern.SUGGESTION_PROVIDER, Lambda.METHOD_REFERENCE
                     ), counter)
                 )
             ),
