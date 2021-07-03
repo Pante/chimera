@@ -24,6 +24,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
+| 5.0.0           | 1.17.0            |
 | 4.9.0-SNAPSHOT  | 1.16.4            |
 | 4.8.0           | 1.16.3            |
 | 4.7.1           | 1.16.1            |

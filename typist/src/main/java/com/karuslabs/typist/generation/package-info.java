@@ -21,33 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.typist.generation.chunks;
-
-import com.karuslabs.typist.Environment;
-import com.karuslabs.utilitary.Source;
 
 /**
- * A generator that emits a class which contains methods for creating commands declared 
- * in all classes annotated with {@code Command}.
+ * Contains classes for generating a Java source file for commands in an {@code Environment}.
  */
-public record Type(MethodBody method) {
-    
-    /**
-     * Emits a class for creating commands 
-     * 
-     * @param source the source
-     * @param environment the environment
-     */
-    public void emit(Source source, Environment environment) {
-        source.line("public class Commands {")
-              .indent()
-                .line("private static final Predicate<CommandSender> REQUIREMENT = s -> true;")
-                .line();
-                 for (var namespace : environment.namespaces.entrySet()) {
-                     method.emit(source, namespace.getKey(), namespace.getValue().values());
-                 }
-        source.unindent()
-              .line("}");
-    }
-    
-}
+package com.karuslabs.typist.generation;

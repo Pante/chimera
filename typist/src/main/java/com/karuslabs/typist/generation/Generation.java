@@ -31,8 +31,16 @@ import java.io.IOException;
 import javax.annotation.processing.*;
 import javax.lang.model.element.Element;
 
+/**
+ * A {@code Genereation} emits a Java source file for commands in an {@code Environment}.
+ */
 public record Generation(Logger logger, Filer filer, Header header, Type type, int[] counter) {
     
+    /**
+     * Emits a Java source file for the commands in an {@code Environment}.
+     * 
+     * @param environment the environment
+     */
     public void generate(Environment environment) {
         var out = environment.out;
         var pack = out.folder().isEmpty() ? "" : out.folder();

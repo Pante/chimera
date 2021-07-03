@@ -27,4 +27,7 @@ import javax.lang.model.element.Element;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * An {@code Out} represents the output location of a generated Java source file.
+ */
 public record Out(@Nullable Element element, @Nullable String folder, @Nullable String file) {}

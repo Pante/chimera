@@ -29,26 +29,46 @@ import com.karuslabs.utilitary.Source;
 import java.util.*;
 import javax.lang.model.element.TypeElement;
 
+/**
+ * A generator which emits the body of a method that creates commands from a class
+ * annotated with {@code @Command}.
+ */
 public record MethodBody(CommandInstantiation instantiation) {
     
+    /**
+     * Emits the body of a method that creates commands from a class annotated with
+     * {@code @Command}.
+     * 
+     * @param source the source
+     * @param site the class annotated with {@code @Command}
+     * @param commands the commands declared in the scope of the class
+     */
     public void emit(Source source, TypeElement site, Collection<Command> commands) {
         source.line("public static Map<String, CommandNode<CommandSender>> of(", site.getQualifiedName(), " source) {")
               .indent()
                 .line("var commands = new HashMap<String, CommandNode<CommandSender>>();");
                  for (var command : commands) {
-                     var name = visit(source, command);
-                     source.line("commands.put(", name, ".getName(), ", name, ");");
-                     source.line();
+                     var name = emit(source, command);
+                     source.line("commands.put(", name, ".getName(), ", name, ");")
+                           .line();
                  }
           source.line("return commands;")
               .unindent()
               .line("}");
     }
     
-    String visit(Source source, Command command) {
+    /**
+     * Recursively emits the instantiation of the given command and it's children.
+     * The children are instantiated before the parent. 
+     * 
+     * @param source the source
+     * @param command the command
+     * @return the generated variable's name
+     */
+    String emit(Source source, Command command) {
         var children = new ArrayList<String>();
         for (var child : command.children().values()) {
-            children.add(visit(source, child));
+            children.add(emit(source, child));
             source.line();
         }
         
