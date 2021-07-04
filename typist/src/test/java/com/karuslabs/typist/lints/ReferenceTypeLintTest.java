@@ -32,6 +32,7 @@ import com.karuslabs.typist.parsers.*;
 import com.karuslabs.typist.parsers.BindParser.Captor;
 import com.karuslabs.utilitary.Logger;
 
+import java.util.*;
 import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
@@ -63,6 +64,10 @@ class Cases {
     @Bind(pattern = "<b>")
     void self(CommandContext<CommandSender> context, CommandSender s, @Let int b) {}
     
+    @Case("reference")
+    @Bind(pattern = "<c>")
+    void reference(CommandContext<CommandSender> context, CommandSender s, @Let int b, @Let String c) {}                
+                                                            
     @Case("previous")
     @Bind(pattern = "<c>")
     void previous(CommandContext<CommandSender> context, CommandSender s, @Let int b) {}
@@ -104,6 +109,23 @@ class ReferenceTypeLintTest {
     }
     
     @Test
+    void lint_references_correct_command() {
+        var executable = (ExecutableElement) cases.one("reference");
+        var b = executable.getParameters().get(2);
+        var c = executable.getParameters().get(3);
+        
+        commands.parse(environment, cases.one("class"));
+        bindings.parse(environment, Set.of(executable, cases.one("b"), cases.one("c")));
+        bindings.parse(environment, executable);
+        lets.parse(environment, b);
+        lets.parse(environment, c);
+        
+        Lint.lint(environment, lint);
+        
+        verifyNoInteractions(logger);
+    }
+    
+    @Test
     void lint_raw() {
         var element = lint("raw", "raw_type");
         verify(logger).warn(element, "Parameter references an argument with a raw ArgumentType");
@@ -136,4 +158,4 @@ class ReferenceTypeLintTest {
         return parameter;
     }
 
-} 
+}

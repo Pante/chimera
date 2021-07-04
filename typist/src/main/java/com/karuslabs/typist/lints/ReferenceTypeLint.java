@@ -64,7 +64,7 @@ public class ReferenceTypeLint extends TypeLint {
         for (var binding : command.bindings().values()) {
             if (binding instanceof Method method) {
                 for (var reference : method.parameters(command).values()) {
-                    lint(environment, command, reference);
+                    lint(environment, reference);
                 }
             }
         }
@@ -78,8 +78,8 @@ public class ReferenceTypeLint extends TypeLint {
      * @param command the command
      * @param reference the reference
      */
-    void lint(Environment environment, Command command, Reference reference) {
-        var argument = command.binding(Pattern.ARGUMENT_TYPE);
+    void lint(Environment environment, Reference reference) {
+        var argument = reference.value().binding(Pattern.ARGUMENT_TYPE);
         if (argument == null) {
             return;
         }

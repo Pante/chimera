@@ -198,9 +198,9 @@
                     <links>
                         <link>https://checkerframework.org/api/</link>
                         <link>https://junit.org/junit5/docs/current/api/</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/annotations/apidocs</link>
+<!--                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/annotations/apidocs</link>
                         <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/commons/apidocs</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/typist/apidocs</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/typist/apidocs</link>-->
                     </links>
                 </configuration>
                 <executions> 
