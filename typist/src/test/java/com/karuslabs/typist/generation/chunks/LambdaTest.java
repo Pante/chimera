@@ -49,6 +49,7 @@ import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.typist.annotations.*;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import java.util.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
     
@@ -57,7 +58,7 @@ import org.bukkit.entity.Player;
 class Lambdas {
     @Case("b")
     @Bind(pattern = "<b>")
-    public static final ArgumentType<? extends Player> players = null;
+    public static final ArgumentType<List<Player>> players = null;
     @Case("c")
     @Bind(pattern = "<c>")
     public final ArgumentType<Integer> count = null;
@@ -76,7 +77,7 @@ class Lambdas {
     
     @Case("desugar_order")
     @Bind(pattern = "<c>")
-    public int desugarOrder(@Case("desugar_b") @Let Player b, CommandContext<CommandSender> context, @Case("desugar_c") @Let int c) {
+    public int desugarOrder(@Case("desugar_b") @Let List<Player> b, CommandContext<CommandSender> context, @Case("desugar_c") @Let int c) {
         return 1;
     }
     
@@ -165,7 +166,7 @@ class LambdaTest {
         
         assertEquals("""
             (context) -> {
-                var b0 = context.getArgument("b", org.bukkit.entity.Player.class);
+                var b0 = context.getArgument("b", java.util.List.class);
                 var c1 = context.getArgument("c", int.class);
                 return source.desugarOrder(b0, context, c1);
             };
@@ -210,7 +211,7 @@ class LambdaTest {
     void match_throws_exception() {
         var closure = new Closure(types, counter, Map.of(), false);
         assertEquals(
-            "Unable to resolve parameter: org.bukkit.entity.Player b",
+            "Unable to resolve parameter: java.util.List<org.bukkit.entity.Player> b",
             assertThrows(IllegalStateException.class, () -> closure.match((VariableElement) cases.one("desugar_b"))).getMessage()
         );
     }

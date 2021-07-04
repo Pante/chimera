@@ -16,13 +16,14 @@
         
         <release>16</release>
         
-        <repository-head>latest</repository-head>
+        <repository-head>nightly</repository-head>
     </properties>
 
     <modules>
         <module>annotations</module>
         <module>commons</module>
         <module>typist</module>
+        <module>typist-example-plugin</module>
     </modules>
           
     <distributionManagement>
@@ -187,7 +188,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+             
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -198,9 +199,9 @@
                     <links>
                         <link>https://checkerframework.org/api/</link>
                         <link>https://junit.org/junit5/docs/current/api/</link>
-<!--                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/annotations/apidocs</link>
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/annotations/apidocs</link>
                         <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/commons/apidocs</link>
-                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/typist/apidocs</link>-->
+                        <link>https://repo.karuslabs.com/repository/chimera/${repository-head}/typist/apidocs</link>
                     </links>
                 </configuration>
                 <executions> 

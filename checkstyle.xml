@@ -5,6 +5,7 @@
     <module name="FileTabCharacter"/>
     
     <module name="TreeWalker">
+		<module name="SuppressionCommentFilter"/>
         <module name="ArrayTrailingComma"/>
         <module name="ArrayTypeStyle"/>
         <module name="AtclauseOrder"/>

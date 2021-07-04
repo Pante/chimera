@@ -119,23 +119,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!-- Maven Shade does not support Java 16 records yet, see https://issues.apache.org/jira/projects/MSHADE/issues/MSHADE-394?filter=allopenissues
-                <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
         </plugins>
     </build>
 </project>

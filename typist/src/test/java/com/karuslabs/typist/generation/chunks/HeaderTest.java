@@ -39,6 +39,8 @@ class HeaderTest {
     
     static final LocalDateTime TIME = LocalDateTime.now();
     static final String HEADER = """
+        // CHECKSTYLE:OFF
+                                 
         import com.karuslabs.commons.command.Execution;
         import com.karuslabs.commons.command.tree.nodes.*;
         

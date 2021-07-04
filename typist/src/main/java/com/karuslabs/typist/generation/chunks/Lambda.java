@@ -133,7 +133,11 @@ record Closure(Types types, int[] counter, Map<String, TypeMirror> parameters, b
                 var name = reference.value().identity().name() + counter[0]++;
                 
                 variables.add(name);
-                source.assign(name, "context.getArgument" + Source.arguments(quote(reference.value().identity().name()), reference.site().asType() + ".class"));
+                source.assign(
+                    name, 
+                    "context.getArgument" + Source.arguments(quote(reference.value().identity().name()), 
+                    types.erasure(reference.site().asType()) + ".class")
+                );
             }
         }
         

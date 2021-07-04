@@ -13,7 +13,6 @@
     <name>Commons</name>
     <description>Karus Lab's commons library</description>
      
-     
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -37,7 +36,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    
     
     <build>
         <plugins>  

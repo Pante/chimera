@@ -1,0 +1,5 @@
+name: TypistExamplePlugin
+main: com.karuslabs.typist.example.plugin.ExamplePlugin
+description: A simple plugin that demostrates the usage of Typist
+version: 1.0.0
+api-version: '1.17'

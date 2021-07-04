@@ -46,6 +46,8 @@ public record Header() {
         }
         
         source.append("""
+               // CHECKSTYLE:OFF
+                      
                import com.karuslabs.commons.command.Execution;
                import com.karuslabs.commons.command.tree.nodes.*;
 
