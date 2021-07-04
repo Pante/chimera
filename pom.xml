@@ -4,7 +4,7 @@
     
     <groupId>com.karuslabs</groupId>
     <artifactId>chimera</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
     
     <name>Chimera</name>
@@ -16,7 +16,7 @@
         
         <release>16</release>
         
-        <repository-head>nightly</repository-head>
+        <repository-head>latest</repository-head>
     </properties>
 
     <modules>

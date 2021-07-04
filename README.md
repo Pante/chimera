@@ -23,7 +23,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
-| 5.0.0           | 1.17.0            |
+| 5.0.0-SNAPSHOT           | 1.17.0            |
 | 4.9.0-SNAPSHOT  | 1.16.4            |
 | 4.8.0           | 1.16.3            |
 | 4.7.1           | 1.16.1            |
@@ -49,7 +49,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -62,7 +62,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -75,6 +75,6 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>typist</artifactId>
-    <version>5.0.0</version>
+    <version>5.0.0-SNAPSHOT</version>
 </dependency>
 ```
