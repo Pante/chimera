@@ -1,4 +1,4 @@
-## 5.0.0 - Next release
+## 5.0.0 - Build strong the beams
 
 **Compatible Spigot versions: 1.17.0**
 

@@ -45,12 +45,12 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Annotations - Contains general purpose annotations
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/annotations/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/annotations/)
-[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/annotations/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/latest/annotations/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>4.8.0</version>
+    <version>5.0.0</version>
 </dependency>
 ```
 
@@ -58,11 +58,24 @@ Karus Labs' mono-repository for spigot libraries & tools.
 #### Commons - Contains the command framework and other common utilities for Spigot plugin development
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/commons)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/commons)
-[![javadoc](https://img.shields.io/badge/javadoc-4.8.0-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/4.8.0/commons/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/latest/commons/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>4.8.0</version>
+    <version>5.0.0</version>
+</dependency>
+```
+
+***
+#### Commons - Contains the command framework and other common utilities for Spigot plugin development
+[![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/typist)
+[![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/typist)
+[![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/latest/typist/apidocs/index.html)
+```XML
+<dependency>
+    <groupId>com.karuslabs</groupId>
+    <artifactId>typist</artifactId>
+    <version>5.0.0</version>
 </dependency>
 ```
