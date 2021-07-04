@@ -4,8 +4,7 @@
 
 Karus Labs' mono-repository for spigot libraries & tools. 
 * Allows Brigadier command framework usage in Spigot plugins
-* Code-generation driven command framework 
-* Compile-time plugin.yml generation tools
+* Code-generation driven annotation command framework 
 
 **Please view the [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 16+.**
 
@@ -68,7 +67,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 ```
 
 ***
-#### Commons - Contains the command framework and other common utilities for Spigot plugin development
+#### Typist - Contains the annotations add-on for the command framework in Commons
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-releases/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-releases/com/karuslabs/typist)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/chimera-snapshots/com/karuslabs/chimera/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/chimera-snapshots/com/karuslabs/typist)
 [![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/chimera/latest/typist/apidocs/index.html)
