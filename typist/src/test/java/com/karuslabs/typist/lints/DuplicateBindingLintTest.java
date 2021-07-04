@@ -55,15 +55,15 @@ class Cases {
     
     @Case("valid_2")
     @Bind("a <b>")
-    public final void valid_2() {}
+    public void valid_2() {}
     
     @Case("invalid_1")
     @Bind("a <b>")
-    public final void invalid_1() {};
+    public void invalid_1() {};
     
     @Case("invalid_2")
     @Bind("a <b>")
-    public final void invalid_2() {};
+    public void invalid_2() {};
     
 }
 """)

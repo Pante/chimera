@@ -66,6 +66,9 @@ public class Processor extends AnnotationProcessor {
         generation(environment);
     }
     
+    /**
+     * Initializes all parsers.
+     */
     void parsers() {
         var memoizer = new Memoizer();
         // ArgumentLexer && LiteralLexer CANNOT share memoizers since memoization is done using names only.
@@ -78,6 +81,9 @@ public class Processor extends AnnotationProcessor {
         };
     }
     
+    /**
+     * Initializes all lints.
+     */
     void lints() {
         lints = new Lint[] {
             new ArgumentPositionLint(logger),
@@ -87,11 +93,16 @@ public class Processor extends AnnotationProcessor {
                 new ArgumentTypeLint(logger),
                 new DuplicateBindingLint(logger),
                 new MethodSignatureLint(logger, types),
-                new PublicFinalBindingLint(logger, types)
+                new BindingAccessibilityLint(logger, types)
             ),
         };
     }
     
+    /**
+     * Initializes the generator.
+     * 
+     * @param environment the environment
+     */
     void generation(ProcessingEnvironment environment) {
         var counter = new int[] {0}; // we use an array instead of int to simulate a ref value
         generation = new Generation(logger, environment.getFiler(),

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.typist.generation.chunks;
+package com.karuslabs.typist;
 
-import com.karuslabs.annotations.Static;
+import com.karuslabs.elementary.Results;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.typist.annotations.*;
 
-@Static interface Constants<T> {
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 
-    static final String VERSION = "5.0.0";
-    static final String SOURCE = "source";
-    static final String REQUIREMENT = "REQUIREMENT";
-    static final String NULL = "null";
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(JavacExtension.class)
+@Processors(Processor.class)
+@Introspect
+class ProcessorTest {
     
-}
+    @Test
+    void process(Results results) {
+        assertTrue(results.errors.isEmpty());
+    }
+    
+    @Pack
+    @com.karuslabs.typist.annotations.Command({"a <b> c", "d"})
+    static class A {
+        
+        @Bind("a <b>") public final ArgumentType<? extends Player> p = null;
+        
+        @Bind("d")
+        public void execute(CommandContext<CommandSender> context, CommandSender sender) {}
+        
+    }
+
+} 

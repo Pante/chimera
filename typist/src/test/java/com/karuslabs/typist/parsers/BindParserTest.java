@@ -58,31 +58,31 @@ class Cases {
 
     @Case("namespace")
     @Bind("a <b> <b>")
-    public final void namespace() {}
+    public void namespace() {}
 
     @Case("invalid_namespace")
     @Bind("<b> c")
-    public final void invalid_namespace() {}
+    public void invalid_namespace() {}
 
     @Case("invalid")
     @Bind({"<a|b>"})
-    public final void invalid() {}
+    public void invalid() {}
 
     @Case("pattern_1")
     @Bind(pattern = "<b> c")
-    public final void pattern_1() {}
+    public void pattern_1() {}
 
     @Case("pattern_2")
     @Bind(pattern = "a <b>")
-    public final void pattern_2() {}
+    public void pattern_2() {}
 
     @Case("pattern_3")
     @Bind(pattern = "<b>")
-    public final void pattern_3() {}
+    public void pattern_3() {}
 
     @Case("invalid_pattern")
     @Bind(pattern = "a <b> c")
-    public final void invalid_pattern() {}
+    public void invalid_pattern() {}
 
     @Case("invalid_method")
     @Bind("<b>")

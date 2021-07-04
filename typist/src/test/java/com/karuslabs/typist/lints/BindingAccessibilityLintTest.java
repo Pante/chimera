@@ -53,11 +53,11 @@ class Cases {
     
     @Case("valid_method")
     @Bind("a b")
-    public final void valid() {}
+    public void valid() {}
                             
     @Case("valid_field")
     @Bind("a b")
-    public final Execution<CommandSender> valid_field = null;
+    public Execution<CommandSender> valid_field = null;
     
     @Case("invalid_method")
     @Bind("a b")
@@ -69,13 +69,13 @@ class Cases {
     
 }
 """)
-class PublicFinalBindingLintTest {
+class BindingAccessibilityLintTest {
     
     Logger logger = mock(Logger.class);
     Lexer lexer = new CommandLexer(new ArgumentLexer(), LiteralLexer.aliasable(new Memoizer()));
     CommandParser commands = new CommandParser(logger, lexer);
     BindParser bindings = new BindParser(new Captor(new Types(Tools.elements(), Tools.typeMirrors())), logger, lexer);
-    PublicFinalBindingLint lint = new PublicFinalBindingLint(logger, new Types(Tools.elements(), Tools.typeMirrors()));
+    BindingAccessibilityLint lint = new BindingAccessibilityLint(logger, new Types(Tools.elements(), Tools.typeMirrors()));
     Environment environment = new Environment();
     Cases cases = Tools.cases();
     
@@ -92,7 +92,7 @@ class PublicFinalBindingLintTest {
     }
     
     @ParameterizedTest
-    @CsvSource({"invalid_method, Method should be public and final", "invalid_field, Field should be public and final"})
+    @CsvSource({"invalid_method, Method should be public", "invalid_field, Field should be public and final"})
     void lint_invalid(String label, String message) {
         var element = cases.one(label);
         

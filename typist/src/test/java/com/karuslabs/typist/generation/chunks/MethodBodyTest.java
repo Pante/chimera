@@ -54,7 +54,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 class Body {
     
     @Case("type")
-    public final @Bind("a <b>") ArgumentType<?> type = null;
+    public @Bind("a <b>") ArgumentType<?> type = null;
     
 }
 """)

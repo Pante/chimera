@@ -35,11 +35,12 @@ import static javax.lang.model.element.Modifier.*;
 
 /**
  * A {@code Lint} which verifies that all fields and methods annotated with {@code Bind}
- * are public and final.
+ * are public and final, and public respectively.
  */
-public class PublicFinalBindingLint extends TypeLint {
+public class BindingAccessibilityLint extends TypeLint {
 
-    private final Assertion<Set<Modifier>> assertion = contains(PUBLIC, FINAL);
+    private final Assertion<Set<Modifier>> variable = contains(PUBLIC, FINAL);
+    private final Assertion<Set<Modifier>> executable = contains(PUBLIC);
 
     /**
      * Creates a {@code PublicFinalBindingLint} with the given logger and types.
@@ -47,7 +48,7 @@ public class PublicFinalBindingLint extends TypeLint {
      * @param logger the logger used to report errors
      * @param types the types used in the assertion
      */
-    public PublicFinalBindingLint(Logger logger, Types types) {
+    public BindingAccessibilityLint(Logger logger, Types types) {
         super(logger, types);
     }
     
@@ -55,10 +56,11 @@ public class PublicFinalBindingLint extends TypeLint {
     public void lint(Environment environment, Command command) {
         for (var binding : command.bindings().values()) {
             var site = binding.site();
-            // TODO: Relax restriction on methods, final seems unnecessary
-            if (!assertion.test(types, site.getModifiers())) {
-                var message = site instanceof VariableElement ? "Field should be public and final" : "Method should be public and final";
-                logger.error(site, message);
+            if (site instanceof VariableElement && !variable.test(types, site.getModifiers())) {
+                logger.error(site, "Field should be public and final");
+                
+            } else if (site instanceof ExecutableElement && !executable.test(types, site.getModifiers())) {
+                logger.error(site, "Method should be public");
             }
         }
     }

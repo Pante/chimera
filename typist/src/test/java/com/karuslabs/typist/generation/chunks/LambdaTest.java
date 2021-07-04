@@ -64,35 +64,35 @@ class Lambdas {
     
     @Case("static_closure")
     @Bind(pattern = "<c>")
-    public static final int staticClosure(CommandContext<CommandSender> context) {
+    public static int staticClosure(CommandContext<CommandSender> context) {
         return 1;
     }
     
     @Case("instance_closure")
     @Bind(pattern = "<c>")
-    public final int instanceClosure(CommandContext<CommandSender> context) {
+    public int instanceClosure(CommandContext<CommandSender> context) {
         return 1;
     }
     
     @Case("desugar_order")
     @Bind(pattern = "<c>")
-    public final int desugarOrder(@Case("desugar_b") @Let Player b, CommandContext<CommandSender> context, @Case("desugar_c") @Let int c) {
+    public int desugarOrder(@Case("desugar_b") @Let Player b, CommandContext<CommandSender> context, @Case("desugar_c") @Let int c) {
         return 1;
     }
     
     @Case("execution")
     @Bind(pattern = "<c>")
-    public final void execution(CommandContext<CommandSender> context, CommandSender sender) {}
+    public void execution(CommandContext<CommandSender> context, CommandSender sender) {}
     
     @Case("static_method_reference")
     @Bind(pattern = "<c>")
-    public static final boolean staticMethodReference(CommandSender sender) {
+    public static boolean staticMethodReference(CommandSender sender) {
         return true;
     }
     
     @Case("instance_method_reference")
     @Bind(pattern = "<c>")
-    public final boolean instanceMethodReference(CommandSender sender) {
+    public boolean instanceMethodReference(CommandSender sender) {
         return true;
     }
     
