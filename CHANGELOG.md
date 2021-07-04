@@ -79,6 +79,10 @@ Typist.
 Command code generation has been rewritten to support inferred parameters for methods annotated with `@Bind`.
 This project was originally part of commons but has since been moved into Typist since this release.
 
+### Typist Example Plugin
+
+This project provides a minimal example of using Typist in a plugin.
+
 ### Scribe
 
 TL;DR - Remove Scribe

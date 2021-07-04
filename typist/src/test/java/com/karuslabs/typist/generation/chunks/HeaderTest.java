@@ -54,7 +54,7 @@ class HeaderTest {
         import org.bukkit.command.CommandSender;
                                  
         /**
-         * This file was generated at %s using Chimera %s
+         * This file was generated at %s using Typist %s
          */
         """.formatted(TIME, VERSION);
     
