@@ -57,3 +57,4 @@ Temporary Items
 *.iml
 /typist/target/
 /typist-example-plugin/target/
+/test-maven-plugin/target/

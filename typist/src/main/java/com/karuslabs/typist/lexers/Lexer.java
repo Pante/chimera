@@ -27,7 +27,7 @@ import com.karuslabs.typist.*;
 import com.karuslabs.utilitary.Logger;
 
 import java.util.*;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 
 /**
  * A {@code Lexer} transforms a string that represents a command into a sequence

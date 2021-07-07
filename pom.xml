@@ -24,6 +24,7 @@
         <module>commons</module>
         <module>typist</module>
         <module>typist-example-plugin</module>
+        <module>test-maven-plugin</module>
     </modules>
           
     <distributionManagement>
@@ -55,6 +56,11 @@
         <repository>
             <id>elementary-releases</id>
             <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
+        </repository>
+        
+        <repository>
+            <id>elementary-nightly</id>
+            <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
         </repository>
         
         <repository>
@@ -133,6 +139,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
+                    <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=uTF-8</argLine>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
             </plugin>
