@@ -4,7 +4,7 @@
 
 Karus Labs' mono-repository for spigot libraries & tools. 
 * Allows Brigadier command framework usage in Spigot plugins
-* Code-generation driven annotation command framework 
+* Code-generation driven annotation command framework
 
 **Please view the [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 16+.**
 
@@ -16,6 +16,18 @@ Karus Labs' mono-repository for spigot libraries & tools.
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/Chimera/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
+### Why Chimera?
+* Improved performance - Since annotation are processed at compile-time, we can avoid many of the performance pitfalls associated with reflective access and reflection in general.
+
+* Light(er)weight Dependencies - All Typist annotations are discarded after compilation and generated code do not rely on Typist, hence it doesn't need to be bundled with the plugin. The only dependency required is Chimera.
+
+* Low Learning Curve & Safe - One benefit of compile-time annotation processing is the ability to check annotations at compile-time. This means errors can be caught eariler by the annotation processor and thus easier to learn and safer.
+
+* Better Developer Experience - No need to compile the plugin, fiddle with the jar, boot-up a Spigot server and pray it doesn't instantly hurl an error. Typist has a _slightly_ shorter feedback loop.
+
+![Imgur](https://i.imgur.com/im6XGBi.gif)
+<br>
+<br>
 <details>
     <summary>
         <b>Version Compatibility</b>
