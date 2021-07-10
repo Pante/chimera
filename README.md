@@ -6,9 +6,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 * Allows Brigadier command framework usage in Spigot plugins
 * Code-generation driven annotation command framework
 
-**Please view the [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 16+.**
-
-**Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started.**
+**Please view the [stable branch](https://github.com/Pante/Chimera/tree/stable) for a production version. Requires Java 16+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started.**
 
 [![CI/CD](https://github.com/Pante/Chimera/workflows/CI/CD/badge.svg)](https://github.com/Pante/Chimera/actions?query=workflow%3ACI%2FCD)
 [![Funding](https://img.shields.io/badge/%F0%9F%A4%8D%20-sponsorship-ff69b4?style=flat-square)](https://github.com/sponsors/Pante)
