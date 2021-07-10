@@ -23,6 +23,8 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 * Low Learning Curve & Safe - One benefit of compile-time annotation processing is the ability to check annotations at compile-time. This means errors can be caught eariler by the annotation processor and thus easier to learn and safer.
 
+* Native Brigadier Support - Typist is built on Chimera, hence by extension, built on Brigadier.
+
 * Better Developer Experience - No need to compile the plugin, fiddle with the jar, boot-up a Spigot server and pray it doesn't instantly hurl an error. Typist has a _slightly_ shorter feedback loop.
 
 ![Imgur](https://i.imgur.com/im6XGBi.gif)
