@@ -25,7 +25,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 * Better Developer Experience - No need to compile the plugin, fiddle with the jar, boot-up a Spigot server and pray it doesn't instantly hurl an error. Typist has a _slightly_ shorter feedback loop.
 
-![Imgur](https://i.imgur.com/im6XGBi.gif)
+![Imgur](https://imgur.com/4gI73KN.gif)
 <br>
 <br>
 <details>
