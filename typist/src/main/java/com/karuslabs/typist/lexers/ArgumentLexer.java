@@ -48,9 +48,9 @@ package com.karuslabs.typist.lexers;
  */
 import com.karuslabs.typist.Token;
 import com.karuslabs.utilitary.Logger;
+
 import java.io.*;
 import java.nio.charset.*;
-
 import java.util.List;
 import javax.lang.model.element.*;
 
@@ -73,31 +73,10 @@ public class ArgumentLexer implements Lexer {
      * @param lexeme the lexeme
      * @return a single argument {@code Token}
      */
-    
-    
-    public static void main(String[] args) {
-        var heart = '\u2764';    
-        System.out.println(heart);
-    }
-    
     @Override
     public List<Token> lex(Logger logger, Element element, String lexeme) {
         if (!lexeme.startsWith("<") || !lexeme.endsWith(">")) {
-            try {
-                System.out.println("Default Charset=" + Charset.defaultCharset());
-                System.out.println("file.encoding=" + System.getProperty("file.encoding"));
-                System.out.println("Default Charset=" + Charset.defaultCharset());
-
-                var heart = '\u2764';
-                
-                System.out.println(heart);
-                System.out.println((int) heart);
-                System.out.println(String.join("\u0332",lexeme.split("",-1)));
-            } catch (Exception e) {
-                
-            }
-            logger.error(element, lexeme, "is not an argument ❤", "An argument should be surrounded by '<' and '>'");
-            
+            logger.error(element, lexeme, "is not an argument", "should be surrounded by '<' and '>'");
             return EMPTY_LIST;
         }
         

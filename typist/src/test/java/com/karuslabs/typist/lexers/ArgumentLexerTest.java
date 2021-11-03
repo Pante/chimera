@@ -59,16 +59,17 @@ class ArgumentLexerTest {
     
     @ParameterizedTest
     @MethodSource("lex_long_error_parameters")
-    void lex_long_error(String lexeme, String reason, String resolution) { 
+    void lex_long_error(String lexeme, String reason, String resolution) {
         assertTrue(lexer.lex(logger, element, lexeme).isEmpty());
         verify(logger).error(element, lexeme, reason, resolution);
     }
     
     static Stream<Arguments> lex_long_error_parameters() {
         return Stream.of(
-            of("<something", "is not an argument ❤", "should be surrounded by '<' and '>'"),
+            of("<something", "is not an argument", "should be surrounded by '<' and '>'"),
             of("something>", "is not an argument", "should be surrounded by '<' and '>'"),
             of("<a|b>", "contains '|'", "argument should not contain aliases")
+            
         );
     }
     

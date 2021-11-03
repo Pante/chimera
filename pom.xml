@@ -24,7 +24,6 @@
         <module>commons</module>
         <module>typist</module>
         <module>typist-example-plugin</module>
-        <module>test-maven-plugin</module>
     </modules>
           
     <distributionManagement>

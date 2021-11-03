@@ -64,5 +64,5 @@ public class BindingAccessibilityLint extends TypeLint {
             }
         }
     }
-
 }
+
