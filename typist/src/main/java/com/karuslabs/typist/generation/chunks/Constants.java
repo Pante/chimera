@@ -27,7 +27,7 @@ import com.karuslabs.annotations.Static;
 
 @Static interface Constants<T> {
 
-    static final String VERSION = "5.1.0-SNAPSHOT";
+    static final String VERSION = "5.1.0";
     static final String SOURCE = "source";
     static final String REQUIREMENT = "REQUIREMENT";
     static final String NULL = "null";
