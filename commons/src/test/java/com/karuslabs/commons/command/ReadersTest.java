@@ -26,6 +26,8 @@ package com.karuslabs.commons.command;
 import com.mojang.brigadier.StringReader;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +36,11 @@ class ReadersTest {
     
     StringReader reader = new StringReader("abcd");
     
+    @ParameterizedTest
+    @CsvSource({"&7kdkd, &7kdkd", "hello, hello world", "\"hello, \"hello world\""})
+    void unquoted(String expected, String actual) {
+        assertEquals(expected, Readers.unquoted(new StringReader(actual)));
+    }
     
     @Test
     void until_char() {

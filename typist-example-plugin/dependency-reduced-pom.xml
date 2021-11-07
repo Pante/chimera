@@ -18,24 +18,24 @@
           <release>${release}</release>
         </configuration>
       </plugin>
-<!--      <plugin>-->
-<!--        <artifactId>maven-shade-plugin</artifactId>-->
-<!--        <version>3.3.0-SNAPSHOT</version>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <goals>-->
-<!--              <goal>shade</goal>-->
-<!--            </goals>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--        <configuration>-->
-<!--          <minimizeJar>true</minimizeJar>-->
-<!--          <shadedArtifactAttached>true</shadedArtifactAttached>-->
-<!--          <transformers>-->
-<!--            <transformer />-->
-<!--          </transformers>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.3.1-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <minimizeJar>true</minimizeJar>
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <transformers>
+            <transformer />
+          </transformers>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -64,27 +64,17 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.karuslabs</groupId>
-      <artifactId>typist</artifactId>
-      <version>5.1.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.17-R0.1-SNAPSHOT</version>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.1</version>
       <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>apiguardian-api</artifactId>
-          <groupId>org.apiguardian</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>opentest4j</artifactId>
           <groupId>org.opentest4j</groupId>
@@ -93,12 +83,16 @@
           <artifactId>junit-platform-commons</artifactId>
           <groupId>org.junit.platform</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>apiguardian-api</artifactId>
+          <groupId>org.apiguardian</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -114,7 +108,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -126,7 +120,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.11.2</version>
+      <version>4.0.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -146,14 +140,8 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>3.11.2</version>
+      <version>4.0.0</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.karuslabs</groupId>
-      <artifactId>typist</artifactId>
-      <version>5.1.0-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

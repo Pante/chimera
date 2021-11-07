@@ -2,8 +2,8 @@ name: Chimera CI/CD
 
 on:
   push:
-    branches:
-      - stable
+    tags:
+      - '*'
 
 env:
   SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}

@@ -40,6 +40,24 @@ public @Static class Readers {
      */
     public static final Pattern COMMA = Pattern.compile("([,]\\s*)");
     
+    /**
+     * Substrings the input between the current cursor of the {@code StringReader}
+     * and the first encountered delimiter. It ignores quotation marks, i.e. given 
+     * {@code "hello world"}, the returned string will be {@code "hello}.
+     * <br>
+     * <br>
+     * <b>
+     * This method should be preferred over {@link StringReader#readUnquotedString()}
+     * as the latter does not handle non-ASCII characters.
+     * </b>
+     * 
+     * @param reader the reader
+     * @return a string between the current cursor and the index of the first encountered
+     *         whitespace
+     */
+    public static String unquoted(StringReader reader) {
+        return until(reader, ' ');
+    }
     
     /**
      * Substrings the input between the current cursor of the {@code StringReader}

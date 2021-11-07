@@ -36,6 +36,8 @@ import org.bukkit.Bukkit;
 
 import org.bukkit.Material;
 
+import static com.karuslabs.commons.command.Readers.unquoted;
+
 /**
  * A {@code Material} type. <b>Legacy materials are not supported</b>.
  */
@@ -66,7 +68,7 @@ public class MaterialType implements WordType<Material> {
      */
     @Override
     public Material parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString().toLowerCase();
+        var name = unquoted(reader).toLowerCase();
         var material = MATERIALS.get(name);
         
         if (material == null) {

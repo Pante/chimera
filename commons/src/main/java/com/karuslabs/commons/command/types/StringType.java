@@ -36,7 +36,7 @@ public interface StringType<T> extends Type<T> {
     /**
      * A {code StringArgumentType} to which this {@code Type} is mapped.
      */
-    public static final StringArgumentType STRING = StringArgumentType.string();
+    static final StringArgumentType STRING = StringArgumentType.string();
     
     /**
      * Returns a {@code StringArgumentType}.

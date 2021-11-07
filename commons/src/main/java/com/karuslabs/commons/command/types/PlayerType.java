@@ -34,6 +34,8 @@ import java.util.concurrent.CompletableFuture;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
+import static com.karuslabs.commons.command.Readers.unquoted;
+
 /**
  * A {@code Player} type.
  */
@@ -54,7 +56,7 @@ public class PlayerType implements WordType<Player> {
      */
     @Override
     public Player parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString();
+        var name = unquoted(reader);
         var player = Bukkit.getPlayerExact(name);
         
         if (player == null) {

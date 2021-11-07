@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.karuslabs.commons.command.Readers;
 import com.mojang.brigadier.arguments.*;
 
 /**
@@ -34,9 +35,18 @@ import com.mojang.brigadier.arguments.*;
 public interface WordType<T> extends Type<T> {
     
     /**
-     * An unquoted {code StringArgumentType} to which this type is mapped.
+     * Returns a alternate implementation of {@link StringArgumentType#word()}
+     * that supports non-ASCII characters.
+     * <br>
+     * <br>
+     * <b>This should be preferred over {@link StringArgumentType#word()}.</b>
+     * 
+     * @return an alternate implementation of {@link StringArgumentType#word()} that
+     *         supports non-ASCII characters
      */
-    public static final StringArgumentType WORD = StringArgumentType.word();
+    static WordType<String> word() {
+        return Readers::unquoted;
+    }
     
     /**
      * Returns an unquoted {@code StringArgumentType}.
@@ -45,7 +55,11 @@ public interface WordType<T> extends Type<T> {
      */
     @Override
     default StringArgumentType mapped() {
-        return WORD;
+        class Constants {
+            static final StringArgumentType WORD = StringArgumentType.word(); 
+        }
+        
+        return Constants.WORD;
     }
     
 }

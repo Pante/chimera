@@ -1,3 +1,20 @@
+## 5.1.0 - The bare necessities (07/11/2021)
+
+**Compatible Spigot versions: 1.17.1**
+
+This update introduces a replacement for `StringArgumentType.word()` that supports non-ASCII characters.
+In addition, we have updated our Git workflow to embrace a more "trunk-based development" model. As such,
+we no longer maintain a stable branch. All releases will be tagged on `master` instead.
+
+### Commmons
+
+- Add `Readers.unquoted(StringReader)` - replaces `StringReader.readUnquotedString()` which does not support non-ASCII characters
+- Add `WordType.word()` - replaces `StringArgumentType.word()` which does not support non-ASCII characters
+- Change`WordType.WORD` to become private
+- Fix `EnchantmentType` not supporting non-ASCII characters
+- Fix `MaterialType` not supporting non-ASCII characters
+- Fix `ParticleType` not supporting non-ASCII characters
+
 ## 5.0.0 - Build strong the beams (04/07/2021)
 
 **Compatible Spigot versions: 1.17.0**

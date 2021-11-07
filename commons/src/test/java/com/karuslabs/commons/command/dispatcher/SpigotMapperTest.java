@@ -28,7 +28,7 @@ import com.karuslabs.commons.command.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.*;
@@ -64,9 +64,10 @@ class SpigotMapperTest {
     @Test
     void type() {
         var bool = BoolArgumentType.bool();
-        
         assertEquals(bool, mapper.type(Argument.of("test", bool).build()));
-        assertEquals(PlayerType.WORD, mapper.type(Argument.of("test", new PlayerType()).build()));
+        
+        var argument = (StringArgumentType) mapper.type(Argument.of("test", new PlayerType()).build());
+        assertEquals(StringArgumentType.word().getType(), argument.getType());
     }
     
     
@@ -83,7 +84,7 @@ class SpigotMapperTest {
     
     @Test
     void suggestions_primitive_empty() {
-        assertNull(mapper.suggestions(Argument.of("a", PlayerType.WORD).build()));
+        assertNull(mapper.suggestions(Argument.of("a", StringArgumentType.word()).build()));
     }
     
     
@@ -99,7 +100,7 @@ class SpigotMapperTest {
     
     @Test
     void suggestions_clientside() {
-        assertSame(SpigotMapper.CLIENT_SIDE.get(ClientSuggestionProvider.ENTITIES), mapper.suggestions(Argument.of("a", PlayerType.WORD).suggests(ClientSuggestionProvider.ENTITIES).build()));
+        assertSame(SpigotMapper.CLIENT_SIDE.get(ClientSuggestionProvider.ENTITIES), mapper.suggestions(Argument.of("a", StringArgumentType.word()).suggests(ClientSuggestionProvider.ENTITIES).build()));
     }
     
     
@@ -108,7 +109,7 @@ class SpigotMapperTest {
         SuggestionProvider<CommandSender> suggestor = (a, b) -> null;
         doReturn(PROVIDER).when(mapper).reparse(suggestor);
         
-        assertSame(PROVIDER, mapper.suggestions(Argument.of("name", PlayerType.WORD).suggests(suggestor).build()));
+        assertSame(PROVIDER, mapper.suggestions(Argument.of("name", StringArgumentType.word()).suggests(suggestor).build()));
     }
     
     

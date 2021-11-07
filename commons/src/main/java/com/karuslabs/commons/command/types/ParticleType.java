@@ -35,6 +35,8 @@ import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Particle;
 
+import static com.karuslabs.commons.command.Readers.unquoted;
+
 /**
  * A {@code Particle} type.
  */
@@ -58,7 +60,7 @@ public class ParticleType implements WordType<Particle> {
      */
     @Override
     public Particle parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString().toLowerCase();
+        var name = unquoted(reader).toLowerCase();
         var particles = PARTICLES.get(name);
         
         if (particles == null) {

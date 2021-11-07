@@ -23,6 +23,7 @@
  */
 package com.karuslabs.commons.command.types;
 
+import com.karuslabs.commons.command.Readers;
 import com.karuslabs.commons.util.collection.Trie;
 
 import com.mojang.brigadier.*;
@@ -60,7 +61,7 @@ public class EnchantmentType implements WordType<Enchantment> {
      */
     @Override
     public Enchantment parse(StringReader reader) throws CommandSyntaxException {
-        var name = reader.readUnquotedString().toLowerCase();
+        var name = Readers.unquoted(reader).toLowerCase();
         var enchantment = ENCHANTMENTS.get(name);
         
         if (enchantment == null) {
