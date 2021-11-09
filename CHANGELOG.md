@@ -1,4 +1,4 @@
-## 5.1.0 - The bare necessities (07/11/2021)
+## 5.2.0-SNAPSHOT - The bare necessities (07/11/2021)
 
 **Compatible Spigot versions: 1.17.1**
 
