@@ -47,5 +47,4 @@ Just upload the spigot-api shaded jar.
 Group ID: `org.spigotmc`
 Artifact ID: `spigot-api`
 
-1.17.1-R0.1-SNAPSHOT
-
+1.18-R0.1-SNAPSHOT

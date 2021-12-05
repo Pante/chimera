@@ -88,7 +88,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.8.1</version>
+      <version>5.8.2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -108,7 +108,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.1</version>
+      <version>5.8.2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.8.1</version>
+      <version>5.8.2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.0.0</version>
+      <version>4.1.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

@@ -23,6 +23,6 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 16
+          java-version: 17
       - run: mvn deploy site site-deploy --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
