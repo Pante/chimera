@@ -6,7 +6,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 * Allows Brigadier command framework usage in Spigot plugins
 * Code-generation driven annotation command framework
 
-**Requires Java 16+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started. View our [GitHub discussions](https://github.com/Pante/chimera/discussions/300) to learn about upcoming developments.**
+**Requires Java 17+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started. View our [GitHub discussions](https://github.com/Pante/chimera/discussions/300) to learn about upcoming developments.**
 
 [![CI/CD](https://github.com/Pante/Chimera/workflows/CI/CD/badge.svg)](https://github.com/Pante/Chimera/actions?query=workflow%3ACI%2FCD)
 [![Funding](https://img.shields.io/badge/%F0%9F%A4%8D%20-sponsorship-ff69b4?style=flat-square)](https://github.com/sponsors/Pante)
@@ -35,6 +35,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
+| 5.2.0           | 1.18.0            |
 | 5.1.0           | 1.17.1            |
 | 5.0.0           | 1.17.0            |
 | 4.9.0-SNAPSHOT  | 1.16.4            |
@@ -62,7 +63,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>5.1.0</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -75,7 +76,7 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>5.1.0</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
@@ -88,6 +89,6 @@ Karus Labs' mono-repository for spigot libraries & tools.
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>typist</artifactId>
-    <version>5.1.0</version>
+    <version>5.2.0</version>
 </dependency>
 ```

@@ -33,7 +33,7 @@ import java.util.*;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 
-import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_18_R1.command.CraftCommandMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

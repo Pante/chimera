@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,45 +24,44 @@
 package com.karuslabs.commons.item.builders;
 
 import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Axolotl.Variant;
 import org.bukkit.inventory.meta.*;
 
 /**
- * A {@code BlockData} builder.
+ * A axolotl bucket builder.
  */
-public final class BlockDataBuilder extends Builder<BlockDataMeta, BlockDataBuilder> {
-    
+public final class AxolotlBucketBuilder extends Builder<AxolotlBucketMeta, AxolotlBucketBuilder> {
+
     /**
-     * Creates a {@code BlockDataBuilder} for the given material.
+     * Creates a {@code AxolotlBucketBuilder}.
      * 
-     * @param material the material
-     * @return a {@code BlockDataBuilder}
+     * @return a {@code AxolotlBucketBuilder}
      */
-    public static BlockDataBuilder of(Material material) {
-        return new BlockDataBuilder(material);
+    public static AxolotlBucketBuilder of() {
+        return new AxolotlBucketBuilder(Material.AXOLOTL_BUCKET);
     }
     
-    BlockDataBuilder(Material material) {
+    AxolotlBucketBuilder(Material material) {
         super(material);
     }
     
-    BlockDataBuilder(Builder<ItemMeta, ?> source) {
+    AxolotlBucketBuilder(Builder<ItemMeta, ?> source) {
         super(source);
     }
     
     /**
-     * Sets the {@code BlockData}.
+     * Sets the {@code Variant}.
      * 
-     * @param data the {@code BlockData}
+     * @param variant the {@code Variant}
      * @return {@code this}
      */
-    public BlockDataBuilder data(BlockData data) {
-        meta.setBlockData(data);
+    public AxolotlBucketBuilder variant(Variant variant) {
+        meta.setVariant(variant);
         return this;
     }
     
     @Override
-    BlockDataBuilder self() {
+    AxolotlBucketBuilder self() {
         return this;
     }
 

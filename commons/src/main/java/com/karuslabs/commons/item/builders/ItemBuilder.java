@@ -46,6 +46,15 @@ public final class ItemBuilder extends Builder<ItemMeta, ItemBuilder> {
     }
     
     /**
+     * Creates a {@code AxolotlBucketBuilder} for this {@code ItemStack}.
+     * 
+     * @return a {@code AxolotlBucketBuilder}
+     */
+    public AxolotlBucketBuilder axolotlBucket() {
+        return new AxolotlBucketBuilder(this);
+    }
+    
+    /**
      * Creates a {@code BannerBuilder} for this {@code ItemStack}.
      * 
      * @return a {@code BannerBuilder}

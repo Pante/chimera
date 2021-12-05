@@ -56,6 +56,7 @@ class ItemBuilderTest {
     
     static Stream<Arguments> builder_parameters() {
         return Stream.of(
+            of(AxolotlBucketMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::axolotlBucket, AxolotlBucketBuilder.class),
             of(BannerMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::banner, BannerBuilder.class),
             of(BlockDataMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::blockData, BlockDataBuilder.class),
             of(BlockStateMeta.class, (Function<ItemBuilder, Builder>) ItemBuilder::blockState, BlockStateBuilder.class),

@@ -6,9 +6,9 @@
     <version>5.2.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>typist-example-plugin</artifactId>
-  <name>Typist Example Plugin</name>
-  <description>A simple plugin that demostrates the usage of Typist</description>
+  <artifactId>typist</artifactId>
+  <name>Typist</name>
+  <description>Compiler for Chimera commands</description>
   <build>
     <plugins>
       <plugin>
@@ -16,6 +16,13 @@
         <version>3.8.1</version>
         <configuration>
           <release>${release}</release>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>com.google.auto.service</groupId>
+              <artifactId>auto-service</artifactId>
+              <version>1.0</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
@@ -36,31 +43,37 @@
           </transformers>
         </configuration>
       </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/test/java/</directory>
+                  <includes>
+                    <include>**/*.*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>chimera-releases</id>
-      <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
-    </repository>
-    <repository>
-      <id>chimera-snapshots</id>
-      <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
-    </repository>
-    <repository>
-      <id>minecraft-libraries</id>
-      <url>https://libraries.minecraft.net</url>
-    </repository>
-  </repositories>
   <dependencies>
     <dependency>
-      <groupId>com.mojang</groupId>
-      <artifactId>brigadier</artifactId>
-      <version>1.0.17</version>
+      <groupId>com.karuslabs</groupId>
+      <artifactId>commons</artifactId>
+      <version>5.2.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -68,6 +81,18 @@
       <artifactId>spigot-api</artifactId>
       <version>1.18-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.mojang</groupId>
+      <artifactId>brigadier</artifactId>
+      <version>1.0.17</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.karuslabs</groupId>
+      <artifactId>elementary</artifactId>
+      <version>1.1.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

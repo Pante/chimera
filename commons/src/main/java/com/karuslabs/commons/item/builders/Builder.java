@@ -41,7 +41,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <Meta> the type of the ItemMeta
  * @param <Self> {@code this}
  */
-public abstract class Builder<Meta extends ItemMeta, Self extends Builder> {
+public abstract sealed class Builder<Meta extends ItemMeta, Self extends Builder> permits 
+    AxolotlBucketBuilder, BannerBuilder, BlockDataBuilder, BlockStateBuilder, 
+    BookBuilder, BundleBuilder, CompassBuilder, CrossbowBuilder, EnchantmentStorageBuilder, 
+    FireworkBuilder, FireworkEffectBuilder, HeadBuilder, ItemBuilder,
+    KnowledgeBookBuilder, LeatherArmourBuilder, MapBuilder, PotionBuilder,
+    SuspiciousStewBuilder, TropicalFishBucketBuilder {
     
     final ItemStack item;
     final Meta meta;

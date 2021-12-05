@@ -37,9 +37,9 @@ import net.minecraft.world.entity.vehicle.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.command.*;
-import org.bukkit.craftbukkit.v1_17_R1.entity.*;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.command.*;
+import org.bukkit.craftbukkit.v1_18_R1.entity.*;
 
 import org.bukkit.command.*;
 
@@ -54,12 +54,12 @@ import org.bukkit.command.*;
 
     static final Logger LOGGER = LogManager.getLogger(Commands.class);
     
-    // Source: net.minecraft.commands.CommandDispatcher #line: 276
+    // Source: net.minecraft.commands.Commands #line: 276
     static void report(CommandSender sender, CommandRuntimeException exception) {
         from(sender).sendFailure(exception.getComponent());
     }
     
-    // Source: net.minecraft.commands.CommandDispatcher #line: 280
+    // Source: net.minecraft.commands.Commands #line: 280
     static void report(CommandSender sender, CommandSyntaxException exception) {
         var stack = from(sender);
         
@@ -92,7 +92,7 @@ import org.bukkit.command.*;
     }
     
     
-    // Source: net.minecraft.server.CommandDispatcher #line: 305
+    // Source: net.minecraft.server.Commands #line: 305
     static void report(CommandSender sender, String command, Exception exception) {
         var stack = from(sender);
         

@@ -37,9 +37,9 @@ import net.minecraft.world.level.BaseCommandBlock;
 
 import org.bukkit.command.*;
 
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.command.*;
-import org.bukkit.craftbukkit.v1_17_R1.entity.*;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.command.*;
+import org.bukkit.craftbukkit.v1_18_R1.entity.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

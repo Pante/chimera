@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,23 @@
  */
 package com.karuslabs.commons.item.builders;
 
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.inventory.meta.*;
+import com.karuslabs.commons.MockBukkit;
+import org.bukkit.entity.Axolotl.Variant;
+import org.bukkit.inventory.meta.AxolotlBucketMeta;
 
-/**
- * A {@code BlockData} builder.
- */
-public final class BlockDataBuilder extends Builder<BlockDataMeta, BlockDataBuilder> {
+import org.junit.jupiter.api.*;
+
+import static org.mockito.Mockito.*;
+
+class AxolotlBucketBuilderTest {
     
-    /**
-     * Creates a {@code BlockDataBuilder} for the given material.
-     * 
-     * @param material the material
-     * @return a {@code BlockDataBuilder}
-     */
-    public static BlockDataBuilder of(Material material) {
-        return new BlockDataBuilder(material);
-    }
+    AxolotlBucketMeta meta = MockBukkit.meta(AxolotlBucketMeta.class);
     
-    BlockDataBuilder(Material material) {
-        super(material);
-    }
-    
-    BlockDataBuilder(Builder<ItemMeta, ?> source) {
-        super(source);
-    }
-    
-    /**
-     * Sets the {@code BlockData}.
-     * 
-     * @param data the {@code BlockData}
-     * @return {@code this}
-     */
-    public BlockDataBuilder data(BlockData data) {
-        meta.setBlockData(data);
-        return this;
-    }
-    
-    @Override
-    BlockDataBuilder self() {
-        return this;
+    @Test
+    void variant() {
+        AxolotlBucketBuilder.of().self().variant(Variant.LUCY);
+        
+        verify(meta).setVariant(Variant.LUCY);
     }
 
-}
+} 

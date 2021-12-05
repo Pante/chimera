@@ -34,7 +34,7 @@ import net.minecraft.commands.*;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;

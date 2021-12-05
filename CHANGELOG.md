@@ -1,4 +1,16 @@
-## 5.2.0-SNAPSHOT - The bare necessities (07/11/2021)
+## 5.2.0 - Into the unknown (05/12/2021)
+
+**Compatible Spigot versions: 1.18.0**
+
+This update adds support for Spigot 1.18. In addition, the library now requires Java 17.
+
+### Commons
+
+- Add `AxoltolBucketBuilder`
+- Change item builders to be sealed
+
+
+## 5.1.0 - The bare necessities (07/11/2021)
 
 **Compatible Spigot versions: 1.17.1**
 
