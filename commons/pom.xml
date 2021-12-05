@@ -25,6 +25,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.18-R0.1-SNAPSHOT</version>
+            <classifier>shaded</classifier>
             <scope>provided</scope>
         </dependency>
         
