@@ -2,9 +2,7 @@
   <img src = "https://i.imgur.com/iHgSlXk.png">
 </p>
 
-Karus Labs' mono-repository for spigot libraries & tools. 
-* Allows Brigadier command framework usage in Spigot plugins
-* Code-generation driven annotation command framework
+**_An annotation-driven and reflectionn-free command framework._**
 
 **Requires Java 17+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started. View our [GitHub discussions](https://github.com/Pante/chimera/discussions/300) to learn about upcoming developments.**
 
