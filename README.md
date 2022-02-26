@@ -2,7 +2,7 @@
   <img src = "https://i.imgur.com/iHgSlXk.png">
 </p>
 
-**_An annotation-driven and reflectionn-free command framework._**
+**_An annotation-driven and reflection-free command framework._**
 
 **Requires Java 17+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started. View our [GitHub discussions](https://github.com/Pante/chimera/discussions/300) to learn about upcoming developments.**
 
@@ -13,11 +13,11 @@
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
 ### Why Chimera?
-* Improved performance - Since annotation are processed at compile-time, we can avoid many of the performance pitfalls associated with reflective access and reflection in general.
+* Improved performance - Since annotations are processed at compile-time, we can avoid many of the performance pitfalls associated with reflection.
 
 * Light(er)weight Dependencies - All Typist annotations are discarded after compilation and generated code do not rely on Typist, hence it doesn't need to be bundled with the plugin. The only dependency required is Chimera.
 
-* Low Learning Curve & Safe - One benefit of compile-time annotation processing is the ability to check annotations at compile-time. This means errors can be caught eariler by the annotation processor and thus easier to learn and safer.
+* Low Learning Curve & Safety - One benefit of compile-time annotation processing is the ability to check annotations at compile-time. This means errors can be caught eariler by the annotation processor and thus easier to learn and safer.
 
 * Native Brigadier Support - Typist is built on Chimera, hence by extension, built on Brigadier.
 
