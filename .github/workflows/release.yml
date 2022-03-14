@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_dispatch: {}
 
 env:
   SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
