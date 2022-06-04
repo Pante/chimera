@@ -52,7 +52,6 @@ class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
     static {
         CLIENT_SIDE.put(ClientSuggestionProvider.RECIPES, SuggestionProviders.ALL_RECIPES);
         CLIENT_SIDE.put(ClientSuggestionProvider.SOUNDS, SuggestionProviders.AVAILABLE_SOUNDS);
-        CLIENT_SIDE.put(ClientSuggestionProvider.BIOMES, SuggestionProviders.AVAILABLE_BIOMES);
         CLIENT_SIDE.put(ClientSuggestionProvider.ENTITIES, SuggestionProviders.SUMMONABLE_ENTITIES);
     }
     

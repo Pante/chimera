@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
@@ -94,9 +94,9 @@
                         </goals>
                         <configuration>
                             <createSourcesJar>${shadeSourcesJar}</createSourcesJar>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
                             <filters>
                                 <filter>
-                                    <artifact>org.spigotmc:minecraft-server</artifact>
                                     <excludes>
                                         <exclude>com/google/common/**</exclude>
                                         <exclude>com/google/gson/**</exclude>

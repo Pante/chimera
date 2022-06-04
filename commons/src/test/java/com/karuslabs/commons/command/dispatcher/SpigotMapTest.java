@@ -35,7 +35,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import org.bukkit.craftbukkit.v1_18_R1.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_18_R2.command.CraftCommandMap;
 
 import org.junit.jupiter.api.*;
 

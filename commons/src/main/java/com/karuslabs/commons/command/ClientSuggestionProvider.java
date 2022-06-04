@@ -41,7 +41,7 @@ import org.bukkit.command.CommandSender;
  */
 public enum ClientSuggestionProvider implements SuggestionProvider<CommandSender> {
     
-    BIOMES, ENTITIES, RECIPES, SOUNDS;
+    ENTITIES, RECIPES, SOUNDS;
     
     @Override
     public CompletableFuture<Suggestions> getSuggestions(@Ignored CommandContext<CommandSender> context, SuggestionsBuilder builder) {

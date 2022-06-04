@@ -36,9 +36,9 @@ import net.minecraft.world.entity.vehicle.*;
 
 import org.apache.logging.log4j.*;
 
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.command.*;
-import org.bukkit.craftbukkit.v1_18_R1.entity.*;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R2.command.*;
+import org.bukkit.craftbukkit.v1_18_R2.entity.*;
 
 import org.bukkit.command.*;
 

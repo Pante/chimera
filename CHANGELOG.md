@@ -1,3 +1,13 @@
+## 5.3.0 - Figure it out (04/06/2022)
+
+**Compatible Spigot versions: 1.18.2**
+
+This update adds support for Spigot 1.18.2.
+
+### Commons
+
+- Remove `ClientSuggestionProvider.BIOMES` - This client side mapping is no longer provided in 1.18.2
+
 ## 5.2.0 - Into the unknown (05/12/2021)
 
 **Compatible Spigot versions: 1.18.0**
