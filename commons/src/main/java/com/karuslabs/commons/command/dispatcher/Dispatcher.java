@@ -34,8 +34,8 @@ import java.util.Map;
 import net.minecraft.commands.*;
 import net.minecraft.server.MinecraftServer;
 
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.command.CraftCommandMap;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;

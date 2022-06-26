@@ -36,11 +36,13 @@ import net.minecraft.world.entity.vehicle.*;
 
 import org.apache.logging.log4j.*;
 
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.command.*;
-import org.bukkit.craftbukkit.v1_18_R2.entity.*;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.command.*;
+import org.bukkit.craftbukkit.v1_19_R1.entity.*;
 
 import org.bukkit.command.*;
+
+// Note: The source comments refer to Mojang mapped names, not Spigot mapped names.
 
 /**
  * Utility methods that handle exceptions which occur when parsing and executing commands.
@@ -68,7 +70,7 @@ import org.bukkit.command.*;
         if (input != null && exception.getCursor() >= 0) {
             var index = Math.min(input.length(), exception.getCursor());
 
-            var text = new TextComponent("").withStyle(ChatFormatting.GRAY).withStyle(style -> 
+            var text = Component.empty().withStyle(ChatFormatting.GRAY).withStyle(style -> 
                 style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, input))
             );
             
@@ -79,11 +81,11 @@ import org.bukkit.command.*;
             text.append(input.substring(Math.max(0, index - 20), index));
             
             if (index < input.length()) {
-                var error = new TextComponent(input.substring(index)).withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.UNDERLINE});
+                var error = Component.literal(input.substring(index)).withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.UNDERLINE});
                 text.append(error);
             }
             
-            var context = new TranslatableComponent("command.context.here").withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.ITALIC});
+            var context = Component.translatable("command.context.here").withStyle(new ChatFormatting[]{ChatFormatting.RED, ChatFormatting.ITALIC});
             text.append(context);
             
             stack.sendFailure(text);
@@ -96,7 +98,7 @@ import org.bukkit.command.*;
         var stack = from(sender);
         
         var message = exception.getMessage();
-        var details = new TextComponent(message == null ? exception.getClass().getName() : message);        
+        var details = Component.literal(message == null ? exception.getClass().getName() : message);        
         
         if (LOGGER.isDebugEnabled()) {
             LOGGER.error("Command exception: {}", command, exception);
@@ -108,12 +110,12 @@ import org.bukkit.command.*;
             }
         }
 
-        stack.sendFailure((new TranslatableComponent("command.failed")).withStyle(style -> 
+        stack.sendFailure((Component.translatable("command.failed")).withStyle(style -> 
             style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, details))
         ));
 
         if (SharedConstants.IS_RUNNING_IN_IDE) {
-            stack.sendFailure(new TextComponent(Util.describeError(exception)));
+            stack.sendFailure(Component.literal(Util.describeError(exception)));
             LOGGER.error("'{}' threw an exception", command, exception);
         }
     }
@@ -125,12 +127,17 @@ import org.bukkit.command.*;
     // We wrote it slightly to check agaisnt NMS types rather than Spigot types to make it safer.
     static CommandSourceStack from(CommandSender sender) {
         if (sender instanceof CraftPlayer player) {
+            // We can't mock/test this path as of Spigot 1.19. This is because player.getHandle() 
+            // returns ServerPlayer which ancestor does WAY too much work in it's 
+            // constructor and tries to initialize some registry. This registry
+            // throws an IllegalArgumentException since it was not properly bootstrapped.
             return player.getHandle().createCommandSourceStack();
             
         } else if (sender instanceof CraftBlockCommandSender block) {
             return block.getWrapper();
             
         } else if (sender instanceof CraftMinecartCommand minecart) {
+            // Same with CraftMinecartCommand
             return ((MinecartCommandBlock) minecart.getHandle()).getCommandBlock().createCommandSourceStack();
             
         } else if (sender instanceof RemoteConsoleCommandSender) {

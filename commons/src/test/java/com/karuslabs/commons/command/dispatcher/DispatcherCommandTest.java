@@ -31,10 +31,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.List;
 
 import net.minecraft.commands.*;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.command.CraftBlockCommandSender;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -49,8 +48,7 @@ import static org.mockito.Mockito.*;
 class DispatcherCommandTest {
     
     CommandSourceStack stack = mock(CommandSourceStack.class);
-    ServerPlayer player = when(mock(ServerPlayer.class).createCommandSourceStack()).thenReturn(stack).getMock();
-    CommandSender sender = when(mock(CraftPlayer.class).getHandle()).thenReturn(player).getMock();
+    CommandSender sender = when(mock(CraftBlockCommandSender.class).getWrapper()).thenReturn(stack).getMock();
     
     Plugin plugin = mock(Plugin.class);
     CommandDispatcher<CommandSender> dispatcher = mock(CommandDispatcher.class);
@@ -84,7 +82,7 @@ class DispatcherCommandTest {
     @Test
     void execute_CommandRuntimeException() throws CommandSyntaxException {
         doReturn(true).when(command).testPermission(sender);
-        doThrow(new CommandRuntimeException(new TextComponent("message"))).when(dispatcher).execute(any(StringReader.class), any(CommandSender.class));
+        doThrow(new CommandRuntimeException(Component.literal("message"))).when(dispatcher).execute(any(StringReader.class), any(CommandSender.class));
         
         assertTrue(command.execute(sender, "command", "a", "b"));
         verify(stack, times(1)).sendFailure(any());

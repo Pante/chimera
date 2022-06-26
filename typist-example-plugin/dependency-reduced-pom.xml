@@ -3,7 +3,7 @@
   <parent>
     <artifactId>chimera</artifactId>
     <groupId>com.karuslabs</groupId>
-    <version>5.3.0</version>
+    <version>5.4.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>typist-example-plugin</artifactId>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.18.2-R0.1-SNAPSHOT</version>
+      <version>1.19-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
