@@ -1,3 +1,10 @@
+## 5.4.0 - When clouds go rolling by (28/06/2022)
+
+**Compatible Spigot versions: 1.19.0**
+
+This update adds support for Spigot 1.19.0.
+
+
 ## 5.3.0 - Figure it out (04/06/2022)
 
 **Compatible Spigot versions: 1.18.2**
