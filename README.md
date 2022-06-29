@@ -63,7 +63,7 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>5.2.0</version>
+    <version>5.4.0</version>
 </dependency>
 ```
 
@@ -76,7 +76,7 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>5.2.0</version>
+    <version>5.4.0</version>
 </dependency>
 ```
 
@@ -89,6 +89,6 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>typist</artifactId>
-    <version>5.2.0</version>
+    <version>5.4.0</version>
 </dependency>
 ```
