@@ -1,6 +1,5 @@
 # Windows image file caches
 Thumbs.db
-ehthumbs.db
 
 # Folder config file
 Desktop.ini
@@ -49,12 +48,12 @@ Temporary Items
 
 # JetBrains .gitignore
 .idea/
+*.iml
+
+#  Java targets
 /nbproject/
 /commons/target/
 /annotations/target/
 /commons/nbproject/
-
-*.iml
 /typist/target/
 /typist-example-plugin/target/
-/test-maven-plugin/target/
