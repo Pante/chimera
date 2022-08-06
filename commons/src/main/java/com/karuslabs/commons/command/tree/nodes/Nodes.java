@@ -133,7 +133,9 @@ public @Static class Nodes {
             var aliases = ((Aliasable<T>) child).aliases();
             
             for (var alias : aliases) {
-                addition.accept(alias);
+                if (node.getChild(alias.getName()) == null) {
+                    addition.accept(alias);
+                }
             }
             
             if (current != null) {

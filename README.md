@@ -33,7 +33,7 @@
 
 | Chimera Version | Minecraft Version |
 |-----------------|-------------------|
-| 5.4.0           | 1.19.0            |
+| 5.4.1           | 1.19.0 - 1.19.2   |
 | 5.3.0           | 1.18.2            |
 | 5.2.0           | 1.18.0 - 1.18.1   |
 | 5.1.0           | 1.17.1            |
@@ -63,7 +63,7 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>annotations</artifactId>
-    <version>5.4.0</version>
+    <version>5.4.1</version>
 </dependency>
 ```
 
@@ -76,7 +76,7 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>commons</artifactId>
-    <version>5.4.0</version>
+    <version>5.4.1</version>
 </dependency>
 ```
 
@@ -89,6 +89,6 @@
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>typist</artifactId>
-    <version>5.4.0</version>
+    <version>5.4.1</version>
 </dependency>
 ```

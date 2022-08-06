@@ -1,3 +1,13 @@
+## 5.4.1 - Life is your restaurant (06/08/2022)
+
+**Compatible Spigot versions: 1.19.0, 1.19.1, 1.19.2**
+
+This update addresses a `ConcurrentModificationException` caused by self-visiting literal aliases.
+
+### Commons
+* Fix `ConcurrentModificationException` caused by self-visiting literal aliases.
+
+
 ## 5.4.0 - When clouds go rolling by (28/06/2022)
 
 **Compatible Spigot versions: 1.19.0**

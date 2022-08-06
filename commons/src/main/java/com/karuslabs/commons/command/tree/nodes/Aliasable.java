@@ -47,5 +47,5 @@ public interface Aliasable<T> {
      * @return {@code true} if this node is an alias; otherwise {@code false}
      */
     boolean isAlias();
-
+    
 }
