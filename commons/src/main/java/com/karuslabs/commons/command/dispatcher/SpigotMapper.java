@@ -94,9 +94,8 @@ class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
             var sender = context.getSource().getBukkitSender();
             
             var input = context.getInput();
-            input = input.length() <= 1 ? "" : input.substring(1);
             
-            var reparsed = dispatcher.parse(input, sender).getContext().build(context.getInput());
+            var reparsed = dispatcher.parse(input, sender).getContext().build(input);
             return command.getCommand().run(reparsed);
         };
     }
