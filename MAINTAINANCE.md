@@ -50,10 +50,3 @@ Both artifacts can be uploaded together.
 Group ID: `org.spigotmc`
 Artifact ID: `spigot`
 Packaging: can be left empty
-
-## Spigot-API
-
-Just upload the spigot-api shaded jar.
-
-Group ID: `org.spigotmc`
-Artifact ID: `spigot-api`

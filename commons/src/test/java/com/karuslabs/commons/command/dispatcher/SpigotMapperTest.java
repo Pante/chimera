@@ -27,7 +27,7 @@ import com.karuslabs.commons.command.types.*;
 import com.karuslabs.commons.command.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.nodes.*;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -52,7 +52,7 @@ import static org.mockito.Mockito.*;
 class SpigotMapperTest {
     
     static final SuggestionProvider<CommandSourceStack> PROVIDER = (a, b) -> null;
-    
+    static final Command<CommandSourceStack> COMMAND = (a) -> 0;
     
     CommandDispatcher<CommandSender> dispatcher = spy(new CommandDispatcher<>());
     SpigotMapper mapper = spy(new SpigotMapper(dispatcher));
@@ -81,6 +81,19 @@ class SpigotMapperTest {
         verify(predicate).test(sender);
     }
     
+    
+    @Test
+    void execution() {
+        assertNull(mapper.execution(Literal.of("a").build()));
+    }
+    
+    @Test
+    void execution_reparse() {
+        var literal = Literal.of("a").executes((sender, context) -> {}).build();
+        doReturn(COMMAND).when(mapper).reparse(literal);
+        
+        assertSame(COMMAND, mapper.execution(literal));
+    }
     
     @Test
     void suggestions_primitive_empty() {

@@ -85,8 +85,8 @@ class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
     }
     
     @Override
-    protected Command<CommandSourceStack> execution(CommandNode<CommandSender> command) {
-        return reparse(command);
+    protected @Nullable Command<CommandSourceStack> execution(CommandNode<CommandSender> command) {
+        return command.getCommand() == null ? null : reparse(command);
     }
     
     Command<CommandSourceStack> reparse(CommandNode<CommandSender> command) {
