@@ -52,6 +52,11 @@
   <id>chimera-releases</id>
   <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
 </repository>
+
+<repository>
+  <id>chimera-snapshots</id>
+  <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
+</repository>
 ```
 
 ***
