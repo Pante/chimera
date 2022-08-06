@@ -114,6 +114,10 @@ public @Static class Nodes {
      */
     static <Node extends CommandNode<T> & Mutable<T>, T> void addChild(Node node, CommandNode<T> child, Consumer<CommandNode<T>> addition) {
         var current = node.getChild(child.getName());
+        if (current == child) { // Don't visit again if node is itself, will cause CMEs
+            return;
+        }
+        
         if (current != null) {
             node.removeChild(current.getName()); // Needs to be removed otherwise child will not replace current
             
@@ -133,9 +137,7 @@ public @Static class Nodes {
             var aliases = ((Aliasable<T>) child).aliases();
             
             for (var alias : aliases) {
-                if (node.getChild(alias.getName()) == null) {
-                    addition.accept(alias);
-                }
+                addition.accept(alias);
             }
             
             if (current != null) {

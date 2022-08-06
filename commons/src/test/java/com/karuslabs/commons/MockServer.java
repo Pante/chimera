@@ -766,5 +766,10 @@ public class MockServer implements Server {
     public int getMaxChainedNeighborUpdates() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public <T extends Keyed> Registry<T> getRegistry(Class<T> type) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

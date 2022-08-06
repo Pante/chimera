@@ -1,6 +1,19 @@
+## 5.4.2 - Drip, drop, drip, drop (06/08/2022)
+
+**Compatible Spigot versions: 1.19.1**
+
+This updates addresses a few breaking bugs
+
+## Commons
+* Fix `ConcurrentModificationException` caused by self-visiting literal aliase still throwing on Spigot
+* Fix commands not being executed due to changes in how Spigot forwards command execution
+
+
 ## 5.4.1 - Life is your restaurant (06/08/2022)
 
-**Compatible Spigot versions: 1.19.0, 1.19.1, 1.19.2**
+**Note: DEFECTIVE - DO NOT USE**
+
+**Compatible Spigot versions: 1.19.0**
 
 This update addresses a `ConcurrentModificationException` caused by self-visiting literal aliases.
 
@@ -9,6 +22,8 @@ This update addresses a `ConcurrentModificationException` caused by self-visitin
 
 
 ## 5.4.0 - When clouds go rolling by (28/06/2022)
+
+**Note: DEFECTIVE - DO NOT USE**
 
 **Compatible Spigot versions: 1.19.0**
 

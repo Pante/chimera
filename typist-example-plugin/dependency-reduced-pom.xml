@@ -3,7 +3,7 @@
   <parent>
     <artifactId>chimera</artifactId>
     <groupId>com.karuslabs</groupId>
-    <version>5.4.1</version>
+    <version>5.4.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>typist-example-plugin</artifactId>
@@ -58,6 +58,13 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot</artifactId>
+      <version>1.19.1-R0.1-SNAPSHOT</version>
+      <classifier>remapped-mojang</classifier>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.mojang</groupId>
       <artifactId>brigadier</artifactId>
       <version>1.0.17</version>
@@ -72,7 +79,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.8.2</version>
+      <version>5.9.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -92,7 +99,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
+      <version>5.9.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -108,7 +115,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.8.2</version>
+      <version>5.9.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

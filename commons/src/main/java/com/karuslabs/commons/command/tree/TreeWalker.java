@@ -132,7 +132,7 @@ public class TreeWalker<T, R> {
             redirect(command.getRedirect(), result, source);
             descend(command.getChildren(), result, source);
         }
-
+        
         return result;
     }
     

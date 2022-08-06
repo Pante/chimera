@@ -39,6 +39,10 @@ import org.bukkit.plugin.Plugin;
  * <br><br>
  * <b>Note:</b><br>
  * This class was adapted from Spigot's {@code VanillaCommand}.
+ * 
+ * As of 1.19, only commands from console are forwarded to a {@code DispatcherCommand}.
+ * Commands issued by players are routed directly to the native {@code CommandDispatcher}.
+ * This behaviour is weird as fuck.
  */
 public class DispatcherCommand extends Command implements PluginIdentifiableCommand {
     

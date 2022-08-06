@@ -27,7 +27,7 @@ import com.karuslabs.commons.command.ClientSuggestionProvider;
 import com.karuslabs.commons.command.tree.Mapper;
 import com.karuslabs.commons.command.types.Type;
 
-import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.*;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.*;
@@ -45,6 +45,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /**
  * A mapper that maps the commands in a {@link Dispatcher} to the internal dispatcher 
  * of the server.
+ * 
+ * As of 1.19, only commands from console are forwarded to a {@code DispatcherCommand}.
+ * Commands issued by players are routed directly to the native {@code CommandDispatcher}.
+ * This behaviour is weird as fuck. We previously only mapped completion related information.
  */
 class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
 
@@ -78,6 +82,23 @@ class SpigotMapper extends Mapper<CommandSender, CommandSourceStack> {
     protected ArgumentType<?> type(ArgumentCommandNode<CommandSender, ?> command) {
         var type = command.getType();
         return type instanceof Type<?> mappable ? mappable.mapped() : type;
+    }
+    
+    @Override
+    protected Command<CommandSourceStack> execution(CommandNode<CommandSender> command) {
+        return reparse(command);
+    }
+    
+    Command<CommandSourceStack> reparse(CommandNode<CommandSender> command) {
+        return (context) -> {
+            var sender = context.getSource().getBukkitSender();
+            
+            var input = context.getInput();
+            input = input.length() <= 1 ? "" : input.substring(1);
+            
+            var reparsed = dispatcher.parse(input, sender).getContext().build(context.getInput());
+            return command.getCommand().run(reparsed);
+        };
     }
     
     /**
