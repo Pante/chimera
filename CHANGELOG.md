@@ -1,4 +1,4 @@
-## 5.4.2 - Drip, drop, drip, drop (06/08/2022)
+## 5.4.2 - Drip, drop, drip, drop (26/08/2022)
 
 **Compatible Spigot versions: 1.19.1**
 
