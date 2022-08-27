@@ -2,7 +2,7 @@
 
 **Compatible Spigot versions: 1.19.1**
 
-This updates addresses a few breaking bugs
+This updates addresses a few breaking bugs.
 
 ## Commons
 * Fix `ConcurrentModificationException` caused by self-visiting literal aliase still throwing on Spigot
