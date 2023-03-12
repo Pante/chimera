@@ -33,7 +33,7 @@ import java.util.List;
 import net.minecraft.commands.*;
 import net.minecraft.network.chat.Component;
 
-import org.bukkit.craftbukkit.v1_19_R1.command.CraftBlockCommandSender;
+import org.bukkit.craftbukkit.v1_19_R2.command.CraftBlockCommandSender;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;

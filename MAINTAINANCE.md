@@ -8,7 +8,7 @@ this properly.
 ## Locally
 
 * Get the latest copy of Spigot via BuildTools.jar
-* Replace the plugins with the section available in `replacement.xml`
+* Replace the plugins of `spigot` artifact with the section available in `replacement.xml`
 * Build Spigot with the `remapped` profile
 * Change dependencies in Chimera projects' poms
 * Test project locally using `typist-example-plugin`

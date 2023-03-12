@@ -1,3 +1,12 @@
+## 5.5.0 - Everything was beautiful (12/03/2023)
+
+**Compatible Spigot versions: 1.19.3**
+
+This update adds support for Spigot 1.19.3
+
+## Commons
+* Deprecate `WordType.word()` - recent changes in 1.19 makes this unfeasible to fix
+
 ## 5.4.2 - Drip, drop, drip, drop (26/08/2022)
 
 **Compatible Spigot versions: 1.19.1**

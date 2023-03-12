@@ -45,7 +45,7 @@ import org.bukkit.plugin.*;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.profile.PlayerProfile;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.*;
 import org.bukkit.structure.StructureManager;
 import org.bukkit.util.CachedServerIcon;
 
@@ -769,6 +769,11 @@ public class MockServer implements Server {
 
     @Override
     public <T extends Keyed> Registry<T> getRegistry(Class<T> type) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Criteria getScoreboardCriteria(String string) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

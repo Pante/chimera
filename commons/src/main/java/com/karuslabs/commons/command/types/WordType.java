@@ -37,13 +37,14 @@ public interface WordType<T> extends Type<T> {
     /**
      * Returns a alternate implementation of {@link StringArgumentType#word()}
      * that supports non-ASCII characters.
-     * <br>
-     * <br>
-     * <b>This should be preferred over {@link StringArgumentType#word()}.</b>
      * 
      * @return an alternate implementation of {@link StringArgumentType#word()} that
      *         supports non-ASCII characters
+     * 
+     * @deprecated This function no longer work due to internal Spigot changes, 
+     * see https://github.com/Pante/chimera/issues/425 for more information.
      */
+    @Deprecated(since = "5.5.0", forRemoval = true)
     static WordType<String> word() {
         return Readers::unquoted;
     }

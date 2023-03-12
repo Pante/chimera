@@ -36,10 +36,10 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.*;
 
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.command.CraftCommandMap;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.scheduler.CraftScheduler;
+import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R2.command.CraftCommandMap;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R2.scheduler.CraftScheduler;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.event.server.ServerLoadEvent.LoadType;
 import org.junit.jupiter.api.*;

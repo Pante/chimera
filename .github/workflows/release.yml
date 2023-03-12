@@ -12,7 +12,7 @@ env:
 
 jobs:
   stable:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: styfle/cancel-workflow-action@0.9.0
         with:

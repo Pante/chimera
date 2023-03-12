@@ -64,7 +64,7 @@ class GenerationTest {
     @BeforeEach
     void before() throws IOException {
         JavaFileObject file = when(mock(JavaFileObject.class).openWriter()).thenReturn(writer).getMock();
-        filer = when(mock(Filer.class).createSourceFile(any(), any())).thenReturn(file).getMock();
+        filer = when(mock(Filer.class).createSourceFile(any(), any(Element[].class))).thenReturn(file).getMock();
         generation = new Generation(logger, filer, new Header(), new Type(new MethodBody(new CommandInstantiation(Map.of(), counter))), counter);
     }
         
@@ -73,7 +73,7 @@ class GenerationTest {
         environment.out = new Out(element, "com.karuslabs", "Commands");
         generation.generate(environment);
         
-        verify(filer).createSourceFile(eq("com.karuslabs.Commands"), any());
+        verify(filer).createSourceFile(eq("com.karuslabs.Commands"));
         assertTrue(writer.toString().startsWith("package com.karuslabs;"));
     }
     
@@ -82,13 +82,13 @@ class GenerationTest {
         environment.out = new Out(element, "", "Commands");
         generation.generate(environment);
         
-        verify(filer).createSourceFile(eq("Commands"), any());
+        verify(filer).createSourceFile(eq("Commands"));
         assertFalse(writer.toString().startsWith("package com.karuslabs;"));
     }
     
     @Test
     void generate_FilerException() throws IOException {
-        when(filer.createSourceFile(any(), any())).thenThrow(FilerException.class);
+        when(filer.createSourceFile(any(), any(Element[].class))).thenThrow(FilerException.class);
         
         environment.out = new Out(element, "com.karuslabs", "Commands");
         generation.generate(environment);
@@ -98,7 +98,7 @@ class GenerationTest {
     
     @Test
     void generate_IOException() throws IOException {
-        when(filer.createSourceFile(any(), any())).thenThrow(IOException.class);
+        when(filer.createSourceFile(any(), any(Element[].class))).thenThrow(IOException.class);
         
         environment.out = new Out(element, "com.karuslabs", "Commands");
         generation.generate(environment);
