@@ -1,0 +1,43 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "dependencyDashboard": true,
+  "addLabels": ["dependencies"],
+  "prCreation": "not-pending",
+  "hostRules": [
+    {
+      "matchHost": "repo.karuslabs.com",
+      "hostType": "maven",
+      "encrypted": {
+        "username": "wcFMA/xDdHCJBTolAQ/9HxBBDuL7fFei3H4O7NYyugJ53CQv6xUtd0RN2KrXI+JPnjpABdrCxKHh1NzaPdmfvKOHtpV7jDXMvCqZ34FZg7K/VxfQE4CU2Wo9v/GvxkS7QXFj+l9Qyoswg+nOmBEl5SuI7h3o/FaLAkBvUc0iG/WbcztI9obF4MmWHXFW+8qoazoyhejPFyqWBtpau8UfZmD1dO0m8+N1j1H/Z5i67BOu5Mvmd01ROLzenmxB0BpdostvKOii0BtUmtasSCDcHdpbnZhkBIOBOOUW6OfbaFKwxqBS2LqTRFEvpxHbNttS1p/rs0DjNyTJqmBl3xaOr5MDHURkbaL7uqOQXl4RrHSAnmWM30/MXiwCXl+/ATp15B1Q8D/brnsBYs/PPp/DVW7B5DvHzuIO8CsUfa3s4PN4/PNwKrkYmWrkdfF8sh1iTOSAJ6SEd0EaC4lbNYt+r8/tDO6Ih9aIasso3jedtrWJphPtR47/bIoz6fTcYLhi5Z5sAkkd5Ma1DcL+Ss1VKtRq2u/wCa6viOesDtzCdQgXRyIvsh7NpYSmVGAjOdV3qC/ob7zkea+PROIvJBy7jdBEFZaGaAKW4g8T26rtwgAZZoBMeJ2EpJYFm7z5Y5VWMvcc4VAs7qVG//H3QXDu9+w6mDkMwHjXY4p8wzrtgiuw3vbwzAk4VOB4TBj6mn/SXQEybGQGWpq42H9ox/dEUxCZkOn1/Hgc2I1Eo6A6mVHuGKc4N8KiXwZhlS+4KOF8KDgo9ZPxqsl0Ut++gMDIx68qlVHppaVjV9g1Ylxx0CZmaVjTs5MLLpT+hkmDJg",
+        "password": "wcFMA/xDdHCJBTolAQ//UHFErtNwXbuiDg1btpiJCofO+/hhifvTWCqZ741isiaIkQUKRuP8M/lJR2/ymlIRcGENvgbBxe4M4+sBm1go3ucgj5gaeoi++AAkuFPS6EbVSwAoj6DSHn5kE8tUyxMRm6xvJ4mXmRLiM6G7+nsd2dycgs5ZoLLBsJuTucYIFTjzZidKKOhmqM6UGy8+jgeFts+cx2hoVwMDDGHqqX/5QK29qMlJ8dk2j5zCOXKuNubFLE1zEZuD2ryydKqLMBNLwHrppGzYPvLG6oYQYTIE5Ug2QIYNX1TPN8tJST7Kkik2Kqjh2a3Lqkid1SNKtMNDUM1mT24Qaskt6LCl7xWMMaJap2fAGFojtTtchKRmbUuVLlQ2z9H0QDdkISfWqrurD87amIR22cqGxvJPs5tv0JEr3c14+DkMqpIQ897BY4kPyRXdw6Dbx6Ssa6VhaYXodxMixX0dC4+Xs1ng6FGkKirU6D/VS5VFfcqRwp3Q3R/F6yDS95KMwLWcycdtvp6rKp1P/BSlMDbNa3Ip0DL+hWZj29NObRnQSmCHQBkSMu902k+SWsSTH8ASXth+/cwHmp5tA/CI2a4vcMCNJw3ZGry0Ju5ZNu96/uikwjCN9vz8z72CTUu7zACIxDVux1nkvu1cSuP/xiXM7ZPu/ijpPIyTUx1Mm8ASX/ty9eejl2/SXQFRax6UBbx7lFdDO6jaBxh24UrBfs2LAtnaeyHMeFdIDhlVZtVAiBtdP7hotK4GM4NLnkhyqvD+2ye55UQAt0Xxz4FhJqjV5iH9tVZiDHiEUVp7SACZ1+AhU6EUeQ"
+      }
+    }
+  ],
+
+  "packageRules": [
+    {
+      "groupName": "GitHub Actions",
+      "matchPaths": [".github/**"],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+
+
+    {
+      "groupName": "Major Revisions",
+      "matchPaths": [
+         "./**"
+      ],
+      "matchUpdateTypes": ["major"]
+    },
+
+    {
+      "groupName": "Minor Revisions",
+      "matchPaths": [
+        "./**"
+      ],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ]
+}
