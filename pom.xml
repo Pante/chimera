@@ -136,7 +136,7 @@
         
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.5</version>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8 -Dconsole.encoding=uTF-8</argLine>
                     <trimStackTrace>false</trimStackTrace>
