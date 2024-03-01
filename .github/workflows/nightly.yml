@@ -17,7 +17,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
           java-version: 17
