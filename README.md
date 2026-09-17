@@ -4,6 +4,11 @@
 
 **_An annotation-driven and reflection-free command framework._**
 
+> [!IMPORTANT]
+> It has been a good run, but all good things must come to an end. Chimera was one of my first OSS projects & what got me into programming. I haven't touched Minecraft in years and **no longer have the resources nor interest in continued maintenance**. Thanks for all the fish.
+> 
+> Pante, September 2026. 
+
 **Requires Java 17+. Read the [wiki](https://github.com/Pante/Chimera/wiki) to get started. View our [GitHub discussions](https://github.com/Pante/chimera/discussions/300) to learn about upcoming developments.**
 
 [![CI/CD](https://github.com/Pante/Chimera/workflows/CI/CD/badge.svg)](https://github.com/Pante/Chimera/actions?query=workflow%3ACI%2FCD)
